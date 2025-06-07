@@ -1,0 +1,8 @@
+using MediatR;
+
+namespace Contract.CQRS.Commands.Entities.AiSettings;
+
+public record CreateAiSettingsCommand(
+    Guid AiSettingsId,
+    string Prompt,
+    string LanguageModelPath) : INotification, IRequest<Unit>;

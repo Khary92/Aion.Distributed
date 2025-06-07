@@ -1,0 +1,86 @@
+using System.Collections.ObjectModel;
+using Contract.Notifications.Entities.Tickets;
+using ReactiveUI;
+
+namespace Contract.DTO;
+
+public class TicketDto : ReactiveObject
+{
+    private Guid _ticketId;
+    private string _name = string.Empty;
+    private string _bookingNumber = string.Empty;
+    private string _documentation = string.Empty;
+    private Collection<Guid> _sprintIds = [];
+
+    public TicketDto(Guid ticketId, string name, string bookingNumber, string documentation, Collection<Guid> sprintIds)
+    {
+        TicketId = ticketId;
+        Name = name;
+        BookingNumber = bookingNumber;
+        Documentation = documentation;
+        SprintIds = sprintIds;
+        PreviousDocumentation = documentation;
+    }
+
+    private string PreviousDocumentation { get; set; }
+
+    public Guid TicketId
+    {
+        get => _ticketId;
+        init => this.RaiseAndSetIfChanged(ref _ticketId, value);
+    }
+
+    public string Name
+    {
+        get => _name;
+        set => this.RaiseAndSetIfChanged(ref _name, value);
+    }
+
+    public string BookingNumber
+    {
+        get => _bookingNumber;
+        set => this.RaiseAndSetIfChanged(ref _bookingNumber, value);
+    }
+
+    public Collection<Guid> SprintIds
+    {
+        get => _sprintIds;
+        private set => this.RaiseAndSetIfChanged(ref _sprintIds, value);
+    }
+
+    public string Documentation
+    {
+        get => _documentation;
+        set => this.RaiseAndSetIfChanged(ref _documentation, value);
+    }
+
+    public void Apply(TicketDataUpdatedNotification notification)
+    {
+        BookingNumber = notification.BookingNumber;
+        Name = notification.Name;
+        SprintIds = notification.SprintIds;
+    }
+
+    public void Apply(TicketDocumentationUpdatedNotification notification)
+    {
+        Documentation = notification.Documentation;
+    }
+
+    public void SynchronizeDocumentation(string documentation)
+    {
+        PreviousDocumentation = Documentation;
+        Documentation = documentation;
+    }
+
+    public TicketDto Clone()
+    {
+        return new TicketDto(TicketId, Name, BookingNumber, Documentation, SprintIds);
+    }
+
+    public bool IsDocumentationChanged()
+    {
+        var result = !PreviousDocumentation.Equals(Documentation);
+        PreviousDocumentation = Documentation;
+        return result;
+    }
+}
