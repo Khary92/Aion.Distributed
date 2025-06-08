@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package Proto.Command.Note;
+
+import "google/protobuf/timestamp.proto";
+
+service NoteCommandService {
+  rpc CreateNote (CreateNoteProtoCommand) returns (CommandResponse);
+  rpc UpdateNote (UpdateNoteProtoCommand) returns (CommandResponse);
+}
+
+message CreateNoteProtoCommand {
+  string noteId = 1;
+  string text = 2;
+  string noteTypeId = 3;
+  string timeSlotId = 4;
+  google.protobuf.Timestamp timeStamp = 5;
+}
+
+message UpdateNoteProtoCommand {
+  string noteId = 1;
+  string text = 2;
+  string noteTypeId = 3;
+  string timeSlotId = 4;
+}
+
+message CommandResponse {
+  bool success = 1;
+}

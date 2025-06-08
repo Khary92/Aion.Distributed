@@ -1,0 +1,103 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:avalonia="clr-namespace:LiveChartsCore.SkiaSharpView.Avalonia;assembly=LiveChartsCore.SkiaSharpView.Avalonia"
+             xmlns:analysis="clr-namespace:Client.Avalonia.ViewModels.Analysis"
+             x:DataType="analysis:AnalysisByTagViewModel"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="450"
+             x:Class="Client.Avalonia.Views.Analysis.AnalysisByTagControl"
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch"
+             Background="Transparent">
+
+    <UserControl.DataContext>
+        <analysis:AnalysisByTagViewModel />
+    </UserControl.DataContext>
+
+    <Grid ColumnDefinitions="200,*"
+          RowDefinitions="*">
+
+        <Border Grid.Row="0"
+                Grid.Column="0"
+                Margin="0,0,5,5">
+            <Grid RowDefinitions="Auto,*">
+                <TextBlock Grid.Row="0"
+                           Text="Select a tag"
+                           HorizontalAlignment="Center" />
+
+                <ListBox Grid.Row="1"
+                         Margin="10,0,10,0"
+                         Name="ListBoxItems"
+                         ItemsSource="{Binding Model.Tags}"
+                         SelectedItem="{Binding SelectedTag, Mode=TwoWay}"
+                         SelectionMode="Single"
+                         VerticalAlignment="Stretch">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}"
+                                       VerticalAlignment="Center" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="0"
+                Grid.Column="1"
+                Margin="5,0,0,5">
+            <Grid RowDefinitions="Auto,*,Auto,*"
+                  ColumnDefinitions="*,*"
+                  Margin="0,0,10,0"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch">
+
+                <TextBlock Grid.Row="0"
+                           Grid.Column="0"
+                           Grid.ColumnSpan="2"
+                           Text="Productivity by tag usage"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,10" />
+
+                <avalonia:PieChart Grid.Row="1"
+                                   Grid.Column="0"
+                                   Grid.ColumnSpan="2"
+                                   Background="Transparent"
+                                   HorizontalAlignment="Stretch"
+                                   VerticalAlignment="Stretch"
+                                   Series="{Binding ProductivityPieChart, Mode=OneWay}" />
+
+                <TextBlock Grid.Row="2"
+                           Grid.Column="0"
+                           Grid.ColumnSpan="2"
+                           Text="Productivity by time spent with tag"
+                           HorizontalAlignment="Center"
+                           Margin="0,20,0,10" />
+
+                <Grid Grid.Row="3"
+                      Grid.Column="0"
+                      Grid.ColumnSpan="2"
+                      ColumnDefinitions="*,*">
+                    <avalonia:PieChart Grid.Column="0"
+                                       Background="Transparent"
+                                       HorizontalAlignment="Stretch"
+                                       VerticalAlignment="Stretch"
+                                       Series="{Binding ProductivityByTimeSpentPieChart, Mode=OneWay}" />
+
+                    <avalonia:CartesianChart Grid.Column="1"
+                                             Background="Transparent"
+                                             HorizontalAlignment="Stretch"
+                                             VerticalAlignment="Stretch"
+                                             Series="{Binding ProductivityTimeSpentBarChart}"
+                                             XAxes="{Binding ProductivityTimeSpentBarChartXAxisNames}"
+                                             YAxes="{Binding ProductivityTimeSpentBarChartYAxis}" />
+                </Grid>
+
+            </Grid>
+        </Border>
+
+    </Grid>
+
+</UserControl>

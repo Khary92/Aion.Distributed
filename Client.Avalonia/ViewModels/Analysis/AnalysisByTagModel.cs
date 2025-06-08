@@ -1,0 +1,66 @@
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
+using Client.Avalonia.Communication.NotificationProcessors.Messages;
+using Client.Avalonia.Communication.RequiresChange;
+using CommunityToolkit.Mvvm.Messaging;
+using Contract.Decorators;
+using Contract.DTO;
+using MediatR;
+using ReactiveUI;
+
+namespace Client.Avalonia.ViewModels.Analysis;
+
+public class AnalysisByTagModel : ReactiveObject
+{
+    private readonly IAnalysisDataService _analysisDataService;
+    private readonly IMediator _mediator;
+    private readonly IMessenger _messenger;
+
+    private AnalysisByTagDecorator? _analysisByTag;
+
+    public AnalysisByTagModel(IMediator mediator, IMessenger messenger, IAnalysisDataService analysisDataService)
+    {
+        _mediator = mediator;
+        _messenger = messenger;
+        _analysisDataService = analysisDataService;
+        _analysisDataService = analysisDataService;
+
+        InitializeAsync().ConfigureAwait(false);
+        RegisterMessenger();
+    }
+
+    public ObservableCollection<TagDto> Tags { get; } = [];
+
+
+    public AnalysisByTagDecorator? AnalysisByTag
+    {
+        get => _analysisByTag;
+        private set => this.RaiseAndSetIfChanged(ref _analysisByTag, value);
+    }
+
+    private void RegisterMessenger()
+    {
+        _messenger.Register<NewTagMessage>(this, (_, m) => { Tags.Add(m.Tag); });
+
+        _messenger.Register<UpdateTagCommand>(this, (_, m) =>
+        {
+            var tag = Tags.FirstOrDefault(t => t.TagId == m.TagId);
+
+            if (tag == null) return;
+
+            tag.Name = m.Name;
+        });
+    }
+
+    private async Task InitializeAsync()
+    {
+        Tags.Clear();
+        Tags.AddRange(await _mediator.Send(new GetAllTagsRequest()));
+    }
+
+    public async Task SetAnalysisForTag(TagDto selectedTag)
+    {
+        AnalysisByTag = await _analysisDataService.GetAnalysisByTag(selectedTag);
+    }
+}

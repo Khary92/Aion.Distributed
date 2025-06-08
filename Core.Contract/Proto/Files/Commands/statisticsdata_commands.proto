@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package Proto.Command.StatisticsData;
+
+service StatisticsDataCommandService {
+  rpc ChangeProductivity (ChangeProductivityProtoCommand) returns (CommandResponse);
+  rpc ChangeTagSelection (ChangeTagSelectionProtoCommand) returns (CommandResponse);
+  rpc CreateStatisticsData (CreateStatisticsDataProtoCommand) returns (CommandResponse);
+}
+
+message ChangeProductivityProtoCommand {
+  string statisticsDataId = 1;
+  bool isProductive = 2;
+  bool isNeutral = 3;
+  bool isUnproductive = 4;
+}
+
+message ChangeTagSelectionProtoCommand {
+  string statisticsDataId = 1;
+  repeated string selectedTagIds = 2;
+}
+
+message CreateStatisticsDataProtoCommand {
+  string statisticsDataId = 1;
+  bool isProductive = 2;
+  bool isNeutral = 3;
+  bool isUnproductive = 4;
+  repeated string tagIds = 5;
+  string timeSlotId = 6;
+}
+
+message CommandResponse {
+  bool success = 1;
+}

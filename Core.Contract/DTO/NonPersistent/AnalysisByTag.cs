@@ -1,4 +1,3 @@
-
 namespace Contract.DTO.NonPersistent;
 
 public class AnalysisByTag

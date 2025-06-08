@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package Proto.Command.Tracing;
+
+service TraceReportCommandService {
+  rpc SendTraceReport (SendTraceReportProtoCommand) returns (CommandResponse);
+}
+
+message SendTraceReportProtoCommand {
+  string traceReportDto = 1;
+}
+
+message CommandResponse {
+  bool success = 1;
+}

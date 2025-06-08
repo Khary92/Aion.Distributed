@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package Proto.Notification.TimerSettings;
+
+service NotificationService {
+  rpc SendDocuTimerSaveIntervalChanged(DocuTimerSaveIntervalChangedNotificationProto) returns (NotificationResponse);
+  rpc SendSnapshotSaveIntervalChanged(SnapshotSaveIntervalChangedNotificationProto) returns (NotificationResponse);
+  rpc SendTimerSettingsCreated(TimerSettingsCreatedNotificationProto) returns (NotificationResponse);
+}
+
+message DocuTimerSaveIntervalChangedNotificationProto {
+  string timerSettingsId = 1;
+  int32 docuTimerSaveInterval = 2;
+}
+
+message SnapshotSaveIntervalChangedNotificationProto {
+  string timerSettingsId = 1;
+  int32 snapshotSaveInterval = 2;
+}
+
+message TimerSettingsCreatedNotificationProto {
+  string timerSettingsId = 1;
+  int32 documentationSaveInterval = 2;
+  int32 snapshotSaveInterval = 3;
+}
+
+message NotificationResponse {
+  bool success = 1;
+}

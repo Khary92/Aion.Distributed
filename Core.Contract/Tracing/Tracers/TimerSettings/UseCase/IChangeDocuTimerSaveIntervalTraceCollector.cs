@@ -8,5 +8,4 @@ public interface IChangeDocuTimerSaveIntervalTraceCollector
     void NoAggregateFound(Type originClassType, Guid traceId);
     void ChangesApplied(Type originClassType, Guid traceId);
     void PropertyNotChanged(Type originClassType, Guid traceId, Dictionary<string, string> asTraceAttributes);
-    
 }

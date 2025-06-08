@@ -1,0 +1,22 @@
+Allgemeiner Look & Feel:
+- Designstil: Minimalistisch, ohne unnötige Design-Elemente oder Dekorationen.
+- Farbthema: Dark Theme, um den Kontrast zu betonen und den Fokus auf die Inhalte zu lenken.
+- Stimmung: Retro Eleganz – ein modernes Design mit einem nostalgischen Touch.
+- Übersichtlichkeit: Klare Abgrenzung der einzelnen Bereiche, um die kognitive Komplexität zu verringern und die Benutzerführung zu verbessern.
+
+Schriftarten:
+- Schriftart: PT Sans (Sans Serif).
+  - Gründe: PT Sans sorgt für einen klaren, sauberen Look und ist gut lesbar.
+  - Optionen: Alternative Sans Serif-Schriften wie Oswald, Poppins, Nunito, und Exo wurden überprüft, aber PT Sans wurde als die beste Option gewählt.
+
+Buttons & Steuerelemente:
+- Schaltflächen: Abgerundete Ecken, um ein weiches, angenehmes Erscheinungsbild zu gewährleisten.
+- Container: Klare, kantige Trennungen der einzelnen Steuerelemente für bessere Übersichtlichkeit.
+
+Weitere Designaspekte:
+- Menü: Das Seitenmenü sollte benutzerfreundlicher gestaltet werden, da das aktuelle Menü als „hacky“ empfunden wird. 
+Es soll funktional bleiben, aber auch ästhetisch ansprechender wirken.
+
+Zusammenfassung:
+Der Styleguide legt Wert auf einen modernen, minimalistischen Look mit einem Dark Theme und klaren, gut strukturierten Bereichen. 
+Wichtige Designaspekte beinhalten eine saubere Schriftwahl (PT Sans) und abgerundete Schaltflächen, um die Benutzererfahrung weich und angenehm zu gestalten.

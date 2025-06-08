@@ -1,16 +1,16 @@
-using Contract.Notifications.Entities.Sprints;
+using Contract.CQRS.Notifications.Entities.Sprints;
 using ReactiveUI;
 
 namespace Contract.DTO;
 
 public class SprintDto : ReactiveObject
 {
-    private Guid _sprintId;
-    private string _name = string.Empty;
-    private bool _isActive;
-    private DateTimeOffset _startTime;
+    private readonly List<Guid> _ticketIds = [];
     private DateTimeOffset _endTime;
-    private List<Guid> _ticketIds = [];
+    private bool _isActive;
+    private string _name = string.Empty;
+    private Guid _sprintId;
+    private DateTimeOffset _startTime;
 
     public SprintDto(Guid sprintId, string name, bool isActive, DateTimeOffset startTime, DateTimeOffset endTime,
         List<Guid> ticketIds)
@@ -89,7 +89,7 @@ public class SprintDto : ReactiveObject
     {
         IsActive = notification.IsActive;
     }
-    
+
     public override string ToString()
     {
         return $"SprintDto:{{sprintId:'{SprintId}', Name:'{Name}', isActive:'{IsActive}'," +

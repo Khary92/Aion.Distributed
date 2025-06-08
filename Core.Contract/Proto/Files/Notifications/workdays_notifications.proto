@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package Proto.Notification.WorkDays;
+
+service NotificationService {
+  rpc SendWorkDayCreated(WorkDayCreatedNotificationProto) returns (NotificationResponse);
+}
+
+message WorkDayCreatedNotificationProto {
+  string workDayId = 1;
+  string date = 2; // ISO 8601 string
+}
+
+message NotificationResponse {
+  bool success = 1;
+}

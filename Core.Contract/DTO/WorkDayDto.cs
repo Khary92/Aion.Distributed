@@ -5,7 +5,7 @@ namespace Contract.DTO;
 public class WorkDayDto : ReactiveObject
 {
     private readonly Guid _workDayId;
-    
+
     private DateTimeOffset _date;
 
     public WorkDayDto(Guid workDayId, DateTimeOffset date)
@@ -13,7 +13,7 @@ public class WorkDayDto : ReactiveObject
         WorkDayId = workDayId;
         Date = date;
     }
-    
+
     public Guid WorkDayId
     {
         get => _workDayId;

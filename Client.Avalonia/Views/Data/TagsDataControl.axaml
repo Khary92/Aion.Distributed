@@ -1,0 +1,41 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:sprintData="clr-namespace:Client.Avalonia.ViewModels.Data"
+             x:DataType="sprintData:TagsDataViewModel"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Client.Avalonia.Views.Data.TagsDataControl">
+
+
+    <Grid ColumnDefinitions="*,*">
+        <Grid Grid.Column="0" RowDefinitions="1*,3*">
+            <TextBlock Grid.Row="0" Grid.Column="0"
+                       FontSize="{StaticResource FontSizeExtraLarge}"
+                       Text="Tags" VerticalAlignment="Center" />
+            <Grid Grid.Row="1" VerticalAlignment="Center" RowDefinitions="*,*,*">
+                <TextBlock Grid.Row="0" Text="Name" HorizontalAlignment="Left" />
+                <TextBox Grid.Row="1" Text="{Binding InputTagName}" HorizontalAlignment="Stretch" />
+                <StackPanel Grid.Row="2" Orientation="Horizontal">
+                    <Button Name="SaveTagButton" Content="Save"
+                            IsEnabled="{Binding PersistTagCommand.CanExecute, Mode=OneWay}"
+                            Command="{Binding PersistTagCommand}" />
+                    <Button Name="EditTagButton" Content="Edit"
+                            IsEnabled="{Binding EditTagCommand.CanExecute, Mode=OneWay}"
+                            Command="{Binding EditTagCommand}" />
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+        <DataGrid Grid.Column="1"
+                  ItemsSource="{Binding DataModel.Tags}"
+                  SelectedItem="{Binding SelectedTag, Mode=TwoWay}"
+                  IsReadOnly="True"
+                  GridLinesVisibility="All">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Tag Name" Width="*"
+                                    Binding="{Binding Name}" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

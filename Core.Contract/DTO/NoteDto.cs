@@ -1,16 +1,16 @@
-using Contract.Notifications.Entities.Note;
+using Contract.CQRS.Notifications.Entities.Note;
 using ReactiveUI;
 
 namespace Contract.DTO;
 
 public class NoteDto : ReactiveObject
 {
+    private readonly DateTimeOffset _timeStamp;
     private Guid _noteId;
     private NoteTypeDto? _noteType;
     private Guid _noteTypeId;
     private string _text = string.Empty;
     private Guid _timeSlotId;
-    private readonly DateTimeOffset _timeStamp;
 
     public NoteDto(Guid noteId, string text, Guid noteTypeId, Guid timeSlotId, DateTimeOffset timeStamp)
     {

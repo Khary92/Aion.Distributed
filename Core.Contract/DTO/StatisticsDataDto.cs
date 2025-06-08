@@ -4,17 +4,16 @@ namespace Contract.DTO;
 
 public sealed class StatisticsDataDto : ReactiveObject
 {
+    private readonly Guid _statisticsId;
+    private readonly Guid _timeSlotId;
     private bool _isNeutral;
     private bool _isProductive;
     private bool _isUnproductive;
 
-    private readonly Guid _statisticsId;
-    private readonly Guid _timeSlotId;
-
     private PreviousProductivityState _previousProductivityState;
     private PreviousTagsState _previousTagsState;
     private List<Guid> _tagIds = [];
-    
+
     public StatisticsDataDto(Guid statisticsId, Guid timeSlotId, List<Guid> tagIds, bool isProductive, bool isNeutral,
         bool isUnproductive)
     {

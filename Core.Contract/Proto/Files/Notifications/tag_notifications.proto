@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package Proto.Notification.Tags;
+
+service NotificationService {
+  rpc SendTagCreated(TagCreatedNotificationProto) returns (NotificationResponse);
+  rpc SendTagUpdated(TagUpdatedNotificationProto) returns (NotificationResponse);
+}
+
+message TagCreatedNotificationProto {
+  string tagId = 1;
+  string name = 2;
+}
+
+message TagUpdatedNotificationProto {
+  string tagId = 1;
+  string name = 2;
+}
+
+message NotificationResponse {
+  bool success = 1;
+}

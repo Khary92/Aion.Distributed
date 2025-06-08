@@ -1,0 +1,30 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:documentation="clr-namespace:Client.Avalonia.ViewModels.Documentation"
+             x:DataType="documentation:TypeCheckBoxViewModel"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Client.Avalonia.Views.Documentation.TypeCheckBoxControl">
+
+    <Border CornerRadius="{StaticResource CornerRadius}"
+            Background="{Binding NoteType.Color, Converter={StaticResource HexColorToAvaloniaColorConverter}}"
+            Margin="{StaticResource GeneralControlMargin}">
+
+        <StackPanel Margin="{StaticResource GeneralControlMargin}" Orientation="Horizontal" VerticalAlignment="Center">
+            <ToggleButton IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                          Width="20" Height="20"
+                          Background="Transparent"
+                          BorderThickness="2"
+                          Content="" />
+
+            <TextBlock Margin="8,0,0,0"
+                       VerticalAlignment="Center"
+                       Foreground="{StaticResource ForegroundBrush}"
+                       Background="Transparent"
+                       FontSize="{StaticResource FontSizeNormal}"
+                       Text="{Binding NoteType.Name}" />
+        </StackPanel>
+
+    </Border>
+</UserControl>

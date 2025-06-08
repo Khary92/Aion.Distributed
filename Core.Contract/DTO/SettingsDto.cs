@@ -8,13 +8,13 @@ public class SettingsDto : ReactiveObject
     private string _exportPath = string.Empty;
     private bool _isAddNewTicketsToCurrentSprintActive;
 
-    public SettingsDto(Guid settingsId, string exportPath, bool isAddNewTicketsToCurrentSprintActive )
+    public SettingsDto(Guid settingsId, string exportPath, bool isAddNewTicketsToCurrentSprintActive)
     {
         SettingsId = settingsId;
         ExportPath = exportPath;
         IsAddNewTicketsToCurrentSprintActive = isAddNewTicketsToCurrentSprintActive;
     }
-    
+
     public Guid SettingsId
     {
         get => _settingsId;

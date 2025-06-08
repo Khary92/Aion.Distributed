@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package Proto.Notification.UseCase;
+
+service NotificationService {
+  rpc SendCreateSnapshot(CreateSnapshotNotificationProto) returns (NotificationResponse);
+  rpc SendSaveDocumentation(SaveDocumentationNotificationProto) returns (NotificationResponse);
+  rpc SendSprintSelectionChanged(SprintSelectionChangedNotificationProto) returns (NotificationResponse);
+  rpc SendTimeSlotControlCreated(TimeSlotControlCreatedNotificationProto) returns (NotificationResponse);
+  rpc SendTraceReportSent(TraceReportSentNotificationProto) returns (NotificationResponse);
+  rpc SendWorkDaySelectionChanged(WorkDaySelectionChangedNotificationProto) returns (NotificationResponse);
+}
+
+message CreateSnapshotNotificationProto {}
+
+message SaveDocumentationNotificationProto {}
+
+message SprintSelectionChangedNotificationProto {}
+
+message TimeSlotControlCreatedNotificationProto {
+  string viewId = 1;
+  string timeSlotId = 2;
+  string ticketId = 3;
+}
+
+message TraceReportSentNotificationProto {
+  string traceReportDto = 1;
+}
+
+message WorkDaySelectionChangedNotificationProto {}
+
+message NotificationResponse {
+  bool success = 1;
+}

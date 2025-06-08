@@ -1,5 +1,4 @@
 using Contract.DTO.Replays;
-using Contract.Services;
 using ReactiveUI;
 
 namespace Contract.DTO;
@@ -7,7 +6,7 @@ namespace Contract.DTO;
 public class TicketReplayDecorator : ReactiveObject
 {
     private readonly List<DocumentationReplayDto> _documentationHistory = [];
-    private readonly IHistoryLoader<DocumentationReplayDto> _documentationHistoryLoader;
+    // private readonly IHistoryLoader<DocumentationReplayDto> _documentationHistoryLoader;
 
     private string _displayedDocumentation = string.Empty;
 
@@ -15,10 +14,10 @@ public class TicketReplayDecorator : ReactiveObject
 
     private bool _isReplayMode;
 
-    public TicketReplayDecorator(TicketDto ticketDto, IHistoryLoader<DocumentationReplayDto> documentationHistoryLoader)
+    public TicketReplayDecorator(TicketDto ticketDto)
     {
         Ticket = ticketDto;
-        _documentationHistoryLoader = documentationHistoryLoader;
+        // _documentationHistoryLoader = documentationHistoryLoader;
 
         DisplayedDocumentation = ticketDto.Documentation;
     }
@@ -44,17 +43,17 @@ public class TicketReplayDecorator : ReactiveObject
 
     public async Task LoadHistory()
     {
-        var ticketDocumentationEventsByTicketId =
-            await _documentationHistoryLoader.Load(Ticket.TicketId);
+//        var ticketDocumentationEventsByTicketId =
+//            await _documentationHistoryLoader.Load(Ticket.TicketId);
 
-        _documentationHistory.Clear();
-        foreach (var ticketDocumentationEvent in ticketDocumentationEventsByTicketId)
-            _documentationHistory.Add(new DocumentationReplayDto(ticketDocumentationEvent.Documentation));
+//        _documentationHistory.Clear();
+//        foreach (var ticketDocumentationEvent in ticketDocumentationEventsByTicketId)
+//            _documentationHistory.Add(new DocumentationReplayDto(ticketDocumentationEvent.Documentation));
 
-        if (_documentationHistory.Count == 0) return;
+//        if (_documentationHistory.Count == 0) return;
 
-        _index = 0;
-        DisplayedDocumentation = _documentationHistory[_index].Documentation;
+//        _index = 0;
+//        DisplayedDocumentation = _documentationHistory[_index].Documentation;
     }
 
     public void ExitReplay()

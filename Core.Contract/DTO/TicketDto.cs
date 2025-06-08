@@ -1,15 +1,15 @@
 using System.Collections.ObjectModel;
-using Contract.Notifications.Entities.Tickets;
+using Contract.CQRS.Notifications.Entities.Tickets;
 using ReactiveUI;
 
 namespace Contract.DTO;
 
 public class TicketDto : ReactiveObject
 {
-    private Guid _ticketId;
-    private string _name = string.Empty;
+    private readonly Guid _ticketId;
     private string _bookingNumber = string.Empty;
     private string _documentation = string.Empty;
+    private string _name = string.Empty;
     private Collection<Guid> _sprintIds = [];
 
     public TicketDto(Guid ticketId, string name, string bookingNumber, string documentation, Collection<Guid> sprintIds)

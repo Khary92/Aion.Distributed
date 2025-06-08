@@ -4,15 +4,15 @@ namespace Contract.DTO;
 
 public class TimeSlotDto : ReactiveObject
 {
+    private readonly Guid _selectedTicket;
     private readonly Guid _timeSlotId;
     private readonly Guid _workDayId;
-    private readonly Guid _selectedTicket;
-    
-    private DateTimeOffset _startTime;
     private DateTimeOffset _endTime;
-    
-    private List<Guid> _noteIds = [];
     private bool _isTimerRunning;
+
+    private List<Guid> _noteIds = [];
+
+    private DateTimeOffset _startTime;
 
     public TimeSlotDto(Guid timeSlotId, Guid workDayId, Guid ticketId, DateTimeOffset startTime, DateTimeOffset endTime,
         List<Guid> noteIds, bool isTimerRunning)
@@ -24,7 +24,7 @@ public class TimeSlotDto : ReactiveObject
         EndTime = endTime;
         NoteIds = noteIds;
         IsTimerRunning = isTimerRunning;
-        
+
         PreviousEndTime = _endTime;
         PreviousStartTime = _startTime;
     }

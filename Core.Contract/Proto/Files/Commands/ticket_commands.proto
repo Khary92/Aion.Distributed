@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package Proto.Command.Tickets;
+
+service TicketCommandService {
+  rpc CreateTicket (CreateTicketProtoCommand) returns (CommandResponse);
+  rpc UpdateTicketData (UpdateTicketDataProtoCommand) returns (CommandResponse);
+  rpc UpdateTicketDocumentation (UpdateTicketDocumentationProtoCommand) returns (CommandResponse);
+}
+
+message CreateTicketProtoCommand {
+  string ticketId = 1;
+  string name = 2;
+  string bookingNumber = 3;
+  repeated string sprintIds = 4;
+}
+
+message UpdateTicketDataProtoCommand {
+  string ticketId = 1;
+  string name = 2;
+  string bookingNumber = 3;
+  repeated string sprintIds = 4;
+}
+
+message UpdateTicketDocumentationProtoCommand {
+  string ticketId = 1;
+  string documentation = 2;
+}
+
+message CommandResponse {
+  bool success = 1;
+}

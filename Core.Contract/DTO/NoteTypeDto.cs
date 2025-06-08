@@ -1,4 +1,4 @@
-using Contract.Notifications.Entities.NoteType;
+using Contract.CQRS.Notifications.Entities.NoteType;
 using ReactiveUI;
 
 namespace Contract.DTO;
@@ -6,7 +6,7 @@ namespace Contract.DTO;
 public class NoteTypeDto : ReactiveObject
 {
     private readonly Guid _noteTypeId;
-    
+
     private string _color = string.Empty;
     private string _name = string.Empty;
 
@@ -22,7 +22,7 @@ public class NoteTypeDto : ReactiveObject
         _previousName = name;
         _previousColor = color;
     }
-    
+
     public Guid NoteTypeId
     {
         get => _noteTypeId;
@@ -54,7 +54,7 @@ public class NoteTypeDto : ReactiveObject
     public bool IsColorChanged()
     {
         if (_color == _previousColor) return false;
-        
+
         _previousColor = _color;
         return true;
     }
@@ -62,7 +62,7 @@ public class NoteTypeDto : ReactiveObject
     public bool IsNameChanged()
     {
         if (_name == _previousName) return false;
-        
+
         _previousName = _name;
         return true;
     }

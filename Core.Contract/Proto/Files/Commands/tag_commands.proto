@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package Proto.Command.Tags;
+
+service TagCommandService {
+  rpc CreateTag (CreateTagProtoCommand) returns (CommandResponse);
+  rpc UpdateTag (UpdateTagProtoCommand) returns (CommandResponse);
+}
+
+message CreateTagProtoCommand {
+  string tagId = 1;
+  string name = 2;
+}
+
+message UpdateTagProtoCommand {
+  string tagId = 1;
+  string name = 2;
+}
+
+message CommandResponse {
+  bool success = 1;
+}

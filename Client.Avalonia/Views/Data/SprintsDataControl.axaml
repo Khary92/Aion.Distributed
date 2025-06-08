@@ -1,0 +1,60 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:data="clr-namespace:Client.Avalonia.ViewModels.Data"
+             x:DataType="data:SprintsDataViewModel"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Client.Avalonia.Views.Data.SprintsDataControl"
+             HorizontalAlignment="Stretch"
+             VerticalAlignment="Stretch">
+
+    <Grid ColumnDefinitions="*,*">
+        <Grid Grid.Column="0" RowDefinitions="1*,3*">
+            <TextBlock Grid.Row="0" Grid.Column="0"
+                       FontSize="{StaticResource FontSizeExtraLarge}"
+                       Text="Sprints" VerticalAlignment="Center" />
+            <Grid Grid.Row="1" VerticalAlignment="Center" RowDefinitions="*,*,*,*,*,*,*">
+                <Label Grid.Row="0" Content="Sprint name" />
+                <TextBox Grid.Row="1" Text="{Binding NewSprintName}" />
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="Start date" />
+                <DatePicker Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center"
+                            SelectedDate="{Binding StartTime, Mode = TwoWay, 
+                                Converter={StaticResource DateTimeOffsetConverter}}" />
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="End date" />
+                <DatePicker Grid.Row="5" Grid.Column="0" HorizontalAlignment="Center"
+                            SelectedDate="{Binding EndTime, Mode = TwoWay,
+                            Converter={StaticResource DateTimeOffsetConverter}}" />
+
+                <StackPanel Grid.Row="6" Grid.Column="0"
+                            Orientation="Horizontal">
+                    <Button Name="SaveSprintButton" Content="Save"
+                            IsEnabled="{Binding CreateSprintCommand.CanExecute, Mode=OneWay}"
+                            Command="{Binding CreateSprintCommand}" />
+                    <Button Name="EditSprintButton" Content="{Binding EditButtonText}"
+                            IsEnabled="{Binding SelectedItem, ElementName=DataGridSprints, 
+                            Converter={StaticResource NullToBoolConverter}}"
+                            Command="{Binding EditSprintCommand}" />
+                    <Button Name="SetSprintActiveButton" Content="Set active"
+                            IsEnabled="{Binding SelectedItem, ElementName=DataGridSprints, 
+                            Converter={StaticResource NullToBoolConverter}}"
+                            Command="{Binding SetSprintActiveCommand}" />
+                </StackPanel>
+            </Grid>
+        </Grid>
+
+        <DataGrid Grid.Column="1" Name="DataGridSprints"
+                  HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                  ItemsSource="{Binding DataModel.Sprints, Mode=TwoWay}"
+                  SelectedItem="{Binding SelectedSprint, Mode=TwoWay}"
+                  IsReadOnly="True"
+                  GridLinesVisibility="All">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Width="*" Binding="{Binding Name}" />
+                <DataGridTextColumn Header="Start date" Width="*" Binding="{Binding StartTimeRepresentation}" />
+                <DataGridTextColumn Header="End date" Width="*" Binding="{Binding EndTimeRepresentation}" />
+                <DataGridTextColumn Header="Is active sprint" Width="*" Binding="{Binding IsActive}" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+</UserControl>

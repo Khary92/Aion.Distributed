@@ -14,7 +14,7 @@ public class AiSettingsDto : ReactiveObject
         LanguageModelPath = languageModelPath;
         Prompt = prompt;
     }
-    
+
     public Guid AiSettingsId
     {
         get => _aiSettingsId;

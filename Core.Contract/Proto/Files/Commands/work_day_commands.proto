@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package Proto.Command.WorkDays;
+
+service WorkDayCommandService {
+  rpc CreateWorkDay (CreateWorkDayProtoCommand) returns (CommandResponse);
+}
+
+message CreateWorkDayProtoCommand {
+  string workDayId = 1;
+  string date = 2; // ISO 8601 datetime string
+}
+
+message CommandResponse {
+  bool success = 1;
+}

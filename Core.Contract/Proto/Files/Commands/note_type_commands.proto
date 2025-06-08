@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package Proto.Command.NoteType;
+
+service NoteTypeCommandService {
+  rpc ChangeNoteTypeColor (ChangeNoteTypeColorProtoCommand) returns (CommandResponse);
+  rpc ChangeNoteTypeName (ChangeNoteTypeNameProtoCommand) returns (CommandResponse);
+  rpc CreateNoteType (CreateNoteTypeProtoCommand) returns (CommandResponse);
+}
+
+message ChangeNoteTypeColorProtoCommand {
+  string noteTypeId = 1;
+  string color = 2;
+}
+
+message ChangeNoteTypeNameProtoCommand {
+  string noteTypeId = 1;
+  string name = 2;
+}
+
+message CreateNoteTypeProtoCommand {
+  string noteTypeId = 1;
+  string name = 2;
+  string color = 3;
+}
+
+message CommandResponse {
+  bool success = 1;
+}

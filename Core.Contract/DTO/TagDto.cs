@@ -1,13 +1,13 @@
-using Contract.Notifications.Entities.Tags;
+using Contract.CQRS.Notifications.Entities.Tags;
 using ReactiveUI;
 
 namespace Contract.DTO;
 
 public class TagDto : ReactiveObject
 {
-    private Guid _tagId;
+    private readonly bool _isSelected;
+    private readonly Guid _tagId;
     private string _name = string.Empty;
-    private bool _isSelected;
 
     public TagDto(Guid tagId, string name, bool isSelected)
     {

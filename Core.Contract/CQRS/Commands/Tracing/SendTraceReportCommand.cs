@@ -1,7 +1,6 @@
-using Contract.DTO;
 using MediatR;
 
 namespace Contract.CQRS.Commands.Tracing;
 
-public record SendTraceReportCommand(TraceReportDto TraceReportDto)
+public record SendTraceReportCommand(string TraceReportDto)
     : IRequest<Unit>;

@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+package Proto.Notification.Tickets;
+
+import "google/protobuf/wrappers.proto";
+
+service NotificationService {
+  rpc SendTicketCreated(TicketCreatedNotificationProto) returns (NotificationResponse);
+  rpc SendTicketDataUpdated(TicketDataUpdatedNotificationProto) returns (NotificationResponse);
+  rpc SendTicketDocumentationUpdated(TicketDocumentationUpdatedNotificationProto) returns (NotificationResponse);
+}
+
+message TicketCreatedNotificationProto {
+  string ticketId = 1;
+  string name = 2;
+  string bookingNumber = 3;
+  repeated string sprintIds = 4; // Guids as strings
+}
+
+message TicketDataUpdatedNotificationProto {
+  string ticketId = 1;
+  string name = 2;
+  string bookingNumber = 3;
+  repeated string sprintIds = 4;
+}
+
+message TicketDocumentationUpdatedNotificationProto {
+  string ticketId = 1;
+  string documentation = 2;
+}
+
+message NotificationResponse {
+  bool success = 1;
+}

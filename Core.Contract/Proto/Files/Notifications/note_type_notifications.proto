@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package Proto.Notification.NoteType;
+
+service NotificationService {
+  rpc SendNoteTypeColorChanged(NoteTypeColorChangedNotificationProto) returns (NotificationResponse);
+  rpc SendNoteTypeCreated(NoteTypeCreatedNotificationProto) returns (NotificationResponse);
+  rpc SendNoteTypeNameChanged(NoteTypeNameChangedNotificationProto) returns (NotificationResponse);
+}
+
+message NoteTypeColorChangedNotificationProto {
+  string noteTypeId = 1;
+  string color = 2;
+}
+
+message NoteTypeCreatedNotificationProto {
+  string noteTypeId = 1;
+  string name = 2;
+  string color = 3;
+}
+
+message NoteTypeNameChangedNotificationProto {
+  string noteTypeId = 1;
+  string name = 2;
+}
+
+message NotificationResponse {
+  bool success = 1;
+}

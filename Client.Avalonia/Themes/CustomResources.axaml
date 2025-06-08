@@ -1,0 +1,45 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:system="clr-namespace:System;assembly=System.Runtime">
+
+    <Color x:Key="BackgroundColor">#121212</Color>
+    <Color x:Key="SurfaceColor">#1E1E1E</Color>
+    <Color x:Key="PrimaryColor">#3B82F6</Color>
+    <Color x:Key="ForegroundColor">#E0E0E0</Color>
+    <Color x:Key="BorderColor">#2C2C2C</Color>
+    <Color x:Key="HoverColor">#2A2A2A</Color>
+    <Color x:Key="DisabledColor">#555555</Color>
+
+    <Color x:Key="ExitButtonColor">#1A0000</Color>
+    <Color x:Key="MaximizeButtonColor">#2A2A00</Color>
+    <Color x:Key="MinimizeButtonColor">#001900</Color>
+
+    <FontFamily x:Key="RegularFont">resm:Themes.Fonts.PtSans.PTSans-Regular.ttf#PT Sans</FontFamily>
+    <FontFamily x:Key="BoldFont">resm:Themes.Fonts.PtSans.PTSans-Bold.ttf#PT Sans</FontFamily>
+    <FontFamily x:Key="ItalicFont">resm:Themes.Fonts.PtSans.PTSans-Italic.ttf#PT Sans</FontFamily>
+    <FontFamily x:Key="BoldItalicFont">resm:Themes.Fonts.PtSans.PTSans-BoldItalic.ttf#PT Sans</FontFamily>
+
+    <SolidColorBrush x:Key="BackgroundBrush" Color="{DynamicResource BackgroundColor}" />
+    <SolidColorBrush x:Key="SurfaceBrush" Color="{DynamicResource SurfaceColor}" />
+    <SolidColorBrush x:Key="PrimaryBrush" Color="{DynamicResource PrimaryColor}" />
+    <SolidColorBrush x:Key="ForegroundBrush" Color="{DynamicResource ForegroundColor}" />
+    <SolidColorBrush x:Key="BorderBrush" Color="{DynamicResource BorderColor}" />
+    <SolidColorBrush x:Key="HoverBrush" Color="{DynamicResource HoverColor}" />
+    <SolidColorBrush x:Key="DisabledBrush" Color="{DynamicResource DisabledColor}" />
+    <SolidColorBrush x:Key="ExitButtonBrush" Color="{DynamicResource ExitButtonColor}" />
+    <SolidColorBrush x:Key="MaximizeButtonBrush" Color="{DynamicResource MaximizeButtonColor}" />
+    <SolidColorBrush x:Key="MinimizeButtonBrush" Color="{DynamicResource MinimizeButtonColor}" />
+
+    <Thickness x:Key="GeneralControlMargin">5,5,5,5</Thickness>
+    <Thickness x:Key="GeneralControlPadding">5,5,5,5</Thickness>
+    <Thickness x:Key="BorderThickness">1</Thickness>
+
+    <CornerRadius x:Key="CornerRadius">8</CornerRadius>
+
+    <system:Double x:Key="FontSizeSmall">12</system:Double>
+    <system:Double x:Key="FontSizeNormal">14</system:Double>
+    <system:Double x:Key="FontSizeLarge">18</system:Double>
+    <system:Double x:Key="FontSizeTitle">24</system:Double>
+    <system:Double x:Key="FontSizeExtraLarge">30</system:Double>
+
+</ResourceDictionary>
