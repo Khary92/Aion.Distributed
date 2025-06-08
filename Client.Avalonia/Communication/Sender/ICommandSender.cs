@@ -1,8 +1,9 @@
 ﻿using System.Threading.Tasks;
+using Proto.Command;
 
 namespace Client.Avalonia.Communication.Sender;
 
-public interface ICommandSender
+public interface ICommandSender<in T>
 {
-    Task Send<T>(T command);
+    Task<CommandResponse> Send(T command);
 }

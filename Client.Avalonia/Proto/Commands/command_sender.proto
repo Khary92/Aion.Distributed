@@ -1,0 +1,15 @@
+syntax = "proto3";
+import "ticket_commands.proto";
+
+
+package Proto.Command;
+
+
+
+service CommandService {
+  rpc SendCommand (Proto.Command.Tickets.CreateTicketCommand) returns (Proto.Command.Tickets.CommandResponse);
+}
+
+message CommandResponse {
+  bool success = 1;
+}

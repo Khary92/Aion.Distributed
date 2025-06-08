@@ -32,14 +32,17 @@
 
         <PackageReference Include="Google.Protobuf" Version="3.31.1"/>
         <PackageReference Include="Grpc.Net.Client" Version="2.71.0"/>
-        <PackageReference Include="Grpc.Tools" Version="2.72.0">
-            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-            <PrivateAssets>all</PrivateAssets>
-        </PackageReference>
-        <Protobuf Include="Communication\Protos\CommandSender.proto" GrpcServices="Both"/>
+        <PackageReference Include="Grpc.Tools" Version="2.72.0" PrivateAssets="All" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Core.Contract\Core.Contract.csproj"/>
+        <ProjectReference Include="..\Core.Contract\Core.Contract.csproj" />
     </ItemGroup>
+    
+    <ItemGroup>
+      <Protobuf Include="Proto\Commands\command_sender.proto">
+        <Generator>MSBuild:Compile</Generator>
+      </Protobuf>
+    </ItemGroup>
+    
 </Project>

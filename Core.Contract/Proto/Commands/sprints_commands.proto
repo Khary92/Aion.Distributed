@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+package Proto.Command.Sprints;
+
+import "google/protobuf/timestamp.proto";
+
+service SprintsCommandService {
+  rpc AddTicketToActiveSprint (AddTicketToActiveSprintCommand) returns (CommandResponse);
+  rpc AddTicketToSprint (AddTicketToSprintCommand) returns (CommandResponse);
+  rpc CreateSprint (CreateSprintCommand) returns (CommandResponse);
+  rpc SetSprintActiveStatus (SetSprintActiveStatusCommand) returns (CommandResponse);
+  rpc UpdateSprintData (UpdateSprintDataCommand) returns (CommandResponse);
+}
+
+message AddTicketToActiveSprintCommand {
+  string ticketId = 1;
+}
+
+message AddTicketToSprintCommand {
+  string sprintId = 1;
+  string ticketId = 2;
+}
+
+message CreateSprintCommand {
+  string sprintId = 1;
+  string name = 2;
+  google.protobuf.Timestamp startTime = 3;
+  google.protobuf.Timestamp endTime = 4;
+  bool isActive = 5;
+  repeated string ticketIds = 6;
+}
+
+message SetSprintActiveStatusCommand {
+  string sprintId = 1;
+  bool isActive = 2;
+}
+
+message UpdateSprintDataCommand {
+  string sprintId = 1;
+  string name = 2;
+  google.protobuf.Timestamp startTime = 3;
+  google.protobuf.Timestamp endTime = 4;
+}
+
+message CommandResponse {
+  bool success = 1;
+}

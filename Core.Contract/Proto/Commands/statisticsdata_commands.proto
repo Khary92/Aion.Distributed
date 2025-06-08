@@ -3,24 +3,24 @@ syntax = "proto3";
 package Proto.Command.StatisticsData;
 
 service StatisticsDataCommandService {
-  rpc ChangeProductivity (ChangeProductivityProtoCommand) returns (CommandResponse);
-  rpc ChangeTagSelection (ChangeTagSelectionProtoCommand) returns (CommandResponse);
-  rpc CreateStatisticsData (CreateStatisticsDataProtoCommand) returns (CommandResponse);
+  rpc ChangeProductivity (ChangeProductivityCommand) returns (CommandResponse);
+  rpc ChangeTagSelection (ChangeTagSelectionCommand) returns (CommandResponse);
+  rpc CreateStatisticsData (CreateStatisticsDataCommand) returns (CommandResponse);
 }
 
-message ChangeProductivityProtoCommand {
+message ChangeProductivityCommand {
   string statisticsDataId = 1;
   bool isProductive = 2;
   bool isNeutral = 3;
   bool isUnproductive = 4;
 }
 
-message ChangeTagSelectionProtoCommand {
+message ChangeTagSelectionCommand {
   string statisticsDataId = 1;
   repeated string selectedTagIds = 2;
 }
 
-message CreateStatisticsDataProtoCommand {
+message CreateStatisticsDataCommand {
   string statisticsDataId = 1;
   bool isProductive = 2;
   bool isNeutral = 3;

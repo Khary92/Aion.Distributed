@@ -2,7 +2,7 @@
 
 namespace Client.Avalonia.Communication.Sender;
 
-public interface IRequestSender
+public interface IRequestSender<in T>
 {
-    Task Send<T>(T command);
+    Task Send(T command);
 }

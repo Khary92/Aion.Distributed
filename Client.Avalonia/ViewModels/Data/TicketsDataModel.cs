@@ -4,8 +4,10 @@ using System.Threading.Tasks;
 using Client.Avalonia.Communication.NotificationProcessors.Messages;
 using Client.Avalonia.Communication.Sender;
 using CommunityToolkit.Mvvm.Messaging;
+using Contract.CQRS.Commands.Entities.Tickets;
 using Contract.CQRS.Notifications.Entities.Tickets;
 using Contract.DTO;
+using Contract.Proto.Converter.Commands;
 using Contract.Tracing;
 using Contract.Tracing.Tracers;
 using MediatR;
@@ -90,6 +92,6 @@ public class TicketsDataModel(
 
         tracer.Ticket.Create.CommandSent(GetType(), createTicketDto.TicketId, createTicketCommand);
 
-        await commandSender.SendCommand(createTicketCommand);
+        await commandSender.SendCommand(createTicketCommand.ToProto());
     }
 }

@@ -3,10 +3,10 @@ syntax = "proto3";
 package Proto.Command.Tracing;
 
 service TraceReportCommandService {
-  rpc SendTraceReport (SendTraceReportProtoCommand) returns (CommandResponse);
+  rpc SendTraceReport (SendTraceReportCommand) returns (CommandResponse);
 }
 
-message SendTraceReportProtoCommand {
+message SendTraceReportCommand {
   string traceReportDto = 1;
 }
 

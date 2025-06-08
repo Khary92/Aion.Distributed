@@ -3,16 +3,16 @@ syntax = "proto3";
 package Proto.Command.Tags;
 
 service TagCommandService {
-  rpc CreateTag (CreateTagProtoCommand) returns (CommandResponse);
-  rpc UpdateTag (UpdateTagProtoCommand) returns (CommandResponse);
+  rpc CreateTag (CreateTagCommand) returns (CommandResponse);
+  rpc UpdateTag (UpdateTagCommand) returns (CommandResponse);
 }
 
-message CreateTagProtoCommand {
+message CreateTagCommand {
   string tagId = 1;
   string name = 2;
 }
 
-message UpdateTagProtoCommand {
+message UpdateTagCommand {
   string tagId = 1;
   string name = 2;
 }

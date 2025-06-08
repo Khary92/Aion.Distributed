@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package Proto.Command.TimerSettings;
+
+service TimerSettingsCommandService {
+  rpc ChangeDocuTimerSaveInterval (ChangeDocuTimerSaveIntervalCommand) returns (CommandResponse);
+  rpc ChangeSnapshotSaveInterval (ChangeSnapshotSaveIntervalCommand) returns (CommandResponse);
+  rpc CreateTimerSettings (CreateTimerSettingsCommand) returns (CommandResponse);
+}
+
+message ChangeDocuTimerSaveIntervalCommand {
+  string timerSettingsId = 1;
+  int32 docuTimerSaveInterval = 2;
+}
+
+message ChangeSnapshotSaveIntervalCommand {
+  string timerSettingsId = 1;
+  int32 snapshotSaveInterval = 2;
+}
+
+message CreateTimerSettingsCommand {
+  string timerSettingsId = 1;
+  int32 documentationSaveInterval = 2;
+  int32 snapshotSaveInterval = 3;
+}
+
+message CommandResponse {
+  bool success = 1;
+}

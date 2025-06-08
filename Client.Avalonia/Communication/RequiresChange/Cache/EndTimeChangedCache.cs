@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Contract.CQRS.Commands.Entities.TimeSlots;
 using Contract.FileSystem;
 
 namespace Client.Avalonia.Communication.RequiresChange.Cache;

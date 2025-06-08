@@ -3,17 +3,17 @@ syntax = "proto3";
 package Proto.Command.Settings;
 
 service SettingsCommandService {
-  rpc CreateSettings (CreateSettingsProtoCommand) returns (CommandResponse);
-  rpc UpdateSettings (UpdateSettingsProtoCommand) returns (CommandResponse);
+  rpc CreateSettings (CreateSettingsCommand) returns (CommandResponse);
+  rpc UpdateSettings (UpdateSettingsCommand) returns (CommandResponse);
 }
 
-message CreateSettingsProtoCommand {
+message CreateSettingsCommand {
   string settingsId = 1;
   string exportPath = 2;
   bool isAddNewTicketsToCurrentSprintActive = 3;
 }
 
-message UpdateSettingsProtoCommand {
+message UpdateSettingsCommand {
   string settingsId = 1;
   string exportPath = 2;
   bool isAddNewTicketsToCurrentSprintActive = 3;

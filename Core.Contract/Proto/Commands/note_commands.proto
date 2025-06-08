@@ -5,11 +5,11 @@ package Proto.Command.Note;
 import "google/protobuf/timestamp.proto";
 
 service NoteCommandService {
-  rpc CreateNote (CreateNoteProtoCommand) returns (CommandResponse);
-  rpc UpdateNote (UpdateNoteProtoCommand) returns (CommandResponse);
+  rpc CreateNote (CreateNoteCommand) returns (CommandResponse);
+  rpc UpdateNote (UpdateNoteCommand) returns (CommandResponse);
 }
 
-message CreateNoteProtoCommand {
+message CreateNoteCommand {
   string noteId = 1;
   string text = 2;
   string noteTypeId = 3;
@@ -17,7 +17,7 @@ message CreateNoteProtoCommand {
   google.protobuf.Timestamp timeStamp = 5;
 }
 
-message UpdateNoteProtoCommand {
+message UpdateNoteCommand {
   string noteId = 1;
   string text = 2;
   string noteTypeId = 3;

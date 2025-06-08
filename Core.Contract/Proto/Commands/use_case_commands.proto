@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package Proto.Command.UseCase;
+
+service UseCaseCommandService {
+  rpc CreateTimeSlotControl (CreateTimeSlotControlCommand) returns (CommandResponse);
+  rpc LoadTimeSlotControl (LoadTimeSlotControlCommand) returns (CommandResponse);
+}
+
+message CreateTimeSlotControlCommand {
+  string ticketId = 1;
+  string viewId = 2;
+}
+
+message LoadTimeSlotControlCommand {
+  string timeSlotId = 1;
+  string viewId = 2;
+}
+
+message CommandResponse {
+  bool success = 1;
+}

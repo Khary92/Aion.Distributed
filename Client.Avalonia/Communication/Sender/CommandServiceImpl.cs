@@ -1,18 +1,16 @@
 ﻿using System.Threading.Tasks;
-using Grpc.Core;
+using Grpc.Net.Client;
 using Proto.Command;
 
 namespace Client.Avalonia.Communication.Sender;
 
 public class CommandServiceImpl : CommandService.CommandServiceBase
 {
-    public override Task<CommandResponse> SendCommand(CreateTicketCommand request, ServerCallContext context)
+    public async Task Send(CreateTicketCommand createTicketCommand)
     {
-        var response = new CommandResponse
-        {
-            Success = true
-        };
+        var channel = GrpcChannel.ForAddress("https://localhost:5001"); // oder dein Zielhost
+        var client = new CommandService.CommandServiceClient(channel);
 
-        return Task.FromResult(response);
+        var response = await client.SendCommandAsync(createTicketCommand);
     }
 }

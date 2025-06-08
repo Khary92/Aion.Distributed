@@ -2,6 +2,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Client.Avalonia.Communication.NotificationProcessors.Messages;
 using CommunityToolkit.Mvvm.Messaging;
+using Contract.CQRS.Commands.Entities.StatisticsData;
 using MediatR;
 
 namespace Client.Avalonia.Communication.NotificationProcessors;

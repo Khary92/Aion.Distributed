@@ -20,146 +20,110 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Protobuf Include="Proto\Files\Notifications\note_notifications.proto">
-            <GrpcServices>Both</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="Proto\Commands\ai_settings_commands.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        <Protobuf Include="Proto\Files\Notifications\note_type_notifications.proto">
-            <GrpcServices>Both</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="Proto\Commands\note_commands.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        <Protobuf Include="Proto\Files\Notifications\sprint_notifications.proto">
-            <GrpcServices>Both</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="Proto\Commands\note_type_commands.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        <Protobuf Include="Proto\Files\Notifications\tag_notifications.proto">
-            <GrpcServices>Both</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="Proto\Commands\settings_commands.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        <Protobuf Include="Proto\Files\Notifications\ticket_notifications.proto">
-            <GrpcServices>Both</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="Proto\Commands\sprints_commands.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        <Protobuf Include="Proto\Files\Notifications\timer_settings_notifications.proto">
-            <GrpcServices>Both</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="Proto\Commands\statisticsdata_commands.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        <Protobuf Include="Proto\Files\Notifications\usecase_notifications.proto">
-            <GrpcServices>Both</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="Proto\Commands\tag_commands.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        <Protobuf Include="Proto\Files\Notifications\workdays_notifications.proto">
-            <GrpcServices>Both</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="Proto\Commands\ticket_commands.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-
-
-        <Protobuf Include="Proto\Files\Commands\ai_settings_commands.proto">
-            <GrpcServices>Both</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="Proto\Commands\timer_settings_commands.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        <Protobuf Include="Proto\Files\Commands\note_commands.proto">
-            <GrpcServices>Both</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="Proto\Commands\time_slot_commands.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        <Protobuf Include="Proto\Files\Commands\note_type_commands.proto">
-            <GrpcServices>Both</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="Proto\Commands\trace_report_commands.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        <Protobuf Include="Proto\Files\Commands\settings_commands.proto">
-            <GrpcServices>Both</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="Proto\Commands\use_case_commands.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        <Protobuf Include="Proto\Files\Commands\sprints_commands.proto">
-            <GrpcServices>Both</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="Proto\Commands\work_day_commands.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        <Protobuf Include="Proto\Files\Commands\statisticsdata_commands.proto">
-            <GrpcServices>Both</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="Proto\DTO\ai_settings.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        <Protobuf Include="Proto\Files\Commands\tag_commands.proto">
-            <GrpcServices>Both</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="Proto\DTO\note.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        <Protobuf Include="Proto\Files\Commands\ticket_commands.proto">
-            <GrpcServices>Both</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="Proto\DTO\note_type.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        <Protobuf Include="Proto\Files\Commands\time_slot_commands.proto">
-            <GrpcServices>Both</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="Proto\DTO\settings.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        <Protobuf Include="Proto\Files\Commands\timer_settings_commands.proto">
-            <GrpcServices>Both</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="Proto\DTO\sprint.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        <Protobuf Include="Proto\Files\Commands\trace_report_commands.proto">
-            <GrpcServices>Both</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="Proto\DTO\statistics_data.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        <Protobuf Include="Proto\Files\Commands\use_case_commands.proto">
-            <GrpcServices>Both</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="Proto\DTO\tag.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        <Protobuf Include="Proto\Files\Commands\work_day_commands.proto">
-            <GrpcServices>Both</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="Proto\DTO\ticket.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        
-        
-        
-        <Protobuf Include="Proto\Files\DTO\ai_settings.proto">
-            <GrpcServices>None</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="Proto\DTO\timer_settings.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        <Protobuf Include="Proto\Files\DTO\note.proto">
-            <GrpcServices>None</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="Proto\DTO\time_slot.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        <Protobuf Include="Proto\Files\DTO\note_type.proto">
-            <GrpcServices>None</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="Proto\DTO\trace_report.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        <Protobuf Include="Proto\Files\DTO\settings.proto">
-            <GrpcServices>None</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="Proto\DTO\work_day.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        <Protobuf Include="Proto\Files\DTO\sprint.proto">
-            <GrpcServices>None</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="..\Core.Contract\Proto\Files\Commands\ticket_commands.proto" GrpcServices="Both" ProtoRoot="..\Core.Contract\Proto\Files\Commands" />
+        <Protobuf Include="Proto\Notifications\note_notifications.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        <Protobuf Include="Proto\Files\DTO\statistics_data.proto">
-            <GrpcServices>None</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="Proto\Notifications\note_type_notifications.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        <Protobuf Include="Proto\Files\DTO\tag.proto">
-            <GrpcServices>None</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="Proto\Notifications\sprint_notifications.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        <Protobuf Include="Proto\Files\DTO\ticket.proto">
-            <GrpcServices>None</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="Proto\Notifications\tag_notifications.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        <Protobuf Include="Proto\Files\DTO\time_slot.proto">
-            <GrpcServices>None</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="Proto\Notifications\ticket_notifications.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        <Protobuf Include="Proto\Files\DTO\timer_settings.proto">
-            <GrpcServices>None</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="Proto\Notifications\timer_settings_notifications.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        <Protobuf Include="Proto\Files\DTO\trace_report.proto">
-            <GrpcServices>None</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="Proto\Notifications\usecase_notifications.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
-        <Protobuf Include="Proto\Files\DTO\work_day.proto">
-            <GrpcServices>None</GrpcServices>
-            <Access>Public</Access>
+        <Protobuf Include="Proto\Notifications\workdays_notifications.proto">
+          <Generator>MSBuild:Compile</Generator>
         </Protobuf>
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Proto\Files\Requests\" />
+        <Folder Include="CQRS\Commands\Entities\Tickets\" />
+        <Folder Include="Proto\Requests\" />
     </ItemGroup>
 </Project>
