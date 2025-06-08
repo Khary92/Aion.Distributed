@@ -46,8 +46,4 @@
         </Protobuf>
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Proto\DTO\" />
-    </ItemGroup>
-
 </Project>

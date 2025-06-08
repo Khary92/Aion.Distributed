@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package contract.dto;
+
+import "google/protobuf/wrappers.proto";
+
+message TicketDto {
+  string ticket_id = 1;          // GUID als String
+  string name = 2;
+  string booking_number = 3;
+  string documentation = 4;
+  repeated string sprint_ids = 5; // GUIDs als Strings
+}

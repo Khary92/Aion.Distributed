@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package contract.dto;
+
+message TagDto {
+  string tag_id = 1;       // GUID als String
+  string name = 2;
+  bool is_selected = 3;
+}

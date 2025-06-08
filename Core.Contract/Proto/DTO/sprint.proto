@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package contract.dto;
+
+import "google/protobuf/timestamp.proto";
+
+message SprintDto {
+  string sprint_id = 1;
+  string name = 2;
+  bool is_active = 3;
+  google.protobuf.Timestamp start_time = 4;
+  google.protobuf.Timestamp end_time = 5;
+  repeated string ticket_ids = 6; // GUIDs als strings
+}

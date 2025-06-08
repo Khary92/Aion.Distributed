@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+package contract.dto;
+
+option csharp_namespace = "Contract.DTO";
+
+import "google/protobuf/timestamp.proto";
+
+message WorkDayDto {
+  string workDayId = 1; // GUID als String
+  google.protobuf.Timestamp date = 2;
+}
