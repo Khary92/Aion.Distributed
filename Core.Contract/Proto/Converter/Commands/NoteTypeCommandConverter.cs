@@ -1,8 +1,7 @@
-﻿using System;
-using Contract.CQRS.Commands.Entities.NoteType;
+﻿using Contract.CQRS.Commands.Entities.NoteType;
 using Proto.Command.NoteType;
 
-namespace Contract.Converters
+namespace Contract.Proto.Converter.Commands
 {
     public static class NoteTypeCommandConverter
     {

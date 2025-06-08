@@ -1,9 +1,8 @@
-﻿using System;
-using Contract.CQRS.Commands.Entities.Note;
+﻿using Contract.CQRS.Commands.Entities.Note;
 using Google.Protobuf.WellKnownTypes;
 using Proto.Command.Note;
 
-namespace Contract.Converters
+namespace Contract.Proto.Converter.Commands
 {
     public static class NoteCommandConverter
     {

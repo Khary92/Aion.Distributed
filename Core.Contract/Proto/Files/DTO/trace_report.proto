@@ -4,6 +4,6 @@ package contract.dto;
 
 option csharp_namespace = "Contract.DTO";
 
-message TraceReportDto {
+message TraceReportProto {
   string logs = 1;
 }

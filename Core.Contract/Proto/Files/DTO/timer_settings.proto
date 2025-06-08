@@ -4,7 +4,7 @@ package contract.dto;
 
 option csharp_namespace = "Contract.DTO";
 
-message TimerSettingsDto {
+message TimerSettingsProto {
   string timerSettingsId = 1;
   int32 documentationSaveInterval = 2;
   int32 snapshotSaveInterval = 3;

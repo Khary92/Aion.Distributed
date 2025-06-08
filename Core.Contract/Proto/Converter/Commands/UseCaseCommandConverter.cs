@@ -1,7 +1,7 @@
-﻿using Contract.CQRS.Commands.UseCase.Commands;
+﻿using Contract.CQRS.Commands.UseCase;
 using Proto.Command.UseCase;
 
-namespace Contract.Converters
+namespace Contract.Proto.Converter.Commands
 {
     public static class UseCaseCommandConverter
     {

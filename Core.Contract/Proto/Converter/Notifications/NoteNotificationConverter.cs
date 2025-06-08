@@ -1,6 +1,7 @@
-﻿using System;
-using Contract.CQRS.Notifications.Entities.Note;
+﻿using Contract.CQRS.Notifications.Entities.Note;
 using Proto.Notification.Note;
+
+namespace Contract.Proto.Converter.Notifications;
 
 public static class NoteNotificationConverter
 {

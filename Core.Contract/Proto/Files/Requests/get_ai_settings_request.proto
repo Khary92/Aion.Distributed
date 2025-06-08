@@ -1,9 +1,0 @@
-syntax = "proto3";
-
-package proto.requests.ai_settings;
-
-service ai_settings_request_service {
-  rpc get_ai_settings_request(GetAiSettingsRequestProto) returns (AiSettingsDto);
-}
-
-message GetAiSettingsRequestProto {}

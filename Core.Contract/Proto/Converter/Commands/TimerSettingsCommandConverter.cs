@@ -1,8 +1,7 @@
-﻿using System;
-using Contract.CQRS.Commands.Entities.TimerSettings;
+﻿using Contract.CQRS.Commands.Entities.TimerSettings;
 using Proto.Command.TimerSettings;
 
-namespace Contract.Converters
+namespace Contract.Proto.Converter.Commands
 {
     public static class TimerSettingsCommandConverter
     {

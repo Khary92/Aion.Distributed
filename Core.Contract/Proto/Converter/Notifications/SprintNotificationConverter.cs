@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Contract.CQRS.Notifications.Entities.Sprints;
+﻿using Contract.CQRS.Notifications.Entities.Sprints;
 using Proto.Notification.Sprints;
+
+namespace Contract.Proto.Converter.Notifications;
 
 public static class SprintNotificationConverter
 {

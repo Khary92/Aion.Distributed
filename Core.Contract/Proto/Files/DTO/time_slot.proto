@@ -6,7 +6,7 @@ import "google/protobuf/timestamp.proto";
 
 option csharp_namespace = "Contract.DTO";
 
-message TimeSlotDto {
+message TimeSlotProto {
   string timeSlotId = 1;
   string workDayId = 2;
   string selectedTicketId = 3;

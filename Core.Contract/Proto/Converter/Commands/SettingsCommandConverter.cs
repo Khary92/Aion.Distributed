@@ -1,8 +1,7 @@
-﻿using System;
-using Contract.CQRS.Commands.Entities.Settings;
+﻿using Contract.CQRS.Commands.Entities.Settings;
 using Proto.Command.Settings;
 
-namespace Contract.Converters
+namespace Contract.Proto.Converter.Commands
 {
     public static class SettingsCommandConverter
     {

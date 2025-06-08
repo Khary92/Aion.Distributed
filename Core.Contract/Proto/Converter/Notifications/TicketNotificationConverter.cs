@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.ObjectModel;
-using System.Linq;
+﻿using System.Collections.ObjectModel;
 using Contract.CQRS.Notifications.Entities.Tickets;
 using Proto.Notification.Tickets;
+
+namespace Contract.Proto.Converter.Notifications;
 
 public static class TicketNotificationConverter
 {

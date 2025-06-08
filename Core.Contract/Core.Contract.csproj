@@ -20,30 +20,146 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Protobuf Include="Proto\Files\Notifications\note_notifications.proto">
+            <GrpcServices>Both</GrpcServices>
+            <Access>Public</Access>
+        </Protobuf>
+        <Protobuf Include="Proto\Files\Notifications\note_type_notifications.proto">
+            <GrpcServices>Both</GrpcServices>
+            <Access>Public</Access>
+        </Protobuf>
+        <Protobuf Include="Proto\Files\Notifications\sprint_notifications.proto">
+            <GrpcServices>Both</GrpcServices>
+            <Access>Public</Access>
+        </Protobuf>
+        <Protobuf Include="Proto\Files\Notifications\tag_notifications.proto">
+            <GrpcServices>Both</GrpcServices>
+            <Access>Public</Access>
+        </Protobuf>
+        <Protobuf Include="Proto\Files\Notifications\ticket_notifications.proto">
+            <GrpcServices>Both</GrpcServices>
+            <Access>Public</Access>
+        </Protobuf>
+        <Protobuf Include="Proto\Files\Notifications\timer_settings_notifications.proto">
+            <GrpcServices>Both</GrpcServices>
+            <Access>Public</Access>
+        </Protobuf>
+        <Protobuf Include="Proto\Files\Notifications\usecase_notifications.proto">
+            <GrpcServices>Both</GrpcServices>
+            <Access>Public</Access>
+        </Protobuf>
+        <Protobuf Include="Proto\Files\Notifications\workdays_notifications.proto">
+            <GrpcServices>Both</GrpcServices>
+            <Access>Public</Access>
+        </Protobuf>
+
+
         <Protobuf Include="Proto\Files\Commands\ai_settings_commands.proto">
-          <GrpcServices>Both</GrpcServices>
-          <Access>Public</Access>
-          <ProtoCompile>True</ProtoCompile>
-          <CompileOutputs>True</CompileOutputs>
-          <OutputDir>obj\Debug\net9.0\</OutputDir>
-          <Generator>MSBuild:Compile</Generator>
+            <GrpcServices>Both</GrpcServices>
+            <Access>Public</Access>
         </Protobuf>
         <Protobuf Include="Proto\Files\Commands\note_commands.proto">
-          <GrpcServices>Both</GrpcServices>
-          <Access>Public</Access>
-          <ProtoCompile>True</ProtoCompile>
-          <CompileOutputs>True</CompileOutputs>
-          <OutputDir>obj\Debug\net9.0\</OutputDir>
-          <Generator>MSBuild:Compile</Generator>
+            <GrpcServices>Both</GrpcServices>
+            <Access>Public</Access>
         </Protobuf>
         <Protobuf Include="Proto\Files\Commands\note_type_commands.proto">
-          <GrpcServices>Both</GrpcServices>
-          <Access>Public</Access>
-          <ProtoCompile>True</ProtoCompile>
-          <CompileOutputs>True</CompileOutputs>
-          <OutputDir>obj\Debug\net9.0\</OutputDir>
-          <Generator>MSBuild:Compile</Generator>
+            <GrpcServices>Both</GrpcServices>
+            <Access>Public</Access>
+        </Protobuf>
+        <Protobuf Include="Proto\Files\Commands\settings_commands.proto">
+            <GrpcServices>Both</GrpcServices>
+            <Access>Public</Access>
+        </Protobuf>
+        <Protobuf Include="Proto\Files\Commands\sprints_commands.proto">
+            <GrpcServices>Both</GrpcServices>
+            <Access>Public</Access>
+        </Protobuf>
+        <Protobuf Include="Proto\Files\Commands\statisticsdata_commands.proto">
+            <GrpcServices>Both</GrpcServices>
+            <Access>Public</Access>
+        </Protobuf>
+        <Protobuf Include="Proto\Files\Commands\tag_commands.proto">
+            <GrpcServices>Both</GrpcServices>
+            <Access>Public</Access>
+        </Protobuf>
+        <Protobuf Include="Proto\Files\Commands\ticket_commands.proto">
+            <GrpcServices>Both</GrpcServices>
+            <Access>Public</Access>
+        </Protobuf>
+        <Protobuf Include="Proto\Files\Commands\time_slot_commands.proto">
+            <GrpcServices>Both</GrpcServices>
+            <Access>Public</Access>
+        </Protobuf>
+        <Protobuf Include="Proto\Files\Commands\timer_settings_commands.proto">
+            <GrpcServices>Both</GrpcServices>
+            <Access>Public</Access>
+        </Protobuf>
+        <Protobuf Include="Proto\Files\Commands\trace_report_commands.proto">
+            <GrpcServices>Both</GrpcServices>
+            <Access>Public</Access>
+        </Protobuf>
+        <Protobuf Include="Proto\Files\Commands\use_case_commands.proto">
+            <GrpcServices>Both</GrpcServices>
+            <Access>Public</Access>
+        </Protobuf>
+        <Protobuf Include="Proto\Files\Commands\work_day_commands.proto">
+            <GrpcServices>Both</GrpcServices>
+            <Access>Public</Access>
+        </Protobuf>
+        
+        
+        
+        <Protobuf Include="Proto\Files\DTO\ai_settings.proto">
+            <GrpcServices>None</GrpcServices>
+            <Access>Public</Access>
+        </Protobuf>
+        <Protobuf Include="Proto\Files\DTO\note.proto">
+            <GrpcServices>None</GrpcServices>
+            <Access>Public</Access>
+        </Protobuf>
+        <Protobuf Include="Proto\Files\DTO\note_type.proto">
+            <GrpcServices>None</GrpcServices>
+            <Access>Public</Access>
+        </Protobuf>
+        <Protobuf Include="Proto\Files\DTO\settings.proto">
+            <GrpcServices>None</GrpcServices>
+            <Access>Public</Access>
+        </Protobuf>
+        <Protobuf Include="Proto\Files\DTO\sprint.proto">
+            <GrpcServices>None</GrpcServices>
+            <Access>Public</Access>
+        </Protobuf>
+        <Protobuf Include="Proto\Files\DTO\statistics_data.proto">
+            <GrpcServices>None</GrpcServices>
+            <Access>Public</Access>
+        </Protobuf>
+        <Protobuf Include="Proto\Files\DTO\tag.proto">
+            <GrpcServices>None</GrpcServices>
+            <Access>Public</Access>
+        </Protobuf>
+        <Protobuf Include="Proto\Files\DTO\ticket.proto">
+            <GrpcServices>None</GrpcServices>
+            <Access>Public</Access>
+        </Protobuf>
+        <Protobuf Include="Proto\Files\DTO\time_slot.proto">
+            <GrpcServices>None</GrpcServices>
+            <Access>Public</Access>
+        </Protobuf>
+        <Protobuf Include="Proto\Files\DTO\timer_settings.proto">
+            <GrpcServices>None</GrpcServices>
+            <Access>Public</Access>
+        </Protobuf>
+        <Protobuf Include="Proto\Files\DTO\trace_report.proto">
+            <GrpcServices>None</GrpcServices>
+            <Access>Public</Access>
+        </Protobuf>
+        <Protobuf Include="Proto\Files\DTO\work_day.proto">
+            <GrpcServices>None</GrpcServices>
+            <Access>Public</Access>
         </Protobuf>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Proto\Files\Requests\" />
+    </ItemGroup>
 </Project>

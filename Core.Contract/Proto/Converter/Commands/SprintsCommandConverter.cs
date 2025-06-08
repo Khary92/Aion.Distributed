@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using Contract.CQRS.Commands.Entities.Sprints;
+﻿using Contract.CQRS.Commands.Entities.Sprints;
 using Google.Protobuf.WellKnownTypes;
 using Proto.Command.Sprints;
+using System;
 
-namespace Contract.Converters
+namespace Contract.Proto.Converter.Commands
 {
     public static class SprintsCommandConverter
     {
@@ -61,7 +60,7 @@ namespace Contract.Converters
                 proto.StartTime.ToDateTimeOffset(),
                 proto.EndTime.ToDateTimeOffset(),
                 proto.IsActive,
-                proto.TicketIds.ConvertAll(Guid.Parse)
+                proto.TicketIds.Select(Guid.Parse).ToList()
             );
 
         public static SetSprintActiveStatusCommand ToDomain(this SetSprintActiveStatusProtoCommand proto)
@@ -74,5 +73,11 @@ namespace Contract.Converters
                 proto.StartTime.ToDateTimeOffset(),
                 proto.EndTime.ToDateTimeOffset()
             );
+
+        public static DateTimeOffset ToDateTimeOffset(this Timestamp timestamp)
+        {
+            var dt = timestamp.ToDateTime();
+            return new DateTimeOffset(dt, TimeSpan.Zero);
+        }
     }
 }

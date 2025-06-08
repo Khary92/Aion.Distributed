@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package contract.cqrs.commands.entities.timeslots;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+message AddNoteCommandProto {
+  string time_slot_id = 1;
+  string note_id = 2;
+}
+
+message CreateTimeSlotCommandProto {
+  string time_slot_id = 1;
+  string selected_ticket_id = 2;
+  string work_day_id = 3;
+  google.protobuf.Timestamp start_time = 4;
+  google.protobuf.Timestamp end_time = 5;
+  bool is_timer_running = 6;
+}
+
+message SetEndTimeCommandProto {
+  string time_slot_id = 1;
+  google.protobuf.Timestamp time = 2;
+}
+
+message SetStartTimeCommandProto {
+  string time_slot_id = 1;
+  google.protobuf.Timestamp time = 2;
+}

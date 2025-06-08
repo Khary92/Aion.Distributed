@@ -4,7 +4,7 @@ package contract.dto;
 
 import "google/protobuf/wrappers.proto";
 
-message TicketDto {
+message TicketProto {
   string ticket_id = 1;          // GUID als String
   string name = 2;
   string booking_number = 3;

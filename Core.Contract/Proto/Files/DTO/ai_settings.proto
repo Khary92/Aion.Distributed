@@ -4,7 +4,7 @@ package contract.dto;
 
 import "google/protobuf/wrappers.proto";
 
-message AiSettings {
+message AiSettingsProto {
   string ai_settings_id = 1;       // UUID als String speichern
   string language_model_path = 2;
   string prompt = 3;

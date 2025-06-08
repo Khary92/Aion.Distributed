@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Contract.CQRS.Commands.Entities.StatisticsData;
+﻿using Contract.CQRS.Commands.Entities.StatisticsData;
 using Proto.Command.StatisticsData;
 
-namespace Contract.Converters
+namespace Contract.Proto.Converter.Commands
 {
     public static class StatisticsDataCommandConverter
     {
@@ -38,7 +36,7 @@ namespace Contract.Converters
             => new(Guid.Parse(proto.StatisticsDataId), proto.IsProductive, proto.IsNeutral, proto.IsUnproductive);
 
         public static ChangeTagSelectionCommand ToDomain(this ChangeTagSelectionProtoCommand proto)
-            => new(Guid.Parse(proto.StatisticsDataId), proto.SelectedTagIds.ConvertAll(Guid.Parse));
+            => new(Guid.Parse(proto.StatisticsDataId), proto.SelectedTagIds.Select(Guid.Parse).ToList());
 
         public static CreateStatisticsDataCommand ToDomain(this CreateStatisticsDataProtoCommand proto)
             => new(
@@ -46,7 +44,7 @@ namespace Contract.Converters
                 proto.IsProductive,
                 proto.IsNeutral,
                 proto.IsUnproductive,
-                proto.TagIds.ConvertAll(Guid.Parse),
+                proto.TagIds.Select(Guid.Parse).ToList(),
                 Guid.Parse(proto.TimeSlotId)
             );
     }

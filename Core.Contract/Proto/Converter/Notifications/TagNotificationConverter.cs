@@ -1,6 +1,7 @@
-﻿using System;
-using Contract.CQRS.Notifications.Entities.Tags;
+﻿using Contract.CQRS.Notifications.Entities.Tags;
 using Proto.Notification.Tags;
+
+namespace Contract.Proto.Converter.Notifications;
 
 public static class TagNotificationConverter
 {

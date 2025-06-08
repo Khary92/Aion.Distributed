@@ -6,7 +6,7 @@ option csharp_namespace = "Contract.DTO";
 
 import "google/protobuf/timestamp.proto";
 
-message WorkDayDto {
+message WorkDayProto {
   string workDayId = 1; // GUID als String
   google.protobuf.Timestamp date = 2;
 }

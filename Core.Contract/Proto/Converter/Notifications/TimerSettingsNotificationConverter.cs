@@ -1,6 +1,7 @@
-﻿using System;
-using Contract.CQRS.Notifications.Entities.TimerSettings;
+﻿using Contract.CQRS.Notifications.Entities.TimerSettings;
 using Proto.Notification.TimerSettings;
+
+namespace Contract.Proto.Converter.Notifications;
 
 public static class TimerSettingsNotificationConverter
 {

@@ -4,7 +4,7 @@ package contract.dto;
 
 import "google/protobuf/timestamp.proto";
 
-message SprintDto {
+message SprintProto {
   string sprint_id = 1;
   string name = 2;
   bool is_active = 3;

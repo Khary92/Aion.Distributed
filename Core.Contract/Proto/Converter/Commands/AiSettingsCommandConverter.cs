@@ -1,7 +1,7 @@
 ﻿using Contract.CQRS.Commands.Entities.AiSettings;
 using Proto.Command.AiSettings;
 
-namespace Contract.Proto.Converter;
+namespace Contract.Proto.Converter.Commands;
 
 public static class AiSettingsCommandConverter
 {

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Linq;
-using Contract.CQRS.Commands.Entities.Tickets;
+﻿using Contract.CQRS.Commands.Entities.Tickets;
 using Proto.Command.Tickets;
 
-namespace Contract.Converters
+namespace Contract.Proto.Converter.Commands
 {
     public static class TicketCommandConverter
     {

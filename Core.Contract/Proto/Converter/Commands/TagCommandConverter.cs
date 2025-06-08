@@ -1,8 +1,7 @@
-﻿using System;
-using Contract.CQRS.Commands.Entities.Tags;
+﻿using Contract.CQRS.Commands.Entities.Tags;
 using Proto.Command.Tags;
 
-namespace Contract.Converters
+namespace Contract.Proto.Converter.Commands
 {
     public static class TagCommandConverter
     {

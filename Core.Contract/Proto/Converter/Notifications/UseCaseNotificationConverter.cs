@@ -1,6 +1,7 @@
-﻿using System;
-using Contract.CQRS.Notifications.UseCase;
+﻿using Contract.CQRS.Notifications.UseCase;
 using Proto.Notification.UseCase;
+
+namespace Contract.Proto.Converter.Notifications;
 
 public static class UseCaseNotificationConverter
 {

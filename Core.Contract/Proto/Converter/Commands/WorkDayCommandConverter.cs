@@ -1,8 +1,7 @@
-﻿using System;
-using Contract.CQRS.Commands.Entities.WorkDays;
+﻿using Contract.CQRS.Commands.Entities.WorkDays;
 using Proto.Command.WorkDays;
 
-namespace Contract.Converters
+namespace Contract.Proto.Converter.Commands
 {
     public static class WorkDayCommandConverter
     {

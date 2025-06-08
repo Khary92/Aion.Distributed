@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package contract.dto;
 
-message NoteTypeDto {
+message NoteTypeProto {
   string note_type_id = 1;
   string name = 2;
   string color = 3;

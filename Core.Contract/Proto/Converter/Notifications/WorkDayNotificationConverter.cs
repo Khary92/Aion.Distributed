@@ -1,6 +1,7 @@
-﻿using System;
-using Contract.CQRS.Notifications.Entities.WorkDays;
+﻿using Contract.CQRS.Notifications.Entities.WorkDays;
 using Proto.Notification.WorkDays;
+
+namespace Contract.Proto.Converter.Notifications;
 
 public static class WorkDayNotificationConverter
 {
