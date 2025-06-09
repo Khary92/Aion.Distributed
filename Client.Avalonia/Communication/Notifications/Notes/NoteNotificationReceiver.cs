@@ -7,23 +7,16 @@ using Contract.DTO;
 using Grpc.Core;
 using Proto.Notifications.Note;
 
-namespace Client.Avalonia.Communication.Notifications;
+namespace Client.Avalonia.Communication.Notifications.Notes;
 
-public class NoteNotificationReceiver
+public class NoteNotificationReceiver(
+    NoteNotificationService.NoteNotificationServiceClient client,
+    IMessenger messenger)
 {
-    private readonly NoteNotificationService.NoteNotificationServiceClient _client;
-    private readonly IMessenger _messenger;
-
-    public NoteNotificationReceiver(NoteNotificationService.NoteNotificationServiceClient client, IMessenger messenger)
-    {
-        _client = client;
-        _messenger = messenger;
-    }
-
     public async Task StartListeningAsync(CancellationToken cancellationToken)
     {
         using var call =
-            _client.SubscribeNoteNotifications(new SubscribeRequest(), cancellationToken: cancellationToken);
+            client.SubscribeNoteNotifications(new SubscribeRequest(), cancellationToken: cancellationToken);
 
         try
         {
@@ -41,12 +34,12 @@ public class NoteNotificationReceiver
                             Guid.Parse(noteCreated.TimeSlotId),
                             DateTimeOffset.Parse(noteCreated.TimeStamp)
                         );
-                        _messenger.Send(new NewNoteMessage(noteDto));
+                        messenger.Send(new NewNoteMessage(noteDto));
                         break;
                     }
                     case NoteNotification.NotificationOneofCase.NoteUpdated:
                     {
-                        _messenger.Send(notification.NoteUpdated);
+                        messenger.Send(notification.NoteUpdated);
                         break;
                     }
                 }

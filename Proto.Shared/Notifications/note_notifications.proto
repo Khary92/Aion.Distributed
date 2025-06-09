@@ -19,8 +19,8 @@ message NoteNotification {
 }
 
 message SubscribeRequest {
-  // ggf. Filter, UserId etc.
 }
+
 message NoteCreatedNotification {
   string noteId = 1;
   string text = 2;
