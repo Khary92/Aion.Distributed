@@ -1,3 +1,6 @@
+using Client.Avalonia.Communication.Commands;
+using Client.Avalonia.Communication.Notifications.Notes;
+using Client.Avalonia.Communication.Sender;
 using Client.Avalonia.Factories;
 using Client.Avalonia.ViewModels.Analysis;
 using Client.Avalonia.ViewModels.Data;
@@ -17,22 +20,20 @@ using Client.Avalonia.Views.Main;
 using Client.Avalonia.Views.Setting;
 using Client.Avalonia.Views.Tracking;
 using CommunityToolkit.Mvvm.Messaging;
-using Contract.CQRS.Notifications.UseCase;
 using Contract.DTO;
-using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Client.Avalonia;
 
-public static class PresentationServices
+public static class Bootstrapper
 {
     public static void AddPresentationServices(this IServiceCollection services)
     {
         AddSynchronizationServices(services);
         AddViews(services);
         AddModels(services);
-        AddCommandHandlers(services);
-        AddNotificationHandlers(services);
+        AddNotificationReceivers(services);
+        AddCommandSenders(services);
     }
 
     private static void AddSynchronizationServices(this IServiceCollection services)
@@ -123,26 +124,29 @@ public static class PresentationServices
         services.AddSingleton<SettingsCompositeViewModel>();
     }
 
-    private static void AddCommandHandlers(this IServiceCollection services)
-    {
-        //  services.AddScoped<IRequestHandler<CreateTimeSlotControlCommand, Unit>, CreateTimeSlotControlCommandHandler>();
-        //  services.AddScoped<IRequestHandler<LoadTimeSlotControlCommand, Unit>, LoadTimeSlotControlCommandHandler>();
-    }
-
-    private static void AddNotificationHandlers(this IServiceCollection services)
+    private static void AddNotificationReceivers(this IServiceCollection services)
     {
         services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
 
+        services.AddHostedService<NoteNotificationBackgroundService>();
+    }
 
-        //TimeSlotControl
-        services.AddScoped<INotificationHandler<TimeSlotControlCreatedNotification>>(sp =>
-            sp.GetRequiredService<TimeTrackingViewModel>());
+    private static void AddCommandSenders(this IServiceCollection services)
+    {
+        services.AddScoped<ICommandSender, CommandSender>();
 
-        //UI
-        services.AddScoped<INotificationHandler<SprintSelectionChangedNotification>>(sp =>
-            sp.GetRequiredService<TimeTrackingViewModel>());
-
-        services.AddScoped<INotificationHandler<WorkDaySelectionChangedNotification>>(sp =>
-            sp.GetRequiredService<TimeTrackingViewModel>());
+        services.AddScoped<IAiSettingsCommandSender, AiSettingsCommandSender>();
+        services.AddScoped<INoteCommandSender, NoteCommandSender>();
+        services.AddScoped<INoteTypeCommandSender, NoteTypeCommandSender>();
+        services.AddScoped<ISettingsCommandSender, SettingsCommandSender>();
+        services.AddScoped<ISprintCommandSender, SprintCommandSender>();
+        services.AddScoped<IStatisticsDataCommandSender, StatisticsDataCommandSender>();
+        services.AddScoped<ITagCommandSender, TagCommandSender>();
+        services.AddScoped<ITicketCommandSender, TicketCommandSender>();
+        services.AddScoped<ITimerSettingsCommandSender, TimerSettingsCommandSender>();
+        services.AddScoped<ITimeSlotCommandSender, TimeSlotCommandSender>();
+        services.AddScoped<ITraceReportCommandSender, TraceReportCommandSender>();
+        services.AddScoped<IUseCaseCommandSender, UseCaseCommandSender>();
+        services.AddScoped<IWorkDayCommandSender, WorkDayCommandSender>();
     }
 }

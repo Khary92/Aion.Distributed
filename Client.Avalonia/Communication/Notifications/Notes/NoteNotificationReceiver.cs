@@ -9,12 +9,12 @@ using Proto.Notifications.Note;
 
 namespace Client.Avalonia.Communication.Notifications;
 
-public class NoteNotificationListener
+public class NoteNotificationReceiver
 {
     private readonly NoteNotificationService.NoteNotificationServiceClient _client;
     private readonly IMessenger _messenger;
 
-    public NoteNotificationListener(NoteNotificationService.NoteNotificationServiceClient client, IMessenger messenger)
+    public NoteNotificationReceiver(NoteNotificationService.NoteNotificationServiceClient client, IMessenger messenger)
     {
         _client = client;
         _messenger = messenger;
@@ -32,6 +32,7 @@ public class NoteNotificationListener
                 switch (notification.NotificationCase)
                 {
                     case NoteNotification.NotificationOneofCase.NoteCreated:
+                    {
                         var noteCreated = notification.NoteCreated;
                         var noteDto = new NoteDto(
                             Guid.Parse(noteCreated.NoteId),
@@ -42,25 +43,20 @@ public class NoteNotificationListener
                         );
                         _messenger.Send(new NewNoteMessage(noteDto));
                         break;
-
+                    }
                     case NoteNotification.NotificationOneofCase.NoteUpdated:
-                        var noteUpdated = notification.NoteUpdated;
-                        _messenger.Send(new NoteUpdatedNotification(noteUpdated.NoteId, noteUpdated.Text));
+                    {
+                        _messenger.Send(notification.NoteUpdated);
                         break;
-
-                    default:
-                        // Unbekannte Nachricht oder kein Notification-Case gesetzt
-                        break;
+                    }
                 }
             }
         }
         catch (OperationCanceledException)
         {
-            // Abbruch gewollt - sauber beenden
         }
         catch (Exception ex)
         {
-            // Fehler-Handling, evtl. Reconnect etc.
             Console.WriteLine($"Error in notification listener: {ex}");
         }
     }

@@ -14,7 +14,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Registry", "Service
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Tracing", "Service.Tracing\Service.Tracing.csproj", "{8BBCF9A9-F514-4329-91C9-0A213AE74788}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Server", "Service.Server\Service.Server.csproj", "{F0B66804-9A5D-41BE-A8B1-CD71BEF6D7F9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Server", "Core.Server\Core.Server.csproj", "{F0B66804-9A5D-41BE-A8B1-CD71BEF6D7F9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proto.Shared", "Proto.Shared\Proto.Shared.csproj", "{099A9566-91C2-4FCF-883A-7E9115DBA043}"
 EndProject

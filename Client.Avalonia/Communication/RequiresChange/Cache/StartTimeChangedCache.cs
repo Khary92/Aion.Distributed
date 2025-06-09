@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Contract.CQRS.Commands.Entities.TimeSlots;
 using Contract.FileSystem;
+using Proto.Command.TimeSlots;
 
 namespace Client.Avalonia.Communication.RequiresChange.Cache;
 
@@ -30,7 +30,8 @@ public class StartTimeChangedCache(
 
     public void Store(SetStartTimeCommand command)
     {
-        if (!_commands.TryAdd(command.TimeSlotId, command)) _commands[command.TimeSlotId] = command;
+        if (!_commands.TryAdd(Guid.Parse(command.TimeSlotId), command))
+            _commands[Guid.Parse(command.TimeSlotId)] = command;
 
         fileSystemWriter.Write(JsonSerializer.Serialize(_commands), Path);
     }
