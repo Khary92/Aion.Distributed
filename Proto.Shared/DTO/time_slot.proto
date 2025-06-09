@@ -1,10 +1,8 @@
 syntax = "proto3";
 
-package contract.dto;
+option csharp_namespace = "Proto.Dto.TimeSlots";
 
 import "google/protobuf/timestamp.proto";
-
-option csharp_namespace = "Contract.DTO";
 
 message TimeSlotProto {
   string timeSlotId = 1;

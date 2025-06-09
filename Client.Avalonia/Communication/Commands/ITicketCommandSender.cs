@@ -1,0 +1,11 @@
+﻿using System.Threading.Tasks;
+using Proto.Command.Tickets;
+
+namespace Client.Avalonia.Communication.Sender;
+
+public interface ITicketCommandSender
+{
+    Task<bool> Send(CreateTicketCommand command);
+    Task<bool> Send(UpdateTicketDataCommand command);
+    Task<bool> Send(UpdateTicketDocumentationCommand command);
+}

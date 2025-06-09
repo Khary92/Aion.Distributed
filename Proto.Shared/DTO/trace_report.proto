@@ -2,7 +2,8 @@ syntax = "proto3";
 
 package contract.dto;
 
-option csharp_namespace = "Contract.DTO";
+option csharp_namespace = "Contract.TraceReports";
+
 
 message TraceReportProto {
   string logs = 1;

@@ -1,12 +1,12 @@
 syntax = "proto3";
 
-package Proto.Notification.WorkDays;
+option csharp_namespace = "Proto.Notifications.WorkDay";
 
 service NotificationService {
-  rpc SendWorkDayCreated(WorkDayCreatedNotificationProto) returns (NotificationResponse);
+  rpc SendWorkDayCreated(WorkDayCreatedNotification) returns (NotificationResponse);
 }
 
-message WorkDayCreatedNotificationProto {
+message WorkDayCreatedNotification {
   string workDayId = 1;
   string date = 2; // ISO 8601 string
 }

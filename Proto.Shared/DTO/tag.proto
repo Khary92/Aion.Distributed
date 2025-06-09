@@ -1,9 +1,11 @@
 syntax = "proto3";
 
+option csharp_namespace = "Proto.Dto.Tags";
+
 package contract.dto;
 
 message TagDto {
-  string tag_id = 1;       // GUID als String
+  string tag_id = 1;
   string name = 2;
   bool is_selected = 3;
 }

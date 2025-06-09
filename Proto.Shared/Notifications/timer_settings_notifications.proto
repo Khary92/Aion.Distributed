@@ -1,24 +1,24 @@
 syntax = "proto3";
 
-package Proto.Notification.TimerSettings;
+option csharp_namespace = "Proto.Notifications.TimerSettings";
 
 service NotificationService {
-  rpc SendDocuTimerSaveIntervalChanged(DocuTimerSaveIntervalChangedNotificationProto) returns (NotificationResponse);
-  rpc SendSnapshotSaveIntervalChanged(SnapshotSaveIntervalChangedNotificationProto) returns (NotificationResponse);
-  rpc SendTimerSettingsCreated(TimerSettingsCreatedNotificationProto) returns (NotificationResponse);
+  rpc SendDocuTimerSaveIntervalChanged(DocuTimerSaveIntervalChangedNotification) returns (NotificationResponse);
+  rpc SendSnapshotSaveIntervalChanged(SnapshotSaveIntervalChangedNotification) returns (NotificationResponse);
+  rpc SendTimerSettingsCreated(TimerSettingsCreatedNotification) returns (NotificationResponse);
 }
 
-message DocuTimerSaveIntervalChangedNotificationProto {
+message DocuTimerSaveIntervalChangedNotification {
   string timerSettingsId = 1;
   int32 docuTimerSaveInterval = 2;
 }
 
-message SnapshotSaveIntervalChangedNotificationProto {
+message SnapshotSaveIntervalChangedNotification {
   string timerSettingsId = 1;
   int32 snapshotSaveInterval = 2;
 }
 
-message TimerSettingsCreatedNotificationProto {
+message TimerSettingsCreatedNotification {
   string timerSettingsId = 1;
   int32 documentationSaveInterval = 2;
   int32 snapshotSaveInterval = 3;

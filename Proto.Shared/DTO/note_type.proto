@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+option csharp_namespace = "Proto.Dto.NoteTypes";
+
 package contract.dto;
 
 message NoteTypeProto {

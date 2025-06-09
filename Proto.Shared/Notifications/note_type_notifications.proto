@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package Proto.Notification.NoteType;
+option csharp_namespace = "Proto.Notifications.NoteType";
 
 service NotificationService {
   rpc SendNoteTypeColorChanged(NoteTypeColorChangedNotificationProto) returns (NotificationResponse);

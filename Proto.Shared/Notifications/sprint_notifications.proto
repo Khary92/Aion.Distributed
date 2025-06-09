@@ -1,21 +1,22 @@
 syntax = "proto3";
 
-package Proto.Notification.Sprints;
+option csharp_namespace = "Proto.Notifications.Sprint";
+
 
 service NotificationService {
-  rpc SendSprintActiveStatusSet(SprintActiveStatusSetNotificationProto) returns (NotificationResponse);
-  rpc SendSprintCreated(SprintCreatedNotificationProto) returns (NotificationResponse);
-  rpc SendSprintDataUpdated(SprintDataUpdatedNotificationProto) returns (NotificationResponse);
-  rpc SendTicketAddedToActiveSprint(TicketAddedToActiveSprintNotificationProto) returns (NotificationResponse);
-  rpc SendTicketAddedToSprint(TicketAddedToSprintNotificationProto) returns (NotificationResponse);
+  rpc SendSprintActiveStatusSet(SprintActiveStatusSetNotification) returns (NotificationResponse);
+  rpc SendSprintCreated(SprintCreatedNotification) returns (NotificationResponse);
+  rpc SendSprintDataUpdated(SprintDataUpdatedNotification) returns (NotificationResponse);
+  rpc SendTicketAddedToActiveSprint(TicketAddedToActiveSprintNotification) returns (NotificationResponse);
+  rpc SendTicketAddedToSprint(TicketAddedToSprintNotification) returns (NotificationResponse);
 }
 
-message SprintActiveStatusSetNotificationProto {
+message SprintActiveStatusSetNotification {
   string sprintId = 1;
   bool isActive = 2;
 }
 
-message SprintCreatedNotificationProto {
+message SprintCreatedNotification {
   string sprintId = 1;
   string name = 2;
   string startTime = 3; // ISO8601 string
@@ -24,18 +25,18 @@ message SprintCreatedNotificationProto {
   repeated string ticketIds = 6;
 }
 
-message SprintDataUpdatedNotificationProto {
+message SprintDataUpdatedNotification {
   string sprintId = 1;
   string name = 2;
   string startTime = 3;
   string endTime = 4;
 }
 
-message TicketAddedToActiveSprintNotificationProto {
+message TicketAddedToActiveSprintNotification {
   // Empty message - no fields
 }
 
-message TicketAddedToSprintNotificationProto {
+message TicketAddedToSprintNotification {
   string sprintId = 1;
   string ticketId = 2;
 }

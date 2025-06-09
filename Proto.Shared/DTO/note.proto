@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+option csharp_namespace = "Proto.Dto.Notes";
+
 import "google/protobuf/timestamp.proto";
 import "google/protobuf/wrappers.proto";
 

@@ -1,18 +1,19 @@
 syntax = "proto3";
 
-package Proto.Notification.Tags;
+option csharp_namespace = "Proto.Notifications.Tag";
+
 
 service NotificationService {
-  rpc SendTagCreated(TagCreatedNotificationProto) returns (NotificationResponse);
-  rpc SendTagUpdated(TagUpdatedNotificationProto) returns (NotificationResponse);
+  rpc SendTagCreated(TagCreatedNotification) returns (NotificationResponse);
+  rpc SendTagUpdated(TagUpdatedNotification) returns (NotificationResponse);
 }
 
-message TagCreatedNotificationProto {
+message TagCreatedNotification {
   string tagId = 1;
   string name = 2;
 }
 
-message TagUpdatedNotificationProto {
+message TagUpdatedNotification {
   string tagId = 1;
   string name = 2;
 }

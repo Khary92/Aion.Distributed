@@ -3,17 +3,20 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Client.Avalonia.Communication.NotificationProcessors.Messages;
+using Client.Avalonia.Communication.Sender;
 using CommunityToolkit.Mvvm.Messaging;
 using Contract.CQRS.Notifications.Entities.NoteType;
+using Contract.CQRS.Requests.NoteTypes;
 using Contract.DTO;
 using Contract.Tracing;
 using Contract.Tracing.Tracers;
-using MediatR;
+using DynamicData;
+using Proto.Command.NoteTypes;
 using ReactiveUI;
 
 namespace Client.Avalonia.ViewModels.Data;
 
-public class NotesDataModel(IMediator mediator, IMessenger messenger, ITracingCollectorProvider tracer)
+public class NotesDataModel(ICommandSender commandSender, IMessenger messenger, ITracingCollectorProvider tracer)
     : ReactiveObject
 {
     private ObservableCollection<NoteTypeDto> _noteTypes = [];
@@ -75,24 +78,41 @@ public class NotesDataModel(IMediator mediator, IMessenger messenger, ITracingCo
     {
         if (string.IsNullOrWhiteSpace(noteType) || NoteTypes.Any(nt => nt.Name == noteType)) return;
 
-        var createNoteTypeCommand = new CreateNoteTypeCommand(Guid.NewGuid(), noteType, color);
-        await mediator.Send(createNoteTypeCommand);
+        var createNoteTypeCommand = new CreateNoteTypeCommand
+        {
+            NoteTypeId = Guid.NewGuid().ToString(),
+            Color = color,
+            Name = noteType
+        };
 
-        tracer.NoteType.Create.CommandSent(GetType(), createNoteTypeCommand.NoteTypeId, createNoteTypeCommand);
+        await commandSender.Send(createNoteTypeCommand);
+
+        tracer.NoteType.Create.CommandSent(GetType(), Guid.Parse(createNoteTypeCommand.NoteTypeId),
+            createNoteTypeCommand);
     }
 
     public async Task ChangeNoteTypeName(NoteTypeDto noteType)
     {
-        var changeNoteTypeNameCommand = new ChangeNoteTypeNameCommand(noteType.NoteTypeId, noteType.Name);
-        await mediator.Send(changeNoteTypeNameCommand);
+        var changeNoteTypeNameCommand = new ChangeNoteTypeNameCommand
+        {
+            NoteTypeId = noteType.NoteTypeId.ToString(),
+            Name = noteType.Name
+        };
+
+        await commandSender.Send(changeNoteTypeNameCommand);
 
         tracer.NoteType.ChangeName.CommandSent(GetType(), noteType.NoteTypeId, changeNoteTypeNameCommand.NoteTypeId);
     }
 
     public async Task ChangeNoteTypeColor(NoteTypeDto noteType)
     {
-        var changeNoteTypeColorCommand = new ChangeNoteTypeColorCommand(noteType.NoteTypeId, noteType.Color);
-        await mediator.Send(changeNoteTypeColorCommand);
+        var changeNoteTypeColorCommand = new ChangeNoteTypeColorCommand
+            {
+                NoteTypeId = noteType.NoteTypeId.ToString(),
+                Color = noteType.Color
+            };
+        
+        await commandSender.Send(changeNoteTypeColorCommand);
 
         tracer.NoteType.ChangeColor.CommandSent(GetType(), noteType.NoteTypeId, changeNoteTypeColorCommand.NoteTypeId);
     }

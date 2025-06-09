@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+option csharp_namespace = "Proto.Dto.Settings";
+
 package contract.dto;
 
 message SettingsProto {

@@ -1,33 +1,34 @@
 syntax = "proto3";
 
-package Proto.Notification.UseCase;
+option csharp_namespace = "Proto.Notifications.UseCase";
+
 
 service NotificationService {
-  rpc SendCreateSnapshot(CreateSnapshotNotificationProto) returns (NotificationResponse);
-  rpc SendSaveDocumentation(SaveDocumentationNotificationProto) returns (NotificationResponse);
-  rpc SendSprintSelectionChanged(SprintSelectionChangedNotificationProto) returns (NotificationResponse);
-  rpc SendTimeSlotControlCreated(TimeSlotControlCreatedNotificationProto) returns (NotificationResponse);
-  rpc SendTraceReportSent(TraceReportSentNotificationProto) returns (NotificationResponse);
-  rpc SendWorkDaySelectionChanged(WorkDaySelectionChangedNotificationProto) returns (NotificationResponse);
+  rpc SendCreateSnapshot(CreateSnapshotNotification) returns (NotificationResponse);
+  rpc SendSaveDocumentation(SaveDocumentationNotification) returns (NotificationResponse);
+  rpc SendSprintSelectionChanged(SprintSelectionChangedNotification) returns (NotificationResponse);
+  rpc SendTimeSlotControlCreated(TimeSlotControlCreatedNotification) returns (NotificationResponse);
+  rpc SendTraceReportSent(TraceReportSentNotification) returns (NotificationResponse);
+  rpc SendWorkDaySelectionChanged(WorkDaySelectionChangedNotification) returns (NotificationResponse);
 }
 
-message CreateSnapshotNotificationProto {}
+message CreateSnapshotNotification {}
 
-message SaveDocumentationNotificationProto {}
+message SaveDocumentationNotification {}
 
-message SprintSelectionChangedNotificationProto {}
+message SprintSelectionChangedNotification {}
 
-message TimeSlotControlCreatedNotificationProto {
+message TimeSlotControlCreatedNotification {
   string viewId = 1;
   string timeSlotId = 2;
   string ticketId = 3;
 }
 
-message TraceReportSentNotificationProto {
+message TraceReportSentNotification {
   string traceReportDto = 1;
 }
 
-message WorkDaySelectionChangedNotificationProto {}
+message WorkDaySelectionChangedNotification {}
 
 message NotificationResponse {
   bool success = 1;

@@ -18,8 +18,4 @@
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
     </ItemGroup>
-
-    <ItemGroup>
-        <Folder Include="CQRS\Commands\Entities\Tickets\" />
-    </ItemGroup>
 </Project>

@@ -26,4 +26,7 @@ message UpdateTicketDocumentationCommand {
   string ticketId = 1;
   string documentation = 2;
 }
+
+message CommandResponse {
+  bool success = 1;
 }

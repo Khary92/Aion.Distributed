@@ -1,30 +1,30 @@
 syntax = "proto3";
 
-package Proto.Notification.Tickets;
+option csharp_namespace = "Proto.Notifications.Ticket";
 
 import "google/protobuf/wrappers.proto";
 
 service NotificationService {
-  rpc SendTicketCreated(TicketCreatedNotificationProto) returns (NotificationResponse);
-  rpc SendTicketDataUpdated(TicketDataUpdatedNotificationProto) returns (NotificationResponse);
-  rpc SendTicketDocumentationUpdated(TicketDocumentationUpdatedNotificationProto) returns (NotificationResponse);
+  rpc SendTicketCreated(TicketCreatedNotification) returns (NotificationResponse);
+  rpc SendTicketDataUpdated(TicketDataUpdatedNotification) returns (NotificationResponse);
+  rpc SendTicketDocumentationUpdated(TicketDocumentationUpdatedNotification) returns (NotificationResponse);
 }
 
-message TicketCreatedNotificationProto {
+message TicketCreatedNotification {
   string ticketId = 1;
   string name = 2;
   string bookingNumber = 3;
   repeated string sprintIds = 4; // Guids as strings
 }
 
-message TicketDataUpdatedNotificationProto {
+message TicketDataUpdatedNotification {
   string ticketId = 1;
   string name = 2;
   string bookingNumber = 3;
   repeated string sprintIds = 4;
 }
 
-message TicketDocumentationUpdatedNotificationProto {
+message TicketDocumentationUpdatedNotification {
   string ticketId = 1;
   string documentation = 2;
 }

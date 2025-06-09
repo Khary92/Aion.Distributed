@@ -1,4 +1,3 @@
-using Contract.CQRS.Notifications.Entities.NoteType;
 using ReactiveUI;
 
 namespace Contract.DTO;
