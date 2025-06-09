@@ -1,6 +1,7 @@
 syntax = "proto3";
 
-package Proto.Command.TimerSettings;
+option csharp_namespace = "Proto.Command.TimerSettings";
+
 
 service TimerSettingsCommandService {
   rpc ChangeDocuTimerSaveInterval (ChangeDocuTimerSaveIntervalCommand) returns (CommandResponse);

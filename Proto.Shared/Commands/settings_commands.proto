@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+option csharp_namespace = "Proto.Command.Settings";
+
 package Proto.Command.Settings;
 
 service SettingsCommandService {

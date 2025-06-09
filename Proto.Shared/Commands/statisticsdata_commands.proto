@@ -1,5 +1,8 @@
 syntax = "proto3";
 
+option csharp_namespace = "Proto.Command.StatisticsData";
+
+
 package Proto.Command.StatisticsData;
 
 service StatisticsDataCommandService {

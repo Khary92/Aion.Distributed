@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package Proto.Command.Tickets;
+option csharp_namespace = "Proto.Command.Tickets";
 
 service TicketCommandService {
   rpc CreateTicket (CreateTicketCommand) returns (CommandResponse);
@@ -26,7 +26,4 @@ message UpdateTicketDocumentationCommand {
   string ticketId = 1;
   string documentation = 2;
 }
-
-message CommandResponse {
-  bool success = 1;
 }

@@ -1,6 +1,7 @@
 syntax = "proto3";
 
-package Proto.Command.Tracing;
+option csharp_namespace = "Proto.Command.TraceReports";
+
 
 service TraceReportCommandService {
   rpc SendTraceReport (SendTraceReportCommand) returns (CommandResponse);

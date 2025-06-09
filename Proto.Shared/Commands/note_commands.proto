@@ -1,6 +1,7 @@
 syntax = "proto3";
 
-package Proto.Command.Note;
+option csharp_namespace = "Proto.Command.Notes";
+
 
 import "google/protobuf/timestamp.proto";
 

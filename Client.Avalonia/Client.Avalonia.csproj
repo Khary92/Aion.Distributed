@@ -37,12 +37,11 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Core.Contract\Core.Contract.csproj" />
+        <ProjectReference Include="..\Proto.Shared\Proto.Shared.csproj" />
     </ItemGroup>
     
     <ItemGroup>
-      <Protobuf Include="Proto\Commands\command_sender.proto">
-        <Generator>MSBuild:Compile</Generator>
-      </Protobuf>
+      <Folder Include="Proto\Commands\" />
     </ItemGroup>
     
 </Project>

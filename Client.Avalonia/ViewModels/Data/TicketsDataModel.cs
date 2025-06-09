@@ -2,21 +2,22 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Client.Avalonia.Communication.NotificationProcessors.Messages;
-using Client.Avalonia.Communication.Sender;
 using CommunityToolkit.Mvvm.Messaging;
-using Contract.CQRS.Commands.Entities.Tickets;
+using Contract.CQRS.Commands.Entities.Sprints;
 using Contract.CQRS.Notifications.Entities.Tickets;
+using Contract.CQRS.Requests.Tickets;
 using Contract.DTO;
-using Contract.Proto.Converter.Commands;
 using Contract.Tracing;
 using Contract.Tracing.Tracers;
+using DynamicData;
 using MediatR;
+using Proto.Command.Tickets;
 using ReactiveUI;
 
 namespace Client.Avalonia.ViewModels.Data;
 
 public class TicketsDataModel(
-    CommandServiceImpl commandSender,
+    TicketCommandSender commandSender,
     IMediator mediator,
     IMessenger messenger,
     ITracingCollectorProvider tracer)
@@ -83,15 +84,16 @@ public class TicketsDataModel(
 
     public async Task CreateTicket(TicketDto createTicketDto)
     {
-        var createTicketCommand = new CreateTicketCommand(
-            createTicketDto.TicketId,
-            createTicketDto.Name,
-            createTicketDto.BookingNumber,
-            createTicketDto.SprintIds
-        );
+        var createTicketCommand = new CreateTicketCommand
+        {
+            TicketId = createTicketDto.TicketId.ToString(),
+            Name = createTicketDto.Name,
+            BookingNumber = createTicketDto.BookingNumber,
+            SprintIds = { createTicketDto.SprintIds.Select(guid => guid.ToString()) }
+        };
 
         tracer.Ticket.Create.CommandSent(GetType(), createTicketDto.TicketId, createTicketCommand);
 
-        await commandSender.SendCommand(createTicketCommand.ToProto());
+        await commandSender.Send(createTicketCommand);
     }
 }
