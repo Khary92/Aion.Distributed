@@ -2,13 +2,29 @@ syntax = "proto3";
 
 option csharp_namespace = "Proto.Notifications.Sprint";
 
-
 service NotificationService {
   rpc SendSprintActiveStatusSet(SprintActiveStatusSetNotification) returns (NotificationResponse);
   rpc SendSprintCreated(SprintCreatedNotification) returns (NotificationResponse);
   rpc SendSprintDataUpdated(SprintDataUpdatedNotification) returns (NotificationResponse);
   rpc SendTicketAddedToActiveSprint(TicketAddedToActiveSprintNotification) returns (NotificationResponse);
   rpc SendTicketAddedToSprint(TicketAddedToSprintNotification) returns (NotificationResponse);
+}
+
+service SprintNotificationService {
+  rpc SubscribeSprintNotifications(SubscribeRequest) returns (stream SprintNotification);
+}
+
+message SprintNotification {
+  oneof notification {
+    SprintActiveStatusSetNotification sprintActiveStatusSet = 1;
+    SprintCreatedNotification sprintCreated = 2;
+    SprintDataUpdatedNotification sprintDataUpdated = 3;
+    TicketAddedToActiveSprintNotification ticketAddedToActiveSprint = 4;
+    TicketAddedToSprintNotification ticketAddedToSprint = 5;
+  }
+}
+
+message SubscribeRequest {
 }
 
 message SprintActiveStatusSetNotification {
@@ -33,7 +49,7 @@ message SprintDataUpdatedNotification {
 }
 
 message TicketAddedToActiveSprintNotification {
-  // Empty message - no fields
+  // No fields for now – can be extended later
 }
 
 message TicketAddedToSprintNotification {

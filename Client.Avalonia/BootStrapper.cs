@@ -1,6 +1,7 @@
 using Client.Avalonia.Communication.Commands;
 using Client.Avalonia.Communication.Notifications.Notes;
 using Client.Avalonia.Communication.Notifications.NoteType;
+using Client.Avalonia.Communication.Notifications.Sprints;
 using Client.Avalonia.Communication.Sender;
 using Client.Avalonia.Factories;
 using Client.Avalonia.ViewModels.Analysis;
@@ -134,6 +135,9 @@ public static class Bootstrapper
         
         services.AddHostedService<NoteTypeNotificationBackgroundService>();
         services.AddSingleton<NoteTypeNotificationReceiver>();
+        
+        services.AddHostedService<SprintNotificationBackgroundService>();
+        services.AddSingleton<SprintNotificationReceiver>();
     }
 
     private static void AddCommandSenders(this IServiceCollection services)

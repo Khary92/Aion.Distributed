@@ -6,6 +6,16 @@ service NotificationService {
   rpc SendWorkDayCreated(WorkDayCreatedNotification) returns (NotificationResponse);
 }
 
+service WorkDayNotificationService {
+  rpc SubscribeWorkDayNotifications(SubscribeRequest) returns (stream WorkDayNotification);
+}
+
+message WorkDayNotification {
+  oneof notification {
+    WorkDayCreatedNotification workDayCreated = 1;
+  }
+}
+
 message WorkDayCreatedNotification {
   string workDayId = 1;
   string date = 2; // ISO 8601 string
@@ -14,3 +24,5 @@ message WorkDayCreatedNotification {
 message NotificationResponse {
   bool success = 1;
 }
+
+message SubscribeRequest {}

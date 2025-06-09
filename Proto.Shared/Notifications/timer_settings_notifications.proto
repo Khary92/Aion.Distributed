@@ -8,6 +8,18 @@ service NotificationService {
   rpc SendTimerSettingsCreated(TimerSettingsCreatedNotification) returns (NotificationResponse);
 }
 
+service TimerSettingsNotificationService {
+  rpc SubscribeTimerSettingsNotifications(SubscribeRequest) returns (stream TimerSettingsNotification);
+}
+
+message TimerSettingsNotification {
+  oneof notification {
+    DocuTimerSaveIntervalChangedNotification docuTimerSaveIntervalChanged = 1;
+    SnapshotSaveIntervalChangedNotification snapshotSaveIntervalChanged = 2;
+    TimerSettingsCreatedNotification timerSettingsCreated = 3;
+  }
+}
+
 message DocuTimerSaveIntervalChangedNotification {
   string timerSettingsId = 1;
   int32 docuTimerSaveInterval = 2;
@@ -26,4 +38,7 @@ message TimerSettingsCreatedNotification {
 
 message NotificationResponse {
   bool success = 1;
+}
+
+message SubscribeRequest {
 }

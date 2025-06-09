@@ -10,11 +10,23 @@ service NotificationService {
   rpc SendTicketDocumentationUpdated(TicketDocumentationUpdatedNotification) returns (NotificationResponse);
 }
 
+service TicketNotificationService {
+  rpc SubscribeTicketNotifications(SubscribeRequest) returns (stream TicketNotification);
+}
+
+message TicketNotification {
+  oneof notification {
+    TicketCreatedNotification ticketCreated = 1;
+    TicketDataUpdatedNotification ticketDataUpdated = 2;
+    TicketDocumentationUpdatedNotification ticketDocumentationUpdated = 3;
+  }
+}
+
 message TicketCreatedNotification {
   string ticketId = 1;
   string name = 2;
   string bookingNumber = 3;
-  repeated string sprintIds = 4; // Guids as strings
+  repeated string sprintIds = 4; // GUIDs as strings
 }
 
 message TicketDataUpdatedNotification {
@@ -31,4 +43,7 @@ message TicketDocumentationUpdatedNotification {
 
 message NotificationResponse {
   bool success = 1;
+}
+
+message SubscribeRequest {
 }

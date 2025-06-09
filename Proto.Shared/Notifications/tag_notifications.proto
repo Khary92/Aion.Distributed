@@ -2,10 +2,20 @@ syntax = "proto3";
 
 option csharp_namespace = "Proto.Notifications.Tag";
 
-
 service NotificationService {
   rpc SendTagCreated(TagCreatedNotification) returns (NotificationResponse);
   rpc SendTagUpdated(TagUpdatedNotification) returns (NotificationResponse);
+}
+
+service TagNotificationService {
+  rpc SubscribeTagNotifications(SubscribeRequest) returns (stream TagNotification);
+}
+
+message TagNotification {
+  oneof notification {
+    TagCreatedNotification tagCreated = 1;
+    TagUpdatedNotification tagUpdated = 2;
+  }
 }
 
 message TagCreatedNotification {
@@ -20,4 +30,7 @@ message TagUpdatedNotification {
 
 message NotificationResponse {
   bool success = 1;
+}
+
+message SubscribeRequest {
 }

@@ -2,7 +2,6 @@ syntax = "proto3";
 
 option csharp_namespace = "Proto.Notifications.UseCase";
 
-
 service NotificationService {
   rpc SendCreateSnapshot(CreateSnapshotNotification) returns (NotificationResponse);
   rpc SendSaveDocumentation(SaveDocumentationNotification) returns (NotificationResponse);
@@ -10,6 +9,21 @@ service NotificationService {
   rpc SendTimeSlotControlCreated(TimeSlotControlCreatedNotification) returns (NotificationResponse);
   rpc SendTraceReportSent(TraceReportSentNotification) returns (NotificationResponse);
   rpc SendWorkDaySelectionChanged(WorkDaySelectionChangedNotification) returns (NotificationResponse);
+}
+
+service UseCaseNotificationService {
+  rpc SubscribeUseCaseNotifications(SubscribeRequest) returns (stream UseCaseNotification);
+}
+
+message UseCaseNotification {
+  oneof notification {
+    CreateSnapshotNotification createSnapshot = 1;
+    SaveDocumentationNotification saveDocumentation = 2;
+    SprintSelectionChangedNotification sprintSelectionChanged = 3;
+    TimeSlotControlCreatedNotification timeSlotControlCreated = 4;
+    TraceReportSentNotification traceReportSent = 5;
+    WorkDaySelectionChangedNotification workDaySelectionChanged = 6;
+  }
 }
 
 message CreateSnapshotNotification {}
@@ -33,3 +47,5 @@ message WorkDaySelectionChangedNotification {}
 message NotificationResponse {
   bool success = 1;
 }
+
+message SubscribeRequest {}
