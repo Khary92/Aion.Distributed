@@ -65,8 +65,7 @@ public class AnalysisBySprintModel : ReactiveObject
             builder.AppendLine("| None | Not available |");
             return builder.ToString();
         }
-
-
+        
         var count = 0;
         foreach (var pair in AnalysisBySprint!.ProductiveTags.OrderByDescending(kvp => kvp.Value))
         {

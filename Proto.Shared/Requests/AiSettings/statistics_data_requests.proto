@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+option csharp_namespace = "Proto.Requests.StatisticsData";
+
+package contract.requests;
+
+message GetStatisticsDataByTimeSlotIdRequestProto {
+  string time_slot_id = 1;
+}
+
+message StatisticsDataProto {
+  string statistics_id = 1;
+  string time_slot_id = 2;
+  repeated string tag_ids = 3;
+  bool is_productive = 4;
+  bool is_neutral = 5;
+  bool is_unproductive = 6;
+}
+
+service StatisticsDataRequestService {
+  rpc GetStatisticsDataByTimeSlotId(GetStatisticsDataByTimeSlotIdRequestProto) returns (StatisticsDataProto);
+}

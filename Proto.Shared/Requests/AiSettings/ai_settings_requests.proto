@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option csharp_namespace = "Proto.Requests.AiSettings";
+
+import "google/protobuf/wrappers.proto";
+
+message GetAiSettingsRequestProto {
+  string ai_settings_id = 1;
+}
+
+message AiSettingsProto {
+  string ai_settings_id = 1;
+  string language_model_path = 2;
+  string prompt = 3;
+}
+
+service AiSettingsRequestService {
+  rpc GetAiSettings(GetAiSettingsRequestProto) returns (AiSettingsProto);
+}

@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option csharp_namespace = "Proto.Requests.Settings";
+
+package contract.requests;
+
+message SettingsProto {
+  string settings_id = 1;
+  string export_path = 2;
+  bool is_add_new_tickets_to_current_sprint_active = 3;
+}
+
+message GetSettingsRequestProto {}
+
+message IsExportPathValidRequestProto {}
+
+message IsExportPathValidResponseProto {
+  bool is_valid = 1;
+}
+
+service SettingsRequestService {
+  rpc GetSettings(GetSettingsRequestProto) returns (SettingsProto);
+  rpc IsExportPathValid(IsExportPathValidRequestProto) returns (IsExportPathValidResponseProto);
+}

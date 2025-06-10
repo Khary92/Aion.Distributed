@@ -19,8 +19,4 @@
     <Protobuf Include="**/*.proto" ProtoRoot="." GrpcServices="Both" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Requests\" />
-  </ItemGroup>
-
 </Project>
