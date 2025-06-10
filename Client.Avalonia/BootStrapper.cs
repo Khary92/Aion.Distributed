@@ -2,6 +2,11 @@ using Client.Avalonia.Communication.Commands;
 using Client.Avalonia.Communication.Notifications.Notes;
 using Client.Avalonia.Communication.Notifications.NoteType;
 using Client.Avalonia.Communication.Notifications.Sprints;
+using Client.Avalonia.Communication.Notifications.Tags;
+using Client.Avalonia.Communication.Notifications.Ticket;
+using Client.Avalonia.Communication.Notifications.TimerSettings;
+using Client.Avalonia.Communication.Notifications.UseCase;
+using Client.Avalonia.Communication.Notifications.WorkDay;
 using Client.Avalonia.Communication.Sender;
 using Client.Avalonia.Factories;
 using Client.Avalonia.ViewModels.Analysis;
@@ -132,12 +137,27 @@ public static class Bootstrapper
 
         services.AddHostedService<NoteNotificationBackgroundService>();
         services.AddSingleton<NoteNotificationReceiver>();
-        
+
         services.AddHostedService<NoteTypeNotificationBackgroundService>();
         services.AddSingleton<NoteTypeNotificationReceiver>();
-        
+
         services.AddHostedService<SprintNotificationBackgroundService>();
         services.AddSingleton<SprintNotificationReceiver>();
+
+        services.AddHostedService<TagNotificationBackgroundService>();
+        services.AddSingleton<TagNotificationReceiver>();
+
+        services.AddHostedService<TicketNotificationBackgroundService>();
+        services.AddSingleton<TicketNotificationReceiver>();
+
+        services.AddHostedService<TimerSettingsNotificationBackgroundService>();
+        services.AddSingleton<TimerSettingsNotificationReceiver>();
+
+        services.AddHostedService<UseCaseNotificationBackgroundService>();
+        services.AddSingleton<UseCaseNotificationReceiver>();
+
+        services.AddHostedService<WorkDayNotificationBackgroundService>();
+        services.AddSingleton<WorkDayNotificationReceiver>();
     }
 
     private static void AddCommandSenders(this IServiceCollection services)
