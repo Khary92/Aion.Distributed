@@ -28,6 +28,9 @@ using Client.Avalonia.Views.Setting;
 using Client.Avalonia.Views.Tracking;
 using CommunityToolkit.Mvvm.Messaging;
 using Contract.DTO;
+using Contract.FileSystem;
+using Infrastructure.FileSystem;
+using Infrastructure.FileSystem.Serializer;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Client.Avalonia;
@@ -41,8 +44,16 @@ public static class Bootstrapper
         AddModels(services);
         AddNotificationReceivers(services);
         AddCommandSenders(services);
+        AddFileSystemServices(services);
     }
 
+    private static void AddFileSystemServices(this IServiceCollection services)
+    {
+        services.AddSingleton<IFileSystemReader, JsonReader>();
+        services.AddSingleton<IFileSystemWriter, FileSystemWriter>();
+        services.AddSingleton<IFileSystemWrapper, FileSystemWrapper>();
+    }
+    
     private static void AddSynchronizationServices(this IServiceCollection services)
     {
         services.AddSingleton<IStateSynchronizer<TicketReplayDecorator, string>, DocumentationSynchronizer>();
@@ -159,7 +170,7 @@ public static class Bootstrapper
         services.AddHostedService<WorkDayNotificationBackgroundService>();
         services.AddSingleton<WorkDayNotificationReceiver>();
     }
-
+    
     private static void AddCommandSenders(this IServiceCollection services)
     {
         services.AddScoped<ICommandSender, CommandSender>();

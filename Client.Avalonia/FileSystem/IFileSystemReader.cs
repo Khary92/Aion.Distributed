@@ -1,4 +1,6 @@
-﻿namespace Contract.FileSystem;
+﻿using System.Threading.Tasks;
+
+namespace Contract.FileSystem;
 
 public interface IFileSystemReader
 {
