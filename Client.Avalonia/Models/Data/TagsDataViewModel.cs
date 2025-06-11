@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Client.Avalonia.Models.Data;
 using Contract.DTO;
 using ReactiveUI;
 using Unit = System.Reactive.Unit;

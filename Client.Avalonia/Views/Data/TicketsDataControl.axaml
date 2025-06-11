@@ -3,7 +3,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:data="clr-namespace:Client.Avalonia.ViewModels.Data"
-             x:DataType="data:TicketsDataViewModel"
+             xmlns:data1="clr-namespace:Client.Avalonia.Models.Data"
+             x:DataType="data1:TicketsDataViewModel"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Client.Avalonia.Views.Data.TicketsDataControl">
 

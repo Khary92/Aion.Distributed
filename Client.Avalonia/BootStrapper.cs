@@ -20,6 +20,7 @@ using Client.Avalonia.Communication.Notifications.Ticket;
 using Client.Avalonia.Communication.Notifications.TimerSettings;
 using Client.Avalonia.Communication.Notifications.UseCase;
 using Client.Avalonia.Communication.Notifications.WorkDay;
+using Client.Avalonia.Communication.Requests;
 using Client.Avalonia.Communication.Requests.AiSettings;
 using Client.Avalonia.Communication.Requests.Notes;
 using Client.Avalonia.Communication.Requests.NoteTypes;
@@ -34,6 +35,7 @@ using Client.Avalonia.Communication.Requests.WorkDays;
 using Client.Avalonia.Factories;
 using Client.Avalonia.FileSystem;
 using Client.Avalonia.FileSystem.Serializer;
+using Client.Avalonia.Models.Data;
 using Client.Avalonia.ViewModels.Analysis;
 using Client.Avalonia.ViewModels.Data;
 using Client.Avalonia.ViewModels.Documentation;
@@ -224,6 +226,8 @@ public static class Bootstrapper
     
     private static void AddRequestSenders(this IServiceCollection services)
     {
+        services.AddScoped<IRequestSender, RequestSender>();
+        
         services.AddScoped<IAiSettingsRequestSender, AiSettingsRequestSender>();
         services.AddScoped<INotesRequestSender, NotesRequestSender>();
         services.AddScoped<INoteTypesRequestSender, NoteTypesRequestSender>();

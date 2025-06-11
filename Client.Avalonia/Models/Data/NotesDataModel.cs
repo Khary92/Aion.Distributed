@@ -4,19 +4,23 @@ using System.Linq;
 using System.Threading.Tasks;
 using Client.Avalonia.Communication.Commands;
 using Client.Avalonia.Communication.Notifications.NoteType;
+using Client.Avalonia.Communication.Requests;
 using CommunityToolkit.Mvvm.Messaging;
-using Contract.CQRS.Notifications.Entities.NoteType;
-using Contract.CQRS.Requests.NoteTypes;
 using Contract.DTO;
 using Contract.Tracing;
 using Contract.Tracing.Tracers;
 using DynamicData;
 using Proto.Command.NoteTypes;
+using Proto.Notifications.NoteType;
 using ReactiveUI;
 
-namespace Client.Avalonia.ViewModels.Data;
+namespace Client.Avalonia.Models.Data;
 
-public class NotesDataModel(ICommandSender commandSender, IMessenger messenger, ITracingCollectorProvider tracer)
+public class NotesDataModel(
+    ICommandSender commandSender,
+    IRequestSender requestSender,
+    IMessenger messenger,
+    ITracingCollectorProvider tracer)
     : ReactiveObject
 {
     private ObservableCollection<NoteTypeDto> _noteTypes = [];
@@ -38,40 +42,42 @@ public class NotesDataModel(ICommandSender commandSender, IMessenger messenger, 
 
         messenger.Register<NoteTypeColorChangedNotification>(this, (_, m) =>
         {
-            tracer.NoteType.ChangeColor.NotificationReceived(GetType(), m.NoteTypeId, m);
+            var parsedId = Guid.Parse(m.NoteTypeId);
+            tracer.NoteType.ChangeColor.NotificationReceived(GetType(), parsedId, m);
 
-            var noteType = NoteTypes.FirstOrDefault(n => n.NoteTypeId == m.NoteTypeId);
+            var noteType = NoteTypes.FirstOrDefault(n => n.NoteTypeId == parsedId);
 
             if (noteType == null)
             {
-                tracer.NoteType.ChangeColor.NoAggregateFound(GetType(), m.NoteTypeId);
+                tracer.NoteType.ChangeColor.NoAggregateFound(GetType(), parsedId);
                 return;
             }
 
             noteType.Apply(m);
-            tracer.NoteType.ChangeColor.ChangesApplied(GetType(), m.NoteTypeId);
+            tracer.NoteType.ChangeColor.ChangesApplied(GetType(), parsedId);
         });
 
         messenger.Register<NoteTypeNameChangedNotification>(this, (_, m) =>
         {
-            tracer.NoteType.ChangeName.NotificationReceived(GetType(), m.NoteTypeId, m);
+            var parsedId = Guid.Parse(m.NoteTypeId);
+            tracer.NoteType.ChangeName.NotificationReceived(GetType(), parsedId, m);
 
-            var noteType = NoteTypes.FirstOrDefault(n => n.NoteTypeId == m.NoteTypeId);
+            var noteType = NoteTypes.FirstOrDefault(n => n.NoteTypeId == parsedId);
 
             if (noteType == null)
             {
-                tracer.NoteType.ChangeName.NoAggregateFound(GetType(), m.NoteTypeId);
+                tracer.NoteType.ChangeName.NoAggregateFound(GetType(), parsedId);
                 return;
             }
 
             noteType.Apply(m);
-            tracer.NoteType.ChangeName.ChangesApplied(GetType(), m.NoteTypeId);
+            tracer.NoteType.ChangeName.ChangesApplied(GetType(), parsedId);
         });
     }
 
     public async Task Initialize()
     {
-        NoteTypes.AddRange(await mediator.Send(new GetAllNoteTypesRequest()));
+        NoteTypes.AddRange(await requestSender.GetAllNoteTypes());
     }
 
     public async Task AddNewNoteType(string noteType, string color)
@@ -107,11 +113,11 @@ public class NotesDataModel(ICommandSender commandSender, IMessenger messenger, 
     public async Task ChangeNoteTypeColor(NoteTypeDto noteType)
     {
         var changeNoteTypeColorCommand = new ChangeNoteTypeColorCommand
-            {
-                NoteTypeId = noteType.NoteTypeId.ToString(),
-                Color = noteType.Color
-            };
-        
+        {
+            NoteTypeId = noteType.NoteTypeId.ToString(),
+            Color = noteType.Color
+        };
+
         await commandSender.Send(changeNoteTypeColorCommand);
 
         tracer.NoteType.ChangeColor.CommandSent(GetType(), noteType.NoteTypeId, changeNoteTypeColorCommand.NoteTypeId);

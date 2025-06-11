@@ -1,10 +1,12 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Contract.DTO;
 using Proto.Requests.Sprints;
 
 namespace Client.Avalonia.Communication.Requests.Sprints;
 
 public interface ISprintRequestSender
 {
-    Task<SprintProto> GetActiveSprint();
-    Task<SprintListProto> GetAllSprints();
+    Task<SprintDto> GetActiveSprint();
+    Task<List<SprintDto>> GetAllSprints();
 }

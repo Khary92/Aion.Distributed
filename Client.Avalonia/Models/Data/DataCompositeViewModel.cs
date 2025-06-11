@@ -1,3 +1,5 @@
+using Client.Avalonia.Models.Data;
+
 namespace Client.Avalonia.ViewModels.Data;
 
 public class DataCompositeViewModel(

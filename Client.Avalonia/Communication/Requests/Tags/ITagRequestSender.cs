@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
-using Proto.Requests.Tags;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Contract.DTO;
 
 namespace Client.Avalonia.Communication.Requests.Tags;
 
 public interface ITagRequestSender
 {
-    Task<TagListProto> GetAllTags();
-    Task<TagProto> GetTagById(string tagId);
+    Task<List<TagDto>> GetAllTags();
+    Task<TagDto> GetTagById(string tagId);
 }

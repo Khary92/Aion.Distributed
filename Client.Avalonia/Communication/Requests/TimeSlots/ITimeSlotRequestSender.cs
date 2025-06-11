@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
-using Proto.Requests.TimeSlots;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Contract.DTO;
 
 namespace Client.Avalonia.Communication.Requests.TimeSlots;
 
 public interface ITimeSlotRequestSender
 {
-    Task<TimeSlotProto> GetTimeSlotById(string timeSlotId);
-    Task<TimeSlotListProto> GetTimeSlotsForWorkDayId(string workDayId);
+    Task<TimeSlotDto> GetTimeSlotById(string timeSlotId);
+    Task<List<TimeSlotDto>> GetTimeSlotsForWorkDayId(string workDayId);
 }

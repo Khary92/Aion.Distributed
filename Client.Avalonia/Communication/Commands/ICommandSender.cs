@@ -14,8 +14,17 @@ using Client.Avalonia.Communication.Commands.WorkDays;
 
 namespace Client.Avalonia.Communication.Commands;
 
-public interface ICommandSender : IAiSettingsCommandSender, INoteCommandSender, INoteTypeCommandSender,
-    ISettingsCommandSender, ISprintCommandSender, IStatisticsDataCommandSender, ITagCommandSender, ITicketCommandSender,
-    ITimerSettingsCommandSender, ITimeSlotCommandSender, ITraceReportCommandSender, IUseCaseCommandSender, IWorkDayCommandSender
-{
-}
+public interface ICommandSender : 
+    IAiSettingsCommandSender,
+    INoteCommandSender,
+    INoteTypeCommandSender,
+    ISettingsCommandSender, 
+    ISprintCommandSender, 
+    IStatisticsDataCommandSender, 
+    ITagCommandSender, 
+    ITicketCommandSender,
+    ITimerSettingsCommandSender, 
+    ITimeSlotCommandSender, 
+    ITraceReportCommandSender, 
+    IUseCaseCommandSender, 
+    IWorkDayCommandSender;

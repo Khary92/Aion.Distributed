@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Grpc.Net.Client;
 using Proto.Command.NoteTypes;
+using Proto.Shared;
 
 namespace Client.Avalonia.Communication.Commands.NoteTypes;
 

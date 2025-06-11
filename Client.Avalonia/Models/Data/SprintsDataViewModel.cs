@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Client.Avalonia.Models.Data;
 using Contract.DTO;
 using Contract.Tracing;
 using Contract.Tracing.Tracers;

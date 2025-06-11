@@ -1,11 +1,13 @@
-﻿using System.Threading.Tasks;
-using Proto.Requests.WorkDays;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
+using Contract.DTO;
+using Google.Protobuf.WellKnownTypes;
 
 namespace Client.Avalonia.Communication.Requests.WorkDays;
 
 public interface IWorkDayRequestSender
 {
-    Task<WorkDayListProto> GetAllWorkDays();
-    Task<WorkDayProto> GetSelectedWorkDay();
-    Task<WorkDayProto> GetWorkDayByDate(Google.Protobuf.WellKnownTypes.Timestamp date);
+    Task<List<WorkDayDto>> GetAllWorkDays();
+    Task<WorkDayDto> GetSelectedWorkDay();
+    Task<WorkDayDto> GetWorkDayByDate(Timestamp date);
 }

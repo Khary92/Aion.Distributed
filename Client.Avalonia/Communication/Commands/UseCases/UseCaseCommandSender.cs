@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Grpc.Net.Client;
 using Proto.Command.UseCases;
+using Proto.Shared;
 using UseCases_CreateTimeSlotControlCommand = Proto.Command.UseCases.CreateTimeSlotControlCommand;
 using UseCases_LoadTimeSlotControlCommand = Proto.Command.UseCases.LoadTimeSlotControlCommand;
 

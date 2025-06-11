@@ -5,10 +5,11 @@ using CommunityToolkit.Mvvm.Messaging;
 using Contract.DTO;
 using Contract.Tracing;
 using Contract.Tracing.Tracers;
+using Proto.Command.Sprints;
 using ReactiveUI;
 using Unit = System.Reactive.Unit;
 
-namespace Client.Avalonia.ViewModels.Data;
+namespace Client.Avalonia.Models.Data;
 
 public class TicketsDataViewModel : ReactiveObject
 {

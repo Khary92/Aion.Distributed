@@ -1,26 +1,25 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Client.Avalonia.Communication.Commands;
-using Client.Avalonia.Communication.Commands.Tickets;
 using Client.Avalonia.Communication.Notifications.Ticket;
+using Client.Avalonia.Communication.Requests;
 using CommunityToolkit.Mvvm.Messaging;
-using Contract.CQRS.Commands.Entities.Sprints;
-using Contract.CQRS.Notifications.Entities.Tickets;
-using Contract.CQRS.Requests.Tickets;
 using Contract.DTO;
 using Contract.Tracing;
 using Contract.Tracing.Tracers;
 using DynamicData;
-using MediatR;
+using Proto.Command.Sprints;
 using Proto.Command.Tickets;
+using Proto.Notifications.Ticket;
 using ReactiveUI;
 
-namespace Client.Avalonia.ViewModels.Data;
+namespace Client.Avalonia.Models.Data;
 
 public class TicketsDataModel(
-    TicketCommandSender commandSender,
-    IMediator mediator,
+    ICommandSender commandSender,
+    IRequestSender requestSender,
     IMessenger messenger,
     ITracingCollectorProvider tracer)
     : ReactiveObject
@@ -33,11 +32,11 @@ public class TicketsDataModel(
 
         if (isShowAllTicketsActive)
         {
-            Tickets.AddRange(await mediator.Send(new GetAllTicketsRequest()));
+            Tickets.AddRange(await requestSender.GetAllTickets());
             return;
         }
 
-        Tickets.AddRange(await mediator.Send(new GetTicketsForCurrentSprintRequest()));
+        Tickets.AddRange(await requestSender.GetTicketsForCurrentSprint());
     }
 
     public void RegisterMessenger()
@@ -51,37 +50,46 @@ public class TicketsDataModel(
 
         messenger.Register<TicketDataUpdatedNotification>(this, (_, m) =>
         {
-            tracer.Ticket.Update.NotificationReceived(GetType(), m.TicketId, m);
+            var parsedId = Guid.Parse(m.TicketId);
+            tracer.Ticket.Update.NotificationReceived(GetType(), parsedId, m);
 
-            var ticket = Tickets.FirstOrDefault(t => t.TicketId == m.TicketId);
+            var ticket = Tickets.FirstOrDefault(t => t.TicketId == parsedId);
 
             if (ticket is null)
             {
-                tracer.Ticket.Update.NoAggregateFound(GetType(), m.TicketId);
+                tracer.Ticket.Update.NoAggregateFound(GetType(), parsedId);
                 return;
             }
 
             ticket.Apply(m);
-            tracer.Ticket.Update.ChangesApplied(GetType(), m.TicketId);
+            tracer.Ticket.Update.ChangesApplied(GetType(), parsedId);
         });
     }
 
     public async Task AddTicketToCurrentSprint(TicketDto ticketDto)
     {
-        var addTicketToActiveSprintCommand = new AddTicketToActiveSprintCommand(ticketDto.TicketId);
-        await mediator.Send(addTicketToActiveSprintCommand);
+        var addTicketToActiveSprintCommand = new AddTicketToActiveSprintCommand
+            { TicketId = ticketDto.TicketId.ToString() };
 
-        tracer.Ticket.AddTicketToSprint.CommandSent(GetType(), addTicketToActiveSprintCommand.TicketId,
+        await commandSender.Send(addTicketToActiveSprintCommand);
+
+        tracer.Ticket.AddTicketToSprint.CommandSent(GetType(), ticketDto.TicketId,
             addTicketToActiveSprintCommand);
     }
 
     public async Task UpdateTicket(TicketDto selectedTicket)
     {
-        var updateTicketDataCommand = new UpdateTicketDataCommand(selectedTicket.TicketId, selectedTicket.Name,
-            selectedTicket.BookingNumber, selectedTicket.SprintIds);
-        await mediator.Send(updateTicketDataCommand);
+        var updateTicketDataCommand = new UpdateTicketDataCommand
+        {
+            TicketId = selectedTicket.TicketId.ToString(),
+            Name = selectedTicket.Name,
+            BookingNumber = selectedTicket.BookingNumber,
+        };
+        updateTicketDataCommand.SprintIds.AddRange(selectedTicket.SprintIds.Select(id => id.ToString()));
 
-        tracer.Ticket.Update.CommandSent(GetType(), updateTicketDataCommand.TicketId, updateTicketDataCommand);
+        await commandSender.Send(updateTicketDataCommand);
+
+        tracer.Ticket.Update.CommandSent(GetType(), selectedTicket.TicketId, updateTicketDataCommand);
     }
 
     public async Task CreateTicket(TicketDto createTicketDto)

@@ -1,4 +1,4 @@
-﻿namespace Client.Avalonia.Communication.Commands;
+﻿namespace Proto.Shared;
 
 public class TempConnectionStatic
 {

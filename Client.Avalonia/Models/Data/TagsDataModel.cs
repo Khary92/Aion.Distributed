@@ -2,18 +2,25 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Client.Avalonia.Communication.Commands;
 using Client.Avalonia.Communication.Notifications.Tags;
+using Client.Avalonia.Communication.Requests;
 using CommunityToolkit.Mvvm.Messaging;
-using Contract.CQRS.Notifications.Entities.Tags;
 using Contract.DTO;
 using Contract.Tracing;
 using Contract.Tracing.Tracers;
-using MediatR;
+using DynamicData;
+using Proto.Command.Tags;
+using Proto.Notifications.Tag;
 using ReactiveUI;
 
-namespace Client.Avalonia.ViewModels.Data;
+namespace Client.Avalonia.Models.Data;
 
-public class TagsDataModel(IMediator mediator, IMessenger messenger, ITracingCollectorProvider tracer) : ReactiveObject
+public class TagsDataModel(
+    ICommandSender commandSender,
+    IRequestSender requestSender,
+    IMessenger messenger,
+    ITracingCollectorProvider tracer) : ReactiveObject
 {
     public ObservableCollection<TagDto> Tags { get; } = [];
 
@@ -28,25 +35,26 @@ public class TagsDataModel(IMediator mediator, IMessenger messenger, ITracingCol
 
         messenger.Register<TagUpdatedNotification>(this, (_, m) =>
         {
-            tracer.Tag.Update.NotificationReceived(GetType(), m.TagId, m);
+            var parsedGuid = Guid.Parse(m.TagId);
+            tracer.Tag.Update.NotificationReceived(GetType(), parsedGuid, m);
 
-            var tag = Tags.FirstOrDefault(t => t.TagId == m.TagId);
+            var tag = Tags.FirstOrDefault(t => t.TagId == parsedGuid);
 
             if (tag == null)
             {
-                tracer.Tag.Update.NoAggregateFound(GetType(), m.TagId);
+                tracer.Tag.Update.NoAggregateFound(GetType(), parsedGuid);
                 return;
             }
 
             tag.Apply(m);
-            tracer.Tag.Update.ChangesApplied(GetType(), m.TagId);
+            tracer.Tag.Update.ChangesApplied(GetType(), parsedGuid);
         });
     }
 
     public async Task InitializeAsync()
     {
         Tags.Clear();
-        Tags.AddRange(await mediator.Send(new GetAllTagsRequest()));
+        Tags.AddRange(await requestSender.GetAllTags());
     }
 
     public async Task PersistTagAsync(string tagName, TagDto? selectedTag, bool isEditMode)
@@ -57,8 +65,13 @@ public class TagsDataModel(IMediator mediator, IMessenger messenger, ITracingCol
 
             tracer.Tag.Update.StartUseCase(GetType(), selectedTag.TagId, selectedTag.AsTraceAttributes());
 
-            var updateTagCommand = new UpdateTagCommand(selectedTag.TagId, tagName);
-            await mediator.Send(updateTagCommand);
+            var updateTagCommand = new UpdateTagCommand
+            {
+                TagId = selectedTag.TagId.ToString(),
+                Name = tagName
+            };
+
+            await commandSender.Send(updateTagCommand);
 
             tracer.Tag.Update.CommandSent(GetType(), selectedTag.TagId, updateTagCommand);
             return;
@@ -68,8 +81,13 @@ public class TagsDataModel(IMediator mediator, IMessenger messenger, ITracingCol
 
         tracer.Tag.Create.StartUseCase(GetType(), createTagDto.TagId, createTagDto.AsTraceAttributes());
 
-        var createTagCommand = new CreateTagCommand(Guid.NewGuid(), tagName);
-        await mediator.Send(createTagCommand);
+        var createTagCommand = new CreateTagCommand
+        {
+            TagId = createTagDto.TagId.ToString(),
+            Name = tagName
+        };
+        
+        await commandSender.Send(createTagCommand);
 
         tracer.Tag.Create.CommandSent(GetType(), createTagDto.TagId, createTagCommand);
     }

@@ -1,9 +1,10 @@
 ﻿using System.Threading.Tasks;
+using Contract.DTO;
 using Proto.Requests.AiSettings;
 
 namespace Client.Avalonia.Communication.Requests.AiSettings;
 
 public interface IAiSettingsRequestSender
 {
-    Task<AiSettingsProto?> Get(string aiSettingsId);
+    Task<AiSettingsDto?> Get(string aiSettingsId);
 }

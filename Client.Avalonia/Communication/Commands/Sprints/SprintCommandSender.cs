@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Grpc.Net.Client;
 using Proto.Command.Sprints;
+using Proto.Shared;
 
 namespace Client.Avalonia.Communication.Commands.Sprints;
 
