@@ -1,0 +1,44 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:sprintData="clr-namespace:Client.Desktop.Models.Data"
+             xmlns:data="clr-namespace:Client.Desktop.Views.Data"
+             x:DataType="sprintData:DataCompositeViewModel"
+             x:Class="Client.Desktop.Views.Data.DataCompositeControl"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450">
+
+    <TabControl>
+        <TabItem Header="Operational">
+            <Grid RowDefinitions="1*,1*" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <data:TicketsDataControl
+                    Grid.Row="0" HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    DataContext="{Binding TicketsDataViewModel}" />
+
+                <data:SprintsDataControl
+                    Grid.Row="1"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    DataContext="{Binding SprintsDataViewModel}" />
+            </Grid>
+        </TabItem>
+
+        <TabItem Header="Meta">
+            <Grid RowDefinitions="1*, 1*">
+                <data:TagsDataControl
+                    Grid.Row="0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    DataContext="{Binding TagsDataViewModel}" />
+
+                <data:NoteDataControl
+                    Grid.Row="1"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    DataContext="{Binding NotesDataViewModel}" />
+            </Grid>
+        </TabItem>
+    </TabControl>
+
+</UserControl>

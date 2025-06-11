@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.Avalonia", "Client.Avalonia\Client.Avalonia.csproj", "{FD0A3BD3-379F-4F65-AC8A-E868A490ACFB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.Desktop", "Client.Desktop\Client.Desktop.csproj", "{FD0A3BD3-379F-4F65-AC8A-E868A490ACFB}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Contract", "Core.Contract\Core.Contract.csproj", "{2AFB4248-ADA4-492F-BD1E-EFFC2230F298}"
 EndProject

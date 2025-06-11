@@ -1,0 +1,84 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:timeTracking1="clr-namespace:Client.Desktop.Models.TimeTracking"
+             xmlns:dynamicControls="clr-namespace:Client.Desktop.Models.TimeTracking.DynamicControls"
+             xmlns:dynamicControl="clr-namespace:Client.Desktop.Views.Tracking.DynamicControl"
+             x:DataType="timeTracking1:TimeSlotViewModel"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Client.Desktop.Views.Tracking.TimeSlotControl"
+             HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+
+    <UserControl.DataTemplates>
+        <DataTemplate DataType="dynamicControls:StatisticsViewModel">
+            <dynamicControl:StatisticsControl />
+        </DataTemplate>
+        <DataTemplate DataType="dynamicControls:NoteStreamViewModel">
+            <dynamicControl:NotesStreamControl />
+        </DataTemplate>
+    </UserControl.DataTemplates>
+
+    <Grid RowDefinitions="*,*,*" ColumnDefinitions="*,*">
+        <Grid.KeyBindings>
+            <KeyBinding Gesture="Alt + N" Command="{Binding AddNoteCommand}" />
+        </Grid.KeyBindings>
+        <Grid RowDefinitions="Auto, *" Grid.Row="0" Grid.RowSpan="3" Grid.Column="0">
+            <Border Grid.Row="0" BorderThickness="2,2,2,0">
+                <Grid RowDefinitions="Auto, Auto"
+                      Margin="{StaticResource GeneralControlMargin}">
+                    <Grid Grid.Row="0" ColumnDefinitions="*,*,*">
+                        <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
+                            <Button Content="Replay" Command="{Binding StartReplayCommand}" />
+                            <Button Content="←" Command="{Binding PreviousStateCommand}" />
+                            <Button Content="→" Command="{Binding NextStateCommand}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock Text="{Binding ElapsedTimeRepresentation}" HorizontalAlignment="Center"
+                                       VerticalAlignment="Center" />
+                            <Button Content="{Binding TimerButtonText, Mode=TwoWay}" HorizontalAlignment="Center"
+                                    VerticalAlignment="Center" Command="{Binding ToggleTimerCommand}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="0" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Button Content="Notes" Command="{Binding SwitchToDocumentationViewCommand}" />
+                            <Button Content="Stats" Command="{Binding SwitchToStatisticsViewCommand}" />
+                        </StackPanel>
+                    </Grid>
+                    <Grid Grid.Row="1" Grid.Column="0" ColumnDefinitions="*,*">
+                        <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock Text="Start" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            <TimePicker Name="StartTime" ClockIdentifier="24HourClock"
+                                        SelectedTime="{Binding Model.TimeSlot.StartTime,Converter={StaticResource TimeSpanConverter}, Mode = TwoWay}"
+                                        HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock Text="End" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                            <TimePicker Name="EndTime" ClockIdentifier="24HourClock"
+                                        SelectedTime="{Binding Model.TimeSlot.EndTime,Converter={StaticResource TimeSpanConverter}, Mode = TwoWay}"
+                                        HorizontalAlignment="Center" VerticalAlignment="Center" />
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </Border>
+            <ScrollViewer Grid.Row="1" Margin="0,0,0,5">
+                <TextBox
+                    AcceptsReturn="True"
+                    TextWrapping="Wrap"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    IsEnabled="{Binding !Model.TicketReplayDecorator.IsReplayMode}"
+                    Text="{Binding Model.TicketReplayDecorator.DisplayedDocumentation, Mode= TwoWay}" />
+            </ScrollViewer>
+        </Grid>
+        <Border BorderThickness="1,2,2,2" Margin="0,0,0,5"
+                Grid.Column="1" Grid.Row="0" Grid.RowSpan="3">
+            <ScrollViewer Margin="{StaticResource GeneralControlMargin}">
+                <ContentControl
+                    VerticalAlignment="Stretch"
+                    HorizontalAlignment="Stretch"
+                    Content="{Binding CurrentView}" />
+            </ScrollViewer>
+        </Border>
+    </Grid>
+
+</UserControl>
