@@ -20,6 +20,17 @@ using Client.Avalonia.Communication.Notifications.Ticket;
 using Client.Avalonia.Communication.Notifications.TimerSettings;
 using Client.Avalonia.Communication.Notifications.UseCase;
 using Client.Avalonia.Communication.Notifications.WorkDay;
+using Client.Avalonia.Communication.Requests.AiSettings;
+using Client.Avalonia.Communication.Requests.Notes;
+using Client.Avalonia.Communication.Requests.NoteTypes;
+using Client.Avalonia.Communication.Requests.Settings;
+using Client.Avalonia.Communication.Requests.Sprints;
+using Client.Avalonia.Communication.Requests.StatisticsData;
+using Client.Avalonia.Communication.Requests.Tags;
+using Client.Avalonia.Communication.Requests.Tickets;
+using Client.Avalonia.Communication.Requests.TimerSettings;
+using Client.Avalonia.Communication.Requests.TimeSlots;
+using Client.Avalonia.Communication.Requests.WorkDays;
 using Client.Avalonia.Factories;
 using Client.Avalonia.FileSystem;
 using Client.Avalonia.FileSystem.Serializer;
@@ -43,6 +54,15 @@ using Client.Avalonia.Views.Tracking;
 using CommunityToolkit.Mvvm.Messaging;
 using Contract.DTO;
 using Microsoft.Extensions.DependencyInjection;
+using Proto.Requests.NoteTypes;
+using Proto.Requests.Settings;
+using Proto.Requests.Sprints;
+using Proto.Requests.StatisticsData;
+using Proto.Requests.Tags;
+using Proto.Requests.Tickets;
+using Proto.Requests.TimerSettings;
+using Proto.Requests.TimeSlots;
+using Proto.Requests.WorkDays;
 
 namespace Client.Avalonia;
 
@@ -54,6 +74,7 @@ public static class Bootstrapper
         AddViews(services);
         AddModels(services);
         AddNotificationReceivers(services);
+        AddRequestSenders(services);
         AddCommandSenders(services);
         AddFileSystemServices(services);
     }
@@ -199,5 +220,20 @@ public static class Bootstrapper
         services.AddScoped<ITraceReportCommandSender, TraceReportCommandSender>();
         services.AddScoped<IUseCaseCommandSender, UseCaseCommandSender>();
         services.AddScoped<IWorkDayCommandSender, WorkDayCommandSender>();
+    }
+    
+    private static void AddRequestSenders(this IServiceCollection services)
+    {
+        services.AddScoped<IAiSettingsRequestSender, AiSettingsRequestSender>();
+        services.AddScoped<INotesRequestSender, NotesRequestSender>();
+        services.AddScoped<INoteTypesRequestSender, NoteTypesRequestSender>();
+        services.AddScoped<ISettingsRequestSender, SettingsRequestSender>();
+        services.AddScoped<ISprintRequestSender, SprintRequestSender>();
+        services.AddScoped<IStatisticsDataRequestSender, StatisticsDataRequestSender>();
+        services.AddScoped<ITagRequestSender, TagRequestSender>();
+        services.AddScoped<ITicketRequestSender, TicketRequestSender>();
+        services.AddScoped<ITimerSettingsRequestSender, TimerSettingsRequestSender>();
+        services.AddScoped<ITimeSlotRequestSender, TimeSlotRequestSender>();
+        services.AddScoped<IWorkDayRequestSender, WorkDayRequestSender>();
     }
 }
