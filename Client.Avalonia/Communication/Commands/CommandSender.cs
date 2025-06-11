@@ -1,4 +1,17 @@
 ﻿using System.Threading.Tasks;
+using Client.Avalonia.Communication.Commands.AiSettings;
+using Client.Avalonia.Communication.Commands.Notes;
+using Client.Avalonia.Communication.Commands.NoteTypes;
+using Client.Avalonia.Communication.Commands.Settings;
+using Client.Avalonia.Communication.Commands.Sprints;
+using Client.Avalonia.Communication.Commands.StatisticsData;
+using Client.Avalonia.Communication.Commands.Tags;
+using Client.Avalonia.Communication.Commands.Tickets;
+using Client.Avalonia.Communication.Commands.TimerSettings;
+using Client.Avalonia.Communication.Commands.TimeSlots;
+using Client.Avalonia.Communication.Commands.TraceReports;
+using Client.Avalonia.Communication.Commands.UseCases;
+using Client.Avalonia.Communication.Commands.WorkDays;
 using Proto.Command.AiSettings;
 using Proto.Command.Notes;
 using Proto.Command.NoteTypes;

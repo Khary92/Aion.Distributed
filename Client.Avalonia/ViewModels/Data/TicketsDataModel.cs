@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Client.Avalonia.Communication.Commands;
+using Client.Avalonia.Communication.Commands.Tickets;
 using Client.Avalonia.Communication.Notifications.Ticket;
 using CommunityToolkit.Mvvm.Messaging;
 using Contract.CQRS.Commands.Entities.Sprints;
