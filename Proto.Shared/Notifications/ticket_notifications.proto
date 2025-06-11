@@ -2,8 +2,6 @@ syntax = "proto3";
 
 option csharp_namespace = "Proto.Notifications.Ticket";
 
-import "google/protobuf/wrappers.proto";
-
 service NotificationService {
   rpc SendTicketCreated(TicketCreatedNotification) returns (NotificationResponse);
   rpc SendTicketDataUpdated(TicketDataUpdatedNotification) returns (NotificationResponse);
