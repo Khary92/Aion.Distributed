@@ -3,7 +3,7 @@
              xmlns:converter="clr-namespace:Client.Avalonia.Converter"
              x:Class="Client.Avalonia.Views.Main.App"
              RequestedThemeVariant="Dark">
-
+    
     <Application.Styles>
         <StyleInclude Source="avares://Avalonia.Themes.Fluent/FluentTheme.xaml" />
         <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
@@ -27,8 +27,8 @@
 
     <TrayIcon.Icons>
         <TrayIcons>
-            <TrayIcon Icon="/Assets/app-icon.ico"
-                      ToolTipText="Avalonia Tray Icon ToolTip">
+            <TrayIcon Icon="avares://Client.Avalonia/Assets/app-icon.ico"
+                      ToolTipText="I am a tooltip. Cool, eh?">
                 <TrayIcon.Menu>
                     <NativeMenu>
                         <NativeMenuItem Header="Show" Click="TrayIconMaximize_OnClick" />

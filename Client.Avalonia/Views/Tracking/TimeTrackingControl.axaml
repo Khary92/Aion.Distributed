@@ -2,16 +2,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:timeTracking="clr-namespace:Client.Avalonia.ViewModels.TimeTracking"
              xmlns:tracking1="clr-namespace:Client.Avalonia.Views.Tracking"
-             x:DataType="timeTracking:TimeTrackingViewModel"
+             xmlns:timeTracking1="clr-namespace:Client.Avalonia.Models.TimeTracking"
+             x:DataType="timeTracking1:TimeTrackingViewModel"
              mc:Ignorable="d"
              x:Class="Client.Avalonia.Views.Tracking.TimeTrackingControl"
              HorizontalAlignment="Stretch"
              VerticalAlignment="Stretch">
 
     <UserControl.DataTemplates>
-        <DataTemplate DataType="timeTracking:TimeSlotViewModel">
+        <DataTemplate DataType="timeTracking1:TimeSlotViewModel">
             <tracking1:TimeSlotControl />
         </DataTemplate>
     </UserControl.DataTemplates>

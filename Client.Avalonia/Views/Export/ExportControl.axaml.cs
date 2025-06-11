@@ -1,5 +1,5 @@
 using Avalonia.Controls;
-using Client.Avalonia.ViewModels.Export;
+using Client.Avalonia.Models.Export;
 
 namespace Client.Avalonia.Views.Export;
 

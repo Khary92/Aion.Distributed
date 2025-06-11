@@ -20,8 +20,8 @@ namespace Client.Avalonia.Models.Data;
 public class TicketsDataModel(
     ICommandSender commandSender,
     IRequestSender requestSender,
-    IMessenger messenger,
-    ITracingCollectorProvider tracer)
+    IMessenger messenger)
+    //ITracingCollectorProvider //tracer)
     : ReactiveObject
 {
     public ObservableCollection<TicketDto> Tickets { get; } = [];
@@ -43,26 +43,26 @@ public class TicketsDataModel(
     {
         messenger.Register<NewTicketMessage>(this, (_, m) =>
         {
-            tracer.Ticket.Create.AggregateReceived(GetType(), m.Ticket.TicketId, m.Ticket.AsTraceAttributes());
+            //tracer.Ticket.Create.AggregateReceived(GetType(), m.Ticket.TicketId, m.Ticket.AsTraceAttributes());
             Tickets.Add(m.Ticket);
-            tracer.Ticket.Create.AggregateAdded(GetType(), m.Ticket.TicketId);
+            //tracer.Ticket.Create.AggregateAdded(GetType(), m.Ticket.TicketId);
         });
 
         messenger.Register<TicketDataUpdatedNotification>(this, (_, m) =>
         {
             var parsedId = Guid.Parse(m.TicketId);
-            tracer.Ticket.Update.NotificationReceived(GetType(), parsedId, m);
+            //tracer.Ticket.Update.NotificationReceived(GetType(), parsedId, m);
 
             var ticket = Tickets.FirstOrDefault(t => t.TicketId == parsedId);
 
             if (ticket is null)
             {
-                tracer.Ticket.Update.NoAggregateFound(GetType(), parsedId);
+                //tracer.Ticket.Update.NoAggregateFound(GetType(), parsedId);
                 return;
             }
 
             ticket.Apply(m);
-            tracer.Ticket.Update.ChangesApplied(GetType(), parsedId);
+            //tracer.Ticket.Update.ChangesApplied(GetType(), parsedId);
         });
     }
 
@@ -73,8 +73,8 @@ public class TicketsDataModel(
 
         await commandSender.Send(addTicketToActiveSprintCommand);
 
-        tracer.Ticket.AddTicketToSprint.CommandSent(GetType(), ticketDto.TicketId,
-            addTicketToActiveSprintCommand);
+        //tracer.Ticket.AddTicketToSprint.CommandSent(GetType(), ticketDto.TicketId,
+         //   addTicketToActiveSprintCommand);
     }
 
     public async Task UpdateTicket(TicketDto selectedTicket)
@@ -89,7 +89,7 @@ public class TicketsDataModel(
 
         await commandSender.Send(updateTicketDataCommand);
 
-        tracer.Ticket.Update.CommandSent(GetType(), selectedTicket.TicketId, updateTicketDataCommand);
+        //tracer.Ticket.Update.CommandSent(GetType(), selectedTicket.TicketId, updateTicketDataCommand);
     }
 
     public async Task CreateTicket(TicketDto createTicketDto)
@@ -102,7 +102,7 @@ public class TicketsDataModel(
             SprintIds = { createTicketDto.SprintIds.Select(guid => guid.ToString()) }
         };
 
-        tracer.Ticket.Create.CommandSent(GetType(), createTicketDto.TicketId, createTicketCommand);
+        //tracer.Ticket.Create.CommandSent(GetType(), createTicketDto.TicketId, createTicketCommand);
 
         await commandSender.Send(createTicketCommand);
     }

@@ -2,17 +2,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:settings="clr-namespace:Client.Avalonia.ViewModels.Settings"
-             xmlns:tracing1="clr-namespace:Client.Avalonia.Views.Tracing"
              xmlns:setting1="clr-namespace:Client.Avalonia.Views.Setting"
-             x:DataType="settings:SettingsCompositeViewModel"
+             xmlns:settings1="clr-namespace:Client.Avalonia.Models.Settings"
+             x:DataType="settings1:SettingsCompositeViewModel"
              x:Class="Client.Avalonia.Views.Setting.SettingsCompositeControl"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450">
 
     <TabControl>
-        <TabItem Header="Tracing">
-            <tracing1:TracingControl DataContext="{Binding TracingViewModel}" />
-        </TabItem>
         <TabItem Header="Settings">
             <StackPanel Margin="10">
                 <StackPanel>

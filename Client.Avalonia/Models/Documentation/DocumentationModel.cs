@@ -5,25 +5,25 @@ using System.Threading.Tasks;
 using Client.Avalonia.Communication.Notifications.Notes;
 using Client.Avalonia.Communication.Notifications.NoteType;
 using Client.Avalonia.Communication.Notifications.Ticket;
+using Client.Avalonia.Communication.Requests;
 using Client.Avalonia.Factories;
-using Client.Avalonia.ViewModels.TimeTracking.DynamicControls;
+using Client.Avalonia.Models.TimeTracking.DynamicControls;
 using CommunityToolkit.Mvvm.Messaging;
-using Contract.CQRS.Notifications.Entities.Note;
-using Contract.CQRS.Notifications.Entities.NoteType;
-using Contract.CQRS.Notifications.Entities.Tickets;
 using Contract.DTO;
 using Contract.Tracing;
 using Contract.Tracing.Tracers;
-using MediatR;
+using DynamicData;
+using Proto.Notifications.Note;
+using Proto.Notifications.NoteType;
+using Proto.Notifications.Ticket;
 using ReactiveUI;
 
-namespace Client.Avalonia.ViewModels.Documentation;
+namespace Client.Avalonia.Models.Documentation;
 
 public class DocumentationModel(
-    IMediator mediator,
+    IRequestSender requestSender,
     IMessenger messenger,
-    INoteViewFactory noteViewFactory,
-    ITracingCollectorProvider tracer)
+    INoteViewFactory noteViewFactory)
     : ReactiveObject
 {
     private ObservableCollection<NoteViewModel> _allNotes = [];
@@ -67,7 +67,7 @@ public class DocumentationModel(
     {
         if (SelectedTicket == null) return;
 
-        var noteDtos = await mediator.Send(new GetNotesByTicketIdRequest(SelectedTicket.TicketId));
+        var noteDtos = await requestSender.GetNotesByTicketId(SelectedTicket.TicketId);
 
         var noteViewModels = await Task.WhenAll(noteDtos.Select(noteViewFactory.Create));
 
@@ -90,11 +90,12 @@ public class DocumentationModel(
 
     public async Task Initialize()
     {
-        var noteTypeDtos = await mediator.Send(new GetAllNoteTypesRequest());
+        var noteTypeDtos = await requestSender.GetAllNoteTypes();
 
         Options.Clear();
 
-        foreach (var option in noteTypeDtos.Select(type => new TypeCheckBoxViewModel(mediator)
+        //TODO this is weird. Why have i done this?
+        foreach (var option in noteTypeDtos.Select(type => new TypeCheckBoxViewModel(requestSender)
                  {
                      IsChecked = false,
                      NoteTypeId = type.NoteTypeId
@@ -107,7 +108,7 @@ public class DocumentationModel(
         }
 
         AllTickets.Clear();
-        AllTickets.AddRange(await mediator.Send(new GetAllTicketsRequest()));
+        AllTickets.AddRange(await requestSender.GetAllTickets());
 
         if (AllTickets.Any()) SelectedTicket = AllTickets[0];
     }
@@ -125,45 +126,46 @@ public class DocumentationModel(
         {
             try
             {
-                tracer.Note.Create.AggregateReceived(GetType(), m.Note.NoteTypeId, m.Note.AsTraceAttributes());
+                //tracer.Note.Create.AggregateReceived(GetType(), m.Note.NoteTypeId, m.Note.AsTraceAttributes());
 
                 var noteViewModel = await noteViewFactory.Create(m.Note);
 
                 AllNotes.Add(noteViewModel);
 
-                tracer.Note.Create.AggregateAdded(GetType(), m.Note.NoteTypeId);
+                //tracer.Note.Create.AggregateAdded(GetType(), m.Note.NoteTypeId);
                 FilterNotes();
             }
             catch (Exception exception)
             {
-                tracer.Note.Create.ExceptionOccured(GetType(), m.Note.NoteTypeId, exception);
+                //tracer.Note.Create.ExceptionOccured(GetType(), m.Note.NoteTypeId, exception);
             }
         });
 
         messenger.Register<NoteUpdatedNotification>(this, async void (_, m) =>
         {
+            var parsedNoteId = Guid.Parse(m.NoteId);
             try
             {
-                tracer.Note.Update.NotificationReceived(GetType(), m.NoteTypeId, m);
+                //tracer.Note.Update.NotificationReceived(GetType(), parsedNoteId, m);
 
-                var noteViewModel = AllNotes.FirstOrDefault(n => n.Note.NoteId == m.NoteId);
+                var noteViewModel = AllNotes.FirstOrDefault(n => n.Note.NoteId == parsedNoteId);
 
                 if (noteViewModel == null)
                 {
-                    tracer.Note.Update.NoAggregateFound(GetType(), m.NoteTypeId);
+                    //tracer.Note.Update.NoAggregateFound(GetType(), parsedNoteId);
                     return;
                 }
 
-                var noteType = await mediator.Send(new GetNoteTypeByIdRequest(m.NoteTypeId));
+                var noteType = await requestSender.GetNoteTypeById(Guid.Parse(m.NoteTypeId));
                 noteViewModel.Note.NoteType = noteType;
                 noteViewModel.Note.Apply(m);
 
-                tracer.Note.Update.ChangesApplied(GetType(), m.NoteTypeId);
+                //tracer.Note.Update.ChangesApplied(GetType(), parsedNoteId);
                 FilterNotes();
             }
             catch (Exception e)
             {
-                tracer.Note.Update.ExceptionOccured(GetType(), m.NoteTypeId, e);
+                //tracer.Note.Update.ExceptionOccured(GetType(), parsedNoteId, e);
             }
         });
     }
@@ -172,27 +174,28 @@ public class DocumentationModel(
     {
         messenger.Register<NewNoteTypeMessage>(this, (_, m) =>
         {
-            tracer.NoteType.Create.AggregateReceived(GetType(), m.NoteType.NoteTypeId, m.NoteType.AsTraceAttributes());
+            //tracer.NoteType.Create.AggregateReceived(GetType(), m.NoteType.NoteTypeId, m.NoteType.AsTraceAttributes());
 
-            Options.Add(new TypeCheckBoxViewModel(mediator)
+            Options.Add(new TypeCheckBoxViewModel(requestSender)
             {
                 NoteTypeId = m.NoteType.NoteTypeId,
                 NoteType = m.NoteType,
                 IsChecked = false
             });
 
-            tracer.NoteType.Create.AggregateAdded(GetType(), m.NoteType.NoteTypeId);
+            //tracer.NoteType.Create.AggregateAdded(GetType(), m.NoteType.NoteTypeId);
         });
 
         messenger.Register<NoteTypeNameChangedNotification>(this, (_, m) =>
         {
-            tracer.NoteType.ChangeName.NotificationReceived(GetType(), m.NoteTypeId, m);
+            var parsedId = Guid.Parse(m.NoteTypeId);
+            //tracer.NoteType.ChangeName.NotificationReceived(GetType(), parsedId, m);
 
-            var typeCheckBoxViewModel = Options.FirstOrDefault(opt => opt.NoteTypeId == m.NoteTypeId);
+            var typeCheckBoxViewModel = Options.FirstOrDefault(opt => opt.NoteTypeId == parsedId);
 
             if (typeCheckBoxViewModel is null)
             {
-                tracer.NoteType.ChangeName.NoAggregateFound(GetType(), m.NoteTypeId);
+                //tracer.NoteType.ChangeName.NoAggregateFound(GetType(), parsedId);
                 return;
             }
 
@@ -201,18 +204,19 @@ public class DocumentationModel(
 
         messenger.Register<NoteTypeColorChangedNotification>(this, (_, m) =>
         {
-            tracer.NoteType.ChangeColor.NotificationReceived(GetType(), m.NoteTypeId, m);
+            var parsedId = Guid.Parse(m.NoteTypeId);
+            //tracer.NoteType.ChangeColor.NotificationReceived(GetType(), parsedId, m);
 
-            var typeCheckBoxViewModel = Options.FirstOrDefault(opt => opt.NoteTypeId == m.NoteTypeId);
+            var typeCheckBoxViewModel = Options.FirstOrDefault(opt => opt.NoteTypeId == parsedId);
 
             if (typeCheckBoxViewModel is null)
             {
-                tracer.NoteType.ChangeColor.NoAggregateFound(GetType(), m.NoteTypeId);
+                //tracer.NoteType.ChangeColor.NoAggregateFound(GetType(), parsedId);
                 return;
             }
 
             typeCheckBoxViewModel.NoteType!.Apply(m);
-            tracer.NoteType.ChangeColor.ChangesApplied(GetType(), m.NoteTypeId);
+            //tracer.NoteType.ChangeColor.ChangesApplied(GetType(), parsedId);
         });
     }
 
@@ -220,25 +224,26 @@ public class DocumentationModel(
     {
         messenger.Register<NewTicketMessage>(this, (_, m) =>
         {
-            tracer.Ticket.Create.AggregateReceived(GetType(), m.Ticket.TicketId, m.Ticket.AsTraceAttributes());
+            //tracer.Ticket.Create.AggregateReceived(GetType(), m.Ticket.TicketId, m.Ticket.AsTraceAttributes());
             AllTickets.Add(m.Ticket);
-            tracer.Ticket.Create.AggregateAdded(GetType(), m.Ticket.TicketId);
+            //tracer.Ticket.Create.AggregateAdded(GetType(), m.Ticket.TicketId);
         });
 
         messenger.Register<TicketDataUpdatedNotification>(this, (_, m) =>
         {
-            tracer.Ticket.Update.NotificationReceived(GetType(), m.TicketId, m);
+            var parsedId = Guid.Parse(m.TicketId);
+            //tracer.Ticket.Update.NotificationReceived(GetType(), parsedId, m);
 
-            var ticket = AllTickets.FirstOrDefault(t => t.TicketId == m.TicketId);
+            var ticket = AllTickets.FirstOrDefault(t => t.TicketId == parsedId);
 
             if (ticket is null)
             {
-                tracer.Ticket.Update.NoAggregateFound(GetType(), m.TicketId);
+                //tracer.Ticket.Update.NoAggregateFound(GetType(), parsedId);
                 return;
             }
 
             ticket.Apply(m);
-            tracer.Ticket.Update.ChangesApplied(GetType(), m.TicketId);
+            //tracer.Ticket.Update.ChangesApplied(GetType(), parsedId);
         });
     }
 }

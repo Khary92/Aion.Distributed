@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:avalonia="clr-namespace:LiveChartsCore.SkiaSharpView.Avalonia;assembly=LiveChartsCore.SkiaSharpView.Avalonia"
              xmlns:mdxaml="https://github.com/whistyun/Markdown.Avalonia"
-             xmlns:analysis="clr-namespace:Client.Avalonia.ViewModels.Analysis"
+             xmlns:analysis="clr-namespace:Client.Avalonia.Models.Analysis"
              mc:Ignorable="d"
              d:DesignWidth="800"
              d:DesignHeight="450"

@@ -2,7 +2,7 @@ using System.Reactive;
 using System.Threading.Tasks;
 using ReactiveUI;
 
-namespace Client.Avalonia.ViewModels.Settings;
+namespace Client.Avalonia.Models.Settings;
 
 public class TimerSettingsViewModel : ReactiveObject
 {

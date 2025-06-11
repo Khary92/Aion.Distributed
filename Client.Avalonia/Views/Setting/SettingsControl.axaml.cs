@@ -3,7 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Avalonia.Platform.Storage;
 using Avalonia.ReactiveUI;
-using Client.Avalonia.ViewModels.Settings;
+using Client.Avalonia.Models.Settings;
 
 namespace Client.Avalonia.Views.Setting;
 

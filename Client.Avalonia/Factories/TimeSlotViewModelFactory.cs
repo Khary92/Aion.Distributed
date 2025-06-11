@@ -1,5 +1,5 @@
 using System;
-using Client.Avalonia.ViewModels.TimeTracking;
+using Client.Avalonia.Models.TimeTracking;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Client.Avalonia.Factories;

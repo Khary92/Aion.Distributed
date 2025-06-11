@@ -2,9 +2,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:dynamicControls="clr-namespace:Client.Avalonia.ViewModels.TimeTracking.DynamicControls"
              xmlns:dynamicControl1="clr-namespace:Client.Avalonia.Views.Tracking.DynamicControl"
-             x:DataType="dynamicControls:StatisticsViewModel"
+             xmlns:dynamicControls1="clr-namespace:Client.Avalonia.Models.TimeTracking.DynamicControls"
+             x:DataType="dynamicControls1:StatisticsViewModel"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Client.Avalonia.Views.Tracking.DynamicControl.StatisticsControl">
     <Grid RowDefinitions="Auto,*" VerticalAlignment="Stretch">
@@ -33,7 +33,7 @@
             </ItemsControl.ItemsPanel>
 
             <ItemsControl.ItemTemplate>
-                <DataTemplate DataType="{x:Type dynamicControls:TagCheckBoxViewModel}">
+                <DataTemplate DataType="{x:Type dynamicControls1:TagCheckBoxViewModel}">
                     <dynamicControl1:TagCheckBoxControl />
                 </DataTemplate>
             </ItemsControl.ItemTemplate>

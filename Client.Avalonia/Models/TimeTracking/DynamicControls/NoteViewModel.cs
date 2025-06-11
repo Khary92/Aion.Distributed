@@ -2,25 +2,30 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Client.Avalonia.Communication.Commands;
 using Client.Avalonia.Communication.Notifications.NoteType;
+using Client.Avalonia.Communication.Requests;
 using CommunityToolkit.Mvvm.Messaging;
-using Contract.CQRS.Notifications.Entities.Note;
-using Contract.CQRS.Notifications.Entities.NoteType;
 using Contract.DTO;
-using MediatR;
+using DynamicData;
+using Proto.Command.Notes;
+using Proto.Notifications.Note;
+using Proto.Notifications.NoteType;
 using ReactiveUI;
 using Unit = System.Reactive.Unit;
 
-namespace Client.Avalonia.ViewModels.TimeTracking.DynamicControls;
+namespace Client.Avalonia.Models.TimeTracking.DynamicControls;
 
 public class NoteViewModel : ReactiveObject
 {
-    private readonly IMediator _mediator;
+    private readonly ICommandSender _commandSender;
+    private readonly IRequestSender _requestSender;
     private int _currentNoteTypeIndex;
 
-    public NoteViewModel(IMessenger messenger, IMediator mediator)
+    public NoteViewModel(ICommandSender commandSender, IRequestSender requestSender, IMessenger messenger)
     {
-        _mediator = mediator;
+        _commandSender = commandSender;
+        _requestSender = requestSender;
 
         SetNextTypeCommand = ReactiveCommand.Create(SetNextType);
         SetPreviousTypeCommand = ReactiveCommand.Create(SetPreviousType);
@@ -28,7 +33,7 @@ public class NoteViewModel : ReactiveObject
 
         messenger.Register<NoteUpdatedNotification>(this, (_, m) =>
         {
-            if (Note.NoteId != m.NoteId) return;
+            if (Note.NoteId != Guid.Parse(m.NoteId)) return;
 
             Note.Apply(m);
         });
@@ -37,7 +42,7 @@ public class NoteViewModel : ReactiveObject
 
         messenger.Register<NoteTypeColorChangedNotification>(this, (_, m) =>
         {
-            var noteType = NoteTypes.FirstOrDefault(nt => nt.NoteTypeId == m.NoteTypeId);
+            var noteType = NoteTypes.FirstOrDefault(nt => nt.NoteTypeId == Guid.Parse(m.NoteTypeId));
 
             if (noteType == null) return;
 
@@ -46,7 +51,7 @@ public class NoteViewModel : ReactiveObject
 
         messenger.Register<NoteTypeNameChangedNotification>(this, (_, m) =>
         {
-            var noteType = NoteTypes.FirstOrDefault(nt => nt.NoteTypeId == m.NoteTypeId);
+            var noteType = NoteTypes.FirstOrDefault(nt => nt.NoteTypeId == Guid.Parse(m.NoteTypeId));
 
             if (noteType == null) return;
 
@@ -64,7 +69,7 @@ public class NoteViewModel : ReactiveObject
     public async Task Initialize()
     {
         NoteTypes.Clear();
-        var noteTypeDtos = await _mediator.Send(new GetAllNoteTypesRequest());
+        var noteTypeDtos = await _requestSender.GetAllNoteTypes();
         NoteTypes.AddRange(noteTypeDtos);
 
         if (Note.NoteTypeId == Guid.Empty) return;
@@ -74,7 +79,13 @@ public class NoteViewModel : ReactiveObject
 
     private async Task Update()
     {
-        await _mediator.Send(new UpdateNoteCommand(Note.NoteId, Note.Text, Note.NoteType!.NoteTypeId, Note.TimeSlotId));
+        await _commandSender.Send(new UpdateNoteCommand
+        {
+            NoteId = Note.NoteId.ToString(),
+            Text = Note.Text,
+            NoteTypeId = Note.NoteTypeId.ToString(),
+            TimeSlotId = Note.TimeSlotId.ToString(),
+        });
     }
 
     private void SetNextType()

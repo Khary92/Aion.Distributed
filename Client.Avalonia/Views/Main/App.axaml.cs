@@ -1,5 +1,4 @@
 using System;
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
@@ -7,7 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Client.Avalonia.Views.Main;
 
-public class App : Application
+public class App : global::Avalonia.Application
 {
     private readonly IServiceProvider _serviceProvider;
 

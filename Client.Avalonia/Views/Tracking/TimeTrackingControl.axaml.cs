@@ -1,5 +1,5 @@
 using Avalonia.Controls;
-using Client.Avalonia.ViewModels.TimeTracking;
+using Client.Avalonia.Models.TimeTracking;
 
 namespace Client.Avalonia.Views.Tracking;
 

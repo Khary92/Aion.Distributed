@@ -1,12 +1,12 @@
 using System;
 using System.Reactive.Linq;
-using Contract.CQRS.Notifications.UseCase;
 using Contract.DTO;
 using MediatR;
+using Proto.Notifications.UseCase;
 using ReactiveUI;
 using Unit = System.Reactive.Unit;
 
-namespace Client.Avalonia.ViewModels.Settings;
+namespace Client.Avalonia.Models.Settings;
 
 public class WorkDaysViewModel : ReactiveObject
 {

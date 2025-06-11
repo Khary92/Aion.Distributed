@@ -1,17 +1,19 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Client.Avalonia.Communication.Notifications.Ticket;
+using Client.Avalonia.Communication.Requests;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
-using Contract.CQRS.Notifications.Entities.Sprints;
-using Contract.CQRS.Notifications.Entities.Tickets;
 using Contract.DTO;
-using MediatR;
+using DynamicData;
+using Proto.Notifications.Sprint;
+using Proto.Notifications.Ticket;
 
-namespace Client.Avalonia.ViewModels.TimeTracking;
+namespace Client.Avalonia.Models.TimeTracking;
 
-public class TimeTrackingModel(IMessenger messenger, IMediator mediator) : ObservableObject
+public class TimeTrackingModel(IRequestSender requestSender, IMessenger messenger) : ObservableObject
 {
     private ObservableCollection<TicketDto> _filteredTickets = [];
 
@@ -26,7 +28,7 @@ public class TimeTrackingModel(IMessenger messenger, IMediator mediator) : Obser
     public async Task Initialize()
     {
         FilteredTickets.Clear();
-        var tickets = await mediator.Send(new GetTicketsForCurrentSprintRequest());
+        var tickets = await requestSender.GetTicketsForCurrentSprint();
         FilteredTickets.AddRange(tickets);
     }
 
@@ -34,16 +36,16 @@ public class TimeTrackingModel(IMessenger messenger, IMediator mediator) : Obser
     {
         messenger.Register<NewTicketMessage>(this, async void (_, m) =>
         {
-            var currentSprint = await mediator.Send(new GetActiveSprintRequest());
+            var currentSprint = await requestSender.GetActiveSprint();
 
             AllTickets.Add(m.Ticket);
-            if (currentSprint != null && currentSprint.TicketIds.Contains(m.Ticket.TicketId))
+            if (currentSprint.TicketIds.Contains(m.Ticket.TicketId))
                 FilteredTickets.Add(m.Ticket);
         });
 
         messenger.Register<TicketDataUpdatedNotification>(this, (_, m) =>
         {
-            var ticketDto = AllTickets.FirstOrDefault(tsv => tsv.TicketId == m.TicketId);
+            var ticketDto = AllTickets.FirstOrDefault(tsv => tsv.TicketId == Guid.Parse(m.TicketId));
 
             if (ticketDto == null) return;
 

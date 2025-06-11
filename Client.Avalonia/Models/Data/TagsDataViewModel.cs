@@ -1,10 +1,9 @@
 using System.Threading.Tasks;
-using Client.Avalonia.Models.Data;
 using Contract.DTO;
 using ReactiveUI;
 using Unit = System.Reactive.Unit;
 
-namespace Client.Avalonia.ViewModels.Data;
+namespace Client.Avalonia.Models.Data;
 
 public class TagsDataViewModel : ReactiveObject
 {

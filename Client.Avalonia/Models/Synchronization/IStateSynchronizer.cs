@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Client.Avalonia.ViewModels.Synchronization;
+namespace Client.Avalonia.Models.Synchronization;
 
 public interface IStateSynchronizer<in TObject, in TValue>
 {

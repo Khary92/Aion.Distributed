@@ -1,6 +1,6 @@
 <Window xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:main="clr-namespace:Client.Avalonia.ViewModels.Main"
+        xmlns:main="clr-namespace:Client.Avalonia.Models.Main"
         x:Class="Client.Avalonia.Views.Main.ContentWrapper"
         x:DataType="main:ContentWrapperViewModel"
         Icon="/Assets/app-icon.ico"

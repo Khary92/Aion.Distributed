@@ -1,22 +1,23 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls;
-using Client.Avalonia.ViewModels.TimeTracking;
+using Client.Avalonia.Models.TimeTracking;
 using Client.Avalonia.Views.Analysis;
 using Client.Avalonia.Views.Data;
 using Client.Avalonia.Views.Documentation;
 using Client.Avalonia.Views.Export;
 using Client.Avalonia.Views.Setting;
 using Client.Avalonia.Views.Tracking;
-using Contract.CQRS.Notifications.UseCase;
-using MediatR;
+using Proto.Notifications.UseCase;
 using ReactiveUI;
 using Unit = System.Reactive.Unit;
 
-namespace Client.Avalonia.ViewModels.Main;
 
-public class ContentWrapperViewModel : ReactiveObject,
-    INotificationHandler<WorkDaySelectionChangedNotification>
+//TODO!
+namespace Client.Avalonia.Models.Main;
+
+public class ContentWrapperViewModel : ReactiveObject
+// INotificationHandler<WorkDaySelectionChangedNotification>
 {
     private const int ZeroConstant = 0;
     private const int MenuTransitionDelay = 250;

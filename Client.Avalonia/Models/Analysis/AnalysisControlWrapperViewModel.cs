@@ -1,6 +1,6 @@
 using ReactiveUI;
 
-namespace Client.Avalonia.ViewModels.Analysis;
+namespace Client.Avalonia.Models.Analysis;
 
 public class AnalysisControlWrapperViewModel(
     AnalysisByTagViewModel analysisByTagViewModel,

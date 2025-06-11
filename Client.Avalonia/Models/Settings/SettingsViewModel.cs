@@ -1,7 +1,7 @@
 ﻿using ReactiveUI;
 using Unit = System.Reactive.Unit;
 
-namespace Client.Avalonia.ViewModels.Settings;
+namespace Client.Avalonia.Models.Settings;
 
 public class SettingsViewModel : ReactiveObject
 {

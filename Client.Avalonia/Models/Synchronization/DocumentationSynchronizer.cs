@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
+using Client.Avalonia.Communication.Commands;
 using Contract.DTO;
-using MediatR;
+using Proto.Command.Tickets;
 
-namespace Client.Avalonia.ViewModels.Synchronization;
+namespace Client.Avalonia.Models.Synchronization;
 
-public class DocumentationSynchronizer(IMediator mediator) : IStateSynchronizer<TicketReplayDecorator, string>
+public class DocumentationSynchronizer(ICommandSender commandSender) : IStateSynchronizer<TicketReplayDecorator, string>
 {
     private readonly ConcurrentDictionary<Guid, string> _documentationById = new();
     private readonly ConcurrentDictionary<Guid, ConcurrentBag<TicketReplayDecorator>> _ticketDecoratorsById = new();
@@ -38,7 +39,11 @@ public class DocumentationSynchronizer(IMediator mediator) : IStateSynchronizer<
                 decorator.DisplayedDocumentation = documentation;
             }
 
-            await mediator.Send(new UpdateTicketDocumentationCommand(ticketId, documentation));
+            await commandSender.Send(new UpdateTicketDocumentationCommand
+            {
+                TicketId = ticketId.ToString(),
+                Documentation = documentation
+            });
         }
     }
 }

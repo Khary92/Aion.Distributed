@@ -1,10 +1,9 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform;
-using Client.Avalonia.ViewModels.Main;
+using Client.Avalonia.Models.Main;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Dto;
 using MsBox.Avalonia.Enums;
@@ -43,6 +42,7 @@ public partial class ContentWrapper : Window
         });
 
         var result = await messageBoxStandard.ShowAsync();
+
 
         if (result == ButtonResult.Yes &&
             Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopApp)

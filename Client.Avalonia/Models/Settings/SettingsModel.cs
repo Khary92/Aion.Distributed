@@ -1,11 +1,13 @@
 using System.Threading.Tasks;
+using Client.Avalonia.Communication.Commands;
+using Client.Avalonia.Communication.Requests;
 using Contract.DTO;
-using MediatR;
+using Proto.Command.Settings;
 using ReactiveUI;
 
-namespace Client.Avalonia.ViewModels.Settings;
+namespace Client.Avalonia.Models.Settings;
 
-public class SettingsModel(IMediator mediator) : ReactiveObject
+public class SettingsModel(ICommandSender commandSender, IRequestSender requestSender) : ReactiveObject
 {
     private SettingsDto _settingsDto = null!;
 
@@ -17,16 +19,18 @@ public class SettingsModel(IMediator mediator) : ReactiveObject
 
     public async Task InitializeAsync()
     {
-        Settings = (await mediator.Send(new GetSettingsRequest()))!;
+        Settings = await requestSender.GetSettings();
     }
 
     public async Task SaveConfigAsync()
     {
         //TODO Make better Events and implement property changed
-        var updateSettingsCommand = new UpdateSettingsCommand(Settings.SettingsId, Settings.ExportPath,
-            Settings.IsAddNewTicketsToCurrentSprintActive);
-        await mediator.Send(updateSettingsCommand);
-
-        //  logger.LogCommandSentNoAnswer(updateSettingsCommand);
+        var updateSettingsCommand = new UpdateSettingsCommand
+        {
+            SettingsId = Settings.SettingsId.ToString(),
+            ExportPath = Settings.ExportPath,
+            IsAddNewTicketsToCurrentSprintActive = Settings.IsAddNewTicketsToCurrentSprintActive,
+        };
+        await commandSender.Send(updateSettingsCommand);
     }
 }

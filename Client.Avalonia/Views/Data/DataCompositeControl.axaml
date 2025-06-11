@@ -2,8 +2,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:sprintData="clr-namespace:Client.Avalonia.ViewModels.Data"
              xmlns:data1="clr-namespace:Client.Avalonia.Views.Data"
+             xmlns:sprintData="clr-namespace:Client.Avalonia.Models.Data"
              x:DataType="sprintData:DataCompositeViewModel"
              x:Class="Client.Avalonia.Views.Data.DataCompositeControl"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450">

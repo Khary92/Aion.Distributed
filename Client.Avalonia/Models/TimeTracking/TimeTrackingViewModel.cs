@@ -5,18 +5,26 @@ using System.Threading;
 using System.Threading.Tasks;
 using Client.Avalonia.Factories;
 using Client.Avalonia.Views.Custom;
-using Contract.CQRS.Notifications.UseCase;
+using Contract.CQRS.Requests.Replays;
+using Contract.CQRS.Requests.Sprints;
+using Contract.CQRS.Requests.StatisticsData;
+using Contract.CQRS.Requests.Tickets;
+using Contract.CQRS.Requests.TimeSlots;
+using Contract.CQRS.Requests.WorkDays;
 using Contract.DTO;
 using MediatR;
+using Proto.Command.UseCases;
+using Proto.Notifications.UseCase;
 using ReactiveUI;
 using Unit = System.Reactive.Unit;
 
-namespace Client.Avalonia.ViewModels.TimeTracking;
+namespace Client.Avalonia.Models.TimeTracking;
 
-public class TimeTrackingViewModel : ReactiveObject,
-    INotificationHandler<SprintSelectionChangedNotification>,
-    INotificationHandler<TimeSlotControlCreatedNotification>,
-    INotificationHandler<WorkDaySelectionChangedNotification>
+//TODO reimplement
+public class TimeTrackingViewModel : ReactiveObject
+// INotificationHandler<SprintSelectionChangedNotification>,
+// INotificationHandler<TimeSlotControlCreatedNotification>,
+// INotificationHandler<WorkDaySelectionChangedNotification>
 {
     private readonly IMediator _mediator;
 
@@ -91,24 +99,25 @@ public class TimeTrackingViewModel : ReactiveObject,
 
     public async Task Handle(TimeSlotControlCreatedNotification notification, CancellationToken cancellationToken)
     {
-        var timeSlotViewModel = TimeSlotViewModels.FirstOrDefault(tsv => tsv.ViewId == notification.ViewId);
+        var timeSlotViewModel = TimeSlotViewModels.FirstOrDefault(tsv => tsv.ViewId == Guid.Parse(notification.ViewId));
 
         if (timeSlotViewModel == null) return;
 
         timeSlotViewModel.Model.TimeSlot =
-            await _mediator.Send(new GetTimeSlotByIdRequest(notification.TimeSlotId), cancellationToken);
+            await _mediator.Send(new GetTimeSlotByIdRequest(Guid.Parse(notification.TimeSlotId)), cancellationToken);
 
         var ticketReplayDecorator =
-            await _mediator.Send(new GetTicketReplayByIdRequest(notification.TicketId), cancellationToken);
+            await _mediator.Send(new GetTicketReplayByIdRequest(Guid.Parse(notification.TicketId)), cancellationToken);
         SelectedTicketName = ticketReplayDecorator.Ticket.Name;
         timeSlotViewModel.Model.TicketReplayDecorator = ticketReplayDecorator;
 
         timeSlotViewModel.StatisticsViewModel.StatisticsData =
-            await _mediator.Send(new GetStatisticsDataByTimeSlotIdRequest(notification.TimeSlotId), cancellationToken);
+            await _mediator.Send(new GetStatisticsDataByTimeSlotIdRequest(Guid.Parse(notification.TimeSlotId)),
+                cancellationToken);
         await timeSlotViewModel.StatisticsViewModel.Initialize();
         timeSlotViewModel.StatisticsViewModel.RegisterMessenger();
 
-        timeSlotViewModel.NoteStreamViewModel.TimeSlotId = notification.TimeSlotId;
+        timeSlotViewModel.NoteStreamViewModel.TimeSlotId = Guid.Parse(notification.TimeSlotId);
         await timeSlotViewModel.NoteStreamViewModel.InitializeAsync();
         timeSlotViewModel.NoteStreamViewModel.RegisterMessenger();
 
@@ -176,7 +185,11 @@ public class TimeTrackingViewModel : ReactiveObject,
             var timeSlotViewModel = _timeSlotViewModelFactory.Create();
             TimeSlotViewModels.Add(timeSlotViewModel);
 
-            await _mediator.Send(new LoadTimeSlotControlCommand(timeSlotDto.TimeSlotId, timeSlotViewModel.ViewId));
+            await _mediator.Send(new LoadTimeSlotControlCommand
+            {
+                TimeSlotId = timeSlotDto.TimeSlotId.ToString(),
+                ViewId = timeSlotViewModel.ViewId.ToString()
+            });
         }
 
         if (TimeSlotViewModels.Any())
@@ -193,7 +206,11 @@ public class TimeTrackingViewModel : ReactiveObject,
         var timeSlotViewModel = _timeSlotViewModelFactory.Create();
 
         TimeSlotViewModels.Add(timeSlotViewModel);
-        await _mediator.Send(new CreateTimeSlotControlCommand(SelectedTicket.TicketId, timeSlotViewModel.ViewId));
+        await _mediator.Send(new CreateTimeSlotControlCommand
+        {
+            TicketId = SelectedTicket.TicketId.ToString(),
+            ViewId = timeSlotViewModel.ViewId.ToString()
+        });
 
         SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.TicketReplayDecorator.Ticket.Name;
     }

@@ -1,5 +1,5 @@
 using Avalonia.ReactiveUI;
-using Client.Avalonia.ViewModels.Settings;
+using Client.Avalonia.Models.Settings;
 
 namespace Client.Avalonia.Views.Setting;
 

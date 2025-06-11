@@ -1,9 +1,10 @@
+using System;
 using CommunityToolkit.Mvvm.Messaging;
-using Contract.CQRS.Notifications.Entities.Tags;
 using Contract.DTO;
+using Proto.Notifications.Tag;
 using ReactiveUI;
 
-namespace Client.Avalonia.ViewModels.TimeTracking.DynamicControls;
+namespace Client.Avalonia.Models.TimeTracking.DynamicControls;
 
 public class TagCheckBoxViewModel(IMessenger messenger) : ReactiveObject
 {
@@ -26,7 +27,7 @@ public class TagCheckBoxViewModel(IMessenger messenger) : ReactiveObject
     {
         messenger.Register<TagUpdatedNotification>(this, (_, m) =>
         {
-            if (Tag == null || Tag.TagId != m.TagId) return;
+            if (Tag == null || Tag.TagId != Guid.Parse(m.TagId)) return;
 
             Tag.Apply(m);
         });

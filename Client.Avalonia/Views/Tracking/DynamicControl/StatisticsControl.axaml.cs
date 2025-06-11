@@ -1,5 +1,5 @@
 using Avalonia.Controls;
-using Client.Avalonia.ViewModels.TimeTracking.DynamicControls;
+using Client.Avalonia.Models.TimeTracking.DynamicControls;
 using ReactiveUI;
 
 namespace Client.Avalonia.Views.Tracking.DynamicControl;

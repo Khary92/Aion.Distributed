@@ -1,15 +1,19 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Client.Avalonia.Communication.Notifications.Tags;
 using Client.Avalonia.Communication.RequiresChange;
 using CommunityToolkit.Mvvm.Messaging;
+using Contract.CQRS.Requests.Tags;
 using Contract.Decorators;
 using Contract.DTO;
+using DynamicData;
 using MediatR;
+using Proto.Command.Tags;
 using ReactiveUI;
 
-namespace Client.Avalonia.ViewModels.Analysis;
+namespace Client.Avalonia.Models.Analysis;
 
 public class AnalysisByTagModel : ReactiveObject
 {
@@ -45,7 +49,7 @@ public class AnalysisByTagModel : ReactiveObject
 
         _messenger.Register<UpdateTagCommand>(this, (_, m) =>
         {
-            var tag = Tags.FirstOrDefault(t => t.TagId == m.TagId);
+            var tag = Tags.FirstOrDefault(t => t.TagId == Guid.Parse(m.TagId));
 
             if (tag == null) return;
 

@@ -20,8 +20,8 @@ namespace Client.Avalonia.Models.Data;
 public class SprintsDataModel(
     ICommandSender commandSender,
     IRequestSender requestSender,
-    IMessenger messenger,
-    ITracingCollectorProvider tracer)
+    IMessenger messenger)
+    //ITracingCollectorProvider tracer)
     : ReactiveObject
 {
     public ObservableCollection<SprintDto> Sprints { get; } = [];
@@ -30,62 +30,62 @@ public class SprintsDataModel(
     {
         messenger.Register<NewSprintMessage>(this, (_, m) =>
         {
-            tracer.Sprint.Create.AggregateReceived(GetType(), m.Sprint.SprintId, m.Sprint.AsTraceAttributes());
+            //tracer.Sprint.Create.AggregateReceived(GetType(), m.Sprint.SprintId, m.Sprint.AsTraceAttributes());
             Sprints.Add(m.Sprint);
-            tracer.Sprint.Create.AggregateAdded(GetType(), m.Sprint.SprintId);
+            //tracer.Sprint.Create.AggregateAdded(GetType(), m.Sprint.SprintId);
         });
 
         messenger.Register<SprintDataUpdatedNotification>(this, (_, m) =>
         {
             var parsedId = Guid.Parse(m.SprintId);
-            tracer.Sprint.Update.NotificationReceived(GetType(), parsedId, m);
+            //tracer.Sprint.Update.NotificationReceived(GetType(), parsedId, m);
 
             var sprint = Sprints.FirstOrDefault(s => parsedId == s.SprintId);
 
             if (sprint is null)
             {
-                tracer.Sprint.Update.NoAggregateFound(GetType(), parsedId);
+                //tracer.Sprint.Update.NoAggregateFound(GetType(), parsedId);
                 return;
             }
 
             sprint.Apply(m);
-            tracer.Sprint.Update.ChangesApplied(GetType(), parsedId);
+            //tracer.Sprint.Update.ChangesApplied(GetType(), parsedId);
         });
 
         messenger.Register<TicketAddedToSprintNotification>(this, (_, m) =>
         {
             var parsedId = Guid.Parse(m.SprintId);
-            tracer.Sprint.AddTicketToSprint.NotificationReceived(GetType(), parsedId, m);
+            //tracer.Sprint.AddTicketToSprint.NotificationReceived(GetType(), parsedId, m);
 
             var sprint = Sprints.FirstOrDefault(s => parsedId == s.SprintId);
 
             if (sprint is null)
             {
-                tracer.Sprint.AddTicketToSprint.NoAggregateFound(GetType(), parsedId);
+                //tracer.Sprint.AddTicketToSprint.NoAggregateFound(GetType(), parsedId);
 
                 return;
             }
 
             sprint.Apply(m);
-            tracer.Sprint.AddTicketToSprint.ChangesApplied(GetType(), parsedId);
+            //tracer.Sprint.AddTicketToSprint.ChangesApplied(GetType(), parsedId);
         });
 
         messenger.Register<SprintActiveStatusSetNotification>(this, (_, m) =>
         {
             var parsedId = Guid.Parse(m.SprintId);
-            tracer.Sprint.ActiveStatus.NotificationReceived(GetType(), parsedId, m);
+            //tracer.Sprint.ActiveStatus.NotificationReceived(GetType(), parsedId, m);
 
             var sprint = Sprints.FirstOrDefault(s => parsedId == s.SprintId);
 
             if (sprint is null)
             {
-                tracer.Sprint.ActiveStatus.NoAggregateFound(GetType(), parsedId);
+                //tracer.Sprint.ActiveStatus.NoAggregateFound(GetType(), parsedId);
 
                 return;
             }
 
             sprint.Apply(m);
-            tracer.Sprint.ActiveStatus.ChangesApplied(GetType(), parsedId);
+            //tracer.Sprint.ActiveStatus.ChangesApplied(GetType(), parsedId);
         });
     }
 
@@ -106,7 +106,7 @@ public class SprintsDataModel(
         };
 
         await commandSender.Send(updateSprintDataCommand);
-        tracer.Sprint.ActiveStatus.CommandSent(GetType(), sprintDto.SprintId, updateSprintDataCommand);
+        //tracer.Sprint.ActiveStatus.CommandSent(GetType(), sprintDto.SprintId, updateSprintDataCommand);
     }
 
     public async Task CreateSprint(SprintDto newSprintDto)
@@ -123,7 +123,7 @@ public class SprintsDataModel(
         createSprintCommand.TicketIds.AddRange(newSprintDto.TicketIds.Select(id => id.ToString()));
 
         await commandSender.Send(createSprintCommand);
-        tracer.Sprint.Create.CommandSent(GetType(), newSprintDto.SprintId, createSprintCommand);
+        //tracer.Sprint.Create.CommandSent(GetType(), newSprintDto.SprintId, createSprintCommand);
     }
 
     public async Task SetSprintActive(SprintDto selectedSprint)
@@ -135,7 +135,7 @@ public class SprintsDataModel(
         };
 
         await commandSender.Send(setSprintActiveStatusCommand);
-        tracer.Sprint.ActiveStatus.CommandSent(GetType(), selectedSprint.SprintId, setSprintActiveStatusCommand);
+        //tracer.Sprint.ActiveStatus.CommandSent(GetType(), selectedSprint.SprintId, setSprintActiveStatusCommand);
 
         //TODO This is wrong. Check it.
         //await mediator.Publish(new SprintSelectionChangedNotification());

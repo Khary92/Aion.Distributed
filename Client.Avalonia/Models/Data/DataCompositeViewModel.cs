@@ -1,6 +1,4 @@
-using Client.Avalonia.Models.Data;
-
-namespace Client.Avalonia.ViewModels.Data;
+namespace Client.Avalonia.Models.Data;
 
 public class DataCompositeViewModel(
     SprintsDataViewModel sprintsDataViewModel,

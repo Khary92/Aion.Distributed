@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Client.Avalonia.Communication.Requests.AiSettings;
 using Client.Avalonia.Communication.Requests.Notes;
@@ -32,7 +33,7 @@ public class RequestSender(
     public async Task<AiSettingsDto?> Get(string aiSettingsId)
         => await aiSettingsRequestSender.Get(aiSettingsId);
 
-    public async Task<List<NoteDto>> GetNotesByTicketId(string ticketId)
+    public async Task<List<NoteDto>> GetNotesByTicketId(Guid ticketId)
         => await notesRequestSender.GetNotesByTicketId(ticketId);
 
     public async Task<List<NoteDto>> GetNotesByTimeSlotId(string timeSlotId)
@@ -41,7 +42,7 @@ public class RequestSender(
     public async Task<List<NoteTypeDto>> GetAllNoteTypes()
         => await noteTypesRequestSender.GetAllNoteTypes();
 
-    public async Task<NoteTypeDto> GetNoteTypeById(string noteTypeId)
+    public async Task<NoteTypeDto> GetNoteTypeById(Guid noteTypeId)
         => await noteTypesRequestSender.GetNoteTypeById(noteTypeId);
 
     public async Task<SettingsDto> GetSettings()
@@ -62,7 +63,7 @@ public class RequestSender(
     public async Task<List<TagDto>> GetAllTags()
         => await tagRequestSender.GetAllTags();
 
-    public async Task<TagDto> GetTagById(string tagId)
+    public async Task<TagDto> GetTagById(Guid tagId)
         => await tagRequestSender.GetTagById(tagId);
 
     public async Task<List<TicketDto>> GetAllTickets()

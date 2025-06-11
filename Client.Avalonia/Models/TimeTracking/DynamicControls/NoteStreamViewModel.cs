@@ -6,12 +6,16 @@ using Client.Avalonia.Communication.Notifications.Notes;
 using Client.Avalonia.Communication.RequiresChange;
 using Client.Avalonia.Factories;
 using CommunityToolkit.Mvvm.Messaging;
-using Contract.CQRS.Notifications.Entities.Note;
+using Contract.CQRS.Requests.Notes;
 using Contract.DTO;
+using Google.Protobuf.WellKnownTypes;
 using MediatR;
+using Proto.Command.Notes;
+using Proto.Command.TimeSlots;
+using Proto.Notifications.Note;
 using ReactiveUI;
 
-namespace Client.Avalonia.ViewModels.TimeTracking.DynamicControls;
+namespace Client.Avalonia.Models.TimeTracking.DynamicControls;
 
 public class NoteStreamViewModel(
     IMediator mediator,
@@ -34,8 +38,20 @@ public class NoteStreamViewModel(
         if (!runTimeSettings.IsSelectedDateCurrentDate()) return;
 
         var noteId = Guid.NewGuid();
-        await mediator.Send(new CreateNoteCommand(noteId, string.Empty, Guid.Empty, TimeSlotId, DateTimeOffset.Now));
-        await mediator.Send(new AddNoteCommand(TimeSlotId, noteId));
+        await mediator.Send(new CreateNoteCommand
+        {
+            NoteId = noteId.ToString(),
+            Text = string.Empty,
+            NoteTypeId = Guid.Empty.ToString(),
+            TimeSlotId = TimeSlotId.ToString(),
+            TimeStamp = Timestamp.FromDateTimeOffset(DateTimeOffset.Now)
+        });
+
+        await mediator.Send(new AddNoteCommand
+        {
+            NoteId = noteId.ToString(),
+            TimeSlotId = TimeSlotId.ToString()
+        });
     }
 
     public void RegisterMessenger()
@@ -44,7 +60,7 @@ public class NoteStreamViewModel(
 
         messenger.Register<NoteUpdatedNotification>(this, (_, m) =>
         {
-            var viewModel = Notes.FirstOrDefault(n => n.Note.NoteId == m.NoteId);
+            var viewModel = Notes.FirstOrDefault(n => n.Note.NoteId == Guid.Parse(m.NoteId));
 
             if (viewModel == null) return;
 

@@ -1,12 +1,12 @@
 using System;
 using System.Threading.Tasks;
+using Client.Avalonia.Communication.Requests;
 using Contract.DTO;
-using MediatR;
 using ReactiveUI;
 
-namespace Client.Avalonia.ViewModels.Documentation;
+namespace Client.Avalonia.Models.Documentation;
 
-public class TypeCheckBoxViewModel(IMediator mediator) : ReactiveObject
+public class TypeCheckBoxViewModel(IRequestSender requestSender) : ReactiveObject
 {
     private readonly Guid _noteTypeId;
     private bool _isChecked;
@@ -37,6 +37,6 @@ public class TypeCheckBoxViewModel(IMediator mediator) : ReactiveObject
 
     private async Task LoadNoteTypeAsync()
     {
-        _noteType ??= await mediator.Send(new GetNoteTypeByIdRequest(NoteTypeId));
+        _noteType ??= await requestSender.GetNoteTypeById(NoteTypeId);
     }
 }

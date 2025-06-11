@@ -1,7 +1,7 @@
 <UserControl xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:viewModels="clr-namespace:Client.Avalonia.ViewModels.Analysis"
              xmlns:analysis1="clr-namespace:Client.Avalonia.Views.Analysis"
+             xmlns:viewModels="clr-namespace:Client.Avalonia.Models.Analysis"
              x:Class="Client.Avalonia.Views.Analysis.AnalysisControlWrapper"
              x:DataType="viewModels:AnalysisControlWrapperViewModel">
 

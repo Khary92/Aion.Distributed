@@ -9,7 +9,7 @@ using MediatR;
 using ReactiveUI;
 using Unit = System.Reactive.Unit;
 
-namespace Client.Avalonia.ViewModels.Documentation;
+namespace Client.Avalonia.Models.Documentation;
 
 public class DocumentationViewModel : ReactiveObject
 {

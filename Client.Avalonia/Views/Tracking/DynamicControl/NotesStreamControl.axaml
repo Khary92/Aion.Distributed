@@ -2,15 +2,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:dynamicControls="clr-namespace:Client.Avalonia.ViewModels.TimeTracking.DynamicControls"
              xmlns:dynamicControl1="clr-namespace:Client.Avalonia.Views.Tracking.DynamicControl"
-             x:DataType="dynamicControls:NoteStreamViewModel"
+             xmlns:dynamicControls1="clr-namespace:Client.Avalonia.Models.TimeTracking.DynamicControls"
+             x:DataType="dynamicControls1:NoteStreamViewModel"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Client.Avalonia.Views.Tracking.DynamicControl.NotesStreamControl">
 
 
     <UserControl.DataTemplates>
-        <DataTemplate DataType="dynamicControls:NoteViewModel">
+        <DataTemplate DataType="dynamicControls1:NoteViewModel">
             <dynamicControl1:NoteControl />
         </DataTemplate>
     </UserControl.DataTemplates>
@@ -21,7 +21,7 @@
                           HorizontalAlignment="Stretch"
                           VerticalAlignment="Stretch">
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="dynamicControls:NoteViewModel">
+                    <DataTemplate DataType="dynamicControls1:NoteViewModel">
                         <dynamicControl1:NoteControl />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>

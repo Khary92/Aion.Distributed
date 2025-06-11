@@ -3,7 +3,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:avalonia="clr-namespace:LiveChartsCore.SkiaSharpView.Avalonia;assembly=LiveChartsCore.SkiaSharpView.Avalonia"
-             xmlns:analysis="clr-namespace:Client.Avalonia.ViewModels.Analysis"
+             xmlns:analysis="clr-namespace:Client.Avalonia.Models.Analysis"
              x:DataType="analysis:AnalysisByTagViewModel"
              mc:Ignorable="d"
              d:DesignWidth="800"

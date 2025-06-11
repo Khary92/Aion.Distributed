@@ -10,7 +10,7 @@ using LiveChartsCore.SkiaSharpView.Painting;
 using ReactiveUI;
 using SkiaSharp;
 
-namespace Client.Avalonia.ViewModels.Analysis;
+namespace Client.Avalonia.Models.Analysis;
 
 public class AnalysisBySprintViewModel(AnalysisBySprintModel analysisBySprintModel) : ReactiveObject
 {

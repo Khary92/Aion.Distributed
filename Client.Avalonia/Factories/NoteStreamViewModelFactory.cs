@@ -1,5 +1,5 @@
 using System;
-using Client.Avalonia.ViewModels.TimeTracking.DynamicControls;
+using Client.Avalonia.Models.TimeTracking.DynamicControls;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Client.Avalonia.Factories;

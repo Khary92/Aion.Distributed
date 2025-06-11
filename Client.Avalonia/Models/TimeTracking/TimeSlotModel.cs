@@ -1,13 +1,16 @@
+using System;
 using System.Threading.Tasks;
 using Client.Avalonia.Communication.RequiresChange.Cache;
-using Client.Avalonia.ViewModels.Synchronization;
+using Client.Avalonia.Models.Synchronization;
 using CommunityToolkit.Mvvm.Messaging;
-using Contract.CQRS.Notifications.Entities.Tickets;
-using Contract.CQRS.Notifications.UseCase;
 using Contract.DTO;
+using Google.Protobuf.WellKnownTypes;
+using Proto.Command.TimeSlots;
+using Proto.Notifications.Ticket;
+using Proto.Notifications.UseCase;
 using ReactiveUI;
 
-namespace Client.Avalonia.ViewModels.TimeTracking;
+namespace Client.Avalonia.Models.TimeTracking;
 
 public class TimeSlotModel(
     IMessenger messenger,
@@ -40,14 +43,14 @@ public class TimeSlotModel(
     {
         messenger.Register<TicketDocumentationUpdatedNotification>(this, (_, m) =>
         {
-            if (TicketReplayDecorator.Ticket.TicketId == m.TicketId) return;
+            if (TicketReplayDecorator.Ticket.TicketId == Guid.Parse(m.TicketId)) return;
 
             TicketReplayDecorator.Ticket.Apply(m);
         });
 
         messenger.Register<TicketDataUpdatedNotification>(this, (_, m) =>
         {
-            if (TicketReplayDecorator.Ticket.TicketId == m.TicketId) return;
+            if (TicketReplayDecorator.Ticket.TicketId == Guid.Parse(m.TicketId)) return;
 
             TicketReplayDecorator.Ticket.Apply(m);
         });
@@ -65,10 +68,25 @@ public class TimeSlotModel(
         messenger.Register<CreateSnapshotNotification>(this, (_, _) =>
         {
             if (TimeSlot.IsEndTimeChanged())
-                endTimeCache.Store(new SetEndTimeCommand(TimeSlot.TimeSlotId, TimeSlot.EndTime));
+            {
+                var setEndTimeCommand = new SetEndTimeCommand
+                {
+                    TimeSlotId = TimeSlot.TimeSlotId.ToString(),
+                    Time = Timestamp.FromDateTimeOffset(TimeSlot.EndTime)
+                };
+                endTimeCache.Store(setEndTimeCommand);
+            }
 
             if (TimeSlot.IsStartTimeChanged())
-                startTimeCache.Store(new SetStartTimeCommand(TimeSlot.TimeSlotId, TimeSlot.StartTime));
+            {
+                var setStartTimeCommand = new SetStartTimeCommand
+                {
+                    TimeSlotId = TimeSlot.TimeSlotId.ToString(),
+                    Time = Timestamp.FromDateTimeOffset(TimeSlot.StartTime)
+                };
+
+                startTimeCache.Store(setStartTimeCommand);
+            }
         });
     }
 

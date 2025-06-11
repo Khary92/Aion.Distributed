@@ -2,17 +2,20 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Client.Avalonia.Communication.Commands;
 using Client.Avalonia.Communication.Notifications.Tags;
+using Client.Avalonia.Communication.Requests;
 using Client.Avalonia.Factories;
 using CommunityToolkit.Mvvm.Messaging;
 using Contract.DTO;
-using MediatR;
+using Proto.Command.StatisticsData;
 using ReactiveUI;
 
-namespace Client.Avalonia.ViewModels.TimeTracking.DynamicControls;
+namespace Client.Avalonia.Models.TimeTracking.DynamicControls;
 
 public class StatisticsViewModel(
-    IMediator mediator,
+    ICommandSender commandSender,
+    IRequestSender requestSender,
     IMessenger messenger,
     ITagCheckBoxViewFactory tagCheckBoxViewFactory) : ReactiveObject
 {
@@ -43,7 +46,7 @@ public class StatisticsViewModel(
     {
         AvailableTags.Clear();
 
-        var tagDtos = await mediator.Send(new GetAllTagsRequest());
+        var tagDtos = await requestSender.GetAllTags();
 
         foreach (var tagDto in tagDtos) AvailableTags.Add(tagCheckBoxViewFactory.Create(tagDto));
 
@@ -68,12 +71,27 @@ public class StatisticsViewModel(
         var id = StatisticsData.StatisticsId;
 
         if (StatisticsData.IsProductivityChanged())
-            mediator.Send(new ChangeProductivityCommand(id,
-                StatisticsData.IsProductive,
-                StatisticsData.IsNeutral,
-                StatisticsData.IsUnproductive));
+        {
+            var changeProductivityCommand = new ChangeProductivityCommand
+            {
+                StatisticsDataId = id.ToString(),
+                IsProductive = StatisticsData.IsProductive,
+                IsNeutral = StatisticsData.IsNeutral,
+                IsUnproductive = StatisticsData.IsUnproductive
+            };
+            commandSender.Send(changeProductivityCommand);
+        }
+
 
         if (StatisticsData.IsTagsSelectionChanged())
-            mediator.Send(new ChangeTagSelectionCommand(id, StatisticsData.TagIds));
+        {
+            var cmd = new ChangeTagSelectionCommand
+            {
+                StatisticsDataId = id.ToString()
+            };
+            cmd.SelectedTagIds.AddRange(StatisticsData.TagIds.Select(t => t.ToString()));
+
+            commandSender.Send(cmd);
+        }
     }
 }

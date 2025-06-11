@@ -2,33 +2,36 @@ using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Threading.Tasks;
+using Client.Avalonia.Communication.Commands;
 using Client.Avalonia.Communication.Notifications.WorkDay;
+using Client.Avalonia.Communication.Requests;
 using Client.Avalonia.Communication.RequiresChange;
 using CommunityToolkit.Mvvm.Messaging;
+using Contract.CQRS.Requests.Settings;
+using Contract.CQRS.Requests.WorkDays;
 using Contract.DTO;
 using Contract.Tracing;
 using Contract.Tracing.Tracers;
-using MediatR;
+using DynamicData;
 using ReactiveUI;
 
-namespace Client.Avalonia.ViewModels.Export;
+namespace Client.Avalonia.Models.Export;
 
 public class ExportModel : ReactiveObject
 {
     private readonly IExportService _exportService;
-    private readonly IMediator _mediator;
+    private readonly IRequestSender _requestSender;
     private readonly IMessenger _messenger;
-    private readonly ITracingCollectorProvider _tracer;
+    //private readonly ITracingCollectorProvider _tracer;
 
     private string _markdownText = null!;
 
-    public ExportModel(IMediator mediator, IMessenger messenger, IExportService exportService,
-        ITracingCollectorProvider tracer)
+    public ExportModel(IRequestSender requestSender, IMessenger messenger,
+        IExportService exportService)
     {
-        _mediator = mediator;
+        _requestSender = requestSender;
         _messenger = messenger;
         _exportService = exportService;
-        _tracer = tracer;
 
         SelectedWorkDays.CollectionChanged += RefreshMarkdownViewerHandler;
     }
@@ -46,23 +49,23 @@ public class ExportModel : ReactiveObject
     {
         _messenger.Register<NewWorkDayMessage>(this, (_, m) =>
         {
-            _tracer.WorkDay.Create.AggregateReceived(GetType(), m.WorkDay.WorkDayId, m.WorkDay.AsTraceAttributes());
+            //_tracer.WorkDay.Create.AggregateReceived(GetType(), m.WorkDay.WorkDayId, m.WorkDay.AsTraceAttributes());
             WorkDays.Add(m.WorkDay);
-            _tracer.WorkDay.Create.AggregateAdded(GetType(), m.WorkDay.WorkDayId);
+            //_tracer.WorkDay.Create.AggregateAdded(GetType(), m.WorkDay.WorkDayId);
         });
     }
 
     public async Task InitializeAsync()
     {
         WorkDays.Clear();
-        WorkDays.AddRange(await _mediator.Send(new GetAllWorkDaysRequest()));
+        WorkDays.AddRange(await _requestSender.GetAllWorkDays());
     }
 
     public async Task<bool> ExportFileAsync()
     {
-        if (await _mediator.Send(new IsExportPathValidRequest())) return await _exportService.ExportToFile(WorkDays);
+        if (await _requestSender.IsExportPathValid()) return await _exportService.ExportToFile(WorkDays);
 
-        _tracer.Export.ToFile.PathSettingsInvalid(GetType(), new IsExportPathValidRequest());
+        //_tracer.Export.ToFile.PathSettingsInvalid(GetType(), new IsExportPathValidRequest());
         return false;
     }
 
@@ -74,7 +77,7 @@ public class ExportModel : ReactiveObject
         }
         catch (Exception exception)
         {
-            _tracer.Export.ToFile.ExceptionOccured(GetType(), exception);
+            //_tracer.Export.ToFile.ExceptionOccured(GetType(), exception);
         }
     }
 

@@ -2,16 +2,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:documentation="clr-namespace:Client.Avalonia.ViewModels.Documentation"
              xmlns:documentation2="clr-namespace:Client.Avalonia.Views.Documentation"
-             xmlns:dynamicControls="clr-namespace:Client.Avalonia.ViewModels.TimeTracking.DynamicControls"
              xmlns:dynamicControl1="clr-namespace:Client.Avalonia.Views.Tracking.DynamicControl"
-             x:DataType="documentation:DocumentationViewModel"
+             xmlns:documentation1="clr-namespace:Client.Avalonia.Models.Documentation"
+             xmlns:dynamicControls1="clr-namespace:Client.Avalonia.Models.TimeTracking.DynamicControls"
+             x:DataType="documentation1:DocumentationViewModel"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Client.Avalonia.Views.Documentation.DocumentationControl">
 
     <UserControl.DataTemplates>
-        <DataTemplate DataType="documentation:TypeCheckBoxViewModel">
+        <DataTemplate DataType="documentation1:TypeCheckBoxViewModel">
             <documentation2:TypeCheckBoxControl />
         </DataTemplate>
     </UserControl.DataTemplates>
@@ -52,7 +52,7 @@
                     <ItemsControl Grid.Row="1" ItemsSource="{Binding Model.Options}"
                                   VerticalAlignment="Stretch">
                         <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="documentation:TypeCheckBoxViewModel">
+                            <DataTemplate DataType="documentation1:TypeCheckBoxViewModel">
                                 <documentation2:TypeCheckBoxControl />
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
@@ -68,7 +68,7 @@
                                   HorizontalAlignment="Stretch"
                                   VerticalAlignment="Stretch">
                         <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="dynamicControls:NoteViewModel">
+                            <DataTemplate DataType="dynamicControls1:NoteViewModel">
                                 <dynamicControl1:NoteControl />
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>

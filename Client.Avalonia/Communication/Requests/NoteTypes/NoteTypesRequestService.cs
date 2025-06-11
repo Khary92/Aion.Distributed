@@ -23,9 +23,9 @@ public class NoteTypesRequestSender : INoteTypesRequestSender
             .ToList();
     }
 
-    public async Task<NoteTypeDto> GetNoteTypeById(string noteTypeId)
+    public async Task<NoteTypeDto> GetNoteTypeById(Guid noteTypeId)
     {
-        var request = new GetNoteTypeByIdRequestProto { NoteTypeId = noteTypeId };
+        var request = new GetNoteTypeByIdRequestProto { NoteTypeId = noteTypeId.ToString() };
         var response = await _client.GetNoteTypeByIdAsync(request);
         return new NoteTypeDto(Guid.Parse(response.NoteTypeId), response.Name, response.Color);
     }

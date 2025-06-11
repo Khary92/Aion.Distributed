@@ -14,7 +14,7 @@
         <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.1"/>
         <PackageReference Include="Avalonia.Desktop" Version="11.3.1"/>
         <PackageReference Include="Avalonia.ReactiveUI" Version="11.3.1"/>
-        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.2.1"/>
+        <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.1" />
         <PackageReference Include="Avalonia.Fonts.Inter" Version="11.2.1"/>
         <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
         <PackageReference Include="Avalonia.Diagnostics" Version="11.2.1">
@@ -40,6 +40,10 @@
     <ItemGroup>
         <ProjectReference Include="..\Core.Contract\Core.Contract.csproj" />
         <ProjectReference Include="..\Proto.Shared\Proto.Shared.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <AvaloniaResource Include="Assets\app-icon.ico" />
     </ItemGroup>
     
 </Project>

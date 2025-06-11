@@ -1,24 +1,25 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Client.Avalonia.Communication.Requests;
 using Client.Avalonia.Communication.RequiresChange;
 using Contract.Decorators;
 using Contract.DTO;
-using MediatR;
+using DynamicData;
 using ReactiveUI;
 
-namespace Client.Avalonia.ViewModels.Analysis;
+namespace Client.Avalonia.Models.Analysis;
 
 public class AnalysisByTicketModel : ReactiveObject
 {
+    private readonly IRequestSender _requestSender;
     private readonly IAnalysisDataService _analysisDataService;
-    private readonly IMediator _mediator;
 
     private AnalysisByTicketDecorator? _analysisByTicket;
 
-    public AnalysisByTicketModel(IMediator mediator, IAnalysisDataService analysisDataService)
+    public AnalysisByTicketModel(IRequestSender requestSender, IAnalysisDataService analysisDataService)
     {
-        _mediator = mediator;
+        _requestSender = requestSender;
         _analysisDataService = analysisDataService;
         _analysisDataService = analysisDataService;
 
@@ -36,7 +37,7 @@ public class AnalysisByTicketModel : ReactiveObject
     private async Task InitializeAsync()
     {
         Tickets.Clear();
-        Tickets.AddRange(await _mediator.Send(new GetTicketsWithShowAllSwitchRequest(false)));
+        Tickets.AddRange(await _requestSender.GetTicketsWithShowAllSwitch(false));
     }
 
     public async Task SetAnalysisByTicket(TicketDto selectedTicket)
@@ -46,6 +47,6 @@ public class AnalysisByTicketModel : ReactiveObject
 
     public async Task<TagDto> GetTagById(Guid tagId)
     {
-        return await _mediator.Send(new GetTagByIdRequest(tagId));
+        return await _requestSender.GetTagById(tagId);
     }
 }

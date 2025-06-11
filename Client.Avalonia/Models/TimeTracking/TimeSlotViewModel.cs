@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Client.Avalonia.Factories;
-using Client.Avalonia.ViewModels.TimeTracking.DynamicControls;
+using Client.Avalonia.Models.TimeTracking.DynamicControls;
 using Client.Avalonia.Views.Custom;
 using CommunityToolkit.Mvvm.Messaging;
-using Contract.CQRS.Notifications.UseCase;
+using Proto.Notifications.UseCase;
 using ReactiveUI;
 using Unit = System.Reactive.Unit;
 
-namespace Client.Avalonia.ViewModels.TimeTracking;
+namespace Client.Avalonia.Models.TimeTracking;
 
 public class TimeSlotViewModel : ReactiveObject
 {

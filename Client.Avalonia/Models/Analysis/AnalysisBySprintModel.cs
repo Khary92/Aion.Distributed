@@ -8,7 +8,7 @@ using Contract.DTO;
 using MediatR;
 using ReactiveUI;
 
-namespace Client.Avalonia.ViewModels.Analysis;
+namespace Client.Avalonia.Models.Analysis;
 
 public class AnalysisBySprintModel : ReactiveObject
 {
@@ -134,7 +134,7 @@ public class AnalysisBySprintModel : ReactiveObject
     private async Task InitializeAsync()
     {
         Sprints.Clear();
-        Sprints.AddRange(await _mediator.Send(new GetAllSprintsRequest()));
+       // Sprints.AddRange(await _mediator.Send(new GetAllSprintsRequest()));
     }
 
     public async Task SetAnalysisForSprint(SprintDto selectedSprint)

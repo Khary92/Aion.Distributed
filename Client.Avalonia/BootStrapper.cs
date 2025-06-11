@@ -1,3 +1,4 @@
+using Application.Services.UseCase;
 using Client.Avalonia.Communication.Commands;
 using Client.Avalonia.Communication.Commands.AiSettings;
 using Client.Avalonia.Communication.Commands.Notes;
@@ -32,20 +33,20 @@ using Client.Avalonia.Communication.Requests.Tickets;
 using Client.Avalonia.Communication.Requests.TimerSettings;
 using Client.Avalonia.Communication.Requests.TimeSlots;
 using Client.Avalonia.Communication.Requests.WorkDays;
+using Client.Avalonia.Communication.RequiresChange;
+using Client.Avalonia.Communication.RequiresChange.Cache;
 using Client.Avalonia.Factories;
 using Client.Avalonia.FileSystem;
 using Client.Avalonia.FileSystem.Serializer;
+using Client.Avalonia.Models.Analysis;
 using Client.Avalonia.Models.Data;
-using Client.Avalonia.ViewModels.Analysis;
-using Client.Avalonia.ViewModels.Data;
-using Client.Avalonia.ViewModels.Documentation;
-using Client.Avalonia.ViewModels.Export;
-using Client.Avalonia.ViewModels.Main;
-using Client.Avalonia.ViewModels.Settings;
-using Client.Avalonia.ViewModels.Synchronization;
-using Client.Avalonia.ViewModels.TimeTracking;
-using Client.Avalonia.ViewModels.TimeTracking.DynamicControls;
-using Client.Avalonia.ViewModels.Tracing;
+using Client.Avalonia.Models.Documentation;
+using Client.Avalonia.Models.Export;
+using Client.Avalonia.Models.Main;
+using Client.Avalonia.Models.Settings;
+using Client.Avalonia.Models.Synchronization;
+using Client.Avalonia.Models.TimeTracking;
+using Client.Avalonia.Models.TimeTracking.DynamicControls;
 using Client.Avalonia.Views.Analysis;
 using Client.Avalonia.Views.Data;
 using Client.Avalonia.Views.Documentation;
@@ -55,16 +56,19 @@ using Client.Avalonia.Views.Setting;
 using Client.Avalonia.Views.Tracking;
 using CommunityToolkit.Mvvm.Messaging;
 using Contract.DTO;
+using Grpc.Net.Client;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using Proto.Requests.NoteTypes;
-using Proto.Requests.Settings;
-using Proto.Requests.Sprints;
-using Proto.Requests.StatisticsData;
-using Proto.Requests.Tags;
-using Proto.Requests.Tickets;
-using Proto.Requests.TimerSettings;
-using Proto.Requests.TimeSlots;
-using Proto.Requests.WorkDays;
+using Proto.Command.TimeSlots;
+using Proto.Notifications.Note;
+using Proto.Notifications.NoteType;
+using Proto.Notifications.Sprint;
+using Proto.Notifications.Tag;
+using Proto.Notifications.Ticket;
+using Proto.Notifications.TimerSettings;
+using Proto.Notifications.UseCase;
+using Proto.Notifications.WorkDay;
+using Proto.Shared;
 
 namespace Client.Avalonia;
 
@@ -79,6 +83,11 @@ public static class Bootstrapper
         AddRequestSenders(services);
         AddCommandSenders(services);
         AddFileSystemServices(services);
+
+        //TODO fix it
+        services.AddSingleton<IMediator, Mediator>();
+        services.AddSingleton<IRunTimeSettings, RunTimeSettings>();
+        services.AddSingleton<IExportService, ExportService>();
     }
 
     private static void AddFileSystemServices(this IServiceCollection services)
@@ -87,10 +96,12 @@ public static class Bootstrapper
         services.AddSingleton<IFileSystemWriter, FileSystemWriter>();
         services.AddSingleton<IFileSystemWrapper, FileSystemWrapper>();
     }
-    
+
     private static void AddSynchronizationServices(this IServiceCollection services)
     {
         services.AddSingleton<IStateSynchronizer<TicketReplayDecorator, string>, DocumentationSynchronizer>();
+        services.AddSingleton<IPersistentCache<SetStartTimeCommand>, StartTimeChangedCache>();
+        services.AddSingleton<IPersistentCache<SetEndTimeCommand>, EndTimeChangedCache>();
     }
 
     private static void AddViews(this IServiceCollection services)
@@ -106,9 +117,6 @@ public static class Bootstrapper
 
     private static void AddModels(this IServiceCollection services)
     {
-        services.AddSingleton<TracingViewModel>();
-        services.AddSingleton<TracingModel>();
-
         services.AddSingleton<TimerSettingsViewModel>();
         services.AddSingleton<TimerSettingsModel>();
 
@@ -203,8 +211,19 @@ public static class Bootstrapper
 
         services.AddHostedService<WorkDayNotificationBackgroundService>();
         services.AddSingleton<WorkDayNotificationReceiver>();
+
+
+        var channel = GrpcChannel.ForAddress(TempConnectionStatic.Address);
+        services.AddSingleton(new NoteNotificationService.NoteNotificationServiceClient(channel));
+        services.AddSingleton(new NoteTypeNotificationService.NoteTypeNotificationServiceClient(channel));
+        services.AddSingleton(new SprintNotificationService.SprintNotificationServiceClient(channel));
+        services.AddSingleton(new TagNotificationService.TagNotificationServiceClient(channel));
+        services.AddSingleton(new TicketNotificationService.TicketNotificationServiceClient(channel));
+        services.AddSingleton(new TimerSettingsNotificationService.TimerSettingsNotificationServiceClient(channel));
+        services.AddSingleton(new UseCaseNotificationService.UseCaseNotificationServiceClient(channel));
+        services.AddSingleton(new WorkDayNotificationService.WorkDayNotificationServiceClient(channel));
     }
-    
+
     private static void AddCommandSenders(this IServiceCollection services)
     {
         services.AddScoped<ICommandSender, CommandSender>();
@@ -223,11 +242,11 @@ public static class Bootstrapper
         services.AddScoped<IUseCaseCommandSender, UseCaseCommandSender>();
         services.AddScoped<IWorkDayCommandSender, WorkDayCommandSender>();
     }
-    
+
     private static void AddRequestSenders(this IServiceCollection services)
     {
         services.AddScoped<IRequestSender, RequestSender>();
-        
+
         services.AddScoped<IAiSettingsRequestSender, AiSettingsRequestSender>();
         services.AddScoped<INotesRequestSender, NotesRequestSender>();
         services.AddScoped<INoteTypesRequestSender, NoteTypesRequestSender>();

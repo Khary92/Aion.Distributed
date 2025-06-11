@@ -1,13 +1,17 @@
+using System;
 using System.Threading.Tasks;
-using Contract.CQRS.Requests.AiSettings;
+using Client.Avalonia.Communication.Commands;
+using Client.Avalonia.Communication.Requests;
 using Contract.DTO;
 using Contract.Tracing.Tracers;
-using MediatR;
+using Proto.Command.AiSettings;
 using ReactiveUI;
 
-namespace Client.Avalonia.ViewModels.Settings;
+namespace Client.Avalonia.Models.Settings;
 
-public class AiSettingsModel(IMediator mediator, ITracingCollectorProvider tracer) : ReactiveObject
+public class AiSettingsModel(
+    ICommandSender commandSender,
+    IRequestSender requestSender) : ReactiveObject
 {
     private string _previousLanguageModelPath = null!;
 
@@ -17,8 +21,9 @@ public class AiSettingsModel(IMediator mediator, ITracingCollectorProvider trace
 
     public async Task Initialize()
     {
-        AiSettings = await mediator.Send(new GetAiSettingsRequest());
-        _previousPrompt = AiSettings.Prompt;
+        //TODO this is wrong. Obviously
+        AiSettings = await requestSender.Get(Guid.NewGuid().ToString());
+        _previousPrompt = AiSettings!.Prompt;
         _previousLanguageModelPath = AiSettings.LanguageModelPath;
     }
 
@@ -26,15 +31,20 @@ public class AiSettingsModel(IMediator mediator, ITracingCollectorProvider trace
     {
         if (_previousPrompt == AiSettings!.Prompt)
         {
-            tracer.AiSettings.ChangePrompt.PropertyNotChanged(GetType(), AiSettings.AiSettingsId,
-                ("propmpt", AiSettings!.Prompt));
+            //tracer.AiSettings.ChangePrompt.PropertyNotChanged(GetType(), AiSettings.AiSettingsId,
+           //     ("prompt", AiSettings!.Prompt));
             return;
         }
 
-        var changePromptCommand = new ChangePromptCommand(AiSettings.AiSettingsId, AiSettings.Prompt);
-        await mediator.Send(changePromptCommand);
+        var changePromptCommand = new ChangePromptCommand
+        {
+            AiSettingsId = AiSettings.AiSettingsId.ToString(),
+            Prompt = AiSettings.Prompt
+        };
 
-        tracer.AiSettings.ChangePrompt.CommandSent(GetType(), AiSettings.AiSettingsId, changePromptCommand);
+        await commandSender.Send(changePromptCommand);
+
+        //tracer.AiSettings.ChangePrompt.CommandSent(GetType(), AiSettings.AiSettingsId, changePromptCommand);
 
         _previousPrompt = AiSettings.Prompt;
     }
@@ -43,17 +53,22 @@ public class AiSettingsModel(IMediator mediator, ITracingCollectorProvider trace
     {
         if (_previousLanguageModelPath == AiSettings!.LanguageModelPath)
         {
-            tracer.AiSettings.ChangeLanguageModel.PropertyNotChanged(GetType(), AiSettings.AiSettingsId,
-                ("languageModelPath", AiSettings!.LanguageModelPath));
+            //tracer.AiSettings.ChangeLanguageModel.PropertyNotChanged(GetType(), AiSettings.AiSettingsId,
+             //   ("languageModelPath", AiSettings!.LanguageModelPath));
             return;
         }
 
         var changeLanguageModelCommand =
-            new ChangeLanguageModelCommand(AiSettings.AiSettingsId, AiSettings.LanguageModelPath);
-        await mediator.Send(changeLanguageModelCommand);
+            new ChangeLanguageModelCommand
+            {
+                AiSettingsId = AiSettings.AiSettingsId.ToString(),
+                LanguageModelPath = AiSettings.LanguageModelPath
+            };
 
-        tracer.AiSettings.ChangeLanguageModel.CommandSent(GetType(), AiSettings.AiSettingsId,
-            changeLanguageModelCommand);
+        await commandSender.Send(changeLanguageModelCommand);
+
+        //tracer.AiSettings.ChangeLanguageModel.CommandSent(GetType(), AiSettings.AiSettingsId,
+       //     changeLanguageModelCommand);
 
         _previousLanguageModelPath = AiSettings.LanguageModelPath;
     }

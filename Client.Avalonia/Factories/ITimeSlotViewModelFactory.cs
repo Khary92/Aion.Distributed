@@ -1,4 +1,4 @@
-using Client.Avalonia.ViewModels.TimeTracking;
+using Client.Avalonia.Models.TimeTracking;
 
 namespace Client.Avalonia.Factories;
 
