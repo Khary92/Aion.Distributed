@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Contract.FileSystem;
+using Client.Avalonia.FileSystem;
 using Proto.Command.TimeSlots;
 
 namespace Client.Avalonia.Communication.RequiresChange.Cache;

@@ -1,5 +1,5 @@
 using System.Collections.ObjectModel;
-using Contract.CQRS.Notifications.Entities.Tickets;
+using Proto.Notifications.Ticket;
 using ReactiveUI;
 
 namespace Contract.DTO;
@@ -58,7 +58,12 @@ public class TicketDto : ReactiveObject
     {
         BookingNumber = notification.BookingNumber;
         Name = notification.Name;
-        SprintIds = notification.SprintIds;
+
+        var guidList = notification.SprintIds
+            .Select(Guid.Parse)
+            .ToList();
+
+        SprintIds = new Collection<Guid>(guidList);
     }
 
     public void Apply(TicketDocumentationUpdatedNotification notification)

@@ -4,7 +4,7 @@ using Proto.Command.UseCases;
 using UseCases_CreateTimeSlotControlCommand = Proto.Command.UseCases.CreateTimeSlotControlCommand;
 using UseCases_LoadTimeSlotControlCommand = Proto.Command.UseCases.LoadTimeSlotControlCommand;
 
-namespace Client.Avalonia.Communication.Sender;
+namespace Client.Avalonia.Communication.Commands;
 
 public class UseCaseCommandSender : IUseCaseCommandSender
 {

@@ -2,7 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Threading.Tasks;
-using Client.Avalonia.Communication.NotificationProcessors.Messages;
+using Client.Avalonia.Communication.Notifications.WorkDay;
 using Client.Avalonia.Communication.RequiresChange;
 using CommunityToolkit.Mvvm.Messaging;
 using Contract.DTO;

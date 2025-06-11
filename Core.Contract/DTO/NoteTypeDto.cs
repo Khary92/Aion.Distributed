@@ -1,3 +1,4 @@
+using Proto.Notifications.NoteType;
 using ReactiveUI;
 
 namespace Contract.DTO;

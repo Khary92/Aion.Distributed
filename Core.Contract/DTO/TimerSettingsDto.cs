@@ -1,4 +1,4 @@
-using Contract.CQRS.Notifications.Entities.TimerSettings;
+using Proto.Notifications.TimerSettings;
 using ReactiveUI;
 
 namespace Contract.DTO;

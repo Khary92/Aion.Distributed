@@ -1,9 +1,7 @@
-﻿
-using System.IO;
+﻿using System.IO;
 using System.Threading.Tasks;
-using Contract.FileSystem;
 
-namespace Infrastructure.FileSystem.Serializer;
+namespace Client.Avalonia.FileSystem.Serializer;
 
 public class FileSystemWriter : IFileSystemWriter
 {

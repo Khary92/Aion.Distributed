@@ -1,4 +1,4 @@
-﻿namespace Client.Avalonia.Communication.Sender;
+﻿namespace Client.Avalonia.Communication.Commands;
 
 public class TempStatic
 {

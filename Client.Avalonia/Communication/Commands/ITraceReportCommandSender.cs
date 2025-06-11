@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Proto.Command.TraceReports;
 
-namespace Client.Avalonia.Communication.Sender;
+namespace Client.Avalonia.Communication.Commands;
 
 public interface ITraceReportCommandSender
 {

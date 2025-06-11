@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using Client.Avalonia.Communication.NotificationProcessors.Messages;
+using Client.Avalonia.Communication.Notifications.TimerSettings;
 using CommunityToolkit.Mvvm.Messaging;
 using Contract.CQRS.Notifications.Entities.TimerSettings;
 using Contract.DTO;

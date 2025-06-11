@@ -18,4 +18,8 @@
             <PrivateAssets>all</PrivateAssets>
         </PackageReference>
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Proto.Shared\Proto.Shared.csproj" />
+    </ItemGroup>
 </Project>

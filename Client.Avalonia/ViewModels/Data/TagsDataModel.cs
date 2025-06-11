@@ -2,7 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Client.Avalonia.Communication.NotificationProcessors.Messages;
+using Client.Avalonia.Communication.Notifications.Tags;
 using CommunityToolkit.Mvvm.Messaging;
 using Contract.CQRS.Notifications.Entities.Tags;
 using Contract.DTO;

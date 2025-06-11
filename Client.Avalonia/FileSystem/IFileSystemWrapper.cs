@@ -1,4 +1,4 @@
-﻿namespace Contract.FileSystem;
+﻿namespace Client.Avalonia.FileSystem;
 
 public interface IFileSystemWrapper
 {

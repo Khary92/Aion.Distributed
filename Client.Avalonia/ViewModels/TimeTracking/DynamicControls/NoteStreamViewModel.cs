@@ -2,7 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Client.Avalonia.Communication.NotificationProcessors.Messages;
+using Client.Avalonia.Communication.Notifications.Notes;
 using Client.Avalonia.Communication.RequiresChange;
 using Client.Avalonia.Factories;
 using CommunityToolkit.Mvvm.Messaging;

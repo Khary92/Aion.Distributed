@@ -1,4 +1,4 @@
-using Contract.CQRS.Notifications.Entities.Tags;
+using Proto.Notifications.Tag;
 using ReactiveUI;
 
 namespace Contract.DTO;

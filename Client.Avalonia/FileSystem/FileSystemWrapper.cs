@@ -1,8 +1,6 @@
-﻿
-using System.IO;
-using Contract.FileSystem;
+﻿using System.IO;
 
-namespace Infrastructure.FileSystem;
+namespace Client.Avalonia.FileSystem;
 
 public class FileSystemWrapper : IFileSystemWrapper
 {

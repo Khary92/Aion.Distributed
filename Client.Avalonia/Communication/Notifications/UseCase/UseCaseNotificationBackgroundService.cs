@@ -1,7 +1,8 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Client.Avalonia.Communication.Notifications.UseCase;
 using Microsoft.Extensions.Hosting;
+
+namespace Client.Avalonia.Communication.Notifications.UseCase;
 
 public class UseCaseNotificationBackgroundService(UseCaseNotificationReceiver notificationReceiver)
     : BackgroundService

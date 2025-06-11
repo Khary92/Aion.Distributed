@@ -15,68 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <!-- Kompiliert alle .proto-Dateien im Verzeichnisbaum -->
     <Protobuf Include="**/*.proto" ProtoRoot="." GrpcServices="Both" />
-    <Protobuf Update="Requests\ai_settings_requests.proto">
-      <Access>Public</Access>
-      <ProtoCompile>True</ProtoCompile>
-      <CompileOutputs>True</CompileOutputs>
-      <OutputDir>obj\Debug\net9.0\</OutputDir>
-    </Protobuf>
-    <Protobuf Update="Requests\note_requests.proto">
-      <Access>Public</Access>
-      <ProtoCompile>True</ProtoCompile>
-      <CompileOutputs>True</CompileOutputs>
-      <OutputDir>obj\Debug\net9.0\</OutputDir>
-    </Protobuf>
-    <Protobuf Update="Requests\note_type_requests.proto">
-      <Access>Public</Access>
-      <ProtoCompile>True</ProtoCompile>
-      <CompileOutputs>True</CompileOutputs>
-      <OutputDir>obj\Debug\net9.0\</OutputDir>
-    </Protobuf>
-    <Protobuf Update="Requests\settings_requests.proto">
-      <Access>Public</Access>
-      <ProtoCompile>True</ProtoCompile>
-      <CompileOutputs>True</CompileOutputs>
-      <OutputDir>obj\Debug\net9.0\</OutputDir>
-    </Protobuf>
-    <Protobuf Update="Requests\sprint_requests.proto">
-      <Access>Public</Access>
-      <ProtoCompile>True</ProtoCompile>
-      <CompileOutputs>True</CompileOutputs>
-      <OutputDir>obj\Debug\net9.0\</OutputDir>
-    </Protobuf>
-    <Protobuf Update="Requests\statistics_data_requests.proto">
-      <Access>Public</Access>
-      <ProtoCompile>True</ProtoCompile>
-      <CompileOutputs>True</CompileOutputs>
-      <OutputDir>obj\Debug\net9.0\</OutputDir>
-    </Protobuf>
-    <Protobuf Update="Requests\tag_requests.proto">
-      <Access>Public</Access>
-      <ProtoCompile>True</ProtoCompile>
-      <CompileOutputs>True</CompileOutputs>
-      <OutputDir>obj\Debug\net9.0\</OutputDir>
-    </Protobuf>
-    <Protobuf Update="Requests\ticket_requests.proto">
-      <Access>Public</Access>
-      <ProtoCompile>True</ProtoCompile>
-      <CompileOutputs>True</CompileOutputs>
-      <OutputDir>obj\Debug\net9.0\</OutputDir>
-    </Protobuf>
-    <Protobuf Update="Requests\time_slot_requests.proto">
-      <Access>Public</Access>
-      <ProtoCompile>True</ProtoCompile>
-      <CompileOutputs>True</CompileOutputs>
-      <OutputDir>obj\Debug\net9.0\</OutputDir>
-    </Protobuf>
-    <Protobuf Update="Requests\timer_settings_requests.proto">
-      <Access>Public</Access>
-      <ProtoCompile>True</ProtoCompile>
-      <CompileOutputs>True</CompileOutputs>
-      <OutputDir>obj\Debug\net9.0\</OutputDir>
-    </Protobuf>
   </ItemGroup>
 
 </Project>

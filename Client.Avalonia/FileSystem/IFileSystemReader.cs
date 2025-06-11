@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Contract.FileSystem;
+namespace Client.Avalonia.FileSystem;
 
 public interface IFileSystemReader
 {

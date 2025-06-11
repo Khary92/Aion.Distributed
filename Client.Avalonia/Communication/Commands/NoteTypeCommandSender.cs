@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Grpc.Net.Client;
-using Proto.Command.Notes;
 using Proto.Command.NoteTypes;
 
-namespace Client.Avalonia.Communication.Sender;
+namespace Client.Avalonia.Communication.Commands;
 
 public class NoteTypeCommandSender : INoteTypeCommandSender
 {

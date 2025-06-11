@@ -2,7 +2,7 @@
 using Grpc.Net.Client;
 using Proto.Command.Sprints;
 
-namespace Client.Avalonia.Communication.Sender;
+namespace Client.Avalonia.Communication.Commands;
 
 public class SprintCommandSender : ISprintCommandSender
 {

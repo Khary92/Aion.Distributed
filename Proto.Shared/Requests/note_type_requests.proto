@@ -15,7 +15,7 @@ message GetAllNoteTypesResponseProto {
 }
 
 message GetNoteTypeByIdRequestProto {
-  string note_type_id = 1; // UUID als String
+  string note_type_id = 1;
 }
 
 service NoteTypesRequestService {

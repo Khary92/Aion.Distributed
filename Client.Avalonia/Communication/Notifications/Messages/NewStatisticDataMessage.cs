@@ -1,3 +1,3 @@
-namespace Client.Avalonia.Communication.NotificationProcessors.Messages;
+namespace Client.Avalonia.Communication.Notifications.Messages;
 
 public record NewStatisticDataMessage;

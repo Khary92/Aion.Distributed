@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Client.Avalonia.Communication.Sender;
+namespace Client.Avalonia.Communication.Commands;
 
 public interface IRequestSender<in T>
 {

@@ -1,4 +1,4 @@
-using Contract.CQRS.Notifications.Entities.Sprints;
+using Proto.Notifications.Sprint;
 using ReactiveUI;
 
 namespace Contract.DTO;
@@ -74,15 +74,17 @@ public class SprintDto : ReactiveObject
 
     public void Apply(SprintDataUpdatedNotification notification)
     {
-        EndTime = notification.EndTime;
-        StartTime = notification.StartTime;
+        EndTime = DateTimeOffset.Parse(notification.EndTime);
+        StartTime = DateTimeOffset.Parse(notification.StartTime);
         Name = notification.Name;
     }
 
     public void Apply(TicketAddedToSprintNotification notification)
     {
-        if (!TicketIds.Contains(notification.TicketId))
-            TicketIds.Add(notification.TicketId);
+        var parsedGuid = Guid.Parse(notification.TicketId);
+        
+        if (!TicketIds.Contains(parsedGuid))
+            TicketIds.Add(parsedGuid);
     }
 
     public void Apply(SprintActiveStatusSetNotification notification)

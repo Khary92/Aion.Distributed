@@ -1,4 +1,4 @@
-using Contract.CQRS.Notifications.Entities.Note;
+using Proto.Notifications.Note;
 using ReactiveUI;
 
 namespace Contract.DTO;
@@ -59,9 +59,9 @@ public class NoteDto : ReactiveObject
 
     public void Apply(NoteUpdatedNotification notification)
     {
-        NoteId = notification.NoteId;
+        NoteId = Guid.Parse(notification.NoteId);
         Text = notification.Text;
-        NoteTypeId = notification.NoteTypeId;
-        TimeSlotId = notification.TimeSlotId;
+        NoteTypeId = Guid.Parse(notification.NoteTypeId);
+        TimeSlotId = Guid.Parse(notification.TimeSlotId);
     }
 }

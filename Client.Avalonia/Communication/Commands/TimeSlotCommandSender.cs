@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Client.Avalonia.Communication.Sender;
 using Grpc.Net.Client;
 using Proto.Command.TimeSlots;
 

@@ -13,7 +13,7 @@ using Proto.Command.TraceReports;
 using Proto.Command.UseCases;
 using Proto.Command.WorkDays;
 
-namespace Client.Avalonia.Communication.Sender;
+namespace Client.Avalonia.Communication.Commands;
 
 public class CommandSender(
     IAiSettingsCommandSender aiSettingsCommandSender,

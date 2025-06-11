@@ -1,9 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Grpc.Net.Client;
-using Proto.Command.StatisticsData;
 using Proto.Command.Tags;
 
-namespace Client.Avalonia.Communication.Sender;
+namespace Client.Avalonia.Communication.Commands;
 
 public class TagCommandSender : ITagCommandSender
 {

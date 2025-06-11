@@ -2,9 +2,8 @@
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Contract.FileSystem;
 
-namespace Infrastructure.FileSystem.Serializer;
+namespace Client.Avalonia.FileSystem.Serializer;
 
 public class JsonReader : IFileSystemReader
 {
