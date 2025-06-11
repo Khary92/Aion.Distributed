@@ -1,0 +1,34 @@
+syntax = "proto3";
+
+option csharp_namespace = "Proto.Requests.TimeSlots";
+
+package contract.requests;
+
+import "google/protobuf/timestamp.proto";
+
+message GetTimeSlotByIdRequestProto {
+  string time_slot_id = 1;
+}
+
+message GetTimeSlotsForWorkDayIdRequestProto {
+  string work_day_id = 1;
+}
+
+message TimeSlotProto {
+  string timeSlotId = 1;
+  string workDayId = 2;
+  string selectedTicketId = 3;
+  google.protobuf.Timestamp startTime = 4;
+  google.protobuf.Timestamp endTime = 5;
+  repeated string noteIds = 6;
+  bool isTimerRunning = 7;
+}
+
+message TimeSlotListProto {
+  repeated TimeSlotProto time_slots = 1;
+}
+
+service TimeSlotRequestService {
+  rpc GetTimeSlotById(GetTimeSlotByIdRequestProto) returns (TimeSlotProto);
+  rpc GetTimeSlotsForWorkDayId(GetTimeSlotsForWorkDayIdRequestProto) returns (TimeSlotListProto);
+}

@@ -1,9 +1,0 @@
-syntax = "proto3";
-
-option csharp_namespace = "Contract.Dto.TimerSettings";
-
-message TimerSettingsProto {
-  string timerSettingsId = 1;
-  int32 documentationSaveInterval = 2;
-  int32 snapshotSaveInterval = 3;
-}

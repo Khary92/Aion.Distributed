@@ -2,8 +2,6 @@ syntax = "proto3";
 
 option csharp_namespace = "Proto.Requests.AiSettings";
 
-import "google/protobuf/wrappers.proto";
-
 message GetAiSettingsRequestProto {
   string ai_settings_id = 1;
 }

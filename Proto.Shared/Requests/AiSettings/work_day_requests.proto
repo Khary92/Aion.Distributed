@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+option csharp_namespace = "Proto.Requests.WorkDays";
+
+package contract.requests;
+
+import "google/protobuf/timestamp.proto";
+
+message GetAllWorkDaysRequestProto {}
+
+message GetSelectedWorkDayRequestProto {}
+
+message GetWorkDayByDateRequestProto {
+  google.protobuf.Timestamp date = 1;
+}
+
+message WorkDayProto {
+  string workDayId = 1;
+  google.protobuf.Timestamp date = 2;
+}
+
+message WorkDayListProto {
+  repeated WorkDayProto work_days = 1;
+}
+
+service WorkDayRequestService {
+  rpc GetAllWorkDays(GetAllWorkDaysRequestProto) returns (WorkDayListProto);
+  rpc GetSelectedWorkDay(GetSelectedWorkDayRequestProto) returns (WorkDayProto);
+  rpc GetWorkDayByDate(GetWorkDayByDateRequestProto) returns (WorkDayProto);
+}
