@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Messaging;
 using Contract.DTO;
 using Grpc.Core;
@@ -33,12 +34,14 @@ public class NoteNotificationReceiver(
                             Guid.Parse(noteCreated.TimeSlotId),
                             DateTimeOffset.Parse(noteCreated.TimeStamp)
                         );
-                        messenger.Send(new NewNoteMessage(noteDto));
+
+                        Dispatcher.UIThread.Post(() => { messenger.Send(new NewNoteMessage(noteDto)); });
+
                         break;
                     }
                     case NoteNotification.NotificationOneofCase.NoteUpdated:
                     {
-                        messenger.Send(notification.NoteUpdated);
+                        Dispatcher.UIThread.Post(() => { messenger.Send(notification.NoteUpdated); });
                         break;
                     }
                 }

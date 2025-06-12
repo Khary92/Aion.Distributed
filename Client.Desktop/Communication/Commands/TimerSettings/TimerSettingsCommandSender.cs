@@ -7,7 +7,7 @@ namespace Client.Desktop.Communication.Commands.TimerSettings;
 
 public class TimerSettingsCommandSender : ITimerSettingsCommandSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.Address);
+    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly TimerSettingsCommandService.TimerSettingsCommandServiceClient _client = new(Channel);
 
     public async Task<bool> Send(CreateTimerSettingsCommand createTicketCommand)

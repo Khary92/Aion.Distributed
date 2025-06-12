@@ -9,7 +9,7 @@ namespace Client.Desktop.Communication.Commands.UseCases;
 
 public class UseCaseCommandSender : IUseCaseCommandSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.Address);
+    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly UseCaseCommandService.UseCaseCommandServiceClient _client = new(Channel);
 
     public async Task<bool> Send(UseCases_CreateTimeSlotControlCommand command)

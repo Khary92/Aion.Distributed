@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Messaging;
 using Contract.DTO;
 using Grpc.Core;
@@ -26,21 +27,25 @@ public class TimerSettingsNotificationReceiver(
                     case TimerSettingsNotification.NotificationOneofCase.TimerSettingsCreated:
                     {
                         var created = notification.TimerSettingsCreated;
-                        messenger.Send(new NewTimerSettingsMessage(new TimerSettingsDto(
-                            Guid.Parse(created.TimerSettingsId),
-                            created.DocumentationSaveInterval,
-                            created.SnapshotSaveInterval
-                        )));
+
+                        Dispatcher.UIThread.Post(() =>
+                        {
+                            messenger.Send(new NewTimerSettingsMessage(new TimerSettingsDto(
+                                Guid.Parse(created.TimerSettingsId),
+                                created.DocumentationSaveInterval,
+                                created.SnapshotSaveInterval
+                            )));
+                        });
                         break;
                     }
                     case TimerSettingsNotification.NotificationOneofCase.DocuTimerSaveIntervalChanged:
                     {
-                        messenger.Send(notification.DocuTimerSaveIntervalChanged);
+                        Dispatcher.UIThread.Post(() => { messenger.Send(notification.DocuTimerSaveIntervalChanged); });
                         break;
                     }
                     case TimerSettingsNotification.NotificationOneofCase.SnapshotSaveIntervalChanged:
                     {
-                        messenger.Send(notification.SnapshotSaveIntervalChanged);
+                        Dispatcher.UIThread.Post(() => { messenger.Send(notification.SnapshotSaveIntervalChanged); });
                         break;
                     }
                 }

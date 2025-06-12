@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Messaging;
 using Contract.DTO;
 using Grpc.Core;
@@ -25,22 +26,28 @@ public class NoteTypeNotificationReceiver(
                 {
                     case NoteTypeNotification.NotificationOneofCase.NoteTypeCreatedColorChanged:
                     {
-                        messenger.Send(notification.NoteTypeCreatedColorChanged);
+                        Dispatcher.UIThread.Post(() => { messenger.Send(notification.NoteTypeCreatedColorChanged); });
+
                         break;
                     }
                     case NoteTypeNotification.NotificationOneofCase.NoteTypeCreated:
                     {
                         var created = notification.NoteTypeCreated;
-                        messenger.Send(new NoteTypeDto(
-                            Guid.Parse(created.NoteTypeId),
-                            created.Name,
-                            created.Color
-                        ));
+
+                        Dispatcher.UIThread.Post(() =>
+                        {
+                            messenger.Send(messenger.Send(new NewNoteTypeMessage(new NoteTypeDto(
+                                Guid.Parse(created.NoteTypeId),
+                                created.Name,
+                                created.Color
+                            ))));
+                        });
+
                         break;
                     }
                     case NoteTypeNotification.NotificationOneofCase.NoteTypeNameChanged:
                     {
-                        messenger.Send(notification.NoteTypeNameChanged);
+                        Dispatcher.UIThread.Post(() => { messenger.Send(notification.NoteTypeNameChanged); });
                         break;
                     }
                 }

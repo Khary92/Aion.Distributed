@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Messaging;
 using Contract.DTO;
 using Grpc.Core;
@@ -22,9 +23,13 @@ public class WorkDayNotificationReceiver(
             switch (notification.NotificationCase)
             {
                 case WorkDayNotification.NotificationOneofCase.WorkDayCreated:
-                    messenger.Send(new NewWorkDayMessage(new WorkDayDto(
-                        Guid.Parse(notification.WorkDayCreated.WorkDayId),
-                        DateTimeOffset.Parse(notification.WorkDayCreated.Date))));
+                    Dispatcher.UIThread.Post(() =>
+                    {
+                        messenger.Send(new NewWorkDayMessage(new WorkDayDto(
+                            Guid.Parse(notification.WorkDayCreated.WorkDayId),
+                            DateTimeOffset.Parse(notification.WorkDayCreated.Date))));
+                    });
+
                     break;
             }
         }

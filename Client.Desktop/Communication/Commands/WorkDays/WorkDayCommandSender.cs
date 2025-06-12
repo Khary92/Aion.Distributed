@@ -7,7 +7,7 @@ namespace Client.Desktop.Communication.Commands.WorkDays;
 
 public class WorkDayCommandSender : IWorkDayCommandSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.Address);
+    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly WorkDayCommandService.WorkDayCommandServiceClient _client = new(Channel);
 
     public async Task<bool> Send(CreateWorkDayCommand command)

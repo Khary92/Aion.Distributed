@@ -9,7 +9,7 @@ namespace Client.Desktop.Communication.Requests.TimerSettings;
 
 public class TimerSettingsRequestSender : ITimerSettingsRequestSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.Address);
+    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly TimerSettingsRequestService.TimerSettingsRequestServiceClient _client = new(Channel);
 
     public async Task<TimerSettingsDto> GetTimerSettings()

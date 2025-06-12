@@ -11,7 +11,7 @@ namespace Client.Desktop.Communication.Requests.Tags;
 
 public class TagRequestSender : ITagRequestSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.Address);
+    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly TagRequestService.TagRequestServiceClient _client = new(Channel);
 
     public async Task<List<TagDto>> GetAllTags()

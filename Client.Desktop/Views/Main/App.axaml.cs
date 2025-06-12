@@ -2,6 +2,7 @@ using System;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using Client.Desktop.Communication.Notifications;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Client.Desktop.Views.Main;
@@ -27,6 +28,9 @@ public class App : Avalonia.Application
             var contentWrapper = _serviceProvider.GetRequiredService<ContentWrapper>();
             contentWrapper.WindowState = WindowState.Maximized;
             contentWrapper.Show();
+
+            var notifiationService = _serviceProvider.GetRequiredService<NotificationReceiverStarter>();
+            _ = notifiationService.Start();
         }
 
         base.OnFrameworkInitializationCompleted();

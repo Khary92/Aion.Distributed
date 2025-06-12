@@ -33,6 +33,16 @@ public static class DesktopApp
 
         await host.StopAsync();
     }
+    
+    
+    private static AppBuilder BuildAvaloniaApp(IServiceProvider serviceProvider)
+    {
+        return AppBuilder.Configure(() => new App(serviceProvider))
+            .UsePlatformDetect()
+            .WithInterFont()
+            .LogToTrace()
+            .UseReactiveUI();
+    }
 
     private static async Task StartupPreparation(IServiceProvider serviceProvider)
     {
@@ -51,14 +61,5 @@ public static class DesktopApp
 
         var endTimeCache = serviceProvider.GetRequiredService<IPersistentCache<SetEndTimeCommand>>();
         await endTimeCache.Persist();
-    }
-
-    private static AppBuilder BuildAvaloniaApp(IServiceProvider serviceProvider)
-    {
-        return AppBuilder.Configure(() => new App(serviceProvider))
-            .UsePlatformDetect()
-            .WithInterFont()
-            .LogToTrace()
-            .UseReactiveUI();
     }
 }

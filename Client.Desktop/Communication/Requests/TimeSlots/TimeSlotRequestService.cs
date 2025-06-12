@@ -11,7 +11,7 @@ namespace Client.Desktop.Communication.Requests.TimeSlots;
 
 public class TimeSlotRequestSender : ITimeSlotRequestSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.Address);
+    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly TimeSlotRequestService.TimeSlotRequestServiceClient _client = new(Channel);
 
     public async Task<TimeSlotDto> GetTimeSlotById(string timeSlotId)

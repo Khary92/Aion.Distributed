@@ -12,7 +12,7 @@ namespace Client.Desktop.Communication.Requests.WorkDays;
 
 public class WorkDayRequestSender : IWorkDayRequestSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.Address);
+    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly WorkDayRequestService.WorkDayRequestServiceClient _client = new(Channel);
 
     public async Task<List<WorkDayDto>> GetAllWorkDays()

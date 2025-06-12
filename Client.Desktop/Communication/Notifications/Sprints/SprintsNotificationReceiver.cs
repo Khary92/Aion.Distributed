@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Messaging;
 using Grpc.Core;
 using Proto.Notifications.Sprint;
@@ -24,27 +25,27 @@ public class SprintNotificationReceiver(
                 {
                     case SprintNotification.NotificationOneofCase.SprintActiveStatusSet:
                     {
-                        messenger.Send(notification.SprintActiveStatusSet);
+                        Dispatcher.UIThread.Post(() => { messenger.Send(notification.SprintActiveStatusSet); });
                         break;
                     }
                     case SprintNotification.NotificationOneofCase.SprintCreated:
                     {
-                        messenger.Send(notification.SprintCreated);
+                        Dispatcher.UIThread.Post(() => { messenger.Send(notification.SprintCreated); });
                         break;
                     }
                     case SprintNotification.NotificationOneofCase.SprintDataUpdated:
                     {
-                        messenger.Send(notification.SprintDataUpdated);
+                        Dispatcher.UIThread.Post(() => { messenger.Send(notification.SprintDataUpdated); });
                         break;
                     }
                     case SprintNotification.NotificationOneofCase.TicketAddedToActiveSprint:
                     {
-                        messenger.Send(notification.TicketAddedToActiveSprint);
+                        Dispatcher.UIThread.Post(() => { messenger.Send(notification.TicketAddedToActiveSprint); });
                         break;
                     }
                     case SprintNotification.NotificationOneofCase.TicketAddedToSprint:
                     {
-                        messenger.Send(notification.TicketAddedToSprint);
+                        Dispatcher.UIThread.Post(() => { messenger.Send(notification.TicketAddedToSprint); });
                         break;
                     }
                     default:

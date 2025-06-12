@@ -9,7 +9,7 @@ namespace Client.Desktop.Communication.Requests.Settings;
 
 public class SettingsRequestSender : ISettingsRequestSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.Address);
+    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly SettingsRequestService.SettingsRequestServiceClient _client = new(Channel);
 
     public async Task<SettingsDto> GetSettings()

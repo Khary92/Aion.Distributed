@@ -7,7 +7,7 @@ namespace Client.Desktop.Communication.Commands.Sprints;
 
 public class SprintCommandSender : ISprintCommandSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.Address);
+    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly SprintsCommandService.SprintsCommandServiceClient _client = new(Channel);
     
     public async Task<bool> Send(CreateSprintCommand command)

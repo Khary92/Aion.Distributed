@@ -7,7 +7,7 @@ namespace Client.Desktop.Communication.Commands.Tickets;
 
 public class TicketCommandSender : ITicketCommandSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.Address);
+    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly TicketCommandService.TicketCommandServiceClient _client = new(Channel);
 
     public async Task<bool> Send(CreateTicketCommand command)

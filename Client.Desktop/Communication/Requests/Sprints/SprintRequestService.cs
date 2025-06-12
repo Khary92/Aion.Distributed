@@ -11,7 +11,7 @@ namespace Client.Desktop.Communication.Requests.Sprints;
 
 public class SprintRequestSender : ISprintRequestSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.Address);
+    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly SprintRequestService.SprintRequestServiceClient _client = new(Channel);
 
     public async Task<SprintDto> GetActiveSprint()

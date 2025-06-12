@@ -7,7 +7,7 @@ namespace Client.Desktop.Communication.Commands.Tags;
 
 public class TagCommandSender : ITagCommandSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.Address);
+    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly TagCommandService.TagCommandServiceClient _client = new(Channel);
 
     public async Task<bool> Send(CreateTagCommand command)

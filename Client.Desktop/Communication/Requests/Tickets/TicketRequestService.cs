@@ -12,7 +12,7 @@ namespace Client.Desktop.Communication.Requests.Tickets;
 
 public class TicketRequestSender : ITicketRequestSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.Address);
+    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly TicketRequestService.TicketRequestServiceClient _client = new(Channel);
 
     public async Task<List<TicketDto>> GetAllTickets()

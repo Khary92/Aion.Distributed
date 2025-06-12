@@ -7,7 +7,7 @@ namespace Client.Desktop.Communication.Commands.Notes;
 
 public class NoteCommandSender : INoteCommandSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.Address);
+    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly NoteCommandService.NoteCommandServiceClient _client = new(Channel);
 
     public async Task<bool> Send(CreateNoteCommand command)

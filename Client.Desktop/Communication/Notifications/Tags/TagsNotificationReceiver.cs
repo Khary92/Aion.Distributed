@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Messaging;
 using Contract.DTO;
 using Grpc.Core;
@@ -27,12 +28,16 @@ public class TagNotificationReceiver(
                     {
                         var created = notification.TagCreated;
 
-                        messenger.Send(new NewTagMessage(new TagDto(Guid.Parse(created.TagId), created.Name, false)));
+                        Dispatcher.UIThread.Post(() =>
+                        {
+                            messenger.Send(new NewTagMessage(new TagDto(Guid.Parse(created.TagId), created.Name,
+                                false)));
+                        });
                         break;
                     }
                     case TagNotification.NotificationOneofCase.TagUpdated:
                     {
-                        messenger.Send(notification.TagUpdated);
+                        Dispatcher.UIThread.Post(() => { messenger.Send(notification.TagUpdated); });
                         break;
                     }
                 }

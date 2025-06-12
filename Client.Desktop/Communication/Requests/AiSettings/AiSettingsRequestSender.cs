@@ -8,7 +8,7 @@ namespace Client.Desktop.Communication.Requests.AiSettings;
 
 public class AiSettingsRequestSender : IAiSettingsRequestSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.Address);
+    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly AiSettingsRequestService.AiSettingsRequestServiceClient _client = new(Channel);
 
     public async Task<AiSettingsDto?> Get(string aiSettingsId)

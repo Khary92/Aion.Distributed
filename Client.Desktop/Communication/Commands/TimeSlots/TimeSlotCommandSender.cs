@@ -7,7 +7,7 @@ namespace Client.Desktop.Communication.Commands.TimeSlots;
 
 public class TimeSlotCommandSender : ITimeSlotCommandSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.Address);
+    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly TimeSlotCommandService.TimeSlotCommandServiceClient _client = new(Channel);
 
     public async Task<bool> Send(CreateTimeSlotCommand command)

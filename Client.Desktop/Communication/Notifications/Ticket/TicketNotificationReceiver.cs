@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Messaging;
 using Contract.DTO;
 using Grpc.Core;
@@ -34,23 +35,26 @@ public class TicketNotificationReceiver(
                                 sprintGuids.Add(guid);
                         }
 
-                        messenger.Send(new NewTicketMessage(new TicketDto(
-                            Guid.Parse(created.TicketId),
-                            created.Name,
-                            created.BookingNumber,
-                            string.Empty,
-                            sprintGuids
-                        )));
+                        Dispatcher.UIThread.Post(() =>
+                        {
+                            messenger.Send(new NewTicketMessage(new TicketDto(
+                                Guid.Parse(created.TicketId),
+                                created.Name,
+                                created.BookingNumber,
+                                string.Empty,
+                                sprintGuids
+                            )));
+                        });
                         break;
                     }
                     case TicketNotification.NotificationOneofCase.TicketDataUpdated:
                     {
-                        messenger.Send(notification.TicketDataUpdated);
+                        Dispatcher.UIThread.Post(() => messenger.Send(notification.TicketDataUpdated));
                         break;
                     }
                     case TicketNotification.NotificationOneofCase.TicketDocumentationUpdated:
                     {
-                        messenger.Send(notification.TicketDocumentationUpdated);
+                        Dispatcher.UIThread.Post(() => messenger.Send(notification.TicketDocumentationUpdated));
                         break;
                     }
                 }

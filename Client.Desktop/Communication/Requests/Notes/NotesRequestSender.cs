@@ -11,7 +11,7 @@ namespace Client.Desktop.Communication.Requests.Notes;
 
 public class NotesRequestSender : INotesRequestSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.Address);
+    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly NotesRequestService.NotesRequestServiceClient _client = new(Channel);
 
     public async Task<List<NoteDto>> GetNotesByTicketId(Guid ticketId)

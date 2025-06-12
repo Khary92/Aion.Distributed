@@ -7,7 +7,7 @@ namespace Client.Desktop.Communication.Commands.StatisticsData;
 
 public class StatisticsDataCommandSender : IStatisticsDataCommandSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.Address);
+    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly StatisticsDataCommandService.StatisticsDataCommandServiceClient _client = new(Channel);
 
     public async Task<bool> Send(CreateStatisticsDataCommand command)

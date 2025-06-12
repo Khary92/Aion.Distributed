@@ -10,7 +10,7 @@ namespace Client.Desktop.Communication.Requests.StatisticsData;
 
 public class StatisticsDataRequestSender : IStatisticsDataRequestSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.Address);
+    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly StatisticsDataRequestService.StatisticsDataRequestServiceClient _client = new(Channel);
 
     public async Task<StatisticsDataDto> GetByTimeSlotId(string timeSlotId)

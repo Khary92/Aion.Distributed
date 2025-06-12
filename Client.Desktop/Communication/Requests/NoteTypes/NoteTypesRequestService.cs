@@ -11,7 +11,7 @@ namespace Client.Desktop.Communication.Requests.NoteTypes;
 
 public class NoteTypesRequestSender : INoteTypesRequestSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.Address);
+    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly NoteTypesRequestService.NoteTypesRequestServiceClient _client = new(Channel);
 
     public async Task<List<NoteTypeDto>> GetAllNoteTypes()

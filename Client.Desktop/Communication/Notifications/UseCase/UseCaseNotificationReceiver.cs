@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Messaging;
 using Grpc.Core;
 using Proto.Notifications.UseCase;
@@ -24,32 +25,32 @@ public class UseCaseNotificationReceiver(
                 {
                     case UseCaseNotification.NotificationOneofCase.TimeSlotControlCreated:
                     {
-                        messenger.Send(notification.TimeSlotControlCreated);
+                        Dispatcher.UIThread.Post(() => { messenger.Send(notification.TimeSlotControlCreated); });
                         break;
                     }
                     case UseCaseNotification.NotificationOneofCase.CreateSnapshot:
                     {
-                        messenger.Send(notification.CreateSnapshot);
+                        Dispatcher.UIThread.Post(() => { messenger.Send(notification.CreateSnapshot); });
                         break;
                     }
                     case UseCaseNotification.NotificationOneofCase.SaveDocumentation:
                     {
-                        messenger.Send(notification.SaveDocumentation);
+                        Dispatcher.UIThread.Post(() => { messenger.Send(notification.SaveDocumentation); });
                         break;
                     }
                     case UseCaseNotification.NotificationOneofCase.SprintSelectionChanged:
                     {
-                        messenger.Send(notification.SprintSelectionChanged);
+                        Dispatcher.UIThread.Post(() => { messenger.Send(notification.SprintSelectionChanged); });
                         break;
                     }
                     case UseCaseNotification.NotificationOneofCase.TraceReportSent:
                     {
-                        messenger.Send(notification.TraceReportSent);
+                        Dispatcher.UIThread.Post(() => { messenger.Send(notification.TraceReportSent); });
                         break;
                     }
                     case UseCaseNotification.NotificationOneofCase.WorkDaySelectionChanged:
                     {
-                        messenger.Send(notification.WorkDaySelectionChanged);
+                        Dispatcher.UIThread.Post(() => { messenger.Send(notification.WorkDaySelectionChanged); });
                         break;
                     }
                 }

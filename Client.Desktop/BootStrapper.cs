@@ -12,6 +12,7 @@ using Client.Desktop.Communication.Commands.TimeSlots;
 using Client.Desktop.Communication.Commands.TraceReports;
 using Client.Desktop.Communication.Commands.UseCases;
 using Client.Desktop.Communication.Commands.WorkDays;
+using Client.Desktop.Communication.Notifications;
 using Client.Desktop.Communication.Notifications.Notes;
 using Client.Desktop.Communication.Notifications.NoteType;
 using Client.Desktop.Communication.Notifications.Sprints;
@@ -187,46 +188,32 @@ public static class Bootstrapper
         services.AddSingleton<SettingsCompositeViewModel>();
     }
 
+
     private static void AddNotificationReceivers(this IServiceCollection services)
     {
         services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
-
-        services.AddHostedService<NoteNotificationBackgroundService>();
-        services.AddSingleton<NoteNotificationReceiver>();
-
-        services.AddHostedService<NoteTypeNotificationBackgroundService>();
-        services.AddSingleton<NoteTypeNotificationReceiver>();
-
-        services.AddHostedService<SprintNotificationBackgroundService>();
-        services.AddSingleton<SprintNotificationReceiver>();
-
-        services.AddHostedService<TagNotificationBackgroundService>();
-        services.AddSingleton<TagNotificationReceiver>();
-
-        services.AddHostedService<TicketNotificationBackgroundService>();
+        
+        services.AddSingleton<NotificationReceiverStarter>();
         services.AddSingleton<TicketNotificationReceiver>();
-
-        services.AddHostedService<TimerSettingsNotificationBackgroundService>();
+        services.AddSingleton<NoteNotificationReceiver>();
+        services.AddSingleton<NoteTypeNotificationReceiver>();
+        services.AddSingleton<SprintNotificationReceiver>();
+        services.AddSingleton<TagNotificationReceiver>();
         services.AddSingleton<TimerSettingsNotificationReceiver>();
-
-        services.AddHostedService<UseCaseNotificationBackgroundService>();
         services.AddSingleton<UseCaseNotificationReceiver>();
-
-        services.AddHostedService<WorkDayNotificationBackgroundService>();
         services.AddSingleton<WorkDayNotificationReceiver>();
-
-
-        var channel = GrpcChannel.ForAddress(TempConnectionStatic.Address);
+        
+        var channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
+        services.AddSingleton(new TicketNotificationService.TicketNotificationServiceClient(channel));
         services.AddSingleton(new NoteNotificationService.NoteNotificationServiceClient(channel));
         services.AddSingleton(new NoteTypeNotificationService.NoteTypeNotificationServiceClient(channel));
         services.AddSingleton(new SprintNotificationService.SprintNotificationServiceClient(channel));
         services.AddSingleton(new TagNotificationService.TagNotificationServiceClient(channel));
-        services.AddSingleton(new TicketNotificationService.TicketNotificationServiceClient(channel));
         services.AddSingleton(new TimerSettingsNotificationService.TimerSettingsNotificationServiceClient(channel));
         services.AddSingleton(new UseCaseNotificationService.UseCaseNotificationServiceClient(channel));
         services.AddSingleton(new WorkDayNotificationService.WorkDayNotificationServiceClient(channel));
     }
-
+    
     private static void AddCommandSenders(this IServiceCollection services)
     {
         services.AddScoped<ICommandSender, CommandSender>();

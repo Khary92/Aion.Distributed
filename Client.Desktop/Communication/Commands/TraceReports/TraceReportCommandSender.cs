@@ -7,7 +7,7 @@ namespace Client.Desktop.Communication.Commands.TraceReports;
 
 public class TraceReportCommandSender : ITraceReportCommandSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.Address);
+    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly TraceReportCommandService.TraceReportCommandServiceClient _client = new(Channel);
 
     public async Task<bool> Send(SendTraceReportCommand command)
