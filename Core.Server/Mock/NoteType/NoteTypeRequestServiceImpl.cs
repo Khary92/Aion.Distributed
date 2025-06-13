@@ -11,13 +11,13 @@ public class NoteTypeRequestServiceImpl : NoteTypesRequestService.NoteTypesReque
         // Beispielhafte Dummy-Daten - ersetze sie durch deine Logik
         response.NoteTypes.Add(new NoteTypeProto
         {
-            NoteTypeId = "type-1",
+            NoteTypeId = Guid.NewGuid().ToString(),
             Name = "Info",
             Color = "#00FF00"
         });
         response.NoteTypes.Add(new NoteTypeProto
         {
-            NoteTypeId = "type-2",
+            NoteTypeId = Guid.NewGuid().ToString(),
             Name = "Warnung",
             Color = "#FFFF00"
         });
@@ -32,7 +32,7 @@ public class NoteTypeRequestServiceImpl : NoteTypesRequestService.NoteTypesReque
         {
             NoteTypeId = request.NoteTypeId,
             Name = request.NoteTypeId == "type-1" ? "Info" : "Unbekannt",
-            Color = request.NoteTypeId == "type-1" ? "#00FF00" : "#FF0000"
+            Color = "#00FF00"
         };
 
         return Task.FromResult(noteType);

@@ -1,23 +1,32 @@
 ﻿using Grpc.Core;
 using Proto.Notifications.Tag;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Service.Server.Mock.Tag;
 
 public class TagNotificationServiceImpl : TagNotificationService.TagNotificationServiceBase
 {
+    private readonly object _lock = new();
     private IServerStreamWriter<TagNotification>? _responseStream;
-    private CancellationToken _cancellationToken;
+    private CancellationToken _cancellationToken = CancellationToken.None;
+    private bool _clientConnected = false;
 
     public override async Task SubscribeTagNotifications(
         SubscribeRequest request,
         IServerStreamWriter<TagNotification> responseStream,
         ServerCallContext context)
     {
-        _responseStream = responseStream;
-        _cancellationToken = context.CancellationToken;
+        lock (_lock)
+        {
+            _responseStream = responseStream;
+            _cancellationToken = context.CancellationToken;
+            _clientConnected = true;
+        }
 
         try
         {
+            // Warte bis Client disconnectet
             await Task.Delay(Timeout.Infinite, context.CancellationToken);
         }
         catch (OperationCanceledException)
@@ -26,22 +35,43 @@ public class TagNotificationServiceImpl : TagNotificationService.TagNotification
         }
         finally
         {
-            _responseStream = null;
+            lock (_lock)
+            {
+                _responseStream = null;
+                _clientConnected = false;
+            }
         }
     }
 
     public async Task SendNotificationAsync(TagNotification notification)
     {
-        if (_responseStream is not null && !_cancellationToken.IsCancellationRequested)
+        IServerStreamWriter<TagNotification>? streamCopy;
+        CancellationToken tokenCopy;
+
+        lock (_lock)
         {
-            try
+            if (!_clientConnected || _responseStream == null || _cancellationToken.IsCancellationRequested)
             {
-                await _responseStream.WriteAsync(notification, _cancellationToken);
+                Console.WriteLine("SendNotificationAsync: Kein aktiver Client-Stream oder Verbindung beendet.");
+                return;
             }
-            catch (Exception ex)
+
+            streamCopy = _responseStream;
+            tokenCopy = _cancellationToken;
+        }
+
+        try
+        {
+            await streamCopy.WriteAsync(notification, tokenCopy);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Fehler beim Senden der TagNotification: {ex.Message}");
+
+            lock (_lock)
             {
-                Console.WriteLine($"Fehler beim Senden der TagNotification: {ex.Message}");
                 _responseStream = null;
+                _clientConnected = false;
             }
         }
     }

@@ -10,10 +10,10 @@ public class NoteRequestServiceImpl : NotesRequestService.NotesRequestServiceBas
         var notes = new GetNotesResponseProto();
         notes.Notes.Add(new NoteProto
         {
-            NoteId = "note-123",
+            NoteId = Guid.NewGuid().ToString(),
             Text = "Beispielnotiz für Ticket " + request.TicketId,
-            NoteTypeId = "type-1",
-            TimeSlotId = "timeslot-1",
+            NoteTypeId = Guid.NewGuid().ToString(),
+            TimeSlotId = Guid.NewGuid().ToString(),
             TimeStamp = Timestamp.FromDateTime(DateTime.UtcNow)
         });
 
@@ -26,10 +26,10 @@ public class NoteRequestServiceImpl : NotesRequestService.NotesRequestServiceBas
         var notes = new GetNotesResponseProto();
         notes.Notes.Add(new NoteProto
         {
-            NoteId = "note-456",
+            NoteId = Guid.NewGuid().ToString(),
             Text = "Beispielnotiz für TimeSlot " + request.TimeSlotId,
-            NoteTypeId = "type-2",
-            TimeSlotId = request.TimeSlotId,
+            NoteTypeId = Guid.NewGuid().ToString(),
+            TimeSlotId = Guid.NewGuid().ToString(),
             TimeStamp = Timestamp.FromDateTime(DateTime.UtcNow)
         });
 

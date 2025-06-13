@@ -21,15 +21,21 @@ public class NotificationReceiverStarter(
     UseCaseNotificationReceiver useCaseNotificationReceiver,
     WorkDayNotificationReceiver workDayNotificationReceiver) : INotificationReceiverStarter
 {
-    public async Task Start()
+    public Task Start()
     {
-        await noteNotificationReceiver.StartListeningAsync(CancellationToken.None);
-        await noteTypeNotificationReceiver.StartListeningAsync(CancellationToken.None);
-        await sprintNotificationReceiver.StartListeningAsync(CancellationToken.None);
-        await tagNotificationReceiver.StartListeningAsync(CancellationToken.None);
-        await ticketNotificationReceiver.StartListeningAsync(CancellationToken.None);
-        await timerSettingsNotificationReceiver.StartListeningAsync(CancellationToken.None);
-        await useCaseNotificationReceiver.StartListeningAsync(CancellationToken.None);
-        await workDayNotificationReceiver.StartListeningAsync(CancellationToken.None);
+        var tasks = new[]
+        {
+            noteNotificationReceiver.StartListeningAsync(CancellationToken.None),
+            noteTypeNotificationReceiver.StartListeningAsync(CancellationToken.None),
+            sprintNotificationReceiver.StartListeningAsync(CancellationToken.None),
+            tagNotificationReceiver.StartListeningAsync(CancellationToken.None),
+            ticketNotificationReceiver.StartListeningAsync(CancellationToken.None),
+            timerSettingsNotificationReceiver.StartListeningAsync(CancellationToken.None),
+            useCaseNotificationReceiver.StartListeningAsync(CancellationToken.None),
+            workDayNotificationReceiver.StartListeningAsync(CancellationToken.None)
+        };
+
+        return Task.WhenAll(tasks);
     }
+
 }

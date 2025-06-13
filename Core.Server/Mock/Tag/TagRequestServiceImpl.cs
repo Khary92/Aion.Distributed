@@ -8,13 +8,13 @@ public class TagRequestServiceImpl : TagRequestService.TagRequestServiceBase
         var response = new TagListProto();
         response.Tags.Add(new TagProto
         {
-            TagId = "tag-1",
+            TagId = Guid.NewGuid().ToString(),
             Name = "Urgent",
             IsSelected = false
         });
         response.Tags.Add(new TagProto
         {
-            TagId = "tag-2",
+            TagId = Guid.NewGuid().ToString(),
             Name = "Review",
             IsSelected = true
         });
@@ -26,9 +26,9 @@ public class TagRequestServiceImpl : TagRequestService.TagRequestServiceBase
     {
         var tag = new TagProto
         {
-            TagId = request.TagId,
-            Name = request.TagId == "tag-1" ? "Urgent" : "Unknown",
-            IsSelected = request.TagId == "tag-1"
+            TagId = Guid.NewGuid().ToString(),
+            Name = "tag-1",
+            IsSelected = true
         };
 
         return Task.FromResult(tag);

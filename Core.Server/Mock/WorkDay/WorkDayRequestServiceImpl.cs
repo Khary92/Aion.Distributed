@@ -2,6 +2,8 @@
 using Grpc.Core;
 using Proto.Requests.WorkDays;
 
+namespace Service.Server.Mock.WorkDay;
+
 public class WorkDayRequestServiceImpl : WorkDayRequestService.WorkDayRequestServiceBase
 {
     public override Task<WorkDayListProto> GetAllWorkDays(GetAllWorkDaysRequestProto request, ServerCallContext context)
@@ -9,12 +11,12 @@ public class WorkDayRequestServiceImpl : WorkDayRequestService.WorkDayRequestSer
         var list = new WorkDayListProto();
         list.WorkDays.Add(new WorkDayProto
         {
-            WorkDayId = "workday-1",
+            WorkDayId = Guid.NewGuid().ToString(),
             Date = Timestamp.FromDateTime(DateTime.UtcNow.AddDays(-2).ToUniversalTime())
         });
         list.WorkDays.Add(new WorkDayProto
         {
-            WorkDayId = "workday-2",
+            WorkDayId = Guid.NewGuid().ToString(),
             Date = Timestamp.FromDateTime(DateTime.UtcNow.AddDays(-1).ToUniversalTime())
         });
         return Task.FromResult(list);
@@ -25,7 +27,7 @@ public class WorkDayRequestServiceImpl : WorkDayRequestService.WorkDayRequestSer
     {
         var selected = new WorkDayProto
         {
-            WorkDayId = "workday-2",
+            WorkDayId = Guid.NewGuid().ToString(),
             Date = Timestamp.FromDateTime(DateTime.UtcNow.ToUniversalTime())
         };
         return Task.FromResult(selected);
@@ -35,7 +37,7 @@ public class WorkDayRequestServiceImpl : WorkDayRequestService.WorkDayRequestSer
     {
         var workDay = new WorkDayProto
         {
-            WorkDayId = "workday-by-date",
+            WorkDayId = Guid.NewGuid().ToString(),
             Date = request.Date
         };
         return Task.FromResult(workDay);

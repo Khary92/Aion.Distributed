@@ -4,15 +4,9 @@ using Proto.Notifications.WorkDay;
 
 namespace Service.Server.Mock.WorkDay;
 
-public class WorkDayCommandServiceImpl : WorkDayCommandService.WorkDayCommandServiceBase
+public class WorkDayCommandServiceImpl(NotificationService.NotificationServiceClient notificationClient)
+    : WorkDayCommandService.WorkDayCommandServiceBase
 {
-    private readonly NotificationService.NotificationServiceClient _notificationClient;
-
-    public WorkDayCommandServiceImpl(NotificationService.NotificationServiceClient notificationClient)
-    {
-        _notificationClient = notificationClient;
-    }
-
     public override async Task<CommandResponse> CreateWorkDay(CreateWorkDayCommand request, ServerCallContext context)
     {
         Console.WriteLine($"[CreateWorkDay] ID: {request.WorkDayId}, Date: {request.Date}");
@@ -23,7 +17,7 @@ public class WorkDayCommandServiceImpl : WorkDayCommandService.WorkDayCommandSer
             Date = request.Date
         };
 
-        await _notificationClient.SendWorkDayCreatedAsync(notification);
+        await notificationClient.SendWorkDayCreatedAsync(notification);
 
         return new CommandResponse { Success = true };
     }

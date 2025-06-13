@@ -8,7 +8,7 @@ public class TimerSettingsRequestServiceImpl : TimerSettingsRequestService.Timer
     {
         var response = new TimerSettingsProto
         {
-            TimerSettingsId = "timer-settings-001",
+            TimerSettingsId = Guid.NewGuid().ToString(),
             DocumentationSaveInterval = 300,
             SnapshotSaveInterval = 60
         };

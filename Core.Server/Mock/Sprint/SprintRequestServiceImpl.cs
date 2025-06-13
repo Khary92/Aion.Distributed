@@ -1,7 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
-using Google.Protobuf.WellKnownTypes;
 using Proto.Requests.Sprints;
+
+namespace Service.Server.Mock.Sprint;
 
 public class SprintRequestServiceImpl : SprintRequestService.SprintRequestServiceBase
 {
@@ -9,9 +10,9 @@ public class SprintRequestServiceImpl : SprintRequestService.SprintRequestServic
     {
         var sprint = new SprintProto
         {
-            SprintId = "active-sprint-1",
+            SprintId = Guid.NewGuid().ToString(),
             Name = "Sprint Alpha",
-            Start = Timestamp.FromDateTime(System.DateTime.UtcNow.AddDays(-7).ToUniversalTime()),
+            Start = Timestamp.FromDateTime(DateTime.UtcNow.AddDays(-7).ToUniversalTime()),
             End = Timestamp.FromDateTime(System.DateTime.UtcNow.AddDays(7).ToUniversalTime()),
         };
         sprint.TicketIds.Add("ticket-1");
@@ -25,17 +26,17 @@ public class SprintRequestServiceImpl : SprintRequestService.SprintRequestServic
         var list = new SprintListProto();
         list.Sprints.Add(new SprintProto
         {
-            SprintId = "sprint-1",
+            SprintId = Guid.NewGuid().ToString(),
             Name = "Sprint Alpha",
-            Start = Timestamp.FromDateTime(System.DateTime.UtcNow.AddDays(-30).ToUniversalTime()),
-            End = Timestamp.FromDateTime(System.DateTime.UtcNow.AddDays(-15).ToUniversalTime())
+            Start = Timestamp.FromDateTime(DateTime.UtcNow.AddDays(-30).ToUniversalTime()),
+            End = Timestamp.FromDateTime(DateTime.UtcNow.AddDays(-15).ToUniversalTime())
         });
         list.Sprints.Add(new SprintProto
         {
-            SprintId = "sprint-2",
+            SprintId = Guid.NewGuid().ToString(),
             Name = "Sprint Beta",
-            Start = Timestamp.FromDateTime(System.DateTime.UtcNow.AddDays(-14).ToUniversalTime()),
-            End = Timestamp.FromDateTime(System.DateTime.UtcNow.AddDays(-1).ToUniversalTime())
+            Start = Timestamp.FromDateTime(DateTime.UtcNow.AddDays(-14).ToUniversalTime()),
+            End = Timestamp.FromDateTime(DateTime.UtcNow.AddDays(-1).ToUniversalTime())
         });
 
         return Task.FromResult(list);

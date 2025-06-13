@@ -1,8 +1,6 @@
 ﻿using Grpc.Core;
 using Proto.Notifications.WorkDay;
 
-// für Timestamp
-
 namespace Service.Server.Mock.WorkDay;
 
 public class WorkDayNotificationServiceImpl : WorkDayNotificationService.WorkDayNotificationServiceBase

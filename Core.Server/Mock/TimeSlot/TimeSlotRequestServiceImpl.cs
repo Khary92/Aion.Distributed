@@ -9,15 +9,15 @@ public class TimeSlotRequestServiceImpl : TimeSlotRequestService.TimeSlotRequest
     {
         var timeSlot = new TimeSlotProto
         {
-            TimeSlotId = request.TimeSlotId,
-            WorkDayId = "workday-123",
-            SelectedTicketId = "ticket-456",
+            TimeSlotId = Guid.NewGuid().ToString(),
+            WorkDayId = Guid.NewGuid().ToString(),
+            SelectedTicketId = Guid.NewGuid().ToString(),
             StartTime = Timestamp.FromDateTime(System.DateTime.UtcNow.AddHours(-1).ToUniversalTime()),
             EndTime = Timestamp.FromDateTime(System.DateTime.UtcNow.AddMinutes(30).ToUniversalTime()),
             IsTimerRunning = true
         };
-        timeSlot.NoteIds.Add("note-1");
-        timeSlot.NoteIds.Add("note-2");
+        timeSlot.NoteIds.Add(Guid.NewGuid().ToString());
+        timeSlot.NoteIds.Add(Guid.NewGuid().ToString());
 
         return Task.FromResult(timeSlot);
     }
@@ -27,25 +27,25 @@ public class TimeSlotRequestServiceImpl : TimeSlotRequestService.TimeSlotRequest
         var list = new TimeSlotListProto();
         list.TimeSlots.Add(new TimeSlotProto
         {
-            TimeSlotId = "timeslot-1",
-            WorkDayId = request.WorkDayId,
-            SelectedTicketId = "ticket-1",
-            StartTime = Timestamp.FromDateTime(System.DateTime.UtcNow.AddHours(-8).ToUniversalTime()),
-            EndTime = Timestamp.FromDateTime(System.DateTime.UtcNow.AddHours(-7).ToUniversalTime()),
+            TimeSlotId = Guid.NewGuid().ToString(),
+            WorkDayId = Guid.NewGuid().ToString(),
+            SelectedTicketId = Guid.NewGuid().ToString(),
+            StartTime = Timestamp.FromDateTime(DateTime.UtcNow.AddHours(-8).ToUniversalTime()),
+            EndTime = Timestamp.FromDateTime(DateTime.UtcNow.AddHours(-7).ToUniversalTime()),
             IsTimerRunning = false
         });
         list.TimeSlots.Add(new TimeSlotProto
         {
-            TimeSlotId = "timeslot-2",
-            WorkDayId = request.WorkDayId,
-            SelectedTicketId = "ticket-2",
-            StartTime = Timestamp.FromDateTime(System.DateTime.UtcNow.AddHours(-6).ToUniversalTime()),
-            EndTime = Timestamp.FromDateTime(System.DateTime.UtcNow.AddHours(-5).ToUniversalTime()),
+            TimeSlotId = Guid.NewGuid().ToString(),
+            WorkDayId = Guid.NewGuid().ToString(),
+            SelectedTicketId = Guid.NewGuid().ToString(),
+            StartTime = Timestamp.FromDateTime(DateTime.UtcNow.AddHours(-6).ToUniversalTime()),
+            EndTime = Timestamp.FromDateTime(DateTime.UtcNow.AddHours(-5).ToUniversalTime()),
             IsTimerRunning = true
         });
 
-        list.TimeSlots[0].NoteIds.Add("note-1");
-        list.TimeSlots[1].NoteIds.Add("note-2");
+        list.TimeSlots[0].NoteIds.Add(Guid.NewGuid().ToString());
+        list.TimeSlots[1].NoteIds.Add(Guid.NewGuid().ToString());
 
         return Task.FromResult(list);
     }

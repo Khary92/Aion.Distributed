@@ -1,6 +1,8 @@
 ﻿using Grpc.Core;
 using Proto.Requests.AiSettings;
 
+namespace Service.Server.Mock.AiSettings;
+
 public class AiSettingsRequestServiceImpl : AiSettingsRequestService.AiSettingsRequestServiceBase
 {
     public override Task<AiSettingsProto> GetAiSettings(GetAiSettingsRequestProto request, ServerCallContext context)

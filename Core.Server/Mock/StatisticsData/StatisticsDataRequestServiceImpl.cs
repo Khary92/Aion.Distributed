@@ -8,14 +8,14 @@ public class StatisticsDataRequestServiceImpl : StatisticsDataRequestService.Sta
     {
         var response = new StatisticsDataProto
         {
-            StatisticsId = "stats-001",
-            TimeSlotId = request.TimeSlotId,
+            StatisticsId = Guid.NewGuid().ToString(),
+            TimeSlotId = Guid.NewGuid().ToString(),
             IsProductive = true,
             IsNeutral = false,
             IsUnproductive = false
         };
-        response.TagIds.Add("tag-1");
-        response.TagIds.Add("tag-2");
+        response.TagIds.Add(Guid.NewGuid().ToString());
+        response.TagIds.Add(Guid.NewGuid().ToString());
 
         return Task.FromResult(response);
     }

@@ -12,7 +12,10 @@ public class TagCommandSender : ITagCommandSender
 
     public async Task<bool> Send(CreateTagCommand command)
     {
-        var response = await _client.CreateTagAsync(command);
+        GrpcChannel channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
+        TagCommandService.TagCommandServiceClient client = new(channel);
+
+        var response = await client.CreateTagAsync(command);
         return response.Success;
     }
 

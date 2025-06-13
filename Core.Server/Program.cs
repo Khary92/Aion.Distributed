@@ -21,6 +21,21 @@ builder.Services.AddGrpcReflection();
 
 builder.WebHost.ConfigureKestrel(options => { options.ListenLocalhost(5000, o => o.Protocols = HttpProtocols.Http2); });
 
+// Notification Services als Singleton registrieren
+builder.Services.AddSingleton<AiSettingsNotificationServiceImpl>();
+builder.Services.AddSingleton<NoteNotificationServiceImpl>();
+builder.Services.AddSingleton<NoteTypeNotificationServiceImpl>();
+builder.Services.AddSingleton<SettingsNotificationServiceImpl>();
+builder.Services.AddSingleton<SprintNotificationServiceImpl>();
+builder.Services.AddSingleton<StatisticsDataNotificationServiceImpl>();
+builder.Services.AddSingleton<TagNotificationServiceImpl>();
+builder.Services.AddSingleton<TicketNotificationServiceImpl>();
+builder.Services.AddSingleton<TimerSettingsNotificationServiceImpl>();
+builder.Services.AddSingleton<TimeSlotNotificationServiceImpl>();
+builder.Services.AddSingleton<TraceReportNotificationServiceImpl>();
+builder.Services.AddSingleton<UseCaseNotificationServiceImpl>();
+builder.Services.AddSingleton<WorkDayNotificationServiceImpl>();
+
 var app = builder.Build();
 
 // Command Services registrieren
@@ -65,6 +80,16 @@ app.MapGrpcService<TicketRequestServiceImpl>();
 app.MapGrpcService<TimerSettingsRequestServiceImpl>();
 app.MapGrpcService<TimeSlotRequestServiceImpl>();
 app.MapGrpcService<WorkDayRequestServiceImpl>();
+
+app.Lifetime.ApplicationStarted.Register(() =>
+{
+    var endpointDataSource = app.Services.GetRequiredService<EndpointDataSource>();
+    foreach (var endpoint in endpointDataSource.Endpoints)
+    {
+        Console.WriteLine($"[Endpoint] {endpoint.DisplayName}");
+    }
+});
+
 
 // TODO remove in productive environment
 app.MapGrpcReflectionService();
