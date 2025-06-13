@@ -1,0 +1,39 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Proto.Notifications.Settings";
+
+package Proto.Notifications.Settings;
+
+service NotificationService {
+  rpc SendSettingsCreated(SettingsCreatedNotification) returns (NotificationResponse);
+  rpc SendSettingsUpdated(SettingsUpdatedNotification) returns (NotificationResponse);
+}
+
+service SettingsNotificationService {
+  rpc SubscribeSettingsNotifications(SubscribeRequest) returns (stream SettingsNotification);
+}
+
+message SettingsNotification {
+  oneof notification {
+    SettingsCreatedNotification settingsCreated = 1;
+    SettingsUpdatedNotification settingsUpdated = 2;
+  }
+}
+
+message SubscribeRequest {}
+
+message SettingsCreatedNotification {
+  string settingsId = 1;
+  string exportPath = 2;
+  bool isAddNewTicketsToCurrentSprintActive = 3;
+}
+
+message SettingsUpdatedNotification {
+  string settingsId = 1;
+  string exportPath = 2;
+  bool isAddNewTicketsToCurrentSprintActive = 3;
+}
+
+message NotificationResponse {
+  bool success = 1;
+}

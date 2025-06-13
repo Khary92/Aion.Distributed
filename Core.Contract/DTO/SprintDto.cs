@@ -74,8 +74,8 @@ public class SprintDto : ReactiveObject
 
     public void Apply(SprintDataUpdatedNotification notification)
     {
-        EndTime = DateTimeOffset.Parse(notification.EndTime);
-        StartTime = DateTimeOffset.Parse(notification.StartTime);
+        EndTime = notification.EndTime.ToDateTimeOffset();
+        StartTime = notification.StartTime.ToDateTimeOffset();
         Name = notification.Name;
     }
 

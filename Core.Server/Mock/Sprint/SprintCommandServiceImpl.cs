@@ -1,11 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
-using Grpc.Core;
+﻿using Grpc.Core;
 using Proto.Command.Sprints;
+using Proto.Notifications.Sprint;
 
-namespace Service.Server.Mock;
+namespace Service.Server.Mock.Sprint;
 
-public class SprintsCommandServiceImpl(SprintsNotificationServiceImpl sprintsNotificationService)
+public class SprintCommandServiceImpl(SprintNotificationServiceImpl sprintsNotificationService)
     : SprintsCommandService.SprintsCommandServiceBase
 {
     public override async Task<CommandResponse> AddTicketToActiveSprint(AddTicketToActiveSprintCommand request, ServerCallContext context)
@@ -14,7 +13,7 @@ public class SprintsCommandServiceImpl(SprintsNotificationServiceImpl sprintsNot
 
         try
         {
-            await sprintsNotificationService.SendNotificationAsync(new SprintsNotification
+            await sprintsNotificationService.SendNotificationAsync(new SprintNotification
             {
                 TicketAddedToActiveSprint = new TicketAddedToActiveSprintNotification
                 {
@@ -37,7 +36,7 @@ public class SprintsCommandServiceImpl(SprintsNotificationServiceImpl sprintsNot
 
         try
         {
-            await sprintsNotificationService.SendNotificationAsync(new SprintsNotification
+            await sprintsNotificationService.SendNotificationAsync(new SprintNotification
             {
                 TicketAddedToSprint = new TicketAddedToSprintNotification
                 {
@@ -61,13 +60,13 @@ public class SprintsCommandServiceImpl(SprintsNotificationServiceImpl sprintsNot
 
         try
         {
-            await sprintsNotificationService.SendNotificationAsync(new SprintsNotification
+            await sprintsNotificationService.SendNotificationAsync(new SprintNotification
             {
                 SprintCreated = new SprintCreatedNotification
                 {
                     SprintId = request.SprintId,
                     Name = request.Name,
-                    StartTime = request.StartTime,
+                    StartTime = request.StartTime ,
                     EndTime = request.EndTime,
                     IsActive = request.IsActive,
                 }
@@ -88,9 +87,9 @@ public class SprintsCommandServiceImpl(SprintsNotificationServiceImpl sprintsNot
 
         try
         {
-            await sprintsNotificationService.SendNotificationAsync(new SprintsNotification
+            await sprintsNotificationService.SendNotificationAsync(new SprintNotification
             {
-                SprintActiveStatusChanged = new SprintActiveStatusChangedNotification
+                SprintActiveStatusSet = new SprintActiveStatusSetNotification
                 {
                     SprintId = request.SprintId,
                     IsActive = request.IsActive,
@@ -112,9 +111,9 @@ public class SprintsCommandServiceImpl(SprintsNotificationServiceImpl sprintsNot
 
         try
         {
-            await sprintsNotificationService.SendNotificationAsync(new SprintsNotification
+            await sprintsNotificationService.SendNotificationAsync(new SprintNotification
             {
-                SprintUpdated = new SprintUpdatedNotification
+                SprintDataUpdated = new SprintDataUpdatedNotification
                 {
                     SprintId = request.SprintId,
                     Name = request.Name,

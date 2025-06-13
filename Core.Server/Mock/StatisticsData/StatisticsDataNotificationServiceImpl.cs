@@ -1,16 +1,17 @@
 ﻿using Grpc.Core;
-using Proto.Notifications.Note;
+using Proto.Notifications.StatisticsData;
 
-namespace Service.Server.Mock.Note;
+namespace Service.Server.Mock.StatisticsData;
 
-public class NoteNotificationServiceImpl : NoteNotificationService.NoteNotificationServiceBase
+public class
+    StatisticsDataNotificationServiceImpl : StatisticsDataNotificationService.StatisticsDataNotificationServiceBase
 {
-    private IServerStreamWriter<NoteNotification>? _responseStream;
+    private IServerStreamWriter<StatisticsDataNotification>? _responseStream;
     private CancellationToken _cancellationToken;
 
-    public override async Task SubscribeNoteNotifications(
+    public override async Task SubscribeStatisticsDataNotifications(
         SubscribeRequest request,
-        IServerStreamWriter<NoteNotification> responseStream,
+        IServerStreamWriter<StatisticsDataNotification> responseStream,
         ServerCallContext context)
     {
         _responseStream = responseStream;
@@ -18,11 +19,11 @@ public class NoteNotificationServiceImpl : NoteNotificationService.NoteNotificat
 
         try
         {
-            await Task.Delay(Timeout.Infinite, context.CancellationToken);
+            await Task.Delay(Timeout.Infinite, _cancellationToken);
         }
         catch (OperationCanceledException)
         {
-            // Client disconnected
+            // Verbindung beendet
         }
         finally
         {
@@ -30,7 +31,7 @@ public class NoteNotificationServiceImpl : NoteNotificationService.NoteNotificat
         }
     }
 
-    public async Task SendNotificationAsync(NoteNotification notification)
+    public async Task SendNotificationAsync(StatisticsDataNotification notification)
     {
         if (_responseStream is not null && !_cancellationToken.IsCancellationRequested)
         {
@@ -40,7 +41,7 @@ public class NoteNotificationServiceImpl : NoteNotificationService.NoteNotificat
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Fehler beim Senden der NoteNotification: {ex.Message}");
+                Console.WriteLine($"Fehler beim Senden der StatisticsDataNotification: {ex.Message}");
                 _responseStream = null;
             }
         }

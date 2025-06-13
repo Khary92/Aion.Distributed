@@ -1,6 +1,8 @@
 ﻿using Grpc.Core;
 using Proto.Notifications.AiSettings;
 
+namespace Service.Server.Mock.AiSettings;
+
 public class AiSettingsNotificationServiceImpl : AiSettingsNotificationService.AiSettingsNotificationServiceBase
 {
     private IServerStreamWriter<AiSettingsNotification>? _responseStream;

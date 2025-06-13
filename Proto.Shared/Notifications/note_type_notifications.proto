@@ -14,7 +14,7 @@ service NoteTypeNotificationService {
 
 message NoteTypeNotification {
   oneof notification {
-    NoteTypeColorChangedNotification noteTypeCreatedColorChanged = 1;
+    NoteTypeColorChangedNotification noteTypeColorChanged = 1;
     NoteTypeCreatedNotification noteTypeCreated = 2;
     NoteTypeNameChangedNotification noteTypeNameChanged = 3;
   }

@@ -2,6 +2,8 @@ syntax = "proto3";
 
 option csharp_namespace = "Proto.Notifications.Sprint";
 
+import "google/protobuf/timestamp.proto";
+
 service NotificationService {
   rpc SendSprintActiveStatusSet(SprintActiveStatusSetNotification) returns (NotificationResponse);
   rpc SendSprintCreated(SprintCreatedNotification) returns (NotificationResponse);
@@ -35,8 +37,8 @@ message SprintActiveStatusSetNotification {
 message SprintCreatedNotification {
   string sprintId = 1;
   string name = 2;
-  string startTime = 3; // ISO8601 string
-  string endTime = 4;   // ISO8601 string
+  google.protobuf.Timestamp startTime = 3;
+  google.protobuf.Timestamp endTime = 4;
   bool isActive = 5;
   repeated string ticketIds = 6;
 }
@@ -44,12 +46,12 @@ message SprintCreatedNotification {
 message SprintDataUpdatedNotification {
   string sprintId = 1;
   string name = 2;
-  string startTime = 3;
-  string endTime = 4;
+  google.protobuf.Timestamp startTime = 3;
+  google.protobuf.Timestamp endTime = 4;
 }
 
 message TicketAddedToActiveSprintNotification {
-  // No fields for now – can be extended later
+  string ticketId = 1;
 }
 
 message TicketAddedToSprintNotification {

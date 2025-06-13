@@ -24,7 +24,7 @@ message TicketCreatedNotification {
   string ticketId = 1;
   string name = 2;
   string bookingNumber = 3;
-  repeated string sprintIds = 4; // GUIDs as strings
+  repeated string sprintIds = 4;
 }
 
 message TicketDataUpdatedNotification {

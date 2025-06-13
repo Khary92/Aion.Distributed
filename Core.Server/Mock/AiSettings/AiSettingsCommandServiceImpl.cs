@@ -2,7 +2,7 @@
 using Proto.Command.AiSettings;
 using Proto.Notifications.AiSettings;
 
-namespace Service.Server.Mock;
+namespace Service.Server.Mock.AiSettings;
 
 public class AiSettingsCommandServiceImpl(AiSettingsNotificationServiceImpl aiSettingsNotificationService)
     : AiSettingsCommandService.AiSettingsCommandServiceBase

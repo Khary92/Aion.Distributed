@@ -2,6 +2,8 @@
 using Proto.Command.WorkDays;
 using Proto.Notifications.WorkDay;
 
+namespace Service.Server.Mock.WorkDay;
+
 public class WorkDayCommandServiceImpl : WorkDayCommandService.WorkDayCommandServiceBase
 {
     private readonly NotificationService.NotificationServiceClient _notificationClient;
@@ -13,14 +15,12 @@ public class WorkDayCommandServiceImpl : WorkDayCommandService.WorkDayCommandSer
 
     public override async Task<CommandResponse> CreateWorkDay(CreateWorkDayCommand request, ServerCallContext context)
     {
-        // Hier würdest du dein Domain-Model persistieren oder speichern
         Console.WriteLine($"[CreateWorkDay] ID: {request.WorkDayId}, Date: {request.Date}");
 
-        // Anschließend sende eine Notification
         var notification = new WorkDayCreatedNotification
         {
             WorkDayId = request.WorkDayId,
-            Date = request.Date.ToDateTime().ToString("o") // ISO 8601
+            Date = request.Date
         };
 
         await _notificationClient.SendWorkDayCreatedAsync(notification);

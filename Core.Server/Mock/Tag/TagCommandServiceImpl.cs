@@ -1,10 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using Grpc.Core;
+﻿using Grpc.Core;
 using Proto.Command.Tags;
-using Proto.Notifications.Tags;
+using Proto.Notifications.Tag;
 
-namespace Service.Server.Mock;
+namespace Service.Server.Mock.Tag;
 
 public class TagCommandServiceImpl(TagNotificationServiceImpl tagNotificationService)
     : TagCommandService.TagCommandServiceBase

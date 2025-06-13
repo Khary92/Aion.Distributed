@@ -1,10 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using Grpc.Core;
+﻿using Grpc.Core;
 using Proto.Command.Settings;
 using Proto.Notifications.Settings;
 
-namespace Service.Server.Mock;
+namespace Service.Server.Mock.Settings;
 
 public class SettingsCommandServiceImpl(SettingsNotificationServiceImpl settingsNotificationService)
     : SettingsCommandService.SettingsCommandServiceBase

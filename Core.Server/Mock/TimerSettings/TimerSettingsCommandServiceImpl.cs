@@ -1,10 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using Grpc.Core;
+﻿using Grpc.Core;
 using Proto.Command.TimerSettings;
 using Proto.Notifications.TimerSettings;
 
-namespace Service.Server.Mock;
+namespace Service.Server.Mock.TimerSettings;
 
 public class TimerSettingsCommandServiceImpl(TimerSettingsNotificationServiceImpl notificationService)
     : TimerSettingsCommandService.TimerSettingsCommandServiceBase
@@ -42,10 +40,10 @@ public class TimerSettingsCommandServiceImpl(TimerSettingsNotificationServiceImp
         {
             await notificationService.SendNotificationAsync(new TimerSettingsNotification
             {
-                DocumentationSaveIntervalChanged = new DocumentationSaveIntervalChangedNotification
+                DocuTimerSaveIntervalChanged = new DocuTimerSaveIntervalChangedNotification
                 {
                     TimerSettingsId = request.TimerSettingsId,
-                    NewInterval = request.DocuTimerSaveInterval
+                    DocuTimerSaveInterval = request.DocuTimerSaveInterval
                 }
             });
 
@@ -69,7 +67,7 @@ public class TimerSettingsCommandServiceImpl(TimerSettingsNotificationServiceImp
                 SnapshotSaveIntervalChanged = new SnapshotSaveIntervalChangedNotification
                 {
                     TimerSettingsId = request.TimerSettingsId,
-                    NewInterval = request.SnapshotSaveInterval
+                    SnapshotSaveInterval = request.SnapshotSaveInterval
                 }
             });
 

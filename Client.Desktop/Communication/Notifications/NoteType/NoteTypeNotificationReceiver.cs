@@ -24,9 +24,9 @@ public class NoteTypeNotificationReceiver(
             {
                 switch (notification.NotificationCase)
                 {
-                    case NoteTypeNotification.NotificationOneofCase.NoteTypeCreatedColorChanged:
+                    case NoteTypeNotification.NotificationOneofCase.NoteTypeColorChanged:
                     {
-                        Dispatcher.UIThread.Post(() => { messenger.Send(notification.NoteTypeCreatedColorChanged); });
+                        Dispatcher.UIThread.Post(() => { messenger.Send(notification.NoteTypeColorChanged); });
 
                         break;
                     }

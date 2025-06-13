@@ -1,16 +1,16 @@
 ﻿using Grpc.Core;
-using Proto.Notifications.Note;
+using Proto.Notifications.Tag;
 
-namespace Service.Server.Mock.Note;
+namespace Service.Server.Mock.Tag;
 
-public class NoteNotificationServiceImpl : NoteNotificationService.NoteNotificationServiceBase
+public class TagNotificationServiceImpl : TagNotificationService.TagNotificationServiceBase
 {
-    private IServerStreamWriter<NoteNotification>? _responseStream;
+    private IServerStreamWriter<TagNotification>? _responseStream;
     private CancellationToken _cancellationToken;
 
-    public override async Task SubscribeNoteNotifications(
+    public override async Task SubscribeTagNotifications(
         SubscribeRequest request,
-        IServerStreamWriter<NoteNotification> responseStream,
+        IServerStreamWriter<TagNotification> responseStream,
         ServerCallContext context)
     {
         _responseStream = responseStream;
@@ -22,7 +22,7 @@ public class NoteNotificationServiceImpl : NoteNotificationService.NoteNotificat
         }
         catch (OperationCanceledException)
         {
-            // Client disconnected
+            // Client-Verbindung wurde getrennt
         }
         finally
         {
@@ -30,7 +30,7 @@ public class NoteNotificationServiceImpl : NoteNotificationService.NoteNotificat
         }
     }
 
-    public async Task SendNotificationAsync(NoteNotification notification)
+    public async Task SendNotificationAsync(TagNotification notification)
     {
         if (_responseStream is not null && !_cancellationToken.IsCancellationRequested)
         {
@@ -40,7 +40,7 @@ public class NoteNotificationServiceImpl : NoteNotificationService.NoteNotificat
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Fehler beim Senden der NoteNotification: {ex.Message}");
+                Console.WriteLine($"Fehler beim Senden der TagNotification: {ex.Message}");
                 _responseStream = null;
             }
         }

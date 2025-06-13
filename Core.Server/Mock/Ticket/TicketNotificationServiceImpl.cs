@@ -1,6 +1,8 @@
 ﻿using Grpc.Core;
 using Proto.Notifications.Ticket;
 
+namespace Service.Server.Mock.Ticket;
+
 public class TicketNotificationServiceImpl : TicketNotificationService.TicketNotificationServiceBase
 {
     private IServerStreamWriter<TicketNotification>? _responseStream;

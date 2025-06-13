@@ -1,16 +1,16 @@
 ﻿using Grpc.Core;
-using Proto.Notifications.Note;
+using Proto.Notifications.Sprint;
 
-namespace Service.Server.Mock.Note;
+namespace Service.Server.Mock.Sprint;
 
-public class NoteNotificationServiceImpl : NoteNotificationService.NoteNotificationServiceBase
+public class SprintNotificationServiceImpl : SprintNotificationService.SprintNotificationServiceBase
 {
-    private IServerStreamWriter<NoteNotification>? _responseStream;
+    private IServerStreamWriter<SprintNotification>? _responseStream;
     private CancellationToken _cancellationToken;
 
-    public override async Task SubscribeNoteNotifications(
+    public override async Task SubscribeSprintNotifications(
         SubscribeRequest request,
-        IServerStreamWriter<NoteNotification> responseStream,
+        IServerStreamWriter<SprintNotification> responseStream,
         ServerCallContext context)
     {
         _responseStream = responseStream;
@@ -22,7 +22,7 @@ public class NoteNotificationServiceImpl : NoteNotificationService.NoteNotificat
         }
         catch (OperationCanceledException)
         {
-            // Client disconnected
+            // Verbindung wurde getrennt
         }
         finally
         {
@@ -30,7 +30,7 @@ public class NoteNotificationServiceImpl : NoteNotificationService.NoteNotificat
         }
     }
 
-    public async Task SendNotificationAsync(NoteNotification notification)
+    public async Task SendNotificationAsync(SprintNotification notification)
     {
         if (_responseStream is not null && !_cancellationToken.IsCancellationRequested)
         {
@@ -40,7 +40,7 @@ public class NoteNotificationServiceImpl : NoteNotificationService.NoteNotificat
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Fehler beim Senden der NoteNotification: {ex.Message}");
+                Console.WriteLine($"Fehler beim Senden der SprintNotification: {ex.Message}");
                 _responseStream = null;
             }
         }

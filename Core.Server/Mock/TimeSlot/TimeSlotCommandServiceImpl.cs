@@ -1,10 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using Grpc.Core;
-using Google.Protobuf.WellKnownTypes;
+﻿using Grpc.Core;
 using Proto.Command.TimeSlots;
+using Proto.Notifications.TimeSlots;
 
-namespace Service.Server.Mock;
+namespace Service.Server.Mock.TimeSlot;
 
 public class TimeSlotCommandServiceImpl(TimeSlotNotificationServiceImpl timeSlotNotificationService)
     : TimeSlotCommandService.TimeSlotCommandServiceBase
@@ -45,7 +43,7 @@ public class TimeSlotCommandServiceImpl(TimeSlotNotificationServiceImpl timeSlot
         {
             await timeSlotNotificationService.SendNotificationAsync(new TimeSlotNotification
             {
-                NoteAdded = new NoteAddedNotification
+                NoteAddedToTimeSlot = new NoteAddedToTimeSlotNotification
                 {
                     TimeSlotId = request.TimeSlotId,
                     NoteId = request.NoteId

@@ -1,16 +1,16 @@
 ﻿using Grpc.Core;
-using Proto.Notifications.Note;
+using Proto.Notifications.UseCase;
 
-namespace Service.Server.Mock.Note;
+namespace Service.Server.Mock.UseCase;
 
-public class NoteNotificationServiceImpl : NoteNotificationService.NoteNotificationServiceBase
+public class UseCaseNotificationServiceImpl : UseCaseNotificationService.UseCaseNotificationServiceBase
 {
-    private IServerStreamWriter<NoteNotification>? _responseStream;
+    private IServerStreamWriter<UseCaseNotification>? _responseStream;
     private CancellationToken _cancellationToken;
 
-    public override async Task SubscribeNoteNotifications(
+    public override async Task SubscribeUseCaseNotifications(
         SubscribeRequest request,
-        IServerStreamWriter<NoteNotification> responseStream,
+        IServerStreamWriter<UseCaseNotification> responseStream,
         ServerCallContext context)
     {
         _responseStream = responseStream;
@@ -18,11 +18,11 @@ public class NoteNotificationServiceImpl : NoteNotificationService.NoteNotificat
 
         try
         {
-            await Task.Delay(Timeout.Infinite, context.CancellationToken);
+            await Task.Delay(Timeout.Infinite, _cancellationToken);
         }
         catch (OperationCanceledException)
         {
-            // Client disconnected
+            // Verbindung beendet
         }
         finally
         {
@@ -30,7 +30,7 @@ public class NoteNotificationServiceImpl : NoteNotificationService.NoteNotificat
         }
     }
 
-    public async Task SendNotificationAsync(NoteNotification notification)
+    public async Task SendNotificationAsync(UseCaseNotification notification)
     {
         if (_responseStream is not null && !_cancellationToken.IsCancellationRequested)
         {
@@ -40,7 +40,7 @@ public class NoteNotificationServiceImpl : NoteNotificationService.NoteNotificat
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Fehler beim Senden der NoteNotification: {ex.Message}");
+                Console.WriteLine($"Fehler beim Senden der UseCaseNotification: {ex.Message}");
                 _responseStream = null;
             }
         }

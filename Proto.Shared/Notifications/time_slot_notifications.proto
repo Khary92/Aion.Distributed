@@ -1,0 +1,55 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Proto.Notifications.TimeSlots";
+
+import "google/protobuf/timestamp.proto";
+
+service NotificationService {
+  rpc SendTimeSlotCreated(TimeSlotCreatedNotification) returns (NotificationResponse);
+  rpc SendNoteAddedToTimeSlot(NoteAddedToTimeSlotNotification) returns (NotificationResponse);
+  rpc SendStartTimeSet(StartTimeSetNotification) returns (NotificationResponse);
+  rpc SendEndTimeSet(EndTimeSetNotification) returns (NotificationResponse);
+}
+
+service TimeSlotNotificationService {
+  rpc SubscribeTimeSlotNotifications(SubscribeRequest) returns (stream TimeSlotNotification);
+}
+
+message TimeSlotNotification {
+  oneof notification {
+    TimeSlotCreatedNotification timeSlotCreated = 1;
+    NoteAddedToTimeSlotNotification noteAddedToTimeSlot = 2;
+    StartTimeSetNotification startTimeSet = 3;
+    EndTimeSetNotification endTimeSet = 4;
+  }
+}
+
+message SubscribeRequest {}
+
+message TimeSlotCreatedNotification {
+  string timeSlotId = 1;
+  string selectedTicketId = 2;
+  string workDayId = 3;
+  google.protobuf.Timestamp startTime = 4;
+  google.protobuf.Timestamp endTime = 5;
+  bool isTimerRunning = 6;
+}
+
+message NoteAddedToTimeSlotNotification {
+  string timeSlotId = 1;
+  string noteId = 2;
+}
+
+message StartTimeSetNotification {
+  string timeSlotId = 1;
+  google.protobuf.Timestamp time = 2;
+}
+
+message EndTimeSetNotification {
+  string timeSlotId = 1;
+  google.protobuf.Timestamp time = 2;
+}
+
+message NotificationResponse {
+  bool success = 1;
+}

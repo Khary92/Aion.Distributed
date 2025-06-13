@@ -27,7 +27,7 @@ public class WorkDayNotificationReceiver(
                     {
                         messenger.Send(new NewWorkDayMessage(new WorkDayDto(
                             Guid.Parse(notification.WorkDayCreated.WorkDayId),
-                            DateTimeOffset.Parse(notification.WorkDayCreated.Date))));
+                            notification.WorkDayCreated.Date.ToDateTimeOffset())));
                     });
 
                     break;

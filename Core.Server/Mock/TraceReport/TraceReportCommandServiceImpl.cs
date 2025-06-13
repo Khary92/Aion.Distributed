@@ -1,15 +1,14 @@
-﻿using System;
-using System.Threading.Tasks;
-using Grpc.Core;
+﻿using Grpc.Core;
 using Proto.Command.TraceReports;
-using Proto.Notifications.UseCase;
+using Proto.Notifications.TraceReports;
 
-namespace Service.Server.Mock;
+namespace Service.Server.Mock.TraceReport;
 
 public class TraceReportCommandServiceImpl(TraceReportNotificationServiceImpl notificationService)
     : TraceReportCommandService.TraceReportCommandServiceBase
 {
-    public override async Task<CommandResponse> SendTraceReport(SendTraceReportCommand request, ServerCallContext context)
+    public override async Task<CommandResponse> SendTraceReport(SendTraceReportCommand request,
+        ServerCallContext context)
     {
         Console.WriteLine($"[SendTraceReport] TraceReportDto: {request.TraceReportDto}");
 

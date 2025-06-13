@@ -1,9 +1,7 @@
-﻿using System;
-using System.Threading.Tasks;
-using Grpc.Core;
+﻿using Grpc.Core;
 using Proto.Command.UseCases;
 
-namespace Service.Server.Mock;
+namespace Service.Server.Mock.UseCase;
 
 public class UseCaseCommandServiceImpl : UseCaseCommandService.UseCaseCommandServiceBase
 {

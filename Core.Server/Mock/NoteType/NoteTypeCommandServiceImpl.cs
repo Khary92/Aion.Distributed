@@ -2,7 +2,7 @@
 using Proto.Command.NoteTypes;
 using Proto.Notifications.NoteType;
 
-namespace Service.Server.Mock;
+namespace Service.Server.Mock.NoteType;
 
 public class NoteTypeCommandServiceImpl(NoteTypeNotificationServiceImpl noteTypeNotificationService)
     : NoteTypeCommandService.NoteTypeCommandServiceBase

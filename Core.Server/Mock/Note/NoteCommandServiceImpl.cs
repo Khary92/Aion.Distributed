@@ -1,9 +1,8 @@
 ﻿using Grpc.Core;
 using Proto.Command.Notes;
 using Proto.Notifications.Note;
-using Service.Server.Mock.Note;
 
-namespace Service.Server.Mock;
+namespace Service.Server.Mock.Note;
 
 public class NoteCommandServiceImpl(NoteNotificationServiceImpl noteNotificationService)
     : NoteCommandService.NoteCommandServiceBase

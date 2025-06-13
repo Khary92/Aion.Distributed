@@ -1,7 +1,8 @@
 ﻿using Grpc.Core;
 using Proto.Command.StatisticsData;
+using Proto.Notifications.StatisticsData;
 
-namespace Service.Server.Mock;
+namespace Service.Server.Mock.StatisticsData;
 
 public class StatisticsDataCommandServiceImpl(StatisticsDataNotificationServiceImpl statisticsDataNotificationService)
     : StatisticsDataCommandService.StatisticsDataCommandServiceBase
@@ -16,7 +17,7 @@ public class StatisticsDataCommandServiceImpl(StatisticsDataNotificationServiceI
         {
             await statisticsDataNotificationService.SendNotificationAsync(new StatisticsDataNotification
             {
-                ProductivityChanged = new ProductivityChangedNotification
+                ChangeProductivity = new ChangeProductivityNotification
                 {
                     StatisticsDataId = request.StatisticsDataId,
                     IsProductive = request.IsProductive,
@@ -44,7 +45,7 @@ public class StatisticsDataCommandServiceImpl(StatisticsDataNotificationServiceI
         {
             await statisticsDataNotificationService.SendNotificationAsync(new StatisticsDataNotification
             {
-                TagSelectionChanged = new TagSelectionChangedNotification
+                ChangeTagSelection = new ChangeTagSelectionNotification()
                 {
                     StatisticsDataId = request.StatisticsDataId,
                     SelectedTagIds = { request.SelectedTagIds }

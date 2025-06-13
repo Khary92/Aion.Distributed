@@ -1,16 +1,16 @@
 ﻿using Grpc.Core;
-using Proto.Notifications.Note;
+using Proto.Notifications.NoteType;
 
-namespace Service.Server.Mock.Note;
+namespace Service.Server.Mock.NoteType;
 
-public class NoteNotificationServiceImpl : NoteNotificationService.NoteNotificationServiceBase
+public class NoteTypeNotificationServiceImpl : NoteTypeNotificationService.NoteTypeNotificationServiceBase
 {
-    private IServerStreamWriter<NoteNotification>? _responseStream;
+    private IServerStreamWriter<NoteTypeNotification>? _responseStream;
     private CancellationToken _cancellationToken;
 
     public override async Task SubscribeNoteNotifications(
         SubscribeRequest request,
-        IServerStreamWriter<NoteNotification> responseStream,
+        IServerStreamWriter<NoteTypeNotification> responseStream,
         ServerCallContext context)
     {
         _responseStream = responseStream;
@@ -22,7 +22,7 @@ public class NoteNotificationServiceImpl : NoteNotificationService.NoteNotificat
         }
         catch (OperationCanceledException)
         {
-            // Client disconnected
+            // Verbindung wurde getrennt
         }
         finally
         {
@@ -30,7 +30,7 @@ public class NoteNotificationServiceImpl : NoteNotificationService.NoteNotificat
         }
     }
 
-    public async Task SendNotificationAsync(NoteNotification notification)
+    public async Task SendNotificationAsync(NoteTypeNotification notification)
     {
         if (_responseStream is not null && !_cancellationToken.IsCancellationRequested)
         {
@@ -40,7 +40,7 @@ public class NoteNotificationServiceImpl : NoteNotificationService.NoteNotificat
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Fehler beim Senden der NoteNotification: {ex.Message}");
+                Console.WriteLine($"Fehler beim Senden der NoteTypeNotification: {ex.Message}");
                 _responseStream = null;
             }
         }
