@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Grpc.Core;
 using Grpc.Net.Client;
+using Microsoft.Extensions.Logging;
 using Proto.Command.Tickets;
 using Proto.Shared;
 
@@ -14,7 +16,15 @@ public class TicketCommandSender : ITicketCommandSender
 
     public async Task<bool> Send(CreateTicketCommand command)
     {
-        using var channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
+        var httpHandler = new HttpClientHandler();
+        httpHandler.ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+
+        var channel = GrpcChannel.ForAddress("http://localhost:5000", new GrpcChannelOptions
+        {
+            HttpHandler = httpHandler,
+            LoggerFactory = LoggerFactory.Create(builder => builder.AddConsole())
+        });
+        
         try
         {
             var client = new TicketCommandService.TicketCommandServiceClient(channel);

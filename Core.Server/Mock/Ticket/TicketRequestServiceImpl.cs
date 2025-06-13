@@ -8,19 +8,19 @@ public class TicketRequestServiceImpl : TicketRequestService.TicketRequestServic
         var response = new TicketListProto();
         response.Tickets.Add(new TicketProto
         {
-            TicketId = "ticket-1",
+            TicketId = Guid.NewGuid().ToString(),
             Name = "Feature A",
             BookingNumber = "BN-001",
             Documentation = "Docs for Feature A",
-            SprintIds = { "sprint-1", "sprint-2" }
+            SprintIds = { Guid.NewGuid().ToString(), Guid.NewGuid().ToString() }
         });
         response.Tickets.Add(new TicketProto
         {
-            TicketId = "ticket-2",
+            TicketId = Guid.NewGuid().ToString(),
             Name = "Bugfix B",
             BookingNumber = "BN-002",
             Documentation = "Docs for Bugfix B",
-            SprintIds = { "sprint-2" }
+            SprintIds = { Guid.NewGuid().ToString() }
         });
 
         return Task.FromResult(response);
@@ -32,11 +32,11 @@ public class TicketRequestServiceImpl : TicketRequestService.TicketRequestServic
         var response = new TicketListProto();
         response.Tickets.Add(new TicketProto
         {
-            TicketId = "ticket-2",
+            TicketId = Guid.NewGuid().ToString(),
             Name = "Bugfix B",
             BookingNumber = "BN-002",
             Documentation = "Docs for Bugfix B",
-            SprintIds = { "current-sprint" }
+            SprintIds = { Guid.NewGuid().ToString() }
         });
 
         return Task.FromResult(response);
@@ -51,30 +51,30 @@ public class TicketRequestServiceImpl : TicketRequestService.TicketRequestServic
         {
             response.Tickets.Add(new TicketProto
             {
-                TicketId = "ticket-1",
+                TicketId = Guid.NewGuid().ToString(),
                 Name = "Feature A",
                 BookingNumber = "BN-001",
                 Documentation = "Docs for Feature A",
-                SprintIds = { "sprint-1", "sprint-2" }
+                SprintIds = { Guid.NewGuid().ToString(), Guid.NewGuid().ToString() }
             });
             response.Tickets.Add(new TicketProto
             {
-                TicketId = "ticket-2",
+                TicketId = Guid.NewGuid().ToString(),
                 Name = "Bugfix B",
                 BookingNumber = "BN-002",
                 Documentation = "Docs for Bugfix B",
-                SprintIds = { "sprint-2" }
+                SprintIds = { Guid.NewGuid().ToString() }
             });
         }
         else
         {
             response.Tickets.Add(new TicketProto
             {
-                TicketId = "ticket-2",
+                TicketId = Guid.NewGuid().ToString(),
                 Name = "Bugfix B",
                 BookingNumber = "BN-002",
                 Documentation = "Docs for Bugfix B",
-                SprintIds = { "current-sprint" }
+                SprintIds = { Guid.NewGuid().ToString() }
             });
         }
 
