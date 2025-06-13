@@ -11,7 +11,7 @@ public class AiSettingsRequestSender : IAiSettingsRequestSender
     private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly AiSettingsRequestService.AiSettingsRequestServiceClient _client = new(Channel);
 
-    public async Task<AiSettingsDto?> Get(string aiSettingsId)
+    public async Task<AiSettingsDto?> GetAiSettings(string aiSettingsId)
     {
         var request = new GetAiSettingsRequestProto { AiSettingsId = aiSettingsId };
         var response = await _client.GetAiSettingsAsync(request);

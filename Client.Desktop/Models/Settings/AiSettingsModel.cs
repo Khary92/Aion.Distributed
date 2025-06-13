@@ -1,16 +1,20 @@
 using System;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
+using Client.Desktop.Communication.Notifications.AiSettings;
 using Client.Desktop.Communication.Requests;
+using CommunityToolkit.Mvvm.Messaging;
 using Contract.DTO;
 using Proto.Command.AiSettings;
+using Proto.Notifications.AiSettings;
 using ReactiveUI;
 
 namespace Client.Desktop.Models.Settings;
 
 public class AiSettingsModel(
     ICommandSender commandSender,
-    IRequestSender requestSender) : ReactiveObject
+    IRequestSender requestSender,
+    IMessenger messenger) : ReactiveObject
 {
     private string _previousLanguageModelPath = null!;
 
@@ -20,10 +24,38 @@ public class AiSettingsModel(
 
     public async Task Initialize()
     {
-        //TODO this is wrong. Obviously
-        AiSettings = await requestSender.Get(Guid.NewGuid().ToString());
+        AiSettings = await requestSender.GetAiSettings(Guid.NewGuid().ToString());
+
+        if (AiSettings == null)
+        {
+           await commandSender.Send(new CreateAiSettingsCommand
+            {
+                AiSettingsId = Guid.NewGuid().ToString(),
+                LanguageModelPath = string.Empty,
+                Prompt = string.Empty
+            });
+        }
+        
         _previousPrompt = AiSettings!.Prompt;
         _previousLanguageModelPath = AiSettings.LanguageModelPath;
+    }
+
+    public void RegisterMessenger()
+    {
+        messenger.Register<NewAiSettingsMessage>(this, (_, m) =>
+        {
+            AiSettings = m.AiSettings;
+        });
+
+        messenger.Register<PromptChangedNotification>(this, (_, m) =>
+        {
+            AiSettings!.Apply(m);
+        });
+
+        messenger.Register<LanguageModelChangedNotification>(this, (_, m) =>
+        {
+            AiSettings?.Apply(m);
+        });
     }
 
     public async Task ChangePrompt()

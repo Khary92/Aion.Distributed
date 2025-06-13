@@ -5,5 +5,5 @@ namespace Client.Desktop.Communication.Requests.AiSettings;
 
 public interface IAiSettingsRequestSender
 {
-    Task<AiSettingsDto?> Get(string aiSettingsId);
+    Task<AiSettingsDto?> GetAiSettings(string aiSettingsId);
 }

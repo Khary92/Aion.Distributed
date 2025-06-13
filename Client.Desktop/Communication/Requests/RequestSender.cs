@@ -30,8 +30,8 @@ public class RequestSender(
     ITimeSlotRequestSender timeSlotRequestSender,
     IWorkDayRequestSender workDayRequestSender) : IRequestSender
 {
-    public async Task<AiSettingsDto?> Get(string aiSettingsId)
-        => await aiSettingsRequestSender.Get(aiSettingsId);
+    public async Task<AiSettingsDto?> GetAiSettings(string aiSettingsId)
+        => await aiSettingsRequestSender.GetAiSettings(aiSettingsId);
 
     public async Task<List<NoteDto>> GetNotesByTicketId(Guid ticketId)
         => await notesRequestSender.GetNotesByTicketId(ticketId);

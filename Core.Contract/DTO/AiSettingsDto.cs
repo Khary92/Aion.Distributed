@@ -1,3 +1,4 @@
+using Proto.Notifications.AiSettings;
 using ReactiveUI;
 
 namespace Contract.DTO;
@@ -31,5 +32,15 @@ public class AiSettingsDto : ReactiveObject
     {
         get => _languageModelPath;
         set => this.RaiseAndSetIfChanged(ref _languageModelPath, value);
+    }
+
+    public void Apply(PromptChangedNotification notification)
+    {
+        Prompt = notification.Prompt;
+    }
+
+    public void Apply(LanguageModelChangedNotification notification)
+    {
+        LanguageModelPath = notification.LanguageModelPath;
     }
 }

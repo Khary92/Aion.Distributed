@@ -14,6 +14,9 @@ builder.WebHost.ConfigureKestrel(options =>
 
 var app = builder.Build();
 
+app.MapGrpcService<AiSettingsCommandServiceImpl>();
+app.MapGrpcService<AiSettingsCommandServiceImpl>();
+
 app.MapGrpcService<TicketNotificationServiceImpl>();
 app.MapGrpcService<TicketCommandServiceImpl>();
 

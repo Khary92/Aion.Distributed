@@ -16,12 +16,10 @@ public class TicketNotificationServiceImpl : TicketNotificationService.TicketNot
 
         try
         {
-            // Warten, bis Client abbricht
             await Task.Delay(Timeout.Infinite, context.CancellationToken);
         }
         catch (OperationCanceledException)
         {
-            // Verbindung beendet
         }
         finally
         {
@@ -35,7 +33,7 @@ public class TicketNotificationServiceImpl : TicketNotificationService.TicketNot
         {
             try
             {
-                await _responseStream.WriteAsync(notification);
+                await _responseStream.WriteAsync(notification, _cancellationToken);
             }
             catch (Exception ex)
             {

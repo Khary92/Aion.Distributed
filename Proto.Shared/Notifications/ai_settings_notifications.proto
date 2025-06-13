@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+option csharp_namespace = "Proto.Notifications.AiSettings";
+
+service NotificationService {
+  rpc SendAiSettingsCreated(AiSettingsCreatedNotification) returns (NotificationResponse);
+  rpc SendLanguageModelChanged(LanguageModelChangedNotification) returns (NotificationResponse);
+  rpc SendPromptChanged(PromptChangedNotification) returns (NotificationResponse);
+}
+
+service AiSettingsNotificationService {
+  rpc SubscribeAiSettingsNotifications(SubscribeRequest) returns (stream AiSettingsNotification);
+}
+
+message AiSettingsNotification {
+  oneof notification {
+    AiSettingsCreatedNotification aiSettingsCreated = 1;
+    LanguageModelChangedNotification languageModelChanged = 2;
+    PromptChangedNotification promptChanged = 3;
+  }
+}
+
+message SubscribeRequest {
+}
+
+message AiSettingsCreatedNotification {
+  string aiSettingsId = 1;
+  string prompt = 2;
+  string languageModelPath = 3;
+}
+
+message LanguageModelChangedNotification {
+  string aiSettingsId = 1;
+  string languageModelPath = 2;
+}
+
+message PromptChangedNotification {
+  string aiSettingsId = 1;
+  string prompt = 2;
+}
+
+message NotificationResponse {
+  bool success = 1;
+}
