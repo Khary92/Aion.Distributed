@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Service.Server.Mock;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +15,7 @@ builder.WebHost.ConfigureKestrel(options =>
 var app = builder.Build();
 
 app.MapGrpcService<TicketNotificationServiceImpl>();
+app.MapGrpcService<TicketCommandServiceImpl>();
 
 // TODO remove in productive environment
 app.MapGrpcReflectionService();

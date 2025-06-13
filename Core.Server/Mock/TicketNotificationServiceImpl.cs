@@ -3,25 +3,45 @@ using Proto.Notifications.Ticket;
 
 public class TicketNotificationServiceImpl : TicketNotificationService.TicketNotificationServiceBase
 {
-    public override async Task SubscribeTicketNotifications(SubscribeRequest request,
+    private IServerStreamWriter<TicketNotification>? _responseStream;
+    private CancellationToken _cancellationToken;
+
+    public override async Task SubscribeTicketNotifications(
+        SubscribeRequest request,
         IServerStreamWriter<TicketNotification> responseStream,
         ServerCallContext context)
     {
-        while (!context.CancellationToken.IsCancellationRequested)
-        {
-            var notification = new TicketNotification
-            {
-                TicketCreated = new TicketCreatedNotification
-                {
-                    TicketId = Guid.NewGuid().ToString(),
-                    Name = "Test Ticket",
-                    BookingNumber = "BN-123",
-                    SprintIds = { Guid.NewGuid().ToString() }
-                }
-            };
+        _responseStream = responseStream;
+        _cancellationToken = context.CancellationToken;
 
-            await responseStream.WriteAsync(notification);
-            await Task.Delay(100);
+        try
+        {
+            // Warten, bis Client abbricht
+            await Task.Delay(Timeout.Infinite, context.CancellationToken);
+        }
+        catch (OperationCanceledException)
+        {
+            // Verbindung beendet
+        }
+        finally
+        {
+            _responseStream = null;
+        }
+    }
+
+    public async Task SendNotificationAsync(TicketNotification notification)
+    {
+        if (_responseStream is not null && !_cancellationToken.IsCancellationRequested)
+        {
+            try
+            {
+                await _responseStream.WriteAsync(notification);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Fehler beim Senden: {ex.Message}");
+                _responseStream = null;
+            }
         }
     }
 }
