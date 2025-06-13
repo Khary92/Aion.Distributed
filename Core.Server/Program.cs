@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Service.Server.Mock;
 using Service.Server.Mock.AiSettings;
 using Service.Server.Mock.Note;
 using Service.Server.Mock.NoteType;
@@ -20,10 +19,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddGrpc();
 builder.Services.AddGrpcReflection();
 
-builder.WebHost.ConfigureKestrel(options =>
-{
-    options.ListenLocalhost(5000, o => o.Protocols = HttpProtocols.Http2);
-});
+builder.WebHost.ConfigureKestrel(options => { options.ListenLocalhost(5000, o => o.Protocols = HttpProtocols.Http2); });
 
 var app = builder.Build();
 
@@ -52,10 +48,23 @@ app.MapGrpcService<StatisticsDataNotificationServiceImpl>();
 app.MapGrpcService<TagNotificationServiceImpl>();
 app.MapGrpcService<TicketNotificationServiceImpl>();
 app.MapGrpcService<TimerSettingsNotificationServiceImpl>();
-app.MapGrpcService<TimeSlotNotificationServiceImpl>();  // Achtung: Datei heißt "TimeSlotNotificationService.Impl.cs" – evtl. Tippfehler im Klassennamen?
+app.MapGrpcService<TimeSlotNotificationServiceImpl>();
 app.MapGrpcService<TraceReportNotificationServiceImpl>();
 app.MapGrpcService<UseCaseNotificationServiceImpl>();
 app.MapGrpcService<WorkDayNotificationServiceImpl>();
+
+// Request Services registrieren
+app.MapGrpcService<AiSettingsRequestServiceImpl>();
+app.MapGrpcService<NoteRequestServiceImpl>();
+app.MapGrpcService<NoteTypeRequestServiceImpl>();
+app.MapGrpcService<SettingsRequestServiceImpl>();
+app.MapGrpcService<SprintRequestServiceImpl>();
+app.MapGrpcService<StatisticsDataRequestServiceImpl>();
+app.MapGrpcService<TagRequestServiceImpl>();
+app.MapGrpcService<TicketRequestServiceImpl>();
+app.MapGrpcService<TimerSettingsRequestServiceImpl>();
+app.MapGrpcService<TimeSlotRequestServiceImpl>();
+app.MapGrpcService<WorkDayRequestServiceImpl>();
 
 // TODO remove in productive environment
 app.MapGrpcReflectionService();
