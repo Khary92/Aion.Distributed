@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.Notifications.Ticket;
 using Client.Desktop.Communication.Requests;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -10,6 +11,8 @@ using Contract.DTO;
 using DynamicData;
 using Proto.Notifications.Sprint;
 using Proto.Notifications.Ticket;
+using Proto.Requests.Sprints;
+using Proto.Requests.Tickets;
 
 namespace Client.Desktop.Models.TimeTracking;
 
@@ -27,8 +30,12 @@ public class TimeTrackingModel(IRequestSender requestSender, IMessenger messenge
 
     public async Task Initialize()
     {
+        var currentSprint = await requestSender.Send(new GetActiveSprintRequestProto());
+
+        if (currentSprint == null) return;
+        
         FilteredTickets.Clear();
-        var tickets = await requestSender.GetTicketsForCurrentSprint();
+        var tickets = await requestSender.Send(new GetTicketsForCurrentSprintRequestProto());
         FilteredTickets.AddRange(tickets);
     }
 
@@ -36,7 +43,7 @@ public class TimeTrackingModel(IRequestSender requestSender, IMessenger messenge
     {
         messenger.Register<NewTicketMessage>(this, async void (_, m) =>
         {
-            var currentSprint = await requestSender.GetActiveSprint();
+            var currentSprint = await requestSender.Send(new GetActiveSprintRequestProto());
 
             AllTickets.Add(m.Ticket);
             if (currentSprint.TicketIds.Contains(m.Ticket.TicketId))

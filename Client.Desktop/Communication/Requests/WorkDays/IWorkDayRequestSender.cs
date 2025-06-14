@@ -2,12 +2,13 @@
 using System.Threading.Tasks;
 using Contract.DTO;
 using Google.Protobuf.WellKnownTypes;
+using Proto.Requests.WorkDays;
 
 namespace Client.Desktop.Communication.Requests.WorkDays;
 
 public interface IWorkDayRequestSender
 {
-    Task<List<WorkDayDto>> GetAllWorkDays();
-    Task<WorkDayDto> GetSelectedWorkDay();
-    Task<WorkDayDto> GetWorkDayByDate(Timestamp date);
+    Task<List<WorkDayDto>> Send(GetAllWorkDaysRequestProto request);
+    Task<WorkDayDto> Send(GetSelectedWorkDayRequestProto request);
+    Task<WorkDayDto> Send(GetWorkDayByDateRequestProto request);
 }

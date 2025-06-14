@@ -11,6 +11,7 @@ using DynamicData;
 using Proto.Command.Sprints;
 using Proto.Command.Tickets;
 using Proto.Notifications.Ticket;
+using Proto.Requests.Tickets;
 using ReactiveUI;
 
 namespace Client.Desktop.Models.Data;
@@ -30,11 +31,11 @@ public class TicketsDataModel(
 
         if (isShowAllTicketsActive)
         {
-            Tickets.AddRange(await requestSender.GetAllTickets());
+            Tickets.AddRange(await requestSender.Send(new GetAllTicketsRequestProto()));
             return;
         }
 
-        Tickets.AddRange(await requestSender.GetTicketsForCurrentSprint());
+        Tickets.AddRange(await requestSender.Send(new GetTicketsForCurrentSprintRequestProto()));
     }
 
     public void RegisterMessenger()

@@ -4,8 +4,8 @@ using Proto.Notifications.Note;
 
 namespace Service.Server.Mock.Note;
 
-public class NoteCommandServiceImpl(NoteNotificationServiceImpl noteNotificationService)
-    : NoteCommandService.NoteCommandServiceBase
+public class MockNoteCommandService(NoteNotificationServiceImpl noteNotificationService)
+    : Proto.Command.Notes.NoteCommandService.NoteCommandServiceBase
 {
     public override async Task<CommandResponse> CreateNote(CreateNoteCommand request, ServerCallContext context)
     {

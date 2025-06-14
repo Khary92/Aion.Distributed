@@ -6,6 +6,8 @@ using Client.Desktop.Communication.RequiresChange;
 using Contract.Decorators;
 using Contract.DTO;
 using DynamicData;
+using Proto.Requests.Tags;
+using Proto.Requests.Tickets;
 using ReactiveUI;
 
 namespace Client.Desktop.Models.Analysis;
@@ -37,7 +39,7 @@ public class AnalysisByTicketModel : ReactiveObject
     private async Task InitializeAsync()
     {
         Tickets.Clear();
-        Tickets.AddRange(await _requestSender.GetTicketsWithShowAllSwitch(false));
+        Tickets.AddRange(await _requestSender.Send(new GetTicketsWithShowAllSwitchRequestProto { IsShowAll = false }));
     }
 
     public async Task SetAnalysisByTicket(TicketDto selectedTicket)
@@ -47,6 +49,9 @@ public class AnalysisByTicketModel : ReactiveObject
 
     public async Task<TagDto> GetTagById(Guid tagId)
     {
-        return await _requestSender.GetTagById(tagId);
+        return await _requestSender.Send(new GetTagByIdRequestProto
+        {
+            TagId = tagId.ToString()
+        });
     }
 }

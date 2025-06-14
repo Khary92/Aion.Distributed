@@ -4,7 +4,7 @@ using Proto.Notifications.AiSettings;
 
 namespace Service.Server.Mock.AiSettings;
 
-public class AiSettingsCommandServiceImpl(AiSettingsNotificationServiceImpl aiSettingsNotificationService)
+public class MockAiSettingsCommandService(AiSettingsNotificationServiceImpl aiSettingsNotificationService)
     : AiSettingsCommandService.AiSettingsCommandServiceBase
 {
     public override async Task<CommandResponse> SendChangeLanguageModel(ChangeLanguageModelCommand request, ServerCallContext context)

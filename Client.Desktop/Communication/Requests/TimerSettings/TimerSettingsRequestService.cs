@@ -12,17 +12,15 @@ public class TimerSettingsRequestSender : ITimerSettingsRequestSender
     private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly TimerSettingsRequestService.TimerSettingsRequestServiceClient _client = new(Channel);
 
-    public async Task<TimerSettingsDto> GetTimerSettings()
+    public async Task<TimerSettingsDto> Send(GetTimerSettingsRequestProto request)
     {
-        var request = new GetTimerSettingsRequestProto();
         var response = await _client.GetTimerSettingsAsync(request);
         return new TimerSettingsDto(Guid.Parse(response.TimerSettingsId), response.DocumentationSaveInterval,
             response.SnapshotSaveInterval);
     }
 
-    public async Task<bool> IsTimerSettingExisting()
+    public async Task<bool> Send(IsTimerSettingExistingRequestProto request)
     {
-        var request = new IsTimerSettingExistingRequestProto();
         var response = await _client.IsTimerSettingExistingAsync(request);
         return response.Exists;
     }

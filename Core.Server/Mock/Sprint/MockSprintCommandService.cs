@@ -4,7 +4,7 @@ using Proto.Notifications.Sprint;
 
 namespace Service.Server.Mock.Sprint;
 
-public class SprintCommandServiceImpl(SprintNotificationServiceImpl sprintsNotificationService)
+public class MockSprintCommandService(SprintNotificationServiceImpl sprintsNotificationService)
     : SprintsCommandService.SprintsCommandServiceBase
 {
     public override async Task<CommandResponse> AddTicketToActiveSprint(AddTicketToActiveSprintCommand request, ServerCallContext context)

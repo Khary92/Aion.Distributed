@@ -4,7 +4,7 @@ using Proto.Requests.WorkDays;
 
 namespace Service.Server.Mock.WorkDay;
 
-public class WorkDayRequestServiceImpl : WorkDayRequestService.WorkDayRequestServiceBase
+public class MockWorkDayRequestService : WorkDayRequestService.WorkDayRequestServiceBase
 {
     public override Task<WorkDayListProto> GetAllWorkDays(GetAllWorkDaysRequestProto request, ServerCallContext context)
     {

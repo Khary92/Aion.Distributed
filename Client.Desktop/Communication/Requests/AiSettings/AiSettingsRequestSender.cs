@@ -11,16 +11,14 @@ public class AiSettingsRequestSender : IAiSettingsRequestSender
     private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly AiSettingsRequestService.AiSettingsRequestServiceClient _client = new(Channel);
 
-    public async Task<AiSettingsDto?> GetAiSettings()
+    public async Task<AiSettingsDto> Send(GetAiSettingsRequestProto request)
     {
-        var request = new GetAiSettingsRequestProto();
         var response = await _client.GetAiSettingsAsync(request);
         return response.ToDto();
     }
 
-    public async Task<bool> IsAiSettingsExisting()
+    public async Task<bool> Send(AiSettingExistsRequestProto request)
     {
-        var request = new AiSettingExistsRequestProto();
         var response = await _client.AiSettingsExistsAsync(request);
         return response.Exists;
     }

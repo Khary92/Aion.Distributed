@@ -3,7 +3,7 @@ using Grpc.Core;
 using Google.Protobuf.WellKnownTypes;
 using Proto.Requests.TimeSlots;
 
-public class TimeSlotRequestServiceImpl : TimeSlotRequestService.TimeSlotRequestServiceBase
+public class MockTimeSlotRequestService : TimeSlotRequestService.TimeSlotRequestServiceBase
 {
     public override Task<TimeSlotProto> GetTimeSlotById(GetTimeSlotByIdRequestProto request, ServerCallContext context)
     {

@@ -4,7 +4,7 @@ using Proto.Notifications.TimeSlots;
 
 namespace Service.Server.Mock.TimeSlot;
 
-public class TimeSlotCommandServiceImpl(TimeSlotNotificationServiceImpl timeSlotNotificationService)
+public class MockTimeSlotCommandService(TimeSlotNotificationServiceImpl timeSlotNotificationService)
     : TimeSlotCommandService.TimeSlotCommandServiceBase
 {
     public override async Task<CommandResponse> CreateTimeSlot(CreateTimeSlotCommand request, ServerCallContext context)

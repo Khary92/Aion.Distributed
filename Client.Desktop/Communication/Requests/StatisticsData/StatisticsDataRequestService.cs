@@ -13,9 +13,8 @@ public class StatisticsDataRequestSender : IStatisticsDataRequestSender
     private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly StatisticsDataRequestService.StatisticsDataRequestServiceClient _client = new(Channel);
 
-    public async Task<StatisticsDataDto> GetByTimeSlotId(string timeSlotId)
+    public async Task<StatisticsDataDto> Send(GetStatisticsDataByTimeSlotIdRequestProto request)
     {
-        var request = new GetStatisticsDataByTimeSlotIdRequestProto { TimeSlotId = timeSlotId };
         var response = await _client.GetStatisticsDataByTimeSlotIdAsync(request);
 
         var tagIds = response.TagIds

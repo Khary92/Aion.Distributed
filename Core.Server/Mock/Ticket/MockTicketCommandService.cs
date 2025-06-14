@@ -4,8 +4,8 @@ using Proto.Notifications.Ticket;
 
 namespace Service.Server.Mock.Ticket;
 
-public class TicketCommandServiceImpl(TicketNotificationServiceImpl ticketNotificationService)
-    : TicketCommandService.TicketCommandServiceBase
+public class MockTicketCommandService(TicketNotificationServiceImpl ticketNotificationService)
+    : Proto.Command.Tickets.TicketCommandService.TicketCommandServiceBase
 {
     public override async Task<CommandResponse> CreateTicket(CreateTicketCommand request, ServerCallContext context)
     {

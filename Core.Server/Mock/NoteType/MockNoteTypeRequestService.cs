@@ -2,7 +2,7 @@
 using Grpc.Core;
 using Proto.Requests.NoteTypes;
 
-public class NoteTypeRequestServiceImpl : NoteTypesRequestService.NoteTypesRequestServiceBase
+public class MockNoteTypeRequestService : NoteTypesRequestService.NoteTypesRequestServiceBase
 {
     public override Task<GetAllNoteTypesResponseProto> GetAllNoteTypes(GetAllNoteTypesRequestProto request, ServerCallContext context)
     {

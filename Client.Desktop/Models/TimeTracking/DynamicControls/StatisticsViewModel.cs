@@ -9,6 +9,7 @@ using Client.Desktop.Factories;
 using CommunityToolkit.Mvvm.Messaging;
 using Contract.DTO;
 using Proto.Command.StatisticsData;
+using Proto.Requests.Tags;
 using ReactiveUI;
 
 namespace Client.Desktop.Models.TimeTracking.DynamicControls;
@@ -46,7 +47,7 @@ public class StatisticsViewModel(
     {
         AvailableTags.Clear();
 
-        var tagDtos = await requestSender.GetAllTags();
+        var tagDtos = await requestSender.Send(new GetAllTagsRequestProto());
 
         foreach (var tagDto in tagDtos) AvailableTags.Add(tagCheckBoxViewFactory.Create(tagDto));
 

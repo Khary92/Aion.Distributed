@@ -1,7 +1,7 @@
 ﻿using Grpc.Core;
 using Proto.Requests.Tags;
 
-public class TagRequestServiceImpl : TagRequestService.TagRequestServiceBase
+public class MockTagRequestService : TagRequestService.TagRequestServiceBase
 {
     public override Task<TagListProto> GetAllTags(GetAllTagsRequestProto request, ServerCallContext context)
     {

@@ -50,7 +50,9 @@ public class TimeTrackingViewModel : ReactiveObject
         NextViewModelCommand = ReactiveCommand.Create(ToggleNextViewModel);
         PreviousViewModelCommand = ReactiveCommand.Create(TogglePreviousViewModel);
 
-        Initialize().ConfigureAwait(false);
+        
+        
+        Model.Initialize().ConfigureAwait(false);
     }
 
     public string SelectedTicketName
@@ -160,19 +162,7 @@ public class TimeTrackingViewModel : ReactiveObject
         CurrentViewModelIndex += 1;
         SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.TicketReplayDecorator.Ticket.Name;
     }
-
-    private async Task Initialize()
-    {
-        var currentSprint = await _mediator.Send(new GetActiveSprintRequest());
-
-        if (currentSprint == null) throw new InvalidOperationException("No active sprint");
-
-        await Model.Initialize();
-        Model.RegisterMessenger();
-
-        if (Model.FilteredTickets.Count != 0) SelectedTicket = Model.FilteredTickets[0];
-    }
-
+    
     public async Task LoadTimeSlotViewModels()
     {
         TimeSlotViewModels.Clear();

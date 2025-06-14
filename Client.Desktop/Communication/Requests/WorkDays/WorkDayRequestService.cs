@@ -15,23 +15,20 @@ public class WorkDayRequestSender : IWorkDayRequestSender
     private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly WorkDayRequestService.WorkDayRequestServiceClient _client = new(Channel);
 
-    public async Task<List<WorkDayDto>> GetAllWorkDays()
+    public async Task<List<WorkDayDto>> Send(GetAllWorkDaysRequestProto request)
     {
-        var request = new GetAllWorkDaysRequestProto();
         var response = await _client.GetAllWorkDaysAsync(request);
-        return response.WorkDays.Select(w => ToDto(w)).ToList();
+        return response.WorkDays.Select(ToDto).ToList();
     }
 
-    public async Task<WorkDayDto> GetSelectedWorkDay()
+    public async Task<WorkDayDto> Send(GetSelectedWorkDayRequestProto request)
     {
-        var request = new GetSelectedWorkDayRequestProto();
         var response = await _client.GetSelectedWorkDayAsync(request);
         return ToDto(response);
     }
 
-    public async Task<WorkDayDto> GetWorkDayByDate(Timestamp date)
+    public async Task<WorkDayDto> Send(GetWorkDayByDateRequestProto request)
     {
-        var request = new GetWorkDayByDateRequestProto { Date = date };
         var response = await _client.GetWorkDayByDateAsync(request);
         return ToDto(response);
     }

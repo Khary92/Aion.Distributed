@@ -4,7 +4,7 @@ using Proto.Notifications.Tag;
 
 namespace Service.Server.Mock.Tag;
 
-public class TagCommandServiceImpl(TagNotificationServiceImpl tagNotificationService)
+public class MockCommandService(TagNotificationServiceImpl tagNotificationService)
     : TagCommandService.TagCommandServiceBase
 {
     public override async Task<CommandResponse> CreateTag(CreateTagCommand request, ServerCallContext context)

@@ -14,18 +14,16 @@ public class NotesRequestSender : INotesRequestSender
     private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly NotesRequestService.NotesRequestServiceClient _client = new(Channel);
 
-    public async Task<List<NoteDto>> GetNotesByTicketId(Guid ticketId)
+    public async Task<List<NoteDto>> Send(GetNotesByTicketIdRequestProto request)
     {
-        var request = new GetNotesByTicketIdRequestProto { TicketId = ticketId.ToString() };
         var response = await _client.GetNotesByTicketIdAsync(request);
 
         return response.Notes.Select(note => new NoteDto(Guid.Parse(note.NoteId), note.Text,
             Guid.Parse(note.NoteTypeId), Guid.Parse(note.TimeSlotId), note.TimeStamp.ToDateTimeOffset())).ToList();
     }
 
-    public async Task<List<NoteDto>> GetNotesByTimeSlotId(string timeSlotId)
+    public async Task<List<NoteDto>> Send(GetNotesByTimeSlotIdRequestProto request)
     {
-        var request = new GetNotesByTimeSlotIdRequestProto { TimeSlotId = timeSlotId };
         var response = await _client.GetNotesByTimeSlotIdAsync(request);
         
         return response.Notes.Select(note => new NoteDto(Guid.Parse(note.NoteId), note.Text,

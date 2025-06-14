@@ -11,6 +11,7 @@ using DynamicData;
 using Google.Protobuf.WellKnownTypes;
 using Proto.Command.Sprints;
 using Proto.Notifications.Sprint;
+using Proto.Requests.Sprints;
 using ReactiveUI;
 
 namespace Client.Desktop.Models.Data;
@@ -90,7 +91,7 @@ public class SprintsDataModel(
     public async Task InitializeAsync()
     {
         Sprints.Clear();
-        Sprints.AddRange(await requestSender.GetAllSprints());
+        Sprints.AddRange(await requestSender.Send(new GetAllSprintsRequestProto()));
     }
 
     public async Task UpdateSprint(SprintDto sprintDto)

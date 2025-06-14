@@ -4,7 +4,7 @@ using Proto.Notifications.NoteType;
 
 namespace Service.Server.Mock.NoteType;
 
-public class NoteTypeCommandServiceImpl(NoteTypeNotificationServiceImpl noteTypeNotificationService)
+public class MockNoteTypeCommandService(NoteTypeNotificationServiceImpl noteTypeNotificationService)
     : NoteTypeCommandService.NoteTypeCommandServiceBase
 {
     public override async Task<CommandResponse> ChangeNoteTypeColor(ChangeNoteTypeColorCommand request,

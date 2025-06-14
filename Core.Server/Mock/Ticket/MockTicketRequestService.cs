@@ -1,7 +1,7 @@
 ﻿using Grpc.Core;
 using Proto.Requests.Tickets;
 
-public class TicketRequestServiceImpl : TicketRequestService.TicketRequestServiceBase
+public class MockTicketRequestService : Proto.Requests.Tickets.TicketRequestService.TicketRequestServiceBase
 {
     public override Task<TicketListProto> GetAllTickets(GetAllTicketsRequestProto request, ServerCallContext context)
     {

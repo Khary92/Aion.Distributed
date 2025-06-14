@@ -4,7 +4,7 @@ using Proto.Notifications.TimerSettings;
 
 namespace Service.Server.Mock.TimerSettings;
 
-public class TimerSettingsCommandServiceImpl(TimerSettingsNotificationServiceImpl notificationService)
+public class MockTimerSettingsCommandService(TimerSettingsNotificationServiceImpl notificationService)
     : TimerSettingsCommandService.TimerSettingsCommandServiceBase
 {
     public override async Task<CommandResponse> CreateTimerSettings(CreateTimerSettingsCommand request, ServerCallContext context)

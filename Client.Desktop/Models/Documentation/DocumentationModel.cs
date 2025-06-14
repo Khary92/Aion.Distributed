@@ -14,6 +14,9 @@ using DynamicData;
 using Proto.Notifications.Note;
 using Proto.Notifications.NoteType;
 using Proto.Notifications.Ticket;
+using Proto.Requests.Notes;
+using Proto.Requests.NoteTypes;
+using Proto.Requests.Tickets;
 using ReactiveUI;
 
 namespace Client.Desktop.Models.Documentation;
@@ -65,7 +68,10 @@ public class DocumentationModel(
     {
         if (SelectedTicket == null) return;
 
-        var noteDtos = await requestSender.GetNotesByTicketId(SelectedTicket.TicketId);
+        var noteDtos = await requestSender.Send(new GetNotesByTicketIdRequestProto
+        {
+            TicketId = SelectedTicket.TicketId.ToString()
+        });
 
         var noteViewModels = await Task.WhenAll(noteDtos.Select(noteViewFactory.Create));
 
@@ -88,7 +94,7 @@ public class DocumentationModel(
 
     public async Task Initialize()
     {
-        var noteTypeDtos = await requestSender.GetAllNoteTypes();
+        var noteTypeDtos = await requestSender.Send(new GetAllNoteTypesRequestProto());
 
         Options.Clear();
 
@@ -106,7 +112,7 @@ public class DocumentationModel(
         }
 
         AllTickets.Clear();
-        AllTickets.AddRange(await requestSender.GetAllTickets());
+        AllTickets.AddRange(await requestSender.Send(new GetAllTicketsRequestProto()));
 
         if (AllTickets.Any()) SelectedTicket = AllTickets[0];
     }
@@ -154,7 +160,11 @@ public class DocumentationModel(
                     return;
                 }
 
-                var noteType = await requestSender.GetNoteTypeById(Guid.Parse(m.NoteTypeId));
+                var noteType = await requestSender.Send(new GetNoteTypeByIdRequestProto
+                {
+                    NoteTypeId = m.NoteTypeId
+                });
+                
                 noteViewModel.Note.NoteType = noteType;
                 noteViewModel.Note.Apply(m);
 

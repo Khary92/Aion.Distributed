@@ -3,7 +3,7 @@ using Proto.Requests.TimerSettings;
 
 namespace Service.Server.Mock.TimerSettings;
 
-public class TimerSettingsRequestServiceImpl : TimerSettingsRequestService.TimerSettingsRequestServiceBase
+public class MockTimerSettingsRequestService : TimerSettingsRequestService.TimerSettingsRequestServiceBase
 {
     public override Task<TimerSettingsProto> GetTimerSettings(GetTimerSettingsRequestProto request,
         ServerCallContext context)

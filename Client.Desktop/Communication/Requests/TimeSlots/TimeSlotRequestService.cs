@@ -14,16 +14,14 @@ public class TimeSlotRequestSender : ITimeSlotRequestSender
     private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly TimeSlotRequestService.TimeSlotRequestServiceClient _client = new(Channel);
 
-    public async Task<TimeSlotDto> GetTimeSlotById(string timeSlotId)
+    public async Task<TimeSlotDto> Send(GetTimeSlotByIdRequestProto request)
     {
-        var request = new GetTimeSlotByIdRequestProto { TimeSlotId = timeSlotId };
         var response = await _client.GetTimeSlotByIdAsync(request);
         return ToDto(response);
     }
 
-    public async Task<List<TimeSlotDto>> GetTimeSlotsForWorkDayId(string workDayId)
+    public async Task<List<TimeSlotDto>> Send(GetTimeSlotsForWorkDayIdRequestProto request)
     {
-        var request = new GetTimeSlotsForWorkDayIdRequestProto { WorkDayId = workDayId };
         var response = await _client.GetTimeSlotsForWorkDayIdAsync(request);
 
         return response.TimeSlots.Select(ToDto).ToList();

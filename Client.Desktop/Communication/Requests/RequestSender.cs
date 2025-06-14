@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests.AiSettings;
 using Client.Desktop.Communication.Requests.Notes;
@@ -13,7 +12,17 @@ using Client.Desktop.Communication.Requests.TimerSettings;
 using Client.Desktop.Communication.Requests.TimeSlots;
 using Client.Desktop.Communication.Requests.WorkDays;
 using Contract.DTO;
-using Google.Protobuf.WellKnownTypes;
+using Proto.Requests.AiSettings;
+using Proto.Requests.Notes;
+using Proto.Requests.NoteTypes;
+using Proto.Requests.Settings;
+using Proto.Requests.Sprints;
+using Proto.Requests.StatisticsData;
+using Proto.Requests.Tags;
+using Proto.Requests.Tickets;
+using Proto.Requests.TimerSettings;
+using Proto.Requests.TimeSlots;
+using Proto.Requests.WorkDays;
 
 namespace Client.Desktop.Communication.Requests;
 
@@ -30,75 +39,75 @@ public class RequestSender(
     ITimeSlotRequestSender timeSlotRequestSender,
     IWorkDayRequestSender workDayRequestSender) : IRequestSender
 {
-    public async Task<AiSettingsDto?> GetAiSettings()
-        => await aiSettingsRequestSender.GetAiSettings();
+    public async Task<AiSettingsDto> Send(GetAiSettingsRequestProto request)
+        => await aiSettingsRequestSender.Send(request);
 
-    public async Task<bool> IsAiSettingsExisting()
-        => await aiSettingsRequestSender.IsAiSettingsExisting();
+    public async Task<bool> Send(AiSettingExistsRequestProto request)
+        => await aiSettingsRequestSender.Send(request);
 
-    public async Task<List<NoteDto>> GetNotesByTicketId(Guid ticketId)
-        => await notesRequestSender.GetNotesByTicketId(ticketId);
+    public async Task<List<NoteDto>> Send(GetNotesByTicketIdRequestProto request)
+        => await notesRequestSender.Send(request);
 
-    public async Task<List<NoteDto>> GetNotesByTimeSlotId(string timeSlotId)
-        => await notesRequestSender.GetNotesByTimeSlotId(timeSlotId);
+    public async Task<List<NoteDto>> Send(GetNotesByTimeSlotIdRequestProto request)
+        => await notesRequestSender.Send(request);
 
-    public async Task<List<NoteTypeDto>> GetAllNoteTypes()
-        => await noteTypesRequestSender.GetAllNoteTypes();
+    public async Task<List<NoteTypeDto>> Send(GetAllNoteTypesRequestProto request)
+        => await noteTypesRequestSender.Send(request);
 
-    public async Task<NoteTypeDto> GetNoteTypeById(Guid noteTypeId)
-        => await noteTypesRequestSender.GetNoteTypeById(noteTypeId);
+    public async Task<NoteTypeDto> Send(GetNoteTypeByIdRequestProto request)
+        => await noteTypesRequestSender.Send(request);
 
-    public async Task<SettingsDto> GetSettings()
-        => await settingsRequestSender.GetSettings();
+    public async Task<SettingsDto> Send(GetSettingsRequestProto request)
+        => await settingsRequestSender.Send(request);
 
-    public async Task<bool> IsExportPathValid()
-        => await settingsRequestSender.IsExportPathValid();
+    public async Task<bool> Send(IsExportPathValidRequestProto request)
+        => await settingsRequestSender.Send(request);
 
-    public async Task<bool> IsSettingsExisting()
-        => await settingsRequestSender.IsSettingsExisting();
+    public async Task<bool> Send(SettingsExistsRequestProto request)
+        => await settingsRequestSender.Send(request);
 
-    public async Task<SprintDto> GetActiveSprint()
-        => await sprintRequestSender.GetActiveSprint();
+    public async Task<SprintDto?> Send(GetActiveSprintRequestProto request)
+        => await sprintRequestSender.Send(request);
 
-    public async Task<List<SprintDto>> GetAllSprints()
-        => await sprintRequestSender.GetAllSprints();
+    public async Task<List<SprintDto>> Send(GetAllSprintsRequestProto request)
+        => await sprintRequestSender.Send(request);
 
-    public async Task<StatisticsDataDto> GetByTimeSlotId(string timeSlotId)
-        => await statisticsDataRequestSender.GetByTimeSlotId(timeSlotId);
+    public async Task<StatisticsDataDto> Send(GetStatisticsDataByTimeSlotIdRequestProto request)
+        => await statisticsDataRequestSender.Send(request);
 
-    public async Task<List<TagDto>> GetAllTags()
-        => await tagRequestSender.GetAllTags();
+    public async Task<List<TagDto>> Send(GetAllTagsRequestProto request)
+        => await tagRequestSender.Send(request);
 
-    public async Task<TagDto> GetTagById(Guid tagId)
-        => await tagRequestSender.GetTagById(tagId);
+    public async Task<TagDto> Send(GetTagByIdRequestProto request)
+        => await tagRequestSender.Send(request);
 
-    public async Task<List<TicketDto>> GetAllTickets()
-        => await ticketRequestSender.GetAllTickets();
+    public async Task<List<TicketDto>> Send(GetAllTicketsRequestProto request)
+        => await ticketRequestSender.Send(request);
 
-    public async Task<List<TicketDto>> GetTicketsForCurrentSprint()
-        => await ticketRequestSender.GetTicketsForCurrentSprint();
+    public async Task<List<TicketDto>> Send(GetTicketsForCurrentSprintRequestProto request)
+        => await ticketRequestSender.Send(request);
 
-    public async Task<List<TicketDto>> GetTicketsWithShowAllSwitch(bool isShowAll)
-        => await ticketRequestSender.GetTicketsWithShowAllSwitch(isShowAll);
+    public async Task<List<TicketDto>> Send(GetTicketsWithShowAllSwitchRequestProto request)
+        => await ticketRequestSender.Send(request);
 
-    public async Task<TimerSettingsDto> GetTimerSettings()
-        => await timerSettingsRequestSender.GetTimerSettings();
+    public async Task<TimerSettingsDto> Send(GetTimerSettingsRequestProto request)
+        => await timerSettingsRequestSender.Send(request);
 
-    public async Task<bool> IsTimerSettingExisting()
-        => await timerSettingsRequestSender.IsTimerSettingExisting();
+    public async Task<bool> Send(IsTimerSettingExistingRequestProto request)
+        => await timerSettingsRequestSender.Send(request);
 
-    public async Task<TimeSlotDto> GetTimeSlotById(string timeSlotId)
-        => await timeSlotRequestSender.GetTimeSlotById(timeSlotId);
+    public async Task<List<TimeSlotDto>> Send(GetTimeSlotsForWorkDayIdRequestProto request)
+        => await timeSlotRequestSender.Send(request);
 
-    public async Task<List<TimeSlotDto>> GetTimeSlotsForWorkDayId(string workDayId)
-        => await timeSlotRequestSender.GetTimeSlotsForWorkDayId(workDayId);
+    public async Task<TimeSlotDto> Send(GetTimeSlotByIdRequestProto request)
+        => await timeSlotRequestSender.Send(request);
 
-    public async Task<List<WorkDayDto>> GetAllWorkDays()
-        => await workDayRequestSender.GetAllWorkDays();
+    public async Task<List<WorkDayDto>> Send(GetAllWorkDaysRequestProto request)
+        => await workDayRequestSender.Send(request);
 
-    public async Task<WorkDayDto> GetSelectedWorkDay()
-        => await workDayRequestSender.GetSelectedWorkDay();
+    public async Task<WorkDayDto> Send(GetSelectedWorkDayRequestProto request)
+        => await workDayRequestSender.Send(request);
 
-    public async Task<WorkDayDto> GetWorkDayByDate(Timestamp date)
-        => await workDayRequestSender.GetWorkDayByDate(date);
+    public async Task<WorkDayDto> Send(GetWorkDayByDateRequestProto request)
+        => await workDayRequestSender.Send(request);
 }

@@ -11,6 +11,7 @@ using DynamicData;
 using Proto.Command.Notes;
 using Proto.Notifications.Note;
 using Proto.Notifications.NoteType;
+using Proto.Requests.NoteTypes;
 using ReactiveUI;
 using Unit = System.Reactive.Unit;
 
@@ -69,7 +70,7 @@ public class NoteViewModel : ReactiveObject
     public async Task Initialize()
     {
         NoteTypes.Clear();
-        var noteTypeDtos = await _requestSender.GetAllNoteTypes();
+        var noteTypeDtos = await _requestSender.Send(new GetAllNoteTypesRequestProto());
         NoteTypes.AddRange(noteTypeDtos);
 
         if (Note.NoteTypeId == Guid.Empty) return;

@@ -15,23 +15,20 @@ public class TicketRequestSender : ITicketRequestSender
     private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly TicketRequestService.TicketRequestServiceClient _client = new(Channel);
 
-    public async Task<List<TicketDto>> GetAllTickets()
+    public async Task<List<TicketDto>> Send(GetAllTicketsRequestProto request)
     {
-        var request = new GetAllTicketsRequestProto();
         var response = await _client.GetAllTicketsAsync(request);
         return ToDto(response);
     }
 
-    public async Task<List<TicketDto>> GetTicketsForCurrentSprint()
+    public async Task<List<TicketDto>> Send(GetTicketsForCurrentSprintRequestProto request)
     {
-        var request = new GetTicketsForCurrentSprintRequestProto();
         var response = await _client.GetTicketsForCurrentSprintAsync(request);
         return ToDto(response);
     }
 
-    public async Task<List<TicketDto>> GetTicketsWithShowAllSwitch(bool isShowAll)
+    public async Task<List<TicketDto>> Send(GetTicketsWithShowAllSwitchRequestProto request)
     {
-        var request = new GetTicketsWithShowAllSwitchRequestProto { IsShowAll = isShowAll };
         var response = await _client.GetTicketsWithShowAllSwitchAsync(request);
         return ToDto(response);
     }
@@ -51,6 +48,7 @@ public class TicketRequestSender : ITicketRequestSender
             result.Add(new TicketDto(Guid.Parse(ticket.TicketId), ticket.Name, ticket.BookingNumber,
                 ticket.Documentation, new Collection<Guid>(sprintIds)));
         }
+
         return result;
     }
 }

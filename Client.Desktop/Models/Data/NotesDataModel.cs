@@ -10,6 +10,7 @@ using Contract.DTO;
 using DynamicData;
 using Proto.Command.NoteTypes;
 using Proto.Notifications.NoteType;
+using Proto.Requests.NoteTypes;
 using ReactiveUI;
 
 namespace Client.Desktop.Models.Data;
@@ -75,7 +76,7 @@ public class NotesDataModel(
 
     public async Task Initialize()
     {
-        NoteTypes.AddRange(await requestSender.GetAllNoteTypes());
+        NoteTypes.AddRange(await requestSender.Send(new GetAllNoteTypesRequestProto()));
     }
 
     public async Task AddNewNoteType(string noteType, string color)

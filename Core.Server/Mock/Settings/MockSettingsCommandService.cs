@@ -4,7 +4,7 @@ using Proto.Notifications.Settings;
 
 namespace Service.Server.Mock.Settings;
 
-public class SettingsCommandServiceImpl(SettingsNotificationServiceImpl settingsNotificationService)
+public class MockSettingsCommandService(SettingsNotificationServiceImpl settingsNotificationService)
     : SettingsCommandService.SettingsCommandServiceBase
 {
     public override async Task<CommandResponse> CreateSettings(CreateSettingsCommand request, ServerCallContext context)

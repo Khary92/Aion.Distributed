@@ -4,7 +4,7 @@ using Proto.Requests.Sprints;
 
 namespace Service.Server.Mock.Sprint;
 
-public class SprintRequestServiceImpl : SprintRequestService.SprintRequestServiceBase
+public class MockSprintRequestService : SprintRequestService.SprintRequestServiceBase
 {
     public override Task<SprintProto> GetActiveSprint(GetActiveSprintRequestProto request, ServerCallContext context)
     {

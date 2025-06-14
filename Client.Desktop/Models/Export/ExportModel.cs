@@ -8,6 +8,8 @@ using Client.Desktop.Communication.RequiresChange;
 using CommunityToolkit.Mvvm.Messaging;
 using Contract.DTO;
 using DynamicData;
+using Proto.Requests.Settings;
+using Proto.Requests.WorkDays;
 using ReactiveUI;
 
 namespace Client.Desktop.Models.Export;
@@ -53,12 +55,13 @@ public class ExportModel : ReactiveObject
     public async Task InitializeAsync()
     {
         WorkDays.Clear();
-        WorkDays.AddRange(await _requestSender.GetAllWorkDays());
+        WorkDays.AddRange(await _requestSender.Send(new GetAllWorkDaysRequestProto()));
     }
 
     public async Task<bool> ExportFileAsync()
     {
-        if (await _requestSender.IsExportPathValid()) return await _exportService.ExportToFile(WorkDays);
+        if (await _requestSender.Send(new IsExportPathValidRequestProto()))
+            return await _exportService.ExportToFile(WorkDays);
 
         //_tracer.Export.ToFile.PathSettingsInvalid(GetType(), new IsExportPathValidRequest());
         return false;

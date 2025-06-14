@@ -4,7 +4,7 @@ using Proto.Notifications.StatisticsData;
 
 namespace Service.Server.Mock.StatisticsData;
 
-public class StatisticsDataCommandServiceImpl(StatisticsDataNotificationServiceImpl statisticsDataNotificationService)
+public class MockStatisticsDataCommandService(StatisticsDataNotificationServiceImpl statisticsDataNotificationService)
     : StatisticsDataCommandService.StatisticsDataCommandServiceBase
 {
     public override async Task<CommandResponse> ChangeProductivity(ChangeProductivityCommand request,

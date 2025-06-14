@@ -2,7 +2,7 @@
 using Grpc.Core;
 using Proto.Requests.Notes;
 
-public class NoteRequestServiceImpl : NotesRequestService.NotesRequestServiceBase
+public class MockNoteRequestService : NotesRequestService.NotesRequestServiceBase
 {
     public override Task<GetNotesResponseProto> GetNotesByTicketId(GetNotesByTicketIdRequestProto request,
         ServerCallContext context)

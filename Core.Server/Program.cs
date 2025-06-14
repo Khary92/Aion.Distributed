@@ -39,19 +39,19 @@ builder.Services.AddSingleton<WorkDayNotificationServiceImpl>();
 var app = builder.Build();
 
 // Command Services registrieren
-app.MapGrpcService<AiSettingsCommandServiceImpl>();
-app.MapGrpcService<NoteCommandServiceImpl>();
-app.MapGrpcService<NoteTypeCommandServiceImpl>();
-app.MapGrpcService<SettingsCommandServiceImpl>();
-app.MapGrpcService<SprintCommandServiceImpl>();
-app.MapGrpcService<StatisticsDataCommandServiceImpl>();
-app.MapGrpcService<TagCommandServiceImpl>();
-app.MapGrpcService<TicketCommandServiceImpl>();
-app.MapGrpcService<TimerSettingsCommandServiceImpl>();
-app.MapGrpcService<TimeSlotCommandServiceImpl>();
-app.MapGrpcService<TraceReportCommandServiceImpl>();
-app.MapGrpcService<UseCaseCommandServiceImpl>();
-app.MapGrpcService<WorkDayCommandServiceImpl>();
+app.MapGrpcService<MockAiSettingsCommandService>();
+app.MapGrpcService<MockNoteCommandService>();
+app.MapGrpcService<MockNoteTypeCommandService>();
+app.MapGrpcService<MockSettingsCommandService>();
+app.MapGrpcService<MockSprintCommandService>();
+app.MapGrpcService<MockStatisticsDataCommandService>();
+app.MapGrpcService<MockCommandService>();
+app.MapGrpcService<MockTicketCommandService>();
+app.MapGrpcService<MockTimerSettingsCommandService>();
+app.MapGrpcService<MockTimeSlotCommandService>();
+app.MapGrpcService<MockTraceReportCommandService>();
+app.MapGrpcService<MockUseCaseCommandService>();
+app.MapGrpcService<MockWorkDayCommandService>();
 
 // Notification Services registrieren
 app.MapGrpcService<AiSettingsNotificationServiceImpl>();
@@ -69,17 +69,17 @@ app.MapGrpcService<UseCaseNotificationServiceImpl>();
 app.MapGrpcService<WorkDayNotificationServiceImpl>();
 
 // Request Services registrieren
-app.MapGrpcService<AiSettingsRequestServiceImpl>();
-app.MapGrpcService<NoteRequestServiceImpl>();
-app.MapGrpcService<NoteTypeRequestServiceImpl>();
-app.MapGrpcService<SettingsRequestServiceImpl>();
-app.MapGrpcService<SprintRequestServiceImpl>();
-app.MapGrpcService<StatisticsDataRequestServiceImpl>();
-app.MapGrpcService<TagRequestServiceImpl>();
-app.MapGrpcService<TicketRequestServiceImpl>();
-app.MapGrpcService<TimerSettingsRequestServiceImpl>();
-app.MapGrpcService<TimeSlotRequestServiceImpl>();
-app.MapGrpcService<WorkDayRequestServiceImpl>();
+app.MapGrpcService<MockAiSettingsRequestService>();
+app.MapGrpcService<MockNoteRequestService>();
+app.MapGrpcService<MockNoteTypeRequestService>();
+app.MapGrpcService<MockSettingsRequestService>();
+app.MapGrpcService<MockSprintRequestService>();
+app.MapGrpcService<MockStatisticsDataRequestService>();
+app.MapGrpcService<MockTagRequestService>();
+app.MapGrpcService<MockTicketRequestService>();
+app.MapGrpcService<MockTimerSettingsRequestService>();
+app.MapGrpcService<MockTimeSlotRequestService>();
+app.MapGrpcService<MockWorkDayRequestService>();
 
 app.Lifetime.ApplicationStarted.Register(() =>
 {

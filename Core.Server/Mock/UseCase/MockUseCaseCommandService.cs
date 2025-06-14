@@ -3,7 +3,7 @@ using Proto.Command.UseCases;
 
 namespace Service.Server.Mock.UseCase;
 
-public class UseCaseCommandServiceImpl : UseCaseCommandService.UseCaseCommandServiceBase
+public class MockUseCaseCommandService : UseCaseCommandService.UseCaseCommandServiceBase
 {
     public override Task<CommandResponse> CreateTimeSlotControl(CreateTimeSlotControlCommand request, ServerCallContext context)
     {

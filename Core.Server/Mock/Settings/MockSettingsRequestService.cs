@@ -1,7 +1,7 @@
 ﻿using Grpc.Core;
 using Proto.Requests.Settings;
 
-public class SettingsRequestServiceImpl : SettingsRequestService.SettingsRequestServiceBase
+public class MockSettingsRequestService : SettingsRequestService.SettingsRequestServiceBase
 {
     public override Task<SettingsProto> GetSettings(GetSettingsRequestProto request, ServerCallContext context)
     {

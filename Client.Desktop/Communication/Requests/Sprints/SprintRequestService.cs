@@ -14,16 +14,15 @@ public class SprintRequestSender : ISprintRequestSender
     private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly SprintRequestService.SprintRequestServiceClient _client = new(Channel);
 
-    public async Task<SprintDto> GetActiveSprint()
+    public async Task<SprintDto?> Send(GetActiveSprintRequestProto request)
     {
-        var request = new GetActiveSprintRequestProto();
         var response = await _client.GetActiveSprintAsync(request);
-        return ToDto(response, true);
+        
+        return response == null? null : ToDto(response, true);
     }
 
-    public async Task<List<SprintDto>> GetAllSprints()
+    public async Task<List<SprintDto>> Send(GetAllSprintsRequestProto request)
     {
-        var request = new GetAllSprintsRequestProto();
         var response = await _client.GetAllSprintsAsync(request);
 
         return response.Sprints.Select(sprint => ToDto(sprint, true)).ToList();

@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using Contract.DTO;
 using Proto.Command.TimerSettings;
 using Proto.Notifications.TimerSettings;
+using Proto.Requests.TimerSettings;
 using ReactiveUI;
 
 namespace Client.Desktop.Models.Settings;
@@ -26,9 +27,9 @@ public class TimerSettingsModel(
 
     public async Task Initialize()
     {
-        if (await requestSender.IsTimerSettingExisting())
+        if (await requestSender.Send(new IsTimerSettingExistingRequestProto()))
         {
-            TimerSettingsDto = await requestSender.GetTimerSettings();
+            TimerSettingsDto = await requestSender.Send(new GetTimerSettingsRequestProto());
             return;
         }
 

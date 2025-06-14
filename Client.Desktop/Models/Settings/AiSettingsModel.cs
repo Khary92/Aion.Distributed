@@ -7,6 +7,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using Contract.DTO;
 using Proto.Command.AiSettings;
 using Proto.Notifications.AiSettings;
+using Proto.Requests.AiSettings;
 using ReactiveUI;
 
 namespace Client.Desktop.Models.Settings;
@@ -29,9 +30,9 @@ public class AiSettingsModel(
 
     public async Task Initialize()
     {
-        if (await requestSender.IsAiSettingsExisting())
+        if (await requestSender.Send(new AiSettingExistsRequestProto()))
         {
-            AiSettings = await requestSender.GetAiSettings();
+            AiSettings = await requestSender.Send(new GetAiSettingsRequestProto());
 
             _previousPrompt = AiSettings.Prompt;
             _previousLanguageModelPath = AiSettings.LanguageModelPath;

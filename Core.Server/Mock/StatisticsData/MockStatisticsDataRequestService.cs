@@ -1,7 +1,7 @@
 ﻿using Grpc.Core;
 using Proto.Requests.StatisticsData;
 
-public class StatisticsDataRequestServiceImpl : StatisticsDataRequestService.StatisticsDataRequestServiceBase
+public class MockStatisticsDataRequestService : StatisticsDataRequestService.StatisticsDataRequestServiceBase
 {
     public override Task<StatisticsDataProto> GetStatisticsDataByTimeSlotId(
         GetStatisticsDataByTimeSlotIdRequestProto request, ServerCallContext context)

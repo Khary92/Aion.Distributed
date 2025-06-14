@@ -14,6 +14,7 @@ using MsBox.Avalonia.Dto;
 using MsBox.Avalonia.Enums;
 using Proto.Command.WorkDays;
 using Proto.Notifications.UseCase;
+using Proto.Requests.WorkDays;
 using ReactiveUI;
 
 namespace Client.Desktop.Models.Settings;
@@ -39,12 +40,15 @@ public class WorkDaysModel(
     public async Task InitializeAsync()
     {
         WorkDays.Clear();
-        WorkDays.AddRange(await requestSender.GetAllWorkDays());
+        WorkDays.AddRange(await requestSender.Send(new GetAllWorkDaysRequestProto()));
     }
 
     public async Task AddWorkDayAsync(DateTimeOffset date)
     {
-        var existingWorkDay = await requestSender.GetWorkDayByDate(Timestamp.FromDateTimeOffset(date));
+        var existingWorkDay = await requestSender.Send(new GetWorkDayByDateRequestProto
+        {
+            Date = Timestamp.FromDateTimeOffset(date)
+        });
 
         //TODO There is something wrong
         if (existingWorkDay != null)

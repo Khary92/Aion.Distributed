@@ -14,18 +14,16 @@ public class NoteTypesRequestSender : INoteTypesRequestSender
     private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly NoteTypesRequestService.NoteTypesRequestServiceClient _client = new(Channel);
 
-    public async Task<List<NoteTypeDto>> GetAllNoteTypes()
+    public async Task<List<NoteTypeDto>> Send(GetAllNoteTypesRequestProto request)
     {
-        var request = new GetAllNoteTypesRequestProto();
         var response = await _client.GetAllNoteTypesAsync(request);
 
         return response.NoteTypes.Select(item => new NoteTypeDto(Guid.Parse(item.NoteTypeId), item.Name, item.Color))
             .ToList();
     }
 
-    public async Task<NoteTypeDto> GetNoteTypeById(Guid noteTypeId)
+    public async Task<NoteTypeDto> Send(GetNoteTypeByIdRequestProto request)
     {
-        var request = new GetNoteTypeByIdRequestProto { NoteTypeId = noteTypeId.ToString() };
         var response = await _client.GetNoteTypeByIdAsync(request);
         return new NoteTypeDto(Guid.Parse(response.NoteTypeId), response.Name, response.Color);
     }

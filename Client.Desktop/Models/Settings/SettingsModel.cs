@@ -7,11 +7,13 @@ using CommunityToolkit.Mvvm.Messaging;
 using Contract.DTO;
 using Proto.Command.Settings;
 using Proto.Notifications.Settings;
+using Proto.Requests.Settings;
 using ReactiveUI;
 
 namespace Client.Desktop.Models.Settings;
 
-public class SettingsModel(ICommandSender commandSender, IRequestSender requestSender, IMessenger messenger) : ReactiveObject
+public class SettingsModel(ICommandSender commandSender, IRequestSender requestSender, IMessenger messenger)
+    : ReactiveObject
 {
     private SettingsDto _settingsDto = new(Guid.Empty, "settings not loaded from server", false);
 
@@ -23,11 +25,11 @@ public class SettingsModel(ICommandSender commandSender, IRequestSender requestS
 
     public async Task InitializeAsync()
     {
-        if (await requestSender.IsSettingsExisting())
+        if (await requestSender.Send(new SettingsExistsRequestProto()))
         {
-            Settings = await requestSender.GetSettings();
+            Settings = await requestSender.Send(new GetSettingsRequestProto());
         }
-        
+
         await commandSender.Send(new CreateSettingsCommand
         {
             SettingsId = Guid.NewGuid().ToString(),
@@ -38,10 +40,7 @@ public class SettingsModel(ICommandSender commandSender, IRequestSender requestS
 
     public void RegisterMessenger()
     {
-        messenger.Register<NewSettingsMessage>(this, (_, m) =>
-        {
-            Settings = m.Settings;
-        });
+        messenger.Register<NewSettingsMessage>(this, (_, m) => { Settings = m.Settings; });
 
         messenger.Register<ExportPathChangedNotification>(this, (_, m) => { Settings.Apply(m); });
 
@@ -50,7 +49,6 @@ public class SettingsModel(ICommandSender commandSender, IRequestSender requestS
 
     public async Task SaveConfigAsync()
     {
-
         if (Settings.IsExportPathChanged())
         {
             await commandSender.Send(new ChangeExportPathCommand
@@ -59,7 +57,7 @@ public class SettingsModel(ICommandSender commandSender, IRequestSender requestS
                 ExportPath = Settings.ExportPath
             });
         }
-        
+
         if (Settings.IsAddNewTicketsToCurrentSprintChanged())
         {
             await commandSender.Send(new ChangeAutomaticTicketAddingToSprintCommand()

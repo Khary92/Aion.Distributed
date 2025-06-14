@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests;
 using Contract.DTO;
+using Proto.Requests.NoteTypes;
 using ReactiveUI;
 
 namespace Client.Desktop.Models.Documentation;
@@ -37,6 +38,9 @@ public class TypeCheckBoxViewModel(IRequestSender requestSender) : ReactiveObjec
 
     private async Task LoadNoteTypeAsync()
     {
-        _noteType ??= await requestSender.GetNoteTypeById(NoteTypeId);
+        _noteType ??= await requestSender.Send(new GetNoteTypeByIdRequestProto
+        {
+            NoteTypeId = _noteTypeId.ToString()
+        });
     }
 }

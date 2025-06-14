@@ -4,7 +4,7 @@ using Proto.Notifications.TraceReports;
 
 namespace Service.Server.Mock.TraceReport;
 
-public class TraceReportCommandServiceImpl(TraceReportNotificationServiceImpl notificationService)
+public class MockTraceReportCommandService(TraceReportNotificationServiceImpl notificationService)
     : TraceReportCommandService.TraceReportCommandServiceBase
 {
     public override async Task<CommandResponse> SendTraceReport(SendTraceReportCommand request,

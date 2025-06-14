@@ -10,6 +10,7 @@ using Contract.DTO;
 using DynamicData;
 using Proto.Command.Tags;
 using Proto.Notifications.Tag;
+using Proto.Requests.Tags;
 using ReactiveUI;
 
 namespace Client.Desktop.Models.Data;
@@ -51,7 +52,7 @@ public class TagsDataModel(
     public async Task InitializeAsync()
     {
         Tags.Clear();
-        Tags.AddRange(await requestSender.GetAllTags());
+        Tags.AddRange(await requestSender.Send(new GetAllTagsRequestProto()));
     }
 
     public async Task PersistTagAsync(string tagName, TagDto? selectedTag, bool isEditMode)
