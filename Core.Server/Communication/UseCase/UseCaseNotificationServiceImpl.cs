@@ -1,7 +1,7 @@
 ﻿using Grpc.Core;
 using Proto.Notifications.UseCase;
 
-namespace Service.Server.Mock.UseCase;
+namespace Service.Server.Communication.UseCase;
 
 public class UseCaseNotificationServiceImpl : UseCaseNotificationService.UseCaseNotificationServiceBase
 {

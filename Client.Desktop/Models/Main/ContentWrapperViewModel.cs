@@ -89,7 +89,7 @@ public class ContentWrapperViewModel : ReactiveObject
 
         _currentControl = timeTrackingControl;
         _timeTrackingViewModel = timeTrackingViewModel;
-        _timeTrackingViewModel.LoadTimeSlotViewModels().ConfigureAwait(false);
+        _timeTrackingViewModel.Model.LoadTimeSlotViewModels().ConfigureAwait(false);
     }
 
     public Control CurrentControl
@@ -120,7 +120,7 @@ public class ContentWrapperViewModel : ReactiveObject
 
     public async Task Handle(WorkDaySelectionChangedNotification notification, CancellationToken cancellationToken)
     {
-        await _timeTrackingViewModel.LoadTimeSlotViewModels();
+        await _timeTrackingViewModel.Model.LoadTimeSlotViewModels();
     }
 
     private void ToggleMenu()

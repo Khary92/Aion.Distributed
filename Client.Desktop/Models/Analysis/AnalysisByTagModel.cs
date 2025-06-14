@@ -2,7 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Client.Desktop.Communication.Notifications.Tags;
+using Client.Desktop.Communication.NotificationWrappers;
 using Client.Desktop.Communication.RequiresChange;
 using CommunityToolkit.Mvvm.Messaging;
 using Contract.CQRS.Requests.Tags;

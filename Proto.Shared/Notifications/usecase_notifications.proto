@@ -33,7 +33,7 @@ message SaveDocumentationNotification {}
 message SprintSelectionChangedNotification {}
 
 message TimeSlotControlCreatedNotification {
-  string viewId = 1;
+  string statisticsDataId = 1;
   string timeSlotId = 2;
   string ticketId = 3;
 }

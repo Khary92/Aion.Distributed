@@ -12,8 +12,8 @@ public class MockTimeSlotRequestService : TimeSlotRequestService.TimeSlotRequest
             TimeSlotId = Guid.NewGuid().ToString(),
             WorkDayId = Guid.NewGuid().ToString(),
             SelectedTicketId = Guid.NewGuid().ToString(),
-            StartTime = Timestamp.FromDateTime(System.DateTime.UtcNow.AddHours(-1).ToUniversalTime()),
-            EndTime = Timestamp.FromDateTime(System.DateTime.UtcNow.AddMinutes(30).ToUniversalTime()),
+            StartTime = Timestamp.FromDateTime(DateTime.UtcNow.AddHours(-1).ToUniversalTime()),
+            EndTime = Timestamp.FromDateTime(DateTime.UtcNow.AddMinutes(30).ToUniversalTime()),
             IsTimerRunning = true
         };
         timeSlot.NoteIds.Add(Guid.NewGuid().ToString());

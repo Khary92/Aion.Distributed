@@ -13,20 +13,11 @@ using Client.Desktop.Communication.Commands.TraceReports;
 using Client.Desktop.Communication.Commands.UseCases;
 using Client.Desktop.Communication.Commands.WorkDays;
 using Client.Desktop.Communication.Notifications;
-using Client.Desktop.Communication.Notifications.AiSettings;
-using Client.Desktop.Communication.Notifications.Notes;
-using Client.Desktop.Communication.Notifications.NoteType;
-using Client.Desktop.Communication.Notifications.Settings;
-using Client.Desktop.Communication.Notifications.Sprints;
-using Client.Desktop.Communication.Notifications.Tags;
-using Client.Desktop.Communication.Notifications.Ticket;
-using Client.Desktop.Communication.Notifications.TimerSettings;
-using Client.Desktop.Communication.Notifications.UseCase;
-using Client.Desktop.Communication.Notifications.WorkDay;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.Communication.Requests.AiSettings;
 using Client.Desktop.Communication.Requests.Notes;
 using Client.Desktop.Communication.Requests.NoteTypes;
+using Client.Desktop.Communication.Requests.Replays;
 using Client.Desktop.Communication.Requests.Settings;
 using Client.Desktop.Communication.Requests.Sprints;
 using Client.Desktop.Communication.Requests.StatisticsData;
@@ -34,6 +25,7 @@ using Client.Desktop.Communication.Requests.Tags;
 using Client.Desktop.Communication.Requests.Tickets;
 using Client.Desktop.Communication.Requests.TimerSettings;
 using Client.Desktop.Communication.Requests.TimeSlots;
+using Client.Desktop.Communication.Requests.UseCase;
 using Client.Desktop.Communication.Requests.WorkDays;
 using Client.Desktop.Communication.RequiresChange;
 using Client.Desktop.Communication.RequiresChange.Cache;
@@ -257,5 +249,8 @@ public static class Bootstrapper
         services.AddScoped<ITimerSettingsRequestSender, TimerSettingsRequestSender>();
         services.AddScoped<ITimeSlotRequestSender, TimeSlotRequestSender>();
         services.AddScoped<IWorkDayRequestSender, WorkDayRequestSender>();
+        services.AddScoped<ITicketReplayRequestSender, TicketReplayRequestSender>();
+        services.AddScoped<ITicketReplayRequestSender, TicketReplayRequestSender>();
+        services.AddScoped<IUseCaseRequestSender, UseCaseRequestSender>();
     }
 }

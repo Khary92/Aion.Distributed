@@ -2,7 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Threading.Tasks;
-using Client.Desktop.Communication.Notifications.WorkDay;
+using Client.Desktop.Communication.NotificationWrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.Communication.RequiresChange;
 using CommunityToolkit.Mvvm.Messaging;

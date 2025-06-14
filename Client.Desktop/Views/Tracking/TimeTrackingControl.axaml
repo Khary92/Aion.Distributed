@@ -22,7 +22,7 @@
                 <ComboBox MinWidth="300"
                           VerticalAlignment="Center"
                           ItemsSource="{Binding Model.FilteredTickets}"
-                          SelectedItem="{Binding SelectedTicket}">
+                          SelectedItem="{Binding Model.SelectedTicket}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Name}" />
@@ -34,7 +34,7 @@
             <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center"
                         VerticalAlignment="Center">
                 <TextBlock FontSize="{StaticResource FontSizeLarge}"
-                           Text="{Binding SelectedTicketName,  Mode=TwoWay, FallbackValue='None'}" />
+                           Text="{Binding Model.SelectedTicketName,  Mode=TwoWay, FallbackValue='None'}" />
             </StackPanel>
             <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
                 <Button Content="←" Command="{Binding PreviousViewModelCommand}" />
@@ -45,8 +45,8 @@
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
 
-            <Carousel ItemsSource="{Binding TimeSlotViewModels}"
-                      SelectedIndex="{Binding CurrentViewModelIndex, Mode=TwoWay}"
+            <Carousel ItemsSource="{Binding Model.TimeSlotViewModels}"
+                      SelectedIndex="{Binding Model.CurrentViewModelIndex, Mode=TwoWay}"
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Stretch">
 

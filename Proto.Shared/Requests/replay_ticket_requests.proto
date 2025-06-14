@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+option csharp_namespace = "Proto.Requests.TicketReplay";
+
+message TicketReplayProto {
+  string documentation_entry = 1;
+}
+
+message GetReplayResponseProto {
+  repeated TicketReplayProto ticket_replays = 1;
+}
+
+message GetTicketReplaysByIdRequestProto {
+  string note_type_id = 1;
+}
+
+service TicketReplayRequestService {
+  rpc GetReplayData(GetTicketReplaysByIdRequestProto) returns (GetReplayResponseProto);
+}

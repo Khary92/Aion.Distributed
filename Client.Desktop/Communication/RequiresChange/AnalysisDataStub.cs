@@ -1,7 +1,8 @@
 ﻿using System.Threading.Tasks;
-using Client.Desktop.Communication.RequiresChange;
 using Contract.Decorators;
 using Contract.DTO;
+
+namespace Client.Desktop.Communication.RequiresChange;
 
 public class AnalysisDataStub : IAnalysisDataService
 {

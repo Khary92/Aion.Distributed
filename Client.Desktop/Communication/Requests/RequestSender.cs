@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests.AiSettings;
 using Client.Desktop.Communication.Requests.Notes;
 using Client.Desktop.Communication.Requests.NoteTypes;
+using Client.Desktop.Communication.Requests.Replays;
 using Client.Desktop.Communication.Requests.Settings;
 using Client.Desktop.Communication.Requests.Sprints;
 using Client.Desktop.Communication.Requests.StatisticsData;
@@ -10,8 +11,10 @@ using Client.Desktop.Communication.Requests.Tags;
 using Client.Desktop.Communication.Requests.Tickets;
 using Client.Desktop.Communication.Requests.TimerSettings;
 using Client.Desktop.Communication.Requests.TimeSlots;
+using Client.Desktop.Communication.Requests.UseCase;
 using Client.Desktop.Communication.Requests.WorkDays;
 using Contract.DTO;
+using Contract.DTO.Replays;
 using Proto.Requests.AiSettings;
 using Proto.Requests.Notes;
 using Proto.Requests.NoteTypes;
@@ -19,9 +22,11 @@ using Proto.Requests.Settings;
 using Proto.Requests.Sprints;
 using Proto.Requests.StatisticsData;
 using Proto.Requests.Tags;
+using Proto.Requests.TicketReplay;
 using Proto.Requests.Tickets;
 using Proto.Requests.TimerSettings;
 using Proto.Requests.TimeSlots;
+using Proto.Requests.UseCase;
 using Proto.Requests.WorkDays;
 
 namespace Client.Desktop.Communication.Requests;
@@ -37,7 +42,9 @@ public class RequestSender(
     ITicketRequestSender ticketRequestSender,
     ITimerSettingsRequestSender timerSettingsRequestSender,
     ITimeSlotRequestSender timeSlotRequestSender,
-    IWorkDayRequestSender workDayRequestSender) : IRequestSender
+    IWorkDayRequestSender workDayRequestSender,
+    ITicketReplayRequestSender ticketReplayRequestSender,
+    IUseCaseRequestSender useCaseRequestSender) : IRequestSender
 {
     public async Task<AiSettingsDto> Send(GetAiSettingsRequestProto request)
         => await aiSettingsRequestSender.Send(request);
@@ -90,6 +97,9 @@ public class RequestSender(
     public async Task<List<TicketDto>> Send(GetTicketsWithShowAllSwitchRequestProto request)
         => await ticketRequestSender.Send(request);
 
+    public async Task<TicketDto> Send(GetTicketByIdRequestProto request)
+        => await ticketRequestSender.Send(request);
+
     public async Task<TimerSettingsDto> Send(GetTimerSettingsRequestProto request)
         => await timerSettingsRequestSender.Send(request);
 
@@ -110,4 +120,10 @@ public class RequestSender(
 
     public async Task<WorkDayDto> Send(GetWorkDayByDateRequestProto request)
         => await workDayRequestSender.Send(request);
+
+    public async Task<List<DocumentationReplayDto>> Send(GetTicketReplaysByIdRequestProto request)
+        => await ticketReplayRequestSender.Send(request);
+
+    public async Task<TimeSlotControlDataProto> Send(GetTimeSlotControlDataRequestProto request)
+        => await useCaseRequestSender.Send(request);
 }

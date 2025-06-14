@@ -12,6 +12,10 @@ message GetTicketsWithShowAllSwitchRequestProto {
   bool is_show_all = 1;
 }
 
+message GetTicketByIdRequestProto {
+  string ticket_id = 1;
+}
+
 message TicketProto {
   string ticket_id = 1;
   string name = 2;
@@ -25,6 +29,7 @@ message TicketListProto {
 }
 
 service TicketRequestService {
+  rpc GetTicketById(GetTicketByIdRequestProto) returns (TicketProto);
   rpc GetAllTickets(GetAllTicketsRequestProto) returns (TicketListProto);
   rpc GetTicketsForCurrentSprint(GetTicketsForCurrentSprintRequestProto) returns (TicketListProto);
   rpc GetTicketsWithShowAllSwitch(GetTicketsWithShowAllSwitchRequestProto) returns (TicketListProto);

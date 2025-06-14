@@ -10,4 +10,5 @@ public interface ITicketRequestSender
     Task<List<TicketDto>> Send(GetAllTicketsRequestProto request);
     Task<List<TicketDto>> Send(GetTicketsForCurrentSprintRequestProto request);
     Task<List<TicketDto>> Send(GetTicketsWithShowAllSwitchRequestProto request);
+    Task<TicketDto> Send(GetTicketByIdRequestProto request);
 }

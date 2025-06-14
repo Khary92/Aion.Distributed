@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Service.Server.Communication.UseCase;
 using Service.Server.Mock.AiSettings;
 using Service.Server.Mock.Note;
 using Service.Server.Mock.NoteType;
@@ -80,6 +81,7 @@ app.MapGrpcService<MockTicketRequestService>();
 app.MapGrpcService<MockTimerSettingsRequestService>();
 app.MapGrpcService<MockTimeSlotRequestService>();
 app.MapGrpcService<MockWorkDayRequestService>();
+app.MapGrpcService<MockUseCaseRequestService>();
 
 app.Lifetime.ApplicationStarted.Register(() =>
 {

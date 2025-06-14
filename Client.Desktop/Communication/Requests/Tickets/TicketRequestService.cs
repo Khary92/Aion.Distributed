@@ -18,37 +18,49 @@ public class TicketRequestSender : ITicketRequestSender
     public async Task<List<TicketDto>> Send(GetAllTicketsRequestProto request)
     {
         var response = await _client.GetAllTicketsAsync(request);
-        return ToDto(response);
+        return MapToDtoList(response);
     }
 
     public async Task<List<TicketDto>> Send(GetTicketsForCurrentSprintRequestProto request)
     {
         var response = await _client.GetTicketsForCurrentSprintAsync(request);
-        return ToDto(response);
+        return MapToDtoList(response);
     }
 
     public async Task<List<TicketDto>> Send(GetTicketsWithShowAllSwitchRequestProto request)
     {
         var response = await _client.GetTicketsWithShowAllSwitchAsync(request);
-        return ToDto(response);
+        return MapToDtoList(response);
     }
 
-    private static List<TicketDto> ToDto(TicketListProto? ticketListProto)
+    public async Task<TicketDto> Send(GetTicketByIdRequestProto request)
+    {
+        var response = await _client.GetTicketByIdAsync(request);
+        return MapToDto(response!);
+    }
+
+    private static List<TicketDto> MapToDtoList(TicketListProto? ticketListProto)
     {
         if (ticketListProto == null) return [];
 
-        var result = new List<TicketDto>();
-        foreach (var ticket in ticketListProto.Tickets)
-        {
-            var sprintIds = ticket.SprintIds
-                .Select(idStr => Guid.TryParse(idStr, out var guid) ? guid : Guid.Empty)
-                .Where(guid => guid != Guid.Empty)
-                .ToList();
+        return ticketListProto.Tickets
+            .Select(MapToDto)
+            .ToList();
+    }
 
-            result.Add(new TicketDto(Guid.Parse(ticket.TicketId), ticket.Name, ticket.BookingNumber,
-                ticket.Documentation, new Collection<Guid>(sprintIds)));
-        }
+    private static TicketDto MapToDto(TicketProto ticket)
+    {
+        var sprintIds = ticket.SprintIds
+            .Select(idStr => Guid.TryParse(idStr, out var guid) ? guid : Guid.Empty)
+            .Where(guid => guid != Guid.Empty)
+            .ToList();
 
-        return result;
+        return new TicketDto(
+            Guid.Parse(ticket.TicketId),
+            ticket.Name,
+            ticket.BookingNumber,
+            ticket.Documentation,
+            new Collection<Guid>(sprintIds)
+        );
     }
 }

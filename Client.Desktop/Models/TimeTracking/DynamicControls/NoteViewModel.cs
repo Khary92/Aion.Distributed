@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
-using Client.Desktop.Communication.Notifications.NoteType;
+using Client.Desktop.Communication.NotificationWrappers;
 using Client.Desktop.Communication.Requests;
 using CommunityToolkit.Mvvm.Messaging;
 using Contract.DTO;
@@ -73,9 +73,9 @@ public class NoteViewModel : ReactiveObject
         var noteTypeDtos = await _requestSender.Send(new GetAllNoteTypesRequestProto());
         NoteTypes.AddRange(noteTypeDtos);
 
-        if (Note.NoteTypeId == Guid.Empty) return;
-
-        Note.NoteType = NoteTypes.First(nt => nt.NoteTypeId == Note.NoteTypeId);
+        if (Note.NoteTypeId == Guid.Empty || !NoteTypes.Any()) return;
+        
+        Note.NoteType = NoteTypes.FirstOrDefault(nt => nt.NoteTypeId == Note.NoteTypeId);
     }
 
     private async Task Update()

@@ -1,14 +1,5 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Client.Desktop.Communication.Notifications.AiSettings;
-using Client.Desktop.Communication.Notifications.Notes;
-using Client.Desktop.Communication.Notifications.NoteType;
-using Client.Desktop.Communication.Notifications.Sprints;
-using Client.Desktop.Communication.Notifications.Tags;
-using Client.Desktop.Communication.Notifications.Ticket;
-using Client.Desktop.Communication.Notifications.TimerSettings;
-using Client.Desktop.Communication.Notifications.UseCase;
-using Client.Desktop.Communication.Notifications.WorkDay;
 
 namespace Client.Desktop.Communication.Notifications;
 

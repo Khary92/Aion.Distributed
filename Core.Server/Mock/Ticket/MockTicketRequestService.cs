@@ -1,5 +1,6 @@
 ﻿using Grpc.Core;
 using Proto.Requests.Tickets;
+using Proto.Requests.UseCase;
 
 public class MockTicketRequestService : Proto.Requests.Tickets.TicketRequestService.TicketRequestServiceBase
 {
@@ -42,6 +43,19 @@ public class MockTicketRequestService : Proto.Requests.Tickets.TicketRequestServ
         return Task.FromResult(response);
     }
 
+    public override Task<TicketProto> GetTicketById(GetTicketByIdRequestProto request,
+        ServerCallContext context)
+    {
+        return Task.FromResult(new TicketProto
+        {
+            TicketId = Guid.NewGuid().ToString(),
+            Name = "Bugfix B",
+            BookingNumber = "BN-002",
+            Documentation = "Docs for Bugfix B",
+            SprintIds = { Guid.NewGuid().ToString() }
+        });
+    }
+    
     public override Task<TicketListProto> GetTicketsWithShowAllSwitch(GetTicketsWithShowAllSwitchRequestProto request,
         ServerCallContext context)
     {

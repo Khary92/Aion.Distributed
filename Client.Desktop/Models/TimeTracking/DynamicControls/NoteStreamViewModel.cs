@@ -2,7 +2,9 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Client.Desktop.Communication.Notifications.Notes;
+using Client.Desktop.Communication.Commands;
+using Client.Desktop.Communication.NotificationWrappers;
+using Client.Desktop.Communication.Requests;
 using Client.Desktop.Communication.RequiresChange;
 using Client.Desktop.Factories;
 using CommunityToolkit.Mvvm.Messaging;
@@ -11,14 +13,17 @@ using Contract.DTO;
 using Google.Protobuf.WellKnownTypes;
 using MediatR;
 using Proto.Command.Notes;
+using Proto.Command.NoteTypes;
 using Proto.Command.TimeSlots;
 using Proto.Notifications.Note;
+using Proto.Requests.Notes;
 using ReactiveUI;
 
 namespace Client.Desktop.Models.TimeTracking.DynamicControls;
 
 public class NoteStreamViewModel(
-    IMediator mediator,
+    ICommandSender commandSender,
+    IRequestSender requestSender,
     IMessenger messenger,
     INoteViewFactory noteViewFactory,
     IRunTimeSettings runTimeSettings)
@@ -38,20 +43,21 @@ public class NoteStreamViewModel(
         if (!runTimeSettings.IsSelectedDateCurrentDate()) return;
 
         var noteId = Guid.NewGuid();
-        await mediator.Send(new CreateNoteCommand
+        await commandSender.Send(new CreateNoteCommand
         {
             NoteId = noteId.ToString(),
+            NoteTypeId = Guid.NewGuid().ToString(),
             Text = string.Empty,
-            NoteTypeId = Guid.Empty.ToString(),
-            TimeSlotId = TimeSlotId.ToString(),
+            TimeSlotId = _timeSlotId.ToString(),
             TimeStamp = Timestamp.FromDateTimeOffset(DateTimeOffset.Now)
         });
 
-        await mediator.Send(new AddNoteCommand
-        {
-            NoteId = noteId.ToString(),
-            TimeSlotId = TimeSlotId.ToString()
-        });
+        //TODO This must be done on server side. Obviously
+        //await commandSender.Send(new AddNot
+        //{
+        //    NoteId = noteId.ToString(),
+        //    TimeSlotId = TimeSlotId.ToString()
+        //});
     }
 
     public void RegisterMessenger()
@@ -70,7 +76,10 @@ public class NoteStreamViewModel(
 
     public async Task InitializeAsync()
     {
-        var noteDtos = await mediator.Send(new GetNotesByTimeSlotIdRequest(TimeSlotId));
+        var noteDtos = await requestSender.Send(new GetNotesByTimeSlotIdRequestProto
+        {
+            TimeSlotId = TimeSlotId.ToString()
+        });
 
         foreach (var note in noteDtos) await InsertNoteViewModel(note);
     }

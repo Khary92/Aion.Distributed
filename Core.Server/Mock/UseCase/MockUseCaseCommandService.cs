@@ -7,9 +7,10 @@ public class MockUseCaseCommandService : UseCaseCommandService.UseCaseCommandSer
 {
     public override Task<CommandResponse> CreateTimeSlotControl(CreateTimeSlotControlCommand request, ServerCallContext context)
     {
-        Console.WriteLine($"[CreateTimeSlotControl] TicketId: {request.TicketId}, ViewId: {request.ViewId}");
+        Console.WriteLine($"[CreateTimeSlotControl] TicketId: {request.TicketId}");
 
-        // Platzhalter für echte Logik
+        
+        
         return Task.FromResult(new CommandResponse { Success = true });
     }
 

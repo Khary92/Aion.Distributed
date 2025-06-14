@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
-using Client.Desktop.Communication.Notifications.Settings;
+using Client.Desktop.Communication.NotificationWrappers;
 using Client.Desktop.Communication.Requests;
 using CommunityToolkit.Mvvm.Messaging;
 using Contract.DTO;

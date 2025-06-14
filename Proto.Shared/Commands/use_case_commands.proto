@@ -9,7 +9,6 @@ service UseCaseCommandService {
 
 message CreateTimeSlotControlCommand {
   string ticketId = 1;
-  string viewId = 2;
 }
 
 message LoadTimeSlotControlCommand {
