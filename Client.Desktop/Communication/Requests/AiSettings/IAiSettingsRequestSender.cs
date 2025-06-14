@@ -5,5 +5,6 @@ namespace Client.Desktop.Communication.Requests.AiSettings;
 
 public interface IAiSettingsRequestSender
 {
-    Task<AiSettingsDto?> GetAiSettings(string aiSettingsId);
+    Task<AiSettingsDto> GetAiSettings();
+    Task<bool> IsAiSettingsExisting();
 }

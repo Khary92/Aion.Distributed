@@ -32,18 +32,41 @@ public class SettingsCommandServiceImpl(SettingsNotificationServiceImpl settings
         }
     }
 
-    public override async Task<CommandResponse> UpdateSettings(UpdateSettingsCommand request, ServerCallContext context)
+    public override async Task<CommandResponse> ChangeExportPath(ChangeExportPathCommand request, ServerCallContext context)
     {
-        Console.WriteLine($"[UpdateSettings] ID: {request.SettingsId}, ExportPath: {request.ExportPath}, AddNewTicketsActive: {request.IsAddNewTicketsToCurrentSprintActive}");
+        Console.WriteLine($"[UpdateSettings] ID: {request.SettingsId}, ExportPath: {request.ExportPath}");
 
         try
         {
             await settingsNotificationService.SendNotificationAsync(new SettingsNotification
             {
-                SettingsUpdated = new SettingsUpdatedNotification
+                ExportPathChanged = new ExportPathChangedNotification()
                 {
                     SettingsId = request.SettingsId,
                     ExportPath = request.ExportPath,
+                }
+            });
+
+            return new CommandResponse { Success = true };
+        }
+        catch (Exception ex)
+        {
+            Console.Error.WriteLine($"[Error] ExportPathChanged failed: {ex.Message}");
+            return new CommandResponse { Success = false };
+        }
+    }
+    
+    public override async Task<CommandResponse> ChangeAutomaticTicketAdding(ChangeAutomaticTicketAddingToSprintCommand request, ServerCallContext context)
+    {
+        Console.WriteLine($"[UpdateSettings] ID: {request.SettingsId}, AddNewTicketsActive: {request.IsAddNewTicketsToCurrentSprintActive}");
+
+        try
+        {
+            await settingsNotificationService.SendNotificationAsync(new SettingsNotification
+            {
+                AutomaticTicketAddingChanged = new AutomaticTicketAddingToSprintChangedNotification()
+                {
+                    SettingsId = request.SettingsId,
                     IsAddNewTicketsToCurrentSprintActive = request.IsAddNewTicketsToCurrentSprintActive
                 }
             });
@@ -52,7 +75,7 @@ public class SettingsCommandServiceImpl(SettingsNotificationServiceImpl settings
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"[Error] UpdateSettings failed: {ex.Message}");
+            Console.Error.WriteLine($"[Error] ChangeAutomaticTicketAdding failed: {ex.Message}");
             return new CommandResponse { Success = false };
         }
     }

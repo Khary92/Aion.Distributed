@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.Messaging;
+using Contract.DTO;
 using Grpc.Core;
 using Proto.Notifications.Sprint;
 
@@ -30,7 +33,21 @@ public class SprintNotificationReceiver(
                     }
                     case SprintNotification.NotificationOneofCase.SprintCreated:
                     {
-                        Dispatcher.UIThread.Post(() => { messenger.Send(notification.SprintCreated); });
+                        var created = notification.SprintCreated;
+                        var ticketGuids = new List<Guid>();
+                        foreach (var id in created.TicketIds)
+                        {
+                            if (Guid.TryParse(id, out var guid))
+                                ticketGuids.Add(guid);
+                        }
+
+                        Dispatcher.UIThread.Post(() =>
+                        {
+                            messenger.Send(
+                                new NewSprintMessage(new SprintDto(Guid.Parse(created.SprintId),
+                                    created.Name, created.IsActive, created.StartTime.ToDateTimeOffset(),
+                                    created.EndTime.ToDateTimeOffset(), ticketGuids)));
+                        });
                         break;
                     }
                     case SprintNotification.NotificationOneofCase.SprintDataUpdated:

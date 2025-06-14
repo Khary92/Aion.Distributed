@@ -13,8 +13,10 @@ using Client.Desktop.Communication.Commands.TraceReports;
 using Client.Desktop.Communication.Commands.UseCases;
 using Client.Desktop.Communication.Commands.WorkDays;
 using Client.Desktop.Communication.Notifications;
+using Client.Desktop.Communication.Notifications.AiSettings;
 using Client.Desktop.Communication.Notifications.Notes;
 using Client.Desktop.Communication.Notifications.NoteType;
+using Client.Desktop.Communication.Notifications.Settings;
 using Client.Desktop.Communication.Notifications.Sprints;
 using Client.Desktop.Communication.Notifications.Tags;
 using Client.Desktop.Communication.Notifications.Ticket;
@@ -61,8 +63,10 @@ using Grpc.Net.Client;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Proto.Command.TimeSlots;
+using Proto.Notifications.AiSettings;
 using Proto.Notifications.Note;
 using Proto.Notifications.NoteType;
+using Proto.Notifications.Settings;
 using Proto.Notifications.Sprint;
 using Proto.Notifications.Tag;
 using Proto.Notifications.Ticket;
@@ -194,6 +198,9 @@ public static class Bootstrapper
         services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
         
         services.AddSingleton<NotificationReceiverStarter>();
+        
+        services.AddSingleton<AiSettingsNotificationReceiver>();
+        services.AddSingleton<SettingsNotificationReceiver>();
         services.AddSingleton<TicketNotificationReceiver>();
         services.AddSingleton<NoteNotificationReceiver>();
         services.AddSingleton<NoteTypeNotificationReceiver>();
@@ -204,6 +211,8 @@ public static class Bootstrapper
         services.AddSingleton<WorkDayNotificationReceiver>();
         
         var channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
+        services.AddSingleton(new AiSettingsNotificationService.AiSettingsNotificationServiceClient(channel));
+        services.AddSingleton(new SettingsNotificationService.SettingsNotificationServiceClient(channel));
         services.AddSingleton(new TicketNotificationService.TicketNotificationServiceClient(channel));
         services.AddSingleton(new NoteNotificationService.NoteNotificationServiceClient(channel));
         services.AddSingleton(new NoteTypeNotificationService.NoteTypeNotificationServiceClient(channel));

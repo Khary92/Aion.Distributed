@@ -3,7 +3,9 @@ syntax = "proto3";
 option csharp_namespace = "Proto.Requests.AiSettings";
 
 message GetAiSettingsRequestProto {
-  string ai_settings_id = 1;
+}
+
+message AiSettingExistsRequestProto {
 }
 
 message AiSettingsProto {
@@ -12,6 +14,11 @@ message AiSettingsProto {
   string prompt = 3;
 }
 
+message AiSettingExistsResponseProto {
+  bool exists = 1;
+}
+
 service AiSettingsRequestService {
   rpc GetAiSettings(GetAiSettingsRequestProto) returns (AiSettingsProto);
+  rpc AiSettingsExists(AiSettingExistsRequestProto) returns (AiSettingExistsResponseProto);
 }

@@ -38,7 +38,10 @@ public class CommandSender(
     ITagCommandSender tagCommandSender,
     ITicketCommandSender ticketCommandSender,
     ITimerSettingsCommandSender timerSettingsCommandSender,
-    ITimeSlotCommandSender timeSlotCommandSender, ITraceReportCommandSender traceReportCommandSender, IUseCaseCommandSender useCaseCommandSender, IWorkDayCommandSender workDayCommandSender) : ICommandSender
+    ITimeSlotCommandSender timeSlotCommandSender,
+    ITraceReportCommandSender traceReportCommandSender,
+    IUseCaseCommandSender useCaseCommandSender,
+    IWorkDayCommandSender workDayCommandSender) : ICommandSender
 {
     public async Task<bool> Send(ChangeLanguageModelCommand command)
     {
@@ -85,11 +88,16 @@ public class CommandSender(
         return await settingsCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(UpdateSettingsCommand command)
+    public async Task<bool> Send(ChangeExportPathCommand command)
     {
         return await settingsCommandSender.Send(command);
     }
 
+    public async Task<bool> Send(ChangeAutomaticTicketAddingToSprintCommand command)
+    {
+        return await settingsCommandSender.Send(command);
+    }
+    
     public async Task<bool> Send(CreateSprintCommand command)
     {
         return await sprintCommandSender.Send(command);
@@ -178,19 +186,16 @@ public class CommandSender(
     public async Task<bool> Send(AddNoteCommand command)
     {
         return await timeSlotCommandSender.Send(command);
-
     }
 
     public async Task<bool> Send(SetStartTimeCommand command)
     {
         return await timeSlotCommandSender.Send(command);
-
     }
 
     public async Task<bool> Send(SetEndTimeCommand command)
     {
         return await timeSlotCommandSender.Send(command);
-
     }
 
     public async Task<bool> Send(SendTraceReportCommand command)

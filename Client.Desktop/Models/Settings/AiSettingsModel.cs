@@ -16,28 +16,34 @@ public class AiSettingsModel(
     IRequestSender requestSender,
     IMessenger messenger) : ReactiveObject
 {
-    private string _previousLanguageModelPath = null!;
+    private string _previousLanguageModelPath = string.Empty;
+    private string _previousPrompt = string.Empty;
 
-    private string _previousPrompt = null!;
-
-    public AiSettingsDto? AiSettings { get; private set; }
+    private AiSettingsDto _aiSettings = new(Guid.NewGuid(), "settings not loaded", "settings not loaded");
+    
+    public AiSettingsDto AiSettings
+    {
+        get => _aiSettings;
+        private set => this.RaiseAndSetIfChanged(ref _aiSettings, value);
+    }
 
     public async Task Initialize()
     {
-        AiSettings = await requestSender.GetAiSettings(Guid.NewGuid().ToString());
-
-        if (AiSettings == null)
+        if (await requestSender.IsAiSettingsExisting())
         {
-           await commandSender.Send(new CreateAiSettingsCommand
-            {
-                AiSettingsId = Guid.NewGuid().ToString(),
-                LanguageModelPath = string.Empty,
-                Prompt = string.Empty
-            });
+            AiSettings = await requestSender.GetAiSettings();
+
+            _previousPrompt = AiSettings.Prompt;
+            _previousLanguageModelPath = AiSettings.LanguageModelPath;
+            return;
         }
-        
-        _previousPrompt = AiSettings!.Prompt;
-        _previousLanguageModelPath = AiSettings.LanguageModelPath;
+
+        await commandSender.Send(new CreateAiSettingsCommand
+        {
+            AiSettingsId = Guid.NewGuid().ToString(),
+            LanguageModelPath = "Not set",
+            Prompt = "not set"
+        });
     }
 
     public void RegisterMessenger()
@@ -45,17 +51,14 @@ public class AiSettingsModel(
         messenger.Register<NewAiSettingsMessage>(this, (_, m) =>
         {
             AiSettings = m.AiSettings;
+
+            _previousPrompt = AiSettings.Prompt;
+            _previousLanguageModelPath = AiSettings.LanguageModelPath;
         });
 
-        messenger.Register<PromptChangedNotification>(this, (_, m) =>
-        {
-            AiSettings!.Apply(m);
-        });
+        messenger.Register<PromptChangedNotification>(this, (_, m) => { AiSettings.Apply(m); });
 
-        messenger.Register<LanguageModelChangedNotification>(this, (_, m) =>
-        {
-            AiSettings?.Apply(m);
-        });
+        messenger.Register<LanguageModelChangedNotification>(this, (_, m) => { AiSettings.Apply(m); });
     }
 
     public async Task ChangePrompt()
@@ -63,7 +66,7 @@ public class AiSettingsModel(
         if (_previousPrompt == AiSettings!.Prompt)
         {
             //tracer.AiSettings.ChangePrompt.PropertyNotChanged(GetType(), AiSettings.AiSettingsId,
-           //     ("prompt", AiSettings!.Prompt));
+            //     ("prompt", AiSettings!.Prompt));
             return;
         }
 
@@ -85,7 +88,7 @@ public class AiSettingsModel(
         if (_previousLanguageModelPath == AiSettings!.LanguageModelPath)
         {
             //tracer.AiSettings.ChangeLanguageModel.PropertyNotChanged(GetType(), AiSettings.AiSettingsId,
-             //   ("languageModelPath", AiSettings!.LanguageModelPath));
+            //   ("languageModelPath", AiSettings!.LanguageModelPath));
             return;
         }
 
@@ -99,7 +102,7 @@ public class AiSettingsModel(
         await commandSender.Send(changeLanguageModelCommand);
 
         //tracer.AiSettings.ChangeLanguageModel.CommandSent(GetType(), AiSettings.AiSettingsId,
-       //     changeLanguageModelCommand);
+        //     changeLanguageModelCommand);
 
         _previousLanguageModelPath = AiSettings.LanguageModelPath;
     }

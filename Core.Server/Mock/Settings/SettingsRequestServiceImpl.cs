@@ -25,4 +25,15 @@ public class SettingsRequestServiceImpl : SettingsRequestService.SettingsRequest
 
         return Task.FromResult(response);
     }
+    
+    public override Task<SettingsExistsResponseProto> SettingsExists(SettingsExistsRequestProto request,
+        ServerCallContext context)
+    {
+        var response = new SettingsExistsResponseProto
+        {
+            Exists = true
+        };
+
+        return Task.FromResult(response);
+    }
 }

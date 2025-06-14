@@ -16,9 +16,16 @@ public class SettingsCommandSender : ISettingsCommandSender
         return response.Success;
     }
 
-    public async Task<bool> Send(UpdateSettingsCommand command)
+    public async Task<bool> Send(ChangeExportPathCommand command)
     {
-        var response = await _client.UpdateSettingsAsync(command);
+        var response = await _client.ChangeExportPathAsync(command);
         return response.Success;
     }
+
+    public async Task<bool> Send(ChangeAutomaticTicketAddingToSprintCommand command)
+    {
+        var response = await _client.ChangeAutomaticTicketAddingAsync(command);
+        return response.Success;
+    }
+    
 }

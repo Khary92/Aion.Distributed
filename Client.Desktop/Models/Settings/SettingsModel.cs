@@ -1,15 +1,19 @@
+using System;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
+using Client.Desktop.Communication.Notifications.Settings;
 using Client.Desktop.Communication.Requests;
+using CommunityToolkit.Mvvm.Messaging;
 using Contract.DTO;
 using Proto.Command.Settings;
+using Proto.Notifications.Settings;
 using ReactiveUI;
 
 namespace Client.Desktop.Models.Settings;
 
-public class SettingsModel(ICommandSender commandSender, IRequestSender requestSender) : ReactiveObject
+public class SettingsModel(ICommandSender commandSender, IRequestSender requestSender, IMessenger messenger) : ReactiveObject
 {
-    private SettingsDto _settingsDto = null!;
+    private SettingsDto _settingsDto = new(Guid.Empty, "settings not loaded from server", false);
 
     public SettingsDto Settings
     {
@@ -19,18 +23,50 @@ public class SettingsModel(ICommandSender commandSender, IRequestSender requestS
 
     public async Task InitializeAsync()
     {
-        Settings = await requestSender.GetSettings();
+        if (await requestSender.IsSettingsExisting())
+        {
+            Settings = await requestSender.GetSettings();
+        }
+        
+        await commandSender.Send(new CreateSettingsCommand
+        {
+            SettingsId = Guid.NewGuid().ToString(),
+            ExportPath = "not set",
+            IsAddNewTicketsToCurrentSprintActive = false
+        });
+    }
+
+    public void RegisterMessenger()
+    {
+        messenger.Register<NewSettingsMessage>(this, (_, m) =>
+        {
+            Settings = m.Settings;
+        });
+
+        messenger.Register<ExportPathChangedNotification>(this, (_, m) => { Settings.Apply(m); });
+
+        messenger.Register<AutomaticTicketAddingToSprintChangedNotification>(this, (_, m) => { Settings.Apply(m); });
     }
 
     public async Task SaveConfigAsync()
     {
-        //TODO Make better Events and implement property changed
-        var updateSettingsCommand = new UpdateSettingsCommand
+
+        if (Settings.IsExportPathChanged())
         {
-            SettingsId = Settings.SettingsId.ToString(),
-            ExportPath = Settings.ExportPath,
-            IsAddNewTicketsToCurrentSprintActive = Settings.IsAddNewTicketsToCurrentSprintActive,
-        };
-        await commandSender.Send(updateSettingsCommand);
+            await commandSender.Send(new ChangeExportPathCommand
+            {
+                SettingsId = Settings.SettingsId.ToString(),
+                ExportPath = Settings.ExportPath
+            });
+        }
+        
+        if (Settings.IsAddNewTicketsToCurrentSprintChanged())
+        {
+            await commandSender.Send(new ChangeAutomaticTicketAddingToSprintCommand()
+            {
+                SettingsId = Settings.SettingsId.ToString(),
+                IsAddNewTicketsToCurrentSprintActive = Settings.IsAddNewTicketsToCurrentSprintActive
+            });
+        }
     }
 }

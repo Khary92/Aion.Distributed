@@ -9,9 +9,19 @@ public class AiSettingsRequestServiceImpl : AiSettingsRequestService.AiSettingsR
     {
         var response = new AiSettingsProto
         {
-            AiSettingsId = request.AiSettingsId,
+            AiSettingsId = Guid.NewGuid().ToString(),
             LanguageModelPath = "/models/example-model.bin",
-            Prompt = "Default prompt for " + request.AiSettingsId
+            Prompt = "Default prompt for mock"
+        };
+
+        return Task.FromResult(response);
+    }
+    
+    public override Task<AiSettingExistsResponseProto> AiSettingsExists(AiSettingExistsRequestProto request, ServerCallContext context)
+    {
+        var response = new AiSettingExistsResponseProto
+        {
+            Exists = false
         };
 
         return Task.FromResult(response);

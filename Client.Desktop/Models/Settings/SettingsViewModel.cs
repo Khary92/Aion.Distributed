@@ -10,8 +10,9 @@ public class SettingsViewModel : ReactiveObject
         Model = settingsModel;
 
         SaveConfigCommand = ReactiveCommand.CreateFromTask(Model.SaveConfigAsync);
-
+        
         Model.InitializeAsync().ConfigureAwait(false);
+        Model.RegisterMessenger();
     }
 
     public SettingsModel Model { get; }

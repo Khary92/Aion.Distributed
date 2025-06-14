@@ -6,7 +6,8 @@ package Proto.Notifications.Settings;
 
 service NotificationService {
   rpc SendSettingsCreated(SettingsCreatedNotification) returns (NotificationResponse);
-  rpc SendSettingsUpdated(SettingsUpdatedNotification) returns (NotificationResponse);
+  rpc SendExportPathChanged(ExportPathChangedNotification) returns (NotificationResponse);
+  rpc SendAutomaticTicketAddingChanged(AutomaticTicketAddingToSprintChangedNotification) returns (NotificationResponse);
 }
 
 service SettingsNotificationService {
@@ -16,7 +17,8 @@ service SettingsNotificationService {
 message SettingsNotification {
   oneof notification {
     SettingsCreatedNotification settingsCreated = 1;
-    SettingsUpdatedNotification settingsUpdated = 2;
+    ExportPathChangedNotification exportPathChanged = 2;
+    AutomaticTicketAddingToSprintChangedNotification automaticTicketAddingChanged = 3;
   }
 }
 
@@ -28,10 +30,14 @@ message SettingsCreatedNotification {
   bool isAddNewTicketsToCurrentSprintActive = 3;
 }
 
-message SettingsUpdatedNotification {
+message ExportPathChangedNotification {
   string settingsId = 1;
   string exportPath = 2;
-  bool isAddNewTicketsToCurrentSprintActive = 3;
+}
+
+message AutomaticTicketAddingToSprintChangedNotification {
+  string settingsId = 1;
+  bool isAddNewTicketsToCurrentSprintActive = 2;
 }
 
 message NotificationResponse {

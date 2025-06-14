@@ -26,4 +26,11 @@ public class SettingsRequestSender : ISettingsRequestSender
         var response = await _client.IsExportPathValidAsync(request);
         return response.IsValid;
     }
+    
+    public async Task<bool> IsSettingsExisting()
+    {
+        var request = new SettingsExistsRequestProto();
+        var response = await _client.SettingsExistsAsync(request);
+        return response.Exists;
+    }
 }

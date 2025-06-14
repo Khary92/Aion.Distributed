@@ -30,8 +30,11 @@ public class RequestSender(
     ITimeSlotRequestSender timeSlotRequestSender,
     IWorkDayRequestSender workDayRequestSender) : IRequestSender
 {
-    public async Task<AiSettingsDto?> GetAiSettings(string aiSettingsId)
-        => await aiSettingsRequestSender.GetAiSettings(aiSettingsId);
+    public async Task<AiSettingsDto?> GetAiSettings()
+        => await aiSettingsRequestSender.GetAiSettings();
+
+    public async Task<bool> IsAiSettingsExisting()
+        => await aiSettingsRequestSender.IsAiSettingsExisting();
 
     public async Task<List<NoteDto>> GetNotesByTicketId(Guid ticketId)
         => await notesRequestSender.GetNotesByTicketId(ticketId);
@@ -50,6 +53,9 @@ public class RequestSender(
 
     public async Task<bool> IsExportPathValid()
         => await settingsRequestSender.IsExportPathValid();
+
+    public async Task<bool> IsSettingsExisting()
+        => await settingsRequestSender.IsSettingsExisting();
 
     public async Task<SprintDto> GetActiveSprint()
         => await sprintRequestSender.GetActiveSprint();

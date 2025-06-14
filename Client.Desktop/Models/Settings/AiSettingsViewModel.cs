@@ -14,6 +14,7 @@ public class AiSettingsViewModel : ReactiveObject
 
         Model = aiSettingsModel;
         Model.Initialize().ConfigureAwait(false);
+        Model.RegisterMessenger();
     }
 
     public AiSettingsModel Model { get; }

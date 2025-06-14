@@ -7,4 +7,5 @@ public interface ISettingsRequestSender
 {
     Task<SettingsDto> GetSettings();
     Task<bool> IsExportPathValid();
+    Task<bool> IsSettingsExisting();
 }

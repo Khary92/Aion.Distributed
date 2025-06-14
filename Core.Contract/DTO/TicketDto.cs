@@ -27,7 +27,7 @@ public class TicketDto : ReactiveObject
     public Guid TicketId
     {
         get => _ticketId;
-        init => this.RaiseAndSetIfChanged(ref _ticketId, value);
+        private init => this.RaiseAndSetIfChanged(ref _ticketId, value);
     }
 
     public string Name
@@ -76,12 +76,7 @@ public class TicketDto : ReactiveObject
         PreviousDocumentation = Documentation;
         Documentation = documentation;
     }
-
-    public TicketDto Clone()
-    {
-        return new TicketDto(TicketId, Name, BookingNumber, Documentation, SprintIds);
-    }
-
+    
     public bool IsDocumentationChanged()
     {
         var result = !PreviousDocumentation.Equals(Documentation);

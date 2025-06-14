@@ -6,7 +6,8 @@ package Proto.Command.Settings;
 
 service SettingsCommandService {
   rpc CreateSettings (CreateSettingsCommand) returns (CommandResponse);
-  rpc UpdateSettings (UpdateSettingsCommand) returns (CommandResponse);
+  rpc ChangeExportPath (ChangeExportPathCommand) returns (CommandResponse);
+  rpc ChangeAutomaticTicketAdding (ChangeAutomaticTicketAddingToSprintCommand) returns (CommandResponse);
 }
 
 message CreateSettingsCommand {
@@ -15,10 +16,14 @@ message CreateSettingsCommand {
   bool isAddNewTicketsToCurrentSprintActive = 3;
 }
 
-message UpdateSettingsCommand {
+message ChangeExportPathCommand {
   string settingsId = 1;
   string exportPath = 2;
-  bool isAddNewTicketsToCurrentSprintActive = 3;
+}
+
+message ChangeAutomaticTicketAddingToSprintCommand {
+  string settingsId = 1;
+  bool isAddNewTicketsToCurrentSprintActive = 2;
 }
 
 message CommandResponse {
