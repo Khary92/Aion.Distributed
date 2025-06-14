@@ -28,7 +28,7 @@ public class TimerSettingsModel(
     {
         if (await requestSender.IsTimerSettingExisting())
         {
-            _timerSettingsDto = await requestSender.GetTimerSettings();
+            TimerSettingsDto = await requestSender.GetTimerSettings();
             return;
         }
 
