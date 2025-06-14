@@ -3,18 +3,22 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Client.Desktop.Communication.Commands;
+using Client.Desktop.Communication.Requests;
 using Client.Desktop.Factories;
 using Client.Desktop.Views.Custom;
 using Contract.CQRS.Requests.Replays;
 using Contract.CQRS.Requests.Sprints;
 using Contract.CQRS.Requests.StatisticsData;
 using Contract.CQRS.Requests.Tickets;
-using Contract.CQRS.Requests.TimeSlots;
-using Contract.CQRS.Requests.WorkDays;
 using Contract.DTO;
 using MediatR;
 using Proto.Command.UseCases;
 using Proto.Notifications.UseCase;
+using Proto.Requests.Sprints;
+using Proto.Requests.Tickets;
+using Proto.Requests.TimeSlots;
+using Proto.Requests.WorkDays;
 using ReactiveUI;
 using Unit = System.Reactive.Unit;
 
@@ -26,9 +30,11 @@ public class TimeTrackingViewModel : ReactiveObject
 // INotificationHandler<TimeSlotControlCreatedNotification>,
 // INotificationHandler<WorkDaySelectionChangedNotification>
 {
+    // Mediator needs to be removed...
     private readonly IMediator _mediator;
-
     private readonly ITimeSlotViewModelFactory _timeSlotViewModelFactory;
+    private readonly ICommandSender _commandSender;
+    private readonly IRequestSender _requestSender;
 
     private int _currentViewModelIndex;
     private TicketDto? _selectedTicket;
@@ -38,10 +44,13 @@ public class TimeTrackingViewModel : ReactiveObject
     private ObservableCollection<TimeSlotViewModel> _timeSlotViewModels = [];
 
     public TimeTrackingViewModel(IMediator mediator, ITimeSlotViewModelFactory timeSlotViewModelFactory,
-        TimeTrackingModel timeTrackingModel, INoteViewFactory noteViewFactory)
+        TimeTrackingModel timeTrackingModel, ICommandSender commandSender, IRequestSender requestSender,
+        INoteViewFactory noteViewFactory)
     {
         _mediator = mediator;
         _timeSlotViewModelFactory = timeSlotViewModelFactory;
+        _commandSender = commandSender;
+        _requestSender = requestSender;
 
         Model = timeTrackingModel;
         AddTimeSlotControlCommand =
@@ -50,9 +59,8 @@ public class TimeTrackingViewModel : ReactiveObject
         NextViewModelCommand = ReactiveCommand.Create(ToggleNextViewModel);
         PreviousViewModelCommand = ReactiveCommand.Create(TogglePreviousViewModel);
 
-        
-        
         Model.Initialize().ConfigureAwait(false);
+        Model.RegisterMessenger();
     }
 
     public string SelectedTicketName
@@ -89,11 +97,11 @@ public class TimeTrackingViewModel : ReactiveObject
     {
         Model.FilteredTickets.Clear();
 
-        var currentSprint = await _mediator.Send(new GetActiveSprintRequest(), cancellationToken);
+        var currentSprint = await _requestSender.Send(new GetActiveSprintRequestProto());
 
         if (currentSprint == null) throw new InvalidOperationException("No active sprint");
 
-        var ticketDtos = await _mediator.Send(new GetAllTicketsRequest(), cancellationToken);
+        var ticketDtos = await _requestSender.Send(new GetAllTicketsRequestProto());
         foreach (var modelTicket in ticketDtos.Where(modelTicket =>
                      modelTicket.SprintIds.Contains(currentSprint.SprintId)))
             Model.FilteredTickets.Add(modelTicket);
@@ -106,7 +114,7 @@ public class TimeTrackingViewModel : ReactiveObject
         if (timeSlotViewModel == null) return;
 
         timeSlotViewModel.Model.TimeSlot =
-            await _mediator.Send(new GetTimeSlotByIdRequest(Guid.Parse(notification.TimeSlotId)), cancellationToken);
+            await _requestSender.Send(new GetTimeSlotByIdRequestProto());
 
         var ticketReplayDecorator =
             await _mediator.Send(new GetTicketReplayByIdRequest(Guid.Parse(notification.TicketId)), cancellationToken);
@@ -162,13 +170,16 @@ public class TimeTrackingViewModel : ReactiveObject
         CurrentViewModelIndex += 1;
         SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.TicketReplayDecorator.Ticket.Name;
     }
-    
+
     public async Task LoadTimeSlotViewModels()
     {
         TimeSlotViewModels.Clear();
 
-        var selectedWorkDay = await _mediator.Send(new GetSelectedWorkDayRequest());
-        var timeSlots = await _mediator.Send(new GetTimeSlotsForWorkDayIdRequest(selectedWorkDay.WorkDayId));
+        var selectedWorkDay = await _requestSender.Send(new GetSelectedWorkDayRequestProto());
+        var timeSlots = await _requestSender.Send(new GetTimeSlotsForWorkDayIdRequestProto
+        {
+            WorkDayId = selectedWorkDay.WorkDayId.ToString()
+        });
 
         foreach (var timeSlotDto in timeSlots)
         {

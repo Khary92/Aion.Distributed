@@ -43,9 +43,12 @@ public class TimeTrackingModel(IRequestSender requestSender, IMessenger messenge
     {
         messenger.Register<NewTicketMessage>(this, async void (_, m) =>
         {
+            AllTickets.Add(m.Ticket);
+
             var currentSprint = await requestSender.Send(new GetActiveSprintRequestProto());
 
-            AllTickets.Add(m.Ticket);
+            if (currentSprint == null) return;
+            
             if (currentSprint.TicketIds.Contains(m.Ticket.TicketId))
                 FilteredTickets.Add(m.Ticket);
         });
