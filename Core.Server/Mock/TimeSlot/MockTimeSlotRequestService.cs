@@ -13,7 +13,7 @@ public class MockTimeSlotRequestService : TimeSlotRequestService.TimeSlotRequest
         {
             TimeSlotId = Guid.NewGuid().ToString(),
             WorkDayId = Guid.NewGuid().ToString(),
-            SelectedTicketId = Guid.NewGuid().ToString(),
+            SelectedTicketId = MockIds.TicketId1,
             StartTime = Timestamp.FromDateTime(DateTime.UtcNow.AddHours(-1).ToUniversalTime()),
             EndTime = Timestamp.FromDateTime(DateTime.UtcNow.AddMinutes(30).ToUniversalTime()),
             IsTimerRunning = true
@@ -31,7 +31,7 @@ public class MockTimeSlotRequestService : TimeSlotRequestService.TimeSlotRequest
         {
             TimeSlotId = Guid.NewGuid().ToString(),
             WorkDayId = Guid.NewGuid().ToString(),
-            SelectedTicketId = Guid.NewGuid().ToString(),
+            SelectedTicketId = MockIds.TicketId1,
             StartTime = Timestamp.FromDateTime(DateTime.UtcNow.AddHours(-8).ToUniversalTime()),
             EndTime = Timestamp.FromDateTime(DateTime.UtcNow.AddHours(-7).ToUniversalTime()),
             IsTimerRunning = false
@@ -40,7 +40,7 @@ public class MockTimeSlotRequestService : TimeSlotRequestService.TimeSlotRequest
         {
             TimeSlotId = Guid.NewGuid().ToString(),
             WorkDayId = Guid.NewGuid().ToString(),
-            SelectedTicketId = Guid.NewGuid().ToString(),
+            SelectedTicketId = MockIds.TicketId1,
             StartTime = Timestamp.FromDateTime(DateTime.UtcNow.AddHours(-6).ToUniversalTime()),
             EndTime = Timestamp.FromDateTime(DateTime.UtcNow.AddHours(-5).ToUniversalTime()),
             IsTimerRunning = true

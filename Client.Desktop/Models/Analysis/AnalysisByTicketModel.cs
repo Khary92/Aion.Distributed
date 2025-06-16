@@ -3,9 +3,11 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.Communication.RequiresChange;
+using Client.Desktop.Decorators;
 using Contract.Decorators;
 using Contract.DTO;
 using DynamicData;
+using Proto.Requests.AnalysisData;
 using Proto.Requests.Tags;
 using Proto.Requests.Tickets;
 using ReactiveUI;
@@ -15,15 +17,12 @@ namespace Client.Desktop.Models.Analysis;
 public class AnalysisByTicketModel : ReactiveObject
 {
     private readonly IRequestSender _requestSender;
-    private readonly IAnalysisDataService _analysisDataService;
 
     private AnalysisByTicketDecorator? _analysisByTicket;
 
-    public AnalysisByTicketModel(IRequestSender requestSender, IAnalysisDataService analysisDataService)
+    public AnalysisByTicketModel(IRequestSender requestSender)
     {
         _requestSender = requestSender;
-        _analysisDataService = analysisDataService;
-        _analysisDataService = analysisDataService;
 
         InitializeAsync().ConfigureAwait(false);
     }
@@ -39,12 +38,15 @@ public class AnalysisByTicketModel : ReactiveObject
     private async Task InitializeAsync()
     {
         Tickets.Clear();
-        Tickets.AddRange(await _requestSender.Send(new GetTicketsWithShowAllSwitchRequestProto { IsShowAll = false }));
+        Tickets.AddRange(await _requestSender.Send(new GetTicketsWithShowAllSwitchRequestProto { IsShowAll = true }));
     }
 
     public async Task SetAnalysisByTicket(TicketDto selectedTicket)
     {
-        AnalysisByTicket = await _analysisDataService.GetAnalysisByTicket(selectedTicket);
+        AnalysisByTicket = await _requestSender.Send(new GetTicketAnalysisById()
+        {
+            TicketId = selectedTicket.TicketId.ToString()
+        });
     }
 
     public async Task<TagDto> GetTagById(Guid tagId)

@@ -2,28 +2,26 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Client.Desktop.Communication.RequiresChange;
-using Contract.Decorators;
+using Client.Desktop.Communication.Requests;
+using Client.Desktop.Decorators;
 using Contract.DTO;
-using MediatR;
+using DynamicData;
+using Proto.Requests.AnalysisData;
+using Proto.Requests.Sprints;
 using ReactiveUI;
 
 namespace Client.Desktop.Models.Analysis;
 
 public class AnalysisBySprintModel : ReactiveObject
 {
+    private readonly IRequestSender _requestSender;
     private const int AmountOfTagsShown = 3;
-
-    private readonly IAnalysisDataService _analysisDataService;
-    private readonly IMediator _mediator;
 
     private AnalysisBySprintDecorator? _analysisBySprint;
 
-    public AnalysisBySprintModel(IMediator mediator, IAnalysisDataService analysisDataService)
+    public AnalysisBySprintModel(IRequestSender requestSender)
     {
-        _mediator = mediator;
-        _analysisDataService = analysisDataService;
-
+        _requestSender = requestSender;
         InitializeAsync().ConfigureAwait(false);
     }
 
@@ -65,7 +63,7 @@ public class AnalysisBySprintModel : ReactiveObject
             builder.AppendLine("| None | Not available |");
             return builder.ToString();
         }
-        
+
         var count = 0;
         foreach (var pair in AnalysisBySprint!.ProductiveTags.OrderByDescending(kvp => kvp.Value))
         {
@@ -134,11 +132,14 @@ public class AnalysisBySprintModel : ReactiveObject
     private async Task InitializeAsync()
     {
         Sprints.Clear();
-       // Sprints.AddRange(await _mediator.Send(new GetAllSprintsRequest()));
+        Sprints.AddRange(await _requestSender.Send(new GetAllSprintsRequestProto()));
     }
 
     public async Task SetAnalysisForSprint(SprintDto selectedSprint)
     {
-        AnalysisBySprint = await _analysisDataService.GetAnalysisBySprint(selectedSprint);
+        AnalysisBySprint = await _requestSender.Send(new GetSprintAnalysisById()
+        {
+            SprintId = selectedSprint.SprintId.ToString()
+        });
     }
 }

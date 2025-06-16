@@ -1,9 +1,17 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using Client.Desktop.Communication.Requests.Tags;
+using Client.Desktop.Decorators.Entities;
+using Contract.Decorators;
 using Contract.DTO;
-using Contract.DTO.NonPersistent;
+using Google.Protobuf.Collections;
+using Proto.Requests.Tags;
 
-namespace Contract.Decorators;
+namespace Client.Desktop.Decorators;
 
-public class AnalysisByTicketDecorator(AnalysisByTicket analysisByTicket)
+public class AnalysisByTicketDecorator(AnalysisByTicket analysisByTicket, ITagRequestSender  tagRequestSender)
 {
     public readonly string TicketName = analysisByTicket.TicketName;
     private int _timeSpentNeutral;
@@ -21,19 +29,23 @@ public class AnalysisByTicketDecorator(AnalysisByTicket analysisByTicket)
         {
             var statisticsData = analysisByTicket.StatisticData.First(t => t.TimeSlotId == timeSlot.TimeSlotId);
 
-            // TotalTimeSpent += timeSlot.GetDurationInMinutes();
+            TotalTimeSpent += timeSlot.GetDurationInMinutes();
 
             if (statisticsData.IsProductive)
-                //   _timeSpentProductive += timeSlot.GetDurationInMinutes();
+            {
+                _timeSpentProductive += timeSlot.GetDurationInMinutes();
                 return;
+            }
 
             if (statisticsData.IsNeutral)
-                // _timeSpentNeutral += timeSlot.GetDurationInMinutes();
+            {
+                _timeSpentNeutral += timeSlot.GetDurationInMinutes();
                 return;
+            }
 
             if (statisticsData.IsUnproductive)
             {
-                //  _timeSpentUnproductive += timeSlot.GetDurationInMinutes();
+                _timeSpentUnproductive += timeSlot.GetDurationInMinutes();
             }
         }
 
@@ -59,8 +71,17 @@ public class AnalysisByTicketDecorator(AnalysisByTicket analysisByTicket)
             .Distinct()
             .ToList();
 
-        var usedTags = new List<TagDto>(); //await tagRequestsService.GetTagsByTagIds(tagIds);
-
+        var tagIdsRepeated = new RepeatedField<string>();
+        foreach (var tagId in tagIds)
+        {
+            tagIdsRepeated.Add(tagId.ToString());
+        }
+        
+        var usedTags = await tagRequestSender.Send(new GetTagsByIdsRequestProto
+        {
+            TagIds = { tagIdsRepeated }
+        });
+        
         var countByTagProductive = usedTags.ToDictionary(tag => tag.TagId, _ => 0);
         var countByTagNeutral = usedTags.ToDictionary(tag => tag.TagId, _ => 0);
         var countByTagUnproductive = usedTags.ToDictionary(tag => tag.TagId, _ => 0);

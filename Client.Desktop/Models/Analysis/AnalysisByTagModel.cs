@@ -3,32 +3,32 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.NotificationWrappers;
+using Client.Desktop.Communication.Requests;
 using Client.Desktop.Communication.RequiresChange;
+using Client.Desktop.Decorators;
 using CommunityToolkit.Mvvm.Messaging;
-using Contract.CQRS.Requests.Tags;
 using Contract.Decorators;
 using Contract.DTO;
 using DynamicData;
 using MediatR;
 using Proto.Command.Tags;
+using Proto.Requests.AnalysisData;
+using Proto.Requests.Tags;
 using ReactiveUI;
 
 namespace Client.Desktop.Models.Analysis;
 
 public class AnalysisByTagModel : ReactiveObject
 {
-    private readonly IAnalysisDataService _analysisDataService;
-    private readonly IMediator _mediator;
+    private readonly IRequestSender _requestSender;
     private readonly IMessenger _messenger;
 
     private AnalysisByTagDecorator? _analysisByTag;
 
-    public AnalysisByTagModel(IMediator mediator, IMessenger messenger, IAnalysisDataService analysisDataService)
+    public AnalysisByTagModel(IRequestSender requestSender, IMessenger messenger)
     {
-        _mediator = mediator;
+        _requestSender = requestSender;
         _messenger = messenger;
-        _analysisDataService = analysisDataService;
-        _analysisDataService = analysisDataService;
 
         InitializeAsync().ConfigureAwait(false);
         RegisterMessenger();
@@ -60,11 +60,14 @@ public class AnalysisByTagModel : ReactiveObject
     private async Task InitializeAsync()
     {
         Tags.Clear();
-        Tags.AddRange(await _mediator.Send(new GetAllTagsRequest()));
+        Tags.AddRange(await _requestSender.Send(new GetAllTagsRequestProto()));
     }
 
     public async Task SetAnalysisForTag(TagDto selectedTag)
     {
-        AnalysisByTag = await _analysisDataService.GetAnalysisByTag(selectedTag);
+        AnalysisByTag = await _requestSender.Send(new GetTagAnalysisById()
+        {
+            TagId = selectedTag.TagId.ToString()
+        });
     }
 }

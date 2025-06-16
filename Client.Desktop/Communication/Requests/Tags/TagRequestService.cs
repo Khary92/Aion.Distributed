@@ -25,4 +25,10 @@ public class TagRequestSender : ITagRequestSender
         var response = await _client.GetTagByIdAsync(request);
         return new TagDto(Guid.Parse(response.TagId), response.Name, response.IsSelected);
     }
+    
+    public async Task<List<TagDto>> Send(GetTagsByIdsRequestProto request)
+    {
+        var response = await _client.GetTagsByIdsAsync(request);
+        return response.Tags.Select(tag => new TagDto(Guid.Parse(tag.TagId), tag.Name, tag.IsSelected)).ToList();
+    }
 }

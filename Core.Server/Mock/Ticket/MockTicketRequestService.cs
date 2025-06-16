@@ -11,7 +11,7 @@ public class MockTicketRequestService : TicketRequestService.TicketRequestServic
         var response = new TicketListProto();
         response.Tickets.Add(new TicketProto
         {
-            TicketId = Guid.NewGuid().ToString(),
+            TicketId = MockIds.TicketId1,
             Name = "Feature A",
             BookingNumber = "BN-001",
             Documentation = "Docs for Feature A",
@@ -19,7 +19,7 @@ public class MockTicketRequestService : TicketRequestService.TicketRequestServic
         });
         response.Tickets.Add(new TicketProto
         {
-            TicketId = Guid.NewGuid().ToString(),
+            TicketId = MockIds.TicketId2,
             Name = "Bugfix B",
             BookingNumber = "BN-002",
             Documentation = "Docs for Bugfix B",
@@ -35,7 +35,7 @@ public class MockTicketRequestService : TicketRequestService.TicketRequestServic
         var response = new TicketListProto();
         response.Tickets.Add(new TicketProto
         {
-            TicketId = Guid.NewGuid().ToString(),
+            TicketId = MockIds.TicketId1,
             Name = "Bugfix B",
             BookingNumber = "BN-002",
             Documentation = "Docs for Bugfix B",
@@ -50,7 +50,7 @@ public class MockTicketRequestService : TicketRequestService.TicketRequestServic
     {
         return Task.FromResult(new TicketProto
         {
-            TicketId = Guid.NewGuid().ToString(),
+            TicketId = MockIds.TicketId1,
             Name = "Bugfix B",
             BookingNumber = "BN-002",
             Documentation = "Docs for Bugfix B",
@@ -67,7 +67,7 @@ public class MockTicketRequestService : TicketRequestService.TicketRequestServic
         {
             response.Tickets.Add(new TicketProto
             {
-                TicketId = Guid.NewGuid().ToString(),
+                TicketId = MockIds.TicketId1,
                 Name = "Feature A",
                 BookingNumber = "BN-001",
                 Documentation = "Docs for Feature A",
@@ -75,7 +75,7 @@ public class MockTicketRequestService : TicketRequestService.TicketRequestServic
             });
             response.Tickets.Add(new TicketProto
             {
-                TicketId = Guid.NewGuid().ToString(),
+                TicketId = MockIds.TicketId2,
                 Name = "Bugfix B",
                 BookingNumber = "BN-002",
                 Documentation = "Docs for Bugfix B",
@@ -86,7 +86,7 @@ public class MockTicketRequestService : TicketRequestService.TicketRequestServic
         {
             response.Tickets.Add(new TicketProto
             {
-                TicketId = Guid.NewGuid().ToString(),
+                TicketId = MockIds.TicketId1,
                 Name = "Bugfix B",
                 BookingNumber = "BN-002",
                 Documentation = "Docs for Bugfix B",

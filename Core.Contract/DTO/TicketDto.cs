@@ -10,9 +10,9 @@ public class TicketDto : ReactiveObject
     private string _bookingNumber = string.Empty;
     private string _documentation = string.Empty;
     private string _name = string.Empty;
-    private Collection<Guid> _sprintIds = [];
+    private List<Guid> _sprintIds = [];
 
-    public TicketDto(Guid ticketId, string name, string bookingNumber, string documentation, Collection<Guid> sprintIds)
+    public TicketDto(Guid ticketId, string name, string bookingNumber, string documentation, List<Guid> sprintIds)
     {
         TicketId = ticketId;
         Name = name;
@@ -42,7 +42,7 @@ public class TicketDto : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref _bookingNumber, value);
     }
 
-    public Collection<Guid> SprintIds
+    public List<Guid> SprintIds
     {
         get => _sprintIds;
         private set => this.RaiseAndSetIfChanged(ref _sprintIds, value);
@@ -63,7 +63,7 @@ public class TicketDto : ReactiveObject
             .Select(Guid.Parse)
             .ToList();
 
-        SprintIds = new Collection<Guid>(guidList);
+        SprintIds = new List<Guid>(guidList);
     }
 
     public void Apply(TicketDocumentationUpdatedNotification notification)

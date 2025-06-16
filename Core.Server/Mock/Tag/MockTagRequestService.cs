@@ -11,13 +11,32 @@ public class MockTagRequestService : TagRequestService.TagRequestServiceBase
         var response = new TagListProto();
         response.Tags.Add(new TagProto
         {
-            TagId = Guid.NewGuid().ToString(),
+            TagId = MockIds.TagId1,
             Name = "Urgent",
             IsSelected = false
         });
         response.Tags.Add(new TagProto
         {
-            TagId = Guid.NewGuid().ToString(),
+            TagId = MockIds.TagId2,
+            Name = "Review",
+            IsSelected = true
+        });
+
+        return Task.FromResult(response);
+    }
+
+    public override Task<TagListProto> GetTagsByIds(GetTagsByIdsRequestProto request, ServerCallContext context)
+    {
+        var response = new TagListProto();
+        response.Tags.Add(new TagProto
+        {
+            TagId = MockIds.TagId1,
+            Name = "Urgent",
+            IsSelected = false
+        });
+        response.Tags.Add(new TagProto
+        {
+            TagId = MockIds.TagId2,
             Name = "Review",
             IsSelected = true
         });
@@ -29,7 +48,7 @@ public class MockTagRequestService : TagRequestService.TagRequestServiceBase
     {
         var tag = new TagProto
         {
-            TagId = Guid.NewGuid().ToString(),
+            TagId = MockIds.TagId1,
             Name = "tag-1",
             IsSelected = true
         };

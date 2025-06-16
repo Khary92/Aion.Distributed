@@ -61,7 +61,7 @@ public class TicketRequestSender : ITicketRequestSender
             ticket.Name,
             ticket.BookingNumber,
             ticket.Documentation,
-            new Collection<Guid>(sprintIds)
+            [..sprintIds]
         );
     }
 }

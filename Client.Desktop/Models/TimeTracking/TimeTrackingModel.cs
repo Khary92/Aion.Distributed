@@ -1,8 +1,10 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
+using Client.Desktop.Communication.Notifications.LocalEvents;
 using Client.Desktop.Communication.NotificationWrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.Factories;
@@ -111,6 +113,38 @@ public class TimeTrackingModel(
                 timeSlotViewModelFactory.Create(Guid.Parse(m.TicketId), Guid.Parse(m.StatisticsDataId),
                     Guid.Parse(m.TimeSlotId));
             });
+
+        messenger.Register<SprintSelectionChangedNotification>(this, async void (_, _) =>
+        {
+            FilteredTickets.Clear();
+
+            var currentSprint = await requestSender.Send(new GetActiveSprintRequestProto());
+
+            if (currentSprint == null) throw new InvalidOperationException("No active sprint");
+
+            var ticketDtos = await requestSender.Send(new GetAllTicketsRequestProto());
+            foreach (var modelTicket in ticketDtos.Where(modelTicket =>
+                         modelTicket.SprintIds.Contains(currentSprint.SprintId)))
+                FilteredTickets.Add(modelTicket);
+        });
+
+        messenger.Register<WorkDaySelectionChangedNotification>(this, async void (_, _) =>
+        {
+            FilteredTickets.Clear();
+
+            var currentSprint = await requestSender.Send(new GetActiveSprintRequestProto());
+
+            if (currentSprint == null) throw new InvalidOperationException("No active sprint");
+
+            var ticketDtos = await requestSender.Send(new GetAllTicketsRequestProto());
+
+            foreach (var ticket in ticketDtos.Where(modelTicket =>
+                         modelTicket.SprintIds.Contains(currentSprint.SprintId)))
+                FilteredTickets.Add(ticket);
+
+            TimeSlotViewModels.Clear();
+            await LoadTimeSlotViewModels();
+        });
     }
 
     public void TogglePreviousViewModel()
@@ -169,8 +203,5 @@ public class TimeTrackingModel(
         {
             TicketId = SelectedTicket.TicketId.ToString(),
         });
-
-        //TODO i do not want this in the model...
-        //SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.TicketReplayDecorator.Ticket.Name;
     }
 }

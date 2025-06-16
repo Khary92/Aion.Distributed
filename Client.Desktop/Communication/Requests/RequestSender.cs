@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests.AiSettings;
+using Client.Desktop.Communication.Requests.Analysis;
 using Client.Desktop.Communication.Requests.Notes;
 using Client.Desktop.Communication.Requests.NoteTypes;
 using Client.Desktop.Communication.Requests.Replays;
@@ -13,9 +14,11 @@ using Client.Desktop.Communication.Requests.TimerSettings;
 using Client.Desktop.Communication.Requests.TimeSlots;
 using Client.Desktop.Communication.Requests.UseCase;
 using Client.Desktop.Communication.Requests.WorkDays;
+using Client.Desktop.Decorators;
 using Contract.DTO;
 using Contract.DTO.Replays;
 using Proto.Requests.AiSettings;
+using Proto.Requests.AnalysisData;
 using Proto.Requests.Notes;
 using Proto.Requests.NoteTypes;
 using Proto.Requests.Settings;
@@ -44,7 +47,8 @@ public class RequestSender(
     ITimeSlotRequestSender timeSlotRequestSender,
     IWorkDayRequestSender workDayRequestSender,
     ITicketReplayRequestSender ticketReplayRequestSender,
-    IUseCaseRequestSender useCaseRequestSender) : IRequestSender
+    IUseCaseRequestSender useCaseRequestSender,
+    IAnalysisRequestSender analysisRequestSender) : IRequestSender
 {
     public async Task<AiSettingsDto> Send(GetAiSettingsRequestProto request)
         => await aiSettingsRequestSender.Send(request);
@@ -88,6 +92,9 @@ public class RequestSender(
     public async Task<TagDto> Send(GetTagByIdRequestProto request)
         => await tagRequestSender.Send(request);
 
+    public async Task<List<TagDto>> Send(GetTagsByIdsRequestProto request)
+        => await tagRequestSender.Send(request);
+
     public async Task<List<TicketDto>> Send(GetAllTicketsRequestProto request)
         => await ticketRequestSender.Send(request);
 
@@ -126,4 +133,13 @@ public class RequestSender(
 
     public async Task<TimeSlotControlDataProto> Send(GetTimeSlotControlDataRequestProto request)
         => await useCaseRequestSender.Send(request);
+
+    public async Task<AnalysisBySprintDecorator> Send(GetSprintAnalysisById request)
+        => await analysisRequestSender.Send(request);
+
+    public async Task<AnalysisByTicketDecorator> Send(GetTicketAnalysisById request)
+        => await analysisRequestSender.Send(request);
+
+    public async Task<AnalysisByTagDecorator> Send(GetTagAnalysisById request)
+        => await analysisRequestSender.Send(request);
 }

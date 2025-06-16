@@ -1,5 +1,5 @@
 using System;
-using System.Collections.ObjectModel;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
@@ -29,7 +29,7 @@ public class TicketNotificationReceiver(
                     case TicketNotification.NotificationOneofCase.TicketCreated:
                     {
                         var created = notification.TicketCreated;
-                        var sprintGuids = new Collection<Guid>();
+                        var sprintGuids = new List<Guid>();
                         foreach (var id in created.SprintIds)
                         {
                             if (Guid.TryParse(id, out var guid))

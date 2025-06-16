@@ -15,7 +15,7 @@ using SkiaSharp;
 
 namespace Client.Desktop.Models.Analysis;
 
-public class AnalysisByTicketViewModel : ReactiveObject
+public class AnalysisByTicketViewModel(AnalysisByTicketModel analysisByTicketModel) : ReactiveObject
 {
     private string _mostRelevantTagsByProductivityText = string.Empty;
 
@@ -23,16 +23,7 @@ public class AnalysisByTicketViewModel : ReactiveObject
 
     private TicketDto? _selectedTicket;
 
-    public AnalysisByTicketViewModel(AnalysisByTicketModel analysisByTicketModel)
-    {
-        Model = analysisByTicketModel;
-    }
-
-    public AnalysisByTicketViewModel()
-    {
-    }
-
-    public AnalysisByTicketModel Model { get; } = null!;
+    public AnalysisByTicketModel Model { get; } = analysisByTicketModel;
 
     public TicketDto? SelectedTicket
     {

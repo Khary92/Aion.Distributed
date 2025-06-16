@@ -1,6 +1,9 @@
-using Contract.DTO.NonPersistent;
+using System.Collections.Generic;
+using System.Linq;
+using Client.Desktop.Decorators.Entities;
+using Contract.Decorators;
 
-namespace Contract.Decorators;
+namespace Client.Desktop.Decorators;
 
 public class AnalysisBySprintDecorator(AnalysisBySprint analysisBySprint)
 {
@@ -25,19 +28,23 @@ public class AnalysisBySprintDecorator(AnalysisBySprint analysisBySprint)
         {
             var statisticsData = analysisBySprint.StatisticsData.First(t => t.TimeSlotId == timeSlot.TimeSlotId);
 
-            // TotalTimeSpent += timeSlot.GetDurationInMinutes();
+            TotalTimeSpent += timeSlot.GetDurationInMinutes();
 
             if (statisticsData.IsProductive)
-                //     _timeSpentProductive += timeSlot.GetDurationInMinutes();
+            {
+                _timeSpentProductive += timeSlot.GetDurationInMinutes();
                 continue;
+            }
 
             if (statisticsData.IsNeutral)
-                //     _timeSpentNeutral += timeSlot.GetDurationInMinutes();
+            {
+                _timeSpentNeutral += timeSlot.GetDurationInMinutes();
                 continue;
+            }
 
             if (statisticsData.IsUnproductive)
             {
-                //    _timeSpentUnproductive += timeSlot.GetDurationInMinutes();
+                _timeSpentUnproductive += timeSlot.GetDurationInMinutes();
             }
         }
 
@@ -63,14 +70,14 @@ public class AnalysisBySprintDecorator(AnalysisBySprint analysisBySprint)
             .Distinct()
             .ToDictionary(name => name, _ => 0);
 
-        // var mappedDurations = analysisBySprint.TimeSlots
-        //     .GroupBy(ts => ts.SelectedTicketId)
-        //     .ToDictionary(
-        //         g => analysisBySprint.Tickets.First(t => t.TicketId == g.Key).Name,
-        //         g => g.Sum(ts => ts.GetDurationInMinutes())
-        //     );
+        var mappedDurations = analysisBySprint.TimeSlots
+            .GroupBy(ts => ts.SelectedTicketId)
+            .ToDictionary(
+                g => analysisBySprint.Tickets.First(t => t.TicketId == g.Key).Name,
+                g => g.Sum(ts => ts.GetDurationInMinutes())
+            );
 
-        //foreach (var entry in mappedDurations) minutesSpent[entry.Key] = entry.Value;
+        foreach (var entry in mappedDurations) minutesSpent[entry.Key] = entry.Value;
 
         return minutesSpent;
     }

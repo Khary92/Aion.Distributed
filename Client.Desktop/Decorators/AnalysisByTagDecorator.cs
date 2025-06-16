@@ -1,13 +1,15 @@
-using Contract.DTO.NonPersistent;
+using System.Collections.Generic;
+using System.Linq;
+using Client.Desktop.Decorators.Entities;
+using Contract.Decorators;
 
-namespace Contract.Decorators;
+namespace Client.Desktop.Decorators;
 
 public class AnalysisByTagDecorator(AnalysisByTag analysisByTag)
 {
     private int GetTotalDurationInSeconds()
     {
-        return 0;
-        //return analysisByTag.TimeSlots.Sum(timeSlot => timeSlot.GetDurationInSeconds());
+        return analysisByTag.TimeSlots.Sum(timeSlot => timeSlot.GetDurationInSeconds());
     }
 
     public Dictionary<Productivity, int> GetMinutesByProductivity()
@@ -24,16 +26,20 @@ public class AnalysisByTagDecorator(AnalysisByTag analysisByTag)
             var statisticsData = analysisByTag.StatisticsData.First(sd => sd.TimeSlotId == timeSlot.TimeSlotId);
 
             if (statisticsData.IsProductive)
-                //countMap[Productivity.Productive] += timeSlot.GetDurationInMinutes();
+            {
+                countMap[Productivity.Productive] += timeSlot.GetDurationInMinutes();
                 continue;
+            }
 
             if (statisticsData.IsNeutral)
-                //countMap[Productivity.Neutral] += timeSlot.GetDurationInMinutes();
+            {
+                countMap[Productivity.Neutral] += timeSlot.GetDurationInMinutes();
                 continue;
+            }
 
             if (statisticsData.IsUnproductive)
             {
-                //countMap[Productivity.Unproductive] += timeSlot.GetDurationInMinutes();
+                countMap[Productivity.Unproductive] += timeSlot.GetDurationInMinutes();
             }
         }
 

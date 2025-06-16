@@ -10,4 +10,5 @@ public interface ITagRequestSender
 {
     Task<List<TagDto>> Send(GetAllTagsRequestProto request);
     Task<TagDto> Send(GetTagByIdRequestProto request);
+    Task<List<TagDto>> Send(GetTagsByIdsRequestProto request);
 }

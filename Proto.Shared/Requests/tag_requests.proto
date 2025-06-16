@@ -10,6 +10,9 @@ message GetTagByIdRequestProto {
   string tag_id = 1;
 }
 
+message GetTagsByIdsRequestProto {
+  repeated string tag_ids = 1;
+}
 
 message TagListProto {
   repeated TagProto tags = 1;
@@ -18,4 +21,5 @@ message TagListProto {
 service TagRequestService {
   rpc GetAllTags(GetAllTagsRequestProto) returns (TagListProto);
   rpc GetTagById(GetTagByIdRequestProto) returns (TagProto);
+  rpc GetTagsByIds(GetTagsByIdsRequestProto) returns (TagListProto);
 }

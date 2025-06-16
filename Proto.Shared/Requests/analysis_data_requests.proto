@@ -18,8 +18,8 @@ message GetTicketAnalysisById {
   string ticket_id = 1;
 }
 
-service NoteTypesRequestService {
-  rpc GetSprintAnalysis(GetSprintAnalysisById) returns (AnalysisBySprint);
-  rpc GetTagAnalysis(GetTagAnalysisById) returns (AnalysisByTag);
-  rpc GetTicketAnalysis(GetTicketAnalysisById) returns (AnalysisByTicket);
+service AnalysisRequestService {
+  rpc GetSprintAnalysis(GetSprintAnalysisById) returns (AnalysisBySprintProto);
+  rpc GetTagAnalysis(GetTagAnalysisById) returns (AnalysisByTagProto);
+  rpc GetTicketAnalysis(GetTicketAnalysisById) returns (AnalysisByTicketProto);
 }

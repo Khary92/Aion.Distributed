@@ -5,7 +5,7 @@ option csharp_namespace = "Proto.DTO.AnalysisByTicket";
 import "dto/time_slot.proto";
 import "dto/statistics_data.proto";
 
-message AnalysisByTicket {
+message AnalysisByTicketProto {
   string ticket_name = 1;
   repeated TimeSlotProto time_slots = 2;
   repeated StatisticsDataProto statistic_data = 3;

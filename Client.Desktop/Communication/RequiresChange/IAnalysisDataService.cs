@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Client.Desktop.Decorators;
 using Contract.Decorators;
 using Contract.DTO;
 

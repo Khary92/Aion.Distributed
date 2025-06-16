@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Service.Server.Communication.UseCase;
 using Service.Server.Mock.AiSettings;
+using Service.Server.Mock.Analysis;
 using Service.Server.Mock.Note;
 using Service.Server.Mock.NoteType;
 using Service.Server.Mock.Settings;
@@ -16,13 +17,11 @@ using Service.Server.Mock.WorkDay;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// gRPC Services und Reflection registrieren
 builder.Services.AddGrpc();
 builder.Services.AddGrpcReflection();
 
 builder.WebHost.ConfigureKestrel(options => { options.ListenLocalhost(5000, o => o.Protocols = HttpProtocols.Http2); });
 
-// Notification Services als Singleton registrieren
 builder.Services.AddSingleton<AiSettingsNotificationServiceImpl>();
 builder.Services.AddSingleton<NoteNotificationServiceImpl>();
 builder.Services.AddSingleton<NoteTypeNotificationServiceImpl>();
@@ -39,7 +38,6 @@ builder.Services.AddSingleton<WorkDayNotificationServiceImpl>();
 
 var app = builder.Build();
 
-// Command Services registrieren
 app.MapGrpcService<MockAiSettingsCommandService>();
 app.MapGrpcService<MockNoteCommandService>();
 app.MapGrpcService<MockNoteTypeCommandService>();
@@ -54,7 +52,6 @@ app.MapGrpcService<MockTraceReportCommandService>();
 app.MapGrpcService<MockUseCaseCommandService>();
 app.MapGrpcService<MockWorkDayCommandService>();
 
-// Notification Services registrieren
 app.MapGrpcService<AiSettingsNotificationServiceImpl>();
 app.MapGrpcService<NoteNotificationServiceImpl>();
 app.MapGrpcService<NoteTypeNotificationServiceImpl>();
@@ -69,7 +66,6 @@ app.MapGrpcService<TraceReportNotificationServiceImpl>();
 app.MapGrpcService<UseCaseNotificationServiceImpl>();
 app.MapGrpcService<WorkDayNotificationServiceImpl>();
 
-// Request Services registrieren
 app.MapGrpcService<MockAiSettingsRequestService>();
 app.MapGrpcService<MockNoteRequestService>();
 app.MapGrpcService<MockNoteTypeRequestService>();
@@ -82,6 +78,7 @@ app.MapGrpcService<MockTimerSettingsRequestService>();
 app.MapGrpcService<MockTimeSlotRequestService>();
 app.MapGrpcService<MockWorkDayRequestService>();
 app.MapGrpcService<MockUseCaseRequestService>();
+app.MapGrpcService<MockAnalysisRequestService>();
 
 app.Lifetime.ApplicationStarted.Register(() =>
 {

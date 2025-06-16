@@ -1,4 +1,5 @@
 ﻿using Client.Desktop.Communication.Requests.AiSettings;
+using Client.Desktop.Communication.Requests.Analysis;
 using Client.Desktop.Communication.Requests.Notes;
 using Client.Desktop.Communication.Requests.NoteTypes;
 using Client.Desktop.Communication.Requests.Replays;
@@ -27,4 +28,5 @@ public interface IRequestSender :
     ITimeSlotRequestSender,
     IWorkDayRequestSender,
     ITicketReplayRequestSender,
-    IUseCaseRequestSender;
+    IUseCaseRequestSender,
+    IAnalysisRequestSender;

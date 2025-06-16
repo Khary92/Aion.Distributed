@@ -6,7 +6,7 @@ import "dto/time_slot.proto";
 import "dto/statistics_data.proto";
 import "dto/ticket.proto";
 
-message AnalysisBySprint {
+message AnalysisBySprintProto {
   string sprint_name = 1;
   repeated TimeSlotProto time_slots = 2;
   repeated StatisticsDataProto statistics_data = 3;

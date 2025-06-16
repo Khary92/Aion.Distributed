@@ -1,4 +1,7 @@
-namespace Contract.DTO.NonPersistent;
+using System.Collections.Generic;
+using Contract.DTO;
+
+namespace Client.Desktop.Decorators.Entities;
 
 public class AnalysisBySprint
 {

@@ -15,6 +15,7 @@ using Client.Desktop.Communication.Commands.WorkDays;
 using Client.Desktop.Communication.Notifications;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.Communication.Requests.AiSettings;
+using Client.Desktop.Communication.Requests.Analysis;
 using Client.Desktop.Communication.Requests.Notes;
 using Client.Desktop.Communication.Requests.NoteTypes;
 using Client.Desktop.Communication.Requests.Replays;
@@ -252,5 +253,6 @@ public static class Bootstrapper
         services.AddScoped<ITicketReplayRequestSender, TicketReplayRequestSender>();
         services.AddScoped<ITicketReplayRequestSender, TicketReplayRequestSender>();
         services.AddScoped<IUseCaseRequestSender, UseCaseRequestSender>();
+        services.AddScoped<IAnalysisRequestSender, AnalysisRequestSender>();
     }
 }
