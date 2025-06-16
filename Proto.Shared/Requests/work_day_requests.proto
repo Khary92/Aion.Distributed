@@ -1,5 +1,5 @@
 syntax = "proto3";
-import "dto/work_day.proto";
+import "DTO/work_day.proto";
 import "google/protobuf/timestamp.proto";
 
 option csharp_namespace = "Proto.Requests.WorkDays";

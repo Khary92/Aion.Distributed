@@ -1,5 +1,5 @@
 syntax = "proto3";
-import "dto/timer_settings.proto";
+import "DTO/timer_settings.proto";
 
 option csharp_namespace = "Proto.Requests.TimerSettings";
 

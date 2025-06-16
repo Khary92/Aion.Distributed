@@ -2,9 +2,9 @@
 
 option csharp_namespace = "Proto.DTO.AnalysisBySprint";
 
-import "dto/time_slot.proto";
-import "dto/statistics_data.proto";
-import "dto/ticket.proto";
+import "DTO/time_slot.proto";
+import "DTO/statistics_data.proto";
+import "DTO/ticket.proto";
 
 message AnalysisBySprintProto {
   string sprint_name = 1;

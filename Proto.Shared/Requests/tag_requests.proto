@@ -1,5 +1,5 @@
 syntax = "proto3";
-import "dto/tag.proto";
+import "DTO/tag.proto";
 
 option csharp_namespace = "Proto.Requests.Tags";
 

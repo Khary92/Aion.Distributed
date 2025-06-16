@@ -1,8 +1,8 @@
 ﻿syntax = "proto3";
 
-import "dto/analysis_by_sprint.proto";
-import "dto/analysis_by_tag.proto";
-import "dto/analysis_by_ticket.proto";
+import "DTO/analysis_by_sprint.proto";
+import "DTO/analysis_by_tag.proto";
+import "DTO/analysis_by_ticket.proto";
 
 option csharp_namespace = "Proto.Requests.AnalysisData";
 

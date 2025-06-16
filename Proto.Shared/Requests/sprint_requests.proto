@@ -1,5 +1,5 @@
 syntax = "proto3";
-import "dto/sprint.proto";
+import "DTO/sprint.proto";
 
 option csharp_namespace = "Proto.Requests.Sprints";
 

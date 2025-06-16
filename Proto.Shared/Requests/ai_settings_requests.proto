@@ -1,5 +1,5 @@
 syntax = "proto3";
-import "dto/ai_settings.proto";
+import "DTO/ai_settings.proto";
 
 option csharp_namespace = "Proto.Requests.AiSettings";
 
