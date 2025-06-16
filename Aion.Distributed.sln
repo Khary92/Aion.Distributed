@@ -2,8 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.Desktop", "Client.Desktop\Client.Desktop.csproj", "{FD0A3BD3-379F-4F65-AC8A-E868A490ACFB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Contract", "Core.Contract\Core.Contract.csproj", "{2AFB4248-ADA4-492F-BD1E-EFFC2230F298}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Domain", "Core.Domain\Core.Domain.csproj", "{634B1444-10A5-4B74-91DA-8D464D324C18}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Persistence", "Infrastructure.Persistence\Infrastructure.Persistence.csproj", "{FF3ED167-D052-4065-8E08-58021873D85C}"
@@ -28,10 +26,6 @@ Global
 		{FD0A3BD3-379F-4F65-AC8A-E868A490ACFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FD0A3BD3-379F-4F65-AC8A-E868A490ACFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FD0A3BD3-379F-4F65-AC8A-E868A490ACFB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2AFB4248-ADA4-492F-BD1E-EFFC2230F298}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2AFB4248-ADA4-492F-BD1E-EFFC2230F298}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2AFB4248-ADA4-492F-BD1E-EFFC2230F298}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2AFB4248-ADA4-492F-BD1E-EFFC2230F298}.Release|Any CPU.Build.0 = Release|Any CPU
 		{634B1444-10A5-4B74-91DA-8D464D324C18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{634B1444-10A5-4B74-91DA-8D464D324C18}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{634B1444-10A5-4B74-91DA-8D464D324C18}.Release|Any CPU.ActiveCfg = Release|Any CPU

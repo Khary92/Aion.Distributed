@@ -37,7 +37,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Core.Contract\Core.Contract.csproj" />
         <ProjectReference Include="..\Proto.Shared\Proto.Shared.csproj" />
     </ItemGroup>
 

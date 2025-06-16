@@ -1,0 +1,102 @@
+using System;
+using System.Collections.Generic;
+using Proto.Notifications.Sprint;
+using ReactiveUI;
+
+namespace Client.Desktop.DTO;
+
+public class SprintDto : ReactiveObject
+{
+    private readonly List<Guid> _ticketIds = [];
+    private DateTimeOffset _endTime;
+    private bool _isActive;
+    private string _name = string.Empty;
+    private Guid _sprintId;
+    private DateTimeOffset _startTime;
+
+    public SprintDto(Guid sprintId, string name, bool isActive, DateTimeOffset startTime, DateTimeOffset endTime,
+        List<Guid> ticketIds)
+    {
+        SprintId = sprintId;
+        Name = name;
+        IsActive = isActive;
+        StartTime = startTime;
+        EndTime = endTime;
+        TicketIds = ticketIds;
+    }
+
+    public Guid SprintId
+    {
+        get => _sprintId;
+        set => this.RaiseAndSetIfChanged(ref _sprintId, value);
+    }
+
+    public string Name
+    {
+        get => _name;
+        set => this.RaiseAndSetIfChanged(ref _name, value);
+    }
+
+
+    public DateTimeOffset StartTime
+    {
+        get => _startTime;
+        private set
+        {
+            this.RaiseAndSetIfChanged(ref _startTime, value);
+            this.RaisePropertyChanged(nameof(StartTimeRepresentation));
+        }
+    }
+
+    public DateTimeOffset EndTime
+    {
+        get => _endTime;
+        private set
+        {
+            this.RaiseAndSetIfChanged(ref _endTime, value);
+            this.RaisePropertyChanged(nameof(EndTimeRepresentation));
+        }
+    }
+
+    public string StartTimeRepresentation => StartTime.ToLocalTime().ToString("dd.MM.yyyy");
+
+    public string EndTimeRepresentation => EndTime.ToLocalTime().ToString("dd.MM.yyyy");
+
+    public bool IsActive
+    {
+        get => _isActive;
+        set => this.RaiseAndSetIfChanged(ref _isActive, value);
+    }
+
+    public List<Guid> TicketIds
+    {
+        get => _ticketIds;
+        init => this.RaiseAndSetIfChanged(ref _ticketIds, value);
+    }
+
+    public void Apply(SprintDataUpdatedNotification notification)
+    {
+        EndTime = notification.EndTime.ToDateTimeOffset();
+        StartTime = notification.StartTime.ToDateTimeOffset();
+        Name = notification.Name;
+    }
+
+    public void Apply(TicketAddedToSprintNotification notification)
+    {
+        var parsedGuid = Guid.Parse(notification.TicketId);
+        
+        if (!TicketIds.Contains(parsedGuid))
+            TicketIds.Add(parsedGuid);
+    }
+
+    public void Apply(SprintActiveStatusSetNotification notification)
+    {
+        IsActive = notification.IsActive;
+    }
+
+    public override string ToString()
+    {
+        return $"SprintDto:{{sprintId:'{SprintId}', Name:'{Name}', isActive:'{IsActive}'," +
+               $" startTime:'{StartTime}', endTime:'{EndTime}', ticketIds:'{TicketIds}'}}";
+    }
+}

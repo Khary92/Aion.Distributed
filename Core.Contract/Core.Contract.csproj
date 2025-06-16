@@ -22,4 +22,8 @@
     <ItemGroup>
       <ProjectReference Include="..\Proto.Shared\Proto.Shared.csproj" />
     </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="LanguageModel\" />
+    </ItemGroup>
 </Project>

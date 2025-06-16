@@ -29,7 +29,6 @@ using Client.Desktop.Communication.Requests.TimeSlots;
 using Client.Desktop.Communication.Requests.UseCase;
 using Client.Desktop.Communication.Requests.WorkDays;
 using Client.Desktop.Communication.RequiresChange;
-using Client.Desktop.Communication.RequiresChange.Cache;
 using Client.Desktop.Factories;
 using Client.Desktop.FileSystem;
 using Client.Desktop.FileSystem.Serializer;
@@ -42,6 +41,9 @@ using Client.Desktop.Models.Settings;
 using Client.Desktop.Models.Synchronization;
 using Client.Desktop.Models.TimeTracking;
 using Client.Desktop.Models.TimeTracking.DynamicControls;
+using Client.Desktop.Replays;
+using Client.Desktop.Services;
+using Client.Desktop.Services.Cache;
 using Client.Desktop.Views.Analysis;
 using Client.Desktop.Views.Data;
 using Client.Desktop.Views.Documentation;
@@ -50,10 +52,7 @@ using Client.Desktop.Views.Main;
 using Client.Desktop.Views.Setting;
 using Client.Desktop.Views.Tracking;
 using CommunityToolkit.Mvvm.Messaging;
-using Contract.DTO;
-using Contract.LanguageModel;
 using Grpc.Net.Client;
-using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using Proto.Command.TimeSlots;
 using Proto.Notifications.AiSettings;
@@ -83,10 +82,8 @@ public static class Bootstrapper
         AddFileSystemServices(services);
 
         //TODO fix it
-        services.AddSingleton<IMediator, Mediator>();
         services.AddSingleton<IRunTimeSettings, RunTimeSettings>();
         services.AddSingleton<IExportService, ExportService>();
-        services.AddSingleton<IAnalysisDataService, AnalysisDataStub>();
         services.AddSingleton<ILanguageModelApi, LanguageModelApiStub>();
         
     }

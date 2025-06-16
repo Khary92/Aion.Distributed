@@ -1,7 +1,7 @@
 using System;
 using System.Reactive.Linq;
-using Contract.DTO;
-using MediatR;
+using Client.Desktop.DTO;
+using CommunityToolkit.Mvvm.Messaging;
 using Proto.Notifications.UseCase;
 using ReactiveUI;
 using Unit = System.Reactive.Unit;
@@ -12,7 +12,7 @@ public class WorkDaysViewModel : ReactiveObject
 {
     private WorkDayDto _selectedWorkDay = null!;
 
-    public WorkDaysViewModel(IMediator mediator, WorkDaysModel workDaysModel)
+    public WorkDaysViewModel(IMessenger messenger, WorkDaysModel workDaysModel)
     {
         Model = workDaysModel;
 
@@ -20,7 +20,7 @@ public class WorkDaysViewModel : ReactiveObject
             () =>
             {
                 workDaysModel.SetSelectedWorkday(SelectedWorkDay);
-                mediator.Publish(new WorkDaySelectionChangedNotification());
+                messenger.Send(new WorkDaySelectionChangedNotification());
             },
             this.WhenAnyValue(x => x.SelectedWorkDay).Any()
         );
