@@ -1,4 +1,5 @@
 ﻿using Grpc.Core;
+using Proto.DTO.AiSettings;
 using Proto.Requests.AiSettings;
 
 namespace Service.Server.Mock.AiSettings;

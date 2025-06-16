@@ -1,0 +1,9 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Proto.DTO.NoteType";
+
+message NoteTypeProto {
+  string note_type_id = 1;
+  string name = 2;
+  string color = 3;
+}

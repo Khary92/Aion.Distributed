@@ -1,4 +1,5 @@
 ﻿using Grpc.Core;
+using Proto.DTO.TimerSettings;
 using Proto.Requests.TimerSettings;
 
 namespace Service.Server.Mock.TimerSettings;

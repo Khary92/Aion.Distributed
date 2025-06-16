@@ -1,0 +1,13 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Proto.DTO.Sprint";
+
+import "google/protobuf/timestamp.proto";
+
+message SprintProto {
+  string sprint_id = 1;
+  string name = 2;
+  google.protobuf.Timestamp start = 3;
+  google.protobuf.Timestamp end = 4;
+  repeated string ticket_ids = 5;
+}

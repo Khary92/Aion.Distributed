@@ -1,12 +1,9 @@
 syntax = "proto3";
 
+import "dto/note_type.proto";
+
 option csharp_namespace = "Proto.Requests.NoteTypes";
 
-message NoteTypeProto {
-  string note_type_id = 1;
-  string name = 2;
-  string color = 3;
-}
 
 message GetAllNoteTypesRequestProto {}
 

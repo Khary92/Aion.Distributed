@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Contract.DTO;
 using Grpc.Net.Client;
+using Proto.DTO.Ticket;
 using Proto.Requests.Tickets;
 using Proto.Shared;
 

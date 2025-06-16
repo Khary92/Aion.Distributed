@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using Proto.DTO.Note;
 using Proto.Requests.Notes;
 
 public class MockNoteRequestService : NotesRequestService.NotesRequestServiceBase

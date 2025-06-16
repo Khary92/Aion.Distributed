@@ -4,8 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.Requests;
-using Contract.CQRS.Requests.Sprints;
-using Contract.CQRS.Requests.Tickets;
 using MediatR;
 using Proto.Notifications.UseCase;
 using Proto.Requests.Sprints;
@@ -25,7 +23,6 @@ public class TimeTrackingViewModel : ReactiveObject
     private readonly IMediator _mediator;
     private readonly ICommandSender _commandSender;
     private readonly IRequestSender _requestSender;
-
 
 
     public TimeTrackingViewModel(IMediator mediator,

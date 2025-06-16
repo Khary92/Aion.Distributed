@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using Proto.DTO.Sprint;
 using Proto.Requests.Sprints;
 
 namespace Service.Server.Mock.Sprint;

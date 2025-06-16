@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Contract.DTO;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Net.Client;
+using Proto.DTO.TimerSettings;
 using Proto.Requests.WorkDays;
 using Proto.Shared;
 

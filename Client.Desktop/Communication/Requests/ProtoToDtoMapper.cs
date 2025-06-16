@@ -1,5 +1,6 @@
 ﻿using System;
 using Contract.DTO;
+using Proto.DTO.AiSettings;
 using Proto.Requests.AiSettings;
 
 namespace Client.Desktop.Communication.Requests;

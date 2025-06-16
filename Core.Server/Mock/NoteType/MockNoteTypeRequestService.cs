@@ -1,14 +1,14 @@
-﻿using System.Threading.Tasks;
-using Grpc.Core;
+﻿using Grpc.Core;
+using Proto.DTO.NoteType;
 using Proto.Requests.NoteTypes;
 
 public class MockNoteTypeRequestService : NoteTypesRequestService.NoteTypesRequestServiceBase
 {
-    public override Task<GetAllNoteTypesResponseProto> GetAllNoteTypes(GetAllNoteTypesRequestProto request, ServerCallContext context)
+    public override Task<GetAllNoteTypesResponseProto> GetAllNoteTypes(GetAllNoteTypesRequestProto request,
+        ServerCallContext context)
     {
         var response = new GetAllNoteTypesResponseProto();
 
-        // Beispielhafte Dummy-Daten - ersetze sie durch deine Logik
         response.NoteTypes.Add(new NoteTypeProto
         {
             NoteTypeId = Guid.NewGuid().ToString(),
@@ -27,7 +27,6 @@ public class MockNoteTypeRequestService : NoteTypesRequestService.NoteTypesReque
 
     public override Task<NoteTypeProto> GetNoteTypeById(GetNoteTypeByIdRequestProto request, ServerCallContext context)
     {
-        // Dummy-Implementierung: je nach ID eine NoteType zurückgeben
         var noteType = new NoteTypeProto
         {
             NoteTypeId = request.NoteTypeId,

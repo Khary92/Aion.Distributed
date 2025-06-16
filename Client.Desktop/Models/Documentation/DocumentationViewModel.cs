@@ -3,9 +3,9 @@ using System.Reactive.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using Contract.CQRS.Requests.AiSettings;
+using Client.Desktop.Communication.Requests;
 using Contract.LanguageModel;
-using MediatR;
+using Proto.Requests.AiSettings;
 using ReactiveUI;
 using Unit = System.Reactive.Unit;
 
@@ -13,16 +13,16 @@ namespace Client.Desktop.Models.Documentation;
 
 public class DocumentationViewModel : ReactiveObject
 {
+    private readonly IRequestSender _requestSender;
     private readonly ILanguageModelApi _languageModelApi;
-    private readonly IMediator _mediator;
     private string _inputText = string.Empty;
 
     private string _responseText = string.Empty;
 
-    public DocumentationViewModel(IMediator mediator, DocumentationModel documentationModel,
+    public DocumentationViewModel(IRequestSender requestSender, DocumentationModel documentationModel,
         ILanguageModelApi languageModelApi)
     {
-        _mediator = mediator;
+        _requestSender = requestSender;
         _languageModelApi = languageModelApi;
         _languageModelApi.OnResponseReceived += WriteGptResponse;
 
@@ -64,7 +64,7 @@ public class DocumentationViewModel : ReactiveObject
     private async Task SetPreparedPrompt()
     {
         InputText = string.Empty;
-        var aiSettingsDto = await _mediator.Send(new GetAiSettingsRequest());
+        var aiSettingsDto = await _requestSender.Send(new GetAiSettingsRequestProto());
 
         var inputBuilder = new StringBuilder();
 

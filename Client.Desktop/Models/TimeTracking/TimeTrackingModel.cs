@@ -1,15 +1,12 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.NotificationWrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.Factories;
-using Client.Desktop.Views.Custom;
 using CommunityToolkit.Mvvm.Messaging;
-using Contract.CQRS.Requests.StatisticsData;
 using Contract.DTO;
 using Proto.Command.UseCases;
 using Proto.Notifications.Sprint;

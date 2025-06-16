@@ -1,5 +1,8 @@
 ﻿using Grpc.Core;
+using Proto.DTO.Tag;
 using Proto.Requests.Tags;
+
+namespace Service.Server.Mock.Tag;
 
 public class MockTagRequestService : TagRequestService.TagRequestServiceBase
 {

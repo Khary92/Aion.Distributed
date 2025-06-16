@@ -1,0 +1,11 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Proto.DTO.AnalysisByTag";
+
+import "dto/time_slot.proto";
+import "dto/statistics_data.proto";
+
+message AnalysisByTag {
+  repeated TimeSlotProto time_slots = 1;
+  repeated StatisticsDataProto statistics_data = 2;
+}

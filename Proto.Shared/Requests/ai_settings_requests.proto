@@ -1,4 +1,5 @@
 syntax = "proto3";
+import "dto/ai_settings.proto";
 
 option csharp_namespace = "Proto.Requests.AiSettings";
 
@@ -6,12 +7,6 @@ message GetAiSettingsRequestProto {
 }
 
 message AiSettingExistsRequestProto {
-}
-
-message AiSettingsProto {
-  string ai_settings_id = 1;
-  string language_model_path = 2;
-  string prompt = 3;
 }
 
 message AiSettingExistsResponseProto {

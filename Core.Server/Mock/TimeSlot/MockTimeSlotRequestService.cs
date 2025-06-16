@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
-using Google.Protobuf.WellKnownTypes;
+using Proto.DTO.TimeSlots;
 using Proto.Requests.TimeSlots;
+
+namespace Service.Server.Mock.TimeSlot;
 
 public class MockTimeSlotRequestService : TimeSlotRequestService.TimeSlotRequestServiceBase
 {

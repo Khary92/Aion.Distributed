@@ -1,8 +1,8 @@
 syntax = "proto3";
+import "dto/tag.proto";
 
 option csharp_namespace = "Proto.Requests.Tags";
 
-package contract.requests;
 
 message GetAllTagsRequestProto {}
 
@@ -10,11 +10,6 @@ message GetTagByIdRequestProto {
   string tag_id = 1;
 }
 
-message TagProto {
-  string tag_id = 1;
-  string name = 2;
-  bool is_selected = 3;
-}
 
 message TagListProto {
   repeated TagProto tags = 1;

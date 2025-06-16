@@ -18,7 +18,6 @@ public class MockUseCaseCommandService : UseCaseCommandService.UseCaseCommandSer
     {
         Console.WriteLine($"[LoadTimeSlotControl] TimeSlotId: {request.TimeSlotId}, ViewId: {request.ViewId}");
 
-        // Platzhalter für echte Logik
         return Task.FromResult(new CommandResponse { Success = true });
     }
 }

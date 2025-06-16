@@ -1,5 +1,6 @@
 ﻿using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
+using Proto.DTO.TimerSettings;
 using Proto.Requests.WorkDays;
 
 namespace Service.Server.Mock.WorkDay;

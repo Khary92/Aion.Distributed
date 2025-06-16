@@ -1,0 +1,9 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Proto.DTO.Settings";
+
+message SettingsProto {
+  string settings_id = 1;
+  string export_path = 2;
+  bool is_add_new_tickets_to_current_sprint_active = 3;
+}

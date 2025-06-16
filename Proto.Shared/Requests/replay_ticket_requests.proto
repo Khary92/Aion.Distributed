@@ -1,10 +1,9 @@
 syntax = "proto3";
 
+import "dto/replay_ticket.proto";
+
 option csharp_namespace = "Proto.Requests.TicketReplay";
 
-message TicketReplayProto {
-  string documentation_entry = 1;
-}
 
 message GetReplayResponseProto {
   repeated TicketReplayProto ticket_replays = 1;

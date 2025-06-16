@@ -1,0 +1,10 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Proto.DTO.AiSettings";
+
+
+message AiSettingsProto {
+  string ai_settings_id = 1;
+  string language_model_path = 2;
+  string prompt = 3;
+}

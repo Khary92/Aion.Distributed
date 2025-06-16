@@ -1,0 +1,13 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Proto.DTO.Note";
+
+import "google/protobuf/timestamp.proto";
+
+message NoteProto {
+  string note_id = 1;
+  string text = 2;
+  string note_type_id = 3;
+  string time_slot_id = 4;
+  google.protobuf.Timestamp time_stamp = 5;
+}

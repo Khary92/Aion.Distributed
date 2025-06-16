@@ -1,5 +1,8 @@
 ﻿using Grpc.Core;
+using Proto.DTO.StatisticsData;
 using Proto.Requests.StatisticsData;
+
+namespace Service.Server.Mock.StatisticsData;
 
 public class MockStatisticsDataRequestService : StatisticsDataRequestService.StatisticsDataRequestServiceBase
 {

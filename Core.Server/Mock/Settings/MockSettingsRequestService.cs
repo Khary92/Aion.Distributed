@@ -1,5 +1,8 @@
 ﻿using Grpc.Core;
+using Proto.DTO.Settings;
 using Proto.Requests.Settings;
+
+namespace Service.Server.Mock.Settings;
 
 public class MockSettingsRequestService : SettingsRequestService.SettingsRequestServiceBase
 {

@@ -5,17 +5,17 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Client.Desktop.Communication.Requests;
 using Client.Desktop.FileSystem;
-using Contract.CQRS.Requests.Settings;
 using Contract.DTO;
-using MediatR;
+using Proto.Requests.Settings;
+using Proto.Requests.Tickets;
+using Proto.Requests.TimeSlots;
 
 namespace Client.Desktop.Communication.RequiresChange;
 
 public class ExportService(
-    IMediator mediator,
-    //ITimeSlotRequestsService timeSlotRequestsService,
-    //ITicketRequestsService ticketRequestsService,
+    IRequestSender requestSender,
     IFileSystemWriter fileSystemWriter)
     : IExportService
 {
@@ -24,7 +24,7 @@ public class ExportService(
         if (workDayDtos.Count == 0) return false;
 
         var markdownString = await GetMarkdownString(workDayDtos);
-        var config = await mediator.Send(new GetSettingsRequest());
+        var config = await requestSender.Send(new GetSettingsRequestProto());
         var filePath = BuildFilePath(workDayDtos.First().Date.Date, config!.ExportPath);
 
         try
@@ -68,8 +68,7 @@ public class ExportService(
     {
         var result = new Dictionary<DateTimeOffset, List<TicketDataHolder>>();
 
-       // var domainWorkDays = workDayDtos.Select(workDayMapper.ToDomain).ToList();
-        //foreach (var workDay in domainWorkDays) await FillDictionaryForWorkday(workDay, result);
+        foreach (var workDay in workDayDtos) await FillDictionaryForWorkday(workDay, result);
 
         return result;
     }
@@ -77,12 +76,20 @@ public class ExportService(
     private async Task FillDictionaryForWorkday(WorkDayDto workDay,
         Dictionary<DateTimeOffset, List<TicketDataHolder>> result)
     {
-        var timeSlots = new List<TimeSlotDto>();//await timeSlotRequestsService.GetTimeSlotsForWorkDayId(workDay.WorkDayId);
+        var timeSlots = await requestSender.Send(new GetTimeSlotsForWorkDayIdRequestProto()
+        {
+            WorkDayId = workDay.WorkDayId.ToString()
+        });
+
         if (timeSlots.Count == 0) return;
 
         foreach (var timeSlot in timeSlots)
         {
-            TicketDto ticket = null;//await ticketRequestsService.GetTicketAsync(timeSlot.SelectedTicketId);
+            var ticket = await requestSender.Send(new GetTicketByIdRequestProto()
+            {
+                TicketId = timeSlot.SelectedTicketId.ToString()
+            });
+
             var elapsedSeconds = (int)(timeSlot.EndTime - timeSlot.StartTime).TotalSeconds;
 
             if (!result.TryGetValue(workDay.Date, out var ticketDataList))
@@ -103,11 +110,7 @@ public class ExportService(
         }
     }
 
-    private class TicketDataHolder(
-        Guid ticketId,
-        string name,
-        string bookingNumber,
-        int elapsedSeconds)
+    private class TicketDataHolder(Guid ticketId, string name, string bookingNumber, int elapsedSeconds)
     {
         public Guid TicketId { get; } = ticketId;
         public string Name { get; } = name;
