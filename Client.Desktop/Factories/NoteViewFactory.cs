@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
+using Client.Desktop.DTO;
 using Client.Desktop.Models.TimeTracking.DynamicControls;
-using Contract.DTO;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Client.Desktop.Factories;

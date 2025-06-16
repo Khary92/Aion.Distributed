@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests;
-using Contract.DTO;
+using Client.Desktop.DTO;
 using Proto.Requests.NoteTypes;
 using ReactiveUI;
 

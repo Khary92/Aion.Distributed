@@ -1,5 +1,5 @@
+using Client.Desktop.DTO;
 using Client.Desktop.Models.TimeTracking.DynamicControls;
-using Contract.DTO;
 
 namespace Client.Desktop.Factories;
 

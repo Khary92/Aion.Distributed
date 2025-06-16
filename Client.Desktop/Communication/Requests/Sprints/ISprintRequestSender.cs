@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Contract.DTO;
+using Client.Desktop.DTO;
 using Proto.Requests.Sprints;
 
 namespace Client.Desktop.Communication.Requests.Sprints;

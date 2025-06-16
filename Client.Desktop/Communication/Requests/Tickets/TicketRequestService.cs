@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Contract.DTO;
+using Client.Desktop.DTO;
 using Grpc.Net.Client;
 using Proto.DTO.Ticket;
 using Proto.Requests.Tickets;

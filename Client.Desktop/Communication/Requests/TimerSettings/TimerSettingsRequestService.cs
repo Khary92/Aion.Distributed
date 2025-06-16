@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Contract.DTO;
+using Client.Desktop.DTO;
 using Grpc.Net.Client;
 using Proto.Requests.TimerSettings;
 using Proto.Shared;

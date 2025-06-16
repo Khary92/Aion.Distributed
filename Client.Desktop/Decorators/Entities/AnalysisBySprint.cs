@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Contract.DTO;
+using Client.Desktop.DTO;
 
 namespace Client.Desktop.Decorators.Entities;
 

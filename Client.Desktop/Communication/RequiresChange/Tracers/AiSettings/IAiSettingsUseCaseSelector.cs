@@ -1,6 +1,6 @@
-using Contract.Tracing.Tracers.AiSettings.UseCase;
+using Client.Desktop.Communication.RequiresChange.Tracers.AiSettings.UseCase;
 
-namespace Contract.Tracing.Tracers.AiSettings;
+namespace Client.Desktop.Communication.RequiresChange.Tracers.AiSettings;
 
 public interface IAiSettingsUseCaseSelector
 {

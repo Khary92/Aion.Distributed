@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Contract.DTO;
+using Client.Desktop.DTO;
 using ReactiveUI;
 using Unit = System.Reactive.Unit;
 

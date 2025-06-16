@@ -2,7 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
-using Contract.DTO;
+using Client.Desktop.Replays;
 using Proto.Command.Tickets;
 
 namespace Client.Desktop.Models.Synchronization;

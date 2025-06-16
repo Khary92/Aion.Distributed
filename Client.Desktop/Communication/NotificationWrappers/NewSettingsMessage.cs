@@ -1,4 +1,4 @@
-﻿using Contract.DTO;
+﻿using Client.Desktop.DTO;
 
 namespace Client.Desktop.Communication.NotificationWrappers;
 

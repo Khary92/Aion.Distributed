@@ -4,7 +4,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.Decorators;
-using Contract.DTO;
+using Client.Desktop.DTO;
 using DynamicData;
 using Proto.Requests.AnalysisData;
 using Proto.Requests.Sprints;

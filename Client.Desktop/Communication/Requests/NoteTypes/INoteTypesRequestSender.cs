@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Contract.DTO;
+using Client.Desktop.DTO;
 using Proto.Requests.NoteTypes;
 
 namespace Client.Desktop.Communication.Requests.NoteTypes;

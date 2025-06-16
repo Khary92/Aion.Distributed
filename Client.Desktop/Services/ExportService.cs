@@ -6,13 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests;
+using Client.Desktop.DTO;
 using Client.Desktop.FileSystem;
-using Contract.DTO;
 using Proto.Requests.Settings;
 using Proto.Requests.Tickets;
 using Proto.Requests.TimeSlots;
 
-namespace Client.Desktop.Communication.RequiresChange;
+namespace Client.Desktop.Services;
 
 public class ExportService(
     IRequestSender requestSender,

@@ -1,6 +1,6 @@
 using System;
+using Client.Desktop.DTO;
 using CommunityToolkit.Mvvm.Messaging;
-using Contract.DTO;
 using Proto.Notifications.Tag;
 using ReactiveUI;
 

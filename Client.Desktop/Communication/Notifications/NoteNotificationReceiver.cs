@@ -3,8 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using Client.Desktop.Communication.NotificationWrappers;
+using Client.Desktop.DTO;
 using CommunityToolkit.Mvvm.Messaging;
-using Contract.DTO;
 using Grpc.Core;
 using Proto.Notifications.Note;
 

@@ -1,3 +1,3 @@
-namespace Contract.DTO.Replays;
+namespace Client.Desktop.Replays;
 
 public record DocumentationReplayDto(string Documentation);

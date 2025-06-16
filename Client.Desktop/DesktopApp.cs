@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.ReactiveUI;
-using Client.Desktop.Communication.RequiresChange.Cache;
+using Client.Desktop.Services.Cache;
 using Client.Desktop.Views.Main;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

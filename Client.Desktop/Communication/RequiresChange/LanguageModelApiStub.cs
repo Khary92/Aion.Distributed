@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Contract.LanguageModel;
 
 namespace Client.Desktop.Communication.RequiresChange;
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Client.Desktop.Communication.RequiresChange;
+namespace Client.Desktop.Services;
 
 public class RunTimeSettings : IRunTimeSettings
 {

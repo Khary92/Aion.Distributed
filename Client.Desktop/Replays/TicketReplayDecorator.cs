@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests;
-using Contract.DTO.Replays;
+using Client.Desktop.DTO;
 using ReactiveUI;
 
-namespace Contract.DTO;
+namespace Client.Desktop.Replays;
 
 public class TicketReplayDecorator : ReactiveObject
 {

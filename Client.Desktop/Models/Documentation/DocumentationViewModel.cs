@@ -4,7 +4,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests;
-using Contract.LanguageModel;
+using Client.Desktop.Communication.RequiresChange;
 using Proto.Requests.AiSettings;
 using ReactiveUI;
 using Unit = System.Reactive.Unit;

@@ -1,5 +1,5 @@
 ﻿using System;
-using Contract.DTO;
+using Client.Desktop.DTO;
 using Proto.DTO.AiSettings;
 using Proto.Requests.AiSettings;
 

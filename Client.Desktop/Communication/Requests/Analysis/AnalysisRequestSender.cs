@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests.Tags;
 using Client.Desktop.Decorators;
 using Client.Desktop.Decorators.Entities;
-using Contract.DTO;
+using Client.Desktop.DTO;
 using Google.Protobuf.Collections;
 using Grpc.Net.Client;
 using Proto.DTO.StatisticsData;

@@ -1,8 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using Contract.DTO;
+using Client.Desktop.DTO;
 
-namespace Client.Desktop.Communication.RequiresChange;
+namespace Client.Desktop.Services;
 
 public interface IExportService
 {

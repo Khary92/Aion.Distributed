@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Contract.DTO;
+using Client.Desktop.DTO;
 using Proto.Requests.Settings;
 
 namespace Client.Desktop.Communication.Requests.Settings;

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Contract.DTO.Replays;
+using Client.Desktop.Replays;
 using Proto.Requests.TicketReplay;
 
 namespace Client.Desktop.Communication.Requests.Replays;

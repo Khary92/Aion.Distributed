@@ -1,8 +1,8 @@
 using System;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Client.Desktop.DTO;
 using CommunityToolkit.Mvvm.Messaging;
-using Contract.DTO;
 using Proto.Command.Sprints;
 using ReactiveUI;
 using Unit = System.Reactive.Unit;
