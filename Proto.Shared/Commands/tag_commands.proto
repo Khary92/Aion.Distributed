@@ -3,16 +3,16 @@ syntax = "proto3";
 option csharp_namespace = "Proto.Command.Tags";
 
 service TagCommandService {
-  rpc CreateTag (CreateTagCommand) returns (CommandResponse);
-  rpc UpdateTag (UpdateTagCommand) returns (CommandResponse);
+  rpc CreateTag (CreateTagCommandProto) returns (CommandResponse);
+  rpc UpdateTag (UpdateTagCommandProto) returns (CommandResponse);
 }
 
-message CreateTagCommand {
+message CreateTagCommandProto {
   string tagId = 1;
   string name = 2;
 }
 
-message UpdateTagCommand {
+message UpdateTagCommandProto {
   string tagId = 1;
   string name = 2;
 }

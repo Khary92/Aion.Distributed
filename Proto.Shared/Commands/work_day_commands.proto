@@ -4,11 +4,11 @@ option csharp_namespace = "Proto.Command.WorkDays";
 
 import "google/protobuf/timestamp.proto";
 
-service WorkDayCommandService {
-  rpc CreateWorkDay (CreateWorkDayCommand) returns (CommandResponse);
+service WorkDayCommandProtoService {
+  rpc CreateWorkDay (CreateWorkDayCommandProto) returns (CommandResponse);
 }
 
-message CreateWorkDayCommand {
+message CreateWorkDayCommandProto {
   string workDayId = 1;
   google.protobuf.Timestamp date = 2;
 }

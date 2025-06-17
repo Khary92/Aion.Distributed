@@ -2,27 +2,27 @@ syntax = "proto3";
 
 option csharp_namespace = "Proto.Command.Tickets";
 
-service TicketCommandService {
-  rpc CreateTicket (CreateTicketCommand) returns (CommandResponse);
-  rpc UpdateTicketData (UpdateTicketDataCommand) returns (CommandResponse);
-  rpc UpdateTicketDocumentation (UpdateTicketDocumentationCommand) returns (CommandResponse);
+service TicketCommandProtoService {
+  rpc CreateTicket (CreateTicketCommandProto) returns (CommandResponse);
+  rpc UpdateTicketData (UpdateTicketDataCommandProto) returns (CommandResponse);
+  rpc UpdateTicketDocumentation (UpdateTicketDocumentationCommandProto) returns (CommandResponse);
 }
 
-message CreateTicketCommand {
+message CreateTicketCommandProto {
   string ticketId = 1;
   string name = 2;
   string bookingNumber = 3;
   repeated string sprintIds = 4;
 }
 
-message UpdateTicketDataCommand {
+message UpdateTicketDataCommandProto {
   string ticketId = 1;
   string name = 2;
   string bookingNumber = 3;
   repeated string sprintIds = 4;
 }
 
-message UpdateTicketDocumentationCommand {
+message UpdateTicketDocumentationCommandProto {
   string ticketId = 1;
   string documentation = 2;
 }

@@ -3,27 +3,25 @@ syntax = "proto3";
 option csharp_namespace = "Proto.Command.StatisticsData";
 
 
-package Proto.Command.StatisticsData;
-
-service StatisticsDataCommandService {
-  rpc ChangeProductivity (ChangeProductivityCommand) returns (CommandResponse);
-  rpc ChangeTagSelection (ChangeTagSelectionCommand) returns (CommandResponse);
-  rpc CreateStatisticsData (CreateStatisticsDataCommand) returns (CommandResponse);
+service StatisticsDataCommandProtoService {
+  rpc ChangeProductivity (ChangeProductivityCommandProto) returns (CommandResponse);
+  rpc ChangeTagSelection (ChangeTagSelectionCommandProto) returns (CommandResponse);
+  rpc CreateStatisticsData (CreateStatisticsDataCommandProto) returns (CommandResponse);
 }
 
-message ChangeProductivityCommand {
+message ChangeProductivityCommandProto {
   string statisticsDataId = 1;
   bool isProductive = 2;
   bool isNeutral = 3;
   bool isUnproductive = 4;
 }
 
-message ChangeTagSelectionCommand {
+message ChangeTagSelectionCommandProto {
   string statisticsDataId = 1;
   repeated string selectedTagIds = 2;
 }
 
-message CreateStatisticsDataCommand {
+message CreateStatisticsDataCommandProto {
   string statisticsDataId = 1;
   bool isProductive = 2;
   bool isNeutral = 3;

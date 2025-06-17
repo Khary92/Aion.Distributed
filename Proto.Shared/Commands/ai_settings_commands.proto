@@ -2,23 +2,23 @@ syntax = "proto3";
 
 option csharp_namespace = "Proto.Command.AiSettings";
 
-service AiSettingsCommandService {
-  rpc SendChangeLanguageModel (ChangeLanguageModelCommand) returns (CommandResponse);
-  rpc SendChangePrompt (ChangePromptCommand) returns (CommandResponse);
-  rpc SendCreateAiSettings (CreateAiSettingsCommand) returns (CommandResponse);
+service AiSettingsCommandProtoService {
+  rpc SendChangeLanguageModel (ChangeLanguageModelCommandProto) returns (CommandResponse);
+  rpc SendChangePrompt (ChangePromptCommandProto) returns (CommandResponse);
+  rpc SendCreateAiSettings (CreateAiSettingsCommandProto) returns (CommandResponse);
 }
 
-message ChangeLanguageModelCommand {
+message ChangeLanguageModelCommandProto {
   string aiSettingsId = 1;
   string languageModelPath = 2;
 }
 
-message ChangePromptCommand {
+message ChangePromptCommandProto {
   string aiSettingsId = 1;
   string prompt = 2;
 }
 
-message CreateAiSettingsCommand {
+message CreateAiSettingsCommandProto {
   string aiSettingsId = 1;
   string prompt = 2;
   string languageModelPath = 3;

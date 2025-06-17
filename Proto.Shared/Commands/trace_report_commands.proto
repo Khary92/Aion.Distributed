@@ -4,10 +4,10 @@ option csharp_namespace = "Proto.Command.TraceReports";
 
 
 service TraceReportCommandService {
-  rpc SendTraceReport (SendTraceReportCommand) returns (CommandResponse);
+  rpc SendTraceReport (SendTraceReportCommandProto) returns (CommandResponse);
 }
 
-message SendTraceReportCommand {
+message SendTraceReportCommandProto {
   string traceReportDto = 1;
 }
 

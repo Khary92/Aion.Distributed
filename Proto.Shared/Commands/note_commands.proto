@@ -5,12 +5,12 @@ option csharp_namespace = "Proto.Command.Notes";
 
 import "google/protobuf/timestamp.proto";
 
-service NoteCommandService {
-  rpc CreateNote (CreateNoteCommand) returns (CommandResponse);
-  rpc UpdateNote (UpdateNoteCommand) returns (CommandResponse);
+service NoteCommandProtoService {
+  rpc CreateNote (CreateNoteCommandProto) returns (CommandResponse);
+  rpc UpdateNote (UpdateNoteCommandProto) returns (CommandResponse);
 }
 
-message CreateNoteCommand {
+message CreateNoteCommandProto {
   string noteId = 1;
   string text = 2;
   string noteTypeId = 3;
@@ -18,7 +18,7 @@ message CreateNoteCommand {
   google.protobuf.Timestamp timeStamp = 5;
 }
 
-message UpdateNoteCommand {
+message UpdateNoteCommandProto {
   string noteId = 1;
   string text = 2;
   string noteTypeId = 3;

@@ -2,23 +2,23 @@ syntax = "proto3";
 
 option csharp_namespace = "Proto.Command.NoteTypes";
 
-service NoteTypeCommandService {
-  rpc ChangeNoteTypeColor (ChangeNoteTypeColorCommand) returns (CommandResponse);
-  rpc ChangeNoteTypeName (ChangeNoteTypeNameCommand) returns (CommandResponse);
-  rpc CreateNoteType (CreateNoteTypeCommand) returns (CommandResponse);
+service NoteTypeCommandProtoService {
+  rpc ChangeNoteTypeColor (ChangeNoteTypeColorCommandProto) returns (CommandResponse);
+  rpc ChangeNoteTypeName (ChangeNoteTypeNameCommandProto) returns (CommandResponse);
+  rpc CreateNoteType (CreateNoteTypeCommandProto) returns (CommandResponse);
 }
 
-message ChangeNoteTypeColorCommand {
+message ChangeNoteTypeColorCommandProto {
   string noteTypeId = 1;
   string color = 2;
 }
 
-message ChangeNoteTypeNameCommand {
+message ChangeNoteTypeNameCommandProto {
   string noteTypeId = 1;
   string name = 2;
 }
 
-message CreateNoteTypeCommand {
+message CreateNoteTypeCommandProto {
   string noteTypeId = 1;
   string name = 2;
   string color = 3;

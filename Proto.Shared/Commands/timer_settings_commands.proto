@@ -3,23 +3,23 @@ syntax = "proto3";
 option csharp_namespace = "Proto.Command.TimerSettings";
 
 
-service TimerSettingsCommandService {
-  rpc ChangeDocuTimerSaveInterval (ChangeDocuTimerSaveIntervalCommand) returns (CommandResponse);
-  rpc ChangeSnapshotSaveInterval (ChangeSnapshotSaveIntervalCommand) returns (CommandResponse);
-  rpc CreateTimerSettings (CreateTimerSettingsCommand) returns (CommandResponse);
+service TimerSettingsCommandProtoService {
+  rpc ChangeDocuTimerSaveInterval (ChangeDocuTimerSaveIntervalCommandProto) returns (CommandResponse);
+  rpc ChangeSnapshotSaveInterval (ChangeSnapshotSaveIntervalCommandProto) returns (CommandResponse);
+  rpc CreateTimerSettings (CreateTimerSettingsCommandProto) returns (CommandResponse);
 }
 
-message ChangeDocuTimerSaveIntervalCommand {
+message ChangeDocuTimerSaveIntervalCommandProto {
   string timerSettingsId = 1;
   int32 docuTimerSaveInterval = 2;
 }
 
-message ChangeSnapshotSaveIntervalCommand {
+message ChangeSnapshotSaveIntervalCommandProto {
   string timerSettingsId = 1;
   int32 snapshotSaveInterval = 2;
 }
 
-message CreateTimerSettingsCommand {
+message CreateTimerSettingsCommandProto {
   string timerSettingsId = 1;
   int32 documentationSaveInterval = 2;
   int32 snapshotSaveInterval = 3;

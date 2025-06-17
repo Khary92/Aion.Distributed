@@ -4,19 +4,19 @@ option csharp_namespace = "Proto.Command.TimeSlots";
 
 import "google/protobuf/timestamp.proto";
 
-service TimeSlotCommandService {
-  rpc CreateTimeSlot(CreateTimeSlotCommand) returns (CommandResponse);
-  rpc AddNote (AddNoteCommand) returns (CommandResponse);
-  rpc SetStartTime (SetStartTimeCommand) returns (CommandResponse);
-  rpc SetEndTime (SetEndTimeCommand) returns (CommandResponse);
+service TimeSlotCommandProtoService {
+  rpc CreateTimeSlot(CreateTimeSlotCommandProto) returns (CommandResponse);
+  rpc AddNote (AddNoteCommandProto) returns (CommandResponse);
+  rpc SetStartTime (SetStartTimeCommandProto) returns (CommandResponse);
+  rpc SetEndTime (SetEndTimeCommandProto) returns (CommandResponse);
 }
 
-message AddNoteCommand {
+message AddNoteCommandProto {
   string time_slot_id = 1;
   string note_id = 2;
 }
 
-message CreateTimeSlotCommand {
+message CreateTimeSlotCommandProto {
   string time_slot_id = 1;
   string selected_ticket_id = 2;
   string work_day_id = 3;
@@ -25,12 +25,12 @@ message CreateTimeSlotCommand {
   bool is_timer_running = 6;
 }
 
-message SetEndTimeCommand {
+message SetEndTimeCommandProto {
   string time_slot_id = 1;
   google.protobuf.Timestamp time = 2;
 }
 
-message SetStartTimeCommand {
+message SetStartTimeCommandProto {
   string time_slot_id = 1;
   google.protobuf.Timestamp time = 2;
 }

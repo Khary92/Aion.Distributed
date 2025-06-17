@@ -5,23 +5,23 @@ option csharp_namespace = "Proto.Command.Sprints";
 import "google/protobuf/timestamp.proto";
 
 service SprintsCommandService {
-  rpc AddTicketToActiveSprint (AddTicketToActiveSprintCommand) returns (CommandResponse);
-  rpc AddTicketToSprint (AddTicketToSprintCommand) returns (CommandResponse);
-  rpc CreateSprint (CreateSprintCommand) returns (CommandResponse);
-  rpc SetSprintActiveStatus (SetSprintActiveStatusCommand) returns (CommandResponse);
-  rpc UpdateSprintData (UpdateSprintDataCommand) returns (CommandResponse);
+  rpc AddTicketToActiveSprint (AddTicketToActiveSprintCommandProto) returns (CommandResponse);
+  rpc AddTicketToSprint (AddTicketToSprintCommandProto) returns (CommandResponse);
+  rpc CreateSprint (CreateSprintCommandProto) returns (CommandResponse);
+  rpc SetSprintActiveStatus (SetSprintActiveStatusCommandProto) returns (CommandResponse);
+  rpc UpdateSprintData (UpdateSprintDataCommandProto) returns (CommandResponse);
 }
 
-message AddTicketToActiveSprintCommand {
+message AddTicketToActiveSprintCommandProto {
   string ticketId = 1;
 }
 
-message AddTicketToSprintCommand {
+message AddTicketToSprintCommandProto {
   string sprintId = 1;
   string ticketId = 2;
 }
 
-message CreateSprintCommand {
+message CreateSprintCommandProto {
   string sprintId = 1;
   string name = 2;
   google.protobuf.Timestamp startTime = 3;
@@ -30,12 +30,12 @@ message CreateSprintCommand {
   repeated string ticketIds = 6;
 }
 
-message SetSprintActiveStatusCommand {
+message SetSprintActiveStatusCommandProto {
   string sprintId = 1;
   bool isActive = 2;
 }
 
-message UpdateSprintDataCommand {
+message UpdateSprintDataCommandProto {
   string sprintId = 1;
   string name = 2;
   google.protobuf.Timestamp startTime = 3;

@@ -4,24 +4,24 @@ option csharp_namespace = "Proto.Command.Settings";
 
 package Proto.Command.Settings;
 
-service SettingsCommandService {
-  rpc CreateSettings (CreateSettingsCommand) returns (CommandResponse);
-  rpc ChangeExportPath (ChangeExportPathCommand) returns (CommandResponse);
-  rpc ChangeAutomaticTicketAdding (ChangeAutomaticTicketAddingToSprintCommand) returns (CommandResponse);
+service SettingsCommandProtoService {
+  rpc CreateSettings (CreateSettingsCommandProto) returns (CommandResponse);
+  rpc ChangeExportPath (ChangeExportPathCommandProto) returns (CommandResponse);
+  rpc ChangeAutomaticTicketAdding (ChangeAutomaticTicketAddingToSprintCommandProto) returns (CommandResponse);
 }
 
-message CreateSettingsCommand {
+message CreateSettingsCommandProto {
   string settingsId = 1;
   string exportPath = 2;
   bool isAddNewTicketsToCurrentSprintActive = 3;
 }
 
-message ChangeExportPathCommand {
+message ChangeExportPathCommandProto {
   string settingsId = 1;
   string exportPath = 2;
 }
 
-message ChangeAutomaticTicketAddingToSprintCommand {
+message ChangeAutomaticTicketAddingToSprintCommandProto {
   string settingsId = 1;
   bool isAddNewTicketsToCurrentSprintActive = 2;
 }
