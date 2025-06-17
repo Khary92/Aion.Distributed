@@ -85,7 +85,6 @@ public static class Bootstrapper
         services.AddSingleton<IRunTimeSettings, RunTimeSettings>();
         services.AddSingleton<IExportService, ExportService>();
         services.AddSingleton<ILanguageModelApi, LanguageModelApiStub>();
-        
     }
 
     private static void AddFileSystemServices(this IServiceCollection services)
