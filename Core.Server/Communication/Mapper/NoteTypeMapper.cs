@@ -1,13 +1,12 @@
-using Domain.Entities;
 using Proto.DTO.NoteType;
 
 namespace Service.Server.Communication.Mapper;
 
-public class NoteTypeMapper : IDtoMapper<NoteTypeProto, NoteType>
+public class NoteTypeMapper : IDtoMapper<NoteTypeProto, Domain.Entities.NoteType>
 {
-    public NoteType ToDomain(NoteTypeProto dto)
+    public Domain.Entities.NoteType ToDomain(NoteTypeProto dto)
     {
-        return new NoteType
+        return new Domain.Entities.NoteType
         {
             NoteTypeId = Guid.Parse(dto.NoteTypeId),
             Name = dto.Name,
@@ -15,7 +14,7 @@ public class NoteTypeMapper : IDtoMapper<NoteTypeProto, NoteType>
         };
     }
 
-    public NoteTypeProto ToDto(NoteType domain)
+    public NoteTypeProto ToDto(Domain.Entities.NoteType domain)
     {
         return new NoteTypeProto
         {
