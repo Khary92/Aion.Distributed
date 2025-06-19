@@ -1,8 +1,7 @@
-using Application.Contract.CQRS.Commands.Entities.Note;
-using Application.Services.Entities.Notes;
-using MediatR;
+using Service.Server.CQRS.Commands.Entities.Note;
+using Service.Server.Old.Services.Entities.Notes;
 
-namespace Application.Handler.Commands.Entities.Note;
+namespace Service.Server.Old.Handler.Commands.Entities.Note;
 
 public class CreateNoteCommandHandler(INoteCommandsService noteCommandsService)
     : IRequestHandler<CreateNoteCommand, Unit>

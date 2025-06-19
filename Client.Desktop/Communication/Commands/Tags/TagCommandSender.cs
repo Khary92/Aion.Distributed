@@ -8,18 +8,15 @@ namespace Client.Desktop.Communication.Commands.Tags;
 public class TagCommandSender : ITagCommandSender
 {
     private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
-    private readonly TagCommandService.TagCommandServiceClient _client = new(Channel);
+    private readonly TagCommandProtoService.TagCommandProtoServiceClient _client = new(Channel);
 
-    public async Task<bool> Send(CreateTagCommand command)
+    public async Task<bool> Send(CreateTagCommandProto command)
     {
-        GrpcChannel channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
-        TagCommandService.TagCommandServiceClient client = new(channel);
-
-        var response = await client.CreateTagAsync(command);
+        var response = await _client.CreateTagAsync(command);
         return response.Success;
     }
 
-    public async Task<bool> Send(UpdateTagCommand command)
+    public async Task<bool> Send(UpdateTagCommandProto command)
     {
         var response = await _client.UpdateTagAsync(command);
         return response.Success;

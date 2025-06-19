@@ -1,22 +1,26 @@
-using Application.Contract.DTO;
-using Domain.Entities;
+using Proto.DTO.Settings;
 
-namespace Application.Mapper;
+namespace Service.Server.Communication.Mapper;
 
-public class SettingsMapper : IDtoMapper<SettingsDto, Settings>
+public class SettingsMapper : IDtoMapper<SettingsProto, Domain.Entities.Settings>
 {
-    public Settings ToDomain(SettingsDto dto)
+    public Domain.Entities.Settings ToDomain(SettingsProto dto)
     {
-        return new Settings
+        return new Domain.Entities.Settings
         {
-            SettingsId = dto.SettingsId,
+            SettingsId = Guid.Parse(dto.SettingsId),
             ExportPath = dto.ExportPath,
             IsAddNewTicketsToCurrentSprintActive = dto.IsAddNewTicketsToCurrentSprintActive
         };
     }
 
-    public SettingsDto ToDto(Settings domain)
+    public SettingsProto ToDto(Domain.Entities.Settings domain)
     {
-        return new SettingsDto(domain.SettingsId, domain.ExportPath, domain.IsAddNewTicketsToCurrentSprintActive);
+        return new SettingsProto
+        {
+            SettingsId = domain.SettingsId.ToString(),
+            ExportPath = domain.ExportPath,
+            IsAddNewTicketsToCurrentSprintActive = domain.IsAddNewTicketsToCurrentSprintActive
+        };
     }
 }

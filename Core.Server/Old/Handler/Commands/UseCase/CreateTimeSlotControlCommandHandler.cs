@@ -1,14 +1,12 @@
-using Application.Contract.CQRS.Commands.Entities.StatisticsData;
-using Application.Contract.CQRS.Commands.Entities.TimeSlots;
-using Application.Contract.CQRS.Commands.UseCase.Commands;
-using Application.Contract.Notifications.UseCase;
-using Application.Services.Entities.StatisticsData;
-using Application.Services.Entities.TimeSlots;
-using Application.Services.Entities.WorkDays;
-using Application.Services.UseCase;
-using MediatR;
+using Service.Server.CQRS.Commands.Entities.StatisticsData;
+using Service.Server.CQRS.Commands.Entities.TimeSlots;
+using Service.Server.CQRS.Commands.UseCase.Commands;
+using Service.Server.Old.Services.Entities.StatisticsData;
+using Service.Server.Old.Services.Entities.TimeSlots;
+using Service.Server.Old.Services.Entities.WorkDays;
+using Service.Server.Old.Services.UseCase;
 
-namespace Application.Handler.Commands.UseCase;
+namespace Service.Server.Old.Handler.Commands.UseCase;
 
 public class CreateTimeSlotControlCommandHandler(
     IMediator mediator,

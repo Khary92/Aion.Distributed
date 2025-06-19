@@ -2,7 +2,7 @@
 using Proto.DTO.Tag;
 using Proto.Requests.Tags;
 
-namespace Service.Server.Mock.Tag;
+namespace Service.Server.Communication.Mock.Tag;
 
 public class MockTagRequestService : TagRequestService.TagRequestServiceBase
 {

@@ -1,5 +1,5 @@
 
-namespace Application.Contract.CQRS.Commands.Entities.Settings;
+namespace Service.Server.CQRS.Commands.Entities.Settings;
 
 public record UpdateSettingsCommand(
     Guid SettingsId,

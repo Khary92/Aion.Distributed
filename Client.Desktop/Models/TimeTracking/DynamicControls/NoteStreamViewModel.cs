@@ -40,7 +40,7 @@ public class NoteStreamViewModel(
         if (!runTimeSettings.IsSelectedDateCurrentDate()) return;
 
         var noteId = Guid.NewGuid();
-        await commandSender.Send(new CreateNoteCommand
+        await commandSender.Send(new CreateNoteCommandProto
         {
             NoteId = noteId.ToString(),
             NoteTypeId = Guid.NewGuid().ToString(),

@@ -1,9 +1,8 @@
-using Application.Contract.DTO;
-using Application.Mapper;
 using Domain.Events.TimerSettings;
 using Domain.Interfaces;
+using Service.Server.Communication.Mapper;
 
-namespace Application.Services.Entities.TimerSettings;
+namespace Service.Server.Old.Services.Entities.TimerSettings;
 
 public class TimerSettingsRequestsService(
     IEventStore<TimerSettingsEvent> timerSettingsEventStore,

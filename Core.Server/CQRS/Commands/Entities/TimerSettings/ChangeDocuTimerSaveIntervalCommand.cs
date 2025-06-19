@@ -1,5 +1,5 @@
 
-namespace Application.Contract.CQRS.Commands.Entities.TimerSettings;
+namespace Service.Server.CQRS.Commands.Entities.TimerSettings;
 
 public record ChangeDocuTimerSaveIntervalCommand(
     Guid TimerSettingsId,

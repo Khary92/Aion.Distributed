@@ -2,7 +2,7 @@
 using Proto.DTO.AiSettings;
 using Proto.Requests.AiSettings;
 
-namespace Service.Server.Mock.AiSettings;
+namespace Service.Server.Communication.Mock.AiSettings;
 
 public class MockAiSettingsRequestService : AiSettingsRequestService.AiSettingsRequestServiceBase
 {

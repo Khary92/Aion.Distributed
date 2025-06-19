@@ -1,9 +1,7 @@
-using Application.Contract.DTO;
-using Application.Decorators;
-using Application.Services.Entities.Tickets;
 using Domain.Interfaces;
+using Service.Server.Old.Services.Entities.Tickets;
 
-namespace Application.Services.UseCase.Replays;
+namespace Service.Server.Old.Services.UseCase.Replays;
 
 public class ReplayRequestsService(ITicketRequestsService ticketRequestsService, ITicketEventsStore ticketEventsStore)
     : IReplayRequestsService

@@ -1,8 +1,7 @@
-using Application.Contract.CQRS.Commands.Entities.AiSettings;
-using Application.Services.Entities.AiSettings;
-using MediatR;
+using Service.Server.CQRS.Commands.Entities.AiSettings;
+using Service.Server.Old.Services.Entities.AiSettings;
 
-namespace Application.Handler.Commands.Entities.AiSettings;
+namespace Service.Server.Old.Handler.Commands.Entities.AiSettings;
 
 public class CreateAiSettingsCommandHandler(IAiSettingsCommandsService configCommandsService)
     : IRequestHandler<CreateAiSettingsCommand, Unit>

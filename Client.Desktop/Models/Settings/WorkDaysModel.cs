@@ -59,7 +59,7 @@ public class WorkDaysModel(
         }
 
         var newGuid = Guid.NewGuid();
-        var createWorkDayCommand = new CreateWorkDayCommand
+        var createWorkDayCommand = new CreateWorkDayCommandProto
         {
             WorkDayId = newGuid.ToString(),
             Date = Timestamp.FromDateTimeOffset(date)

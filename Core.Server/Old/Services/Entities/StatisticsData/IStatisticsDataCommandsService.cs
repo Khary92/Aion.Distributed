@@ -1,6 +1,6 @@
-using Application.Contract.CQRS.Commands.Entities.StatisticsData;
+using Service.Server.CQRS.Commands.Entities.StatisticsData;
 
-namespace Application.Services.Entities.StatisticsData;
+namespace Service.Server.Old.Services.Entities.StatisticsData;
 
 public interface IStatisticsDataCommandsService
 {

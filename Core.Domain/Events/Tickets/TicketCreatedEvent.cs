@@ -1,5 +1,3 @@
-using System.Collections.ObjectModel;
-
 namespace Domain.Events.Tickets;
 
 public record TicketCreatedEvent(
@@ -7,4 +5,4 @@ public record TicketCreatedEvent(
     string Name,
     string BookingNumber,
     string Documentation,
-    Collection<Guid> SprintIds);
+    List<Guid> SprintIds);

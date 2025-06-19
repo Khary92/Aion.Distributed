@@ -1,8 +1,7 @@
-using Application.Contract.CQRS.Commands.Entities.WorkDays;
-using Application.Services.Entities.WorkDays;
-using MediatR;
+using Service.Server.CQRS.Commands.Entities.WorkDays;
+using Service.Server.Old.Services.Entities.WorkDays;
 
-namespace Application.Handler.Commands.Entities.WorkDays;
+namespace Service.Server.Old.Handler.Commands.Entities.WorkDays;
 
 public class CreateWorkDayCommandHandler(
     IWorkDayCommandsService workDayCommandsService,

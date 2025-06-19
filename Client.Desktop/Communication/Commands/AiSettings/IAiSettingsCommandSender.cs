@@ -5,7 +5,7 @@ namespace Client.Desktop.Communication.Commands.AiSettings;
 
 public interface IAiSettingsCommandSender
 {
-    Task<bool> Send(ChangeLanguageModelCommand command);
-    Task<bool> Send(ChangePromptCommand command);
-    Task<bool> Send(CreateAiSettingsCommand command);
+    Task<bool> Send(ChangeLanguageModelCommandProto command);
+    Task<bool> Send(ChangePromptCommandProto command);
+    Task<bool> Send(CreateAiSettingsCommandProto command);
 }

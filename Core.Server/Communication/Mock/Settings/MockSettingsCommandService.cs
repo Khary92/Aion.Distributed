@@ -1,13 +1,14 @@
 ﻿using Grpc.Core;
 using Proto.Command.Settings;
 using Proto.Notifications.Settings;
+using Service.Server.Communication.Settings;
 
-namespace Service.Server.Mock.Settings;
+namespace Service.Server.Communication.Mock.Settings;
 
 public class MockSettingsCommandService(SettingsNotificationServiceImpl settingsNotificationService)
-    : SettingsCommandService.SettingsCommandServiceBase
+    : SettingsCommandProtoService.SettingsCommandProtoServiceBase
 {
-    public override async Task<CommandResponse> CreateSettings(CreateSettingsCommand request, ServerCallContext context)
+    public override async Task<CommandResponse> CreateSettings(CreateSettingsCommandProto request, ServerCallContext context)
     {
         Console.WriteLine($"[CreateSettings] ID: {request.SettingsId}, ExportPath: {request.ExportPath}, AddNewTicketsActive: {request.IsAddNewTicketsToCurrentSprintActive}");
 
@@ -32,7 +33,7 @@ public class MockSettingsCommandService(SettingsNotificationServiceImpl settings
         }
     }
 
-    public override async Task<CommandResponse> ChangeExportPath(ChangeExportPathCommand request, ServerCallContext context)
+    public override async Task<CommandResponse> ChangeExportPath(ChangeExportPathCommandProto request, ServerCallContext context)
     {
         Console.WriteLine($"[UpdateSettings] ID: {request.SettingsId}, ExportPath: {request.ExportPath}");
 
@@ -56,7 +57,7 @@ public class MockSettingsCommandService(SettingsNotificationServiceImpl settings
         }
     }
     
-    public override async Task<CommandResponse> ChangeAutomaticTicketAdding(ChangeAutomaticTicketAddingToSprintCommand request, ServerCallContext context)
+    public override async Task<CommandResponse> ChangeAutomaticTicketAdding(ChangeAutomaticTicketAddingToSprintCommandProto request, ServerCallContext context)
     {
         Console.WriteLine($"[UpdateSettings] ID: {request.SettingsId}, AddNewTicketsActive: {request.IsAddNewTicketsToCurrentSprintActive}");
 

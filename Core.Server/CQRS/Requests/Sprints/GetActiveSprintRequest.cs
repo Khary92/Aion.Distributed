@@ -1,4 +1,4 @@
 
-namespace Application.Contract.CQRS.Requests.Sprints;
+namespace Service.Server.CQRS.Requests.Sprints;
 
 public class GetActiveSprintRequest;

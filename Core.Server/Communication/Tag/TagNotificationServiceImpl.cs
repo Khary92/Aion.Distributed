@@ -1,9 +1,7 @@
 ﻿using Grpc.Core;
 using Proto.Notifications.Tag;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace Service.Server.Mock.Tag;
+namespace Service.Server.Communication.Tag;
 
 public class TagNotificationServiceImpl : TagNotificationService.TagNotificationServiceBase
 {

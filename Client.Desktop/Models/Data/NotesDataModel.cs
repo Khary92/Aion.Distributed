@@ -83,7 +83,7 @@ public class NotesDataModel(
     {
         if (string.IsNullOrWhiteSpace(noteType) || NoteTypes.Any(nt => nt.Name == noteType)) return;
 
-        var createNoteTypeCommand = new CreateNoteTypeCommand
+        var createNoteTypeCommand = new CreateNoteTypeCommandProto
         {
             NoteTypeId = Guid.NewGuid().ToString(),
             Color = color,
@@ -98,7 +98,7 @@ public class NotesDataModel(
 
     public async Task ChangeNoteTypeName(NoteTypeDto noteType)
     {
-        var changeNoteTypeNameCommand = new ChangeNoteTypeNameCommand
+        var changeNoteTypeNameCommand = new ChangeNoteTypeNameCommandProto
         {
             NoteTypeId = noteType.NoteTypeId.ToString(),
             Name = noteType.Name
@@ -111,7 +111,7 @@ public class NotesDataModel(
 
     public async Task ChangeNoteTypeColor(NoteTypeDto noteType)
     {
-        var changeNoteTypeColorCommand = new ChangeNoteTypeColorCommand
+        var changeNoteTypeColorCommand = new ChangeNoteTypeColorCommandProto
         {
             NoteTypeId = noteType.NoteTypeId.ToString(),
             Color = noteType.Color

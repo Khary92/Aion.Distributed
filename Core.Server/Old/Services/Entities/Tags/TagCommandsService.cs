@@ -1,10 +1,9 @@
-using Application.Contract.CQRS.Commands.Entities.Tags;
-using Application.Translators.Tags;
 using Domain.Events.Tags;
 using Domain.Interfaces;
-using MediatR;
+using Service.Server.CQRS.Commands.Entities.Tags;
+using Service.Server.Old.Translators.Tags;
 
-namespace Application.Services.Entities.Tags;
+namespace Service.Server.Old.Services.Entities.Tags;
 
 public class TagCommandsService(
     IEventStore<TagEvent> tagEventStore,

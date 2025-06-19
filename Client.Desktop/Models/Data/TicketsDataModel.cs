@@ -67,7 +67,7 @@ public class TicketsDataModel(
 
     public async Task AddTicketToCurrentSprint(TicketDto ticketDto)
     {
-        var addTicketToActiveSprintCommand = new AddTicketToActiveSprintCommand
+        var addTicketToActiveSprintCommand = new AddTicketToActiveSprintCommandProto
             { TicketId = ticketDto.TicketId.ToString() };
 
         await commandSender.Send(addTicketToActiveSprintCommand);
@@ -78,7 +78,7 @@ public class TicketsDataModel(
 
     public async Task UpdateTicket(TicketDto selectedTicket)
     {
-        var updateTicketDataCommand = new UpdateTicketDataCommand
+        var updateTicketDataCommand = new UpdateTicketDataCommandProto
         {
             TicketId = selectedTicket.TicketId.ToString(),
             Name = selectedTicket.Name,
@@ -93,7 +93,7 @@ public class TicketsDataModel(
 
     public async Task CreateTicket(TicketDto createTicketDto)
     {
-        var createTicketCommand = new CreateTicketCommand
+        var createTicketCommand = new CreateTicketCommandProto
         {
             TicketId = createTicketDto.TicketId.ToString(),
             Name = createTicketDto.Name,

@@ -1,6 +1,4 @@
-using Application.Contract.DTO;
-
-namespace Application.Services.Entities.Sprints;
+namespace Service.Server.Old.Services.Entities.Sprints;
 
 public interface ISprintRequestsService
 {

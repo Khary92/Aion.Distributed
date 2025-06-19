@@ -8,7 +8,7 @@ using Proto.DTO.Ticket;
 using Proto.DTO.TimeSlots;
 using Proto.Requests.AnalysisData;
 
-namespace Service.Server.Mock.Analysis;
+namespace Service.Server.Communication.Mock.Analysis;
 
 public class MockAnalysisRequestService : AnalysisRequestService.AnalysisRequestServiceBase
 {

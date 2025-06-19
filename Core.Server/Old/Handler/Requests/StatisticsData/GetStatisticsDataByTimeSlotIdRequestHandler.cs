@@ -1,9 +1,7 @@
-using Application.Contract.CQRS.Requests.StatisticsData;
-using Application.Contract.DTO;
-using Application.Services.Entities.StatisticsData;
-using MediatR;
+using Service.Server.CQRS.Requests.StatisticsData;
+using Service.Server.Old.Services.Entities.StatisticsData;
 
-namespace Application.Handler.Requests.StatisticsData;
+namespace Service.Server.Old.Handler.Requests.StatisticsData;
 
 public class GetStatisticsDataByTimeSlotIdRequestHandler(IStatisticsDataRequestsService statisticsDataRequestsService)
     : IRequestHandler<GetStatisticsDataByTimeSlotIdRequest, StatisticsDataDto>

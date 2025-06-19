@@ -1,12 +1,8 @@
 using System.Timers;
-using Application.Contract.DTO;
-using Application.Contract.Notifications.Entities.TimerSettings;
-using Application.Contract.Notifications.UseCase;
-using Application.Services.Entities.TimerSettings;
-using MediatR;
+using Service.Server.Old.Services.Entities.TimerSettings;
 using Timer = System.Timers.Timer;
 
-namespace Application.Services.UseCase;
+namespace Service.Server.Old.Services.UseCase;
 
 public class TimerService :
     INotificationHandler<TimerSettingsCreatedNotification>,

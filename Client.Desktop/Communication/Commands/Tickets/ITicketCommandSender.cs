@@ -5,7 +5,7 @@ namespace Client.Desktop.Communication.Commands.Tickets;
 
 public interface ITicketCommandSender
 {
-    Task<bool> Send(CreateTicketCommand command);
-    Task<bool> Send(UpdateTicketDataCommand command);
-    Task<bool> Send(UpdateTicketDocumentationCommand command);
+    Task<bool> Send(CreateTicketCommandProto command);
+    Task<bool> Send(UpdateTicketDataCommandProto command);
+    Task<bool> Send(UpdateTicketDocumentationCommandProto command);
 }

@@ -1,6 +1,4 @@
-using Application.Contract.DTO;
-
-namespace Application.Services.Entities.Tickets;
+namespace Service.Server.Old.Services.Entities.Tickets;
 
 public interface ITicketRequestsService
 {

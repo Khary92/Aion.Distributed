@@ -1,10 +1,8 @@
-using Application.Contract.CQRS.Commands.UseCase.Commands;
-using Application.Contract.Notifications.UseCase;
-using Application.Services.Entities.StatisticsData;
-using Application.Services.Entities.TimeSlots;
-using MediatR;
+using Service.Server.CQRS.Commands.UseCase.Commands;
+using Service.Server.Old.Services.Entities.StatisticsData;
+using Service.Server.Old.Services.Entities.TimeSlots;
 
-namespace Application.Handler.Commands.UseCase;
+namespace Service.Server.Old.Handler.Commands.UseCase;
 
 public class LoadTimeSlotControlCommandHandler(
     IMediator mediator,

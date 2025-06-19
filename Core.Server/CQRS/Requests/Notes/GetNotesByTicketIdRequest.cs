@@ -1,4 +1,4 @@
 
-namespace Application.Contract.CQRS.Requests.Notes;
+namespace Service.Server.CQRS.Requests.Notes;
 
 public record GetNotesByTicketIdRequest(Guid TicketId);

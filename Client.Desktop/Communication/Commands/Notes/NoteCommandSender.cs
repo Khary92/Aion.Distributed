@@ -8,15 +8,15 @@ namespace Client.Desktop.Communication.Commands.Notes;
 public class NoteCommandSender : INoteCommandSender
 {
     private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
-    private readonly NoteCommandService.NoteCommandServiceClient _client = new(Channel);
+    private readonly NoteCommandProtoService.NoteCommandProtoServiceClient _client = new(Channel);
 
-    public async Task<bool> Send(CreateNoteCommand command)
+    public async Task<bool> Send(CreateNoteCommandProto command)
     {
         var response = await _client.CreateNoteAsync(command);
         return response.Success;
     }
 
-    public async Task<bool> Send(UpdateNoteCommand updateTicketDataCommand)
+    public async Task<bool> Send(UpdateNoteCommandProto updateTicketDataCommand)
     {
         var response = await _client.UpdateNoteAsync(updateTicketDataCommand);
         return response.Success;

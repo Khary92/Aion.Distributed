@@ -1,9 +1,7 @@
-using Application.Contract.CQRS.Requests.Replays;
-using Application.Contract.DTO;
-using Application.Services.UseCase.Replays;
-using MediatR;
+using Service.Server.CQRS.Requests.Replays;
+using Service.Server.Old.Services.UseCase.Replays;
 
-namespace Application.Handler.Requests.Replays;
+namespace Service.Server.Old.Handler.Requests.Replays;
 
 public class GetTicketReplayByIdRequestHandler(IReplayRequestsService replayRequestsService)
     : IRequestHandler<GetTicketReplayByIdRequest, TicketReplayDecorator>

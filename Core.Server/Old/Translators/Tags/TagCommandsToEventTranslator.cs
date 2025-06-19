@@ -1,8 +1,8 @@
 using System.Text.Json;
-using Application.Contract.CQRS.Commands.Entities.Tags;
 using Domain.Events.Tags;
+using Service.Server.CQRS.Commands.Entities.Tags;
 
-namespace Application.Translators.Tags;
+namespace Service.Server.Old.Translators.Tags;
 
 public class TagCommandsToEventTranslator : ITagCommandsToEventTranslator
 {

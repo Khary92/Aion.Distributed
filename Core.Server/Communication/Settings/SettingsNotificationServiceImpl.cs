@@ -1,7 +1,7 @@
 ﻿using Grpc.Core;
 using Proto.Notifications.Settings;
 
-namespace Service.Server.Mock.Settings;
+namespace Service.Server.Communication.Settings;
 
 public class SettingsNotificationServiceImpl : SettingsNotificationService.SettingsNotificationServiceBase
 {

@@ -1,7 +1,4 @@
-using Application.Contract.DTO;
-using Application.Decorators;
-
-namespace Application.Services.UseCase.Replays;
+namespace Service.Server.Old.Services.UseCase.Replays;
 
 public interface IReplayRequestsService
 {

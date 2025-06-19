@@ -2,7 +2,7 @@
 using Proto.DTO.Ticket;
 using Proto.Requests.Tickets;
 
-namespace Service.Server.Mock.Ticket;
+namespace Service.Server.Communication.Mock.Ticket;
 
 public class MockTicketRequestService : TicketRequestService.TicketRequestServiceBase
 {

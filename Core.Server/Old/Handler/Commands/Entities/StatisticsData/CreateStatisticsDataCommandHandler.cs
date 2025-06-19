@@ -1,8 +1,7 @@
-using Application.Contract.CQRS.Commands.Entities.StatisticsData;
-using Application.Services.Entities.StatisticsData;
-using MediatR;
+using Service.Server.CQRS.Commands.Entities.StatisticsData;
+using Service.Server.Old.Services.Entities.StatisticsData;
 
-namespace Application.Handler.Commands.Entities.StatisticsData;
+namespace Service.Server.Old.Handler.Commands.Entities.StatisticsData;
 
 public class CreateStatisticsDataCommandHandler(IStatisticsDataCommandsService statisticsDataCommandsService)
     : IRequestHandler<CreateStatisticsDataCommand, Unit>

@@ -39,7 +39,7 @@ public class DocumentationSynchronizer(ICommandSender commandSender) : IStateSyn
                 decorator.DisplayedDocumentation = documentation;
             }
 
-            await commandSender.Send(new UpdateTicketDocumentationCommand
+            await commandSender.Send(new UpdateTicketDocumentationCommandProto
             {
                 TicketId = ticketId.ToString(),
                 Documentation = documentation

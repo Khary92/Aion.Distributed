@@ -5,5 +5,5 @@ namespace Client.Desktop.Communication.Commands.WorkDays;
 
 public interface IWorkDayCommandSender
 {
-    Task<bool> Send(CreateWorkDayCommand command);
+    Task<bool> Send(CreateWorkDayCommandProto command);
 }

@@ -1,13 +1,14 @@
 ﻿using Grpc.Core;
 using Proto.Command.Notes;
 using Proto.Notifications.Note;
+using Service.Server.Communication.Note;
 
-namespace Service.Server.Mock.Note;
+namespace Service.Server.Communication.Mock.Note;
 
 public class MockNoteCommandService(NoteNotificationServiceImpl noteNotificationService)
-    : Proto.Command.Notes.NoteCommandService.NoteCommandServiceBase
+    : NoteCommandProtoService.NoteCommandProtoServiceBase
 {
-    public override async Task<CommandResponse> CreateNote(CreateNoteCommand request, ServerCallContext context)
+    public override async Task<CommandResponse> CreateNote(CreateNoteCommandProto request, ServerCallContext context)
     {
         Console.WriteLine(
             $"[CreateNote] ID: {request.NoteId}, Text: {request.Text}, NoteTypeId: {request.NoteTypeId}, TimeSlotId: {request.TimeSlotId}, TimeStamp: {request.TimeStamp}");
@@ -35,7 +36,7 @@ public class MockNoteCommandService(NoteNotificationServiceImpl noteNotification
         }
     }
 
-    public override async Task<CommandResponse> UpdateNote(UpdateNoteCommand request, ServerCallContext context)
+    public override async Task<CommandResponse> UpdateNote(UpdateNoteCommandProto request, ServerCallContext context)
     {
         Console.WriteLine(
             $"[UpdateNote] ID: {request.NoteId}, Text: {request.Text}, NoteTypeId: {request.NoteTypeId}, TimeSlotId: {request.TimeSlotId}");

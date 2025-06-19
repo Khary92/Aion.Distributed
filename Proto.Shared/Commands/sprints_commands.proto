@@ -4,7 +4,7 @@ option csharp_namespace = "Proto.Command.Sprints";
 
 import "google/protobuf/timestamp.proto";
 
-service SprintsCommandService {
+service SprintCommandProtoService {
   rpc AddTicketToActiveSprint (AddTicketToActiveSprintCommandProto) returns (CommandResponse);
   rpc AddTicketToSprint (AddTicketToSprintCommandProto) returns (CommandResponse);
   rpc CreateSprint (CreateSprintCommandProto) returns (CommandResponse);

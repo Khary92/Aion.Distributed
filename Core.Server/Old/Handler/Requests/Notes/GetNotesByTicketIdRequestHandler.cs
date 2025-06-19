@@ -1,10 +1,8 @@
-using Application.Contract.CQRS.Requests.Notes;
-using Application.Contract.DTO;
-using Application.Services.Entities.Notes;
-using Application.Services.Entities.TimeSlots;
-using MediatR;
+using Service.Server.CQRS.Requests.Notes;
+using Service.Server.Old.Services.Entities.Notes;
+using Service.Server.Old.Services.Entities.TimeSlots;
 
-namespace Application.Handler.Requests.Notes;
+namespace Service.Server.Old.Handler.Requests.Notes;
 
 public class GetNotesByTicketIdRequestHandler(
     ITimeSlotRequestsService timeSlotRequestsService,

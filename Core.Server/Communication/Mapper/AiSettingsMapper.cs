@@ -1,23 +1,26 @@
-using Application.Contract.DTO;
-using Domain.Entities;
 using Proto.DTO.AiSettings;
 
-namespace Application.Mapper;
+namespace Service.Server.Communication.Mapper;
 
-public class AiSettingsMapper : IDtoMapper<AiSettingsProto, AiSettings>
+public class AiSettingsMapper : IDtoMapper<AiSettingsProto, Domain.Entities.AiSettings>
 {
-    public AiSettings ToDomain(AiSettingsDto dto)
+    public Domain.Entities.AiSettings ToDomain(AiSettingsProto dto)
     {
-        return new AiSettings
+        return new Domain.Entities.AiSettings
         {
-            AiSettingsId = dto.AiSettingsId,
+            AiSettingsId = Guid.Parse(dto.AiSettingsId),
             Prompt = dto.Prompt,
             LanguageModelPath = dto.LanguageModelPath
         };
     }
 
-    public AiSettingsDto ToDto(AiSettings domain)
+    public AiSettingsProto ToDto(Domain.Entities.AiSettings domain)
     {
-        return new AiSettingsDto(domain.AiSettingsId, domain.LanguageModelPath, domain.Prompt);
+        return new AiSettingsProto
+        {
+            AiSettingsId = domain.AiSettingsId.ToString(),
+            Prompt = domain.Prompt,
+            LanguageModelPath = domain.LanguageModelPath
+        };
     }
 }

@@ -1,11 +1,10 @@
-using Application.Contract.CQRS.Commands.Entities.Sprints;
-using Application.Contract.CQRS.Commands.Entities.Tickets;
-using Application.Contract.CQRS.Requests.Sprints;
-using Application.Services.Entities.Settings;
-using Application.Services.Entities.Tickets;
-using MediatR;
+using Service.Server.CQRS.Commands.Entities.Sprints;
+using Service.Server.CQRS.Commands.Entities.Tickets;
+using Service.Server.CQRS.Requests.Sprints;
+using Service.Server.Old.Services.Entities.Settings;
+using Service.Server.Old.Services.Entities.Tickets;
 
-namespace Application.Handler.Commands.Entities.Tickets;
+namespace Service.Server.Old.Handler.Commands.Entities.Tickets;
 
 public class CreateTicketCommandHandler(
     ITicketCommandsService ticketCommandsService,

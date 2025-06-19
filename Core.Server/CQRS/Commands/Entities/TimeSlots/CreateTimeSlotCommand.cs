@@ -1,5 +1,5 @@
 
-namespace Application.Contract.CQRS.Commands.Entities.TimeSlots;
+namespace Service.Server.CQRS.Commands.Entities.TimeSlots;
 
 public record CreateTimeSlotCommand(
     Guid TimeSlotId,

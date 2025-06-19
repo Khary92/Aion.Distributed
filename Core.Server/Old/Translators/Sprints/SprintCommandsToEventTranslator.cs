@@ -1,8 +1,8 @@
 using System.Text.Json;
-using Application.Contract.CQRS.Commands.Entities.Sprints;
 using Domain.Events.Sprints;
+using Service.Server.CQRS.Commands.Entities.Sprints;
 
-namespace Application.Translators.Sprints;
+namespace Service.Server.Old.Translators.Sprints;
 
 public class SprintCommandsToEventTranslator : ISprintCommandsToEventTranslator
 {

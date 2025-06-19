@@ -2,7 +2,7 @@
 using Proto.DTO.Settings;
 using Proto.Requests.Settings;
 
-namespace Service.Server.Mock.Settings;
+namespace Service.Server.Communication.Mock.Settings;
 
 public class MockSettingsRequestService : SettingsRequestService.SettingsRequestServiceBase
 {

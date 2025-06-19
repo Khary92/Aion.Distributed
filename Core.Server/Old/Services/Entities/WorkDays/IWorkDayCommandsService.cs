@@ -1,6 +1,6 @@
-using Application.Contract.CQRS.Commands.Entities.WorkDays;
+using Service.Server.CQRS.Commands.Entities.WorkDays;
 
-namespace Application.Services.Entities.WorkDays;
+namespace Service.Server.Old.Services.Entities.WorkDays;
 
 public interface IWorkDayCommandsService
 {

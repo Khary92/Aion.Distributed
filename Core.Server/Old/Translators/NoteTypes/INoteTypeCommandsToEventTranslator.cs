@@ -1,7 +1,7 @@
-using Application.Contract.CQRS.Commands.Entities.NoteType;
 using Domain.Events.NoteTypes;
+using Service.Server.CQRS.Commands.Entities.NoteType;
 
-namespace Application.Translators.NoteTypes;
+namespace Service.Server.Old.Translators.NoteTypes;
 
 public interface INoteTypeCommandsToEventTranslator
 {

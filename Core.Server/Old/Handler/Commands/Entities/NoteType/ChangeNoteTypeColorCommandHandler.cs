@@ -1,8 +1,7 @@
-using Application.Contract.CQRS.Commands.Entities.NoteType;
-using Application.Services.Entities.NoteTypes;
-using MediatR;
+using Service.Server.CQRS.Commands.Entities.NoteType;
+using Service.Server.Old.Services.Entities.NoteTypes;
 
-namespace Application.Handler.Commands.Entities.NoteType;
+namespace Service.Server.Old.Handler.Commands.Entities.NoteType;
 
 public class ChangeNoteTypeColorCommandHandler(INoteTypeCommandsService noteTypeCommandsService)
     : IRequestHandler<ChangeNoteTypeColorCommand, Unit>

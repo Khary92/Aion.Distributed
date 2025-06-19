@@ -1,8 +1,7 @@
-using Application.Contract.CQRS.Commands.Entities.TimeSlots;
-using Application.Services.Entities.TimeSlots;
-using MediatR;
+using Service.Server.CQRS.Commands.Entities.TimeSlots;
+using Service.Server.Old.Services.Entities.TimeSlots;
 
-namespace Application.Handler.Commands.Entities.TimeSlots;
+namespace Service.Server.Old.Handler.Commands.Entities.TimeSlots;
 
 public class AddNoteCommandHandler(ITimeSlotCommandsService timeSlotCommandsService)
     : IRequestHandler<AddNoteCommand, Unit>

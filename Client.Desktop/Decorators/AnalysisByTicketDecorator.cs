@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests.Tags;
 using Client.Desktop.Decorators.Entities;
-using Contract.Decorators;
 using Google.Protobuf.Collections;
 using Proto.Requests.Tags;
+using Proto.Shared;
 
 namespace Client.Desktop.Decorators;
 

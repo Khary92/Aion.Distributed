@@ -8,21 +8,21 @@ namespace Client.Desktop.Communication.Commands.StatisticsData;
 public class StatisticsDataCommandSender : IStatisticsDataCommandSender
 {
     private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
-    private readonly StatisticsDataCommandService.StatisticsDataCommandServiceClient _client = new(Channel);
+    private readonly StatisticsDataCommandProtoService.StatisticsDataCommandProtoServiceClient _client = new(Channel);
 
-    public async Task<bool> Send(CreateStatisticsDataCommand command)
+    public async Task<bool> Send(CreateStatisticsDataCommandProto command)
     {
         var response = await _client.CreateStatisticsDataAsync(command);
         return response.Success;
     }
 
-    public async Task<bool> Send(ChangeTagSelectionCommand command)
+    public async Task<bool> Send(ChangeTagSelectionCommandProto command)
     {
         var response = await _client.ChangeTagSelectionAsync(command);
         return response.Success;
     }
 
-    public async Task<bool> Send(ChangeProductivityCommand command)
+    public async Task<bool> Send(ChangeProductivityCommandProto command)
     {
         var response = await _client.ChangeProductivityAsync(command);
         return response.Success;

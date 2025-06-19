@@ -1,10 +1,9 @@
-using Application.Contract.CQRS.Commands.Entities.NoteType;
-using Application.Translators.NoteTypes;
 using Domain.Events.NoteTypes;
 using Domain.Interfaces;
-using MediatR;
+using Service.Server.CQRS.Commands.Entities.NoteType;
+using Service.Server.Old.Translators.NoteTypes;
 
-namespace Application.Services.Entities.NoteTypes;
+namespace Service.Server.Old.Services.Entities.NoteTypes;
 
 public class NoteTypeCommandsService(
     IMediator mediator,

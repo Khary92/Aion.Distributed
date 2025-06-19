@@ -1,7 +1,7 @@
 ﻿using Grpc.Core;
 using Proto.Notifications.TimeSlots;
 
-namespace Service.Server.Mock.TimeSlot;
+namespace Service.Server.Communication.TimeSlot;
 
 public class TimeSlotNotificationServiceImpl : TimeSlotNotificationService.TimeSlotNotificationServiceBase
 {

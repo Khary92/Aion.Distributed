@@ -1,14 +1,13 @@
 ﻿using Grpc.Core;
 using Proto.Command.AiSettings;
 using Proto.Notifications.AiSettings;
-using Service.Server.Mock.AiSettings;
 
 namespace Service.Server.Communication.AiSettings;
 
 public class AiSettingsCommandService(AiSettingsNotificationServiceImpl aiSettingsNotificationService)
-    : Proto.Command.AiSettings.AiSettingsCommandService.AiSettingsCommandServiceBase
+    : AiSettingsCommandProtoService.AiSettingsCommandProtoServiceBase
 {
-    public override async Task<CommandResponse> SendChangeLanguageModel(ChangeLanguageModelCommand request, ServerCallContext context)
+    public override async Task<CommandResponse> SendChangeLanguageModel(ChangeLanguageModelCommandProto request, ServerCallContext context)
     {
         Console.WriteLine($"[ChangeLanguageModel] ID: {request.AiSettingsId}, ModelPath: {request.LanguageModelPath}");
 
@@ -32,7 +31,7 @@ public class AiSettingsCommandService(AiSettingsNotificationServiceImpl aiSettin
         }
     }
 
-    public override async Task<CommandResponse> SendChangePrompt(ChangePromptCommand request, ServerCallContext context)
+    public override async Task<CommandResponse> SendChangePrompt(ChangePromptCommandProto request, ServerCallContext context)
     {
         Console.WriteLine($"[ChangePrompt] ID: {request.AiSettingsId}, Prompt: {request.Prompt}");
 
@@ -56,7 +55,7 @@ public class AiSettingsCommandService(AiSettingsNotificationServiceImpl aiSettin
         }
     }
 
-    public override async Task<CommandResponse> SendCreateAiSettings(CreateAiSettingsCommand request, ServerCallContext context)
+    public override async Task<CommandResponse> SendCreateAiSettings(CreateAiSettingsCommandProto request, ServerCallContext context)
     {
         Console.WriteLine($"[CreateAiSettings] ID: {request.AiSettingsId}, Prompt: {request.Prompt}, ModelPath: {request.LanguageModelPath}");
 

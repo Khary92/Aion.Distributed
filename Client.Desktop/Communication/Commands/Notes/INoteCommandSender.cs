@@ -5,6 +5,6 @@ namespace Client.Desktop.Communication.Commands.Notes;
 
 public interface INoteCommandSender
 {
-    Task<bool> Send(CreateNoteCommand command);
-    Task<bool> Send(UpdateNoteCommand updateTicketDataCommand);
+    Task<bool> Send(CreateNoteCommandProto command);
+    Task<bool> Send(UpdateNoteCommandProto updateTicketDataCommand);
 }

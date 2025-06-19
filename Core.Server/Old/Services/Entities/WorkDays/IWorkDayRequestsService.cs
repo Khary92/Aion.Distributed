@@ -1,6 +1,4 @@
-using Application.Contract.DTO;
-
-namespace Application.Services.Entities.WorkDays;
+namespace Service.Server.Old.Services.Entities.WorkDays;
 
 public interface IWorkDayRequestsService
 {

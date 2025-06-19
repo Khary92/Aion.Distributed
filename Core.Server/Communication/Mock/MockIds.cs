@@ -1,4 +1,4 @@
-﻿namespace Service.Server.Mock;
+﻿namespace Service.Server.Communication.Mock;
 
 public static class MockIds
 {

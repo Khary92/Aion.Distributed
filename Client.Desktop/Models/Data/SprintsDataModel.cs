@@ -96,7 +96,7 @@ public class SprintsDataModel(
 
     public async Task UpdateSprint(SprintDto sprintDto)
     {
-        var updateSprintDataCommand = new UpdateSprintDataCommand
+        var updateSprintDataCommand = new UpdateSprintDataCommandProto
         {
             SprintId = sprintDto.SprintId.ToString(),
             Name = sprintDto.Name,
@@ -110,7 +110,7 @@ public class SprintsDataModel(
 
     public async Task CreateSprint(SprintDto newSprintDto)
     {
-        var createSprintCommand = new CreateSprintCommand
+        var createSprintCommand = new CreateSprintCommandProto
         {
             SprintId = newSprintDto.SprintId.ToString(),
             Name = newSprintDto.Name,
@@ -127,7 +127,7 @@ public class SprintsDataModel(
 
     public async Task SetSprintActive(SprintDto selectedSprint)
     {
-        var setSprintActiveStatusCommand = new SetSprintActiveStatusCommand
+        var setSprintActiveStatusCommand = new SetSprintActiveStatusCommandProto
         {
             SprintId = selectedSprint.SprintId.ToString(),
             IsActive = true

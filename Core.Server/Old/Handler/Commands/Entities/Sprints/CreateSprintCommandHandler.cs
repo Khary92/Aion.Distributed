@@ -1,8 +1,7 @@
-using Application.Contract.CQRS.Commands.Entities.Sprints;
-using Application.Services.Entities.Sprints;
-using MediatR;
+using Service.Server.CQRS.Commands.Entities.Sprints;
+using Service.Server.Old.Services.Entities.Sprints;
 
-namespace Application.Handler.Commands.Entities.Sprints;
+namespace Service.Server.Old.Handler.Commands.Entities.Sprints;
 
 public class CreateSprintCommandHandler(ISprintCommandsService sprintCommandsService)
     : IRequestHandler<CreateSprintCommand, Unit>

@@ -5,7 +5,7 @@ namespace Client.Desktop.Communication.Commands.StatisticsData;
 
 public interface IStatisticsDataCommandSender
 {
-    Task<bool> Send(CreateStatisticsDataCommand command);
-    Task<bool> Send(ChangeTagSelectionCommand command);
-    Task<bool> Send(ChangeProductivityCommand command);
+    Task<bool> Send(CreateStatisticsDataCommandProto command);
+    Task<bool> Send(ChangeTagSelectionCommandProto command);
+    Task<bool> Send(ChangeProductivityCommandProto command);
 }

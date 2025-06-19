@@ -1,7 +1,7 @@
 ﻿using Grpc.Core;
 using Proto.Notifications.WorkDay;
 
-namespace Service.Server.Mock.WorkDay;
+namespace Service.Server.Communication.WorkDay;
 
 public class WorkDayNotificationServiceImpl : WorkDayNotificationService.WorkDayNotificationServiceBase
 {

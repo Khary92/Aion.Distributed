@@ -1,9 +1,9 @@
-using Application.Contract.CQRS.Commands.Entities.TimeSlots;
-using Application.Translators.TimeSlots;
 using Domain.Events.TimeSlots;
 using Domain.Interfaces;
+using Service.Server.CQRS.Commands.Entities.TimeSlots;
+using Service.Server.Old.Translators.TimeSlots;
 
-namespace Application.Services.Entities.TimeSlots;
+namespace Service.Server.Old.Services.Entities.TimeSlots;
 
 public class TimeSlotCommandService(
     IEventStore<TimeSlotEvent> timeSlotEventStore,

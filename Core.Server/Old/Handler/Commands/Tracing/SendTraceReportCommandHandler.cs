@@ -1,8 +1,4 @@
-using Application.Contract.CQRS.Commands.Tracing;
-using Application.Contract.Notifications.UseCase;
-using MediatR;
-
-namespace Application.Handler.Commands.Tracing;
+namespace Service.Server.Old.Handler.Commands.Tracing;
 
 public class SendTraceReportCommandHandler(IMediator mediator) :  IRequestHandler<SendTraceReportCommand, Unit>
 {

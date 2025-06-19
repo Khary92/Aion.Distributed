@@ -1,9 +1,8 @@
-using Application.Contract.DTO;
-using Application.Mapper;
 using Domain.Entities;
 using Domain.Interfaces;
+using Service.Server.Communication.Mapper;
 
-namespace Application.Services.Entities.Tickets;
+namespace Service.Server.Old.Services.Entities.Tickets;
 
 public class TicketRequestService(
     ITicketEventsStore ticketEventStore,

@@ -1,9 +1,8 @@
-using Application.Contract.DTO;
-using Application.Mapper;
 using Domain.Events.Settings;
 using Domain.Interfaces;
+using Service.Server.Communication.Mapper;
 
-namespace Application.Services.Entities.Settings;
+namespace Service.Server.Old.Services.Entities.Settings;
 
 public class SettingsRequestsService(
     IEventStore<SettingsEvent> settingsEventsStore,

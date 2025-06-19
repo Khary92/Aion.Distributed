@@ -1,9 +1,7 @@
-using Application.Contract.CQRS.Requests.Settings;
-using Application.Contract.FileSystem;
-using Application.Services.Entities.Settings;
-using MediatR;
+using Service.Server.CQRS.Requests.Settings;
+using Service.Server.Old.Services.Entities.Settings;
 
-namespace Application.Handler.Requests.Settings;
+namespace Service.Server.Old.Handler.Requests.Settings;
 
 public class IsExportPathValidRequestHandler(
     ISettingsRequestsService settingsRequestsService,

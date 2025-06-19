@@ -3,7 +3,7 @@ using Grpc.Core;
 using Proto.DTO.TimerSettings;
 using Proto.Requests.WorkDays;
 
-namespace Service.Server.Mock.WorkDay;
+namespace Service.Server.Communication.Mock.WorkDay;
 
 public class MockWorkDayRequestService : WorkDayRequestService.WorkDayRequestServiceBase
 {

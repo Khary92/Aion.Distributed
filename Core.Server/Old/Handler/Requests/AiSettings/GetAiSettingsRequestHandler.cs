@@ -1,10 +1,8 @@
-using Application.Contract.CQRS.Commands.Entities.AiSettings;
-using Application.Contract.CQRS.Requests.AiSettings;
-using Application.Contract.DTO;
-using Application.Services.Entities.AiSettings;
-using MediatR;
+using Service.Server.CQRS.Commands.Entities.AiSettings;
+using Service.Server.CQRS.Requests.AiSettings;
+using Service.Server.Old.Services.Entities.AiSettings;
 
-namespace Application.Handler.Requests.AiSettings;
+namespace Service.Server.Old.Handler.Requests.AiSettings;
 
 public class GetAiSettingsRequestHandler(
     IAiSettingsRequestsService aiSettingsRequestsService,

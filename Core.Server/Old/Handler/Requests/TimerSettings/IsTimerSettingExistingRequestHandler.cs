@@ -1,8 +1,7 @@
-using Application.Contract.CQRS.Requests.TimerSettings;
-using Application.Services.Entities.TimerSettings;
-using MediatR;
+using Service.Server.CQRS.Requests.TimerSettings;
+using Service.Server.Old.Services.Entities.TimerSettings;
 
-namespace Application.Handler.Requests.TimerSettings;
+namespace Service.Server.Old.Handler.Requests.TimerSettings;
 
 public class IsTimerSettingExistingRequestHandler(
     ITimerSettingsRequestsService timerSettingsRequestsService) :

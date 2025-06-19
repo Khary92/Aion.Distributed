@@ -1,7 +1,7 @@
 ﻿using Grpc.Core;
 using Proto.Notifications.NoteType;
 
-namespace Service.Server.Mock.NoteType;
+namespace Service.Server.Communication.NoteType;
 
 public class NoteTypeNotificationServiceImpl : NoteTypeNotificationService.NoteTypeNotificationServiceBase
 {

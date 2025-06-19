@@ -1,8 +1,7 @@
-using Application.Contract.CQRS.Commands.Entities.TimerSettings;
-using Application.Services.Entities.TimerSettings;
-using MediatR;
+using Service.Server.CQRS.Commands.Entities.TimerSettings;
+using Service.Server.Old.Services.Entities.TimerSettings;
 
-namespace Application.Handler.Commands.Entities.TimerSettings;
+namespace Service.Server.Old.Handler.Commands.Entities.TimerSettings;
 
 public class ChangeSnapshotSaveIntervalCommandHandler(ITimerSettingsCommandsService timerSettingsCommandsService)
     : IRequestHandler<ChangeSnapshotSaveIntervalCommand, Unit>

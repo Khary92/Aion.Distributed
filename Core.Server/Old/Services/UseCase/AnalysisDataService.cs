@@ -1,15 +1,12 @@
-﻿using Application.Contract.DTO;
-using Application.Contract.DTO.NonPersistent;
-using Application.Decorators;
-using Application.Mapper;
-using Application.Services.Entities.StatisticsData;
-using Application.Services.Entities.Tags;
-using Application.Services.Entities.Tickets;
-using Application.Services.Entities.TimeSlots;
-using Application.Services.Entities.WorkDays;
-using Domain.Entities;
+﻿using Domain.Entities;
+using Service.Server.Communication.Mapper;
+using Service.Server.Old.Services.Entities.StatisticsData;
+using Service.Server.Old.Services.Entities.Tags;
+using Service.Server.Old.Services.Entities.Tickets;
+using Service.Server.Old.Services.Entities.TimeSlots;
+using Service.Server.Old.Services.Entities.WorkDays;
 
-namespace Application.Services.UseCase;
+namespace Service.Server.Old.Services.UseCase;
 
 public class AnalysisDataService(
     ITimeSlotRequestsService timeSlotRequestsService,

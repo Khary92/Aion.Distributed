@@ -3,7 +3,7 @@ using Grpc.Core;
 using Proto.DTO.Sprint;
 using Proto.Requests.Sprints;
 
-namespace Service.Server.Mock.Sprint;
+namespace Service.Server.Communication.Mock.Sprint;
 
 public class MockSprintRequestService : SprintRequestService.SprintRequestServiceBase
 {

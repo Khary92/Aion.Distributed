@@ -30,7 +30,7 @@ public class SettingsModel(ICommandSender commandSender, IRequestSender requestS
             Settings = await requestSender.Send(new GetSettingsRequestProto());
         }
 
-        await commandSender.Send(new CreateSettingsCommand
+        await commandSender.Send(new CreateSettingsCommandProto
         {
             SettingsId = Guid.NewGuid().ToString(),
             ExportPath = "not set",
@@ -51,7 +51,7 @@ public class SettingsModel(ICommandSender commandSender, IRequestSender requestS
     {
         if (Settings.IsExportPathChanged())
         {
-            await commandSender.Send(new ChangeExportPathCommand
+            await commandSender.Send(new ChangeExportPathCommandProto
             {
                 SettingsId = Settings.SettingsId.ToString(),
                 ExportPath = Settings.ExportPath
@@ -60,7 +60,7 @@ public class SettingsModel(ICommandSender commandSender, IRequestSender requestS
 
         if (Settings.IsAddNewTicketsToCurrentSprintChanged())
         {
-            await commandSender.Send(new ChangeAutomaticTicketAddingToSprintCommand()
+            await commandSender.Send(new ChangeAutomaticTicketAddingToSprintCommandProto
             {
                 SettingsId = Settings.SettingsId.ToString(),
                 IsAddNewTicketsToCurrentSprintActive = Settings.IsAddNewTicketsToCurrentSprintActive

@@ -1,4 +1,4 @@
 
-namespace Application.Contract.CQRS.Requests.WorkDays;
+namespace Service.Server.CQRS.Requests.WorkDays;
 
 public record GetWorkDayByDateRequest(DateTimeOffset Date);

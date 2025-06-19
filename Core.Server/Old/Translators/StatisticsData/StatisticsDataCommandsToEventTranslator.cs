@@ -1,8 +1,8 @@
 using System.Text.Json;
-using Application.Contract.CQRS.Commands.Entities.StatisticsData;
 using Domain.Events.StatisticsData;
+using Service.Server.CQRS.Commands.Entities.StatisticsData;
 
-namespace Application.Translators.StatisticsData;
+namespace Service.Server.Old.Translators.StatisticsData;
 
 public class StatisticsDataCommandsToEventTranslator : IStatisticsDataCommandsToEventTranslator
 {

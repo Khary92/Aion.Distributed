@@ -1,13 +1,14 @@
 ﻿using Grpc.Core;
 using Proto.Command.Sprints;
 using Proto.Notifications.Sprint;
+using Service.Server.Communication.Sprint;
 
-namespace Service.Server.Mock.Sprint;
+namespace Service.Server.Communication.Mock.Sprint;
 
 public class MockSprintCommandService(SprintNotificationServiceImpl sprintsNotificationService)
-    : SprintsCommandService.SprintsCommandServiceBase
+    : SprintCommandProtoService.SprintCommandProtoServiceBase
 {
-    public override async Task<CommandResponse> AddTicketToActiveSprint(AddTicketToActiveSprintCommand request, ServerCallContext context)
+    public override async Task<CommandResponse> AddTicketToActiveSprint(AddTicketToActiveSprintCommandProto request, ServerCallContext context)
     {
         Console.WriteLine($"[AddTicketToActiveSprint] TicketID: {request.TicketId}");
 
@@ -30,7 +31,7 @@ public class MockSprintCommandService(SprintNotificationServiceImpl sprintsNotif
         }
     }
 
-    public override async Task<CommandResponse> AddTicketToSprint(AddTicketToSprintCommand request, ServerCallContext context)
+    public override async Task<CommandResponse> AddTicketToSprint(AddTicketToSprintCommandProto request, ServerCallContext context)
     {
         Console.WriteLine($"[AddTicketToSprint] SprintID: {request.SprintId}, TicketID: {request.TicketId}");
 
@@ -54,7 +55,7 @@ public class MockSprintCommandService(SprintNotificationServiceImpl sprintsNotif
         }
     }
 
-    public override async Task<CommandResponse> CreateSprint(CreateSprintCommand request, ServerCallContext context)
+    public override async Task<CommandResponse> CreateSprint(CreateSprintCommandProto request, ServerCallContext context)
     {
         Console.WriteLine($"[CreateSprint] SprintID: {request.SprintId}, Name: {request.Name}, Start: {request.StartTime}, End: {request.EndTime}, IsActive: {request.IsActive}, Tickets: {string.Join(", ", request.TicketIds)}");
 
@@ -81,7 +82,7 @@ public class MockSprintCommandService(SprintNotificationServiceImpl sprintsNotif
         }
     }
 
-    public override async Task<CommandResponse> SetSprintActiveStatus(SetSprintActiveStatusCommand request, ServerCallContext context)
+    public override async Task<CommandResponse> SetSprintActiveStatus(SetSprintActiveStatusCommandProto request, ServerCallContext context)
     {
         Console.WriteLine($"[SetSprintActiveStatus] SprintID: {request.SprintId}, IsActive: {request.IsActive}");
 
@@ -105,7 +106,7 @@ public class MockSprintCommandService(SprintNotificationServiceImpl sprintsNotif
         }
     }
 
-    public override async Task<CommandResponse> UpdateSprintData(UpdateSprintDataCommand request, ServerCallContext context)
+    public override async Task<CommandResponse> UpdateSprintData(UpdateSprintDataCommandProto request, ServerCallContext context)
     {
         Console.WriteLine($"[UpdateSprintData] SprintID: {request.SprintId}, Name: {request.Name}, Start: {request.StartTime}, End: {request.EndTime}");
 

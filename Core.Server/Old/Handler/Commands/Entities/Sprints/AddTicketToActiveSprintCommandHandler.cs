@@ -1,10 +1,9 @@
-using Application.Contract.CQRS.Commands.Entities.Sprints;
-using Application.Contract.CQRS.Commands.Entities.Tickets;
-using Application.Services.Entities.Sprints;
-using Application.Services.Entities.Tickets;
-using MediatR;
+using Service.Server.CQRS.Commands.Entities.Sprints;
+using Service.Server.CQRS.Commands.Entities.Tickets;
+using Service.Server.Old.Services.Entities.Sprints;
+using Service.Server.Old.Services.Entities.Tickets;
 
-namespace Application.Handler.Commands.Entities.Sprints;
+namespace Service.Server.Old.Handler.Commands.Entities.Sprints;
 
 public class AddTicketToActiveSprintCommandHandler(
     ITicketCommandsService ticketCommandsService,

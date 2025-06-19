@@ -1,7 +1,7 @@
 ﻿using Grpc.Core;
 using Proto.Notifications.Ticket;
 
-namespace Service.Server.Mock.Ticket;
+namespace Service.Server.Communication.Ticket;
 
 public class TicketNotificationServiceImpl : TicketNotificationService.TicketNotificationServiceBase
 {

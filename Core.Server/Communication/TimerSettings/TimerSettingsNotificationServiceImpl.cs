@@ -1,7 +1,7 @@
 ﻿using Grpc.Core;
 using Proto.Notifications.TimerSettings;
 
-namespace Service.Server.Mock.TimerSettings;
+namespace Service.Server.Communication.TimerSettings;
 
 public class TimerSettingsNotificationServiceImpl : TimerSettingsNotificationService.TimerSettingsNotificationServiceBase
 {

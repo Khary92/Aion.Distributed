@@ -1,6 +1,4 @@
-using Application.Contract.DTO;
-
-namespace Application.Services.Entities.Tags;
+namespace Service.Server.Old.Services.Entities.Tags;
 
 public interface ITagRequestsService
 {

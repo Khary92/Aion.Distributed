@@ -1,23 +1,26 @@
-using Application.Contract.DTO;
-using Domain.Entities;
+using Proto.DTO.TimerSettings;
 
-namespace Application.Mapper;
+namespace Service.Server.Communication.Mapper;
 
-public class TimerSettingsMapper : IDtoMapper<TimerSettingsDto, TimerSettings>
+public class TimerSettingsMapper : IDtoMapper<TimerSettingsProto, Domain.Entities.TimerSettings>
 {
-    public TimerSettings ToDomain(TimerSettingsDto dto)
+    public Domain.Entities.TimerSettings ToDomain(TimerSettingsProto dto)
     {
-        return new TimerSettings
+        return new Domain.Entities.TimerSettings
         {
-            TimerSettingsId = dto.TimerSettingsId,
+            TimerSettingsId = Guid.Parse(dto.TimerSettingsId),
             DocumentationSaveInterval = dto.DocumentationSaveInterval,
             SnapshotSaveInterval = dto.SnapshotSaveInterval
         };
     }
 
-    public TimerSettingsDto ToDto(TimerSettings domain)
+    public TimerSettingsProto ToDto(Domain.Entities.TimerSettings domain)
     {
-        return new TimerSettingsDto(domain.TimerSettingsId, domain.DocumentationSaveInterval,
-            domain.SnapshotSaveInterval);
+        return new TimerSettingsProto
+        {
+            TimerSettingsId = domain.TimerSettingsId.ToString(),
+            DocumentationSaveInterval = domain.DocumentationSaveInterval,
+            SnapshotSaveInterval = domain.SnapshotSaveInterval
+        };
     }
 }

@@ -1,9 +1,7 @@
-using Application.Contract.CQRS.Requests.WorkDays;
-using Application.Contract.DTO;
-using Application.Services.Entities.WorkDays;
-using MediatR;
+using Service.Server.CQRS.Requests.WorkDays;
+using Service.Server.Old.Services.Entities.WorkDays;
 
-namespace Application.Handler.Requests.WorkDays;
+namespace Service.Server.Old.Handler.Requests.WorkDays;
 
 public class GetWorkDayByDateRequestHandler(IWorkDayRequestsService workDayRequestsService)
     : IRequestHandler<GetWorkDayByDateRequest, WorkDayDto?>

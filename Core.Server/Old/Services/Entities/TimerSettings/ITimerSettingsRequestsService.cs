@@ -1,6 +1,4 @@
-using Application.Contract.DTO;
-
-namespace Application.Services.Entities.TimerSettings;
+namespace Service.Server.Old.Services.Entities.TimerSettings;
 
 public interface ITimerSettingsRequestsService
 {

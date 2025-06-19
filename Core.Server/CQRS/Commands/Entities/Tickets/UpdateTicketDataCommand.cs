@@ -1,6 +1,6 @@
 using System.Collections.ObjectModel;
 
-namespace Application.Contract.CQRS.Commands.Entities.Tickets;
+namespace Service.Server.CQRS.Commands.Entities.Tickets;
 
 public record UpdateTicketDataCommand(
     Guid TicketId,

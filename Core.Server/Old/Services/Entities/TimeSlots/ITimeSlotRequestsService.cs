@@ -1,6 +1,4 @@
-using Application.Contract.DTO;
-
-namespace Application.Services.Entities.TimeSlots;
+namespace Service.Server.Old.Services.Entities.TimeSlots;
 
 public interface ITimeSlotRequestsService
 {

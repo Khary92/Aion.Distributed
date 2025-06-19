@@ -1,4 +1,4 @@
 
-namespace Application.Contract.CQRS.Requests.AiSettings;
+namespace Service.Server.CQRS.Requests.AiSettings;
 
 public record GetAiSettingsRequest;

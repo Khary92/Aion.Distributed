@@ -1,21 +1,25 @@
-using Application.Contract.DTO;
-using Domain.Entities;
+using Proto.DTO.Tag;
 
-namespace Application.Mapper;
+namespace Service.Server.Communication.Mapper;
 
-public class TagMapper : IDtoMapper<TagDto, Tag>
+public class TagMapper : IDtoMapper<TagProto, Domain.Entities.Tag>
 {
-    public Tag ToDomain(TagDto dto)
+    public Domain.Entities.Tag ToDomain(TagProto dto)
     {
-        return new Tag
+        return new Domain.Entities.Tag
         {
-            TagId = dto.TagId,
+            TagId = Guid.Parse(dto.TagId),
             Name = dto.Name
         };
     }
 
-    public TagDto ToDto(Tag domain)
+    public TagProto ToDto(Domain.Entities.Tag domain)
     {
-        return new TagDto(domain.TagId, domain.Name, false);
+        return new TagProto
+        {
+            TagId = domain.TagId.ToString(),
+            Name = domain.Name,
+            IsSelected = false
+        };
     }
 }

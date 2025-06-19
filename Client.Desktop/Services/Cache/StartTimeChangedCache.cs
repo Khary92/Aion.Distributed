@@ -8,27 +8,26 @@ using Proto.Command.TimeSlots;
 namespace Client.Desktop.Services.Cache;
 
 public class StartTimeChangedCache(
-    // ITimeSlotCommandsService timeSlotCommandsService,
     IFileSystemWrapper fileSystemWrapper,
     IFileSystemWriter fileSystemWriter,
-    IFileSystemReader fileSystemReader) : IPersistentCache<SetStartTimeCommand>
+    IFileSystemReader fileSystemReader) : IPersistentCache<SetStartTimeCommandProto>
 {
     private const string Path = ".\\StartTimes.json";
 
-    private readonly Dictionary<Guid, SetStartTimeCommand> _commands = new();
+    private readonly Dictionary<Guid, SetStartTimeCommandProto> _commands = new();
 
     public async Task Persist()
     {
         if (!fileSystemWrapper.IsFileExisting(Path)) return;
 
-        var data = await fileSystemReader.GetObject<Dictionary<Guid, SetStartTimeCommand>>(Path);
+        var data = await fileSystemReader.GetObject<Dictionary<Guid, SetStartTimeCommandProto>>(Path);
 
         //  foreach (var command in data.Values) await timeSlotCommandsService.SetStartTime(command);
 
         CleanUp();
     }
 
-    public void Store(SetStartTimeCommand command)
+    public void Store(SetStartTimeCommandProto command)
     {
         if (!_commands.TryAdd(Guid.Parse(command.TimeSlotId), command))
             _commands[Guid.Parse(command.TimeSlotId)] = command;

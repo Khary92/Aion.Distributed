@@ -1,7 +1,7 @@
 ﻿using Grpc.Core;
 using Proto.Notifications.AiSettings;
 
-namespace Service.Server.Mock.AiSettings;
+namespace Service.Server.Communication.AiSettings;
 
 public class AiSettingsNotificationServiceImpl : AiSettingsNotificationService.AiSettingsNotificationServiceBase
 {

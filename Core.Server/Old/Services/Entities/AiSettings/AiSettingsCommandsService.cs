@@ -1,9 +1,9 @@
-using Application.Contract.CQRS.Commands.Entities.AiSettings;
-using Application.Translators.AiSettings;
 using Domain.Events.AiSettings;
 using Domain.Interfaces;
+using Service.Server.CQRS.Commands.Entities.AiSettings;
+using Service.Server.Old.Translators.AiSettings;
 
-namespace Application.Services.Entities.AiSettings;
+namespace Service.Server.Old.Services.Entities.AiSettings;
 
 public class AiSettingsCommandsService(
     IEventStore<AiSettingsEvent> aiSettingsEventsStore,

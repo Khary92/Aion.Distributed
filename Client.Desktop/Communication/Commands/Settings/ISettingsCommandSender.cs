@@ -5,7 +5,7 @@ namespace Client.Desktop.Communication.Commands.Settings;
 
 public interface ISettingsCommandSender
 {
-    Task<bool> Send(CreateSettingsCommand command);
-    Task<bool> Send(ChangeExportPathCommand command);
-    Task<bool> Send(ChangeAutomaticTicketAddingToSprintCommand command);
+    Task<bool> Send(CreateSettingsCommandProto command);
+    Task<bool> Send(ChangeExportPathCommandProto command);
+    Task<bool> Send(ChangeAutomaticTicketAddingToSprintCommandProto command);
 }

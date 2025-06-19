@@ -80,7 +80,7 @@ public class NoteViewModel : ReactiveObject
 
     private async Task Update()
     {
-        await _commandSender.Send(new UpdateNoteCommand
+        await _commandSender.Send(new UpdateNoteCommandProto
         {
             NoteId = Note.NoteId.ToString(),
             Text = Note.Text,

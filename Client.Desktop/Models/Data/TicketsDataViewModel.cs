@@ -42,7 +42,7 @@ public class TicketsDataViewModel : ReactiveObject
             this.WhenAnyValue(x => x.SelectedTicket).Any()
         );
 
-        messenger.Register<SetSprintActiveStatusCommand>(this,
+        messenger.Register<SetSprintActiveStatusCommandProto>(this,
             async void (_, _) => { await DataModel.InitializeAsync(IsShowAllTicketsActive); });
 
         IsEditMode = false;

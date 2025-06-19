@@ -199,7 +199,7 @@ public class TimeTrackingModel(
     {
         if (SelectedTicket == null) return;
 
-        await commandSender.Send(new CreateTimeSlotControlCommand
+        await commandSender.Send(new CreateTimeSlotControlCommandProto
         {
             TicketId = SelectedTicket.TicketId.ToString(),
         });

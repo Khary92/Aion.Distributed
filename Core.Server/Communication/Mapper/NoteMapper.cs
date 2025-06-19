@@ -1,24 +1,31 @@
-using Application.Contract.DTO;
-using Domain.Entities;
+using Google.Protobuf.WellKnownTypes;
+using Proto.DTO.Note;
 
-namespace Application.Mapper;
+namespace Service.Server.Communication.Mapper;
 
-public class NoteMapper : IDtoMapper<NoteDto, Note>
+public class NoteMapper : IDtoMapper<NoteProto, Domain.Entities.Note>
 {
-    public Note ToDomain(NoteDto dto)
+    public Domain.Entities.Note ToDomain(NoteProto dto)
     {
-        return new Note
+        return new Domain.Entities.Note
         {
-            NoteId = dto.NoteId,
+            NoteId = Guid.Parse(dto.NoteId),
             Text = dto.Text,
-            NoteTypeId = dto.NoteTypeId,
-            TimeSlotId = dto.TimeSlotId,
-            TimeStamp = dto.TimeStamp
+            NoteTypeId = Guid.Parse(dto.NoteTypeId),
+            TimeSlotId = Guid.Parse(dto.TimeSlotId),
+            TimeStamp = dto.TimeStamp.ToDateTimeOffset(),
         };
     }
 
-    public NoteDto ToDto(Note domain)
+    public NoteProto ToDto(Domain.Entities.Note domain)
     {
-        return new NoteDto(domain.NoteId, domain.Text, domain.NoteTypeId, domain.TimeSlotId, domain.TimeStamp);
+        return new NoteProto
+        {
+            NoteId = domain.NoteId.ToString(),
+            Text = domain.Text,
+            NoteTypeId = domain.NoteTypeId.ToString(),
+            TimeSlotId = domain.TimeSlotId.ToString(),
+            TimeStamp = Timestamp.FromDateTimeOffset(domain.TimeStamp)
+        };
     }
 }

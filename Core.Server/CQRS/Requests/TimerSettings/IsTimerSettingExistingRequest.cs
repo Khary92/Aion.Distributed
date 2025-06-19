@@ -1,4 +1,4 @@
 
-namespace Application.Contract.CQRS.Requests.TimerSettings;
+namespace Service.Server.CQRS.Requests.TimerSettings;
 
 public record IsTimerSettingExistingRequest;

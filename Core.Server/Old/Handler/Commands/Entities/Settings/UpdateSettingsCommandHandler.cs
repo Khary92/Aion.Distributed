@@ -1,8 +1,7 @@
-using Application.Contract.CQRS.Commands.Entities.Settings;
-using Application.Services.Entities.Settings;
-using MediatR;
+using Service.Server.CQRS.Commands.Entities.Settings;
+using Service.Server.Old.Services.Entities.Settings;
 
-namespace Application.Handler.Commands.Entities.Settings;
+namespace Service.Server.Old.Handler.Commands.Entities.Settings;
 
 public class UpdateSettingsCommandHandler(ISettingsCommandsService settingsCommandsService)
     : IRequestHandler<UpdateSettingsCommand, Unit>

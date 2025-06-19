@@ -1,9 +1,7 @@
-using Application.Contract.CQRS.Requests.Sprints;
-using Application.Contract.DTO;
-using Application.Services.Entities.Sprints;
-using MediatR;
+using Service.Server.CQRS.Requests.Sprints;
+using Service.Server.Old.Services.Entities.Sprints;
 
-namespace Application.Handler.Requests.Sprints;
+namespace Service.Server.Old.Handler.Requests.Sprints;
 
 public class GetActiveSprintRequestHandler(ISprintRequestsService sprintRequestsService) :
     IRequestHandler<GetActiveSprintRequest, SprintDto?>

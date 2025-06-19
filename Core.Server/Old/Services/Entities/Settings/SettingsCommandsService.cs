@@ -1,9 +1,9 @@
-using Application.Contract.CQRS.Commands.Entities.Settings;
-using Application.Translators.Settings;
 using Domain.Events.Settings;
 using Domain.Interfaces;
+using Service.Server.CQRS.Commands.Entities.Settings;
+using Service.Server.Old.Translators.Settings;
 
-namespace Application.Services.Entities.Settings;
+namespace Service.Server.Old.Services.Entities.Settings;
 
 public class SettingsCommandsService(
     IEventStore<SettingsEvent> settingsEventStore,

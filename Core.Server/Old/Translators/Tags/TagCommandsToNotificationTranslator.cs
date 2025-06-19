@@ -1,7 +1,6 @@
-using Application.Contract.CQRS.Commands.Entities.Tags;
-using Application.Contract.Notifications.Entities.Tags;
+using Service.Server.CQRS.Commands.Entities.Tags;
 
-namespace Application.Translators.Tags;
+namespace Service.Server.Old.Translators.Tags;
 
 public class TagCommandsToNotificationTranslator : ITagCommandsToNotificationTranslator
 {

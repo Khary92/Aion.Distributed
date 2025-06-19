@@ -1,11 +1,9 @@
-using Application.Contract.CQRS.Commands.Entities.WorkDays;
-using Application.Contract.CQRS.Requests.WorkDays;
-using Application.Contract.DTO;
-using Application.Services.Entities.WorkDays;
-using Application.Services.UseCase;
-using MediatR;
+using Service.Server.CQRS.Commands.Entities.WorkDays;
+using Service.Server.CQRS.Requests.WorkDays;
+using Service.Server.Old.Services.Entities.WorkDays;
+using Service.Server.Old.Services.UseCase;
 
-namespace Application.Handler.Requests.WorkDays;
+namespace Service.Server.Old.Handler.Requests.WorkDays;
 
 public class GetSelectedWorkDayRequestHandler(
     IWorkDayRequestsService workDayRequestsService,

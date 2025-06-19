@@ -1,6 +1,4 @@
-using Application.Contract.DTO;
-
-namespace Application.Services.Entities.StatisticsData;
+namespace Service.Server.Old.Services.Entities.StatisticsData;
 
 public interface IStatisticsDataRequestsService
 {

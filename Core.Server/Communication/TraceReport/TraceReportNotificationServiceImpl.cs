@@ -1,7 +1,7 @@
 ﻿using Grpc.Core;
 using Proto.Notifications.TraceReports;
 
-namespace Service.Server.Mock.TraceReport;
+namespace Service.Server.Communication.TraceReport;
 
 public class TraceReportNotificationServiceImpl : TraceReportNotificationService.TraceReportNotificationServiceBase
 {

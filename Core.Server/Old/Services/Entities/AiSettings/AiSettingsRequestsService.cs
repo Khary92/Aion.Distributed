@@ -1,9 +1,8 @@
-using Application.Contract.DTO;
-using Application.Mapper;
 using Domain.Events.AiSettings;
 using Domain.Interfaces;
+using Service.Server.Communication.Mapper;
 
-namespace Application.Services.Entities.AiSettings;
+namespace Service.Server.Old.Services.Entities.AiSettings;
 
 public class AiSettingsRequestsService(
     IEventStore<AiSettingsEvent> aiSettingsEventsStore,

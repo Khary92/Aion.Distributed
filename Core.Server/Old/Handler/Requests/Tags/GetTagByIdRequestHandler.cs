@@ -1,9 +1,7 @@
-using Application.Contract.CQRS.Requests.Tags;
-using Application.Contract.DTO;
-using Application.Services.Entities.Tags;
-using MediatR;
+using Service.Server.CQRS.Requests.Tags;
+using Service.Server.Old.Services.Entities.Tags;
 
-namespace Application.Handler.Requests.Tags;
+namespace Service.Server.Old.Handler.Requests.Tags;
 
 public class GetTagByIdRequestHandler(ITagRequestsService tagRequestsService)
     : IRequestHandler<GetTagByIdRequest, TagDto>

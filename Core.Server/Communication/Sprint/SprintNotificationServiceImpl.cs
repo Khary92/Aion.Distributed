@@ -1,7 +1,7 @@
 ﻿using Grpc.Core;
 using Proto.Notifications.Sprint;
 
-namespace Service.Server.Mock.Sprint;
+namespace Service.Server.Communication.Sprint;
 
 public class SprintNotificationServiceImpl : SprintNotificationService.SprintNotificationServiceBase
 {

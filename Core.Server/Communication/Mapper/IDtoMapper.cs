@@ -1,4 +1,4 @@
-namespace Application.Mapper;
+namespace Service.Server.Communication.Mapper;
 
 public interface IDtoMapper<TDtoType, TDomainType>
 {

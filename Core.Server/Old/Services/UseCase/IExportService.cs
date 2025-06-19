@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
-using Application.Contract.DTO;
 
-namespace Application.Services.UseCase;
+namespace Service.Server.Old.Services.UseCase;
 
 public interface IExportService
 {

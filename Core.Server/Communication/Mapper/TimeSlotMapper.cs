@@ -1,27 +1,35 @@
-using Application.Contract.DTO;
-using Domain.Entities;
+using Google.Protobuf.WellKnownTypes;
+using Proto.DTO.TimeSlots;
 
-namespace Application.Mapper;
+namespace Service.Server.Communication.Mapper;
 
-public class TimeSlotMapper : IDtoMapper<TimeSlotDto, TimeSlot>
+public class TimeSlotMapper : IDtoMapper<TimeSlotProto, Domain.Entities.TimeSlot>
 {
-    public TimeSlot ToDomain(TimeSlotDto dto)
+    public Domain.Entities.TimeSlot ToDomain(TimeSlotProto dto)
     {
-        return new TimeSlot
+        return new Domain.Entities.TimeSlot
         {
-            TimeSlotId = dto.TimeSlotId,
-            SelectedTicketId = dto.SelectedTicketId,
-            StartTime = dto.StartTime,
-            EndTime = dto.EndTime,
-            WorkDayId = dto.WorkDayId,
+            TimeSlotId = Guid.Parse(dto.TimeSlotId),
+            SelectedTicketId = Guid.Parse(dto.SelectedTicketId),
+            StartTime = dto.StartTime.ToDateTimeOffset(),
+            EndTime = dto.EndTime.ToDateTimeOffset(),
+            WorkDayId = Guid.Parse(dto.WorkDayId),
             IsTimerRunning = dto.IsTimerRunning
         };
     }
 
-    public TimeSlotDto ToDto(TimeSlot domain)
+    public TimeSlotProto ToDto(Domain.Entities.TimeSlot domain)
     {
-        var timeSlotDto = new TimeSlotDto(domain.TimeSlotId, domain.WorkDayId, domain.SelectedTicketId,
-            domain.StartTime, domain.EndTime, domain.NoteIds, domain.IsTimerRunning);
+        var timeSlotDto = new TimeSlotProto
+        {
+            TimeSlotId = domain.TimeSlotId.ToString(),
+            SelectedTicketId = domain.SelectedTicketId.ToString(),
+            StartTime = Timestamp.FromDateTimeOffset(domain.StartTime),
+            EndTime = Timestamp.FromDateTimeOffset(domain.EndTime),
+            WorkDayId = domain.WorkDayId.ToString(),
+            IsTimerRunning = domain.IsTimerRunning,
+            NoteIds = { domain.NoteIds.ToRepeatedField() }
+        };
 
         return timeSlotDto;
     }

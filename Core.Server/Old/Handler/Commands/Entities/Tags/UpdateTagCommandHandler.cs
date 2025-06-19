@@ -1,8 +1,7 @@
-using Application.Contract.CQRS.Commands.Entities.Tags;
-using Application.Services.Entities.Tags;
-using MediatR;
+using Service.Server.CQRS.Commands.Entities.Tags;
+using Service.Server.Old.Services.Entities.Tags;
 
-namespace Application.Handler.Commands.Entities.Tags;
+namespace Service.Server.Old.Handler.Commands.Entities.Tags;
 
 public class UpdateTagCommandHandler(ITagCommandsService tagCommandsService)
     : IRequestHandler<UpdateTagCommand, Unit>

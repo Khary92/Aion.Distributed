@@ -1,4 +1,4 @@
-﻿namespace Application.Services.UseCase;
+﻿namespace Service.Server.Old.Services.UseCase;
 
 public interface IRunTimeSettings
 {

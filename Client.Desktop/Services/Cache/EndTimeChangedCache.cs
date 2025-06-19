@@ -8,27 +8,26 @@ using Proto.Command.TimeSlots;
 namespace Client.Desktop.Services.Cache;
 
 public class EndTimeChangedCache(
-    // ITimeSlotCommandsService timeSlotCommandsService,
     IFileSystemWrapper fileSystemWrapper,
     IFileSystemWriter fileSystemWriter,
-    IFileSystemReader fileSystemReader) : IPersistentCache<SetEndTimeCommand>
+    IFileSystemReader fileSystemReader) : IPersistentCache<SetEndTimeCommandProto>
 {
     private const string Path = ".\\EndTimes.json";
 
-    private readonly Dictionary<Guid, SetEndTimeCommand> _commands = new();
+    private readonly Dictionary<Guid, SetEndTimeCommandProto> _commands = new();
 
     public async Task Persist()
     {
         if (!fileSystemWrapper.IsFileExisting(Path)) return;
 
-        var data = await fileSystemReader.GetObject<Dictionary<Guid, SetEndTimeCommand>>(Path);
+        var data = await fileSystemReader.GetObject<Dictionary<Guid, SetEndTimeCommandProto>>(Path);
 
-        // foreach (var command in data.Values) await timeSlotCommandsService.SetEndTime(command);
+        //foreach (var command in data.Values) await timeSlotCommandsService.SetEndTime(command);
 
         CleanUp();
     }
 
-    public void Store(SetEndTimeCommand command)
+    public void Store(SetEndTimeCommandProto command)
     {
         if (!_commands.TryAdd(Guid.Parse(command.TimeSlotId), command)) _commands[Guid.Parse(command.TimeSlotId)] = command;
 

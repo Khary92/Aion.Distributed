@@ -1,9 +1,8 @@
-using Application.Contract.DTO;
-using Application.Mapper;
 using Domain.Events.StatisticsData;
 using Domain.Interfaces;
+using Service.Server.Communication.Mapper;
 
-namespace Application.Services.Entities.StatisticsData;
+namespace Service.Server.Old.Services.Entities.StatisticsData;
 
 public class StatisticsDataRequestsService(
     IEventStore<StatisticsDataEvent> statisticsDataEventStore,

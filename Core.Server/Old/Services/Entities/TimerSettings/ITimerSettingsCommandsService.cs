@@ -1,6 +1,6 @@
-using Application.Contract.CQRS.Commands.Entities.TimerSettings;
+using Service.Server.CQRS.Commands.Entities.TimerSettings;
 
-namespace Application.Services.Entities.TimerSettings;
+namespace Service.Server.Old.Services.Entities.TimerSettings;
 
 public interface ITimerSettingsCommandsService
 {

@@ -1,10 +1,9 @@
-using Application.Contract.DTO;
-using Application.Mapper;
 using Domain.Entities;
 using Domain.Events.Sprints;
 using Domain.Interfaces;
+using Service.Server.Communication.Mapper;
 
-namespace Application.Services.Entities.Sprints;
+namespace Service.Server.Old.Services.Entities.Sprints;
 
 public class SprintRequestService(
     IEventStore<SprintEvent> sprintEventsStore,

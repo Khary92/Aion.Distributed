@@ -5,6 +5,6 @@ namespace Client.Desktop.Communication.Commands.Tags;
 
 public interface ITagCommandSender
 {
-    Task<bool> Send(CreateTagCommand command);
-    Task<bool> Send(UpdateTagCommand command);
+    Task<bool> Send(CreateTagCommandProto command);
+    Task<bool> Send(UpdateTagCommandProto command);
 }

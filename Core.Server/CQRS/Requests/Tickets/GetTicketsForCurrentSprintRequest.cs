@@ -1,4 +1,4 @@
 
-namespace Application.Contract.CQRS.Requests.Tickets;
+namespace Service.Server.CQRS.Requests.Tickets;
 
 public record GetTicketsForCurrentSprintRequest;

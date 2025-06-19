@@ -1,7 +1,7 @@
-using Application.Contract.CQRS.Commands.Entities.AiSettings;
 using Domain.Events.AiSettings;
+using Service.Server.CQRS.Commands.Entities.AiSettings;
 
-namespace Application.Translators.AiSettings;
+namespace Service.Server.Old.Translators.AiSettings;
 
 public interface IAiSettingsCommandsToEventTranslator
 {

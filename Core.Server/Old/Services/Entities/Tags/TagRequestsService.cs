@@ -1,10 +1,9 @@
-using Application.Contract.DTO;
-using Application.Mapper;
 using Domain.Entities;
 using Domain.Events.Tags;
 using Domain.Interfaces;
+using Service.Server.Communication.Mapper;
 
-namespace Application.Services.Entities.Tags;
+namespace Service.Server.Old.Services.Entities.Tags;
 
 public class TagRequestsService(IEventStore<TagEvent> tagEventStore, IDtoMapper<TagDto, Tag> tagMapper)
     : ITagRequestsService

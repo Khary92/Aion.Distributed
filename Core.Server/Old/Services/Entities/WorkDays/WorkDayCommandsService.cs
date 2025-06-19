@@ -1,10 +1,9 @@
-using Application.Contract.CQRS.Commands.Entities.WorkDays;
-using Application.Translators.WorkDays;
 using Domain.Events.WorkDays;
 using Domain.Interfaces;
-using MediatR;
+using Service.Server.CQRS.Commands.Entities.WorkDays;
+using Service.Server.Old.Translators.WorkDays;
 
-namespace Application.Services.Entities.WorkDays;
+namespace Service.Server.Old.Services.Entities.WorkDays;
 
 public class WorkDayCommandsService(
     IEventStore<WorkDayEvent> workDayEventStore,

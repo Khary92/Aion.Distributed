@@ -97,8 +97,8 @@ public static class Bootstrapper
     private static void AddSynchronizationServices(this IServiceCollection services)
     {
         services.AddSingleton<IStateSynchronizer<TicketReplayDecorator, string>, DocumentationSynchronizer>();
-        services.AddSingleton<IPersistentCache<SetStartTimeCommand>, StartTimeChangedCache>();
-        services.AddSingleton<IPersistentCache<SetEndTimeCommand>, EndTimeChangedCache>();
+        services.AddSingleton<IPersistentCache<SetStartTimeCommandProto>, StartTimeChangedCache>();
+        services.AddSingleton<IPersistentCache<SetEndTimeCommandProto>, EndTimeChangedCache>();
     }
 
     private static void AddViews(this IServiceCollection services)

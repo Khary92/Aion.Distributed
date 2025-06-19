@@ -56,10 +56,10 @@ public static class DesktopApp
 
     private static async Task PersistCaches(IServiceProvider serviceProvider)
     {
-        var startTimeCache = serviceProvider.GetRequiredService<IPersistentCache<SetStartTimeCommand>>();
+        var startTimeCache = serviceProvider.GetRequiredService<IPersistentCache<SetStartTimeCommandProto>>();
         await startTimeCache.Persist();
 
-        var endTimeCache = serviceProvider.GetRequiredService<IPersistentCache<SetEndTimeCommand>>();
+        var endTimeCache = serviceProvider.GetRequiredService<IPersistentCache<SetEndTimeCommandProto>>();
         await endTimeCache.Persist();
     }
 }

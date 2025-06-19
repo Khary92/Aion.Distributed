@@ -1,4 +1,4 @@
 
-namespace Application.Contract.CQRS.Requests.Tags;
+namespace Service.Server.CQRS.Requests.Tags;
 
 public record GetTagByIdRequest(Guid TagId);

@@ -2,12 +2,13 @@
 using Proto.Command.WorkDays;
 using Proto.Notifications.WorkDay;
 
-namespace Service.Server.Mock.WorkDay;
+namespace Service.Server.Communication.Mock.WorkDay;
 
 public class MockWorkDayCommandService(NotificationService.NotificationServiceClient notificationClient)
-    : WorkDayCommandService.WorkDayCommandServiceBase
+    : WorkDayCommandProtoService.WorkDayCommandProtoServiceBase
 {
-    public override async Task<CommandResponse> CreateWorkDay(CreateWorkDayCommand request, ServerCallContext context)
+    public override async Task<CommandResponse> CreateWorkDay(CreateWorkDayCommandProto request,
+        ServerCallContext context)
     {
         Console.WriteLine($"[CreateWorkDay] ID: {request.WorkDayId}, Date: {request.Date}");
 

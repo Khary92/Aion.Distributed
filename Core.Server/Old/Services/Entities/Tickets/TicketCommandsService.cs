@@ -1,9 +1,8 @@
-using Application.Contract.CQRS.Commands.Entities.Tickets;
-using Application.Translators.Tickets;
 using Domain.Interfaces;
-using MediatR;
+using Service.Server.CQRS.Commands.Entities.Tickets;
+using Service.Server.Old.Translators.Tickets;
 
-namespace Application.Services.Entities.Tickets;
+namespace Service.Server.Old.Services.Entities.Tickets;
 
 public class TicketCommandsService(
     ITicketEventsStore ticketEventStore,

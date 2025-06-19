@@ -1,21 +1,25 @@
-using Application.Contract.DTO;
-using Domain.Entities;
+using Google.Protobuf.WellKnownTypes;
+using Proto.DTO.TimerSettings;
 
-namespace Application.Mapper;
+namespace Service.Server.Communication.Mapper;
 
-public class WorkDayMapper : IDtoMapper<WorkDayDto, WorkDay>
+public class WorkDayMapper : IDtoMapper<WorkDayProto, Domain.Entities.WorkDay>
 {
-    public WorkDay ToDomain(WorkDayDto dto)
+    public Domain.Entities.WorkDay ToDomain(WorkDayProto dto)
     {
-        return new WorkDay
+        return new Domain.Entities.WorkDay
         {
-            WorkDayId = dto.WorkDayId,
-            Date = dto.Date
+            WorkDayId = Guid.Parse(dto.WorkDayId),
+            Date = dto.Date.ToDateTimeOffset(),
         };
     }
 
-    public WorkDayDto ToDto(WorkDay domain)
+    public WorkDayProto ToDto(Domain.Entities.WorkDay domain)
     {
-        return new WorkDayDto(domain.WorkDayId, domain.Date);
+        return new WorkDayProto
+        {
+            WorkDayId = domain.WorkDayId.ToString(),
+            Date = Timestamp.FromDateTimeOffset(domain.Date)
+        };
     }
 }

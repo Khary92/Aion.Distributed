@@ -1,22 +1,27 @@
-using Application.Contract.DTO;
 using Domain.Entities;
+using Proto.DTO.NoteType;
 
-namespace Application.Mapper;
+namespace Service.Server.Communication.Mapper;
 
-public class NoteTypeMapper : IDtoMapper<NoteTypeDto, NoteType>
+public class NoteTypeMapper : IDtoMapper<NoteTypeProto, NoteType>
 {
-    public NoteType ToDomain(NoteTypeDto dto)
+    public NoteType ToDomain(NoteTypeProto dto)
     {
         return new NoteType
         {
-            NoteTypeId = dto.NoteTypeId,
+            NoteTypeId = Guid.Parse(dto.NoteTypeId),
             Name = dto.Name,
             Color = dto.Color
         };
     }
 
-    public NoteTypeDto ToDto(NoteType domain)
+    public NoteTypeProto ToDto(NoteType domain)
     {
-        return new NoteTypeDto(domain.NoteTypeId, domain.Name, domain.Color);
+        return new NoteTypeProto
+        {
+            NoteTypeId = domain.NoteTypeId.ToString(),
+            Name = domain.Name,
+            Color = domain.Color
+        };
     }
 }

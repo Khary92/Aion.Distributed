@@ -1,10 +1,9 @@
-using Application.Contract.DTO;
-using Application.Mapper;
 using Domain.Entities;
 using Domain.Events.Note;
 using Domain.Interfaces;
+using Service.Server.Communication.Mapper;
 
-namespace Application.Services.Entities.Notes;
+namespace Service.Server.Old.Services.Entities.Notes;
 
 public class NoteRequestsService(IEventStore<NoteEvent> noteEventsStore, IDtoMapper<NoteDto, Note> noteMapper)
     : INoteRequestsService

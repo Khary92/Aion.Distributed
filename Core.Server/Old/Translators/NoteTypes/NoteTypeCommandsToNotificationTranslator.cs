@@ -1,7 +1,6 @@
-using Application.Contract.CQRS.Commands.Entities.NoteType;
-using Application.Contract.Notifications.Entities.NoteType;
+using Service.Server.CQRS.Commands.Entities.NoteType;
 
-namespace Application.Translators.NoteTypes;
+namespace Service.Server.Old.Translators.NoteTypes;
 
 public class NoteTypeCommandsToNotificationTranslator : INoteTypeCommandsToNotificationTranslator
 {

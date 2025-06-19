@@ -5,7 +5,7 @@ namespace Client.Desktop.Communication.Commands.NoteTypes;
 
 public interface INoteTypeCommandSender
 {
-    Task<bool> Send(CreateNoteTypeCommand command);
-    Task<bool> Send(ChangeNoteTypeNameCommand command);
-    Task<bool> Send(ChangeNoteTypeColorCommand command);
+    Task<bool> Send(CreateNoteTypeCommandProto command);
+    Task<bool> Send(ChangeNoteTypeNameCommandProto command);
+    Task<bool> Send(ChangeNoteTypeColorCommandProto command);
 }

@@ -33,7 +33,7 @@ public class TimerSettingsModel(
             return;
         }
 
-        var crateTimerSettingsCommand = new CreateTimerSettingsCommand
+        var crateTimerSettingsCommand = new CreateTimerSettingsCommandProto
         {
             TimerSettingsId = Guid.NewGuid().ToString(),
             DocumentationSaveInterval = 30,
@@ -93,7 +93,7 @@ public class TimerSettingsModel(
             return;
         }
 
-        var changeDocuTimerSaveIntervalCommand = new ChangeDocuTimerSaveIntervalCommand
+        var changeDocuTimerSaveIntervalCommand = new ChangeDocuTimerSaveIntervalCommandProto
         {
             TimerSettingsId = TimerSettingsDto.TimerSettingsId.ToString(),
             DocuTimerSaveInterval = TimerSettingsDto.DocumentationSaveInterval
@@ -114,7 +114,7 @@ public class TimerSettingsModel(
             return;
         }
 
-        var changeSnapshotSaveIntervalCommand = new ChangeSnapshotSaveIntervalCommand
+        var changeSnapshotSaveIntervalCommand = new ChangeSnapshotSaveIntervalCommandProto
         {
             TimerSettingsId = TimerSettingsDto.TimerSettingsId.ToString(),
             SnapshotSaveInterval = TimerSettingsDto.SnapshotSaveInterval

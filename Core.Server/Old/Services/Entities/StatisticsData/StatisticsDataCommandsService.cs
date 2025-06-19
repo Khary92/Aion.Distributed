@@ -1,9 +1,9 @@
-using Application.Contract.CQRS.Commands.Entities.StatisticsData;
-using Application.Translators.StatisticsData;
 using Domain.Events.StatisticsData;
 using Domain.Interfaces;
+using Service.Server.CQRS.Commands.Entities.StatisticsData;
+using Service.Server.Old.Translators.StatisticsData;
 
-namespace Application.Services.Entities.StatisticsData;
+namespace Service.Server.Old.Services.Entities.StatisticsData;
 
 public class StatisticsDataCommandsService(
     IEventStore<StatisticsDataEvent> statisticsDataEventStore,

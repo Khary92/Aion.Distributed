@@ -1,4 +1,4 @@
-namespace Contract.Decorators;
+namespace Proto.Shared;
 
 public enum Productivity
 {

@@ -1,13 +1,14 @@
 ﻿using Grpc.Core;
 using Proto.Command.Tags;
 using Proto.Notifications.Tag;
+using Service.Server.Communication.Tag;
 
-namespace Service.Server.Mock.Tag;
+namespace Service.Server.Communication.Mock.Tag;
 
 public class MockCommandService(TagNotificationServiceImpl tagNotificationService)
-    : TagCommandService.TagCommandServiceBase
+    : TagCommandProtoService.TagCommandProtoServiceBase
 {
-    public override async Task<CommandResponse> CreateTag(CreateTagCommand request, ServerCallContext context)
+    public override async Task<CommandResponse> CreateTag(CreateTagCommandProto request, ServerCallContext context)
     {
         Console.WriteLine($"[CreateTag] ID: {request.TagId}, Name: {request.Name}");
 
@@ -31,7 +32,7 @@ public class MockCommandService(TagNotificationServiceImpl tagNotificationServic
         }
     }
 
-    public override async Task<CommandResponse> UpdateTag(UpdateTagCommand request, ServerCallContext context)
+    public override async Task<CommandResponse> UpdateTag(UpdateTagCommandProto request, ServerCallContext context)
     {
         Console.WriteLine($"[UpdateTag] ID: {request.TagId}, Name: {request.Name}");
 

@@ -1,6 +1,4 @@
-using Application.Contract.DTO;
-
-namespace Application.Services.Entities.AiSettings;
+namespace Service.Server.Old.Services.Entities.AiSettings;
 
 public interface IAiSettingsRequestsService
 {

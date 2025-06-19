@@ -3,7 +3,7 @@ using Grpc.Core;
 using Proto.DTO.TimeSlots;
 using Proto.Requests.TimeSlots;
 
-namespace Service.Server.Mock.TimeSlot;
+namespace Service.Server.Communication.Mock.TimeSlot;
 
 public class MockTimeSlotRequestService : TimeSlotRequestService.TimeSlotRequestServiceBase
 {

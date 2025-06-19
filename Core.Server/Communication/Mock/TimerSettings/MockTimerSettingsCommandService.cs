@@ -1,15 +1,18 @@
 ﻿using Grpc.Core;
 using Proto.Command.TimerSettings;
 using Proto.Notifications.TimerSettings;
+using Service.Server.Communication.TimerSettings;
 
-namespace Service.Server.Mock.TimerSettings;
+namespace Service.Server.Communication.Mock.TimerSettings;
 
 public class MockTimerSettingsCommandService(TimerSettingsNotificationServiceImpl notificationService)
-    : TimerSettingsCommandService.TimerSettingsCommandServiceBase
+    : TimerSettingsCommandProtoService.TimerSettingsCommandProtoServiceBase
 {
-    public override async Task<CommandResponse> CreateTimerSettings(CreateTimerSettingsCommand request, ServerCallContext context)
+    public override async Task<CommandResponse> CreateTimerSettings(CreateTimerSettingsCommandProto request,
+        ServerCallContext context)
     {
-        Console.WriteLine($"[CreateTimerSettings] ID: {request.TimerSettingsId}, DocuInterval: {request.DocumentationSaveInterval}, SnapshotInterval: {request.SnapshotSaveInterval}");
+        Console.WriteLine(
+            $"[CreateTimerSettings] ID: {request.TimerSettingsId}, DocuInterval: {request.DocumentationSaveInterval}, SnapshotInterval: {request.SnapshotSaveInterval}");
 
         try
         {
@@ -32,9 +35,11 @@ public class MockTimerSettingsCommandService(TimerSettingsNotificationServiceImp
         }
     }
 
-    public override async Task<CommandResponse> ChangeDocuTimerSaveInterval(ChangeDocuTimerSaveIntervalCommand request, ServerCallContext context)
+    public override async Task<CommandResponse> ChangeDocuTimerSaveInterval(
+        ChangeDocuTimerSaveIntervalCommandProto request, ServerCallContext context)
     {
-        Console.WriteLine($"[ChangeDocuTimerSaveInterval] ID: {request.TimerSettingsId}, NewInterval: {request.DocuTimerSaveInterval}");
+        Console.WriteLine(
+            $"[ChangeDocuTimerSaveInterval] ID: {request.TimerSettingsId}, NewInterval: {request.DocuTimerSaveInterval}");
 
         try
         {
@@ -56,9 +61,11 @@ public class MockTimerSettingsCommandService(TimerSettingsNotificationServiceImp
         }
     }
 
-    public override async Task<CommandResponse> ChangeSnapshotSaveInterval(ChangeSnapshotSaveIntervalCommand request, ServerCallContext context)
+    public override async Task<CommandResponse> ChangeSnapshotSaveInterval(
+        ChangeSnapshotSaveIntervalCommandProto request, ServerCallContext context)
     {
-        Console.WriteLine($"[ChangeSnapshotSaveInterval] ID: {request.TimerSettingsId}, NewInterval: {request.SnapshotSaveInterval}");
+        Console.WriteLine(
+            $"[ChangeSnapshotSaveInterval] ID: {request.TimerSettingsId}, NewInterval: {request.SnapshotSaveInterval}");
 
         try
         {

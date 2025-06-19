@@ -1,7 +1,7 @@
 ﻿using Grpc.Core;
 using Proto.Notifications.StatisticsData;
 
-namespace Service.Server.Mock.StatisticsData;
+namespace Service.Server.Communication.StatisticsData;
 
 public class
     StatisticsDataNotificationServiceImpl : StatisticsDataNotificationService.StatisticsDataNotificationServiceBase

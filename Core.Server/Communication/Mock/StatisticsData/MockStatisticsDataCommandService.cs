@@ -1,13 +1,14 @@
 ﻿using Grpc.Core;
 using Proto.Command.StatisticsData;
 using Proto.Notifications.StatisticsData;
+using Service.Server.Communication.StatisticsData;
 
-namespace Service.Server.Mock.StatisticsData;
+namespace Service.Server.Communication.Mock.StatisticsData;
 
 public class MockStatisticsDataCommandService(StatisticsDataNotificationServiceImpl statisticsDataNotificationService)
-    : StatisticsDataCommandService.StatisticsDataCommandServiceBase
+    : StatisticsDataCommandProtoService.StatisticsDataCommandProtoServiceBase
 {
-    public override async Task<CommandResponse> ChangeProductivity(ChangeProductivityCommand request,
+    public override async Task<CommandResponse> ChangeProductivity(ChangeProductivityCommandProto request,
         ServerCallContext context)
     {
         Console.WriteLine(
@@ -35,7 +36,7 @@ public class MockStatisticsDataCommandService(StatisticsDataNotificationServiceI
         }
     }
 
-    public override async Task<CommandResponse> ChangeTagSelection(ChangeTagSelectionCommand request,
+    public override async Task<CommandResponse> ChangeTagSelection(ChangeTagSelectionCommandProto request,
         ServerCallContext context)
     {
         Console.WriteLine(
@@ -61,7 +62,7 @@ public class MockStatisticsDataCommandService(StatisticsDataNotificationServiceI
         }
     }
 
-    public override async Task<CommandResponse> CreateStatisticsData(CreateStatisticsDataCommand request,
+    public override async Task<CommandResponse> CreateStatisticsData(CreateStatisticsDataCommandProto request,
         ServerCallContext context)
     {
         Console.WriteLine(

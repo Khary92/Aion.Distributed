@@ -1,4 +1,4 @@
 
-namespace Application.Contract.CQRS.Requests.TimeSlots;
+namespace Service.Server.CQRS.Requests.TimeSlots;
 
 public record GetTimeSlotsForWorkDayIdRequest(Guid WorkDayId);

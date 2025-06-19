@@ -1,26 +1,35 @@
-using Application.Contract.DTO;
-using Domain.Entities;
+using Google.Protobuf.Collections;
+using Google.Protobuf.WellKnownTypes;
+using Proto.DTO.Sprint;
 
-namespace Application.Mapper;
+namespace Service.Server.Communication.Mapper;
 
-public class SprintMapper : IDtoMapper<SprintDto, Sprint>
+public class SprintMapper : IDtoMapper<SprintProto, Domain.Entities.Sprint>
 {
-    public Sprint ToDomain(SprintDto dto)
+    public Domain.Entities.Sprint ToDomain(SprintProto dto)
     {
-        return new Sprint
+        return new Domain.Entities.Sprint
         {
-            SprintId = dto.SprintId,
+            SprintId = Guid.Parse( dto.SprintId),
             Name = dto.Name,
-            StartDate = dto.StartTime,
-            EndDate = dto.EndTime,
+            StartDate = dto.Start.ToDateTimeOffset(),
+            EndDate = dto.End.ToDateTimeOffset(),
             IsActive = dto.IsActive,
-            TicketIds = dto.TicketIds
+            TicketIds = dto.TicketIds.ToGuidList()
         };
     }
 
-    public SprintDto ToDto(Sprint domain)
+    public SprintProto ToDto(Domain.Entities.Sprint domain)
     {
-        return new SprintDto(domain.SprintId, domain.Name, domain.IsActive, domain.StartDate, domain.EndDate,
-            domain.TicketIds);
+       return new SprintProto
+       {
+           SprintId = domain.SprintId.ToString(),
+           Name = domain.Name,
+           Start = Timestamp.FromDateTimeOffset(domain.StartDate),
+           End = Timestamp.FromDateTimeOffset(domain.EndDate),
+           IsActive = domain.IsActive,
+           TicketIds = { domain.TicketIds.ToRepeatedField() }
+
+       };
     }
 }

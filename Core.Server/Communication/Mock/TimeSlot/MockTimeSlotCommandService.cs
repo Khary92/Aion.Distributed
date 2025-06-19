@@ -1,13 +1,14 @@
 ﻿using Grpc.Core;
 using Proto.Command.TimeSlots;
 using Proto.Notifications.TimeSlots;
+using Service.Server.Communication.TimeSlot;
 
-namespace Service.Server.Mock.TimeSlot;
+namespace Service.Server.Communication.Mock.TimeSlot;
 
 public class MockTimeSlotCommandService(TimeSlotNotificationServiceImpl timeSlotNotificationService)
-    : TimeSlotCommandService.TimeSlotCommandServiceBase
+    : TimeSlotCommandProtoService.TimeSlotCommandProtoServiceBase
 {
-    public override async Task<CommandResponse> CreateTimeSlot(CreateTimeSlotCommand request, ServerCallContext context)
+    public override async Task<CommandResponse> CreateTimeSlot(CreateTimeSlotCommandProto request, ServerCallContext context)
     {
         Console.WriteLine($"[CreateTimeSlot] ID: {request.TimeSlotId}, TicketID: {request.SelectedTicketId}, WorkDayID: {request.WorkDayId}, StartTime: {request.StartTime}, EndTime: {request.EndTime}, TimerRunning: {request.IsTimerRunning}");
 
@@ -35,7 +36,7 @@ public class MockTimeSlotCommandService(TimeSlotNotificationServiceImpl timeSlot
         }
     }
 
-    public override async Task<CommandResponse> AddNote(AddNoteCommand request, ServerCallContext context)
+    public override async Task<CommandResponse> AddNote(AddNoteCommandProto request, ServerCallContext context)
     {
         Console.WriteLine($"[AddNote] TimeSlotID: {request.TimeSlotId}, NoteID: {request.NoteId}");
 
@@ -59,7 +60,7 @@ public class MockTimeSlotCommandService(TimeSlotNotificationServiceImpl timeSlot
         }
     }
 
-    public override async Task<CommandResponse> SetStartTime(SetStartTimeCommand request, ServerCallContext context)
+    public override async Task<CommandResponse> SetStartTime(SetStartTimeCommandProto request, ServerCallContext context)
     {
         Console.WriteLine($"[SetStartTime] TimeSlotID: {request.TimeSlotId}, Time: {request.Time}");
 
@@ -83,7 +84,7 @@ public class MockTimeSlotCommandService(TimeSlotNotificationServiceImpl timeSlot
         }
     }
 
-    public override async Task<CommandResponse> SetEndTime(SetEndTimeCommand request, ServerCallContext context)
+    public override async Task<CommandResponse> SetEndTime(SetEndTimeCommandProto request, ServerCallContext context)
     {
         Console.WriteLine($"[SetEndTime] TimeSlotID: {request.TimeSlotId}, Time: {request.Time}");
 

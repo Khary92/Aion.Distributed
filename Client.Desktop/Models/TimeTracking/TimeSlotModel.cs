@@ -16,8 +16,8 @@ namespace Client.Desktop.Models.TimeTracking;
 public class TimeSlotModel(
     IMessenger messenger,
     IStateSynchronizer<TicketReplayDecorator, string> ticketDocumentStateSynchronizer,
-    IPersistentCache<SetStartTimeCommand> startTimeCache,
-    IPersistentCache<SetEndTimeCommand> endTimeCache) : ReactiveObject
+    IPersistentCache<SetStartTimeCommandProto> startTimeCache,
+    IPersistentCache<SetEndTimeCommandProto> endTimeCache) : ReactiveObject
 {
     private TicketReplayDecorator _selectedTicketReplayDecorator = null!;
     private TimeSlotDto _timeSlot = null!;
@@ -70,7 +70,7 @@ public class TimeSlotModel(
         {
             if (TimeSlot.IsEndTimeChanged())
             {
-                var setEndTimeCommand = new SetEndTimeCommand
+                var setEndTimeCommand = new SetEndTimeCommandProto
                 {
                     TimeSlotId = TimeSlot.TimeSlotId.ToString(),
                     Time = Timestamp.FromDateTimeOffset(TimeSlot.EndTime)
@@ -80,7 +80,7 @@ public class TimeSlotModel(
 
             if (TimeSlot.IsStartTimeChanged())
             {
-                var setStartTimeCommand = new SetStartTimeCommand
+                var setStartTimeCommand = new SetStartTimeCommandProto
                 {
                     TimeSlotId = TimeSlot.TimeSlotId.ToString(),
                     Time = Timestamp.FromDateTimeOffset(TimeSlot.StartTime)

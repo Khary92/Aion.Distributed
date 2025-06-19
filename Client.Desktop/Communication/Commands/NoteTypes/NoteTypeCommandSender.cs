@@ -8,21 +8,21 @@ namespace Client.Desktop.Communication.Commands.NoteTypes;
 public class NoteTypeCommandSender : INoteTypeCommandSender
 {
     private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
-    private readonly NoteTypeCommandService.NoteTypeCommandServiceClient _client = new(Channel);
+    private readonly NoteTypeCommandProtoService.NoteTypeCommandProtoServiceClient _client = new(Channel);
 
-    public async Task<bool> Send(CreateNoteTypeCommand command)
+    public async Task<bool> Send(CreateNoteTypeCommandProto command)
     {
         var response = await _client.CreateNoteTypeAsync(command);
         return response.Success;
     }
 
-    public async Task<bool> Send(ChangeNoteTypeNameCommand command)
+    public async Task<bool> Send(ChangeNoteTypeNameCommandProto command)
     {
         var response = await _client.ChangeNoteTypeNameAsync(command);
         return response.Success;
     }
     
-    public async Task<bool> Send(ChangeNoteTypeColorCommand command)
+    public async Task<bool> Send(ChangeNoteTypeColorCommandProto command)
     {
         var response = await _client.ChangeNoteTypeColorAsync(command);
         return response.Success;

@@ -1,6 +1,6 @@
-using Application.Contract.CQRS.Commands.Entities.Settings;
+using Service.Server.CQRS.Commands.Entities.Settings;
 
-namespace Application.Services.Entities.Settings;
+namespace Service.Server.Old.Services.Entities.Settings;
 
 public interface ISettingsCommandsService
 {

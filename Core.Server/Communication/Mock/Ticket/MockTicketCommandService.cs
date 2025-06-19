@@ -1,13 +1,14 @@
 using Grpc.Core;
 using Proto.Command.Tickets;
 using Proto.Notifications.Ticket;
+using Service.Server.Communication.Ticket;
 
-namespace Service.Server.Mock.Ticket;
+namespace Service.Server.Communication.Mock.Ticket;
 
 public class MockTicketCommandService(TicketNotificationServiceImpl ticketNotificationService)
-    : TicketCommandService.TicketCommandServiceBase
+    : TicketCommandProtoService.TicketCommandProtoServiceBase
 {
-    public override async Task<CommandResponse> CreateTicket(CreateTicketCommand request, ServerCallContext context)
+    public override async Task<CommandResponse> CreateTicket(CreateTicketCommandProto request, ServerCallContext context)
     {
         Console.WriteLine(
             $"[CreateTicket] ID: {request.TicketId}, Name: {request.Name}, BookingNumber: {request.BookingNumber}");
@@ -25,7 +26,7 @@ public class MockTicketCommandService(TicketNotificationServiceImpl ticketNotifi
         return new CommandResponse { Success = true };
     }
 
-    public override async Task<CommandResponse> UpdateTicketData(UpdateTicketDataCommand request,
+    public override async Task<CommandResponse> UpdateTicketData(UpdateTicketDataCommandProto request,
         ServerCallContext context)
     {
         Console.WriteLine(
@@ -44,7 +45,7 @@ public class MockTicketCommandService(TicketNotificationServiceImpl ticketNotifi
         return new CommandResponse { Success = true };
     }
 
-    public override async Task<CommandResponse> UpdateTicketDocumentation(UpdateTicketDocumentationCommand request,
+    public override async Task<CommandResponse> UpdateTicketDocumentation(UpdateTicketDocumentationCommandProto request,
         ServerCallContext context)
     {
         Console.WriteLine($"[UpdateTicketDocumentation] ID: {request.TicketId}, Doc: {request.Documentation}");

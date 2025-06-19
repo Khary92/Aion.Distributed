@@ -44,7 +44,7 @@ public class AnalysisByTagModel : ReactiveObject
     {
         _messenger.Register<NewTagMessage>(this, (_, m) => { Tags.Add(m.Tag); });
 
-        _messenger.Register<UpdateTagCommand>(this, (_, m) =>
+        _messenger.Register<UpdateTagCommandProto>(this, (_, m) =>
         {
             var tag = Tags.FirstOrDefault(t => t.TagId == Guid.Parse(m.TagId));
 

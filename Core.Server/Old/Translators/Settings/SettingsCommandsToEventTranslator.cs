@@ -1,8 +1,8 @@
 using System.Text.Json;
-using Application.Contract.CQRS.Commands.Entities.Settings;
 using Domain.Events.Settings;
+using Service.Server.CQRS.Commands.Entities.Settings;
 
-namespace Application.Translators.Settings;
+namespace Service.Server.Old.Translators.Settings;
 
 public class SettingsCommandsToEventTranslator : ISettingsCommandsToEventTranslator
 {

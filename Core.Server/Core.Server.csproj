@@ -17,6 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Core.Domain\Core.Domain.csproj" />
       <ProjectReference Include="..\Proto.Shared\Proto.Shared.csproj" />
     </ItemGroup>
 

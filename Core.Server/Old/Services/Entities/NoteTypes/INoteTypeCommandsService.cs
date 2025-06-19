@@ -1,6 +1,6 @@
-using Application.Contract.CQRS.Commands.Entities.NoteType;
+using Service.Server.CQRS.Commands.Entities.NoteType;
 
-namespace Application.Services.Entities.NoteTypes;
+namespace Service.Server.Old.Services.Entities.NoteTypes;
 
 public interface INoteTypeCommandsService
 {

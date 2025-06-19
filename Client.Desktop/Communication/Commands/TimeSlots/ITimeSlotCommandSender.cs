@@ -5,8 +5,8 @@ namespace Client.Desktop.Communication.Commands.TimeSlots;
 
 public interface ITimeSlotCommandSender
 {
-    Task<bool> Send(CreateTimeSlotCommand command);
-    Task<bool> Send(AddNoteCommand command);
-    Task<bool> Send(SetStartTimeCommand command);
-    Task<bool> Send(SetEndTimeCommand command);
+    Task<bool> Send(CreateTimeSlotCommandProto command);
+    Task<bool> Send(AddNoteCommandProto command);
+    Task<bool> Send(SetStartTimeCommandProto command);
+    Task<bool> Send(SetEndTimeCommandProto command);
 }

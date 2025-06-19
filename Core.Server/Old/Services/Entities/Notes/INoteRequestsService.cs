@@ -1,6 +1,4 @@
-using Application.Contract.DTO;
-
-namespace Application.Services.Entities.Notes;
+namespace Service.Server.Old.Services.Entities.Notes;
 
 public interface INoteRequestsService
 {

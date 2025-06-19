@@ -8,21 +8,21 @@ namespace Client.Desktop.Communication.Commands.Settings;
 public class SettingsCommandSender : ISettingsCommandSender
 {
     private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
-    private readonly SettingsCommandService.SettingsCommandServiceClient _client = new(Channel);
+    private readonly SettingsCommandProtoService.SettingsCommandProtoServiceClient _client = new(Channel);
 
-    public async Task<bool> Send(CreateSettingsCommand command)
+    public async Task<bool> Send(CreateSettingsCommandProto command)
     {
         var response = await _client.CreateSettingsAsync(command);
         return response.Success;
     }
 
-    public async Task<bool> Send(ChangeExportPathCommand command)
+    public async Task<bool> Send(ChangeExportPathCommandProto command)
     {
         var response = await _client.ChangeExportPathAsync(command);
         return response.Success;
     }
 
-    public async Task<bool> Send(ChangeAutomaticTicketAddingToSprintCommand command)
+    public async Task<bool> Send(ChangeAutomaticTicketAddingToSprintCommandProto command)
     {
         var response = await _client.ChangeAutomaticTicketAddingAsync(command);
         return response.Success;

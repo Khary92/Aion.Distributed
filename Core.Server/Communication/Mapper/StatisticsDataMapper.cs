@@ -1,26 +1,32 @@
-using Application.Contract.DTO;
-using Domain.Entities;
+using Proto.DTO.StatisticsData;
 
-namespace Application.Mapper;
+namespace Service.Server.Communication.Mapper;
 
-public class StatisticsDataMapper : IDtoMapper<StatisticsDataDto, StatisticsData>
+public class StatisticsDataMapper : IDtoMapper<StatisticsDataProto, Domain.Entities.StatisticsData>
 {
-    public StatisticsData ToDomain(StatisticsDataDto dto)
+    public Domain.Entities.StatisticsData ToDomain(StatisticsDataProto dto)
     {
-        return new StatisticsData
+        return new Domain.Entities.StatisticsData
         {
-            StatisticsId = dto.StatisticsId,
-            TimeSlotId = dto.TimeSlotId,
+            StatisticsId = Guid.Parse(dto.StatisticsId),
+            TimeSlotId = Guid.Parse(dto.TimeSlotId),
             IsProductive = dto.IsProductive,
             IsNeutral = dto.IsNeutral,
             IsUnproductive = dto.IsUnproductive,
-            TagIds = dto.TagIds
+            TagIds = dto.TagIds.ToGuidList()
         };
     }
 
-    public StatisticsDataDto ToDto(StatisticsData domain)
+    public StatisticsDataProto ToDto(Domain.Entities.StatisticsData domain)
     {
-        return new StatisticsDataDto(domain.StatisticsId, domain.TimeSlotId, domain.TagIds, domain.IsProductive,
-            domain.IsNeutral, domain.IsUnproductive);
+        return new StatisticsDataProto
+        {
+            StatisticsId = domain.StatisticsId.ToString(),
+            TimeSlotId = domain.TimeSlotId.ToString(),
+            IsProductive = domain.IsProductive,
+            IsNeutral = domain.IsNeutral,
+            IsUnproductive = domain.IsUnproductive,
+            TagIds = { domain.TagIds.ToRepeatedField() }
+        };
     }
 }

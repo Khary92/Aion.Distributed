@@ -63,7 +63,7 @@ public class TagsDataModel(
 
             //tracer.Tag.Update.StartUseCase(GetType(), selectedTag.TagId, selectedTag.AsTraceAttributes());
 
-            var updateTagCommand = new UpdateTagCommand
+            var updateTagCommand = new UpdateTagCommandProto
             {
                 TagId = selectedTag.TagId.ToString(),
                 Name = tagName
@@ -79,7 +79,7 @@ public class TagsDataModel(
 
         //tracer.Tag.Create.StartUseCase(GetType(), createTagDto.TagId, createTagDto.AsTraceAttributes());
 
-        var createTagCommand = new CreateTagCommand
+        var createTagCommand = new CreateTagCommandProto
         {
             TagId = createTagDto.TagId.ToString(),
             Name = tagName

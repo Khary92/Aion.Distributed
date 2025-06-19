@@ -1,6 +1,4 @@
-using Application.Contract.DTO;
-
-namespace Application.Services.Entities.Settings;
+namespace Service.Server.Old.Services.Entities.Settings;
 
 public interface ISettingsRequestsService
 {

@@ -1,26 +1,30 @@
-using System.Collections.ObjectModel;
-using Application.Contract.DTO;
-using Domain.Entities;
+using Proto.DTO.Ticket;
 
-namespace Application.Mapper;
+namespace Service.Server.Communication.Mapper;
 
-public class TicketMapper : IDtoMapper<TicketDto, Ticket>
+public class TicketMapper : IDtoMapper<TicketProto, Domain.Entities.Ticket>
 {
-    public Ticket ToDomain(TicketDto dto)
+    public Domain.Entities.Ticket ToDomain(TicketProto dto)
     {
-        return new Ticket
+        return new Domain.Entities.Ticket
         {
-            TicketId = dto.TicketId,
+            TicketId = Guid.Parse(dto.TicketId),
             Name = dto.Name,
             BookingNumber = dto.BookingNumber,
             Documentation = dto.Documentation,
-            SprintIds = new Collection<Guid>(dto.SprintIds.ToList())
+            SprintIds = dto.SprintIds.ToGuidList(),
         };
     }
 
-    public TicketDto ToDto(Ticket domain)
+    public TicketProto ToDto(Domain.Entities.Ticket domain)
     {
-        return new TicketDto(domain.TicketId, domain.Name, domain.BookingNumber, domain.Documentation,
-            domain.SprintIds);
+        return new TicketProto
+        {
+            TicketId = domain.TicketId.ToString(),
+            Name = domain.Name,
+            BookingNumber = domain.BookingNumber,
+            Documentation = domain.Documentation,
+            SprintIds = { domain.SprintIds.ToRepeatedField() }
+        };
     }
 }

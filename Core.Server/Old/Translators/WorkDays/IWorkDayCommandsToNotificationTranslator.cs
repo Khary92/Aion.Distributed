@@ -1,7 +1,6 @@
-using Application.Contract.CQRS.Commands.Entities.WorkDays;
-using Application.Contract.Notifications.Entities.WorkDays;
+using Service.Server.CQRS.Commands.Entities.WorkDays;
 
-namespace Application.Translators.WorkDays;
+namespace Service.Server.Old.Translators.WorkDays;
 
 public interface IWorkDayCommandsToNotificationTranslator
 {

@@ -9,7 +9,7 @@ public class Ticket
     public Guid TicketId { get; set; }
     public string Name { get; set; } = string.Empty;
     public string BookingNumber { get; set; } = string.Empty;
-    public Collection<Guid> SprintIds { get; set; } = [];
+    public List<Guid> SprintIds { get; set; } = [];
     public string Documentation { get; set; } = string.Empty;
 
     public static Ticket Rehydrate(List<TicketEvent> events)

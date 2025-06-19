@@ -1,9 +1,7 @@
-using Application.Contract.CQRS.Requests.NoteTypes;
-using Application.Contract.DTO;
-using Application.Services.Entities.NoteTypes;
-using MediatR;
+using Service.Server.CQRS.Requests.NoteTypes;
+using Service.Server.Old.Services.Entities.NoteTypes;
 
-namespace Application.Handler.Requests.NoteTypes;
+namespace Service.Server.Old.Handler.Requests.NoteTypes;
 
 public class GetAllNoteTypesRequestHandler(INoteTypeRequestsService noteTypeRequestsService)
     : IRequestHandler<GetAllNoteTypesRequest, List<NoteTypeDto>>

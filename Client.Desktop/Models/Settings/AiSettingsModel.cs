@@ -39,7 +39,7 @@ public class AiSettingsModel(
             return;
         }
 
-        await commandSender.Send(new CreateAiSettingsCommand
+        await commandSender.Send(new CreateAiSettingsCommandProto
         {
             AiSettingsId = Guid.NewGuid().ToString(),
             LanguageModelPath = "Not set",
@@ -71,7 +71,7 @@ public class AiSettingsModel(
             return;
         }
 
-        var changePromptCommand = new ChangePromptCommand
+        var changePromptCommand = new ChangePromptCommandProto
         {
             AiSettingsId = AiSettings.AiSettingsId.ToString(),
             Prompt = AiSettings.Prompt
@@ -94,7 +94,7 @@ public class AiSettingsModel(
         }
 
         var changeLanguageModelCommand =
-            new ChangeLanguageModelCommand
+            new ChangeLanguageModelCommandProto
             {
                 AiSettingsId = AiSettings.AiSettingsId.ToString(),
                 LanguageModelPath = AiSettings.LanguageModelPath

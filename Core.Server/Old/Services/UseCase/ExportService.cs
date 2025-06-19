@@ -1,16 +1,12 @@
 ﻿using System.Collections.ObjectModel;
 using System.Text;
-using Application.Contract.CQRS.Requests.Settings;
-using Application.Contract.DTO;
-using Application.Contract.FileSystem;
-using Application.Handler.Requests.Settings;
-using Application.Mapper;
-using Application.Services.Entities.Tickets;
-using Application.Services.Entities.TimeSlots;
 using Domain.Entities;
-using MediatR;
+using Service.Server.Communication.Mapper;
+using Service.Server.CQRS.Requests.Settings;
+using Service.Server.Old.Services.Entities.Tickets;
+using Service.Server.Old.Services.Entities.TimeSlots;
 
-namespace Application.Services.UseCase;
+namespace Service.Server.Old.Services.UseCase;
 
 public class ExportService(
     IMediator mediator,

@@ -43,177 +43,177 @@ public class CommandSender(
     IUseCaseCommandSender useCaseCommandSender,
     IWorkDayCommandSender workDayCommandSender) : ICommandSender
 {
-    public async Task<bool> Send(ChangeLanguageModelCommand command)
+    public async Task<bool> Send(ChangeLanguageModelCommandProto command)
     {
         return await aiSettingsCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(ChangePromptCommand command)
+    public async Task<bool> Send(ChangePromptCommandProto command)
     {
         return await aiSettingsCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(CreateAiSettingsCommand command)
+    public async Task<bool> Send(CreateAiSettingsCommandProto command)
     {
         return await aiSettingsCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(CreateNoteCommand command)
+    public async Task<bool> Send(CreateNoteCommandProto command)
     {
         return await noteCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(UpdateNoteCommand command)
+    public async Task<bool> Send(UpdateNoteCommandProto command)
     {
         return await noteCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(CreateNoteTypeCommand command)
+    public async Task<bool> Send(CreateNoteTypeCommandProto command)
     {
         return await noteTypeCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(ChangeNoteTypeNameCommand command)
+    public async Task<bool> Send(ChangeNoteTypeNameCommandProto command)
     {
         return await noteTypeCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(ChangeNoteTypeColorCommand command)
+    public async Task<bool> Send(ChangeNoteTypeColorCommandProto command)
     {
         return await noteTypeCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(CreateSettingsCommand command)
+    public async Task<bool> Send(CreateSettingsCommandProto command)
     {
         return await settingsCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(ChangeExportPathCommand command)
+    public async Task<bool> Send(ChangeExportPathCommandProto command)
     {
         return await settingsCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(ChangeAutomaticTicketAddingToSprintCommand command)
+    public async Task<bool> Send(ChangeAutomaticTicketAddingToSprintCommandProto command)
     {
         return await settingsCommandSender.Send(command);
     }
     
-    public async Task<bool> Send(CreateSprintCommand command)
+    public async Task<bool> Send(CreateSprintCommandProto command)
     {
         return await sprintCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(AddTicketToActiveSprintCommand command)
+    public async Task<bool> Send(AddTicketToActiveSprintCommandProto command)
     {
         return await sprintCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(AddTicketToSprintCommand command)
+    public async Task<bool> Send(AddTicketToSprintCommandProto command)
     {
         return await sprintCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(SetSprintActiveStatusCommand command)
+    public async Task<bool> Send(SetSprintActiveStatusCommandProto command)
     {
         return await sprintCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(UpdateSprintDataCommand command)
+    public async Task<bool> Send(UpdateSprintDataCommandProto command)
     {
         return await sprintCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(CreateStatisticsDataCommand command)
+    public async Task<bool> Send(CreateStatisticsDataCommandProto command)
     {
         return await statisticsDataCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(ChangeTagSelectionCommand command)
+    public async Task<bool> Send(ChangeTagSelectionCommandProto command)
     {
         return await statisticsDataCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(ChangeProductivityCommand command)
+    public async Task<bool> Send(ChangeProductivityCommandProto command)
     {
         return await statisticsDataCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(CreateTagCommand command)
+    public async Task<bool> Send(CreateTagCommandProto command)
     {
         return await tagCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(UpdateTagCommand command)
+    public async Task<bool> Send(UpdateTagCommandProto command)
     {
         return await tagCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(CreateTicketCommand command)
+    public async Task<bool> Send(CreateTicketCommandProto command)
     {
         return await ticketCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(UpdateTicketDataCommand command)
+    public async Task<bool> Send(UpdateTicketDataCommandProto command)
     {
         return await ticketCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(UpdateTicketDocumentationCommand command)
+    public async Task<bool> Send(UpdateTicketDocumentationCommandProto command)
     {
         return await ticketCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(CreateTimerSettingsCommand createTicketCommand)
+    public async Task<bool> Send(CreateTimerSettingsCommandProto createTicketCommand)
     {
         return await timerSettingsCommandSender.Send(createTicketCommand);
     }
 
-    public async Task<bool> Send(ChangeSnapshotSaveIntervalCommand command)
+    public async Task<bool> Send(ChangeSnapshotSaveIntervalCommandProto command)
     {
         return await timerSettingsCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(ChangeDocuTimerSaveIntervalCommand command)
+    public async Task<bool> Send(ChangeDocuTimerSaveIntervalCommandProto command)
     {
         return await timerSettingsCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(CreateTimeSlotCommand command)
+    public async Task<bool> Send(CreateTimeSlotCommandProto command)
     {
         return await timeSlotCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(AddNoteCommand command)
+    public async Task<bool> Send(AddNoteCommandProto command)
     {
         return await timeSlotCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(SetStartTimeCommand command)
+    public async Task<bool> Send(SetStartTimeCommandProto command)
     {
         return await timeSlotCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(SetEndTimeCommand command)
+    public async Task<bool> Send(SetEndTimeCommandProto command)
     {
         return await timeSlotCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(SendTraceReportCommand command)
+    public async Task<bool> Send(SendTraceReportCommandProto command)
     {
         return await traceReportCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(CreateTimeSlotControlCommand command)
+    public async Task<bool> Send(CreateTimeSlotControlCommandProto command)
     {
         return await useCaseCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(LoadTimeSlotControlCommand command)
+    public async Task<bool> Send(LoadTimeSlotControlCommandProto command)
     {
         return await useCaseCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(CreateWorkDayCommand command)
+    public async Task<bool> Send(CreateWorkDayCommandProto command)
     {
         return await workDayCommandSender.Send(command);
     }

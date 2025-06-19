@@ -73,7 +73,7 @@ public class StatisticsViewModel(
 
         if (StatisticsData.IsProductivityChanged())
         {
-            var changeProductivityCommand = new ChangeProductivityCommand
+            var changeProductivityCommand = new ChangeProductivityCommandProto
             {
                 StatisticsDataId = id.ToString(),
                 IsProductive = StatisticsData.IsProductive,
@@ -86,7 +86,7 @@ public class StatisticsViewModel(
 
         if (StatisticsData.IsTagsSelectionChanged())
         {
-            var cmd = new ChangeTagSelectionCommand
+            var cmd = new ChangeTagSelectionCommandProto
             {
                 StatisticsDataId = id.ToString()
             };

@@ -5,7 +5,6 @@ using Client.Desktop.Communication.Requests;
 using Client.Desktop.Communication.RequiresChange;
 using Client.Desktop.Decorators;
 using Client.Desktop.DTO;
-using Contract.Decorators;
 using DynamicData;
 using Proto.Requests.AnalysisData;
 using Proto.Requests.Tags;

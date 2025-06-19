@@ -1,10 +1,9 @@
-using Application.Contract.CQRS.Commands.Entities.Sprints;
-using Application.Translators.Sprints;
 using Domain.Events.Sprints;
 using Domain.Interfaces;
-using MediatR;
+using Service.Server.CQRS.Commands.Entities.Sprints;
+using Service.Server.Old.Translators.Sprints;
 
-namespace Application.Services.Entities.Sprints;
+namespace Service.Server.Old.Services.Entities.Sprints;
 
 public class SprintCommandsService(
     IEventStore<SprintEvent> sprintEventStore,

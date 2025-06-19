@@ -5,7 +5,7 @@ namespace Client.Desktop.Communication.Commands.TimerSettings;
 
 public interface ITimerSettingsCommandSender
 {
-    Task<bool> Send(CreateTimerSettingsCommand createTicketCommand);
-    Task<bool> Send(ChangeSnapshotSaveIntervalCommand command);
-    Task<bool> Send(ChangeDocuTimerSaveIntervalCommand command);
+    Task<bool> Send(CreateTimerSettingsCommandProto createTicketCommand);
+    Task<bool> Send(ChangeSnapshotSaveIntervalCommandProto command);
+    Task<bool> Send(ChangeDocuTimerSaveIntervalCommandProto command);
 }

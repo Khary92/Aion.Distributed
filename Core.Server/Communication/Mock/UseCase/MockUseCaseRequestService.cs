@@ -1,7 +1,7 @@
 using Grpc.Core;
 using Proto.Requests.UseCase;
 
-namespace Service.Server.Mock.UseCase;
+namespace Service.Server.Communication.Mock.UseCase;
 
 public class MockUseCaseRequestService : UseCaseRequestService.UseCaseRequestServiceBase
 {

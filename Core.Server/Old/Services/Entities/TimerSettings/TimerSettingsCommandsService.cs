@@ -1,10 +1,9 @@
-using Application.Contract.CQRS.Commands.Entities.TimerSettings;
-using Application.Translators.TimerSettings;
 using Domain.Events.TimerSettings;
 using Domain.Interfaces;
-using MediatR;
+using Service.Server.CQRS.Commands.Entities.TimerSettings;
+using Service.Server.Old.Translators.TimerSettings;
 
-namespace Application.Services.Entities.TimerSettings;
+namespace Service.Server.Old.Services.Entities.TimerSettings;
 
 public class TimerSettingsCommandsService(
     IMediator mediator,

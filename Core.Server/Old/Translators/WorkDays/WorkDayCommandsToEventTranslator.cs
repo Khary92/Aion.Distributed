@@ -1,8 +1,8 @@
 using System.Text.Json;
-using Application.Contract.CQRS.Commands.Entities.WorkDays;
 using Domain.Events.WorkDays;
+using Service.Server.CQRS.Commands.Entities.WorkDays;
 
-namespace Application.Translators.WorkDays;
+namespace Service.Server.Old.Translators.WorkDays;
 
 public class WorkDayCommandsToEventTranslator : IWorkDayCommandsToEventTranslator
 {

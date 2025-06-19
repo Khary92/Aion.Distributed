@@ -1,10 +1,8 @@
-using Application.Contract.CQRS.Requests.Tickets;
-using Application.Contract.DTO;
-using Application.Services.Entities.Sprints;
-using Application.Services.Entities.Tickets;
-using MediatR;
+using Service.Server.CQRS.Requests.Tickets;
+using Service.Server.Old.Services.Entities.Sprints;
+using Service.Server.Old.Services.Entities.Tickets;
 
-namespace Application.Handler.Requests.Tickets;
+namespace Service.Server.Old.Handler.Requests.Tickets;
 
 public class GetTicketsWithShowAllSwitchRequestHandler(
     ITicketRequestsService ticketRequestsService,

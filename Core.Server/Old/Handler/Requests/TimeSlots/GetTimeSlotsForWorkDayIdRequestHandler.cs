@@ -1,9 +1,7 @@
-using Application.Contract.CQRS.Requests.TimeSlots;
-using Application.Contract.DTO;
-using Application.Services.Entities.TimeSlots;
-using MediatR;
+using Service.Server.CQRS.Requests.TimeSlots;
+using Service.Server.Old.Services.Entities.TimeSlots;
 
-namespace Application.Handler.Requests.TimeSlots;
+namespace Service.Server.Old.Handler.Requests.TimeSlots;
 
 public class GetTimeSlotsForWorkDayIdRequestHandler(ITimeSlotRequestsService timeSlotRequestsService)
     : IRequestHandler<GetTimeSlotsForWorkDayIdRequest, List<TimeSlotDto>>

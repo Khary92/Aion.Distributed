@@ -1,6 +1,6 @@
-using Application.Contract.CQRS.Commands.Entities.Sprints;
+using Service.Server.CQRS.Commands.Entities.Sprints;
 
-namespace Application.Services.Entities.Sprints;
+namespace Service.Server.Old.Services.Entities.Sprints;
 
 public interface ISprintCommandsService
 {

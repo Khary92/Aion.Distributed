@@ -1,4 +1,4 @@
 
-namespace Application.Contract.CQRS.Requests.StatisticsData;
+namespace Service.Server.CQRS.Requests.StatisticsData;
 
 public record GetStatisticsDataByTimeSlotIdRequest(Guid TimeSlotId);
