@@ -2,10 +2,11 @@
 using Proto.Command.AiSettings;
 using Proto.Notifications.AiSettings;
 using Service.Server.Communication.AiSettings;
+using AiSettingsNotificationService = Service.Server.Communication.AiSettings.AiSettingsNotificationService;
 
 namespace Service.Server.Communication.Mock.AiSettings;
 
-public class MockAiSettingsCommandService(AiSettingsNotificationServiceImpl aiSettingsNotificationService)
+public class MockAiSettingsCommandReceiver(AiSettingsNotificationService aiSettingsNotificationService)
     : AiSettingsCommandProtoService.AiSettingsCommandProtoServiceBase
 {
     public override async Task<CommandResponse> SendChangeLanguageModel(ChangeLanguageModelCommandProto request, ServerCallContext context)

@@ -6,7 +6,7 @@ using Service.Server.Old.Services.Entities.AiSettings;
 namespace Service.Server.Communication.AiSettings;
 
 public class AiSettingsCommandsReceiver(
-    AiSettingsNotificationServiceImpl aiSettingsNotificationService,
+    AiSettingsNotificationService aiSettingsNotificationService,
     IAiSettingsCommandsService aiSettingsCommandsService)
     : AiSettingsCommandProtoService.AiSettingsCommandProtoServiceBase
 {

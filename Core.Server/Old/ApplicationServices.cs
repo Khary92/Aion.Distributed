@@ -1,3 +1,4 @@
+using Service.Server.Communication.AiSettings;
 using Service.Server.Communication.Mapper;
 using Service.Server.Old.Handler.Commands.Entities.AiSettings;
 using Service.Server.Old.Handler.Commands.Entities.Note;
@@ -67,7 +68,7 @@ public static class ApplicationServices
     private static void AddMapperServices(this IServiceCollection services)
     {
         services.AddSingleton<IDtoMapper<SettingsDto, Settings>, SettingsMapper>();
-        services.AddSingleton<IDtoMapper<AiSettingsDto, AiSettings>, AiSettingsMapper>();
+        services.AddSingleton<IDtoMapper<AiSettingsDto, AiSettings>, AiSettingsExtensions>();
         services.AddSingleton<IDtoMapper<NoteDto, Note>, NoteMapper>();
         services.AddSingleton<IDtoMapper<NoteTypeDto, NoteType>, NoteTypeMapper>();
         services.AddSingleton<IDtoMapper<SprintDto, Sprint>, SprintMapper>();

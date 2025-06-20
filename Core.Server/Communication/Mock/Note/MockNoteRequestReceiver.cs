@@ -5,7 +5,7 @@ using Proto.Requests.Notes;
 
 namespace Service.Server.Communication.Mock.Note;
 
-public class MockNoteRequestService : NotesRequestService.NotesRequestServiceBase
+public class MockNoteRequestReceiver : NotesRequestService.NotesRequestServiceBase
 {
     public override Task<GetNotesResponseProto> GetNotesByTicketId(GetNotesByTicketIdRequestProto request,
         ServerCallContext context)

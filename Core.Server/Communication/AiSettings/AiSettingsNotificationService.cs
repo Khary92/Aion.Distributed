@@ -3,7 +3,7 @@ using Proto.Notifications.AiSettings;
 
 namespace Service.Server.Communication.AiSettings;
 
-public class AiSettingsNotificationServiceImpl : AiSettingsNotificationService.AiSettingsNotificationServiceBase
+public class AiSettingsNotificationService : Proto.Notifications.AiSettings.AiSettingsNotificationService.AiSettingsNotificationServiceBase
 {
     private IServerStreamWriter<AiSettingsNotification>? _responseStream;
     private CancellationToken _cancellationToken;

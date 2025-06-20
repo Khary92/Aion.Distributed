@@ -3,7 +3,7 @@ using Proto.Notifications.Note;
 
 namespace Service.Server.Communication.Note;
 
-public class NoteNotificationServiceImpl : NoteNotificationService.NoteNotificationServiceBase
+public class NoteNotificationService : Proto.Notifications.Note.NoteNotificationService.NoteNotificationServiceBase
 {
     private IServerStreamWriter<NoteNotification>? _responseStream;
     private CancellationToken _cancellationToken;

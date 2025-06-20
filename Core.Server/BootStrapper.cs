@@ -44,8 +44,8 @@ public static class BootStrapper
         services.AddGrpc();
         services.AddGrpcReflection();
         
-        services.AddSingleton<AiSettingsNotificationServiceImpl>();
-        services.AddSingleton<NoteNotificationServiceImpl>();
+        services.AddSingleton<AiSettingsNotificationService>();
+        services.AddSingleton<NoteNotificationService>();
         services.AddSingleton<NoteTypeNotificationServiceImpl>();
         services.AddSingleton<SettingsNotificationServiceImpl>();
         services.AddSingleton<SprintNotificationServiceImpl>();
@@ -71,8 +71,8 @@ public static class BootStrapper
 
     public static void AddNotificationEndPoints(WebApplication app)
     {
-        app.MapGrpcService<AiSettingsNotificationServiceImpl>();
-        app.MapGrpcService<NoteNotificationServiceImpl>();
+        app.MapGrpcService<AiSettingsNotificationService>();
+        app.MapGrpcService<NoteNotificationService>();
         app.MapGrpcService<NoteTypeNotificationServiceImpl>();
         app.MapGrpcService<SettingsNotificationServiceImpl>();
         app.MapGrpcService<SprintNotificationServiceImpl>();
@@ -88,8 +88,8 @@ public static class BootStrapper
 
     public static void AddMockingEndpoints(this WebApplication app)
     {
-        app.MapGrpcService<MockAiSettingsCommandService>();
-        app.MapGrpcService<MockNoteCommandService>();
+        app.MapGrpcService<MockAiSettingsCommandReceiver>();
+        app.MapGrpcService<NoteCommandReceiver>();
         app.MapGrpcService<MockNoteTypeCommandService>();
         app.MapGrpcService<MockSettingsCommandService>();
         app.MapGrpcService<MockSprintCommandService>();
@@ -102,8 +102,8 @@ public static class BootStrapper
         app.MapGrpcService<MockUseCaseCommandService>();
         app.MapGrpcService<MockWorkDayCommandService>();
 
-        app.MapGrpcService<MockAiSettingsRequestService>();
-        app.MapGrpcService<MockNoteRequestService>();
+        app.MapGrpcService<MockAiSettingsRequestReceiver>();
+        app.MapGrpcService<NoteRequestReceiver>();
         app.MapGrpcService<MockNoteTypeRequestService>();
         app.MapGrpcService<MockSettingsRequestService>();
         app.MapGrpcService<MockSprintRequestService>();

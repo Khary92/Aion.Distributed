@@ -1,6 +1,6 @@
 ﻿using Google.Protobuf.Collections;
 
-namespace Service.Server.Communication.Mapper;
+namespace Service.Server.Communication;
 
 public static class MapperExtensions
 {

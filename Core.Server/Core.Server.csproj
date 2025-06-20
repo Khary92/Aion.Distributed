@@ -21,8 +21,4 @@
       <ProjectReference Include="..\Proto.Shared\Proto.Shared.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Communication\" />
-    </ItemGroup>
-
 </Project>
