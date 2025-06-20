@@ -1,5 +1,5 @@
 ﻿using Core.Persistence;
-using Infrastructure.SQLite.DbContext;
+using Core.Persistence.SQLite.DbContext;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;

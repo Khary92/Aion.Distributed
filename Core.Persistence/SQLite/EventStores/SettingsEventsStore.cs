@@ -1,20 +1,24 @@
+using Core.Persistence.SQLite.DbContext;
 using Domain.Events.Settings;
 using Domain.Interfaces;
-using Infrastructure.SQLite.DbContext;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.SQLite.EventStores;
+namespace Core.Persistence.SQLite.EventStores;
 
-public class SettingsEventsStore(AppDbContext appDbContext) : IEventStore<SettingsEvent>
+public class SettingsEventsStore(IDbContextFactory<AppDbContext> appDbContextFactory) : IEventStore<SettingsEvent>
 {
     public async Task StoreEventAsync(SettingsEvent @event)
     {
+        await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
+        
         await appDbContext.SettingsEvents.AddAsync(@event);
         await appDbContext.SaveChangesAsync();
     }
 
     public async Task<List<SettingsEvent>> GetEventsForAggregateAsync(Guid entityId)
     {
+        await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
+        
         return await appDbContext.SettingsEvents
             .Where(e => e.EntityId == entityId)
             .OrderBy(e => e.TimeStamp)
@@ -24,6 +28,8 @@ public class SettingsEventsStore(AppDbContext appDbContext) : IEventStore<Settin
 
     public async Task<List<SettingsEvent>> GetAllEventsAsync()
     {
+        await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
+        
         return await appDbContext.SettingsEvents
             .OrderBy(e => e.TimeStamp)
             .AsNoTracking()

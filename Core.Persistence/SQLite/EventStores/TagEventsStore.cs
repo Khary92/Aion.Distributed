@@ -1,20 +1,24 @@
+using Core.Persistence.SQLite.DbContext;
 using Domain.Events.Tags;
 using Domain.Interfaces;
-using Infrastructure.SQLite.DbContext;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.SQLite.EventStores;
+namespace Core.Persistence.SQLite.EventStores;
 
-public class TagEventsStore(AppDbContext appDbContext) : IEventStore<TagEvent>
+public class TagEventsStore(IDbContextFactory<AppDbContext> appDbContextFactory) : IEventStore<TagEvent>
 {
     public async Task StoreEventAsync(TagEvent @event)
     {
+        await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
+        
         await appDbContext.TagEvents.AddAsync(@event);
         await appDbContext.SaveChangesAsync();
     }
 
     public async Task<List<TagEvent>> GetEventsForAggregateAsync(Guid entityId)
     {
+        await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
+        
         return await appDbContext.TagEvents
             .Where(e => e.EntityId == entityId)
             .OrderBy(e => e.TimeStamp)
@@ -24,6 +28,8 @@ public class TagEventsStore(AppDbContext appDbContext) : IEventStore<TagEvent>
 
     public async Task<List<TagEvent>> GetAllEventsAsync()
     {
+        await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
+        
         return await appDbContext.TagEvents
             .OrderBy(e => e.TimeStamp)
             .AsNoTracking()

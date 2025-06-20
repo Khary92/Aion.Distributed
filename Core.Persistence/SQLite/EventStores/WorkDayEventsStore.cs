@@ -1,6 +1,6 @@
+using Core.Persistence.SQLite.DbContext;
 using Domain.Events.WorkDays;
 using Domain.Interfaces;
-using Infrastructure.SQLite.DbContext;
 using Microsoft.EntityFrameworkCore;
 
 namespace Core.Persistence.SQLite.EventStores;

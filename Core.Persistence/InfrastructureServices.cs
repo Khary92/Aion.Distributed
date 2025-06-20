@@ -1,3 +1,4 @@
+using Core.Persistence.SQLite.DbContext;
 using Core.Persistence.SQLite.EventStores;
 using Domain.Events.AiSettings;
 using Domain.Events.Note;
@@ -10,8 +11,6 @@ using Domain.Events.TimerSettings;
 using Domain.Events.TimeSlots;
 using Domain.Events.WorkDays;
 using Domain.Interfaces;
-using Infrastructure.SQLite.DbContext;
-using Infrastructure.SQLite.EventStores;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -30,7 +29,8 @@ public static class InfrastructureServices
     {
         services.AddDbContext<AppDbContext>(options =>
             options.UseSqlite($"Data Source={DatabaseName}"));
-
+        services.AddDbContextFactory<AppDbContext>();
+        
         services.AddScoped<IEventStore<AiSettingsEvent>, AiSettingsEventsStore>();
         services.AddScoped<IEventStore<NoteEvent>, NoteEventsStore>();
         services.AddScoped<IEventStore<NoteTypeEvent>, NoteTypeEventsStore>();

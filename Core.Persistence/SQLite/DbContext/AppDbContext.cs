@@ -11,7 +11,7 @@ using Domain.Events.TimeSlots;
 using Domain.Events.WorkDays;
 using Microsoft.EntityFrameworkCore;
 
-namespace Infrastructure.SQLite.DbContext;
+namespace Core.Persistence.SQLite.DbContext;
 
 public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
     : Microsoft.EntityFrameworkCore.DbContext(options)
