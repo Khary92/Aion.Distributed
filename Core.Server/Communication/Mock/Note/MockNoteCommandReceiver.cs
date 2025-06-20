@@ -1,7 +1,6 @@
 ﻿using Grpc.Core;
 using Proto.Command.Notes;
 using Proto.Notifications.Note;
-using Service.Server.Communication.Note;
 using NoteNotificationService = Service.Server.Communication.Note.NoteNotificationService;
 
 namespace Service.Server.Communication.Mock.Note;
@@ -24,7 +23,7 @@ public class MockNoteCommandReceiver(NoteNotificationService noteNotificationSer
                     Text = request.Text,
                     NoteTypeId = request.NoteTypeId,
                     TimeSlotId = request.TimeSlotId,
-                    TimeStamp = request.TimeStamp.ToDateTime().ToString("o") // ISO 8601 string
+                    TimeStamp = request.TimeStamp
                 }
             });
 

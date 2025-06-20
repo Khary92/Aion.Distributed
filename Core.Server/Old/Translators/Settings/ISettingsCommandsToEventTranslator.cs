@@ -6,5 +6,6 @@ namespace Service.Server.Old.Translators.Settings;
 public interface ISettingsCommandsToEventTranslator
 {
     SettingsEvent ToEvent(CreateSettingsCommand command);
-    SettingsEvent ToEvent(UpdateSettingsCommand command);
+    SettingsEvent ToEvent(ChangeExportPathCommand command);
+    SettingsEvent ToEvent(ChangeAutomaticTicketAddingToSprintCommand command);
 }

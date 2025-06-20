@@ -15,14 +15,16 @@ public class SettingsCommandsToEventTranslator : ISettingsCommandsToEventTransla
             JsonSerializer.Serialize(domainEvent));
     }
 
-    public SettingsEvent ToEvent(UpdateSettingsCommand command)
+    public SettingsEvent ToEvent(ChangeExportPathCommand command)
     {
-        var domainEvent = new SettingsUpdatedEvent(command.SettingsId, command.ExportPath,
-            command.IsAddNewTicketsToCurrentSprintActive);
-
-        return CreateDatabaseEvent(nameof(SettingsUpdatedEvent), command.SettingsId,
-            JsonSerializer.Serialize(domainEvent));
+        throw new NotImplementedException();
     }
+
+    public SettingsEvent ToEvent(ChangeAutomaticTicketAddingToSprintCommand command)
+    {
+        throw new NotImplementedException();
+    }
+
 
     private static SettingsEvent CreateDatabaseEvent(string eventName, Guid entityId, string json)
     {

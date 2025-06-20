@@ -10,10 +10,14 @@ public class SettingsCommandsService(
     ISettingsCommandsToEventTranslator eventTranslator)
     : ISettingsCommandsService
 {
-    public async Task Update(UpdateSettingsCommand updateSettingsCommand)
+    public Task ChangeAutomaticTicketAddingToSprint(ChangeAutomaticTicketAddingToSprintCommand command)
     {
-        await settingsEventStore.StoreEventAsync(
-            eventTranslator.ToEvent(updateSettingsCommand));
+        throw new NotImplementedException();
+    }
+
+    public Task ChangeExportPath(ChangeExportPathCommand command)
+    {
+        throw new NotImplementedException();
     }
 
     public async Task Create(CreateSettingsCommand createSettingsCommand)

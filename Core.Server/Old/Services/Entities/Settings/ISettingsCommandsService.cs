@@ -4,6 +4,7 @@ namespace Service.Server.Old.Services.Entities.Settings;
 
 public interface ISettingsCommandsService
 {
-    Task Update(UpdateSettingsCommand updateSettingsCommand);
+    Task ChangeAutomaticTicketAddingToSprint(ChangeAutomaticTicketAddingToSprintCommand command);
+    Task ChangeExportPath(ChangeExportPathCommand command);
     Task Create(CreateSettingsCommand createSettingsCommand);
 }
