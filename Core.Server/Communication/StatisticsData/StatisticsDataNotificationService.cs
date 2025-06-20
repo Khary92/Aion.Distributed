@@ -4,7 +4,7 @@ using Proto.Notifications.StatisticsData;
 namespace Service.Server.Communication.StatisticsData;
 
 public class
-    StatisticsDataNotificationServiceImpl : StatisticsDataNotificationService.StatisticsDataNotificationServiceBase
+    StatisticsDataNotificationService : Proto.Notifications.StatisticsData.StatisticsDataNotificationService.StatisticsDataNotificationServiceBase
 {
     private IServerStreamWriter<StatisticsDataNotification>? _responseStream;
     private CancellationToken _cancellationToken;

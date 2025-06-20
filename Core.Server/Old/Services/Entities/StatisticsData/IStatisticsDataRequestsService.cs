@@ -2,6 +2,6 @@ namespace Service.Server.Old.Services.Entities.StatisticsData;
 
 public interface IStatisticsDataRequestsService
 {
-    Task<StatisticsDataDto> GetStatisticsDataByTimeSlotId(Guid timeSlotId);
-    Task<List<StatisticsDataDto>> GetAll();
+    Task<Domain.Entities.StatisticsData> GetStatisticsDataByTimeSlotId(Guid timeSlotId);
+    Task<List<Domain.Entities.StatisticsData>> GetAll();
 }

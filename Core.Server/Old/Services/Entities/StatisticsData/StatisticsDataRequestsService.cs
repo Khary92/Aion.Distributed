@@ -4,19 +4,17 @@ using Service.Server.Communication.Mapper;
 
 namespace Service.Server.Old.Services.Entities.StatisticsData;
 
-public class StatisticsDataRequestsService(
-    IEventStore<StatisticsDataEvent> statisticsDataEventStore,
-    IDtoMapper<StatisticsDataDto, Domain.Entities.StatisticsData> statisticsDataMapper)
+public class StatisticsDataRequestsService(IEventStore<StatisticsDataEvent> statisticsDataEventStore)
     : IStatisticsDataRequestsService
 {
-    public async Task<StatisticsDataDto> GetStatisticsDataByTimeSlotId(Guid timeSlotId)
+    public async Task<Domain.Entities.StatisticsData> GetStatisticsDataByTimeSlotId(Guid timeSlotId)
     {
         var allStatisticsData = await GetAll();
 
         return allStatisticsData.First(x => x.TimeSlotId == timeSlotId);
     }
 
-    public async Task<List<StatisticsDataDto>> GetAll()
+    public async Task<List<Domain.Entities.StatisticsData>> GetAll()
     {
         var allEvents = await statisticsDataEventStore.GetAllEventsAsync();
 
@@ -27,7 +25,6 @@ public class StatisticsDataRequestsService(
 
         return groupedEvents
             .Select(group => Domain.Entities.StatisticsData.Rehydrate(group.ToList()))
-            .Select(statisticsDataMapper.ToDto)
             .ToList();
     }
 }
