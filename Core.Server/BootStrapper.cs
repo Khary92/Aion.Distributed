@@ -94,7 +94,7 @@ public static class BootStrapper
         app.MapGrpcService<MockSettingsCommandService>();
         app.MapGrpcService<MockSprintCommandService>();
         app.MapGrpcService<MockStatisticsDataCommandService>();
-        app.MapGrpcService<MockCommandService>();
+        app.MapGrpcService<TagCommandReceiver>();
         app.MapGrpcService<MockTicketCommandService>();
         app.MapGrpcService<MockTimerSettingsCommandService>();
         app.MapGrpcService<MockTimeSlotCommandService>();
