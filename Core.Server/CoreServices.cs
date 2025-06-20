@@ -52,26 +52,21 @@ using Service.Server.Translators.WorkDays;
 
 namespace Service.Server;
 
-public static class BootStrapper
+public static class CoreServices
 {
-    public static WebApplication BuildWebApp(String[] args)
+    public static void AddCoreServices(this IServiceCollection services)
     {
-        var builder = WebApplication.CreateBuilder(args);
-        builder.WebHost.ConfigureKestrel(options =>
-        {
-            options.ListenLocalhost(5000, o => o.Protocols = HttpProtocols.Http2);
-        });
-        AddNotificationServices(builder.Services);
-        AddCommonServices(builder.Services);
-        AddRequestsServices(builder.Services);
-        AddCommandsServices(builder.Services);
-        AddCommandToEventTranslators(builder.Services);
-        return builder.Build();
+        AddNotificationServices(services);
+        AddCommonServices(services);
+        AddRequestsServices(services);
+        AddCommandsServices(services);
+        AddCommandToEventTranslators(services);
     }
 
     private static void AddCommonServices(this IServiceCollection services)
     {
         services.AddSingleton<IRunTimeSettings, RunTimeSettings>();
+        services.AddSingleton<TimerService>();
     }
 
     private static void AddRequestsServices(this IServiceCollection services)
@@ -139,91 +134,4 @@ public static class BootStrapper
         services.AddSingleton<WorkDayNotificationService>();
     }
 
-    public static void AddEndPoints(this WebApplication app)
-    {
-        AddCommandEndPoints(app);
-    }
-
-    private static void AddCommandEndPoints(WebApplication app)
-    {
-        app.MapGrpcService<AiSettingsCommandReceiver>();
-        app.MapGrpcService<NoteCommandReceiver>();
-        app.MapGrpcService<NoteTypeCommandReceiver>();
-        app.MapGrpcService<SettingsCommandReceiver>();
-        app.MapGrpcService<SprintCommandReceiver>();
-        app.MapGrpcService<StatisticsDataCommandReceiver>();
-        app.MapGrpcService<TagCommandReceiver>();
-        app.MapGrpcService<TicketCommandReceiver>();
-        app.MapGrpcService<TimerSettingsCommandReceiver>();
-        app.MapGrpcService<TimeSlotCommandService>();
-        app.MapGrpcService<UseCaseCommandReceiver>();
-        app.MapGrpcService<WorkDayCommandReceiver>();
-    }
-
-    private static void AddRequestEndPoints(WebApplication app)
-    {
-        app.MapGrpcService<AiSettingsRequestReceiver>();
-        app.MapGrpcService<NoteRequestReceiver>();
-        app.MapGrpcService<NoteTypeRequestReceiver>();
-        app.MapGrpcService<SettingsRequestReceiver>();
-        app.MapGrpcService<SprintRequestService>();
-        app.MapGrpcService<StatisticsDataRequestReceiver>();
-        app.MapGrpcService<TagRequestReceiver>();
-        app.MapGrpcService<TicketRequestReceiver>();
-        app.MapGrpcService<TimerSettingsRequestReceiver>();
-        app.MapGrpcService<TimeSlotRequestReceiver>();
-        app.MapGrpcService<WorkDayRequestReceiver>();
-
-        //TODO
-        //app.MapGrpcService<UseCaseRequestReceiver>();
-        //app.MapGrpcService<AnalysisRequestReceiver>();
-    }
-
-    public static void AddNotificationEndPoints(WebApplication app)
-    {
-        app.MapGrpcService<AiSettingsNotificationService>();
-        app.MapGrpcService<NoteNotificationService>();
-        app.MapGrpcService<NoteTypeNotificationService>();
-        app.MapGrpcService<SettingsNotificationService>();
-        app.MapGrpcService<SprintNotificationService>();
-        app.MapGrpcService<StatisticsDataNotificationService>();
-        app.MapGrpcService<TagNotificationServiceImpl>();
-        app.MapGrpcService<TicketNotificationService>();
-        app.MapGrpcService<TimerSettingsNotificationService>();
-        app.MapGrpcService<TimeSlotNotificationService>();
-        app.MapGrpcService<TraceReportNotificationService>();
-        app.MapGrpcService<UseCaseNotificationService>();
-        app.MapGrpcService<WorkDayNotificationService>();
-    }
-
-    public static void AddMockingEndpoints(this WebApplication app)
-    {
-        app.MapGrpcService<MockAiSettingsCommandReceiver>();
-        app.MapGrpcService<MockNoteCommandReceiver>();
-        app.MapGrpcService<MockNoteTypeCommandService>();
-        app.MapGrpcService<MockSettingsCommandService>();
-        app.MapGrpcService<MockSprintCommandService>();
-        app.MapGrpcService<MockStatisticsDataCommandService>();
-        app.MapGrpcService<MockTagCommandService>();
-        app.MapGrpcService<MockTicketCommandService>();
-        app.MapGrpcService<MockTimerSettingsCommandService>();
-        app.MapGrpcService<MockTimeSlotCommandService>();
-        app.MapGrpcService<MockTraceReportCommandService>();
-        app.MapGrpcService<MockUseCaseCommandService>();
-        app.MapGrpcService<MockWorkDayCommandService>();
-
-        app.MapGrpcService<MockAiSettingsRequestReceiver>();
-        app.MapGrpcService<NoteRequestReceiver>();
-        app.MapGrpcService<MockNoteTypeRequestService>();
-        app.MapGrpcService<MockSettingsRequestService>();
-        app.MapGrpcService<MockSprintRequestService>();
-        app.MapGrpcService<MockStatisticsDataRequestService>();
-        app.MapGrpcService<MockTagRequestService>();
-        app.MapGrpcService<MockTicketRequestService>();
-        app.MapGrpcService<MockTimerSettingsRequestService>();
-        app.MapGrpcService<MockTimeSlotRequestService>();
-        app.MapGrpcService<MockWorkDayRequestService>();
-        app.MapGrpcService<MockUseCaseRequestService>();
-        app.MapGrpcService<MockAnalysisRequestService>();
-    }
 }

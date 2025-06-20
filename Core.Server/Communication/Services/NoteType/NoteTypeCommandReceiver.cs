@@ -5,7 +5,6 @@ using Service.Server.Services.Entities.NoteTypes;
 namespace Service.Server.Communication.Services.NoteType;
 
 public class NoteTypeCommandReceiver(
-    NoteTypeNotificationService noteTypeNotificationService,
     INoteTypeCommandsService noteTypeCommandsService)
     : NoteTypeCommandProtoService.NoteTypeCommandProtoServiceBase
 {

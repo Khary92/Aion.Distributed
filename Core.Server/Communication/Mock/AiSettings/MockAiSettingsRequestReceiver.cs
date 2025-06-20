@@ -6,7 +6,7 @@ namespace Service.Server.Communication.Mock.AiSettings;
 
 public class MockAiSettingsRequestReceiver : AiSettingsRequestService.AiSettingsRequestServiceBase
 {
-    public override Task<AiSettingsProto?> GetAiSettings(GetAiSettingsRequestProto request, ServerCallContext context)
+    public override Task<AiSettingsProto> GetAiSettings(GetAiSettingsRequestProto request, ServerCallContext context)
     {
         var response = new AiSettingsProto
         {

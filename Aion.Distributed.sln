@@ -4,7 +4,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.Desktop", "Client.De
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Domain", "Core.Domain\Core.Domain.csproj", "{634B1444-10A5-4B74-91DA-8D464D324C18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure.Persistence", "Infrastructure.Persistence\Infrastructure.Persistence.csproj", "{FF3ED167-D052-4065-8E08-58021873D85C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Persistence", "Core.Persistence\Core.Persistence.csproj", "{FF3ED167-D052-4065-8E08-58021873D85C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Monitoring.Web", "Monitoring.Web\Monitoring.Web.csproj", "{9AA30374-B913-46BF-983E-8F211D903259}"
 EndProject
@@ -15,6 +15,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Server", "Core.Server\Core.Server.csproj", "{F0B66804-9A5D-41BE-A8B1-CD71BEF6D7F9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proto.Shared", "Proto.Shared\Proto.Shared.csproj", "{099A9566-91C2-4FCF-883A-7E9115DBA043}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Boot", "Core.Boot\Core.Boot.csproj", "{4D9F97AE-828E-4194-BCB0-298366287063}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,5 +56,9 @@ Global
 		{099A9566-91C2-4FCF-883A-7E9115DBA043}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{099A9566-91C2-4FCF-883A-7E9115DBA043}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{099A9566-91C2-4FCF-883A-7E9115DBA043}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D9F97AE-828E-4194-BCB0-298366287063}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D9F97AE-828E-4194-BCB0-298366287063}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D9F97AE-828E-4194-BCB0-298366287063}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D9F97AE-828E-4194-BCB0-298366287063}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
