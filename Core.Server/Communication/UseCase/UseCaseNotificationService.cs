@@ -1,16 +1,16 @@
 ﻿using Grpc.Core;
-using Proto.Notifications.WorkDay;
+using Proto.Notifications.UseCase;
 
-namespace Service.Server.Communication.WorkDay;
+namespace Service.Server.Communication.UseCase;
 
-public class WorkDayNotificationServiceImpl : WorkDayNotificationService.WorkDayNotificationServiceBase
+public class UseCaseNotificationService : Proto.Notifications.UseCase.UseCaseNotificationService.UseCaseNotificationServiceBase
 {
-    private IServerStreamWriter<WorkDayNotification>? _responseStream;
+    private IServerStreamWriter<UseCaseNotification>? _responseStream;
     private CancellationToken _cancellationToken;
 
-    public override async Task SubscribeWorkDayNotifications(
+    public override async Task SubscribeUseCaseNotifications(
         SubscribeRequest request,
-        IServerStreamWriter<WorkDayNotification> responseStream,
+        IServerStreamWriter<UseCaseNotification> responseStream,
         ServerCallContext context)
     {
         _responseStream = responseStream;
@@ -22,7 +22,7 @@ public class WorkDayNotificationServiceImpl : WorkDayNotificationService.WorkDay
         }
         catch (OperationCanceledException)
         {
-            // Stream wurde beendet
+            // Verbindung beendet
         }
         finally
         {
@@ -30,9 +30,9 @@ public class WorkDayNotificationServiceImpl : WorkDayNotificationService.WorkDay
         }
     }
 
-    public async Task SendNotificationAsync(WorkDayNotification notification)
+    public async Task SendNotificationAsync(UseCaseNotification notification)
     {
-        if (_responseStream != null && !_cancellationToken.IsCancellationRequested)
+        if (_responseStream is not null && !_cancellationToken.IsCancellationRequested)
         {
             try
             {
@@ -40,7 +40,7 @@ public class WorkDayNotificationServiceImpl : WorkDayNotificationService.WorkDay
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Fehler beim Senden der WorkDayNotification: {ex.Message}");
+                Console.WriteLine($"Fehler beim Senden der UseCaseNotification: {ex.Message}");
                 _responseStream = null;
             }
         }

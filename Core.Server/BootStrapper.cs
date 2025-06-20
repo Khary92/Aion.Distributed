@@ -54,9 +54,9 @@ public static class BootStrapper
         services.AddSingleton<TicketNotificationService>();
         services.AddSingleton<TimerSettingsNotificationService>();
         services.AddSingleton<TimeSlotNotificationService>();
-        services.AddSingleton<TraceReportNotificationServiceImpl>();
-        services.AddSingleton<UseCaseNotificationServiceImpl>();
-        services.AddSingleton<WorkDayNotificationServiceImpl>();
+        services.AddSingleton<TraceReportNotificationService>();
+        services.AddSingleton<UseCaseNotificationService>();
+        services.AddSingleton<WorkDayNotificationService>();
     }
 
     public static void AddEndPoints(this WebApplication app)
@@ -81,9 +81,9 @@ public static class BootStrapper
         app.MapGrpcService<TicketNotificationService>();
         app.MapGrpcService<TimerSettingsNotificationService>();
         app.MapGrpcService<TimeSlotNotificationService>();
-        app.MapGrpcService<TraceReportNotificationServiceImpl>();
-        app.MapGrpcService<UseCaseNotificationServiceImpl>();
-        app.MapGrpcService<WorkDayNotificationServiceImpl>();
+        app.MapGrpcService<TraceReportNotificationService>();
+        app.MapGrpcService<UseCaseNotificationService>();
+        app.MapGrpcService<WorkDayNotificationService>();
     }
 
     public static void AddMockingEndpoints(this WebApplication app)

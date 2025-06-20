@@ -3,7 +3,7 @@ using Proto.Notifications.TraceReports;
 
 namespace Service.Server.Communication.TraceReport;
 
-public class TraceReportNotificationServiceImpl : TraceReportNotificationService.TraceReportNotificationServiceBase
+public class TraceReportNotificationService : Proto.Notifications.TraceReports.TraceReportNotificationService.TraceReportNotificationServiceBase
 {
     private IServerStreamWriter<TraceReportNotification>? _responseStream;
     private CancellationToken _cancellationToken;

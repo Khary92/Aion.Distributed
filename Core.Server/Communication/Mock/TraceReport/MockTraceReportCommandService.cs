@@ -2,10 +2,11 @@
 using Proto.Command.TraceReports;
 using Proto.Notifications.TraceReports;
 using Service.Server.Communication.TraceReport;
+using TraceReportNotificationService = Service.Server.Communication.TraceReport.TraceReportNotificationService;
 
 namespace Service.Server.Communication.Mock.TraceReport;
 
-public class MockTraceReportCommandService(TraceReportNotificationServiceImpl notificationService)
+public class MockTraceReportCommandService(TraceReportNotificationService notificationService)
     : TraceReportCommandService.TraceReportCommandServiceBase
 {
     public override async Task<CommandResponse> SendTraceReport(SendTraceReportCommandProto request,

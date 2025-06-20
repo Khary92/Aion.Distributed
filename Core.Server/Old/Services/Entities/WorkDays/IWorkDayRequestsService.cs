@@ -1,7 +1,11 @@
+using Domain.Entities;
+
 namespace Service.Server.Old.Services.Entities.WorkDays;
 
 public interface IWorkDayRequestsService
 {
-    Task<List<WorkDayDto>> GetAll();
-    Task<List<WorkDayDto>> GetWorkDaysInDateRange(DateTimeOffset startDate, DateTimeOffset endDate);
+    Task<WorkDay?> GetById(Guid workDayId);
+    Task<List<WorkDay>> GetAll();
+    Task<List<WorkDay>> GetWorkDaysInDateRange(DateTimeOffset startDate, DateTimeOffset endDate);
+    Task<WorkDay?> GetWorkDayByDate(DateTimeOffset date);
 }

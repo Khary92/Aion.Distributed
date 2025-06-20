@@ -6,7 +6,9 @@ option csharp_namespace = "Proto.Requests.WorkDays";
 
 message GetAllWorkDaysRequestProto {}
 
-message GetSelectedWorkDayRequestProto {}
+message GetSelectedWorkDayRequestProto {
+  string work_day_id = 1;
+}
 
 message GetWorkDayByDateRequestProto {
   google.protobuf.Timestamp date = 1;
