@@ -52,7 +52,7 @@ public static class BootStrapper
         services.AddSingleton<StatisticsDataNotificationService>();
         services.AddSingleton<TagNotificationServiceImpl>();
         services.AddSingleton<TicketNotificationService>();
-        services.AddSingleton<TimerSettingsNotificationServiceImpl>();
+        services.AddSingleton<TimerSettingsNotificationService>();
         services.AddSingleton<TimeSlotNotificationServiceImpl>();
         services.AddSingleton<TraceReportNotificationServiceImpl>();
         services.AddSingleton<UseCaseNotificationServiceImpl>();
@@ -79,7 +79,7 @@ public static class BootStrapper
         app.MapGrpcService<StatisticsDataNotificationService>();
         app.MapGrpcService<TagNotificationServiceImpl>();
         app.MapGrpcService<TicketNotificationService>();
-        app.MapGrpcService<TimerSettingsNotificationServiceImpl>();
+        app.MapGrpcService<TimerSettingsNotificationService>();
         app.MapGrpcService<TimeSlotNotificationServiceImpl>();
         app.MapGrpcService<TraceReportNotificationServiceImpl>();
         app.MapGrpcService<UseCaseNotificationServiceImpl>();

@@ -3,7 +3,7 @@ using Proto.Notifications.TimerSettings;
 
 namespace Service.Server.Communication.TimerSettings;
 
-public class TimerSettingsNotificationServiceImpl : TimerSettingsNotificationService.TimerSettingsNotificationServiceBase
+public class TimerSettingsNotificationService : Proto.Notifications.TimerSettings.TimerSettingsNotificationService.TimerSettingsNotificationServiceBase
 {
     private IServerStreamWriter<TimerSettingsNotification>? _responseStream;
     private CancellationToken _cancellationToken;

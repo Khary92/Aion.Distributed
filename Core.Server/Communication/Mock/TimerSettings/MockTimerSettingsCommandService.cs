@@ -2,10 +2,11 @@
 using Proto.Command.TimerSettings;
 using Proto.Notifications.TimerSettings;
 using Service.Server.Communication.TimerSettings;
+using TimerSettingsNotificationService = Service.Server.Communication.TimerSettings.TimerSettingsNotificationService;
 
 namespace Service.Server.Communication.Mock.TimerSettings;
 
-public class MockTimerSettingsCommandService(TimerSettingsNotificationServiceImpl notificationService)
+public class MockTimerSettingsCommandService(TimerSettingsNotificationService notificationService)
     : TimerSettingsCommandProtoService.TimerSettingsCommandProtoServiceBase
 {
     public override async Task<CommandResponse> CreateTimerSettings(CreateTimerSettingsCommandProto request,

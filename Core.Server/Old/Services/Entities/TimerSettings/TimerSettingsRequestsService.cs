@@ -4,17 +4,24 @@ using Service.Server.Communication.Mapper;
 
 namespace Service.Server.Old.Services.Entities.TimerSettings;
 
-public class TimerSettingsRequestsService(
-    IEventStore<TimerSettingsEvent> timerSettingsEventStore,
-    IDtoMapper<TimerSettingsDto, Domain.Entities.TimerSettings> settingsMapper) : ITimerSettingsRequestsService
+public class TimerSettingsRequestsService(IEventStore<TimerSettingsEvent> timerSettingsEventStore) : ITimerSettingsRequestsService
 {
-    public async Task<TimerSettingsDto?> Get()
+    public async Task<Domain.Entities.TimerSettings> Get()
     {
         var settingsList = (await timerSettingsEventStore.GetAllEventsAsync())
             .GroupBy(e => e.EntityId)
             .OrderBy(e => e.Key)
             .Select(Domain.Entities.TimerSettings.Rehydrate).ToList();
 
-        return settingsList.Count != 0 ? settingsMapper.ToDto(settingsList[0]) : null;
+        //There is only one aggregate.
+        return settingsList[0];
+    }
+
+    public async Task<bool> IsTimerSettingsExisting()
+    {
+        var events = await timerSettingsEventStore.GetAllEventsAsync();
+
+        //There is only oen aggregate. No events means no that TimerSettings do not exist yet or were deleted.
+        return events.Count != 0;
     }
 }
