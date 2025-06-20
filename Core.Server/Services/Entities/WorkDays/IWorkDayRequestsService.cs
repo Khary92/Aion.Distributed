@@ -1,6 +1,6 @@
 using Domain.Entities;
 
-namespace Service.Server.Old.Services.Entities.WorkDays;
+namespace Service.Server.Services.Entities.WorkDays;
 
 public interface IWorkDayRequestsService
 {

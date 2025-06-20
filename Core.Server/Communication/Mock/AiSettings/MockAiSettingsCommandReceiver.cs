@@ -1,8 +1,7 @@
 ﻿using Grpc.Core;
 using Proto.Command.AiSettings;
 using Proto.Notifications.AiSettings;
-using Service.Server.Communication.AiSettings;
-using AiSettingsNotificationService = Service.Server.Communication.AiSettings.AiSettingsNotificationService;
+using AiSettingsNotificationService = Service.Server.Communication.Services.AiSettings.AiSettingsNotificationService;
 
 namespace Service.Server.Communication.Mock.AiSettings;
 

@@ -1,8 +1,8 @@
 using System.Text.Json;
 using Domain.Events.AiSettings;
-using Service.Server.CQRS.Commands.Entities.AiSettings;
+using Service.Server.Communication.CQRS.Commands.Entities.AiSettings;
 
-namespace Service.Server.Old.Translators.AiSettings;
+namespace Service.Server.Translators.AiSettings;
 
 public class AiSettingsCommandsToEventTranslator : IAiSettingsCommandsToEventTranslator
 {

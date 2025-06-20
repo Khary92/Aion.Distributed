@@ -1,4 +1,4 @@
-namespace Service.Server.Old.Services.Entities.TimerSettings;
+namespace Service.Server.Services.Entities.TimerSettings;
 
 public interface ITimerSettingsRequestsService
 {

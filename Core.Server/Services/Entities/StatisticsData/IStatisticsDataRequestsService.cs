@@ -1,4 +1,4 @@
-namespace Service.Server.Old.Services.Entities.StatisticsData;
+namespace Service.Server.Services.Entities.StatisticsData;
 
 public interface IStatisticsDataRequestsService
 {

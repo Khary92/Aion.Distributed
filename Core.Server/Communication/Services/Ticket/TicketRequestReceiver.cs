@@ -1,10 +1,10 @@
 ﻿using Grpc.Core;
 using Proto.DTO.Ticket;
 using Proto.Requests.Tickets;
-using Service.Server.Old.Services.Entities.Tickets;
+using Service.Server.Services.Entities.Tickets;
 using TicketRequestService = Proto.Requests.Tickets.TicketRequestService;
 
-namespace Service.Server.Communication.Ticket;
+namespace Service.Server.Communication.Services.Ticket;
 
 public class TicketRequestReceiver(ITicketRequestsService ticketRequestsService)
     : TicketRequestService.TicketRequestServiceBase

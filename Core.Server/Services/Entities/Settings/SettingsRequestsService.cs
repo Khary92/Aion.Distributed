@@ -1,8 +1,7 @@
 using Domain.Events.Settings;
 using Domain.Interfaces;
-using Service.Server.Communication.Mapper;
 
-namespace Service.Server.Old.Services.Entities.Settings;
+namespace Service.Server.Services.Entities.Settings;
 
 public class SettingsRequestsService(
     IEventStore<SettingsEvent> settingsEventsStore)

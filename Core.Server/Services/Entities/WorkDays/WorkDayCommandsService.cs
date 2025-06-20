@@ -1,16 +1,15 @@
 using Domain.Events.WorkDays;
 using Domain.Interfaces;
-using Service.Server.Communication.WorkDay;
-using Service.Server.CQRS.Commands.Entities.WorkDays;
-using Service.Server.Old.Translators.WorkDays;
+using Service.Server.Communication.CQRS.Commands.Entities.WorkDays;
+using Service.Server.Communication.Services.WorkDay;
+using Service.Server.Translators.WorkDays;
 
-namespace Service.Server.Old.Services.Entities.WorkDays;
+namespace Service.Server.Services.Entities.WorkDays;
 
 public class WorkDayCommandsService(
     IEventStore<WorkDayEvent> workDayEventStore,
     WorkDayNotificationService workDayNotificationService,
     IWorkDayCommandsToEventTranslator eventTranslator,
-    IWorkDayCommandsToNotificationTranslator notificationTranslator,
     IWorkDayRequestsService workDayRequestsService)
     : IWorkDayCommandsService
 {

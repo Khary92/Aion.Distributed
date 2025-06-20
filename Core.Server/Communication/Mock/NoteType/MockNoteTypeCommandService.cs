@@ -1,11 +1,12 @@
 ﻿using Grpc.Core;
 using Proto.Command.NoteTypes;
 using Proto.Notifications.NoteType;
-using Service.Server.Communication.NoteType;
+using Service.Server.Communication.Services.NoteType;
+using NoteTypeNotificationService = Service.Server.Communication.Services.NoteType.NoteTypeNotificationService;
 
 namespace Service.Server.Communication.Mock.NoteType;
 
-public class MockNoteTypeCommandService(NoteTypeNotificationServiceImpl noteTypeNotificationService)
+public class MockNoteTypeCommandService(NoteTypeNotificationService noteTypeNotificationService)
     : NoteTypeCommandProtoService.NoteTypeCommandProtoServiceBase
 {
     public override async Task<CommandResponse> ChangeNoteTypeColor(ChangeNoteTypeColorCommandProto request,

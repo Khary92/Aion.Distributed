@@ -1,9 +1,8 @@
 using Domain.Entities;
 using Domain.Events.NoteTypes;
 using Domain.Interfaces;
-using Service.Server.Communication.Mapper;
 
-namespace Service.Server.Old.Services.Entities.NoteTypes;
+namespace Service.Server.Services.Entities.NoteTypes;
 
 public class NoteTypeRequestsService(
     IEventStore<NoteTypeEvent> noteTypeEventsStore) : INoteTypeRequestsService

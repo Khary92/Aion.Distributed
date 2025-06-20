@@ -1,16 +1,15 @@
 using Domain.Events.Note;
 using Domain.Interfaces;
-using Service.Server.Communication.Note;
-using Service.Server.CQRS.Commands.Entities.Note;
-using Service.Server.Old.Translators.Notes;
+using Service.Server.Communication.CQRS.Commands.Entities.Note;
+using Service.Server.Communication.Services.Note;
+using Service.Server.Translators.Notes;
 
-namespace Service.Server.Old.Services.Entities.Notes;
+namespace Service.Server.Services.Entities.Notes;
 
 public class NoteCommandsService(
     NoteNotificationService noteNotificationService,
     IEventStore<NoteEvent> noteEventsStore,
-    INoteCommandsToEventTranslator eventTranslator,
-    INoteCommandsToNotificationTranslator notificationTranslator) : INoteCommandsService
+    INoteCommandsToEventTranslator eventTranslator) : INoteCommandsService
 {
     public async Task Update(UpdateNoteCommand updateNoteCommand)
     {

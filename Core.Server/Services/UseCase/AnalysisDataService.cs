@@ -1,92 +1,120 @@
 ﻿using Domain.Entities;
-using Service.Server.Communication.Mapper;
-using Service.Server.Old.Services.Entities.StatisticsData;
-using Service.Server.Old.Services.Entities.Tags;
-using Service.Server.Old.Services.Entities.Tickets;
-using Service.Server.Old.Services.Entities.TimeSlots;
-using Service.Server.Old.Services.Entities.WorkDays;
+using Google.Protobuf.Collections;
+using Proto.DTO.AnalysisBySprint;
+using Proto.DTO.AnalysisByTag;
+using Proto.DTO.AnalysisByTicket;
+using Proto.DTO.StatisticsData;
+using Proto.DTO.Ticket;
+using Proto.DTO.TimeSlots;
+using Service.Server.Communication.Services.StatisticsData;
+using Service.Server.Communication.Services.Ticket;
+using Service.Server.Communication.Services.TimeSlot;
+using Service.Server.Services.Entities.StatisticsData;
+using Service.Server.Services.Entities.Tags;
+using Service.Server.Services.Entities.Tickets;
+using Service.Server.Services.Entities.TimeSlots;
+using Service.Server.Services.Entities.WorkDays;
 
-namespace Service.Server.Old.Services.UseCase;
+namespace Service.Server.Services.UseCase;
 
 public class AnalysisDataService(
     ITimeSlotRequestsService timeSlotRequestsService,
     IStatisticsDataRequestsService statisticsDataRequestsService,
     ITagRequestsService tagRequestsService,
     IWorkDayRequestsService workDayRequestsService,
-    ITicketRequestsService ticketRequestsService,
-    IDtoMapper<StatisticsDataDto, StatisticsData> statisticsDataMapper,
-    IDtoMapper<TicketDto, Ticket> ticketMapper,
-    IDtoMapper<TimeSlotDto, TimeSlot> timeSlotMapper) : IAnalysisDataService
+    ITicketRequestsService ticketRequestsService) : IAnalysisDataService
 {
-    public async Task<AnalysisByTagDecorator> GetAnalysisByTag(TagDto tagDto)
+    public async Task<AnalysisByTagProto> GetAnalysisByTag(Tag tag)
     {
         var statisticsData = await statisticsDataRequestsService.GetAll();
-        statisticsData = statisticsData.Where(sd => sd.TagIds.Contains(tagDto.TagId)).ToList();
+        statisticsData = statisticsData.Where(sd => sd.TagIds.Contains(tag.TagId)).ToList();
 
-        var timeSlots = new List<TimeSlotDto>();
+        var timeSlots = new List<TimeSlot>();
         foreach (var data in statisticsData) timeSlots.Add(await timeSlotRequestsService.GetById(data.TimeSlotId));
 
-        var analysisByTag = new AnalysisByTag
+        return new AnalysisByTagProto
         {
-            TimeSlots = timeSlots.Select(timeSlotMapper.ToDomain).ToList(),
-            StatisticsData = statisticsData.Select(statisticsDataMapper.ToDomain).ToList()
+            TimeSlots = { ConvertToRepeatedField(timeSlots) },
+            StatisticsData = { ConvertToRepeatedField(statisticsData) }
         };
-
-        return new AnalysisByTagDecorator(analysisByTag);
     }
 
-    public async Task<AnalysisByTicketDecorator> GetAnalysisByTicket(TicketDto ticketDto)
+    public async Task<AnalysisByTicketProto> GetAnalysisByTicket(Ticket ticket)
     {
         var timeSlots = (await timeSlotRequestsService.GetAll())
-            .Where(ts => ts.SelectedTicketId == ticketDto.TicketId).ToList();
+            .Where(ts => ts.SelectedTicketId == ticket.TicketId).ToList();
 
-        var statisticsData = new List<StatisticsDataDto>();
+        var statisticsData = new List<StatisticsData>();
         foreach (var timeSlot in timeSlots)
             statisticsData.Add(
                 await statisticsDataRequestsService.GetStatisticsDataByTimeSlotId(timeSlot.TimeSlotId));
 
-        var analysisByTicket = new AnalysisByTicket
+        return new AnalysisByTicketProto
         {
-            TicketName = ticketDto.Name,
-            TimeSlots = timeSlots.Select(timeSlotMapper.ToDomain).ToList(),
-            StatisticData = statisticsData.Select(statisticsDataMapper.ToDomain).ToList()
+            TicketName = ticket.Name,
+            TimeSlots = { ConvertToRepeatedField(timeSlots) },
+            StatisticData = { ConvertToRepeatedField(statisticsData) }
         };
-
-        return new AnalysisByTicketDecorator(analysisByTicket, tagRequestsService);
     }
 
-    public async Task<AnalysisBySprintDecorator> GetAnalysisBySprint(SprintDto sprintDto)
+    public async Task<AnalysisBySprintProto> GetAnalysisBySprint(Sprint sprint)
     {
-        var domainWorkDays = await GetWorkDays(sprintDto.StartTime.Date, sprintDto.EndTime);
-        var timeSlots = await GetTimeSlots(domainWorkDays);
+        var workDays = await workDayRequestsService.GetWorkDaysInDateRange(sprint.StartDate.Date, sprint.EndDate.Date);
+        var timeSlots = await GetTimeSlots(workDays);
         var statisticsData = await GetStatisticsData(timeSlots);
-        var tagDtos = await tagRequestsService.GetAll();
+        var tags = await tagRequestsService.GetAll();
+        var tickets = await ticketRequestsService.GetTicketsBySprintId(sprint.SprintId);
 
-        var (productiveTags, neutralTags, unproductiveTags) = GetTagCounts(statisticsData, tagDtos);
+        var (productiveTags, neutralTags, unproductiveTags) = GetTagCounts(statisticsData, tags);
 
-        var analysisBySprint = new AnalysisBySprint
+        return new AnalysisBySprintProto
         {
-            SprintName = sprintDto.Name,
-            TimeSlots = timeSlots.Select(timeSlotMapper.ToDomain).ToList(),
-            StatisticsData = statisticsData.Select(statisticsDataMapper.ToDomain).ToList(),
-            Tickets = (await ticketRequestsService.GetTicketsBySprintId(sprintDto.SprintId))
-                .Select(ticketMapper.ToDomain).ToList(),
-            ProductiveTags = productiveTags,
-            NeutralTags = neutralTags,
-            UnproductiveTags = unproductiveTags
+            SprintName = sprint.Name,
+            TimeSlots = { ConvertToRepeatedField(timeSlots) },
+            StatisticsData = { ConvertToRepeatedField(statisticsData) },
+            Tickets = { ConvertToRepeatedField(tickets) },
+            ProductiveTags = { new MapField<string, int> { productiveTags } },
+            NeutralTags = { new MapField<string, int> { neutralTags } },
+            UnproductiveTags = { new MapField<string, int> { unproductiveTags } }
         };
-
-        return new AnalysisBySprintDecorator(analysisBySprint);
-    }
-    
-    private async Task<List<WorkDayDto>> GetWorkDays(DateTimeOffset startDate, DateTimeOffset endDate)
-    {
-        return await workDayRequestsService.GetWorkDaysInDateRange(startDate, endDate);
     }
 
-    private async Task<List<TimeSlotDto>> GetTimeSlots(List<WorkDayDto> domainWorkDays)
+    private static RepeatedField<TimeSlotProto> ConvertToRepeatedField(List<TimeSlot> timeSlots)
     {
-        var timeSlots = new List<TimeSlotDto>();
+        var repeatedTimeSlots = new RepeatedField<TimeSlotProto>();
+        foreach (var timeSlot in timeSlots)
+        {
+            repeatedTimeSlots.Add(timeSlot.ToProto());
+        }
+
+        return repeatedTimeSlots;
+    }
+
+    private static RepeatedField<StatisticsDataProto> ConvertToRepeatedField(List<StatisticsData> statisticsData)
+    {
+        var repeatedStatisticsData = new RepeatedField<StatisticsDataProto>();
+        foreach (var statistic in statisticsData)
+        {
+            repeatedStatisticsData.Add(statistic.ToProto());
+        }
+
+        return repeatedStatisticsData;
+    }
+
+    private static RepeatedField<TicketProto> ConvertToRepeatedField(List<Ticket> tickets)
+    {
+        var repeatedTickets = new RepeatedField<TicketProto>();
+        foreach (var ticket in tickets)
+        {
+            repeatedTickets.Add(ticket.ToProto());
+        }
+
+        return repeatedTickets;
+    }
+
+    private async Task<List<TimeSlot>> GetTimeSlots(List<WorkDay> domainWorkDays)
+    {
+        var timeSlots = new List<TimeSlot>();
         foreach (var domainWorkDay in domainWorkDays)
         {
             var slots = await timeSlotRequestsService.GetTimeSlotsForWorkDayId(domainWorkDay.WorkDayId);
@@ -96,9 +124,9 @@ public class AnalysisDataService(
         return timeSlots;
     }
 
-    private async Task<List<StatisticsDataDto>> GetStatisticsData(List<TimeSlotDto> timeSlots)
+    private async Task<List<StatisticsData>> GetStatisticsData(List<TimeSlot> timeSlots)
     {
-        var statisticsData = new List<StatisticsDataDto>();
+        var statisticsData = new List<StatisticsData>();
         foreach (var timeSlot in timeSlots)
         {
             var data = await statisticsDataRequestsService.GetStatisticsDataByTimeSlotId(timeSlot.TimeSlotId);
@@ -110,7 +138,7 @@ public class AnalysisDataService(
 
     private static (Dictionary<string, int> productiveTags, Dictionary<string, int> neutralTags, Dictionary<string, int>
         unproductiveTags)
-        GetTagCounts(List<StatisticsDataDto> statisticsData, List<TagDto> tagDtos)
+        GetTagCounts(List<StatisticsData> statisticsData, List<Tag> tagDtos)
     {
         var productiveTags = new Dictionary<string, int>();
         var neutralTags = new Dictionary<string, int>();
@@ -121,7 +149,7 @@ public class AnalysisDataService(
         return (productiveTags, neutralTags, unproductiveTags);
     }
 
-    private static void ProcessTags(StatisticsDataDto data, List<TagDto> tagDtos,
+    private static void ProcessTags(StatisticsData data, List<Tag> tagDtos,
         Dictionary<string, int> productiveTags, Dictionary<string, int> neutralTags,
         Dictionary<string, int> unproductiveTags)
     {
@@ -132,7 +160,7 @@ public class AnalysisDataService(
         if (data.IsUnproductive) AddTagsToDictionary(data.TagIds, tagDtos, unproductiveTags);
     }
 
-    private static void AddTagsToDictionary(IEnumerable<Guid> tagIds, List<TagDto> tagDtos,
+    private static void AddTagsToDictionary(IEnumerable<Guid> tagIds, List<Tag> tagDtos,
         Dictionary<string, int> tagDictionary)
     {
         foreach (var tag in tagIds.Select(tagId => tagDtos.First(t => t.TagId == tagId)))

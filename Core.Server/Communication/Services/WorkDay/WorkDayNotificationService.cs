@@ -1,7 +1,7 @@
 ﻿using Grpc.Core;
 using Proto.Notifications.WorkDay;
 
-namespace Service.Server.Communication.WorkDay;
+namespace Service.Server.Communication.Services.WorkDay;
 
 public class WorkDayNotificationService : Proto.Notifications.WorkDay.WorkDayNotificationService.WorkDayNotificationServiceBase
 {

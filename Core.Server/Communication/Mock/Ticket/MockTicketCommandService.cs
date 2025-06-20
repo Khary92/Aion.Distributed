@@ -1,8 +1,7 @@
 using Grpc.Core;
 using Proto.Command.Tickets;
 using Proto.Notifications.Ticket;
-using Service.Server.Communication.Ticket;
-using TicketNotificationService = Service.Server.Communication.Ticket.TicketNotificationService;
+using TicketNotificationService = Service.Server.Communication.Services.Ticket.TicketNotificationService;
 
 namespace Service.Server.Communication.Mock.Ticket;
 

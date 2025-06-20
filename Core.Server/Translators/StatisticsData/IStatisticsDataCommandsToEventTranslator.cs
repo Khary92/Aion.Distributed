@@ -1,7 +1,7 @@
 using Domain.Events.StatisticsData;
-using Service.Server.CQRS.Commands.Entities.StatisticsData;
+using Service.Server.Communication.CQRS.Commands.Entities.StatisticsData;
 
-namespace Service.Server.Old.Translators.StatisticsData;
+namespace Service.Server.Translators.StatisticsData;
 
 public interface IStatisticsDataCommandsToEventTranslator
 {

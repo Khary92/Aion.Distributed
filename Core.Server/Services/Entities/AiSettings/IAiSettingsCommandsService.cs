@@ -1,6 +1,6 @@
-using Service.Server.CQRS.Commands.Entities.AiSettings;
+using Service.Server.Communication.CQRS.Commands.Entities.AiSettings;
 
-namespace Service.Server.Old.Services.Entities.AiSettings;
+namespace Service.Server.Services.Entities.AiSettings;
 
 public interface IAiSettingsCommandsService
 {

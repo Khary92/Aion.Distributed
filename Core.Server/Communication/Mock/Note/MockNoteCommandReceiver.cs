@@ -1,7 +1,7 @@
 ﻿using Grpc.Core;
 using Proto.Command.Notes;
 using Proto.Notifications.Note;
-using NoteNotificationService = Service.Server.Communication.Note.NoteNotificationService;
+using NoteNotificationService = Service.Server.Communication.Services.Note.NoteNotificationService;
 
 namespace Service.Server.Communication.Mock.Note;
 

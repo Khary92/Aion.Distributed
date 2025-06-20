@@ -3,9 +3,9 @@ using Proto.Command.WorkDays;
 using Proto.DTO.TimerSettings;
 using Proto.Notifications.WorkDay;
 using Proto.Requests.WorkDays;
-using Service.Server.CQRS.Commands.Entities.WorkDays;
+using Service.Server.Communication.CQRS.Commands.Entities.WorkDays;
 
-namespace Service.Server.Communication.WorkDay;
+namespace Service.Server.Communication.Services.WorkDay;
 
 public static class WorkDayProtoExtensions
 {

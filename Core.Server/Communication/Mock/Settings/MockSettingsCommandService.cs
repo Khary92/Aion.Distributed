@@ -1,8 +1,7 @@
 ﻿using Grpc.Core;
 using Proto.Command.Settings;
 using Proto.Notifications.Settings;
-using Service.Server.Communication.Settings;
-using SettingsNotificationService = Service.Server.Communication.Settings.SettingsNotificationService;
+using SettingsNotificationService = Service.Server.Communication.Services.Settings.SettingsNotificationService;
 
 namespace Service.Server.Communication.Mock.Settings;
 

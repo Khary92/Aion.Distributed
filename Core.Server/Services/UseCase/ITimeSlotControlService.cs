@@ -1,6 +1,4 @@
-﻿using Service.Server.CQRS.Commands.UseCase;
-
-namespace Service.Server.Old.Services.UseCase;
+﻿namespace Service.Server.Services.UseCase;
 
 public interface ITimeSlotControlService
 {

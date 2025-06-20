@@ -1,8 +1,7 @@
 ﻿using Grpc.Core;
 using Proto.Command.Sprints;
 using Proto.Notifications.Sprint;
-using Service.Server.Communication.Sprint;
-using SprintNotificationService = Service.Server.Communication.Sprint.SprintNotificationService;
+using SprintNotificationService = Service.Server.Communication.Services.Sprint.SprintNotificationService;
 
 namespace Service.Server.Communication.Mock.Sprint;
 

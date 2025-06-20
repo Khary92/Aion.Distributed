@@ -1,26 +1,27 @@
+
 using System.Timers;
-using Service.Server.Old.Services.Entities.TimerSettings;
+using Domain.Entities;
+using Proto.Notifications.UseCase;
+using Service.Server.Services.Entities.TimerSettings;
 using Timer = System.Timers.Timer;
+using UseCaseNotificationService = Service.Server.Communication.Services.UseCase.UseCaseNotificationService;
 
-namespace Service.Server.Old.Services.UseCase;
+namespace Service.Server.Services.UseCase;
 
-public class TimerService :
-    INotificationHandler<TimerSettingsCreatedNotification>,
-    INotificationHandler<DocuTimerSaveIntervalChangedNotification>,
-    INotificationHandler<SnapshotSaveIntervalChangedNotification>
+public class TimerService
 {
-    private readonly IMediator _mediator;
     private readonly Timer _timer;
     private readonly ITimerSettingsRequestsService _timerSettingsRequestsService;
+    private readonly UseCaseNotificationService _useCaseNotificationService;
     private int _docuSeconds;
     private int _snapshotSeconds;
 
-    private TimerSettingsDto? _timerSettings;
+    private TimerSettings? _timerSettings;
 
-    public TimerService(IMediator mediator, ITimerSettingsRequestsService timerSettingsRequestsService)
+    public TimerService(ITimerSettingsRequestsService timerSettingsRequestsService, UseCaseNotificationService useCaseNotificationService)
     {
-        _mediator = mediator;
         _timerSettingsRequestsService = timerSettingsRequestsService;
+        _useCaseNotificationService = useCaseNotificationService;
 
         _timer = new Timer(1000);
         _timer.Elapsed += OnTick;
@@ -28,26 +29,6 @@ public class TimerService :
 
         _ = InitializeAndStart();
     }
-
-    public Task Handle(DocuTimerSaveIntervalChangedNotification notification, CancellationToken cancellationToken)
-    {
-        _timerSettings!.Apply(notification);
-        return Task.CompletedTask;
-    }
-
-    public Task Handle(SnapshotSaveIntervalChangedNotification notification, CancellationToken cancellationToken)
-    {
-        _timerSettings!.Apply(notification);
-        return Task.CompletedTask;
-    }
-
-    public Task Handle(TimerSettingsCreatedNotification notification, CancellationToken cancellationToken)
-    {
-        _timerSettings = new TimerSettingsDto(notification.TimerSettingsId, notification.DocumentationSaveInterval,
-            notification.SnapshotSaveInterval);
-        return Task.CompletedTask;
-    }
-
     private async Task InitializeAndStart()
     {
         _timerSettings = await _timerSettingsRequestsService.Get();
@@ -63,13 +44,20 @@ public class TimerService :
 
         if (_snapshotSeconds >= _timerSettings.SnapshotSaveInterval)
         {
-            _ = _mediator.Publish(new CreateSnapshotNotification());
+            _ = _useCaseNotificationService.SendNotificationAsync(new UseCaseNotification
+            {
+                CreateSnapshot = new CreateSnapshotNotification()
+            });
             _snapshotSeconds = 0;
         }
 
         if (_docuSeconds >= _timerSettings.DocumentationSaveInterval)
         {
-            _ = _mediator.Publish(new SaveDocumentationNotification());
+            _ = _useCaseNotificationService.SendNotificationAsync(new UseCaseNotification
+            {
+                SaveDocumentation = new SaveDocumentationNotification()
+            });
+            
             _docuSeconds = 0;
         }
     }

@@ -1,7 +1,7 @@
 ﻿using Grpc.Core;
 using Proto.Command.Tags;
 using Proto.Notifications.Tag;
-using Service.Server.Communication.Tag;
+using Service.Server.Communication.Services.Tag;
 
 namespace Service.Server.Communication.Mock.Tag;
 

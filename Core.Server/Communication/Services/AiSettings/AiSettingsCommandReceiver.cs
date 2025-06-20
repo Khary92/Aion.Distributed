@@ -1,8 +1,8 @@
 ﻿using Grpc.Core;
 using Proto.Command.AiSettings;
-using Service.Server.Old.Services.Entities.AiSettings;
+using Service.Server.Services.Entities.AiSettings;
 
-namespace Service.Server.Communication.AiSettings;
+namespace Service.Server.Communication.Services.AiSettings;
 
 public class AiSettingsCommandReceiver(
     IAiSettingsCommandsService aiSettingsCommandsService)

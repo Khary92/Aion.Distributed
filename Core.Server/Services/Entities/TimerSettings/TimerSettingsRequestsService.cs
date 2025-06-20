@@ -1,8 +1,7 @@
 using Domain.Events.TimerSettings;
 using Domain.Interfaces;
-using Service.Server.Communication.Mapper;
 
-namespace Service.Server.Old.Services.Entities.TimerSettings;
+namespace Service.Server.Services.Entities.TimerSettings;
 
 public class TimerSettingsRequestsService(IEventStore<TimerSettingsEvent> timerSettingsEventStore) : ITimerSettingsRequestsService
 {

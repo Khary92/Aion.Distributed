@@ -1,9 +1,8 @@
 using Domain.Entities;
 using Domain.Events.TimeSlots;
 using Domain.Interfaces;
-using Service.Server.Communication.Mapper;
 
-namespace Service.Server.Old.Services.Entities.TimeSlots;
+namespace Service.Server.Services.Entities.TimeSlots;
 
 public class TimeSlotRequestsService(IEventStore<TimeSlotEvent> timeSlotEventsStore) : ITimeSlotRequestsService
 {

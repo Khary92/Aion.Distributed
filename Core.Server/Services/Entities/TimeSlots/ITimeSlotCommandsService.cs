@@ -1,6 +1,6 @@
-using Service.Server.CQRS.Commands.Entities.TimeSlots;
+using Service.Server.Communication.CQRS.Commands.Entities.TimeSlots;
 
-namespace Service.Server.Old.Services.Entities.TimeSlots;
+namespace Service.Server.Services.Entities.TimeSlots;
 
 public interface ITimeSlotCommandsService
 {

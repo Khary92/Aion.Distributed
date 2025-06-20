@@ -1,6 +1,6 @@
 using Domain.Entities;
 
-namespace Service.Server.Old.Services.Entities.TimeSlots;
+namespace Service.Server.Services.Entities.TimeSlots;
 
 public interface ITimeSlotRequestsService
 {

@@ -2,9 +2,9 @@
 using Proto.DTO.Tag;
 using Proto.Notifications.Tag;
 using Proto.Requests.Tags;
-using Service.Server.CQRS.Commands.Entities.Tags;
+using Service.Server.Communication.CQRS.Commands.Entities.Tags;
 
-namespace Service.Server.Communication.Tag;
+namespace Service.Server.Communication.Services.Tag;
 
 public static class TagProtoExtensions
 {

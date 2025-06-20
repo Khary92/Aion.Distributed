@@ -1,9 +1,8 @@
 using Domain.Entities;
 using Domain.Interfaces;
-using Service.Server.Communication.Mapper;
-using Service.Server.Old.Services.Entities.Sprints;
+using Service.Server.Services.Entities.Sprints;
 
-namespace Service.Server.Old.Services.Entities.Tickets;
+namespace Service.Server.Services.Entities.Tickets;
 
 public class TicketRequestService(
     ITicketEventsStore ticketEventStore, ISprintRequestsService sprintRequestsService) : ITicketRequestsService

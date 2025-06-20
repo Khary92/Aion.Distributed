@@ -1,10 +1,10 @@
 using Domain.Events.Sprints;
 using Domain.Interfaces;
-using Service.Server.Communication.Sprint;
-using Service.Server.CQRS.Commands.Entities.Sprints;
-using Service.Server.Old.Translators.Sprints;
+using Service.Server.Communication.CQRS.Commands.Entities.Sprints;
+using Service.Server.Communication.Services.Sprint;
+using Service.Server.Translators.Sprints;
 
-namespace Service.Server.Old.Services.Entities.Sprints;
+namespace Service.Server.Services.Entities.Sprints;
 
 public class SprintCommandsService(
     IEventStore<SprintEvent> sprintEventStore,

@@ -1,8 +1,8 @@
 using System.Text.Json;
 using Domain.Events.NoteTypes;
-using Service.Server.CQRS.Commands.Entities.NoteType;
+using Service.Server.Communication.CQRS.Commands.Entities.NoteType;
 
-namespace Service.Server.Old.Translators.NoteTypes;
+namespace Service.Server.Translators.NoteTypes;
 
 public class NoteTypeCommandsToEventTranslator : INoteTypeCommandsToEventTranslator
 {

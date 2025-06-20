@@ -1,4 +1,4 @@
-namespace Service.Server.Old.Services.Entities.Settings;
+namespace Service.Server.Services.Entities.Settings;
 
 public interface ISettingsRequestsService
 {

@@ -1,10 +1,10 @@
 using Domain.Events.AiSettings;
 using Domain.Interfaces;
-using Service.Server.Communication.AiSettings;
-using Service.Server.CQRS.Commands.Entities.AiSettings;
-using Service.Server.Old.Translators.AiSettings;
+using Service.Server.Communication.CQRS.Commands.Entities.AiSettings;
+using Service.Server.Communication.Services.AiSettings;
+using Service.Server.Translators.AiSettings;
 
-namespace Service.Server.Old.Services.Entities.AiSettings;
+namespace Service.Server.Services.Entities.AiSettings;
 
 public class AiSettingsCommandsService(
     IEventStore<AiSettingsEvent> aiSettingsEventsStore,

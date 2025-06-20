@@ -1,9 +1,8 @@
 using Domain.Entities;
 using Domain.Events.WorkDays;
 using Domain.Interfaces;
-using Service.Server.Communication.Mapper;
 
-namespace Service.Server.Old.Services.Entities.WorkDays;
+namespace Service.Server.Services.Entities.WorkDays;
 
 public class WorkDayRequestsService(
     IEventStore<WorkDayEvent> workDayEventStore) : IWorkDayRequestsService

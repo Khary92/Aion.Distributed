@@ -1,8 +1,8 @@
 ﻿using Grpc.Core;
 using Proto.Command.WorkDays;
-using Service.Server.Old.Services.Entities.WorkDays;
+using Service.Server.Services.Entities.WorkDays;
 
-namespace Service.Server.Communication.WorkDay;
+namespace Service.Server.Communication.Services.WorkDay;
 
 public class WorkDayCommandReceiver(IWorkDayCommandsService workDayCommandsService)
     : WorkDayCommandProtoService.WorkDayCommandProtoServiceBase

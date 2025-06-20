@@ -1,12 +1,12 @@
-﻿using Service.Server.Communication.UseCase;
-using Service.Server.CQRS.Commands.Entities.StatisticsData;
-using Service.Server.CQRS.Commands.Entities.TimeSlots;
-using Service.Server.Old.Services.Entities.StatisticsData;
-using Service.Server.Old.Services.Entities.TimeSlots;
-using Service.Server.Old.Services.Entities.WorkDays;
-using UseCaseNotificationService = Service.Server.Communication.UseCase.UseCaseNotificationService;
+﻿using Service.Server.Communication.CQRS.Commands.Entities.StatisticsData;
+using Service.Server.Communication.CQRS.Commands.Entities.TimeSlots;
+using Service.Server.Communication.Services.UseCase;
+using Service.Server.Services.Entities.StatisticsData;
+using Service.Server.Services.Entities.TimeSlots;
+using Service.Server.Services.Entities.WorkDays;
+using UseCaseNotificationService = Service.Server.Communication.Services.UseCase.UseCaseNotificationService;
 
-namespace Service.Server.Old.Services.UseCase;
+namespace Service.Server.Services.UseCase;
 
 public class TimeSlotControlService(
     IRunTimeSettings runTimeSettings,

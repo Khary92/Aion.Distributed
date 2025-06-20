@@ -1,6 +1,6 @@
 using Domain.Entities;
 
-namespace Service.Server.Old.Services.Entities.Sprints;
+namespace Service.Server.Services.Entities.Sprints;
 
 public interface ISprintRequestsService
 {

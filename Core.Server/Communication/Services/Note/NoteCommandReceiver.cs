@@ -1,8 +1,8 @@
 ﻿using Grpc.Core;
 using Proto.Command.Notes;
-using Service.Server.Old.Services.Entities.Notes;
+using Service.Server.Services.Entities.Notes;
 
-namespace Service.Server.Communication.Note;
+namespace Service.Server.Communication.Services.Note;
 
 public class NoteCommandReceiver(INoteCommandsService noteCommandsService)
     : NoteCommandProtoService.NoteCommandProtoServiceBase

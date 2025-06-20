@@ -1,10 +1,10 @@
 using Domain.Events.TimeSlots;
 using Domain.Interfaces;
-using Service.Server.Communication.TimeSlot;
-using Service.Server.CQRS.Commands.Entities.TimeSlots;
-using Service.Server.Old.Translators.TimeSlots;
+using Service.Server.Communication.CQRS.Commands.Entities.TimeSlots;
+using Service.Server.Communication.Services.TimeSlot;
+using Service.Server.Translators.TimeSlots;
 
-namespace Service.Server.Old.Services.Entities.TimeSlots;
+namespace Service.Server.Services.Entities.TimeSlots;
 
 public class TimeSlotCommandService(TimeSlotNotificationService timeSlotNotificationService,
     IEventStore<TimeSlotEvent> timeSlotEventStore,

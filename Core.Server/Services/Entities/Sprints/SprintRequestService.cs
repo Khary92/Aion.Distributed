@@ -1,9 +1,9 @@
 using Domain.Entities;
 using Domain.Events.Sprints;
 using Domain.Interfaces;
-using Service.Server.CQRS.Commands.Entities.Sprints;
+using Service.Server.Communication.CQRS.Commands.Entities.Sprints;
 
-namespace Service.Server.Old.Services.Entities.Sprints;
+namespace Service.Server.Services.Entities.Sprints;
 
 public class SprintRequestService(IEventStore<SprintEvent> sprintEventsStore, SprintCommandsService sprintCommandsService) : ISprintRequestsService
 {

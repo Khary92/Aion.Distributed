@@ -2,6 +2,9 @@ syntax = "proto3";
 
 option csharp_namespace = "Proto.Notifications.Note";
 
+import "google/protobuf/timestamp.proto";
+
+
 service NotificationService {
   rpc SendNoteCreated(NoteCreatedNotification) returns (NotificationResponse);
   rpc SendNoteUpdated(NoteUpdatedNotification) returns (NotificationResponse);
@@ -26,7 +29,7 @@ message NoteCreatedNotification {
   string text = 2;
   string noteTypeId = 3;
   string timeSlotId = 4;
-  string timeStamp = 5; // ISO 8601
+  google.protobuf.Timestamp  timeStamp = 5;
 }
 
 message NoteUpdatedNotification {

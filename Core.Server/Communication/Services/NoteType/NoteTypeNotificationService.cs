@@ -1,9 +1,9 @@
 ﻿using Grpc.Core;
 using Proto.Notifications.NoteType;
 
-namespace Service.Server.Communication.NoteType;
+namespace Service.Server.Communication.Services.NoteType;
 
-public class NoteTypeNotificationServiceImpl : NoteTypeNotificationService.NoteTypeNotificationServiceBase
+public class NoteTypeNotificationService : Proto.Notifications.NoteType.NoteTypeNotificationService.NoteTypeNotificationServiceBase
 {
     private IServerStreamWriter<NoteTypeNotification>? _responseStream;
     private CancellationToken _cancellationToken;

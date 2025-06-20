@@ -1,7 +1,7 @@
 using Domain.Events.TimerSettings;
-using Service.Server.CQRS.Commands.Entities.TimerSettings;
+using Service.Server.Communication.CQRS.Commands.Entities.TimerSettings;
 
-namespace Service.Server.Old.Translators.TimerSettings;
+namespace Service.Server.Translators.TimerSettings;
 
 public interface ITimerSettingsCommandsToEventTranslator
 {

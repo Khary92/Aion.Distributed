@@ -1,8 +1,7 @@
 using Domain.Events.StatisticsData;
 using Domain.Interfaces;
-using Service.Server.Communication.Mapper;
 
-namespace Service.Server.Old.Services.Entities.StatisticsData;
+namespace Service.Server.Services.Entities.StatisticsData;
 
 public class StatisticsDataRequestsService(IEventStore<StatisticsDataEvent> statisticsDataEventStore)
     : IStatisticsDataRequestsService

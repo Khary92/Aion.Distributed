@@ -1,7 +1,7 @@
 using Domain.Events.Tickets;
-using Service.Server.CQRS.Commands.Entities.Tickets;
+using Service.Server.Communication.CQRS.Commands.Entities.Tickets;
 
-namespace Service.Server.Old.Translators.Tickets;
+namespace Service.Server.Translators.Tickets;
 
 public interface ITicketCommandsToEventTranslator
 {

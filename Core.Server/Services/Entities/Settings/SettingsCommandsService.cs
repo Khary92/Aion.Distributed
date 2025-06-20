@@ -1,10 +1,10 @@
 using Domain.Events.Settings;
 using Domain.Interfaces;
-using Service.Server.Communication.Settings;
-using Service.Server.CQRS.Commands.Entities.Settings;
-using Service.Server.Old.Translators.Settings;
+using Service.Server.Communication.CQRS.Commands.Entities.Settings;
+using Service.Server.Communication.Services.Settings;
+using Service.Server.Translators.Settings;
 
-namespace Service.Server.Old.Services.Entities.Settings;
+namespace Service.Server.Services.Entities.Settings;
 
 public class SettingsCommandsService(
     SettingsNotificationService settingsNotificationService,

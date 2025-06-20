@@ -1,9 +1,9 @@
 ﻿using Grpc.Core;
 using Proto.DTO.Tag;
 using Proto.Requests.Tags;
-using Service.Server.Old.Services.Entities.Tags;
+using Service.Server.Services.Entities.Tags;
 
-namespace Service.Server.Communication.Tag;
+namespace Service.Server.Communication.Services.Tag;
 
 public class TagRequestReceiver(ITagRequestsService tagRequestsService) : TagRequestService.TagRequestServiceBase
 {
