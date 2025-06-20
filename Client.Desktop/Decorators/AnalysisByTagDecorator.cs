@@ -37,10 +37,7 @@ public class AnalysisByTagDecorator(AnalysisByTag analysisByTag)
                 continue;
             }
 
-            if (statisticsData.IsUnproductive)
-            {
-                countMap[Productivity.Unproductive] += timeSlot.GetDurationInMinutes();
-            }
+            if (statisticsData.IsUnproductive) countMap[Productivity.Unproductive] += timeSlot.GetDurationInMinutes();
         }
 
 

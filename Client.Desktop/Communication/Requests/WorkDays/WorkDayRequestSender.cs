@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Client.Desktop.DTO;
-using Google.Protobuf.WellKnownTypes;
 using Grpc.Net.Client;
 using Proto.DTO.TimerSettings;
 using Proto.Requests.WorkDays;
@@ -28,7 +27,7 @@ public class WorkDayRequestSender : IWorkDayRequestSender
         return ToDto(response);
     }
 
-    public async Task<WorkDayDto> Send(GetWorkDayByDateRequestProto request)
+    public async Task<WorkDayDto?> Send(GetWorkDayByDateRequestProto request)
     {
         var response = await _client.GetWorkDayByDateAsync(request);
         return ToDto(response);

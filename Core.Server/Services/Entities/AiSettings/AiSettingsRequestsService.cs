@@ -1,7 +1,7 @@
 using Domain.Events.AiSettings;
 using Domain.Interfaces;
 
-namespace Service.Server.Services.Entities.AiSettings;
+namespace Core.Server.Services.Entities.AiSettings;
 
 public class AiSettingsRequestsService(
     IEventStore<AiSettingsEvent> aiSettingsEventsStore) : IAiSettingsRequestsService

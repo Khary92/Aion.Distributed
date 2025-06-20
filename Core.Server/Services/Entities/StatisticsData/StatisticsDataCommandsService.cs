@@ -1,10 +1,10 @@
+using Core.Server.Communication.CQRS.Commands.Entities.StatisticsData;
+using Core.Server.Communication.Services.StatisticsData;
+using Core.Server.Translators.StatisticsData;
 using Domain.Events.StatisticsData;
 using Domain.Interfaces;
-using Service.Server.Communication.CQRS.Commands.Entities.StatisticsData;
-using Service.Server.Communication.Services.StatisticsData;
-using Service.Server.Translators.StatisticsData;
 
-namespace Service.Server.Services.Entities.StatisticsData;
+namespace Core.Server.Services.Entities.StatisticsData;
 
 public class StatisticsDataCommandsService(
     StatisticsDataNotificationService statisticsDataNotificationService,

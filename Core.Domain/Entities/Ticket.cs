@@ -1,5 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Text.Json;
+﻿using System.Text.Json;
 using Domain.Events.Tickets;
 
 namespace Domain.Entities;

@@ -17,9 +17,9 @@ using ReactiveUI;
 namespace Client.Desktop.Models.Data;
 
 public class TicketsDataModel(
-    ICommandSender commandSender,
-    IRequestSender requestSender,
-    IMessenger messenger)
+        ICommandSender commandSender,
+        IRequestSender requestSender,
+        IMessenger messenger)
     //ITracingCollectorProvider //tracer)
     : ReactiveObject
 {
@@ -55,10 +55,8 @@ public class TicketsDataModel(
             var ticket = Tickets.FirstOrDefault(t => t.TicketId == parsedId);
 
             if (ticket is null)
-            {
                 //tracer.Ticket.Update.NoAggregateFound(GetType(), parsedId);
                 return;
-            }
 
             ticket.Apply(m);
             //tracer.Ticket.Update.ChangesApplied(GetType(), parsedId);
@@ -73,7 +71,7 @@ public class TicketsDataModel(
         await commandSender.Send(addTicketToActiveSprintCommand);
 
         //tracer.Ticket.AddTicketToSprint.CommandSent(GetType(), ticketDto.TicketId,
-         //   addTicketToActiveSprintCommand);
+        //   addTicketToActiveSprintCommand);
     }
 
     public async Task UpdateTicket(TicketDto selectedTicket)
@@ -82,7 +80,7 @@ public class TicketsDataModel(
         {
             TicketId = selectedTicket.TicketId.ToString(),
             Name = selectedTicket.Name,
-            BookingNumber = selectedTicket.BookingNumber,
+            BookingNumber = selectedTicket.BookingNumber
         };
         updateTicketDataCommand.SprintIds.AddRange(selectedTicket.SprintIds.Select(id => id.ToString()));
 

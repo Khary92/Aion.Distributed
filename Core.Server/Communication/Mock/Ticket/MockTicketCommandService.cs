@@ -1,21 +1,22 @@
 using Grpc.Core;
 using Proto.Command.Tickets;
 using Proto.Notifications.Ticket;
-using TicketNotificationService = Service.Server.Communication.Services.Ticket.TicketNotificationService;
+using TicketNotificationService = Core.Server.Communication.Services.Ticket.TicketNotificationService;
 
-namespace Service.Server.Communication.Mock.Ticket;
+namespace Core.Server.Communication.Mock.Ticket;
 
 public class MockTicketCommandService(TicketNotificationService ticketNotificationService)
     : TicketCommandProtoService.TicketCommandProtoServiceBase
 {
-    public override async Task<CommandResponse> CreateTicket(CreateTicketCommandProto request, ServerCallContext context)
+    public override async Task<CommandResponse> CreateTicket(CreateTicketCommandProto request,
+        ServerCallContext context)
     {
         Console.WriteLine(
             $"[CreateTicket] ID: {request.TicketId}, Name: {request.Name}, BookingNumber: {request.BookingNumber}");
 
-        await ticketNotificationService.SendNotificationAsync(new TicketNotification()
+        await ticketNotificationService.SendNotificationAsync(new TicketNotification
         {
-            TicketCreated = new TicketCreatedNotification()
+            TicketCreated = new TicketCreatedNotification
             {
                 TicketId = request.TicketId,
                 Name = request.Name,
@@ -32,9 +33,9 @@ public class MockTicketCommandService(TicketNotificationService ticketNotificati
         Console.WriteLine(
             $"[UpdateTicketData] ID: {request.TicketId}, Name: {request.Name}, BookingNumber: {request.BookingNumber}");
 
-        await ticketNotificationService.SendNotificationAsync(new TicketNotification()
+        await ticketNotificationService.SendNotificationAsync(new TicketNotification
         {
-            TicketDataUpdated = new TicketDataUpdatedNotification()
+            TicketDataUpdated = new TicketDataUpdatedNotification
             {
                 TicketId = request.TicketId,
                 Name = request.Name,
@@ -49,10 +50,10 @@ public class MockTicketCommandService(TicketNotificationService ticketNotificati
         ServerCallContext context)
     {
         Console.WriteLine($"[UpdateTicketDocumentation] ID: {request.TicketId}, Doc: {request.Documentation}");
-        
-        await ticketNotificationService.SendNotificationAsync(new TicketNotification()
+
+        await ticketNotificationService.SendNotificationAsync(new TicketNotification
         {
-            TicketDocumentationUpdated = new TicketDocumentationUpdatedNotification()
+            TicketDocumentationUpdated = new TicketDocumentationUpdatedNotification
             {
                 TicketId = request.TicketId,
                 Documentation = request.Documentation

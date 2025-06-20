@@ -2,7 +2,7 @@ using Domain.Entities;
 using Domain.Events.Note;
 using Domain.Interfaces;
 
-namespace Service.Server.Services.Entities.Notes;
+namespace Core.Server.Services.Entities.Notes;
 
 public class NoteRequestsService(IEventStore<NoteEvent> noteEventsStore)
     : INoteRequestsService

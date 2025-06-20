@@ -20,7 +20,6 @@ public class WorkDayNotificationReceiver(
             client.SubscribeWorkDayNotifications(new SubscribeRequest(), cancellationToken: cancellationToken);
 
         await foreach (var notification in call.ResponseStream.ReadAllAsync(cancellationToken))
-        {
             switch (notification.NotificationCase)
             {
                 case WorkDayNotification.NotificationOneofCase.WorkDayCreated:
@@ -33,6 +32,5 @@ public class WorkDayNotificationReceiver(
 
                     break;
             }
-        }
     }
 }

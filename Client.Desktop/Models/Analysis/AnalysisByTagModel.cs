@@ -17,8 +17,8 @@ namespace Client.Desktop.Models.Analysis;
 
 public class AnalysisByTagModel : ReactiveObject
 {
-    private readonly IRequestSender _requestSender;
     private readonly IMessenger _messenger;
+    private readonly IRequestSender _requestSender;
 
     private AnalysisByTagDecorator? _analysisByTag;
 
@@ -62,7 +62,7 @@ public class AnalysisByTagModel : ReactiveObject
 
     public async Task SetAnalysisForTag(TagDto selectedTag)
     {
-        AnalysisByTag = await _requestSender.Send(new GetTagAnalysisById()
+        AnalysisByTag = await _requestSender.Send(new GetTagAnalysisById
         {
             TagId = selectedTag.TagId.ToString()
         });

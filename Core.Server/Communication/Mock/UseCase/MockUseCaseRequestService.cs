@@ -1,7 +1,7 @@
 using Grpc.Core;
 using Proto.Requests.UseCase;
 
-namespace Service.Server.Communication.Mock.UseCase;
+namespace Core.Server.Communication.Mock.UseCase;
 
 public class MockUseCaseRequestService : UseCaseRequestService.UseCaseRequestServiceBase
 {
@@ -13,8 +13,8 @@ public class MockUseCaseRequestService : UseCaseRequestService.UseCaseRequestSer
             StatisticsDataId = Guid.NewGuid().ToString(),
             TicketId = Guid.NewGuid().ToString(),
             TimeSlotId = Guid.NewGuid().ToString()
-        };   
-        
+        };
+
         return Task.FromResult(timeSlotData);
     }
 }

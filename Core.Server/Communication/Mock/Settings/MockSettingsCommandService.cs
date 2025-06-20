@@ -1,16 +1,18 @@
 ﻿using Grpc.Core;
 using Proto.Command.Settings;
 using Proto.Notifications.Settings;
-using SettingsNotificationService = Service.Server.Communication.Services.Settings.SettingsNotificationService;
+using SettingsNotificationService = Core.Server.Communication.Services.Settings.SettingsNotificationService;
 
-namespace Service.Server.Communication.Mock.Settings;
+namespace Core.Server.Communication.Mock.Settings;
 
 public class MockSettingsCommandService(SettingsNotificationService settingsNotificationService)
     : SettingsCommandProtoService.SettingsCommandProtoServiceBase
 {
-    public override async Task<CommandResponse> CreateSettings(CreateSettingsCommandProto request, ServerCallContext context)
+    public override async Task<CommandResponse> CreateSettings(CreateSettingsCommandProto request,
+        ServerCallContext context)
     {
-        Console.WriteLine($"[CreateSettings] ID: {request.SettingsId}, ExportPath: {request.ExportPath}, AddNewTicketsActive: {request.IsAddNewTicketsToCurrentSprintActive}");
+        Console.WriteLine(
+            $"[CreateSettings] ID: {request.SettingsId}, ExportPath: {request.ExportPath}, AddNewTicketsActive: {request.IsAddNewTicketsToCurrentSprintActive}");
 
         try
         {
@@ -33,7 +35,8 @@ public class MockSettingsCommandService(SettingsNotificationService settingsNoti
         }
     }
 
-    public override async Task<CommandResponse> ChangeExportPath(ChangeExportPathCommandProto request, ServerCallContext context)
+    public override async Task<CommandResponse> ChangeExportPath(ChangeExportPathCommandProto request,
+        ServerCallContext context)
     {
         Console.WriteLine($"[UpdateSettings] ID: {request.SettingsId}, ExportPath: {request.ExportPath}");
 
@@ -41,10 +44,10 @@ public class MockSettingsCommandService(SettingsNotificationService settingsNoti
         {
             await settingsNotificationService.SendNotificationAsync(new SettingsNotification
             {
-                ExportPathChanged = new ExportPathChangedNotification()
+                ExportPathChanged = new ExportPathChangedNotification
                 {
                     SettingsId = request.SettingsId,
-                    ExportPath = request.ExportPath,
+                    ExportPath = request.ExportPath
                 }
             });
 
@@ -56,16 +59,18 @@ public class MockSettingsCommandService(SettingsNotificationService settingsNoti
             return new CommandResponse { Success = false };
         }
     }
-    
-    public override async Task<CommandResponse> ChangeAutomaticTicketAdding(ChangeAutomaticTicketAddingToSprintCommandProto request, ServerCallContext context)
+
+    public override async Task<CommandResponse> ChangeAutomaticTicketAdding(
+        ChangeAutomaticTicketAddingToSprintCommandProto request, ServerCallContext context)
     {
-        Console.WriteLine($"[UpdateSettings] ID: {request.SettingsId}, AddNewTicketsActive: {request.IsAddNewTicketsToCurrentSprintActive}");
+        Console.WriteLine(
+            $"[UpdateSettings] ID: {request.SettingsId}, AddNewTicketsActive: {request.IsAddNewTicketsToCurrentSprintActive}");
 
         try
         {
             await settingsNotificationService.SendNotificationAsync(new SettingsNotification
             {
-                AutomaticTicketAddingChanged = new AutomaticTicketAddingToSprintChangedNotification()
+                AutomaticTicketAddingChanged = new AutomaticTicketAddingToSprintChangedNotification
                 {
                     SettingsId = request.SettingsId,
                     IsAddNewTicketsToCurrentSprintActive = request.IsAddNewTicketsToCurrentSprintActive

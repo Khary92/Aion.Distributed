@@ -1,34 +1,41 @@
-﻿using Google.Protobuf.WellKnownTypes;
+﻿using Core.Server.Communication.CQRS.Commands.Entities.TimeSlots;
+using Google.Protobuf.WellKnownTypes;
 using Proto.Command.TimeSlots;
 using Proto.DTO.TimeSlots;
 using Proto.Notifications.TimeSlots;
 using Proto.Requests.TimeSlots;
-using Service.Server.Communication.CQRS.Commands.Entities.TimeSlots;
 
-namespace Service.Server.Communication.Services.TimeSlot;
+namespace Core.Server.Communication.Services.TimeSlot;
 
 public static class TimeSlotProtoExtensions
 {
     public static AddNoteCommand ToCommand(
-        this AddNoteCommandProto proto) =>
-        new(Guid.Parse(proto.TimeSlotId), Guid.Parse(proto.NoteId));
+        this AddNoteCommandProto proto)
+    {
+        return new AddNoteCommand(Guid.Parse(proto.TimeSlotId), Guid.Parse(proto.NoteId));
+    }
 
-    public static TimeSlotNotification ToNotification(this AddNoteCommand proto) =>
-        new()
+    public static TimeSlotNotification ToNotification(this AddNoteCommand proto)
+    {
+        return new TimeSlotNotification
         {
             NoteAddedToTimeSlot = new NoteAddedToTimeSlotNotification
             {
                 TimeSlotId = proto.TimeSlotId.ToString(),
-                NoteId = proto.NoteId.ToString(),
+                NoteId = proto.NoteId.ToString()
             }
         };
+    }
 
     public static SetEndTimeCommand ToCommand(
-        this SetEndTimeCommandProto proto) =>
-        new(Guid.Parse(proto.TimeSlotId), proto.Time.ToDateTimeOffset());
+        this SetEndTimeCommandProto proto)
+    {
+        return new SetEndTimeCommand(Guid.Parse(proto.TimeSlotId), proto.Time.ToDateTimeOffset());
+    }
 
-    public static TimeSlotNotification ToNotification(this SetEndTimeCommand proto) =>
-        new()
+    public static TimeSlotNotification ToNotification(this SetEndTimeCommand proto)
+    {
+        return new TimeSlotNotification
         {
             EndTimeSet = new EndTimeSetNotification
             {
@@ -36,13 +43,17 @@ public static class TimeSlotProtoExtensions
                 Time = Timestamp.FromDateTimeOffset(proto.Time)
             }
         };
+    }
 
     public static SetStartTimeCommand ToCommand(
-        this SetStartTimeCommandProto proto) =>
-        new(Guid.Parse(proto.TimeSlotId), proto.Time.ToDateTimeOffset());
+        this SetStartTimeCommandProto proto)
+    {
+        return new SetStartTimeCommand(Guid.Parse(proto.TimeSlotId), proto.Time.ToDateTimeOffset());
+    }
 
-    public static TimeSlotNotification ToNotification(this SetStartTimeCommand proto) =>
-        new()
+    public static TimeSlotNotification ToNotification(this SetStartTimeCommand proto)
+    {
+        return new TimeSlotNotification
         {
             StartTimeSet = new StartTimeSetNotification
             {
@@ -50,14 +61,19 @@ public static class TimeSlotProtoExtensions
                 Time = Timestamp.FromDateTimeOffset(proto.Time)
             }
         };
+    }
 
     public static CreateTimeSlotCommand ToCommand(
-        this CreateTimeSlotCommandProto proto) =>
-        new(Guid.Parse(proto.TimeSlotId), Guid.Parse(proto.SelectedTicketId), Guid.Parse(proto.WorkDayId),
+        this CreateTimeSlotCommandProto proto)
+    {
+        return new CreateTimeSlotCommand(Guid.Parse(proto.TimeSlotId), Guid.Parse(proto.SelectedTicketId),
+            Guid.Parse(proto.WorkDayId),
             proto.StartTime.ToDateTimeOffset(), proto.EndTime.ToDateTimeOffset(), proto.IsTimerRunning);
+    }
 
-    public static TimeSlotNotification ToNotification(this CreateTimeSlotCommand proto) =>
-        new()
+    public static TimeSlotNotification ToNotification(this CreateTimeSlotCommand proto)
+    {
+        return new TimeSlotNotification
         {
             TimeSlotCreated = new TimeSlotCreatedNotification
             {
@@ -69,9 +85,11 @@ public static class TimeSlotProtoExtensions
                 IsTimerRunning = proto.IsTimerRunning
             }
         };
+    }
 
-    public static TimeSlotProto ToProto(this Domain.Entities.TimeSlot timeSlot) =>
-        new()
+    public static TimeSlotProto ToProto(this Domain.Entities.TimeSlot timeSlot)
+    {
+        return new TimeSlotProto
         {
             TimeSlotId = timeSlot.TimeSlotId.ToString(),
             SelectedTicketId = timeSlot.SelectedTicketId.ToString(),
@@ -80,15 +98,13 @@ public static class TimeSlotProtoExtensions
             EndTime = timeSlot.EndTime.ToTimestamp(),
             IsTimerRunning = timeSlot.IsTimerRunning
         };
+    }
 
     public static TimeSlotListProto ToProtoList(this List<Domain.Entities.TimeSlot> timeSlots)
     {
         var timeSlotListProto = new TimeSlotListProto();
 
-        foreach (var timeSlot in timeSlots)
-        {
-            timeSlotListProto.TimeSlots.Add(timeSlot.ToProto());
-        }
+        foreach (var timeSlot in timeSlots) timeSlotListProto.TimeSlots.Add(timeSlot.ToProto());
 
         return timeSlotListProto;
     }

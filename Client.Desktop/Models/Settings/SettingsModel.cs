@@ -26,9 +26,7 @@ public class SettingsModel(ICommandSender commandSender, IRequestSender requestS
     public async Task InitializeAsync()
     {
         if (await requestSender.Send(new SettingsExistsRequestProto()))
-        {
             Settings = await requestSender.Send(new GetSettingsRequestProto());
-        }
 
         await commandSender.Send(new CreateSettingsCommandProto
         {
@@ -50,21 +48,17 @@ public class SettingsModel(ICommandSender commandSender, IRequestSender requestS
     public async Task SaveConfigAsync()
     {
         if (Settings.IsExportPathChanged())
-        {
             await commandSender.Send(new ChangeExportPathCommandProto
             {
                 SettingsId = Settings.SettingsId.ToString(),
                 ExportPath = Settings.ExportPath
             });
-        }
 
         if (Settings.IsAddNewTicketsToCurrentSprintChanged())
-        {
             await commandSender.Send(new ChangeAutomaticTicketAddingToSprintCommandProto
             {
                 SettingsId = Settings.SettingsId.ToString(),
                 IsAddNewTicketsToCurrentSprintActive = Settings.IsAddNewTicketsToCurrentSprintActive
             });
-        }
     }
 }

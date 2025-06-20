@@ -1,6 +1,6 @@
 using Domain.Entities;
 
-namespace Service.Server.Services.Entities.Notes;
+namespace Core.Server.Services.Entities.Notes;
 
 public interface INoteRequestsService
 {

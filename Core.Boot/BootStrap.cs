@@ -1,19 +1,19 @@
 ﻿using Core.Persistence;
 using Core.Persistence.SQLite.DbContext;
+using Core.Server;
+using Core.Server.Services.UseCase;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Service.Server;
-using Service.Server.Services.UseCase;
 
 namespace Core.Boot;
 
 public class BootStrap
 {
-    public static async Task Main(string[] args) // <- async Task Main
+    public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
@@ -31,7 +31,7 @@ public class BootStrap
         {
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             await db.Database.MigrateAsync();
-            
+
             //This is required or else the service will not be created
             scope.ServiceProvider.GetRequiredService(typeof(TimerService));
         }
@@ -42,11 +42,9 @@ public class BootStrap
         {
             var endpointDataSource = app.Services.GetRequiredService<EndpointDataSource>();
             foreach (var endpoint in endpointDataSource.Endpoints)
-            {
                 Console.WriteLine($"[Endpoint] {endpoint.DisplayName}");
-            }
         });
 
-        app.Run();
+        await app.RunAsync();
     }
 }

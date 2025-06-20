@@ -1,6 +1,6 @@
-using Service.Server.Communication.CQRS.Commands.Entities.Tickets;
+using Core.Server.Communication.CQRS.Commands.Entities.Tickets;
 
-namespace Service.Server.Services.Entities.Tickets;
+namespace Core.Server.Services.Entities.Tickets;
 
 public interface ITicketCommandsService
 {

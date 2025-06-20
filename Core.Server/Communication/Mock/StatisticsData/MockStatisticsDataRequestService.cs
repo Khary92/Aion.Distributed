@@ -2,7 +2,7 @@
 using Proto.DTO.StatisticsData;
 using Proto.Requests.StatisticsData;
 
-namespace Service.Server.Communication.Mock.StatisticsData;
+namespace Core.Server.Communication.Mock.StatisticsData;
 
 public class MockStatisticsDataRequestService : StatisticsDataRequestService.StatisticsDataRequestServiceBase
 {

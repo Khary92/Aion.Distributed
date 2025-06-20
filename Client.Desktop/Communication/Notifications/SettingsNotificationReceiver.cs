@@ -23,7 +23,6 @@ public class SettingsNotificationReceiver(
         try
         {
             await foreach (var notification in call.ResponseStream.ReadAllAsync(cancellationToken))
-            {
                 switch (notification.NotificationCase)
                 {
                     case SettingsNotification.NotificationOneofCase.SettingsCreated:
@@ -52,7 +51,6 @@ public class SettingsNotificationReceiver(
                         break;
                     }
                 }
-            }
         }
         catch (OperationCanceledException)
         {

@@ -10,7 +10,7 @@ public class TagEventsStore(IDbContextFactory<AppDbContext> appDbContextFactory)
     public async Task StoreEventAsync(TagEvent @event)
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
-        
+
         await appDbContext.TagEvents.AddAsync(@event);
         await appDbContext.SaveChangesAsync();
     }
@@ -18,7 +18,7 @@ public class TagEventsStore(IDbContextFactory<AppDbContext> appDbContextFactory)
     public async Task<List<TagEvent>> GetEventsForAggregateAsync(Guid entityId)
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
-        
+
         return await appDbContext.TagEvents
             .Where(e => e.EntityId == entityId)
             .OrderBy(e => e.TimeStamp)
@@ -29,7 +29,7 @@ public class TagEventsStore(IDbContextFactory<AppDbContext> appDbContextFactory)
     public async Task<List<TagEvent>> GetAllEventsAsync()
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
-        
+
         return await appDbContext.TagEvents
             .OrderBy(e => e.TimeStamp)
             .AsNoTracking()

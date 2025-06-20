@@ -1,9 +1,9 @@
+using Core.Server.Communication.CQRS.Commands.Entities.Tickets;
+using Core.Server.Communication.Services.Ticket;
+using Core.Server.Translators.Tickets;
 using Domain.Interfaces;
-using Service.Server.Communication.CQRS.Commands.Entities.Tickets;
-using Service.Server.Communication.Services.Ticket;
-using Service.Server.Translators.Tickets;
 
-namespace Service.Server.Services.Entities.Tickets;
+namespace Core.Server.Services.Entities.Tickets;
 
 public class TicketCommandsService(
     ITicketEventsStore ticketEventStore,

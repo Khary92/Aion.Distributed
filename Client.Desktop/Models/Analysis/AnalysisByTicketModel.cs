@@ -2,7 +2,6 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests;
-using Client.Desktop.Communication.RequiresChange;
 using Client.Desktop.Decorators;
 using Client.Desktop.DTO;
 using DynamicData;
@@ -42,7 +41,7 @@ public class AnalysisByTicketModel : ReactiveObject
 
     public async Task SetAnalysisByTicket(TicketDto selectedTicket)
     {
-        AnalysisByTicket = await _requestSender.Send(new GetTicketAnalysisById()
+        AnalysisByTicket = await _requestSender.Send(new GetTicketAnalysisById
         {
             TicketId = selectedTicket.TicketId.ToString()
         });

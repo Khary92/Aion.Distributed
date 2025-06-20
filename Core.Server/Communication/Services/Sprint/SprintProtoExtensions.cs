@@ -1,49 +1,60 @@
-﻿using Google.Protobuf.WellKnownTypes;
+﻿using Core.Server.Communication.CQRS.Commands.Entities.Sprints;
+using Core.Server.Communication.CQRS.Requests.Sprints;
+using Google.Protobuf.WellKnownTypes;
 using Proto.Command.Sprints;
 using Proto.DTO.Sprint;
 using Proto.Notifications.Sprint;
 using Proto.Requests.Sprints;
-using Service.Server.Communication.CQRS.Commands.Entities.Sprints;
-using Service.Server.Communication.CQRS.Requests.Sprints;
 
-namespace Service.Server.Communication.Services.Sprint;
+namespace Core.Server.Communication.Services.Sprint;
 
 public static class SprintProtoExtensions
 {
     public static AddTicketToActiveSprintCommand ToCommand(
-        this AddTicketToActiveSprintCommandProto proto) =>
-        new(Guid.Parse(proto.TicketId));
+        this AddTicketToActiveSprintCommandProto proto)
+    {
+        return new AddTicketToActiveSprintCommand(Guid.Parse(proto.TicketId));
+    }
 
-    public static SprintNotification ToNotification(this AddTicketToActiveSprintCommand command) =>
-        new()
+    public static SprintNotification ToNotification(this AddTicketToActiveSprintCommand command)
+    {
+        return new SprintNotification
         {
             TicketAddedToActiveSprint = new TicketAddedToActiveSprintNotification
             {
-                TicketId = command.TicketId.ToString(),
+                TicketId = command.TicketId.ToString()
             }
         };
+    }
 
     public static AddTicketToSprintCommand ToCommand(
-        this AddTicketToSprintCommandProto proto) =>
-        new(Guid.Parse(proto.SprintId), Guid.Parse(proto.TicketId));
+        this AddTicketToSprintCommandProto proto)
+    {
+        return new AddTicketToSprintCommand(Guid.Parse(proto.SprintId), Guid.Parse(proto.TicketId));
+    }
 
-    public static SprintNotification ToNotification(this AddTicketToSprintCommand command) =>
-        new()
+    public static SprintNotification ToNotification(this AddTicketToSprintCommand command)
+    {
+        return new SprintNotification
         {
-            TicketAddedToSprint = new TicketAddedToSprintNotification()
+            TicketAddedToSprint = new TicketAddedToSprintNotification
             {
                 TicketId = command.TicketId.ToString(),
-                SprintId = command.SprintId.ToString(),
+                SprintId = command.SprintId.ToString()
             }
         };
+    }
 
     public static CreateSprintCommand ToCommand(
-        this CreateSprintCommandProto proto) =>
-        new(Guid.Parse(proto.SprintId), proto.Name, proto.StartTime.ToDateTimeOffset(),
+        this CreateSprintCommandProto proto)
+    {
+        return new CreateSprintCommand(Guid.Parse(proto.SprintId), proto.Name, proto.StartTime.ToDateTimeOffset(),
             proto.EndTime.ToDateTimeOffset(), proto.IsActive, proto.TicketIds.ToGuidList());
+    }
 
-    public static SprintNotification ToNotification(this CreateSprintCommand command) =>
-        new()
+    public static SprintNotification ToNotification(this CreateSprintCommand command)
+    {
+        return new SprintNotification
         {
             SprintCreated = new SprintCreatedNotification
             {
@@ -52,49 +63,61 @@ public static class SprintProtoExtensions
                 StartTime = Timestamp.FromDateTimeOffset(command.StartTime),
                 EndTime = Timestamp.FromDateTimeOffset(command.EndTime),
                 IsActive = command.IsActive,
-                TicketIds = { command.TicketIds.ToRepeatedField() },
+                TicketIds = { command.TicketIds.ToRepeatedField() }
             }
         };
+    }
 
     public static SetSprintActiveStatusCommand ToCommand(
-        this SetSprintActiveStatusCommandProto proto) =>
-        new(Guid.Parse(proto.SprintId), proto.IsActive);
+        this SetSprintActiveStatusCommandProto proto)
+    {
+        return new SetSprintActiveStatusCommand(Guid.Parse(proto.SprintId), proto.IsActive);
+    }
 
 
-    public static SprintNotification ToNotification(this SetSprintActiveStatusCommand command) =>
-        new()
+    public static SprintNotification ToNotification(this SetSprintActiveStatusCommand command)
+    {
+        return new SprintNotification
         {
             SprintActiveStatusSet = new SprintActiveStatusSetNotification
             {
                 SprintId = command.SprintId.ToString(),
-                IsActive = command.IsActive,
+                IsActive = command.IsActive
             }
         };
+    }
 
     public static UpdateSprintDataCommand ToCommand(
-        this UpdateSprintDataCommandProto proto) =>
-        new(Guid.Parse(proto.SprintId), proto.Name, proto.StartTime.ToDateTimeOffset(),
+        this UpdateSprintDataCommandProto proto)
+    {
+        return new UpdateSprintDataCommand(Guid.Parse(proto.SprintId), proto.Name, proto.StartTime.ToDateTimeOffset(),
             proto.EndTime.ToDateTimeOffset());
+    }
 
 
-    public static SprintNotification ToNotification(this UpdateSprintDataCommand command) =>
-        new()
+    public static SprintNotification ToNotification(this UpdateSprintDataCommand command)
+    {
+        return new SprintNotification
         {
             SprintDataUpdated = new SprintDataUpdatedNotification
             {
                 SprintId = command.SprintId.ToString(),
                 Name = command.Name,
                 StartTime = Timestamp.FromDateTimeOffset(command.StartTime),
-                EndTime = Timestamp.FromDateTimeOffset(command.EndTime),
+                EndTime = Timestamp.FromDateTimeOffset(command.EndTime)
             }
         };
+    }
 
-    
-    public static GetActiveSprintRequest ToCommand() =>
-        new();
 
-    public static SprintProto ToProto(this Domain.Entities.Sprint sprint) =>
-        new()
+    public static GetActiveSprintRequest ToCommand()
+    {
+        return new GetActiveSprintRequest();
+    }
+
+    public static SprintProto ToProto(this Domain.Entities.Sprint sprint)
+    {
+        return new SprintProto
         {
             SprintId = sprint.SprintId.ToString(),
             Name = sprint.Name,
@@ -103,15 +126,13 @@ public static class SprintProtoExtensions
             IsActive = sprint.IsActive,
             TicketIds = { sprint.TicketIds.ToRepeatedField() }
         };
+    }
 
     public static SprintListProto ToProtoList(this List<Domain.Entities.Sprint> sprints)
     {
         var sprintProtos = new SprintListProto();
 
-        foreach (var sprint in sprints)
-        {
-            sprintProtos.Sprints.Add(sprint.ToProto());
-        }
+        foreach (var sprint in sprints) sprintProtos.Sprints.Add(sprint.ToProto());
 
         return sprintProtos;
     }

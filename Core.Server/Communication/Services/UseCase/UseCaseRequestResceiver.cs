@@ -1,7 +1,7 @@
 using Grpc.Core;
 using Proto.Requests.UseCase;
 
-namespace Service.Server.Communication.Services.UseCase;
+namespace Core.Server.Communication.Services.UseCase;
 
 public class UseCaseRequestResceiver : UseCaseRequestService.UseCaseRequestServiceBase
 {
@@ -13,8 +13,8 @@ public class UseCaseRequestResceiver : UseCaseRequestService.UseCaseRequestServi
             StatisticsDataId = Guid.NewGuid().ToString(),
             TicketId = Guid.NewGuid().ToString(),
             TimeSlotId = Guid.NewGuid().ToString()
-        };   
-        
+        };
+
         return Task.FromResult(timeSlotData);
     }
 }

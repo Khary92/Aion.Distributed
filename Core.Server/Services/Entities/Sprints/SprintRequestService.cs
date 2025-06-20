@@ -1,11 +1,13 @@
+using Core.Server.Communication.CQRS.Commands.Entities.Sprints;
 using Domain.Entities;
 using Domain.Events.Sprints;
 using Domain.Interfaces;
-using Service.Server.Communication.CQRS.Commands.Entities.Sprints;
 
-namespace Service.Server.Services.Entities.Sprints;
+namespace Core.Server.Services.Entities.Sprints;
 
-public class SprintRequestService(IEventStore<SprintEvent> sprintEventsStore, SprintCommandsService sprintCommandsService) : ISprintRequestsService
+public class SprintRequestService(
+    IEventStore<SprintEvent> sprintEventsStore,
+    ISprintCommandsService sprintCommandsService) : ISprintRequestsService
 {
     public async Task<List<Sprint>> GetAll()
     {

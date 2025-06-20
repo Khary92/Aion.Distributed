@@ -1,5 +1,4 @@
-
-namespace Service.Server.Communication.CQRS.Commands.Entities.StatisticsData;
+namespace Core.Server.Communication.CQRS.Commands.Entities.StatisticsData;
 
 public record CreateStatisticsDataCommand(
     Guid StatisticsDataId,

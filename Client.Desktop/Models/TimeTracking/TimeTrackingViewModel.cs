@@ -1,12 +1,5 @@
-﻿using System;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using Client.Desktop.Communication.Commands;
+﻿using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.Requests;
-using Proto.Notifications.UseCase;
-using Proto.Requests.Sprints;
-using Proto.Requests.Tickets;
 using ReactiveUI;
 using Unit = System.Reactive.Unit;
 

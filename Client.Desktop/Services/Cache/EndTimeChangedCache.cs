@@ -29,7 +29,8 @@ public class EndTimeChangedCache(
 
     public void Store(SetEndTimeCommandProto command)
     {
-        if (!_commands.TryAdd(Guid.Parse(command.TimeSlotId), command)) _commands[Guid.Parse(command.TimeSlotId)] = command;
+        if (!_commands.TryAdd(Guid.Parse(command.TimeSlotId), command))
+            _commands[Guid.Parse(command.TimeSlotId)] = command;
 
         fileSystemWriter.Write(JsonSerializer.Serialize(_commands), Path);
     }

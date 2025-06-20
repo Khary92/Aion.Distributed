@@ -1,12 +1,14 @@
 ﻿using Grpc.Core;
 using Proto.Notifications.TimeSlots;
 
-namespace Service.Server.Communication.Services.TimeSlot;
+namespace Core.Server.Communication.Services.TimeSlot;
 
-public class TimeSlotNotificationService : Proto.Notifications.TimeSlots.TimeSlotNotificationService.TimeSlotNotificationServiceBase
+public class
+    TimeSlotNotificationService : Proto.Notifications.TimeSlots.TimeSlotNotificationService.
+    TimeSlotNotificationServiceBase
 {
-    private IServerStreamWriter<TimeSlotNotification>? _responseStream;
     private CancellationToken _cancellationToken;
+    private IServerStreamWriter<TimeSlotNotification>? _responseStream;
 
     public override async Task SubscribeTimeSlotNotifications(
         SubscribeRequest request,
@@ -33,7 +35,6 @@ public class TimeSlotNotificationService : Proto.Notifications.TimeSlots.TimeSlo
     public async Task SendNotificationAsync(TimeSlotNotification notification)
     {
         if (_responseStream is not null && !_cancellationToken.IsCancellationRequested)
-        {
             try
             {
                 await _responseStream.WriteAsync(notification, _cancellationToken);
@@ -43,6 +44,5 @@ public class TimeSlotNotificationService : Proto.Notifications.TimeSlots.TimeSlo
                 Console.WriteLine($"Fehler beim Senden der TimeSlotNotification: {ex.Message}");
                 _responseStream = null;
             }
-        }
     }
 }

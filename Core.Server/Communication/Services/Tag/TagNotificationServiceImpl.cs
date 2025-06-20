@@ -1,14 +1,14 @@
 ﻿using Grpc.Core;
 using Proto.Notifications.Tag;
 
-namespace Service.Server.Communication.Services.Tag;
+namespace Core.Server.Communication.Services.Tag;
 
 public class TagNotificationServiceImpl : TagNotificationService.TagNotificationServiceBase
 {
     private readonly object _lock = new();
-    private IServerStreamWriter<TagNotification>? _responseStream;
     private CancellationToken _cancellationToken = CancellationToken.None;
-    private bool _clientConnected = false;
+    private bool _clientConnected;
+    private IServerStreamWriter<TagNotification>? _responseStream;
 
     public override async Task SubscribeTagNotifications(
         SubscribeRequest request,

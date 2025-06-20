@@ -1,12 +1,13 @@
 ﻿using Grpc.Core;
 using Proto.Notifications.Ticket;
 
-namespace Service.Server.Communication.Services.Ticket;
+namespace Core.Server.Communication.Services.Ticket;
 
-public class TicketNotificationService : Proto.Notifications.Ticket.TicketNotificationService.TicketNotificationServiceBase
+public class
+    TicketNotificationService : Proto.Notifications.Ticket.TicketNotificationService.TicketNotificationServiceBase
 {
-    private IServerStreamWriter<TicketNotification>? _responseStream;
     private CancellationToken _cancellationToken;
+    private IServerStreamWriter<TicketNotification>? _responseStream;
 
     public override async Task SubscribeTicketNotifications(
         SubscribeRequest request,
@@ -32,7 +33,6 @@ public class TicketNotificationService : Proto.Notifications.Ticket.TicketNotifi
     public async Task SendNotificationAsync(TicketNotification notification)
     {
         if (_responseStream is not null && !_cancellationToken.IsCancellationRequested)
-        {
             try
             {
                 await _responseStream.WriteAsync(notification, _cancellationToken);
@@ -42,6 +42,5 @@ public class TicketNotificationService : Proto.Notifications.Ticket.TicketNotifi
                 Console.WriteLine($"Fehler beim Senden: {ex.Message}");
                 _responseStream = null;
             }
-        }
     }
 }

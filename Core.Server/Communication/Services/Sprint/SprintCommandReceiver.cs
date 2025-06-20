@@ -1,11 +1,12 @@
-﻿using Grpc.Core;
+﻿using Core.Server.Communication.Services.Sprint.Handlers;
+using Core.Server.Services.Entities.Sprints;
+using Grpc.Core;
 using Proto.Command.Sprints;
-using Service.Server.Communication.Services.Sprint.Handlers;
-using Service.Server.Services.Entities.Sprints;
 
-namespace Service.Server.Communication.Services.Sprint;
+namespace Core.Server.Communication.Services.Sprint;
 
-public class SprintCommandReceiver(ISprintCommandsService sprintsCommandsService,
+public class SprintCommandReceiver(
+    ISprintCommandsService sprintsCommandsService,
     AddTicketToActiveSprintCommandHandler addTicketToActiveSprintCommandHandler,
     AddTicketToSprintCommandHandler addTicketToSprintCommandHandler,
     SetSprintActiveStatusCommandHandler setSprintActiveStatusCommandHandler)

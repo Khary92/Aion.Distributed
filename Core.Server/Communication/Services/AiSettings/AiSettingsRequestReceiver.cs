@@ -1,9 +1,9 @@
-﻿using Grpc.Core;
+﻿using Core.Server.Services.Entities.AiSettings;
+using Grpc.Core;
 using Proto.DTO.AiSettings;
 using Proto.Requests.AiSettings;
-using Service.Server.Services.Entities.AiSettings;
 
-namespace Service.Server.Communication.Services.AiSettings;
+namespace Core.Server.Communication.Services.AiSettings;
 
 public class AiSettingsRequestReceiver(
     IAiSettingsRequestsService aiSettingsRequestsService)

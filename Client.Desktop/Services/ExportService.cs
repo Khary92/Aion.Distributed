@@ -25,7 +25,7 @@ public class ExportService(
 
         var markdownString = await GetMarkdownString(workDayDtos);
         var config = await requestSender.Send(new GetSettingsRequestProto());
-        var filePath = BuildFilePath(workDayDtos.First().Date.Date, config!.ExportPath);
+        var filePath = BuildFilePath(workDayDtos.First().Date.Date, config.ExportPath);
 
         try
         {
@@ -76,7 +76,7 @@ public class ExportService(
     private async Task FillDictionaryForWorkday(WorkDayDto workDay,
         Dictionary<DateTimeOffset, List<TicketDataHolder>> result)
     {
-        var timeSlots = await requestSender.Send(new GetTimeSlotsForWorkDayIdRequestProto()
+        var timeSlots = await requestSender.Send(new GetTimeSlotsForWorkDayIdRequestProto
         {
             WorkDayId = workDay.WorkDayId.ToString()
         });
@@ -85,7 +85,7 @@ public class ExportService(
 
         foreach (var timeSlot in timeSlots)
         {
-            var ticket = await requestSender.Send(new GetTicketByIdRequestProto()
+            var ticket = await requestSender.Send(new GetTicketByIdRequestProto
             {
                 TicketId = timeSlot.SelectedTicketId.ToString()
             });

@@ -20,7 +20,6 @@ public class UseCaseNotificationReceiver(
         try
         {
             await foreach (var notification in call.ResponseStream.ReadAllAsync(cancellationToken))
-            {
                 switch (notification.NotificationCase)
                 {
                     case UseCaseNotification.NotificationOneofCase.TimeSlotControlCreated:
@@ -54,7 +53,6 @@ public class UseCaseNotificationReceiver(
                         break;
                     }
                 }
-            }
         }
         catch (OperationCanceledException)
         {

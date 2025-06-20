@@ -2,7 +2,7 @@
 using Proto.DTO.NoteType;
 using Proto.Requests.NoteTypes;
 
-namespace Service.Server.Communication.Mock.NoteType;
+namespace Core.Server.Communication.Mock.NoteType;
 
 public class MockNoteTypeRequestService : NoteTypesRequestService.NoteTypesRequestServiceBase
 {

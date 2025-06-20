@@ -23,7 +23,6 @@ public class SprintNotificationReceiver(
         try
         {
             await foreach (var notification in call.ResponseStream.ReadAllAsync(cancellationToken))
-            {
                 switch (notification.NotificationCase)
                 {
                     case SprintNotification.NotificationOneofCase.SprintActiveStatusSet:
@@ -36,10 +35,8 @@ public class SprintNotificationReceiver(
                         var created = notification.SprintCreated;
                         var ticketGuids = new List<Guid>();
                         foreach (var id in created.TicketIds)
-                        {
                             if (Guid.TryParse(id, out var guid))
                                 ticketGuids.Add(guid);
-                        }
 
                         Dispatcher.UIThread.Post(() =>
                         {
@@ -65,11 +62,7 @@ public class SprintNotificationReceiver(
                         Dispatcher.UIThread.Post(() => { messenger.Send(notification.TicketAddedToSprint); });
                         break;
                     }
-                    default:
-                        // Optional: handle unknown notification case or log
-                        break;
                 }
-            }
         }
         catch (OperationCanceledException)
         {

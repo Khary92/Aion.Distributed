@@ -1,21 +1,25 @@
-﻿using Proto.Command.Tickets;
+﻿using Core.Server.Communication.CQRS.Commands.Entities.Tickets;
+using Proto.Command.Tickets;
 using Proto.DTO.Ticket;
 using Proto.Notifications.Ticket;
 using Proto.Requests.Tickets;
-using Service.Server.Communication.CQRS.Commands.Entities.Tickets;
 
-namespace Service.Server.Communication.Services.Ticket;
+namespace Core.Server.Communication.Services.Ticket;
 
 public static class TicketProtoExtensions
 {
     public static UpdateTicketDataCommand ToCommand(
-        this UpdateTicketDataCommandProto proto) =>
-        new(Guid.Parse(proto.TicketId), proto.Name, proto.BookingNumber, proto.SprintIds.ToGuidList());
+        this UpdateTicketDataCommandProto proto)
+    {
+        return new UpdateTicketDataCommand(Guid.Parse(proto.TicketId), proto.Name, proto.BookingNumber,
+            proto.SprintIds.ToGuidList());
+    }
 
-    public static TicketNotification ToNotification(this UpdateTicketDataCommand proto) =>
-        new()
+    public static TicketNotification ToNotification(this UpdateTicketDataCommand proto)
+    {
+        return new TicketNotification
         {
-            TicketDataUpdated = new TicketDataUpdatedNotification()
+            TicketDataUpdated = new TicketDataUpdatedNotification
             {
                 TicketId = proto.TicketId.ToString(),
                 Name = proto.Name,
@@ -23,13 +27,17 @@ public static class TicketProtoExtensions
                 SprintIds = { proto.SprintIds.ToRepeatedField() }
             }
         };
+    }
 
     public static UpdateTicketDocumentationCommand ToCommand(
-        this UpdateTicketDocumentationCommandProto proto) =>
-        new(Guid.Parse(proto.TicketId), proto.Documentation);
+        this UpdateTicketDocumentationCommandProto proto)
+    {
+        return new UpdateTicketDocumentationCommand(Guid.Parse(proto.TicketId), proto.Documentation);
+    }
 
-    public static TicketNotification ToNotification(this UpdateTicketDocumentationCommand proto) =>
-        new()
+    public static TicketNotification ToNotification(this UpdateTicketDocumentationCommand proto)
+    {
+        return new TicketNotification
         {
             TicketDocumentationUpdated = new TicketDocumentationUpdatedNotification
             {
@@ -37,15 +45,20 @@ public static class TicketProtoExtensions
                 Documentation = proto.Documentation
             }
         };
+    }
 
     public static CreateTicketCommand ToCommand(
-        this CreateTicketCommandProto proto) =>
-        new(Guid.Parse(proto.TicketId), proto.Name, proto.BookingNumber, proto.SprintIds.ToGuidList());
+        this CreateTicketCommandProto proto)
+    {
+        return new CreateTicketCommand(Guid.Parse(proto.TicketId), proto.Name, proto.BookingNumber,
+            proto.SprintIds.ToGuidList());
+    }
 
-    public static TicketNotification ToNotification(this CreateTicketCommand proto) =>
-        new()
+    public static TicketNotification ToNotification(this CreateTicketCommand proto)
+    {
+        return new TicketNotification
         {
-            TicketCreated = new TicketCreatedNotification()
+            TicketCreated = new TicketCreatedNotification
             {
                 TicketId = proto.TicketId.ToString(),
                 Name = proto.Name,
@@ -53,24 +66,24 @@ public static class TicketProtoExtensions
                 SprintIds = { proto.SprintIds.ToRepeatedField() }
             }
         };
+    }
 
-    public static TicketProto ToProto(this Domain.Entities.Ticket ticket) =>
-        new()
+    public static TicketProto ToProto(this Domain.Entities.Ticket ticket)
+    {
+        return new TicketProto
         {
             TicketId = ticket.TicketId.ToString(),
             Name = ticket.Name,
             BookingNumber = ticket.BookingNumber,
             SprintIds = { ticket.SprintIds.ToRepeatedField() }
         };
+    }
 
     public static TicketListProto ToProtoList(this List<Domain.Entities.Ticket> tickets)
     {
         var ticketProtos = new TicketListProto();
 
-        foreach (var ticket in tickets)
-        {
-            ticketProtos.Tickets.Add(ticket.ToProto());
-        }
+        foreach (var ticket in tickets) ticketProtos.Tickets.Add(ticket.ToProto());
 
         return ticketProtos;
     }

@@ -1,4 +1,3 @@
-
 namespace Domain.Events.Sprints;
 
 public record SprintDataUpdatedEvent(

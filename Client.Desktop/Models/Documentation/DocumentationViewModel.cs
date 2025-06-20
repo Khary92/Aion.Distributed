@@ -13,8 +13,8 @@ namespace Client.Desktop.Models.Documentation;
 
 public class DocumentationViewModel : ReactiveObject
 {
-    private readonly IRequestSender _requestSender;
     private readonly ILanguageModelApi _languageModelApi;
+    private readonly IRequestSender _requestSender;
     private string _inputText = string.Empty;
 
     private string _responseText = string.Empty;

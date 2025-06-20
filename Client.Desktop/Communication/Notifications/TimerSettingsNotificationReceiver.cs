@@ -22,7 +22,6 @@ public class TimerSettingsNotificationReceiver(
         try
         {
             await foreach (var notification in call.ResponseStream.ReadAllAsync(cancellationToken))
-            {
                 switch (notification.NotificationCase)
                 {
                     case TimerSettingsNotification.NotificationOneofCase.TimerSettingsCreated:
@@ -50,7 +49,6 @@ public class TimerSettingsNotificationReceiver(
                         break;
                     }
                 }
-            }
         }
         catch (OperationCanceledException)
         {

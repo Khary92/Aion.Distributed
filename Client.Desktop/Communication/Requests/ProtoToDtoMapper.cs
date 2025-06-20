@@ -1,7 +1,6 @@
 ﻿using System;
 using Client.Desktop.DTO;
 using Proto.DTO.AiSettings;
-using Proto.Requests.AiSettings;
 
 namespace Client.Desktop.Communication.Requests;
 

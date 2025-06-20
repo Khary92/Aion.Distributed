@@ -1,11 +1,12 @@
 ﻿using Proto.Notifications.UseCase;
 
-namespace Service.Server.Communication.Services.UseCase;
+namespace Core.Server.Communication.Services.UseCase;
 
 public static class UseCaseProtoExtensions
 {
-    public static UseCaseNotification ToNotification(Guid timeSlotId, Guid statisticsDatatId, Guid ticketId) =>
-        new()
+    public static UseCaseNotification ToNotification(Guid timeSlotId, Guid statisticsDatatId, Guid ticketId)
+    {
+        return new UseCaseNotification
         {
             TimeSlotControlCreated = new TimeSlotControlCreatedNotification
             {
@@ -14,4 +15,5 @@ public static class UseCaseProtoExtensions
                 TicketId = ticketId.ToString()
             }
         };
+    }
 }

@@ -1,6 +1,6 @@
 using Domain.Entities;
 
-namespace Service.Server.Services.Entities.Tickets;
+namespace Core.Server.Services.Entities.Tickets;
 
 public interface ITicketRequestsService
 {

@@ -31,7 +31,7 @@ public class TimeSlotViewModelFactory(IServiceProvider serviceProvider, IRequest
 
         timeSlotViewModel.Model.TicketReplayDecorator = replayDecorator;
 
-        var timeSlotDto = await requestSender.Send(new GetTimeSlotByIdRequestProto()
+        var timeSlotDto = await requestSender.Send(new GetTimeSlotByIdRequestProto
         {
             TimeSlotId = timeSlotId.ToString()
         });
@@ -44,7 +44,7 @@ public class TimeSlotViewModelFactory(IServiceProvider serviceProvider, IRequest
         });
 
         timeSlotViewModel.StatisticsViewModel.StatisticsData = statisticsDataDto;
-        
+
         await timeSlotViewModel.StatisticsViewModel.Initialize();
         timeSlotViewModel.StatisticsViewModel.RegisterMessenger();
 

@@ -3,7 +3,7 @@ using Grpc.Core;
 using Proto.DTO.Sprint;
 using Proto.Requests.Sprints;
 
-namespace Service.Server.Communication.Mock.Sprint;
+namespace Core.Server.Communication.Mock.Sprint;
 
 public class MockSprintRequestService : SprintRequestService.SprintRequestServiceBase
 {
@@ -14,7 +14,7 @@ public class MockSprintRequestService : SprintRequestService.SprintRequestServic
             SprintId = Guid.NewGuid().ToString(),
             Name = "Sprint Alpha",
             Start = Timestamp.FromDateTime(DateTime.UtcNow.AddDays(-7).ToUniversalTime()),
-            End = Timestamp.FromDateTime(System.DateTime.UtcNow.AddDays(7).ToUniversalTime()),
+            End = Timestamp.FromDateTime(DateTime.UtcNow.AddDays(7).ToUniversalTime())
         };
         sprint.TicketIds.Add("ticket-1");
         sprint.TicketIds.Add("ticket-2");

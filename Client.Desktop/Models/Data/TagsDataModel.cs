@@ -39,10 +39,8 @@ public class TagsDataModel(
             var tag = Tags.FirstOrDefault(t => t.TagId == parsedGuid);
 
             if (tag == null)
-            {
                 //tracer.Tag.Update.NoAggregateFound(GetType(), parsedGuid);
                 return;
-            }
 
             tag.Apply(m);
             //tracer.Tag.Update.ChangesApplied(GetType(), parsedGuid);
@@ -84,7 +82,7 @@ public class TagsDataModel(
             TagId = createTagDto.TagId.ToString(),
             Name = tagName
         };
-        
+
         await commandSender.Send(createTagCommand);
 
         //tracer.Tag.Create.CommandSent(GetType(), createTagDto.TagId, createTagCommand);

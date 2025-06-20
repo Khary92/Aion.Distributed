@@ -10,7 +10,7 @@ namespace Client.Desktop.Models.Data;
 
 public class SprintsDataViewModel : ReactiveObject
 {
-   // private readonly ITracingCollectorProvider _tracer;
+    // private readonly ITracingCollectorProvider _tracer;
     private string _editButtonText = string.Empty;
 
     private DateTimeOffset _endTime = DateTimeOffset.Now.AddDays(7);
@@ -25,7 +25,7 @@ public class SprintsDataViewModel : ReactiveObject
 
     public SprintsDataViewModel(SprintsDataModel dataModel) //ITracingCollectorProvider tracer)
     {
-       // //_tracer = tracer;
+        // //_tracer = tracer;
         DataModel = dataModel;
 
         CreateSprintCommand = ReactiveCommand.CreateFromTask(PersistSprint,
@@ -124,7 +124,7 @@ public class SprintsDataViewModel : ReactiveObject
             .ForEach(s => s.IsActive = false);
 
         //_tracer.Sprint.ActiveStatus.StartUseCase(GetType(), SelectedSprint.SprintId,
-         //   SelectedSprint.AsTraceAttributes());
+        //   SelectedSprint.AsTraceAttributes());
 
         await DataModel.SetSprintActive(SelectedSprint);
     }
@@ -137,7 +137,7 @@ public class SprintsDataViewModel : ReactiveObject
                 StartTime, EndTime, SelectedSprint.TicketIds);
 
             //_tracer.Sprint.Update.StartUseCase(GetType(), updateSprintDto.SprintId,
-                //updateSprintDto.AsTraceAttributes());
+            //updateSprintDto.AsTraceAttributes());
             await DataModel.UpdateSprint(updateSprintDto);
 
             IsEditMode = false;

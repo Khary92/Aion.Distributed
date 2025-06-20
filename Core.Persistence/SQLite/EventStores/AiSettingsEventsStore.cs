@@ -10,7 +10,7 @@ public class AiSettingsEventsStore(IDbContextFactory<AppDbContext> appDbContextF
     public async Task StoreEventAsync(AiSettingsEvent @event)
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
-        
+
         await appDbContext.AiSettingsEvents.AddAsync(@event);
         await appDbContext.SaveChangesAsync();
     }
@@ -18,7 +18,7 @@ public class AiSettingsEventsStore(IDbContextFactory<AppDbContext> appDbContextF
     public async Task<List<AiSettingsEvent>> GetEventsForAggregateAsync(Guid entityId)
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
-        
+
         return await appDbContext.AiSettingsEvents
             .Where(e => e.EntityId == entityId)
             .OrderBy(e => e.TimeStamp)
@@ -29,7 +29,7 @@ public class AiSettingsEventsStore(IDbContextFactory<AppDbContext> appDbContextF
     public async Task<List<AiSettingsEvent>> GetAllEventsAsync()
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
-        
+
         return await appDbContext.AiSettingsEvents
             .OrderBy(e => e.TimeStamp)
             .AsNoTracking()

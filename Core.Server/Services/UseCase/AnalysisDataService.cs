@@ -1,4 +1,12 @@
-﻿using Domain.Entities;
+﻿using Core.Server.Communication.Services.StatisticsData;
+using Core.Server.Communication.Services.Ticket;
+using Core.Server.Communication.Services.TimeSlot;
+using Core.Server.Services.Entities.StatisticsData;
+using Core.Server.Services.Entities.Tags;
+using Core.Server.Services.Entities.Tickets;
+using Core.Server.Services.Entities.TimeSlots;
+using Core.Server.Services.Entities.WorkDays;
+using Domain.Entities;
 using Google.Protobuf.Collections;
 using Proto.DTO.AnalysisBySprint;
 using Proto.DTO.AnalysisByTag;
@@ -6,16 +14,8 @@ using Proto.DTO.AnalysisByTicket;
 using Proto.DTO.StatisticsData;
 using Proto.DTO.Ticket;
 using Proto.DTO.TimeSlots;
-using Service.Server.Communication.Services.StatisticsData;
-using Service.Server.Communication.Services.Ticket;
-using Service.Server.Communication.Services.TimeSlot;
-using Service.Server.Services.Entities.StatisticsData;
-using Service.Server.Services.Entities.Tags;
-using Service.Server.Services.Entities.Tickets;
-using Service.Server.Services.Entities.TimeSlots;
-using Service.Server.Services.Entities.WorkDays;
 
-namespace Service.Server.Services.UseCase;
+namespace Core.Server.Services.UseCase;
 
 public class AnalysisDataService(
     ITimeSlotRequestsService timeSlotRequestsService,
@@ -82,10 +82,7 @@ public class AnalysisDataService(
     private static RepeatedField<TimeSlotProto> ConvertToRepeatedField(List<TimeSlot> timeSlots)
     {
         var repeatedTimeSlots = new RepeatedField<TimeSlotProto>();
-        foreach (var timeSlot in timeSlots)
-        {
-            repeatedTimeSlots.Add(timeSlot.ToProto());
-        }
+        foreach (var timeSlot in timeSlots) repeatedTimeSlots.Add(timeSlot.ToProto());
 
         return repeatedTimeSlots;
     }
@@ -93,10 +90,7 @@ public class AnalysisDataService(
     private static RepeatedField<StatisticsDataProto> ConvertToRepeatedField(List<StatisticsData> statisticsData)
     {
         var repeatedStatisticsData = new RepeatedField<StatisticsDataProto>();
-        foreach (var statistic in statisticsData)
-        {
-            repeatedStatisticsData.Add(statistic.ToProto());
-        }
+        foreach (var statistic in statisticsData) repeatedStatisticsData.Add(statistic.ToProto());
 
         return repeatedStatisticsData;
     }
@@ -104,10 +98,7 @@ public class AnalysisDataService(
     private static RepeatedField<TicketProto> ConvertToRepeatedField(List<Ticket> tickets)
     {
         var repeatedTickets = new RepeatedField<TicketProto>();
-        foreach (var ticket in tickets)
-        {
-            repeatedTickets.Add(ticket.ToProto());
-        }
+        foreach (var ticket in tickets) repeatedTickets.Add(ticket.ToProto());
 
         return repeatedTickets;
     }

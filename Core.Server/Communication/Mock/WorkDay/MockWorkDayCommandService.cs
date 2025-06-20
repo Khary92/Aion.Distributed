@@ -2,7 +2,7 @@
 using Proto.Command.WorkDays;
 using Proto.Notifications.WorkDay;
 
-namespace Service.Server.Communication.Mock.WorkDay;
+namespace Core.Server.Communication.Mock.WorkDay;
 
 public class MockWorkDayCommandService(NotificationService.NotificationServiceClient notificationClient)
     : WorkDayCommandProtoService.WorkDayCommandProtoServiceBase

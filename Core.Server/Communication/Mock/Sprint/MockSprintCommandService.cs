@@ -1,14 +1,15 @@
 ﻿using Grpc.Core;
 using Proto.Command.Sprints;
 using Proto.Notifications.Sprint;
-using SprintNotificationService = Service.Server.Communication.Services.Sprint.SprintNotificationService;
+using SprintNotificationService = Core.Server.Communication.Services.Sprint.SprintNotificationService;
 
-namespace Service.Server.Communication.Mock.Sprint;
+namespace Core.Server.Communication.Mock.Sprint;
 
 public class MockSprintCommandService(SprintNotificationService sprintsNotificationService)
     : SprintCommandProtoService.SprintCommandProtoServiceBase
 {
-    public override async Task<CommandResponse> AddTicketToActiveSprint(AddTicketToActiveSprintCommandProto request, ServerCallContext context)
+    public override async Task<CommandResponse> AddTicketToActiveSprint(AddTicketToActiveSprintCommandProto request,
+        ServerCallContext context)
     {
         Console.WriteLine($"[AddTicketToActiveSprint] TicketID: {request.TicketId}");
 
@@ -31,7 +32,8 @@ public class MockSprintCommandService(SprintNotificationService sprintsNotificat
         }
     }
 
-    public override async Task<CommandResponse> AddTicketToSprint(AddTicketToSprintCommandProto request, ServerCallContext context)
+    public override async Task<CommandResponse> AddTicketToSprint(AddTicketToSprintCommandProto request,
+        ServerCallContext context)
     {
         Console.WriteLine($"[AddTicketToSprint] SprintID: {request.SprintId}, TicketID: {request.TicketId}");
 
@@ -55,9 +57,11 @@ public class MockSprintCommandService(SprintNotificationService sprintsNotificat
         }
     }
 
-    public override async Task<CommandResponse> CreateSprint(CreateSprintCommandProto request, ServerCallContext context)
+    public override async Task<CommandResponse> CreateSprint(CreateSprintCommandProto request,
+        ServerCallContext context)
     {
-        Console.WriteLine($"[CreateSprint] SprintID: {request.SprintId}, Name: {request.Name}, Start: {request.StartTime}, End: {request.EndTime}, IsActive: {request.IsActive}, Tickets: {string.Join(", ", request.TicketIds)}");
+        Console.WriteLine(
+            $"[CreateSprint] SprintID: {request.SprintId}, Name: {request.Name}, Start: {request.StartTime}, End: {request.EndTime}, IsActive: {request.IsActive}, Tickets: {string.Join(", ", request.TicketIds)}");
 
         try
         {
@@ -67,9 +71,9 @@ public class MockSprintCommandService(SprintNotificationService sprintsNotificat
                 {
                     SprintId = request.SprintId,
                     Name = request.Name,
-                    StartTime = request.StartTime ,
+                    StartTime = request.StartTime,
                     EndTime = request.EndTime,
-                    IsActive = request.IsActive,
+                    IsActive = request.IsActive
                 }
             });
 
@@ -82,7 +86,8 @@ public class MockSprintCommandService(SprintNotificationService sprintsNotificat
         }
     }
 
-    public override async Task<CommandResponse> SetSprintActiveStatus(SetSprintActiveStatusCommandProto request, ServerCallContext context)
+    public override async Task<CommandResponse> SetSprintActiveStatus(SetSprintActiveStatusCommandProto request,
+        ServerCallContext context)
     {
         Console.WriteLine($"[SetSprintActiveStatus] SprintID: {request.SprintId}, IsActive: {request.IsActive}");
 
@@ -93,7 +98,7 @@ public class MockSprintCommandService(SprintNotificationService sprintsNotificat
                 SprintActiveStatusSet = new SprintActiveStatusSetNotification
                 {
                     SprintId = request.SprintId,
-                    IsActive = request.IsActive,
+                    IsActive = request.IsActive
                 }
             });
 
@@ -106,9 +111,11 @@ public class MockSprintCommandService(SprintNotificationService sprintsNotificat
         }
     }
 
-    public override async Task<CommandResponse> UpdateSprintData(UpdateSprintDataCommandProto request, ServerCallContext context)
+    public override async Task<CommandResponse> UpdateSprintData(UpdateSprintDataCommandProto request,
+        ServerCallContext context)
     {
-        Console.WriteLine($"[UpdateSprintData] SprintID: {request.SprintId}, Name: {request.Name}, Start: {request.StartTime}, End: {request.EndTime}");
+        Console.WriteLine(
+            $"[UpdateSprintData] SprintID: {request.SprintId}, Name: {request.Name}, Start: {request.StartTime}, End: {request.EndTime}");
 
         try
         {
@@ -119,7 +126,7 @@ public class MockSprintCommandService(SprintNotificationService sprintsNotificat
                     SprintId = request.SprintId,
                     Name = request.Name,
                     StartTime = request.StartTime,
-                    EndTime = request.EndTime,
+                    EndTime = request.EndTime
                 }
             });
 

@@ -1,7 +1,7 @@
 using Domain.Events.StatisticsData;
 using Domain.Interfaces;
 
-namespace Service.Server.Services.Entities.StatisticsData;
+namespace Core.Server.Services.Entities.StatisticsData;
 
 public class StatisticsDataRequestsService(IEventStore<StatisticsDataEvent> statisticsDataEventStore)
     : IStatisticsDataRequestsService

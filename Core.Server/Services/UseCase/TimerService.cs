@@ -1,12 +1,11 @@
-
 using System.Timers;
+using Core.Server.Services.Entities.TimerSettings;
 using Domain.Entities;
 using Proto.Notifications.UseCase;
-using Service.Server.Services.Entities.TimerSettings;
 using Timer = System.Timers.Timer;
-using UseCaseNotificationService = Service.Server.Communication.Services.UseCase.UseCaseNotificationService;
+using UseCaseNotificationService = Core.Server.Communication.Services.UseCase.UseCaseNotificationService;
 
-namespace Service.Server.Services.UseCase;
+namespace Core.Server.Services.UseCase;
 
 public class TimerService
 {
@@ -18,7 +17,8 @@ public class TimerService
 
     private TimerSettings? _timerSettings;
 
-    public TimerService(ITimerSettingsRequestsService timerSettingsRequestsService, UseCaseNotificationService useCaseNotificationService)
+    public TimerService(ITimerSettingsRequestsService timerSettingsRequestsService,
+        UseCaseNotificationService useCaseNotificationService)
     {
         _timerSettingsRequestsService = timerSettingsRequestsService;
         _useCaseNotificationService = useCaseNotificationService;
@@ -29,6 +29,7 @@ public class TimerService
 
         _ = InitializeAndStart();
     }
+
     private async Task InitializeAndStart()
     {
         _timerSettings = await _timerSettingsRequestsService.Get();
@@ -57,7 +58,7 @@ public class TimerService
             {
                 SaveDocumentation = new SaveDocumentationNotification()
             });
-            
+
             _docuSeconds = 0;
         }
     }

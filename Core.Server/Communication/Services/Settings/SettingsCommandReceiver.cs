@@ -1,8 +1,8 @@
-﻿using Grpc.Core;
+﻿using Core.Server.Services.Entities.Settings;
+using Grpc.Core;
 using Proto.Command.Settings;
-using Service.Server.Services.Entities.Settings;
 
-namespace Service.Server.Communication.Services.Settings;
+namespace Core.Server.Communication.Services.Settings;
 
 public class SettingsCommandReceiver(ISettingsCommandsService settingsCommandsService)
     : SettingsCommandProtoService.SettingsCommandProtoServiceBase

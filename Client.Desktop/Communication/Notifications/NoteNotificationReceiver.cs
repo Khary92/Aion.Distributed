@@ -22,7 +22,6 @@ public class NoteNotificationReceiver(
         try
         {
             await foreach (var notification in call.ResponseStream.ReadAllAsync(cancellationToken))
-            {
                 switch (notification.NotificationCase)
                 {
                     case NoteNotification.NotificationOneofCase.NoteCreated:
@@ -46,7 +45,6 @@ public class NoteNotificationReceiver(
                         break;
                     }
                 }
-            }
         }
         catch (OperationCanceledException)
         {

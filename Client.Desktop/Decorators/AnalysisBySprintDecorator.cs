@@ -42,10 +42,7 @@ public class AnalysisBySprintDecorator(AnalysisBySprint analysisBySprint)
                 continue;
             }
 
-            if (statisticsData.IsUnproductive)
-            {
-                _timeSpentUnproductive += timeSlot.GetDurationInMinutes();
-            }
+            if (statisticsData.IsUnproductive) _timeSpentUnproductive += timeSlot.GetDurationInMinutes();
         }
 
         _wasInitialized = true;

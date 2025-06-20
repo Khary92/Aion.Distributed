@@ -3,7 +3,7 @@ using Grpc.Core;
 using Proto.DTO.TimeSlots;
 using Proto.Requests.TimeSlots;
 
-namespace Service.Server.Communication.Mock.TimeSlot;
+namespace Core.Server.Communication.Mock.TimeSlot;
 
 public class MockTimeSlotRequestService : TimeSlotRequestService.TimeSlotRequestServiceBase
 {
@@ -24,7 +24,8 @@ public class MockTimeSlotRequestService : TimeSlotRequestService.TimeSlotRequest
         return Task.FromResult(timeSlot);
     }
 
-    public override Task<TimeSlotListProto> GetTimeSlotsForWorkDayId(GetTimeSlotsForWorkDayIdRequestProto request, ServerCallContext context)
+    public override Task<TimeSlotListProto> GetTimeSlotsForWorkDayId(GetTimeSlotsForWorkDayIdRequestProto request,
+        ServerCallContext context)
     {
         var list = new TimeSlotListProto();
         list.TimeSlots.Add(new TimeSlotProto

@@ -1,32 +1,39 @@
-﻿using Proto.Command.TimerSettings;
+﻿using Core.Server.Communication.CQRS.Commands.Entities.TimerSettings;
+using Proto.Command.TimerSettings;
 using Proto.DTO.TimerSettings;
 using Proto.Notifications.TimerSettings;
-using Service.Server.Communication.CQRS.Commands.Entities.TimerSettings;
 
-namespace Service.Server.Communication.Services.TimerSettings;
+namespace Core.Server.Communication.Services.TimerSettings;
 
 public static class TimerSettingsProtoExtensions
 {
     public static ChangeDocuTimerSaveIntervalCommand ToCommand(
-        this ChangeDocuTimerSaveIntervalCommandProto proto) =>
-        new(Guid.Parse(proto.TimerSettingsId), proto.DocuTimerSaveInterval);
+        this ChangeDocuTimerSaveIntervalCommandProto proto)
+    {
+        return new ChangeDocuTimerSaveIntervalCommand(Guid.Parse(proto.TimerSettingsId), proto.DocuTimerSaveInterval);
+    }
 
-    public static TimerSettingsNotification ToNotification(this ChangeDocuTimerSaveIntervalCommand proto) =>
-        new()
+    public static TimerSettingsNotification ToNotification(this ChangeDocuTimerSaveIntervalCommand proto)
+    {
+        return new TimerSettingsNotification
         {
-            DocuTimerSaveIntervalChanged = new DocuTimerSaveIntervalChangedNotification()
+            DocuTimerSaveIntervalChanged = new DocuTimerSaveIntervalChangedNotification
             {
                 TimerSettingsId = proto.TimerSettingsId.ToString(),
                 DocuTimerSaveInterval = proto.DocuTimerSaveInterval
             }
         };
-    
-    public static ChangeSnapshotSaveIntervalCommand ToCommand(
-        this ChangeSnapshotSaveIntervalCommandProto proto) =>
-        new(Guid.Parse(proto.TimerSettingsId), proto.SnapshotSaveInterval);
+    }
 
-    public static TimerSettingsNotification ToNotification(this ChangeSnapshotSaveIntervalCommand proto) =>
-        new()
+    public static ChangeSnapshotSaveIntervalCommand ToCommand(
+        this ChangeSnapshotSaveIntervalCommandProto proto)
+    {
+        return new ChangeSnapshotSaveIntervalCommand(Guid.Parse(proto.TimerSettingsId), proto.SnapshotSaveInterval);
+    }
+
+    public static TimerSettingsNotification ToNotification(this ChangeSnapshotSaveIntervalCommand proto)
+    {
+        return new TimerSettingsNotification
         {
             SnapshotSaveIntervalChanged = new SnapshotSaveIntervalChangedNotification
             {
@@ -34,13 +41,18 @@ public static class TimerSettingsProtoExtensions
                 SnapshotSaveInterval = proto.SnapshotSaveInterval
             }
         };
-    
-    public static CreateTimerSettingsCommand ToCommand(
-        this CreateTimerSettingsCommandProto proto) =>
-        new(Guid.Parse(proto.TimerSettingsId),proto.DocumentationSaveInterval, proto.SnapshotSaveInterval);
+    }
 
-    public static TimerSettingsNotification ToNotification(this CreateTimerSettingsCommand proto) =>
-        new()
+    public static CreateTimerSettingsCommand ToCommand(
+        this CreateTimerSettingsCommandProto proto)
+    {
+        return new CreateTimerSettingsCommand(Guid.Parse(proto.TimerSettingsId), proto.DocumentationSaveInterval,
+            proto.SnapshotSaveInterval);
+    }
+
+    public static TimerSettingsNotification ToNotification(this CreateTimerSettingsCommand proto)
+    {
+        return new TimerSettingsNotification
         {
             TimerSettingsCreated = new TimerSettingsCreatedNotification
             {
@@ -49,12 +61,15 @@ public static class TimerSettingsProtoExtensions
                 SnapshotSaveInterval = proto.SnapshotSaveInterval
             }
         };
+    }
 
-    public static TimerSettingsProto ToProto(this Domain.Entities.TimerSettings timerSettings) =>
-        new()
+    public static TimerSettingsProto ToProto(this Domain.Entities.TimerSettings timerSettings)
+    {
+        return new TimerSettingsProto
         {
             TimerSettingsId = timerSettings.TimerSettingsId.ToString(),
             DocumentationSaveInterval = timerSettings.DocumentationSaveInterval,
-            SnapshotSaveInterval = timerSettings.SnapshotSaveInterval,
+            SnapshotSaveInterval = timerSettings.SnapshotSaveInterval
         };
+    }
 }

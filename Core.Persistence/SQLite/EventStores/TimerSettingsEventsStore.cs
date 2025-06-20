@@ -5,12 +5,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Core.Persistence.SQLite.EventStores;
 
-public class TimerSettingsEventsStore(IDbContextFactory<AppDbContext> appDbContextFactory) : IEventStore<TimerSettingsEvent>
+public class TimerSettingsEventsStore(IDbContextFactory<AppDbContext> appDbContextFactory)
+    : IEventStore<TimerSettingsEvent>
 {
     public async Task StoreEventAsync(TimerSettingsEvent @event)
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
-        
+
         await appDbContext.TimerSettingsEvents.AddAsync(@event);
         await appDbContext.SaveChangesAsync();
     }
@@ -18,7 +19,7 @@ public class TimerSettingsEventsStore(IDbContextFactory<AppDbContext> appDbConte
     public async Task<List<TimerSettingsEvent>> GetEventsForAggregateAsync(Guid entityId)
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
-        
+
         return await appDbContext.TimerSettingsEvents
             .Where(e => e.EntityId == entityId)
             .OrderBy(e => e.TimeStamp)
@@ -29,7 +30,7 @@ public class TimerSettingsEventsStore(IDbContextFactory<AppDbContext> appDbConte
     public async Task<List<TimerSettingsEvent>> GetAllEventsAsync()
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
-        
+
         return await appDbContext.TimerSettingsEvents
             .OrderBy(e => e.TimeStamp)
             .AsNoTracking()

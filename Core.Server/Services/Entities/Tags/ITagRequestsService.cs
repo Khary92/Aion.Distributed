@@ -1,6 +1,6 @@
 using Domain.Entities;
 
-namespace Service.Server.Services.Entities.Tags;
+namespace Core.Server.Services.Entities.Tags;
 
 public interface ITagRequestsService
 {

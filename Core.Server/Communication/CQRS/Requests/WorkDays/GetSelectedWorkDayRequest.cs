@@ -1,4 +1,3 @@
-
-namespace Service.Server.Communication.CQRS.Requests.WorkDays;
+namespace Core.Server.Communication.CQRS.Requests.WorkDays;
 
 public record GetSelectedWorkDayRequest;

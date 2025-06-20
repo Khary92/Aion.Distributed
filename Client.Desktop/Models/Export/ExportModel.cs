@@ -4,7 +4,6 @@ using System.Collections.Specialized;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.NotificationWrappers;
 using Client.Desktop.Communication.Requests;
-using Client.Desktop.Communication.RequiresChange;
 using Client.Desktop.DTO;
 using Client.Desktop.Services;
 using CommunityToolkit.Mvvm.Messaging;
@@ -18,8 +17,9 @@ namespace Client.Desktop.Models.Export;
 public class ExportModel : ReactiveObject
 {
     private readonly IExportService _exportService;
-    private readonly IRequestSender _requestSender;
     private readonly IMessenger _messenger;
+
+    private readonly IRequestSender _requestSender;
     //private readonly ITracingCollectorProvider _tracer;
 
     private string _markdownText = null!;

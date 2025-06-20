@@ -1,9 +1,9 @@
-﻿using Grpc.Core;
+﻿using Core.Server.Services.Entities.Settings;
+using Grpc.Core;
 using Proto.DTO.Settings;
 using Proto.Requests.Settings;
-using Service.Server.Services.Entities.Settings;
 
-namespace Service.Server.Communication.Services.Settings;
+namespace Core.Server.Communication.Services.Settings;
 
 public class SettingsRequestReceiver(ISettingsRequestsService settingsRequestsService)
     : SettingsRequestService.SettingsRequestServiceBase
@@ -23,14 +23,12 @@ public class SettingsRequestReceiver(ISettingsRequestsService settingsRequestsSe
         };
     }
 
-    public override Task<SettingsExistsResponseProto> SettingsExists(SettingsExistsRequestProto request,
+    public override async Task<SettingsExistsResponseProto> SettingsExists(SettingsExistsRequestProto request,
         ServerCallContext context)
     {
-        var response = new SettingsExistsResponseProto
+        return new SettingsExistsResponseProto
         {
-            Exists = true
+            Exists = await settingsRequestsService.IsSettingsExisting()
         };
-
-        return Task.FromResult(response);
     }
 }

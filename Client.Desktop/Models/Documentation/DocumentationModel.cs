@@ -153,16 +153,14 @@ public class DocumentationModel(
                 var noteViewModel = AllNotes.FirstOrDefault(n => n.Note.NoteId == parsedNoteId);
 
                 if (noteViewModel == null)
-                {
                     //tracer.Note.Update.NoAggregateFound(GetType(), parsedNoteId);
                     return;
-                }
 
                 var noteType = await requestSender.Send(new GetNoteTypeByIdRequestProto
                 {
                     NoteTypeId = m.NoteTypeId
                 });
-                
+
                 noteViewModel.Note.NoteType = noteType;
                 noteViewModel.Note.Apply(m);
 
@@ -200,10 +198,8 @@ public class DocumentationModel(
             var typeCheckBoxViewModel = Options.FirstOrDefault(opt => opt.NoteTypeId == parsedId);
 
             if (typeCheckBoxViewModel is null)
-            {
                 //tracer.NoteType.ChangeName.NoAggregateFound(GetType(), parsedId);
                 return;
-            }
 
             typeCheckBoxViewModel.NoteType!.Apply(m);
         });
@@ -216,10 +212,8 @@ public class DocumentationModel(
             var typeCheckBoxViewModel = Options.FirstOrDefault(opt => opt.NoteTypeId == parsedId);
 
             if (typeCheckBoxViewModel is null)
-            {
                 //tracer.NoteType.ChangeColor.NoAggregateFound(GetType(), parsedId);
                 return;
-            }
 
             typeCheckBoxViewModel.NoteType!.Apply(m);
             //tracer.NoteType.ChangeColor.ChangesApplied(GetType(), parsedId);
@@ -243,10 +237,8 @@ public class DocumentationModel(
             var ticket = AllTickets.FirstOrDefault(t => t.TicketId == parsedId);
 
             if (ticket is null)
-            {
                 //tracer.Ticket.Update.NoAggregateFound(GetType(), parsedId);
                 return;
-            }
 
             ticket.Apply(m);
             //tracer.Ticket.Update.ChangesApplied(GetType(), parsedId);

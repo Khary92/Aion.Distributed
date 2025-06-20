@@ -1,4 +1,3 @@
-
-namespace Service.Server.Communication.CQRS.Requests.Settings;
+namespace Core.Server.Communication.CQRS.Requests.Settings;
 
 public record GetSettingsRequest;

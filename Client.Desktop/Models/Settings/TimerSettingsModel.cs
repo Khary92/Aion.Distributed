@@ -87,11 +87,9 @@ public class TimerSettingsModel(
     private async Task CheckDocuIntervalChanged()
     {
         if (!TimerSettingsDto!.IsDocuIntervalChanged())
-        {
             //tracer.TimerSettings.ChangeDocuTimerInterval.PropertyNotChanged(GetType(), TimerSettingsDto.TimerSettingsId,
-                //TimerSettingsDto.AsTraceAttributes());
+            //TimerSettingsDto.AsTraceAttributes());
             return;
-        }
 
         var changeDocuTimerSaveIntervalCommand = new ChangeDocuTimerSaveIntervalCommandProto
         {
@@ -102,17 +100,15 @@ public class TimerSettingsModel(
         await commandSender.Send(changeDocuTimerSaveIntervalCommand);
 
         //tracer.TimerSettings.ChangeDocuTimerInterval.CommandSent(GetType(), TimerSettingsDto.TimerSettingsId,
-            //changeDocuTimerSaveIntervalCommand);
+        //changeDocuTimerSaveIntervalCommand);
     }
 
     private async Task CheckSnapShotIntervalChanged()
     {
         if (!TimerSettingsDto!.IsSnapshotIntervalChanged())
-        {
             //tracer.TimerSettings.ChangeSnapshotInterval.PropertyNotChanged(GetType(), TimerSettingsDto.TimerSettingsId,
-                //TimerSettingsDto.AsTraceAttributes());
+            //TimerSettingsDto.AsTraceAttributes());
             return;
-        }
 
         var changeSnapshotSaveIntervalCommand = new ChangeSnapshotSaveIntervalCommandProto
         {
@@ -123,6 +119,6 @@ public class TimerSettingsModel(
         await commandSender.Send(changeSnapshotSaveIntervalCommand);
 
         //tracer.TimerSettings.ChangeSnapshotInterval.CommandSent(GetType(), TimerSettingsDto.TimerSettingsId,
-         //   changeSnapshotSaveIntervalCommand);
+        //   changeSnapshotSaveIntervalCommand);
     }
 }

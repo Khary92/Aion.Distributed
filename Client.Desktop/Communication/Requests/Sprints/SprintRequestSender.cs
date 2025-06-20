@@ -18,8 +18,8 @@ public class SprintRequestSender : ISprintRequestSender
     public async Task<SprintDto?> Send(GetActiveSprintRequestProto request)
     {
         var response = await _client.GetActiveSprintAsync(request);
-        
-        return response == null? null : ToDto(response, true);
+
+        return response == null ? null : ToDto(response, true);
     }
 
     public async Task<List<SprintDto>> Send(GetAllSprintsRequestProto request)
@@ -28,7 +28,7 @@ public class SprintRequestSender : ISprintRequestSender
 
         return response.Sprints.Select(sprint => ToDto(sprint, true)).ToList();
     }
-    
+
     private static SprintDto ToDto(SprintProto proto, bool isActive)
     {
         var ticketIds = proto.TicketIds

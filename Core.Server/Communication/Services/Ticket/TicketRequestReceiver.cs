@@ -1,10 +1,10 @@
-﻿using Grpc.Core;
+﻿using Core.Server.Services.Entities.Tickets;
+using Grpc.Core;
 using Proto.DTO.Ticket;
 using Proto.Requests.Tickets;
-using Service.Server.Services.Entities.Tickets;
 using TicketRequestService = Proto.Requests.Tickets.TicketRequestService;
 
-namespace Service.Server.Communication.Services.Ticket;
+namespace Core.Server.Communication.Services.Ticket;
 
 public class TicketRequestReceiver(ITicketRequestsService ticketRequestsService)
     : TicketRequestService.TicketRequestServiceBase
@@ -31,7 +31,8 @@ public class TicketRequestReceiver(ITicketRequestsService ticketRequestsService)
         return ticket?.ToProto();
     }
 
-    public override async Task<TicketListProto> GetTicketsWithShowAllSwitch(GetTicketsWithShowAllSwitchRequestProto request,
+    public override async Task<TicketListProto> GetTicketsWithShowAllSwitch(
+        GetTicketsWithShowAllSwitchRequestProto request,
         ServerCallContext context)
     {
         var tickets = request.IsShowAll

@@ -6,9 +6,9 @@ namespace Domain.Entities;
 public class StatisticsData
 {
     public Guid StatisticsId { get; set; }
-    public bool IsProductive { get; set; } 
-    public bool IsNeutral { get; set; } 
-    public bool IsUnproductive { get; set; } 
+    public bool IsProductive { get; set; }
+    public bool IsNeutral { get; set; }
+    public bool IsUnproductive { get; set; }
     public List<Guid> TagIds { get; set; } = [];
     public Guid TimeSlotId { get; set; }
 

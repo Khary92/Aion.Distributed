@@ -1,7 +1,7 @@
+using Core.Server.Communication.CQRS.Commands.Entities.StatisticsData;
 using Domain.Events.StatisticsData;
-using Service.Server.Communication.CQRS.Commands.Entities.StatisticsData;
 
-namespace Service.Server.Translators.StatisticsData;
+namespace Core.Server.Translators.StatisticsData;
 
 public interface IStatisticsDataCommandsToEventTranslator
 {

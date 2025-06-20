@@ -1,7 +1,7 @@
+using Core.Server.Communication.CQRS.Commands.Entities.Note;
 using Domain.Events.Note;
-using Service.Server.Communication.CQRS.Commands.Entities.Note;
 
-namespace Service.Server.Translators.Notes;
+namespace Core.Server.Translators.Notes;
 
 public interface INoteCommandsToEventTranslator
 {

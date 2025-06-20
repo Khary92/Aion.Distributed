@@ -1,4 +1,3 @@
-
 namespace Domain.Events.TimerSettings;
 
 public record TimerSettingsCreatedEvent(

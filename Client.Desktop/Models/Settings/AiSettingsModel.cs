@@ -17,11 +17,10 @@ public class AiSettingsModel(
     IRequestSender requestSender,
     IMessenger messenger) : ReactiveObject
 {
+    private AiSettingsDto _aiSettings = new(Guid.NewGuid(), "settings not loaded", "settings not loaded");
     private string _previousLanguageModelPath = string.Empty;
     private string _previousPrompt = string.Empty;
 
-    private AiSettingsDto _aiSettings = new(Guid.NewGuid(), "settings not loaded", "settings not loaded");
-    
     public AiSettingsDto AiSettings
     {
         get => _aiSettings;
@@ -65,11 +64,9 @@ public class AiSettingsModel(
     public async Task ChangePrompt()
     {
         if (_previousPrompt == AiSettings!.Prompt)
-        {
             //tracer.AiSettings.ChangePrompt.PropertyNotChanged(GetType(), AiSettings.AiSettingsId,
             //     ("prompt", AiSettings!.Prompt));
             return;
-        }
 
         var changePromptCommand = new ChangePromptCommandProto
         {
@@ -87,11 +84,9 @@ public class AiSettingsModel(
     public async Task ChangeLanguageModelPath()
     {
         if (_previousLanguageModelPath == AiSettings!.LanguageModelPath)
-        {
             //tracer.AiSettings.ChangeLanguageModel.PropertyNotChanged(GetType(), AiSettings.AiSettingsId,
             //   ("languageModelPath", AiSettings!.LanguageModelPath));
             return;
-        }
 
         var changeLanguageModelCommand =
             new ChangeLanguageModelCommandProto

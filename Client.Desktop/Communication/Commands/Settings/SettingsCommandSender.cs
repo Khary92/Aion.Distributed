@@ -27,5 +27,4 @@ public class SettingsCommandSender : ISettingsCommandSender
         var response = await _client.ChangeAutomaticTicketAddingAsync(command);
         return response.Success;
     }
-    
 }

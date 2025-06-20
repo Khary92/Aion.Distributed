@@ -1,12 +1,14 @@
 ﻿using Grpc.Core;
 using Proto.Notifications.NoteType;
 
-namespace Service.Server.Communication.Services.NoteType;
+namespace Core.Server.Communication.Services.NoteType;
 
-public class NoteTypeNotificationService : Proto.Notifications.NoteType.NoteTypeNotificationService.NoteTypeNotificationServiceBase
+public class
+    NoteTypeNotificationService : Proto.Notifications.NoteType.NoteTypeNotificationService.
+    NoteTypeNotificationServiceBase
 {
-    private IServerStreamWriter<NoteTypeNotification>? _responseStream;
     private CancellationToken _cancellationToken;
+    private IServerStreamWriter<NoteTypeNotification>? _responseStream;
 
     public override async Task SubscribeNoteNotifications(
         SubscribeRequest request,
@@ -33,7 +35,6 @@ public class NoteTypeNotificationService : Proto.Notifications.NoteType.NoteType
     public async Task SendNotificationAsync(NoteTypeNotification notification)
     {
         if (_responseStream is not null && !_cancellationToken.IsCancellationRequested)
-        {
             try
             {
                 await _responseStream.WriteAsync(notification, _cancellationToken);
@@ -43,6 +44,5 @@ public class NoteTypeNotificationService : Proto.Notifications.NoteType.NoteType
                 Console.WriteLine($"Fehler beim Senden der NoteTypeNotification: {ex.Message}");
                 _responseStream = null;
             }
-        }
     }
 }

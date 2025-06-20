@@ -1,12 +1,13 @@
+using Core.Server.Communication.CQRS.Commands.Entities.TimeSlots;
+using Core.Server.Communication.Services.TimeSlot;
+using Core.Server.Translators.TimeSlots;
 using Domain.Events.TimeSlots;
 using Domain.Interfaces;
-using Service.Server.Communication.CQRS.Commands.Entities.TimeSlots;
-using Service.Server.Communication.Services.TimeSlot;
-using Service.Server.Translators.TimeSlots;
 
-namespace Service.Server.Services.Entities.TimeSlots;
+namespace Core.Server.Services.Entities.TimeSlots;
 
-public class TimeSlotCommandService(TimeSlotNotificationService timeSlotNotificationService,
+public class TimeSlotCommandService(
+    TimeSlotNotificationService timeSlotNotificationService,
     IEventStore<TimeSlotEvent> timeSlotEventStore,
     ITimeSlotCommandsToEventTranslator eventTranslator) : ITimeSlotCommandsService
 {

@@ -1,4 +1,3 @@
-
-namespace Service.Server.Communication.CQRS.Requests.NoteTypes;
+namespace Core.Server.Communication.CQRS.Requests.NoteTypes;
 
 public record GetAllNoteTypesRequest;

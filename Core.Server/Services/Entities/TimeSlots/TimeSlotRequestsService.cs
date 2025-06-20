@@ -2,7 +2,7 @@ using Domain.Entities;
 using Domain.Events.TimeSlots;
 using Domain.Interfaces;
 
-namespace Service.Server.Services.Entities.TimeSlots;
+namespace Core.Server.Services.Entities.TimeSlots;
 
 public class TimeSlotRequestsService(IEventStore<TimeSlotEvent> timeSlotEventsStore) : ITimeSlotRequestsService
 {
@@ -10,7 +10,7 @@ public class TimeSlotRequestsService(IEventStore<TimeSlotEvent> timeSlotEventsSt
     {
         var timeSlotEvents = await timeSlotEventsStore
             .GetEventsForAggregateAsync(timeSlotId);
-        
+
         return TimeSlot.Rehydrate(timeSlotEvents);
     }
 

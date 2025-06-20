@@ -1,36 +1,35 @@
-﻿using Service.Server.Communication.Mock.AiSettings;
-using Service.Server.Communication.Mock.Analysis;
-using Service.Server.Communication.Mock.Note;
-using Service.Server.Communication.Mock.NoteType;
-using Service.Server.Communication.Mock.Settings;
-using Service.Server.Communication.Mock.Sprint;
-using Service.Server.Communication.Mock.StatisticsData;
-using Service.Server.Communication.Mock.Tag;
-using Service.Server.Communication.Mock.Ticket;
-using Service.Server.Communication.Mock.TimerSettings;
-using Service.Server.Communication.Mock.TimeSlot;
-using Service.Server.Communication.Mock.TraceReport;
-using Service.Server.Communication.Mock.UseCase;
-using Service.Server.Communication.Mock.WorkDay;
-using Service.Server.Communication.Services.AiSettings;
-using Service.Server.Communication.Services.Note;
-using Service.Server.Communication.Services.NoteType;
-using Service.Server.Communication.Services.Settings;
-using Service.Server.Communication.Services.Sprint;
-using Service.Server.Communication.Services.StatisticsData;
-using Service.Server.Communication.Services.Tag;
-using Service.Server.Communication.Services.Ticket;
-using Service.Server.Communication.Services.TimerSettings;
-using Service.Server.Communication.Services.TimeSlot;
-using Service.Server.Communication.Services.UseCase;
-using Service.Server.Communication.Services.WorkDay;
-using Service.Server.Services.Entities.TimeSlots;
+﻿using Core.Server.Communication.Mock.AiSettings;
+using Core.Server.Communication.Mock.Analysis;
+using Core.Server.Communication.Mock.Note;
+using Core.Server.Communication.Mock.NoteType;
+using Core.Server.Communication.Mock.Settings;
+using Core.Server.Communication.Mock.Sprint;
+using Core.Server.Communication.Mock.StatisticsData;
+using Core.Server.Communication.Mock.Tag;
+using Core.Server.Communication.Mock.Ticket;
+using Core.Server.Communication.Mock.TimerSettings;
+using Core.Server.Communication.Mock.TimeSlot;
+using Core.Server.Communication.Mock.TraceReport;
+using Core.Server.Communication.Mock.UseCase;
+using Core.Server.Communication.Mock.WorkDay;
+using Core.Server.Communication.Services.AiSettings;
+using Core.Server.Communication.Services.Note;
+using Core.Server.Communication.Services.NoteType;
+using Core.Server.Communication.Services.Settings;
+using Core.Server.Communication.Services.Sprint;
+using Core.Server.Communication.Services.StatisticsData;
+using Core.Server.Communication.Services.Tag;
+using Core.Server.Communication.Services.Ticket;
+using Core.Server.Communication.Services.TimerSettings;
+using Core.Server.Communication.Services.TimeSlot;
+using Core.Server.Communication.Services.UseCase;
+using Core.Server.Communication.Services.WorkDay;
+using Core.Server.Services.Entities.TimeSlots;
 
-namespace Service.Server;
+namespace Core.Server;
 
 public static class EndpointServices
 {
-    
     public static void AddEndPoints(this WebApplication app)
     {
         AddCommandEndPoints(app);

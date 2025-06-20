@@ -1,6 +1,6 @@
-using Service.Server.Communication.CQRS.Commands.Entities.Tags;
+using Core.Server.Communication.CQRS.Commands.Entities.Tags;
 
-namespace Service.Server.Services.Entities.Tags;
+namespace Core.Server.Services.Entities.Tags;
 
 public interface ITagCommandsService
 {

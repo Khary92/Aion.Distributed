@@ -1,8 +1,8 @@
+using Core.Server.Services.Entities.Tickets;
 using Grpc.Core;
 using Proto.Command.Tickets;
-using Service.Server.Services.Entities.Tickets;
 
-namespace Service.Server.Communication.Services.Ticket;
+namespace Core.Server.Communication.Services.Ticket;
 
 public class TicketCommandReceiver(ITicketCommandsService ticketCommandsService)
     : TicketCommandProtoService.TicketCommandProtoServiceBase

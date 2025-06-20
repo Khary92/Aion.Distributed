@@ -9,7 +9,6 @@ namespace Client.Desktop.Models.Export;
 
 public class ExportViewModel : ReactiveObject
 {
-
     public ExportViewModel(ExportModel exportModel)
     {
         Model = exportModel;

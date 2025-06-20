@@ -1,10 +1,10 @@
+using Core.Server.Communication.CQRS.Commands.Entities.TimerSettings;
+using Core.Server.Communication.Services.TimerSettings;
+using Core.Server.Translators.TimerSettings;
 using Domain.Events.TimerSettings;
 using Domain.Interfaces;
-using Service.Server.Communication.CQRS.Commands.Entities.TimerSettings;
-using Service.Server.Communication.Services.TimerSettings;
-using Service.Server.Translators.TimerSettings;
 
-namespace Service.Server.Services.Entities.TimerSettings;
+namespace Core.Server.Services.Entities.TimerSettings;
 
 public class TimerSettingsCommandsService(
     TimerSettingsNotificationService notificationService,

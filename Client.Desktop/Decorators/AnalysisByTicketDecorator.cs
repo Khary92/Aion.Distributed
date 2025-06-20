@@ -10,7 +10,7 @@ using Proto.Shared;
 
 namespace Client.Desktop.Decorators;
 
-public class AnalysisByTicketDecorator(AnalysisByTicket analysisByTicket, ITagRequestSender  tagRequestSender)
+public class AnalysisByTicketDecorator(AnalysisByTicket analysisByTicket, ITagRequestSender tagRequestSender)
 {
     public readonly string TicketName = analysisByTicket.TicketName;
     private int _timeSpentNeutral;
@@ -42,10 +42,7 @@ public class AnalysisByTicketDecorator(AnalysisByTicket analysisByTicket, ITagRe
                 return;
             }
 
-            if (statisticsData.IsUnproductive)
-            {
-                _timeSpentUnproductive += timeSlot.GetDurationInMinutes();
-            }
+            if (statisticsData.IsUnproductive) _timeSpentUnproductive += timeSlot.GetDurationInMinutes();
         }
 
         _wasInitialized = true;
@@ -71,16 +68,13 @@ public class AnalysisByTicketDecorator(AnalysisByTicket analysisByTicket, ITagRe
             .ToList();
 
         var tagIdsRepeated = new RepeatedField<string>();
-        foreach (var tagId in tagIds)
-        {
-            tagIdsRepeated.Add(tagId.ToString());
-        }
-        
+        foreach (var tagId in tagIds) tagIdsRepeated.Add(tagId.ToString());
+
         var usedTags = await tagRequestSender.Send(new GetTagsByIdsRequestProto
         {
             TagIds = { tagIdsRepeated }
         });
-        
+
         var countByTagProductive = usedTags.ToDictionary(tag => tag.TagId, _ => 0);
         var countByTagNeutral = usedTags.ToDictionary(tag => tag.TagId, _ => 0);
         var countByTagUnproductive = usedTags.ToDictionary(tag => tag.TagId, _ => 0);

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Grpc.Core;
+﻿using System.Threading.Tasks;
 using Grpc.Net.Client;
 using Proto.Command.Tickets;
 using Proto.Shared;

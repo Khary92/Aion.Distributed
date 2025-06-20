@@ -51,95 +51,157 @@ public class RequestSender(
     IAnalysisRequestSender analysisRequestSender) : IRequestSender
 {
     public async Task<AiSettingsDto> Send(GetAiSettingsRequestProto request)
-        => await aiSettingsRequestSender.Send(request);
+    {
+        return await aiSettingsRequestSender.Send(request);
+    }
 
     public async Task<bool> Send(AiSettingExistsRequestProto request)
-        => await aiSettingsRequestSender.Send(request);
+    {
+        return await aiSettingsRequestSender.Send(request);
+    }
 
     public async Task<List<NoteDto>> Send(GetNotesByTicketIdRequestProto request)
-        => await notesRequestSender.Send(request);
+    {
+        return await notesRequestSender.Send(request);
+    }
 
     public async Task<List<NoteDto>> Send(GetNotesByTimeSlotIdRequestProto request)
-        => await notesRequestSender.Send(request);
+    {
+        return await notesRequestSender.Send(request);
+    }
 
     public async Task<List<NoteTypeDto>> Send(GetAllNoteTypesRequestProto request)
-        => await noteTypesRequestSender.Send(request);
+    {
+        return await noteTypesRequestSender.Send(request);
+    }
 
     public async Task<NoteTypeDto> Send(GetNoteTypeByIdRequestProto request)
-        => await noteTypesRequestSender.Send(request);
+    {
+        return await noteTypesRequestSender.Send(request);
+    }
 
     public async Task<SettingsDto> Send(GetSettingsRequestProto request)
-        => await settingsRequestSender.Send(request);
+    {
+        return await settingsRequestSender.Send(request);
+    }
 
     public async Task<bool> Send(IsExportPathValidRequestProto request)
-        => await settingsRequestSender.Send(request);
+    {
+        return await settingsRequestSender.Send(request);
+    }
 
     public async Task<bool> Send(SettingsExistsRequestProto request)
-        => await settingsRequestSender.Send(request);
+    {
+        return await settingsRequestSender.Send(request);
+    }
 
     public async Task<SprintDto?> Send(GetActiveSprintRequestProto request)
-        => await sprintRequestSender.Send(request);
+    {
+        return await sprintRequestSender.Send(request);
+    }
 
     public async Task<List<SprintDto>> Send(GetAllSprintsRequestProto request)
-        => await sprintRequestSender.Send(request);
+    {
+        return await sprintRequestSender.Send(request);
+    }
 
     public async Task<StatisticsDataDto> Send(GetStatisticsDataByTimeSlotIdRequestProto request)
-        => await statisticsDataRequestSender.Send(request);
+    {
+        return await statisticsDataRequestSender.Send(request);
+    }
 
     public async Task<List<TagDto>> Send(GetAllTagsRequestProto request)
-        => await tagRequestSender.Send(request);
+    {
+        return await tagRequestSender.Send(request);
+    }
 
     public async Task<TagDto> Send(GetTagByIdRequestProto request)
-        => await tagRequestSender.Send(request);
+    {
+        return await tagRequestSender.Send(request);
+    }
 
     public async Task<List<TagDto>> Send(GetTagsByIdsRequestProto request)
-        => await tagRequestSender.Send(request);
+    {
+        return await tagRequestSender.Send(request);
+    }
 
     public async Task<List<TicketDto>> Send(GetAllTicketsRequestProto request)
-        => await ticketRequestSender.Send(request);
+    {
+        return await ticketRequestSender.Send(request);
+    }
 
     public async Task<List<TicketDto>> Send(GetTicketsForCurrentSprintRequestProto request)
-        => await ticketRequestSender.Send(request);
+    {
+        return await ticketRequestSender.Send(request);
+    }
 
     public async Task<List<TicketDto>> Send(GetTicketsWithShowAllSwitchRequestProto request)
-        => await ticketRequestSender.Send(request);
+    {
+        return await ticketRequestSender.Send(request);
+    }
 
     public async Task<TicketDto> Send(GetTicketByIdRequestProto request)
-        => await ticketRequestSender.Send(request);
+    {
+        return await ticketRequestSender.Send(request);
+    }
 
     public async Task<TimerSettingsDto> Send(GetTimerSettingsRequestProto request)
-        => await timerSettingsRequestSender.Send(request);
+    {
+        return await timerSettingsRequestSender.Send(request);
+    }
 
     public async Task<bool> Send(IsTimerSettingExistingRequestProto request)
-        => await timerSettingsRequestSender.Send(request);
+    {
+        return await timerSettingsRequestSender.Send(request);
+    }
 
     public async Task<List<TimeSlotDto>> Send(GetTimeSlotsForWorkDayIdRequestProto request)
-        => await timeSlotRequestSender.Send(request);
+    {
+        return await timeSlotRequestSender.Send(request);
+    }
 
     public async Task<TimeSlotDto> Send(GetTimeSlotByIdRequestProto request)
-        => await timeSlotRequestSender.Send(request);
+    {
+        return await timeSlotRequestSender.Send(request);
+    }
 
     public async Task<List<WorkDayDto>> Send(GetAllWorkDaysRequestProto request)
-        => await workDayRequestSender.Send(request);
+    {
+        return await workDayRequestSender.Send(request);
+    }
 
     public async Task<WorkDayDto> Send(GetSelectedWorkDayRequestProto request)
-        => await workDayRequestSender.Send(request);
+    {
+        return await workDayRequestSender.Send(request);
+    }
 
     public async Task<WorkDayDto> Send(GetWorkDayByDateRequestProto request)
-        => await workDayRequestSender.Send(request);
+    {
+        return await workDayRequestSender.Send(request);
+    }
 
     public async Task<List<DocumentationReplayDto>> Send(GetTicketReplaysByIdRequestProto request)
-        => await ticketReplayRequestSender.Send(request);
+    {
+        return await ticketReplayRequestSender.Send(request);
+    }
 
     public async Task<TimeSlotControlDataProto> Send(GetTimeSlotControlDataRequestProto request)
-        => await useCaseRequestSender.Send(request);
+    {
+        return await useCaseRequestSender.Send(request);
+    }
 
     public async Task<AnalysisBySprintDecorator> Send(GetSprintAnalysisById request)
-        => await analysisRequestSender.Send(request);
+    {
+        return await analysisRequestSender.Send(request);
+    }
 
     public async Task<AnalysisByTicketDecorator> Send(GetTicketAnalysisById request)
-        => await analysisRequestSender.Send(request);
+    {
+        return await analysisRequestSender.Send(request);
+    }
 
     public async Task<AnalysisByTagDecorator> Send(GetTagAnalysisById request)
-        => await analysisRequestSender.Send(request);
+    {
+        return await analysisRequestSender.Send(request);
+    }
 }

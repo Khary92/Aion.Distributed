@@ -3,7 +3,7 @@ using Proto.DTO.AnalysisBySprint;
 using Proto.DTO.AnalysisByTag;
 using Proto.DTO.AnalysisByTicket;
 
-namespace Service.Server.Services.UseCase;
+namespace Core.Server.Services.UseCase;
 
 public interface IAnalysisDataService
 {

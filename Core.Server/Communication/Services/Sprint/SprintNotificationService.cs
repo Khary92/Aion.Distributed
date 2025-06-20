@@ -1,12 +1,13 @@
 ﻿using Grpc.Core;
 using Proto.Notifications.Sprint;
 
-namespace Service.Server.Communication.Services.Sprint;
+namespace Core.Server.Communication.Services.Sprint;
 
-public class SprintNotificationService : Proto.Notifications.Sprint.SprintNotificationService.SprintNotificationServiceBase
+public class
+    SprintNotificationService : Proto.Notifications.Sprint.SprintNotificationService.SprintNotificationServiceBase
 {
-    private IServerStreamWriter<SprintNotification>? _responseStream;
     private CancellationToken _cancellationToken;
+    private IServerStreamWriter<SprintNotification>? _responseStream;
 
     public override async Task SubscribeSprintNotifications(
         SubscribeRequest request,
@@ -33,7 +34,6 @@ public class SprintNotificationService : Proto.Notifications.Sprint.SprintNotifi
     public async Task SendNotificationAsync(SprintNotification notification)
     {
         if (_responseStream is not null && !_cancellationToken.IsCancellationRequested)
-        {
             try
             {
                 await _responseStream.WriteAsync(notification, _cancellationToken);
@@ -43,6 +43,5 @@ public class SprintNotificationService : Proto.Notifications.Sprint.SprintNotifi
                 Console.WriteLine($"Fehler beim Senden der SprintNotification: {ex.Message}");
                 _responseStream = null;
             }
-        }
     }
 }

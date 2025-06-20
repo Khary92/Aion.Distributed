@@ -8,18 +8,18 @@
     <TabControl>
         <TabItem Header="Tag">
             <analysis:AnalysisByTagControl DataContext="{Binding AnalysisByTagViewModel}"
-                                            HorizontalAlignment="Stretch"
-                                            VerticalAlignment="Stretch" />
+                                           HorizontalAlignment="Stretch"
+                                           VerticalAlignment="Stretch" />
         </TabItem>
         <TabItem Header="Ticket">
             <analysis:AnalysisByTicketControl DataContext="{Binding AnalysisByTicketViewModel}"
-                                               HorizontalAlignment="Stretch"
-                                               VerticalAlignment="Stretch" />
+                                              HorizontalAlignment="Stretch"
+                                              VerticalAlignment="Stretch" />
         </TabItem>
         <TabItem Header="Sprint">
             <analysis:AnalysisBySprintControl DataContext="{Binding AnalysisBySprintViewModel}"
-                                               HorizontalAlignment="Stretch"
-                                               VerticalAlignment="Stretch" />
+                                              HorizontalAlignment="Stretch"
+                                              VerticalAlignment="Stretch" />
         </TabItem>
     </TabControl>
 </UserControl>

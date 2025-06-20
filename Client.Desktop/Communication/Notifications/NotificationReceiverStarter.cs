@@ -33,5 +33,4 @@ public class NotificationReceiverStarter(
 
         return Task.WhenAll(tasks);
     }
-
 }

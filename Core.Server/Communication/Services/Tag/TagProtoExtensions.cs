@@ -1,19 +1,22 @@
-﻿using Proto.Command.Tags;
+﻿using Core.Server.Communication.CQRS.Commands.Entities.Tags;
+using Proto.Command.Tags;
 using Proto.DTO.Tag;
 using Proto.Notifications.Tag;
 using Proto.Requests.Tags;
-using Service.Server.Communication.CQRS.Commands.Entities.Tags;
 
-namespace Service.Server.Communication.Services.Tag;
+namespace Core.Server.Communication.Services.Tag;
 
 public static class TagProtoExtensions
 {
     public static CreateTagCommand ToCommand(
-        this CreateTagCommandProto proto) =>
-        new(Guid.Parse(proto.TagId), proto.Name);
+        this CreateTagCommandProto proto)
+    {
+        return new CreateTagCommand(Guid.Parse(proto.TagId), proto.Name);
+    }
 
-    public static TagNotification ToNotification(this CreateTagCommand proto) =>
-        new()
+    public static TagNotification ToNotification(this CreateTagCommand proto)
+    {
+        return new TagNotification
         {
             TagCreated = new TagCreatedNotification
             {
@@ -21,13 +24,17 @@ public static class TagProtoExtensions
                 Name = proto.Name
             }
         };
+    }
 
     public static UpdateTagCommand ToCommand(
-        this UpdateTagCommandProto proto) =>
-        new(Guid.Parse(proto.TagId), proto.Name);
+        this UpdateTagCommandProto proto)
+    {
+        return new UpdateTagCommand(Guid.Parse(proto.TagId), proto.Name);
+    }
 
-    public static TagNotification ToNotification(this UpdateTagCommand proto) =>
-        new()
+    public static TagNotification ToNotification(this UpdateTagCommand proto)
+    {
+        return new TagNotification
         {
             TagUpdated = new TagUpdatedNotification
             {
@@ -35,22 +42,22 @@ public static class TagProtoExtensions
                 Name = proto.Name
             }
         };
+    }
 
-    public static TagProto ToProto(this Domain.Entities.Tag tag) =>
-        new()
+    public static TagProto ToProto(this Domain.Entities.Tag tag)
+    {
+        return new TagProto
         {
             TagId = tag.TagId.ToString(),
             Name = tag.Name
         };
+    }
 
     public static TagListProto ToProtoList(this List<Domain.Entities.Tag> tags)
     {
         var tagProtos = new TagListProto();
 
-        foreach (var tag in tags)
-        {
-            tagProtos.Tags.Add(tag.ToProto());
-        }
+        foreach (var tag in tags) tagProtos.Tags.Add(tag.ToProto());
 
         return tagProtos;
     }

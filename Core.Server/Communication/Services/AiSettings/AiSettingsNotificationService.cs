@@ -1,12 +1,13 @@
 ﻿using Grpc.Core;
 using Proto.Notifications.AiSettings;
 
-namespace Service.Server.Communication.Services.AiSettings;
+namespace Core.Server.Communication.Services.AiSettings;
 
-public class AiSettingsNotificationService : Proto.Notifications.AiSettings.AiSettingsNotificationService.AiSettingsNotificationServiceBase
+public class AiSettingsNotificationService : Proto.Notifications.AiSettings.AiSettingsNotificationService.
+    AiSettingsNotificationServiceBase
 {
-    private IServerStreamWriter<AiSettingsNotification>? _responseStream;
     private CancellationToken _cancellationToken;
+    private IServerStreamWriter<AiSettingsNotification>? _responseStream;
 
     public override async Task SubscribeAiSettingsNotifications(
         SubscribeRequest request,
@@ -32,7 +33,6 @@ public class AiSettingsNotificationService : Proto.Notifications.AiSettings.AiSe
     public async Task SendNotificationAsync(AiSettingsNotification notification)
     {
         if (_responseStream is not null && !_cancellationToken.IsCancellationRequested)
-        {
             try
             {
                 await _responseStream.WriteAsync(notification, _cancellationToken);
@@ -42,6 +42,5 @@ public class AiSettingsNotificationService : Proto.Notifications.AiSettings.AiSe
                 Console.WriteLine($"Fehler beim Senden: {ex.Message}");
                 _responseStream = null;
             }
-        }
     }
 }

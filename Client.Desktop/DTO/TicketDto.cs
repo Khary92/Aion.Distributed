@@ -78,7 +78,7 @@ public class TicketDto : ReactiveObject
         PreviousDocumentation = Documentation;
         Documentation = documentation;
     }
-    
+
     public bool IsDocumentationChanged()
     {
         var result = !PreviousDocumentation.Equals(Documentation);

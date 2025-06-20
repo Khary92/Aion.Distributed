@@ -1,4 +1,3 @@
-
 namespace Domain.Events.StatisticsData;
 
 public record StatisticsDataCreatedEvent(

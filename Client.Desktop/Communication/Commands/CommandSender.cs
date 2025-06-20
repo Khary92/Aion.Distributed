@@ -97,7 +97,7 @@ public class CommandSender(
     {
         return await settingsCommandSender.Send(command);
     }
-    
+
     public async Task<bool> Send(CreateSprintCommandProto command)
     {
         return await sprintCommandSender.Send(command);

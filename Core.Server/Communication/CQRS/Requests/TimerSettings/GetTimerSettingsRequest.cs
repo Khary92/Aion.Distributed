@@ -1,4 +1,3 @@
-
-namespace Service.Server.Communication.CQRS.Requests.TimerSettings;
+namespace Core.Server.Communication.CQRS.Requests.TimerSettings;
 
 public record GetTimerSettingsRequest;

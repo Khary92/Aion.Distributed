@@ -17,9 +17,9 @@ using ReactiveUI;
 namespace Client.Desktop.Models.Data;
 
 public class SprintsDataModel(
-    ICommandSender commandSender,
-    IRequestSender requestSender,
-    IMessenger messenger)
+        ICommandSender commandSender,
+        IRequestSender requestSender,
+        IMessenger messenger)
     //ITracingCollectorProvider tracer)
     : ReactiveObject
 {
@@ -42,10 +42,8 @@ public class SprintsDataModel(
             var sprint = Sprints.FirstOrDefault(s => parsedId == s.SprintId);
 
             if (sprint is null)
-            {
                 //tracer.Sprint.Update.NoAggregateFound(GetType(), parsedId);
                 return;
-            }
 
             sprint.Apply(m);
             //tracer.Sprint.Update.ChangesApplied(GetType(), parsedId);
@@ -59,11 +57,8 @@ public class SprintsDataModel(
             var sprint = Sprints.FirstOrDefault(s => parsedId == s.SprintId);
 
             if (sprint is null)
-            {
                 //tracer.Sprint.AddTicketToSprint.NoAggregateFound(GetType(), parsedId);
-
                 return;
-            }
 
             sprint.Apply(m);
             //tracer.Sprint.AddTicketToSprint.ChangesApplied(GetType(), parsedId);
@@ -77,11 +72,8 @@ public class SprintsDataModel(
             var sprint = Sprints.FirstOrDefault(s => parsedId == s.SprintId);
 
             if (sprint is null)
-            {
                 //tracer.Sprint.ActiveStatus.NoAggregateFound(GetType(), parsedId);
-
                 return;
-            }
 
             sprint.Apply(m);
             //tracer.Sprint.ActiveStatus.ChangesApplied(GetType(), parsedId);
@@ -116,7 +108,7 @@ public class SprintsDataModel(
             Name = newSprintDto.Name,
             StartTime = Timestamp.FromDateTime(newSprintDto.StartTime.UtcDateTime),
             EndTime = Timestamp.FromDateTime(newSprintDto.EndTime.UtcDateTime),
-            IsActive = newSprintDto.IsActive,
+            IsActive = newSprintDto.IsActive
         };
 
         createSprintCommand.TicketIds.AddRange(newSprintDto.TicketIds.Select(id => id.ToString()));

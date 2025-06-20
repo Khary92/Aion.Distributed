@@ -1,8 +1,8 @@
-﻿using Grpc.Core;
+﻿using Core.Server.Services.Entities.NoteTypes;
+using Grpc.Core;
 using Proto.Command.NoteTypes;
-using Service.Server.Services.Entities.NoteTypes;
 
-namespace Service.Server.Communication.Services.NoteType;
+namespace Core.Server.Communication.Services.NoteType;
 
 public class NoteTypeCommandReceiver(
     INoteTypeCommandsService noteTypeCommandsService)

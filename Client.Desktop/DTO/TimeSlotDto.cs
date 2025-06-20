@@ -96,7 +96,7 @@ public class TimeSlotDto : ReactiveObject
         PreviousEndTime = EndTime;
         return result;
     }
-    
+
     public int GetDurationInSeconds()
     {
         var difference = EndTime - StartTime;

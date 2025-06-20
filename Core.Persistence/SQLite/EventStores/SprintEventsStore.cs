@@ -10,7 +10,7 @@ public class SprintEventsStore(IDbContextFactory<AppDbContext> appDbContextFacto
     public async Task StoreEventAsync(SprintEvent @event)
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
-        
+
         await appDbContext.SprintEvents.AddAsync(@event);
         await appDbContext.SaveChangesAsync();
     }
@@ -18,7 +18,7 @@ public class SprintEventsStore(IDbContextFactory<AppDbContext> appDbContextFacto
     public async Task<List<SprintEvent>> GetEventsForAggregateAsync(Guid entityId)
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
-        
+
         return await appDbContext.SprintEvents
             .Where(e => e.EntityId == entityId)
             .OrderBy(e => e.TimeStamp)
@@ -29,7 +29,7 @@ public class SprintEventsStore(IDbContextFactory<AppDbContext> appDbContextFacto
     public async Task<List<SprintEvent>> GetAllEventsAsync()
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
-        
+
         return await appDbContext.SprintEvents
             .OrderBy(e => e.TimeStamp)
             .AsNoTracking()

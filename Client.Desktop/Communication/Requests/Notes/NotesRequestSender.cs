@@ -25,7 +25,7 @@ public class NotesRequestSender : INotesRequestSender
     public async Task<List<NoteDto>> Send(GetNotesByTimeSlotIdRequestProto request)
     {
         var response = await _client.GetNotesByTimeSlotIdAsync(request);
-        
+
         return response.Notes.Select(note => new NoteDto(Guid.Parse(note.NoteId), note.Text,
             Guid.Parse(note.NoteTypeId), Guid.Parse(note.TimeSlotId), note.TimeStamp.ToDateTimeOffset())).ToList();
     }

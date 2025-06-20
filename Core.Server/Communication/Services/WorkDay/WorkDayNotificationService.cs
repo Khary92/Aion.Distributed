@@ -1,12 +1,13 @@
 ﻿using Grpc.Core;
 using Proto.Notifications.WorkDay;
 
-namespace Service.Server.Communication.Services.WorkDay;
+namespace Core.Server.Communication.Services.WorkDay;
 
-public class WorkDayNotificationService : Proto.Notifications.WorkDay.WorkDayNotificationService.WorkDayNotificationServiceBase
+public class
+    WorkDayNotificationService : Proto.Notifications.WorkDay.WorkDayNotificationService.WorkDayNotificationServiceBase
 {
-    private IServerStreamWriter<WorkDayNotification>? _responseStream;
     private CancellationToken _cancellationToken;
+    private IServerStreamWriter<WorkDayNotification>? _responseStream;
 
     public override async Task SubscribeWorkDayNotifications(
         SubscribeRequest request,
@@ -33,7 +34,6 @@ public class WorkDayNotificationService : Proto.Notifications.WorkDay.WorkDayNot
     public async Task SendNotificationAsync(WorkDayNotification notification)
     {
         if (_responseStream != null && !_cancellationToken.IsCancellationRequested)
-        {
             try
             {
                 await _responseStream.WriteAsync(notification, _cancellationToken);
@@ -43,6 +43,5 @@ public class WorkDayNotificationService : Proto.Notifications.WorkDay.WorkDayNot
                 Console.WriteLine($"Fehler beim Senden der WorkDayNotification: {ex.Message}");
                 _responseStream = null;
             }
-        }
     }
 }

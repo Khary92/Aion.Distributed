@@ -10,7 +10,7 @@ public class WorkDayEventsStore(IDbContextFactory<AppDbContext> appDbContextFact
     public async Task StoreEventAsync(WorkDayEvent @event)
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
-        
+
         await appDbContext.WorkDayEvents.AddAsync(@event);
         await appDbContext.SaveChangesAsync();
     }
@@ -18,7 +18,7 @@ public class WorkDayEventsStore(IDbContextFactory<AppDbContext> appDbContextFact
     public async Task<List<WorkDayEvent>> GetEventsForAggregateAsync(Guid entityId)
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
-        
+
         return await appDbContext.WorkDayEvents
             .Where(e => e.EntityId == entityId)
             .OrderBy(e => e.TimeStamp)
@@ -29,7 +29,7 @@ public class WorkDayEventsStore(IDbContextFactory<AppDbContext> appDbContextFact
     public async Task<List<WorkDayEvent>> GetAllEventsAsync()
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
-        
+
         return await appDbContext.WorkDayEvents
             .OrderBy(e => e.TimeStamp)
             .AsNoTracking()

@@ -2,7 +2,7 @@ using Domain.Entities;
 using Domain.Events.Tags;
 using Domain.Interfaces;
 
-namespace Service.Server.Services.Entities.Tags;
+namespace Core.Server.Services.Entities.Tags;
 
 public class TagRequestsService(IEventStore<TagEvent> tagEventStore)
     : ITagRequestsService

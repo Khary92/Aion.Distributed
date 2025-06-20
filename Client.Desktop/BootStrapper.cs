@@ -185,9 +185,9 @@ public static class Bootstrapper
     private static void AddNotificationReceivers(this IServiceCollection services)
     {
         services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
-        
+
         services.AddSingleton<NotificationReceiverStarter>();
-        
+
         services.AddSingleton<AiSettingsNotificationReceiver>();
         services.AddSingleton<SettingsNotificationReceiver>();
         services.AddSingleton<TicketNotificationReceiver>();
@@ -198,7 +198,7 @@ public static class Bootstrapper
         services.AddSingleton<TimerSettingsNotificationReceiver>();
         services.AddSingleton<UseCaseNotificationReceiver>();
         services.AddSingleton<WorkDayNotificationReceiver>();
-        
+
         var channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
         services.AddSingleton(new AiSettingsNotificationService.AiSettingsNotificationServiceClient(channel));
         services.AddSingleton(new SettingsNotificationService.SettingsNotificationServiceClient(channel));
@@ -211,7 +211,7 @@ public static class Bootstrapper
         services.AddSingleton(new UseCaseNotificationService.UseCaseNotificationServiceClient(channel));
         services.AddSingleton(new WorkDayNotificationService.WorkDayNotificationServiceClient(channel));
     }
-    
+
     private static void AddCommandSenders(this IServiceCollection services)
     {
         services.AddScoped<ICommandSender, CommandSender>();

@@ -1,10 +1,10 @@
-﻿using Grpc.Core;
+﻿using Core.Server.Services.Entities.Sprints;
+using Grpc.Core;
 using Proto.DTO.Sprint;
 using Proto.Requests.Sprints;
-using Service.Server.Services.Entities.Sprints;
 using SprintRequestService = Proto.Requests.Sprints.SprintRequestService;
 
-namespace Service.Server.Communication.Services.Sprint;
+namespace Core.Server.Communication.Services.Sprint;
 
 public class SprintRequestReceiver(
     ISprintRequestsService sprintRequestsService) : SprintRequestService.SprintRequestServiceBase
@@ -18,7 +18,7 @@ public class SprintRequestReceiver(
 
     public override async Task<SprintListProto> GetAllSprints(GetAllSprintsRequestProto request,
         ServerCallContext context)
-    { 
+    {
         var sprints = await sprintRequestsService.GetAll();
         return sprints.ToProtoList();
     }

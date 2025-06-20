@@ -2,7 +2,7 @@ using Domain.Entities;
 using Domain.Events.WorkDays;
 using Domain.Interfaces;
 
-namespace Service.Server.Services.Entities.WorkDays;
+namespace Core.Server.Services.Entities.WorkDays;
 
 public class WorkDayRequestsService(
     IEventStore<WorkDayEvent> workDayEventStore) : IWorkDayRequestsService
@@ -34,7 +34,7 @@ public class WorkDayRequestsService(
             .Select(group => WorkDay.Rehydrate(group.ToList()))
             .ToList();
     }
-    
+
     public async Task<List<WorkDay>> GetWorkDaysInDateRange(DateTimeOffset startDate, DateTimeOffset endDate)
     {
         var allEvents = await workDayEventStore.GetAllEventsAsync();

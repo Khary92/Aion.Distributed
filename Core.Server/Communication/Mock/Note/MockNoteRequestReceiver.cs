@@ -3,7 +3,7 @@ using Grpc.Core;
 using Proto.DTO.Note;
 using Proto.Requests.Notes;
 
-namespace Service.Server.Communication.Mock.Note;
+namespace Core.Server.Communication.Mock.Note;
 
 public class MockNoteRequestReceiver : NotesRequestService.NotesRequestServiceBase
 {

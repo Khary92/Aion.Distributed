@@ -47,7 +47,7 @@ public class AnalysisRequestSender(ITagRequestSender tagRequestSender) : IAnalys
         {
             TicketName = response.TicketName,
             TimeSlots = GetTimeSlots(response.TimeSlots),
-            StatisticData = GetStatisticsData(response.StatisticData),
+            StatisticData = GetStatisticsData(response.StatisticData)
         };
 
         return new AnalysisByTicketDecorator(analysisByTicket, tagRequestSender);
@@ -60,7 +60,7 @@ public class AnalysisRequestSender(ITagRequestSender tagRequestSender) : IAnalys
         var analysisByTag = new AnalysisByTag
         {
             TimeSlots = GetTimeSlots(response.TimeSlots),
-            StatisticsData = GetStatisticsData(response.StatisticsData),
+            StatisticsData = GetStatisticsData(response.StatisticsData)
         };
 
         return new AnalysisByTagDecorator(analysisByTag);

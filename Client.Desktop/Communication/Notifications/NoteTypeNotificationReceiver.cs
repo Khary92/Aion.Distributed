@@ -22,7 +22,6 @@ public class NoteTypeNotificationReceiver(
         try
         {
             await foreach (var notification in call.ResponseStream.ReadAllAsync(cancellationToken))
-            {
                 switch (notification.NotificationCase)
                 {
                     case NoteTypeNotification.NotificationOneofCase.NoteTypeColorChanged:
@@ -52,7 +51,6 @@ public class NoteTypeNotificationReceiver(
                         break;
                     }
                 }
-            }
         }
         catch (OperationCanceledException)
         {

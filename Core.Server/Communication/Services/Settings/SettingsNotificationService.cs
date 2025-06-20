@@ -1,12 +1,14 @@
 ﻿using Grpc.Core;
 using Proto.Notifications.Settings;
 
-namespace Service.Server.Communication.Services.Settings;
+namespace Core.Server.Communication.Services.Settings;
 
-public class SettingsNotificationService : Proto.Notifications.Settings.SettingsNotificationService.SettingsNotificationServiceBase
+public class
+    SettingsNotificationService : Proto.Notifications.Settings.SettingsNotificationService.
+    SettingsNotificationServiceBase
 {
-    private IServerStreamWriter<SettingsNotification>? _responseStream;
     private CancellationToken _cancellationToken;
+    private IServerStreamWriter<SettingsNotification>? _responseStream;
 
     public override async Task SubscribeSettingsNotifications(
         SubscribeRequest request,
@@ -33,7 +35,6 @@ public class SettingsNotificationService : Proto.Notifications.Settings.Settings
     public async Task SendNotificationAsync(SettingsNotification notification)
     {
         if (_responseStream is not null && !_cancellationToken.IsCancellationRequested)
-        {
             try
             {
                 await _responseStream.WriteAsync(notification, _cancellationToken);
@@ -43,6 +44,5 @@ public class SettingsNotificationService : Proto.Notifications.Settings.Settings
                 Console.WriteLine($"Fehler beim Senden der SettingsNotification: {ex.Message}");
                 _responseStream = null;
             }
-        }
     }
 }

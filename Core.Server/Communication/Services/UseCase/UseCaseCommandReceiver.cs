@@ -1,8 +1,8 @@
-﻿using Grpc.Core;
+﻿using Core.Server.Services.UseCase;
+using Grpc.Core;
 using Proto.Command.UseCases;
-using Service.Server.Services.UseCase;
 
-namespace Service.Server.Communication.Services.UseCase;
+namespace Core.Server.Communication.Services.UseCase;
 
 public class UseCaseCommandReceiver(ITimeSlotControlService timeSlotControlService)
     : UseCaseCommandProtoService.UseCaseCommandProtoServiceBase

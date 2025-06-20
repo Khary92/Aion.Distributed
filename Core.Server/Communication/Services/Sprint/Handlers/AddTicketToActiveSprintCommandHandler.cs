@@ -1,9 +1,9 @@
-using Service.Server.Communication.CQRS.Commands.Entities.Sprints;
-using Service.Server.Communication.CQRS.Commands.Entities.Tickets;
-using Service.Server.Services.Entities.Sprints;
-using Service.Server.Services.Entities.Tickets;
+using Core.Server.Communication.CQRS.Commands.Entities.Sprints;
+using Core.Server.Communication.CQRS.Commands.Entities.Tickets;
+using Core.Server.Services.Entities.Sprints;
+using Core.Server.Services.Entities.Tickets;
 
-namespace Service.Server.Communication.Services.Sprint.Handlers;
+namespace Core.Server.Communication.Services.Sprint.Handlers;
 
 public class AddTicketToActiveSprintCommandHandler(
     ITicketCommandsService ticketCommandsService,

@@ -1,8 +1,8 @@
-﻿using Grpc.Core;
+﻿using Core.Server.Services.Entities.Tags;
+using Grpc.Core;
 using Proto.Command.Tags;
-using Service.Server.Services.Entities.Tags;
 
-namespace Service.Server.Communication.Services.Tag;
+namespace Core.Server.Communication.Services.Tag;
 
 public class TagCommandReceiver(ITagCommandsService tagCommandsService)
     : TagCommandProtoService.TagCommandProtoServiceBase

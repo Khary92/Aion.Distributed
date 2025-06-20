@@ -1,10 +1,9 @@
 ﻿using Grpc.Core;
 using Proto.Command.NoteTypes;
 using Proto.Notifications.NoteType;
-using Service.Server.Communication.Services.NoteType;
-using NoteTypeNotificationService = Service.Server.Communication.Services.NoteType.NoteTypeNotificationService;
+using NoteTypeNotificationService = Core.Server.Communication.Services.NoteType.NoteTypeNotificationService;
 
-namespace Service.Server.Communication.Mock.NoteType;
+namespace Core.Server.Communication.Mock.NoteType;
 
 public class MockNoteTypeCommandService(NoteTypeNotificationService noteTypeNotificationService)
     : NoteTypeCommandProtoService.NoteTypeCommandProtoServiceBase
@@ -59,7 +58,8 @@ public class MockNoteTypeCommandService(NoteTypeNotificationService noteTypeNoti
         }
     }
 
-    public override async Task<CommandResponse> CreateNoteType(CreateNoteTypeCommandProto request, ServerCallContext context)
+    public override async Task<CommandResponse> CreateNoteType(CreateNoteTypeCommandProto request,
+        ServerCallContext context)
     {
         Console.WriteLine($"[CreateNoteType] ID: {request.NoteTypeId}, Name: {request.Name}, Color: {request.Color}");
 

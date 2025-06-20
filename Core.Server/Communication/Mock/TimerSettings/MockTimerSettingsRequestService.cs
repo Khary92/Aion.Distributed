@@ -2,7 +2,7 @@
 using Proto.DTO.TimerSettings;
 using Proto.Requests.TimerSettings;
 
-namespace Service.Server.Communication.Mock.TimerSettings;
+namespace Core.Server.Communication.Mock.TimerSettings;
 
 public class MockTimerSettingsRequestService : TimerSettingsRequestService.TimerSettingsRequestServiceBase
 {

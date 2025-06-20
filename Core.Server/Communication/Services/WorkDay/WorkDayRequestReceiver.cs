@@ -1,9 +1,9 @@
-﻿using Grpc.Core;
+﻿using Core.Server.Services.Entities.WorkDays;
+using Grpc.Core;
 using Proto.DTO.TimerSettings;
 using Proto.Requests.WorkDays;
-using Service.Server.Services.Entities.WorkDays;
 
-namespace Service.Server.Communication.Services.WorkDay;
+namespace Core.Server.Communication.Services.WorkDay;
 
 public class WorkDayRequestReceiver(IWorkDayRequestsService workDayRequestsService)
     : WorkDayRequestService.WorkDayRequestServiceBase
@@ -22,9 +22,10 @@ public class WorkDayRequestReceiver(IWorkDayRequestsService workDayRequestsServi
         return workDay?.ToProto();
     }
 
-    public override async Task<WorkDayProto?> GetWorkDayByDate(GetWorkDayByDateRequestProto request, ServerCallContext context)
+    public override async Task<WorkDayProto?> GetWorkDayByDate(GetWorkDayByDateRequestProto request,
+        ServerCallContext context)
     {
         var workDay = await workDayRequestsService.GetWorkDayByDate(request.Date.ToDateTimeOffset());
-        return workDay?.ToProto();
+        return workDay == null ? new WorkDayProto() : workDay.ToProto();
     }
 }

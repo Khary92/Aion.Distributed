@@ -9,18 +9,18 @@ public class SettingsDto : ReactiveObject
     private readonly Guid _settingsId;
     private string _exportPath = string.Empty;
     private bool _isAddNewTicketsToCurrentSprintActive;
-    
-    private bool _previousIsAddNewTicketsToCurrentSprintActive;
     private string _previousExportPath;
+
+    private bool _previousIsAddNewTicketsToCurrentSprintActive;
 
     public SettingsDto(Guid settingsId, string exportPath, bool isAddNewTicketsToCurrentSprintActive)
     {
         SettingsId = settingsId;
         ExportPath = exportPath;
         IsAddNewTicketsToCurrentSprintActive = isAddNewTicketsToCurrentSprintActive;
-        
+
         _previousExportPath = exportPath;
-        _previousIsAddNewTicketsToCurrentSprintActive  = isAddNewTicketsToCurrentSprintActive;
+        _previousIsAddNewTicketsToCurrentSprintActive = isAddNewTicketsToCurrentSprintActive;
     }
 
     public Guid SettingsId
@@ -54,7 +54,7 @@ public class SettingsDto : ReactiveObject
     public bool IsExportPathChanged()
     {
         if (ExportPath == _previousExportPath) return false;
-        
+
         _previousExportPath = ExportPath;
         return true;
     }
@@ -62,7 +62,7 @@ public class SettingsDto : ReactiveObject
     public bool IsAddNewTicketsToCurrentSprintChanged()
     {
         if (IsAddNewTicketsToCurrentSprintActive == _previousIsAddNewTicketsToCurrentSprintActive) return false;
-        
+
         _previousIsAddNewTicketsToCurrentSprintActive = IsAddNewTicketsToCurrentSprintActive;
         return true;
     }

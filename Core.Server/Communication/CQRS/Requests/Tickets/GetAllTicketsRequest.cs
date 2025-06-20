@@ -1,4 +1,3 @@
-
-namespace Service.Server.Communication.CQRS.Requests.Tickets;
+namespace Core.Server.Communication.CQRS.Requests.Tickets;
 
 public record GetAllTicketsRequest;

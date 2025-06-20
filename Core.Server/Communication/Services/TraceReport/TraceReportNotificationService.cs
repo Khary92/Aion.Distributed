@@ -1,12 +1,13 @@
 ﻿using Grpc.Core;
 using Proto.Notifications.TraceReports;
 
-namespace Service.Server.Communication.Services.TraceReport;
+namespace Core.Server.Communication.Services.TraceReport;
 
-public class TraceReportNotificationService : Proto.Notifications.TraceReports.TraceReportNotificationService.TraceReportNotificationServiceBase
+public class TraceReportNotificationService : Proto.Notifications.TraceReports.TraceReportNotificationService.
+    TraceReportNotificationServiceBase
 {
-    private IServerStreamWriter<TraceReportNotification>? _responseStream;
     private CancellationToken _cancellationToken;
+    private IServerStreamWriter<TraceReportNotification>? _responseStream;
 
     public override async Task SubscribeTraceReportNotifications(
         SubscribeRequest request,
@@ -33,7 +34,6 @@ public class TraceReportNotificationService : Proto.Notifications.TraceReports.T
     public async Task SendNotificationAsync(TraceReportNotification notification)
     {
         if (_responseStream is not null && !_cancellationToken.IsCancellationRequested)
-        {
             try
             {
                 await _responseStream.WriteAsync(notification, _cancellationToken);
@@ -43,6 +43,5 @@ public class TraceReportNotificationService : Proto.Notifications.TraceReports.T
                 Console.WriteLine($"Fehler beim Senden der TraceReportNotification: {ex.Message}");
                 _responseStream = null;
             }
-        }
     }
 }

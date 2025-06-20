@@ -22,39 +22,34 @@ public class AiSettingsNotificationReceiver(
         try
         {
             await foreach (var notification in call.ResponseStream.ReadAllAsync(cancellationToken))
-            {
                 switch (notification.NotificationCase)
                 {
                     case AiSettingsNotification.NotificationOneofCase.AiSettingsCreated:
                     {
                         var created = notification.AiSettingsCreated;
-                        Dispatcher.UIThread.Post(() => { messenger.Send(new NewAiSettingsMessage(new AiSettingsDto(
-                            Guid.Parse(created.AiSettingsId),
-                            created.Prompt,
-                            created.LanguageModelPath
-                        ))); });
+                        Dispatcher.UIThread.Post(() =>
+                        {
+                            messenger.Send(new NewAiSettingsMessage(new AiSettingsDto(
+                                Guid.Parse(created.AiSettingsId),
+                                created.Prompt,
+                                created.LanguageModelPath
+                            )));
+                        });
                         break;
                     }
 
                     case AiSettingsNotification.NotificationOneofCase.LanguageModelChanged:
                     {
-                        Dispatcher.UIThread.Post(() =>
-                        {
-                            messenger.Send(notification.LanguageModelChanged);
-                        });
+                        Dispatcher.UIThread.Post(() => { messenger.Send(notification.LanguageModelChanged); });
                         break;
                     }
 
                     case AiSettingsNotification.NotificationOneofCase.PromptChanged:
                     {
-                        Dispatcher.UIThread.Post(() =>
-                        {
-                            messenger.Send(notification.PromptChanged);
-                        });
+                        Dispatcher.UIThread.Post(() => { messenger.Send(notification.PromptChanged); });
                         break;
                     }
                 }
-            }
         }
         catch (OperationCanceledException)
         {

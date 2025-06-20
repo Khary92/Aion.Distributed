@@ -1,4 +1,4 @@
-﻿namespace Service.Server.Services.UseCase;
+﻿namespace Core.Server.Services.UseCase;
 
 public interface ITimeSlotControlService
 {

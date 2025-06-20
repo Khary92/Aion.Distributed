@@ -8,9 +8,9 @@ namespace Client.Desktop.Replays;
 
 public class TicketReplayDecorator : ReactiveObject
 {
-    private readonly IRequestSender _requestSender;
-
     private readonly List<DocumentationReplayDto> _documentationHistory = [];
+
+    private readonly IRequestSender _requestSender;
     // private readonly IHistoryLoader<DocumentationReplayDto> _documentationHistoryLoader;
 
     private string _displayedDocumentation = string.Empty;

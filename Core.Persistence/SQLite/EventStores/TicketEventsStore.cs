@@ -11,7 +11,7 @@ public class TicketEventsStore(IDbContextFactory<AppDbContext> appDbContextFacto
     public async Task StoreEventAsync(TicketEvent @event)
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
-        
+
         await appDbContext.TicketEvents.AddAsync(@event);
         await appDbContext.SaveChangesAsync();
     }
@@ -19,7 +19,7 @@ public class TicketEventsStore(IDbContextFactory<AppDbContext> appDbContextFacto
     public async Task<List<TicketEvent>> GetEventsForAggregateAsync(Guid entityId)
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
-        
+
         return await appDbContext.TicketEvents
             .Where(e => e.EntityId == entityId)
             .OrderBy(e => e.TimeStamp)
@@ -30,7 +30,7 @@ public class TicketEventsStore(IDbContextFactory<AppDbContext> appDbContextFacto
     public async Task<List<TicketEvent>> GetAllEventsAsync()
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
-        
+
         return await appDbContext.TicketEvents
             .OrderBy(e => e.TimeStamp)
             .AsNoTracking()
@@ -40,7 +40,7 @@ public class TicketEventsStore(IDbContextFactory<AppDbContext> appDbContextFacto
     public async Task<List<TicketDocumentationChangedEvent>> GetTicketDocumentationEventsByTicketId(Guid ticketId)
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
-        
+
         var rawEvents = await appDbContext.TicketEvents
             .Where(e => e.EntityId == ticketId && e.EventType == nameof(TicketDocumentationChangedEvent))
             .OrderBy(e => e.TimeStamp)

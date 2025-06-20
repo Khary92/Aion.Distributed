@@ -1,9 +1,9 @@
-﻿using Grpc.Core;
+﻿using Core.Server.Services.Entities.TimerSettings;
+using Grpc.Core;
 using Proto.DTO.TimerSettings;
 using Proto.Requests.TimerSettings;
-using Service.Server.Services.Entities.TimerSettings;
 
-namespace Service.Server.Communication.Services.TimerSettings;
+namespace Core.Server.Communication.Services.TimerSettings;
 
 public class TimerSettingsRequestReceiver(ITimerSettingsRequestsService timerSettingsRequestsService)
     : TimerSettingsRequestService.TimerSettingsRequestServiceBase

@@ -14,8 +14,8 @@ namespace Client.Desktop.Models.Analysis;
 
 public class AnalysisBySprintModel : ReactiveObject
 {
-    private readonly IRequestSender _requestSender;
     private const int AmountOfTagsShown = 3;
+    private readonly IRequestSender _requestSender;
 
     private AnalysisBySprintDecorator? _analysisBySprint;
 
@@ -137,7 +137,7 @@ public class AnalysisBySprintModel : ReactiveObject
 
     public async Task SetAnalysisForSprint(SprintDto selectedSprint)
     {
-        AnalysisBySprint = await _requestSender.Send(new GetSprintAnalysisById()
+        AnalysisBySprint = await _requestSender.Send(new GetSprintAnalysisById
         {
             SprintId = selectedSprint.SprintId.ToString()
         });

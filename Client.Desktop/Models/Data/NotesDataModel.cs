@@ -16,9 +16,9 @@ using ReactiveUI;
 namespace Client.Desktop.Models.Data;
 
 public class NotesDataModel(
-    ICommandSender commandSender,
-    IRequestSender requestSender,
-    IMessenger messenger)
+        ICommandSender commandSender,
+        IRequestSender requestSender,
+        IMessenger messenger)
     //ITracingCollectorProvider tracer)
     : ReactiveObject
 {
@@ -47,10 +47,8 @@ public class NotesDataModel(
             var noteType = NoteTypes.FirstOrDefault(n => n.NoteTypeId == parsedId);
 
             if (noteType == null)
-            {
                 //tracer.NoteType.ChangeColor.NoAggregateFound(GetType(), parsedId);
                 return;
-            }
 
             noteType.Apply(m);
             //tracer.NoteType.ChangeColor.ChangesApplied(GetType(), parsedId);
@@ -64,10 +62,8 @@ public class NotesDataModel(
             var noteType = NoteTypes.FirstOrDefault(n => n.NoteTypeId == parsedId);
 
             if (noteType == null)
-            {
                 //tracer.NoteType.ChangeName.NoAggregateFound(GetType(), parsedId);
                 return;
-            }
 
             noteType.Apply(m);
             //tracer.NoteType.ChangeName.ChangesApplied(GetType(), parsedId);
@@ -93,7 +89,7 @@ public class NotesDataModel(
         await commandSender.Send(createNoteTypeCommand);
 
         //tracer.NoteType.Create.CommandSent(GetType(), Guid.Parse(createNoteTypeCommand.NoteTypeId),
-         //   createNoteTypeCommand);
+        //   createNoteTypeCommand);
     }
 
     public async Task ChangeNoteTypeName(NoteTypeDto noteType)

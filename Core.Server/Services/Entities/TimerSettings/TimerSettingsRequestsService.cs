@@ -1,9 +1,10 @@
 using Domain.Events.TimerSettings;
 using Domain.Interfaces;
 
-namespace Service.Server.Services.Entities.TimerSettings;
+namespace Core.Server.Services.Entities.TimerSettings;
 
-public class TimerSettingsRequestsService(IEventStore<TimerSettingsEvent> timerSettingsEventStore) : ITimerSettingsRequestsService
+public class TimerSettingsRequestsService(IEventStore<TimerSettingsEvent> timerSettingsEventStore)
+    : ITimerSettingsRequestsService
 {
     public async Task<Domain.Entities.TimerSettings> Get()
     {

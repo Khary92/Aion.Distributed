@@ -6,7 +6,6 @@ namespace Client.Desktop.Models.Settings;
 
 public class AiSettingsViewModel : ReactiveObject
 {
-
     public AiSettingsViewModel(AiSettingsModel aiSettingsModel)
     {
         ChangePromptCommand = ReactiveCommand.CreateFromTask(ChangePrompt);
@@ -25,7 +24,7 @@ public class AiSettingsViewModel : ReactiveObject
     private async Task ChangePrompt()
     {
         //_tracer.AiSettings.ChangePrompt.StartUseCase(GetType(), Model.AiSettings!.AiSettingsId,
-       //     ("prompt", Model.AiSettings.Prompt));
+        //     ("prompt", Model.AiSettings.Prompt));
         await Model.ChangePrompt();
     }
 

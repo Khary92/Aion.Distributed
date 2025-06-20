@@ -16,10 +16,7 @@ public static class DesktopApp
     public static async Task Main(string[] args)
     {
         var host = Host.CreateDefaultBuilder(args)
-            .ConfigureServices(services =>
-            {
-                services.AddPresentationServices();
-            })
+            .ConfigureServices(services => { services.AddPresentationServices(); })
             .Build();
 
         await host.StartAsync();
@@ -33,8 +30,8 @@ public static class DesktopApp
 
         await host.StopAsync();
     }
-    
-    
+
+
     private static AppBuilder BuildAvaloniaApp(IServiceProvider serviceProvider)
     {
         return AppBuilder.Configure(() => new App(serviceProvider))
@@ -46,10 +43,7 @@ public static class DesktopApp
 
     private static async Task StartupPreparation(IServiceProvider serviceProvider)
     {
-        AppDomain.CurrentDomain.ProcessExit += (_, _) =>
-        {
-            PersistCaches(serviceProvider).GetAwaiter().GetResult();
-        };
+        AppDomain.CurrentDomain.ProcessExit += (_, _) => { PersistCaches(serviceProvider).GetAwaiter().GetResult(); };
 
         await PersistCaches(serviceProvider);
     }

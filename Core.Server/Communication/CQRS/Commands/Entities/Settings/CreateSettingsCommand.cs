@@ -1,5 +1,4 @@
-
-namespace Service.Server.Communication.CQRS.Commands.Entities.Settings;
+namespace Core.Server.Communication.CQRS.Commands.Entities.Settings;
 
 public record CreateSettingsCommand(
     Guid SettingsId,

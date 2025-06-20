@@ -1,6 +1,6 @@
 using Domain.Entities;
 
-namespace Service.Server.Services.Entities.NoteTypes;
+namespace Core.Server.Services.Entities.NoteTypes;
 
 public interface INoteTypeRequestsService
 {

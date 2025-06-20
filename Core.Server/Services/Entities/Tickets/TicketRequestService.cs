@@ -1,11 +1,12 @@
+using Core.Server.Services.Entities.Sprints;
 using Domain.Entities;
 using Domain.Interfaces;
-using Service.Server.Services.Entities.Sprints;
 
-namespace Service.Server.Services.Entities.Tickets;
+namespace Core.Server.Services.Entities.Tickets;
 
 public class TicketRequestService(
-    ITicketEventsStore ticketEventStore, ISprintRequestsService sprintRequestsService) : ITicketRequestsService
+    ITicketEventsStore ticketEventStore,
+    ISprintRequestsService sprintRequestsService) : ITicketRequestsService
 {
     public async Task<Ticket?> GetTicketById(Guid ticketId)
     {
@@ -47,7 +48,7 @@ public class TicketRequestService(
         var activeSprint = await sprintRequestsService.GetActiveSprint();
 
         if (activeSprint == null) return [];
-        
+
         return await GetTicketsBySprintId(activeSprint.SprintId);
     }
 }

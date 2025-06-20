@@ -1,10 +1,10 @@
+using Core.Server.Communication.CQRS.Commands.Entities.Tags;
+using Core.Server.Communication.Services.Tag;
+using Core.Server.Translators.Tags;
 using Domain.Events.Tags;
 using Domain.Interfaces;
-using Service.Server.Communication.CQRS.Commands.Entities.Tags;
-using Service.Server.Communication.Services.Tag;
-using Service.Server.Translators.Tags;
 
-namespace Service.Server.Services.Entities.Tags;
+namespace Core.Server.Services.Entities.Tags;
 
 public class TagCommandsService(
     IEventStore<TagEvent> tagEventStore,

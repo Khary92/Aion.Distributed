@@ -84,7 +84,7 @@ public class SprintDto : ReactiveObject
     public void Apply(TicketAddedToSprintNotification notification)
     {
         var parsedGuid = Guid.Parse(notification.TicketId);
-        
+
         if (!TicketIds.Contains(parsedGuid))
             TicketIds.Add(parsedGuid);
     }

@@ -11,7 +11,7 @@ namespace Client.Desktop.Models.Data;
 
 public class TicketsDataViewModel : ReactiveObject
 {
-   // private readonly ITracingCollectorProvider _tracer;
+    // private readonly ITracingCollectorProvider _tracer;
     private string _editButtonText = string.Empty;
 
     private bool _isEditMode;
@@ -115,7 +115,7 @@ public class TicketsDataViewModel : ReactiveObject
     private async Task AddTicketToActiveSprint()
     {
         //_tracer.Ticket.AddTicketToSprint.StartUseCase(GetType(), SelectedTicket!.TicketId,
-            //SelectedTicket.AsTraceAttributes());
+        //SelectedTicket.AsTraceAttributes());
 
         await DataModel.AddTicketToCurrentSprint(SelectedTicket!);
         ResetData();
@@ -128,7 +128,7 @@ public class TicketsDataViewModel : ReactiveObject
             var updatedTicket = new TicketDto(SelectedTicket!.TicketId, NewTicketName, NewTicketBookingNumber,
                 SelectedTicket.Documentation, SelectedTicket.SprintIds);
 
-           // _tracer.Ticket.Update.StartUseCase(GetType(), SelectedTicket!.TicketId, updatedTicket.AsTraceAttributes());
+            // _tracer.Ticket.Update.StartUseCase(GetType(), SelectedTicket!.TicketId, updatedTicket.AsTraceAttributes());
 
             await DataModel.UpdateTicket(updatedTicket);
 

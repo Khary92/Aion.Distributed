@@ -1,4 +1,4 @@
-namespace Service.Server.Communication.CQRS.Commands.Entities.Tickets;
+namespace Core.Server.Communication.CQRS.Commands.Entities.Tickets;
 
 public record UpdateTicketDataCommand(
     Guid TicketId,

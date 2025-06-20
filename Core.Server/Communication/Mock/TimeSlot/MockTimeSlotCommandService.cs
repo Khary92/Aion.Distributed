@@ -1,16 +1,18 @@
 ﻿using Grpc.Core;
 using Proto.Command.TimeSlots;
 using Proto.Notifications.TimeSlots;
-using TimeSlotNotificationService = Service.Server.Communication.Services.TimeSlot.TimeSlotNotificationService;
+using TimeSlotNotificationService = Core.Server.Communication.Services.TimeSlot.TimeSlotNotificationService;
 
-namespace Service.Server.Communication.Mock.TimeSlot;
+namespace Core.Server.Communication.Mock.TimeSlot;
 
 public class MockTimeSlotCommandService(TimeSlotNotificationService timeSlotNotificationService)
     : TimeSlotCommandProtoService.TimeSlotCommandProtoServiceBase
 {
-    public override async Task<CommandResponse> CreateTimeSlot(CreateTimeSlotCommandProto request, ServerCallContext context)
+    public override async Task<CommandResponse> CreateTimeSlot(CreateTimeSlotCommandProto request,
+        ServerCallContext context)
     {
-        Console.WriteLine($"[CreateTimeSlot] ID: {request.TimeSlotId}, TicketID: {request.SelectedTicketId}, WorkDayID: {request.WorkDayId}, StartTime: {request.StartTime}, EndTime: {request.EndTime}, TimerRunning: {request.IsTimerRunning}");
+        Console.WriteLine(
+            $"[CreateTimeSlot] ID: {request.TimeSlotId}, TicketID: {request.SelectedTicketId}, WorkDayID: {request.WorkDayId}, StartTime: {request.StartTime}, EndTime: {request.EndTime}, TimerRunning: {request.IsTimerRunning}");
 
         try
         {
@@ -60,7 +62,8 @@ public class MockTimeSlotCommandService(TimeSlotNotificationService timeSlotNoti
         }
     }
 
-    public override async Task<CommandResponse> SetStartTime(SetStartTimeCommandProto request, ServerCallContext context)
+    public override async Task<CommandResponse> SetStartTime(SetStartTimeCommandProto request,
+        ServerCallContext context)
     {
         Console.WriteLine($"[SetStartTime] TimeSlotID: {request.TimeSlotId}, Time: {request.Time}");
 

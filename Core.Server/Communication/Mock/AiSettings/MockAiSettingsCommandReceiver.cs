@@ -1,14 +1,15 @@
 ﻿using Grpc.Core;
 using Proto.Command.AiSettings;
 using Proto.Notifications.AiSettings;
-using AiSettingsNotificationService = Service.Server.Communication.Services.AiSettings.AiSettingsNotificationService;
+using AiSettingsNotificationService = Core.Server.Communication.Services.AiSettings.AiSettingsNotificationService;
 
-namespace Service.Server.Communication.Mock.AiSettings;
+namespace Core.Server.Communication.Mock.AiSettings;
 
 public class MockAiSettingsCommandReceiver(AiSettingsNotificationService aiSettingsNotificationService)
     : AiSettingsCommandProtoService.AiSettingsCommandProtoServiceBase
 {
-    public override async Task<CommandResponse> SendChangeLanguageModel(ChangeLanguageModelCommandProto request, ServerCallContext context)
+    public override async Task<CommandResponse> SendChangeLanguageModel(ChangeLanguageModelCommandProto request,
+        ServerCallContext context)
     {
         Console.WriteLine($"[ChangeLanguageModel] ID: {request.AiSettingsId}, ModelPath: {request.LanguageModelPath}");
 
@@ -32,7 +33,8 @@ public class MockAiSettingsCommandReceiver(AiSettingsNotificationService aiSetti
         }
     }
 
-    public override async Task<CommandResponse> SendChangePrompt(ChangePromptCommandProto request, ServerCallContext context)
+    public override async Task<CommandResponse> SendChangePrompt(ChangePromptCommandProto request,
+        ServerCallContext context)
     {
         Console.WriteLine($"[ChangePrompt] ID: {request.AiSettingsId}, Prompt: {request.Prompt}");
 
@@ -56,9 +58,11 @@ public class MockAiSettingsCommandReceiver(AiSettingsNotificationService aiSetti
         }
     }
 
-    public override async Task<CommandResponse> SendCreateAiSettings(CreateAiSettingsCommandProto request, ServerCallContext context)
+    public override async Task<CommandResponse> SendCreateAiSettings(CreateAiSettingsCommandProto request,
+        ServerCallContext context)
     {
-        Console.WriteLine($"[CreateAiSettings] ID: {request.AiSettingsId}, Prompt: {request.Prompt}, ModelPath: {request.LanguageModelPath}");
+        Console.WriteLine(
+            $"[CreateAiSettings] ID: {request.AiSettingsId}, Prompt: {request.Prompt}, ModelPath: {request.LanguageModelPath}");
 
         try
         {

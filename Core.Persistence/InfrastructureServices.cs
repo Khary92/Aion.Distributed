@@ -30,7 +30,7 @@ public static class InfrastructureServices
         services.AddDbContext<AppDbContext>(options =>
             options.UseSqlite($"Data Source={DatabaseName}"));
         services.AddDbContextFactory<AppDbContext>();
-        
+
         services.AddScoped<IEventStore<AiSettingsEvent>, AiSettingsEventsStore>();
         services.AddScoped<IEventStore<NoteEvent>, NoteEventsStore>();
         services.AddScoped<IEventStore<NoteTypeEvent>, NoteTypeEventsStore>();

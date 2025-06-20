@@ -22,7 +22,6 @@ public class TagNotificationReceiver(
         try
         {
             await foreach (var notification in call.ResponseStream.ReadAllAsync(cancellationToken))
-            {
                 switch (notification.NotificationCase)
                 {
                     case TagNotification.NotificationOneofCase.TagCreated:
@@ -42,7 +41,6 @@ public class TagNotificationReceiver(
                         break;
                     }
                 }
-            }
         }
         catch (OperationCanceledException)
         {

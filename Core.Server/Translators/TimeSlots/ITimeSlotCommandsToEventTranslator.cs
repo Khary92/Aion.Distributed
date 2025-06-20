@@ -1,7 +1,7 @@
+using Core.Server.Communication.CQRS.Commands.Entities.TimeSlots;
 using Domain.Events.TimeSlots;
-using Service.Server.Communication.CQRS.Commands.Entities.TimeSlots;
 
-namespace Service.Server.Translators.TimeSlots;
+namespace Core.Server.Translators.TimeSlots;
 
 public interface ITimeSlotCommandsToEventTranslator
 {

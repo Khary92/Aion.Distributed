@@ -1,9 +1,9 @@
-﻿using Grpc.Core;
+﻿using Core.Server.Services.Entities.NoteTypes;
+using Grpc.Core;
 using Proto.DTO.NoteType;
 using Proto.Requests.NoteTypes;
-using Service.Server.Services.Entities.NoteTypes;
 
-namespace Service.Server.Communication.Services.NoteType;
+namespace Core.Server.Communication.Services.NoteType;
 
 public class NoteTypeRequestReceiver(INoteTypeRequestsService noteTypeRequestsService)
     : NoteTypesRequestService.NoteTypesRequestServiceBase

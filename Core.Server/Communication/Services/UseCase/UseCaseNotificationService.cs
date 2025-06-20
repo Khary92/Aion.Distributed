@@ -1,12 +1,13 @@
 ﻿using Grpc.Core;
 using Proto.Notifications.UseCase;
 
-namespace Service.Server.Communication.Services.UseCase;
+namespace Core.Server.Communication.Services.UseCase;
 
-public class UseCaseNotificationService : Proto.Notifications.UseCase.UseCaseNotificationService.UseCaseNotificationServiceBase
+public class
+    UseCaseNotificationService : Proto.Notifications.UseCase.UseCaseNotificationService.UseCaseNotificationServiceBase
 {
-    private IServerStreamWriter<UseCaseNotification>? _responseStream;
     private CancellationToken _cancellationToken;
+    private IServerStreamWriter<UseCaseNotification>? _responseStream;
 
     public override async Task SubscribeUseCaseNotifications(
         SubscribeRequest request,
@@ -33,7 +34,6 @@ public class UseCaseNotificationService : Proto.Notifications.UseCase.UseCaseNot
     public async Task SendNotificationAsync(UseCaseNotification notification)
     {
         if (_responseStream is not null && !_cancellationToken.IsCancellationRequested)
-        {
             try
             {
                 await _responseStream.WriteAsync(notification, _cancellationToken);
@@ -43,6 +43,5 @@ public class UseCaseNotificationService : Proto.Notifications.UseCase.UseCaseNot
                 Console.WriteLine($"Fehler beim Senden der UseCaseNotification: {ex.Message}");
                 _responseStream = null;
             }
-        }
     }
 }

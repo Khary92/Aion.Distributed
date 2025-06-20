@@ -1,7 +1,7 @@
+using Core.Server.Communication.CQRS.Commands.Entities.Sprints;
 using Domain.Events.Sprints;
-using Service.Server.Communication.CQRS.Commands.Entities.Sprints;
 
-namespace Service.Server.Translators.Sprints;
+namespace Core.Server.Translators.Sprints;
 
 public interface ISprintCommandsToEventTranslator
 {

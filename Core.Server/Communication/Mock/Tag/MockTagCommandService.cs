@@ -1,9 +1,9 @@
-﻿using Grpc.Core;
+﻿using Core.Server.Communication.Services.Tag;
+using Grpc.Core;
 using Proto.Command.Tags;
 using Proto.Notifications.Tag;
-using Service.Server.Communication.Services.Tag;
 
-namespace Service.Server.Communication.Mock.Tag;
+namespace Core.Server.Communication.Mock.Tag;
 
 public class MockTagCommandService(TagNotificationServiceImpl tagNotificationService)
     : TagCommandProtoService.TagCommandProtoServiceBase

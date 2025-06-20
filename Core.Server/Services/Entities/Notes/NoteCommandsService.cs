@@ -1,10 +1,10 @@
+using Core.Server.Communication.CQRS.Commands.Entities.Note;
+using Core.Server.Communication.Services.Note;
+using Core.Server.Translators.Notes;
 using Domain.Events.Note;
 using Domain.Interfaces;
-using Service.Server.Communication.CQRS.Commands.Entities.Note;
-using Service.Server.Communication.Services.Note;
-using Service.Server.Translators.Notes;
 
-namespace Service.Server.Services.Entities.Notes;
+namespace Core.Server.Services.Entities.Notes;
 
 public class NoteCommandsService(
     NoteNotificationService noteNotificationService,

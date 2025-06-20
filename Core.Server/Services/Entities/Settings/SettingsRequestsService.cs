@@ -1,7 +1,7 @@
 using Domain.Events.Settings;
 using Domain.Interfaces;
 
-namespace Service.Server.Services.Entities.Settings;
+namespace Core.Server.Services.Entities.Settings;
 
 public class SettingsRequestsService(
     IEventStore<SettingsEvent> settingsEventsStore)
@@ -21,7 +21,7 @@ public class SettingsRequestsService(
     public async Task<bool> IsSettingsExisting()
     {
         var events = await settingsEventsStore.GetAllEventsAsync();
-        
+
         //There is only one settings aggregate. If there are no events, then there is no aggregate.
         return events.Count != 0;
     }

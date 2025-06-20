@@ -14,17 +14,17 @@ using Client.Desktop.Communication.Commands.WorkDays;
 
 namespace Client.Desktop.Communication.Commands;
 
-public interface ICommandSender : 
+public interface ICommandSender :
     IAiSettingsCommandSender,
     INoteCommandSender,
     INoteTypeCommandSender,
-    ISettingsCommandSender, 
-    ISprintCommandSender, 
-    IStatisticsDataCommandSender, 
-    ITagCommandSender, 
+    ISettingsCommandSender,
+    ISprintCommandSender,
+    IStatisticsDataCommandSender,
+    ITagCommandSender,
     ITicketCommandSender,
-    ITimerSettingsCommandSender, 
-    ITimeSlotCommandSender, 
-    ITraceReportCommandSender, 
-    IUseCaseCommandSender, 
+    ITimerSettingsCommandSender,
+    ITimeSlotCommandSender,
+    ITraceReportCommandSender,
+    IUseCaseCommandSender,
     IWorkDayCommandSender;

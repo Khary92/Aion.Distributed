@@ -1,4 +1,3 @@
-
 namespace Domain.Events.Tags;
 
 public record TagCreatedEvent(

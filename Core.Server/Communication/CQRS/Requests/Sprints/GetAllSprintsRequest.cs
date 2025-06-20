@@ -1,4 +1,3 @@
-
-namespace Service.Server.Communication.CQRS.Requests.Sprints;
+namespace Core.Server.Communication.CQRS.Requests.Sprints;
 
 public record GetAllSprintsRequest;

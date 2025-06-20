@@ -1,43 +1,46 @@
-﻿using Google.Protobuf.WellKnownTypes;
+﻿using Core.Server.Communication.CQRS.Commands.Entities.WorkDays;
+using Google.Protobuf.WellKnownTypes;
 using Proto.Command.WorkDays;
 using Proto.DTO.TimerSettings;
 using Proto.Notifications.WorkDay;
 using Proto.Requests.WorkDays;
-using Service.Server.Communication.CQRS.Commands.Entities.WorkDays;
 
-namespace Service.Server.Communication.Services.WorkDay;
+namespace Core.Server.Communication.Services.WorkDay;
 
 public static class WorkDayProtoExtensions
 {
     public static CreateWorkDayCommand ToCommand(
-        this CreateWorkDayCommandProto proto) =>
-        new(Guid.Parse(proto.WorkDayId), proto.Date.ToDateTimeOffset());
+        this CreateWorkDayCommandProto proto)
+    {
+        return new CreateWorkDayCommand(Guid.Parse(proto.WorkDayId), proto.Date.ToDateTimeOffset());
+    }
 
-    public static WorkDayNotification ToNotification(this CreateWorkDayCommand proto) =>
-        new()
+    public static WorkDayNotification ToNotification(this CreateWorkDayCommand proto)
+    {
+        return new WorkDayNotification
         {
-            WorkDayCreated = new WorkDayCreatedNotification()
+            WorkDayCreated = new WorkDayCreatedNotification
             {
                 WorkDayId = proto.WorkDayId.ToString(),
                 Date = proto.Date.ToTimestamp()
             }
         };
+    }
 
-    public static WorkDayProto ToProto(this Domain.Entities.WorkDay workDay) =>
-        new()
+    public static WorkDayProto ToProto(this Domain.Entities.WorkDay workDay)
+    {
+        return new WorkDayProto
         {
             WorkDayId = workDay.WorkDayId.ToString(),
             Date = workDay.Date.ToTimestamp()
         };
+    }
 
     public static WorkDayListProto ToProtoList(this List<Domain.Entities.WorkDay> workDays)
     {
         var workDayProtos = new WorkDayListProto();
 
-        foreach (var workDay in workDays)
-        {
-            workDayProtos.WorkDays.Add(workDay.ToProto());
-        }
+        foreach (var workDay in workDays) workDayProtos.WorkDays.Add(workDay.ToProto());
 
         return workDayProtos;
     }

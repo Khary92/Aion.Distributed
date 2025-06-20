@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.NotificationWrappers;
 using Client.Desktop.Communication.Requests;
-using Client.Desktop.Communication.RequiresChange;
 using Client.Desktop.DTO;
 using Client.Desktop.Services;
 using CommunityToolkit.Mvvm.Messaging;

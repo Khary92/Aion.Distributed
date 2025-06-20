@@ -23,7 +23,6 @@ public class TicketNotificationReceiver(
         try
         {
             await foreach (var notification in call.ResponseStream.ReadAllAsync(cancellationToken))
-            {
                 switch (notification.NotificationCase)
                 {
                     case TicketNotification.NotificationOneofCase.TicketCreated:
@@ -31,10 +30,8 @@ public class TicketNotificationReceiver(
                         var created = notification.TicketCreated;
                         var sprintGuids = new List<Guid>();
                         foreach (var id in created.SprintIds)
-                        {
                             if (Guid.TryParse(id, out var guid))
                                 sprintGuids.Add(guid);
-                        }
 
                         Dispatcher.UIThread.Post(() =>
                         {
@@ -59,7 +56,6 @@ public class TicketNotificationReceiver(
                         break;
                     }
                 }
-            }
         }
         catch (OperationCanceledException)
         {

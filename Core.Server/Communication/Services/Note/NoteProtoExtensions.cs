@@ -1,20 +1,24 @@
-﻿using Google.Protobuf.WellKnownTypes;
+﻿using Core.Server.Communication.CQRS.Commands.Entities.Note;
+using Google.Protobuf.WellKnownTypes;
 using Proto.Command.Notes;
 using Proto.DTO.Note;
 using Proto.Notifications.Note;
 using Proto.Requests.Notes;
-using Service.Server.Communication.CQRS.Commands.Entities.Note;
 
-namespace Service.Server.Communication.Services.Note;
+namespace Core.Server.Communication.Services.Note;
 
 public static class NoteProtoExtensions
 {
-    public static CreateNoteCommand ToCommand(this CreateNoteCommandProto proto) =>
-        new(Guid.Parse(proto.NoteId), proto.Text, Guid.Parse(proto.NoteTypeId), Guid.Parse(proto.TimeSlotId),
+    public static CreateNoteCommand ToCommand(this CreateNoteCommandProto proto)
+    {
+        return new CreateNoteCommand(Guid.Parse(proto.NoteId), proto.Text, Guid.Parse(proto.NoteTypeId),
+            Guid.Parse(proto.TimeSlotId),
             proto.TimeStamp.ToDateTimeOffset());
+    }
 
-    public static NoteNotification ToNotification(this CreateNoteCommand proto) =>
-        new()
+    public static NoteNotification ToNotification(this CreateNoteCommand proto)
+    {
+        return new NoteNotification
         {
             NoteCreated = new NoteCreatedNotification
             {
@@ -25,36 +29,40 @@ public static class NoteProtoExtensions
                 TimeStamp = proto.TimeStamp.ToTimestamp()
             }
         };
+    }
 
-    public static UpdateNoteCommand ToCommand(this UpdateNoteCommandProto proto) =>
-        new(Guid.Parse(proto.NoteId), proto.Text, Guid.Parse(proto.NoteTypeId), Guid.Parse(proto.TimeSlotId));
+    public static UpdateNoteCommand ToCommand(this UpdateNoteCommandProto proto)
+    {
+        return new UpdateNoteCommand(Guid.Parse(proto.NoteId), proto.Text, Guid.Parse(proto.NoteTypeId),
+            Guid.Parse(proto.TimeSlotId));
+    }
 
-    public static NoteNotification ToNotification(this UpdateNoteCommand proto) =>
-        new()
+    public static NoteNotification ToNotification(this UpdateNoteCommand proto)
+    {
+        return new NoteNotification
         {
             NoteUpdated = new NoteUpdatedNotification
             {
                 NoteId = proto.NoteId.ToString(),
                 Text = proto.Text,
                 NoteTypeId = proto.NoteTypeId.ToString(),
-                TimeSlotId = proto.TimeSlotId.ToString(),
+                TimeSlotId = proto.TimeSlotId.ToString()
             }
         };
-    
+    }
+
     public static GetNotesResponseProto ToProtoList(this List<Domain.Entities.Note> notes)
     {
         var noteProtos = new GetNotesResponseProto();
 
-        foreach (var note in notes)
-        {
-            noteProtos.Notes.Add(note.ToProto());
-        }
-        
+        foreach (var note in notes) noteProtos.Notes.Add(note.ToProto());
+
         return noteProtos;
     }
-    
-    private static NoteProto ToProto(this Domain.Entities.Note note) =>
-        new()
+
+    private static NoteProto ToProto(this Domain.Entities.Note note)
+    {
+        return new NoteProto
         {
             NoteId = note.NoteId.ToString(),
             NoteTypeId = note.NoteTypeId.ToString(),
@@ -62,4 +70,5 @@ public static class NoteProtoExtensions
             TimeSlotId = note.TimeSlotId.ToString(),
             TimeStamp = Timestamp.FromDateTimeOffset(note.TimeStamp)
         };
+    }
 }

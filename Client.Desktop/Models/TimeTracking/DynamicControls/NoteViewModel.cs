@@ -74,7 +74,7 @@ public class NoteViewModel : ReactiveObject
         NoteTypes.AddRange(noteTypeDtos);
 
         if (Note.NoteTypeId == Guid.Empty || !NoteTypes.Any()) return;
-        
+
         Note.NoteType = NoteTypes.FirstOrDefault(nt => nt.NoteTypeId == Note.NoteTypeId);
     }
 
@@ -85,7 +85,7 @@ public class NoteViewModel : ReactiveObject
             NoteId = Note.NoteId.ToString(),
             Text = Note.Text,
             NoteTypeId = Note.NoteTypeId.ToString(),
-            TimeSlotId = Note.TimeSlotId.ToString(),
+            TimeSlotId = Note.TimeSlotId.ToString()
         });
     }
 

@@ -1,12 +1,13 @@
 ﻿using Grpc.Core;
 using Proto.Notifications.TimerSettings;
 
-namespace Service.Server.Communication.Services.TimerSettings;
+namespace Core.Server.Communication.Services.TimerSettings;
 
-public class TimerSettingsNotificationService : Proto.Notifications.TimerSettings.TimerSettingsNotificationService.TimerSettingsNotificationServiceBase
+public class TimerSettingsNotificationService : Proto.Notifications.TimerSettings.TimerSettingsNotificationService.
+    TimerSettingsNotificationServiceBase
 {
-    private IServerStreamWriter<TimerSettingsNotification>? _responseStream;
     private CancellationToken _cancellationToken;
+    private IServerStreamWriter<TimerSettingsNotification>? _responseStream;
 
     public override async Task SubscribeTimerSettingsNotifications(
         SubscribeRequest request,
@@ -33,7 +34,6 @@ public class TimerSettingsNotificationService : Proto.Notifications.TimerSetting
     public async Task SendNotificationAsync(TimerSettingsNotification notification)
     {
         if (_responseStream is not null && !_cancellationToken.IsCancellationRequested)
-        {
             try
             {
                 await _responseStream.WriteAsync(notification, _cancellationToken);
@@ -43,6 +43,5 @@ public class TimerSettingsNotificationService : Proto.Notifications.TimerSetting
                 Console.WriteLine($"Fehler beim Senden der TimerSettingsNotification: {ex.Message}");
                 _responseStream = null;
             }
-        }
     }
 }

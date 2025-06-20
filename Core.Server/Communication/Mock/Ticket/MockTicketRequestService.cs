@@ -2,7 +2,7 @@
 using Proto.DTO.Ticket;
 using Proto.Requests.Tickets;
 
-namespace Service.Server.Communication.Mock.Ticket;
+namespace Core.Server.Communication.Mock.Ticket;
 
 public class MockTicketRequestService : TicketRequestService.TicketRequestServiceBase
 {
@@ -57,7 +57,7 @@ public class MockTicketRequestService : TicketRequestService.TicketRequestServic
             SprintIds = { Guid.NewGuid().ToString() }
         });
     }
-    
+
     public override Task<TicketListProto> GetTicketsWithShowAllSwitch(GetTicketsWithShowAllSwitchRequestProto request,
         ServerCallContext context)
     {

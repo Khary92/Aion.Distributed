@@ -2,7 +2,7 @@
 using Proto.DTO.AiSettings;
 using Proto.Requests.AiSettings;
 
-namespace Service.Server.Communication.Mock.AiSettings;
+namespace Core.Server.Communication.Mock.AiSettings;
 
 public class MockAiSettingsRequestReceiver : AiSettingsRequestService.AiSettingsRequestServiceBase
 {
@@ -17,8 +17,9 @@ public class MockAiSettingsRequestReceiver : AiSettingsRequestService.AiSettings
 
         return Task.FromResult(response);
     }
-    
-    public override Task<AiSettingExistsResponseProto> AiSettingsExists(AiSettingExistsRequestProto request, ServerCallContext context)
+
+    public override Task<AiSettingExistsResponseProto> AiSettingsExists(AiSettingExistsRequestProto request,
+        ServerCallContext context)
     {
         var response = new AiSettingExistsResponseProto
         {

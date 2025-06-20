@@ -21,5 +21,4 @@ public class NoteCommandSender : INoteCommandSender
         var response = await _client.UpdateNoteAsync(updateTicketDataCommand);
         return response.Success;
     }
-    
 }

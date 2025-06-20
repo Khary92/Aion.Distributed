@@ -2,7 +2,7 @@
 using Proto.DTO.Settings;
 using Proto.Requests.Settings;
 
-namespace Service.Server.Communication.Mock.Settings;
+namespace Core.Server.Communication.Mock.Settings;
 
 public class MockSettingsRequestService : SettingsRequestService.SettingsRequestServiceBase
 {
@@ -28,7 +28,7 @@ public class MockSettingsRequestService : SettingsRequestService.SettingsRequest
 
         return Task.FromResult(response);
     }
-    
+
     public override Task<SettingsExistsResponseProto> SettingsExists(SettingsExistsRequestProto request,
         ServerCallContext context)
     {

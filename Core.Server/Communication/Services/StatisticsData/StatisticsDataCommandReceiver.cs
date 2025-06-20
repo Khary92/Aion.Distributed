@@ -1,8 +1,8 @@
-﻿using Grpc.Core;
+﻿using Core.Server.Services.Entities.StatisticsData;
+using Grpc.Core;
 using Proto.Command.StatisticsData;
-using Service.Server.Services.Entities.StatisticsData;
 
-namespace Service.Server.Communication.Services.StatisticsData;
+namespace Core.Server.Communication.Services.StatisticsData;
 
 public class StatisticsDataCommandReceiver(IStatisticsDataCommandsService statisticsDataCommandsService)
     : StatisticsDataCommandProtoService.StatisticsDataCommandProtoServiceBase

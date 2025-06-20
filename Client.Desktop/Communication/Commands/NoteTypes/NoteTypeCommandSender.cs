@@ -21,7 +21,7 @@ public class NoteTypeCommandSender : INoteTypeCommandSender
         var response = await _client.ChangeNoteTypeNameAsync(command);
         return response.Success;
     }
-    
+
     public async Task<bool> Send(ChangeNoteTypeColorCommandProto command)
     {
         var response = await _client.ChangeNoteTypeColorAsync(command);

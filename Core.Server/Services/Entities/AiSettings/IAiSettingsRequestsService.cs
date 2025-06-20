@@ -1,4 +1,4 @@
-namespace Service.Server.Services.Entities.AiSettings;
+namespace Core.Server.Services.Entities.AiSettings;
 
 public interface IAiSettingsRequestsService
 {
