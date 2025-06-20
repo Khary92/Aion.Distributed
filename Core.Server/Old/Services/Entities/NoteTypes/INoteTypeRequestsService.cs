@@ -1,7 +1,9 @@
+using Domain.Entities;
+
 namespace Service.Server.Old.Services.Entities.NoteTypes;
 
 public interface INoteTypeRequestsService
 {
-    Task<List<NoteTypeDto>> GetAll();
-    Task<NoteTypeDto?> GetById(Guid id);
+    Task<List<NoteType>> GetAll();
+    Task<NoteType?> GetById(Guid id);
 }

@@ -6,10 +6,9 @@ using Service.Server.Communication.Mapper;
 namespace Service.Server.Old.Services.Entities.NoteTypes;
 
 public class NoteTypeRequestsService(
-    IEventStore<NoteTypeEvent> noteTypeEventsStore,
-    IDtoMapper<NoteTypeDto, NoteType> noteTypeMapper) : INoteTypeRequestsService
+    IEventStore<NoteTypeEvent> noteTypeEventsStore) : INoteTypeRequestsService
 {
-    public async Task<List<NoteTypeDto>> GetAll()
+    public async Task<List<NoteType>> GetAll()
     {
         var allEvents = await noteTypeEventsStore.GetAllEventsAsync();
 
@@ -19,17 +18,14 @@ public class NoteTypeRequestsService(
             .ToList();
 
         return groupedEvents
-            .Select(group => NoteType.Rehydrate(group.ToList()))
-            .Select(noteTypeMapper.ToDto)
-            .ToList();
+            .Select(group => NoteType.Rehydrate(group.ToList())).ToList();
     }
 
-    public async Task<NoteTypeDto?> GetById(Guid id)
+    public async Task<NoteType?> GetById(Guid id)
     {
         var noteTypeEvents = await noteTypeEventsStore
             .GetEventsForAggregateAsync(id);
 
-        var domainSprint = NoteType.Rehydrate(noteTypeEvents);
-        return noteTypeMapper.ToDto(domainSprint);
+        return NoteType.Rehydrate(noteTypeEvents);
     }
 }

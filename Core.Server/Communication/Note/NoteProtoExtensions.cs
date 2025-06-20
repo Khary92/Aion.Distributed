@@ -57,7 +57,7 @@ public static class NoteProtoExtensions
         new()
         {
             NoteId = note.NoteId.ToString(),
-            NoteTypeId = note.Text,
+            NoteTypeId = note.NoteTypeId.ToString(),
             Text = note.Text,
             TimeSlotId = note.TimeSlotId.ToString(),
             TimeStamp = Timestamp.FromDateTimeOffset(note.TimeStamp)
