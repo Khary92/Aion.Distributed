@@ -6,15 +6,13 @@ namespace Service.Server.Old.Handler.Commands.Entities.Sprints;
 public class AddTicketToSprintCommandHandler(
     ISprintRequestsService sprintRequestsService,
     ISprintCommandsService sprintCommandsService)
-    : IRequestHandler<AddTicketToSprintCommand, Unit>
 {
-    public async Task<Unit> Handle(AddTicketToSprintCommand command, CancellationToken cancellationToken)
+    public async Task Handle(AddTicketToSprintCommand command)
     {
         var activeSprint = await sprintRequestsService.GetById(command.SprintId);
 
-        if (activeSprint == null) return Unit.Value;
+        if (activeSprint == null) return;
 
         await sprintCommandsService.AddTicketToSprint(command);
-        return Unit.Value;
     }
 }

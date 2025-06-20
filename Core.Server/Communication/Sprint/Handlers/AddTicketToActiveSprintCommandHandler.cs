@@ -10,17 +10,16 @@ public class AddTicketToActiveSprintCommandHandler(
     ITicketRequestsService ticketRequestsService,
     ISprintRequestsService sprintRequestsService,
     ISprintCommandsService sprintCommandsService)
-    : IRequestHandler<AddTicketToActiveSprintCommand, Unit>
 {
-    public async Task<Unit> Handle(AddTicketToActiveSprintCommand command, CancellationToken cancellationToken)
+    public async Task Handle(AddTicketToActiveSprintCommand command)
     {
         var ticketDto = await ticketRequestsService.GetTicketAsync(command.TicketId);
 
-        if (ticketDto == null) return Unit.Value;
+        if (ticketDto == null) return;
 
         var activeSprint = (await sprintRequestsService.GetAll()).FirstOrDefault(s => s.IsActive);
 
-        if (activeSprint == null) return Unit.Value;
+        if (activeSprint == null) return;
 
         ticketDto.SprintIds.Add(activeSprint.SprintId);
         await ticketCommandsService.UpdateData(new UpdateTicketDataCommand(ticketDto.TicketId, ticketDto.Name,
@@ -28,7 +27,5 @@ public class AddTicketToActiveSprintCommandHandler(
 
         await sprintCommandsService.AddTicketToSprint(new AddTicketToSprintCommand(activeSprint.SprintId,
             command.TicketId));
-
-        return Unit.Value;
     }
 }

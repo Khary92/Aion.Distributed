@@ -13,31 +13,31 @@ public static class NoteProtoExtensions
         new(Guid.Parse(proto.NoteId), proto.Text, Guid.Parse(proto.NoteTypeId), Guid.Parse(proto.TimeSlotId),
             proto.TimeStamp.ToDateTimeOffset());
 
-    public static NoteNotification ToNotification(this CreateNoteCommandProto proto) =>
+    public static NoteNotification ToNotification(this CreateNoteCommand proto) =>
         new()
         {
             NoteCreated = new NoteCreatedNotification
             {
-                NoteId = proto.NoteId,
+                NoteId = proto.NoteId.ToString(),
                 Text = proto.Text,
-                NoteTypeId = proto.NoteTypeId,
-                TimeSlotId = proto.TimeSlotId,
-                TimeStamp = proto.TimeStamp
+                NoteTypeId = proto.NoteTypeId.ToString(),
+                TimeSlotId = proto.TimeSlotId.ToString(),
+                TimeStamp = proto.TimeStamp.ToTimestamp()
             }
         };
 
     public static UpdateNoteCommand ToCommand(this UpdateNoteCommandProto proto) =>
         new(Guid.Parse(proto.NoteId), proto.Text, Guid.Parse(proto.NoteTypeId), Guid.Parse(proto.TimeSlotId));
 
-    public static NoteNotification ToNotification(this UpdateNoteCommandProto proto) =>
+    public static NoteNotification ToNotification(this UpdateNoteCommand proto) =>
         new()
         {
             NoteUpdated = new NoteUpdatedNotification
             {
-                NoteId = proto.NoteId,
+                NoteId = proto.NoteId.ToString(),
                 Text = proto.Text,
-                NoteTypeId = proto.NoteTypeId,
-                TimeSlotId = proto.TimeSlotId
+                NoteTypeId = proto.NoteTypeId.ToString(),
+                TimeSlotId = proto.TimeSlotId.ToString(),
             }
         };
     

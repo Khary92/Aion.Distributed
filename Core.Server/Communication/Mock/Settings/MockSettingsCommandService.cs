@@ -2,10 +2,11 @@
 using Proto.Command.Settings;
 using Proto.Notifications.Settings;
 using Service.Server.Communication.Settings;
+using SettingsNotificationService = Service.Server.Communication.Settings.SettingsNotificationService;
 
 namespace Service.Server.Communication.Mock.Settings;
 
-public class MockSettingsCommandService(SettingsNotificationServiceImpl settingsNotificationService)
+public class MockSettingsCommandService(SettingsNotificationService settingsNotificationService)
     : SettingsCommandProtoService.SettingsCommandProtoServiceBase
 {
     public override async Task<CommandResponse> CreateSettings(CreateSettingsCommandProto request, ServerCallContext context)

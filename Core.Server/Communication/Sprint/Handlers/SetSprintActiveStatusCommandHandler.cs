@@ -5,9 +5,9 @@ namespace Service.Server.Old.Handler.Commands.Entities.Sprints;
 
 public class SetSprintActiveStatusCommandHandler(
     ISprintCommandsService sprintCommandsService,
-    ISprintRequestsService sprintRequestsService) : IRequestHandler<SetSprintActiveStatusCommand, Unit>
+    ISprintRequestsService sprintRequestsService)
 {
-    public async Task<Unit> Handle(SetSprintActiveStatusCommand command, CancellationToken cancellationToken)
+    public async Task Handle(SetSprintActiveStatusCommand command)
     {
         var sprintDtos = await sprintRequestsService.GetAll();
 
@@ -15,6 +15,5 @@ public class SetSprintActiveStatusCommandHandler(
             await sprintCommandsService.SetSprintActiveStatus(new SetSprintActiveStatusCommand(sprint.SprintId, false));
 
         await sprintCommandsService.SetSprintActiveStatus(command);
-        return Unit.Value;
     }
 }

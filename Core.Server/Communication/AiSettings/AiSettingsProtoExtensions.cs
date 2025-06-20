@@ -10,26 +10,27 @@ public static class AiSettingsProtoExtensions
     public static CreateAiSettingsCommand ToCommand(this CreateAiSettingsCommandProto proto) =>
         new(Guid.Parse(proto.AiSettingsId), proto.Prompt, proto.LanguageModelPath);
 
-    public static AiSettingsNotification ToNotification(this CreateAiSettingsCommandProto proto) =>
+    public static AiSettingsNotification ToNotification(this CreateAiSettingsCommand proto) =>
         new()
         {
             AiSettingsCreated = new AiSettingsCreatedNotification()
             {
-                AiSettingsId = proto.AiSettingsId,
+                AiSettingsId = proto.AiSettingsId.ToString(),
                 Prompt = proto.Prompt,
                 LanguageModelPath = proto.LanguageModelPath
             }
         };
 
+
     public static ChangeLanguageModelCommand ToCommand(this ChangeLanguageModelCommandProto proto) =>
         new(Guid.Parse(proto.AiSettingsId), proto.LanguageModelPath);
 
-    public static AiSettingsNotification ToNotification(this ChangeLanguageModelCommandProto proto) =>
+    public static AiSettingsNotification ToNotification(this ChangeLanguageModelCommand proto) =>
         new()
         {
             LanguageModelChanged = new LanguageModelChangedNotification
             {
-                AiSettingsId = proto.AiSettingsId,
+                AiSettingsId = proto.AiSettingsId.ToString(),
                 LanguageModelPath = proto.LanguageModelPath
             }
         };
@@ -37,25 +38,15 @@ public static class AiSettingsProtoExtensions
     public static ChangePromptCommand ToCommand(this ChangePromptCommandProto proto) =>
         new(Guid.Parse(proto.AiSettingsId), proto.Prompt);
 
-    public static AiSettingsNotification ToNotification(this ChangePromptCommandProto proto) =>
+    public static AiSettingsNotification ToNotification(this ChangePromptCommand proto) =>
         new()
         {
             PromptChanged = new PromptChangedNotification
             {
-                AiSettingsId = proto.AiSettingsId,
+                AiSettingsId = proto.AiSettingsId.ToString(),
                 Prompt = proto.Prompt
             }
         };
-
-    public static Domain.Entities.AiSettings ToDomain(this AiSettingsProto dto)
-    {
-        return new Domain.Entities.AiSettings
-        {
-            AiSettingsId = Guid.Parse(dto.AiSettingsId),
-            Prompt = dto.Prompt,
-            LanguageModelPath = dto.LanguageModelPath
-        };
-    }
 
     public static AiSettingsProto ToProto(this Domain.Entities.AiSettings domain)
     {

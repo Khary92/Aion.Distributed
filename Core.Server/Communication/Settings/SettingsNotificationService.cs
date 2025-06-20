@@ -1,16 +1,16 @@
 ﻿using Grpc.Core;
-using Proto.Notifications.Sprint;
+using Proto.Notifications.Settings;
 
-namespace Service.Server.Communication.Sprint;
+namespace Service.Server.Communication.Settings;
 
-public class SprintNotificationServiceImpl : SprintNotificationService.SprintNotificationServiceBase
+public class SettingsNotificationService : Proto.Notifications.Settings.SettingsNotificationService.SettingsNotificationServiceBase
 {
-    private IServerStreamWriter<SprintNotification>? _responseStream;
+    private IServerStreamWriter<SettingsNotification>? _responseStream;
     private CancellationToken _cancellationToken;
 
-    public override async Task SubscribeSprintNotifications(
+    public override async Task SubscribeSettingsNotifications(
         SubscribeRequest request,
-        IServerStreamWriter<SprintNotification> responseStream,
+        IServerStreamWriter<SettingsNotification> responseStream,
         ServerCallContext context)
     {
         _responseStream = responseStream;
@@ -18,11 +18,11 @@ public class SprintNotificationServiceImpl : SprintNotificationService.SprintNot
 
         try
         {
-            await Task.Delay(Timeout.Infinite, context.CancellationToken);
+            await Task.Delay(Timeout.Infinite, _cancellationToken);
         }
         catch (OperationCanceledException)
         {
-            // Verbindung wurde getrennt
+            // Verbindung beendet
         }
         finally
         {
@@ -30,7 +30,7 @@ public class SprintNotificationServiceImpl : SprintNotificationService.SprintNot
         }
     }
 
-    public async Task SendNotificationAsync(SprintNotification notification)
+    public async Task SendNotificationAsync(SettingsNotification notification)
     {
         if (_responseStream is not null && !_cancellationToken.IsCancellationRequested)
         {
@@ -40,7 +40,7 @@ public class SprintNotificationServiceImpl : SprintNotificationService.SprintNot
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Fehler beim Senden der SprintNotification: {ex.Message}");
+                Console.WriteLine($"Fehler beim Senden der SettingsNotification: {ex.Message}");
                 _responseStream = null;
             }
         }

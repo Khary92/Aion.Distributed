@@ -11,12 +11,12 @@ public static class NoteTypeProtoExtensions
     public static CreateNoteTypeCommand ToCommand(this CreateNoteTypeCommandProto proto) =>
         new(Guid.Parse(proto.NoteTypeId), proto.Name, proto.Color);
 
-    public static NoteTypeNotification ToNotification(this CreateNoteTypeCommandProto proto) =>
+    public static NoteTypeNotification ToNotification(this CreateNoteTypeCommand proto) =>
         new()
         {
             NoteTypeCreated = new NoteTypeCreatedNotification
             {
-                NoteTypeId = proto.NoteTypeId,
+                NoteTypeId = proto.NoteTypeId.ToString(),
                 Name = proto.Name,
                 Color = proto.Color
             }
@@ -25,12 +25,12 @@ public static class NoteTypeProtoExtensions
     public static ChangeNoteTypeNameCommand ToCommand(this ChangeNoteTypeNameCommandProto proto) =>
         new(Guid.Parse(proto.NoteTypeId), proto.Name);
 
-    public static NoteTypeNotification ToNotification(this ChangeNoteTypeNameCommandProto proto) =>
+    public static NoteTypeNotification ToNotification(this ChangeNoteTypeNameCommand proto) =>
         new()
         {
             NoteTypeNameChanged = new NoteTypeNameChangedNotification()
             {
-                NoteTypeId = proto.NoteTypeId,
+                NoteTypeId = proto.NoteTypeId.ToString(),
                 Name = proto.Name,
             }
         };
@@ -38,12 +38,12 @@ public static class NoteTypeProtoExtensions
     public static ChangeNoteTypeColorCommand ToCommand(this ChangeNoteTypeColorCommandProto proto) =>
         new(Guid.Parse(proto.NoteTypeId), proto.Color);
 
-    public static NoteTypeNotification ToNotification(this ChangeNoteTypeColorCommandProto proto) =>
+    public static NoteTypeNotification ToNotification(this ChangeNoteTypeColorCommand proto) =>
         new()
         {
             NoteTypeColorChanged = new NoteTypeColorChangedNotification()
             {
-                NoteTypeId = proto.NoteTypeId,
+                NoteTypeId = proto.NoteTypeId.ToString(),
                 Color = proto.Color
             }
         };

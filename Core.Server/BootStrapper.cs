@@ -47,8 +47,8 @@ public static class BootStrapper
         services.AddSingleton<AiSettingsNotificationService>();
         services.AddSingleton<NoteNotificationService>();
         services.AddSingleton<NoteTypeNotificationServiceImpl>();
-        services.AddSingleton<SettingsNotificationServiceImpl>();
-        services.AddSingleton<SprintNotificationServiceImpl>();
+        services.AddSingleton<SettingsNotificationService>();
+        services.AddSingleton<SprintNotificationService>();
         services.AddSingleton<StatisticsDataNotificationServiceImpl>();
         services.AddSingleton<TagNotificationServiceImpl>();
         services.AddSingleton<TicketNotificationServiceImpl>();
@@ -74,8 +74,8 @@ public static class BootStrapper
         app.MapGrpcService<AiSettingsNotificationService>();
         app.MapGrpcService<NoteNotificationService>();
         app.MapGrpcService<NoteTypeNotificationServiceImpl>();
-        app.MapGrpcService<SettingsNotificationServiceImpl>();
-        app.MapGrpcService<SprintNotificationServiceImpl>();
+        app.MapGrpcService<SettingsNotificationService>();
+        app.MapGrpcService<SprintNotificationService>();
         app.MapGrpcService<StatisticsDataNotificationServiceImpl>();
         app.MapGrpcService<TagNotificationServiceImpl>();
         app.MapGrpcService<TicketNotificationServiceImpl>();

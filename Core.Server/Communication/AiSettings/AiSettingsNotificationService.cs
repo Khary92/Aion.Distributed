@@ -1,5 +1,6 @@
 ﻿using Grpc.Core;
 using Proto.Notifications.AiSettings;
+using Service.Server.CQRS.Commands.Entities.AiSettings;
 
 namespace Service.Server.Communication.AiSettings;
 
