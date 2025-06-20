@@ -1,6 +1,6 @@
 ﻿using Grpc.Core;
 using Proto.Command.Sprints;
-using Service.Server.Old.Handler.Commands.Entities.Sprints;
+using Service.Server.Communication.Sprint.Handlers;
 using Service.Server.Old.Services.Entities.Sprints;
 
 namespace Service.Server.Communication.Sprint;

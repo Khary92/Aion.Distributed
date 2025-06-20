@@ -1,8 +1,6 @@
 ﻿using Grpc.Core;
 using Proto.DTO.AiSettings;
 using Proto.Requests.AiSettings;
-using Service.Server.Communication.Mapper;
-using Service.Server.CQRS.Commands.Entities.AiSettings;
 using Service.Server.Old.Services.Entities.AiSettings;
 
 namespace Service.Server.Communication.AiSettings;

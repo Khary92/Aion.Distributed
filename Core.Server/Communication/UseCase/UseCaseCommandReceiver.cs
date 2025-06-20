@@ -2,7 +2,7 @@
 using Proto.Command.UseCases;
 using Service.Server.Old.Services.UseCase;
 
-namespace Service.Server.Communication.Mock.UseCase;
+namespace Service.Server.Communication.UseCase;
 
 public class UseCaseCommandReceiver(ITimeSlotControlService timeSlotControlService)
     : UseCaseCommandProtoService.UseCaseCommandProtoServiceBase

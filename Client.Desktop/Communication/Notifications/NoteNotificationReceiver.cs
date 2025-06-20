@@ -33,7 +33,7 @@ public class NoteNotificationReceiver(
                             noteCreated.Text,
                             Guid.Parse(noteCreated.NoteTypeId),
                             Guid.Parse(noteCreated.TimeSlotId),
-                            DateTimeOffset.Parse(noteCreated.TimeStamp)
+                            noteCreated.TimeStamp.ToDateTimeOffset()
                         );
 
                         Dispatcher.UIThread.Post(() => { messenger.Send(new NewNoteMessage(noteDto)); });

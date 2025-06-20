@@ -1,10 +1,9 @@
 ﻿using Grpc.Core;
 using Proto.DTO.TimerSettings;
 using Proto.Requests.WorkDays;
-using Service.Server.Communication.WorkDay;
 using Service.Server.Old.Services.Entities.WorkDays;
 
-namespace Service.Server.Communication.Mock.WorkDay;
+namespace Service.Server.Communication.WorkDay;
 
 public class WorkDayRequestReceiver(IWorkDayRequestsService workDayRequestsService)
     : WorkDayRequestService.WorkDayRequestServiceBase

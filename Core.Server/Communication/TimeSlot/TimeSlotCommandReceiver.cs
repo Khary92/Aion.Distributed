@@ -1,9 +1,8 @@
 ﻿using Grpc.Core;
 using Proto.Command.TimeSlots;
-using Service.Server.Communication.TimeSlot;
 using Service.Server.Old.Services.Entities.TimeSlots;
 
-namespace Service.Server.Communication.Mock.TimeSlot;
+namespace Service.Server.Communication.TimeSlot;
 
 public class TimeSlotCommandReceiver(ITimeSlotCommandsService timeSlotCommandsService)
     : TimeSlotCommandProtoService.TimeSlotCommandProtoServiceBase

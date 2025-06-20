@@ -1,11 +1,9 @@
-﻿using Google.Protobuf.WellKnownTypes;
-using Grpc.Core;
+﻿using Grpc.Core;
 using Proto.DTO.TimeSlots;
 using Proto.Requests.TimeSlots;
-using Service.Server.Communication.TimeSlot;
 using Service.Server.Old.Services.Entities.TimeSlots;
 
-namespace Service.Server.Communication.Mock.TimeSlot;
+namespace Service.Server.Communication.TimeSlot;
 
 public class TimeSlotRequestReceiver(ITimeSlotRequestsService timeSlotRequestsService)
     : TimeSlotRequestService.TimeSlotRequestServiceBase

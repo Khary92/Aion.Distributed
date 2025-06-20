@@ -1,14 +1,10 @@
 ﻿using Grpc.Core;
 using Proto.Command.WorkDays;
-using Proto.Notifications.WorkDay;
-using Service.Server.Communication.WorkDay;
 using Service.Server.Old.Services.Entities.WorkDays;
 
-namespace Service.Server.Communication.Mock.WorkDay;
+namespace Service.Server.Communication.WorkDay;
 
-public class WorkDayCommandReceiver(
-    NotificationService.NotificationServiceClient notificationClient,
-    IWorkDayCommandsService workDayCommandsService)
+public class WorkDayCommandReceiver(IWorkDayCommandsService workDayCommandsService)
     : WorkDayCommandProtoService.WorkDayCommandProtoServiceBase
 {
     public override async Task<CommandResponse> CreateWorkDay(CreateWorkDayCommandProto request,

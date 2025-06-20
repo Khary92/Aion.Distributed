@@ -1,10 +1,9 @@
 ﻿using Grpc.Core;
 using Proto.DTO.TimerSettings;
 using Proto.Requests.TimerSettings;
-using Service.Server.Communication.TimerSettings;
 using Service.Server.Old.Services.Entities.TimerSettings;
 
-namespace Service.Server.Communication.Mock.TimerSettings;
+namespace Service.Server.Communication.TimerSettings;
 
 public class TimerSettingsRequestReceiver(ITimerSettingsRequestsService timerSettingsRequestsService)
     : TimerSettingsRequestService.TimerSettingsRequestServiceBase

@@ -3,7 +3,7 @@ using Service.Server.CQRS.Commands.Entities.Tickets;
 using Service.Server.Old.Services.Entities.Sprints;
 using Service.Server.Old.Services.Entities.Tickets;
 
-namespace Service.Server.Old.Handler.Commands.Entities.Sprints;
+namespace Service.Server.Communication.Sprint.Handlers;
 
 public class AddTicketToActiveSprintCommandHandler(
     ITicketCommandsService ticketCommandsService,

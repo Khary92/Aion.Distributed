@@ -1,7 +1,7 @@
 using Service.Server.CQRS.Commands.Entities.Sprints;
 using Service.Server.Old.Services.Entities.Sprints;
 
-namespace Service.Server.Old.Handler.Commands.Entities.Sprints;
+namespace Service.Server.Communication.Sprint.Handlers;
 
 public class AddTicketToSprintCommandHandler(
     ISprintRequestsService sprintRequestsService,

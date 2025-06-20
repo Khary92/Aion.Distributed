@@ -1,9 +1,8 @@
 ﻿using Grpc.Core;
 using Proto.Command.NoteTypes;
-using Service.Server.Communication.NoteType;
 using Service.Server.Old.Services.Entities.NoteTypes;
 
-namespace Service.Server.Communication.Mock.NoteType;
+namespace Service.Server.Communication.NoteType;
 
 public class NoteTypeCommandReceiver(
     NoteTypeNotificationServiceImpl noteTypeNotificationService,
