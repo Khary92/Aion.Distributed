@@ -22,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Old\" />
+      <Folder Include="Communication\Services\" />
     </ItemGroup>
 
 </Project>

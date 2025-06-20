@@ -1,11 +1,4 @@
 using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Proto.Requests.AnalysisData;
-using Proto.Requests.Tags;
-using Proto.Requests.TimerSettings;
-using Proto.Requests.TimeSlots;
-using Proto.Requests.UseCase;
-using Proto.Requests.WorkDays;
-using Service.Server.Communication.AiSettings;
 using Service.Server.Communication.Mock.AiSettings;
 using Service.Server.Communication.Mock.Analysis;
 using Service.Server.Communication.Mock.Note;
@@ -20,42 +13,42 @@ using Service.Server.Communication.Mock.TimeSlot;
 using Service.Server.Communication.Mock.TraceReport;
 using Service.Server.Communication.Mock.UseCase;
 using Service.Server.Communication.Mock.WorkDay;
-using Service.Server.Communication.Note;
-using Service.Server.Communication.NoteType;
-using Service.Server.Communication.Settings;
-using Service.Server.Communication.Sprint;
-using Service.Server.Communication.StatisticsData;
-using Service.Server.Communication.Tag;
-using Service.Server.Communication.Ticket;
-using Service.Server.Communication.TimerSettings;
-using Service.Server.Communication.TimeSlot;
-using Service.Server.Communication.TraceReport;
-using Service.Server.Communication.UseCase;
-using Service.Server.Communication.WorkDay;
-using Service.Server.Old.Services.Entities.AiSettings;
-using Service.Server.Old.Services.Entities.Notes;
-using Service.Server.Old.Services.Entities.NoteTypes;
-using Service.Server.Old.Services.Entities.Settings;
-using Service.Server.Old.Services.Entities.Sprints;
-using Service.Server.Old.Services.Entities.StatisticsData;
-using Service.Server.Old.Services.Entities.Tags;
-using Service.Server.Old.Services.Entities.Tickets;
-using Service.Server.Old.Services.Entities.TimerSettings;
-using Service.Server.Old.Services.Entities.TimeSlots;
-using Service.Server.Old.Services.Entities.WorkDays;
-using Service.Server.Old.Services.UseCase;
-using Service.Server.Old.Services.UseCase.Replays;
-using Service.Server.Old.Translators.AiSettings;
-using Service.Server.Old.Translators.Notes;
-using Service.Server.Old.Translators.NoteTypes;
-using Service.Server.Old.Translators.Settings;
-using Service.Server.Old.Translators.Sprints;
-using Service.Server.Old.Translators.StatisticsData;
-using Service.Server.Old.Translators.Tags;
-using Service.Server.Old.Translators.Tickets;
-using Service.Server.Old.Translators.TimerSettings;
-using Service.Server.Old.Translators.TimeSlots;
-using Service.Server.Old.Translators.WorkDays;
+using Service.Server.Communication.Services.AiSettings;
+using Service.Server.Communication.Services.Note;
+using Service.Server.Communication.Services.NoteType;
+using Service.Server.Communication.Services.Settings;
+using Service.Server.Communication.Services.Sprint;
+using Service.Server.Communication.Services.StatisticsData;
+using Service.Server.Communication.Services.Tag;
+using Service.Server.Communication.Services.Ticket;
+using Service.Server.Communication.Services.TimerSettings;
+using Service.Server.Communication.Services.TimeSlot;
+using Service.Server.Communication.Services.TraceReport;
+using Service.Server.Communication.Services.UseCase;
+using Service.Server.Communication.Services.WorkDay;
+using Service.Server.Services.Entities.AiSettings;
+using Service.Server.Services.Entities.Notes;
+using Service.Server.Services.Entities.NoteTypes;
+using Service.Server.Services.Entities.Settings;
+using Service.Server.Services.Entities.Sprints;
+using Service.Server.Services.Entities.StatisticsData;
+using Service.Server.Services.Entities.Tags;
+using Service.Server.Services.Entities.Tickets;
+using Service.Server.Services.Entities.TimerSettings;
+using Service.Server.Services.Entities.TimeSlots;
+using Service.Server.Services.Entities.WorkDays;
+using Service.Server.Services.UseCase;
+using Service.Server.Translators.AiSettings;
+using Service.Server.Translators.Notes;
+using Service.Server.Translators.NoteTypes;
+using Service.Server.Translators.Settings;
+using Service.Server.Translators.Sprints;
+using Service.Server.Translators.StatisticsData;
+using Service.Server.Translators.Tags;
+using Service.Server.Translators.Tickets;
+using Service.Server.Translators.TimerSettings;
+using Service.Server.Translators.TimeSlots;
+using Service.Server.Translators.WorkDays;
 
 namespace Service.Server;
 
@@ -64,7 +57,10 @@ public static class BootStrapper
     public static WebApplication BuildWebApp(String[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
-        builder.WebHost.ConfigureKestrel(options => { options.ListenLocalhost(5000, o => o.Protocols = HttpProtocols.Http2); });
+        builder.WebHost.ConfigureKestrel(options =>
+        {
+            options.ListenLocalhost(5000, o => o.Protocols = HttpProtocols.Http2);
+        });
         AddNotificationServices(builder.Services);
         AddCommonServices(builder.Services);
         AddRequestsServices(builder.Services);
@@ -72,11 +68,10 @@ public static class BootStrapper
         AddCommandToEventTranslators(builder.Services);
         return builder.Build();
     }
-    
+
     private static void AddCommonServices(this IServiceCollection services)
     {
         services.AddSingleton<IRunTimeSettings, RunTimeSettings>();
-        services.AddSingleton<IReplayRequestsService, ReplayRequestsService>();
     }
 
     private static void AddRequestsServices(this IServiceCollection services)
@@ -108,7 +103,7 @@ public static class BootStrapper
         services.AddSingleton<ISettingsCommandsService, SettingsCommandsService>();
         services.AddSingleton<ITimerSettingsCommandsService, TimerSettingsCommandsService>();
     }
-    
+
     private static void AddCommandToEventTranslators(this IServiceCollection services)
     {
         services.AddSingleton<ISettingsCommandsToEventTranslator, SettingsCommandsToEventTranslator>();
@@ -123,15 +118,15 @@ public static class BootStrapper
         services.AddSingleton<INoteTypeCommandsToEventTranslator, NoteTypeCommandsToEventTranslator>();
         services.AddSingleton<ITimerSettingsCommandsToEventTranslator, TimerSettingsCommandsToEventTranslator>();
     }
-    
+
     private static void AddNotificationServices(this IServiceCollection services)
     {
         services.AddGrpc();
         services.AddGrpcReflection();
-        
+
         services.AddSingleton<AiSettingsNotificationService>();
         services.AddSingleton<NoteNotificationService>();
-        services.AddSingleton<NoteTypeNotificationServiceImpl>();
+        services.AddSingleton<NoteTypeNotificationService>();
         services.AddSingleton<SettingsNotificationService>();
         services.AddSingleton<SprintNotificationService>();
         services.AddSingleton<StatisticsDataNotificationService>();
@@ -148,7 +143,7 @@ public static class BootStrapper
     {
         AddCommandEndPoints(app);
     }
-    
+
     private static void AddCommandEndPoints(WebApplication app)
     {
         app.MapGrpcService<AiSettingsCommandReceiver>();
@@ -163,9 +158,8 @@ public static class BootStrapper
         app.MapGrpcService<TimeSlotCommandService>();
         app.MapGrpcService<UseCaseCommandReceiver>();
         app.MapGrpcService<WorkDayCommandReceiver>();
-        
     }
-    
+
     private static void AddRequestEndPoints(WebApplication app)
     {
         app.MapGrpcService<AiSettingsRequestReceiver>();
@@ -179,15 +173,17 @@ public static class BootStrapper
         app.MapGrpcService<TimerSettingsRequestReceiver>();
         app.MapGrpcService<TimeSlotRequestReceiver>();
         app.MapGrpcService<WorkDayRequestReceiver>();
-        app.MapGrpcService<UseCaseRequestReceiver>();
-        app.MapGrpcService<AnalysisRequestReceiver>();
+
+        //TODO
+        //app.MapGrpcService<UseCaseRequestReceiver>();
+        //app.MapGrpcService<AnalysisRequestReceiver>();
     }
 
     public static void AddNotificationEndPoints(WebApplication app)
     {
         app.MapGrpcService<AiSettingsNotificationService>();
         app.MapGrpcService<NoteNotificationService>();
-        app.MapGrpcService<NoteTypeNotificationServiceImpl>();
+        app.MapGrpcService<NoteTypeNotificationService>();
         app.MapGrpcService<SettingsNotificationService>();
         app.MapGrpcService<SprintNotificationService>();
         app.MapGrpcService<StatisticsDataNotificationService>();
