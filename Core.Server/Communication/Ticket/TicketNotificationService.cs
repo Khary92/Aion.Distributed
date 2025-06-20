@@ -3,7 +3,7 @@ using Proto.Notifications.Ticket;
 
 namespace Service.Server.Communication.Ticket;
 
-public class TicketNotificationServiceImpl : TicketNotificationService.TicketNotificationServiceBase
+public class TicketNotificationService : Proto.Notifications.Ticket.TicketNotificationService.TicketNotificationServiceBase
 {
     private IServerStreamWriter<TicketNotification>? _responseStream;
     private CancellationToken _cancellationToken;

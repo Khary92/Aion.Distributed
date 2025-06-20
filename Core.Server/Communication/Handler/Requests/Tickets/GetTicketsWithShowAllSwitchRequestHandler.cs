@@ -12,13 +12,6 @@ public class GetTicketsWithShowAllSwitchRequestHandler(
     public async Task<List<TicketDto>> Handle(GetTicketsWithShowAllSwitchRequest request,
         CancellationToken cancellationToken)
     {
-        var allTickets = await ticketRequestsService.GetAll();
-        if (request.IsShowAll) return allTickets;
 
-        var currentSprint = (await sprintRequestsService.GetAll()).FirstOrDefault(s => s.IsActive);
-
-        return currentSprint == null
-            ? []
-            : allTickets.Where(t => t.SprintIds.Contains(currentSprint.SprintId)).ToList();
     }
 }

@@ -1,8 +1,11 @@
+using Domain.Entities;
+
 namespace Service.Server.Old.Services.Entities.Tickets;
 
 public interface ITicketRequestsService
 {
-    Task<TicketDto?> GetTicketAsync(Guid ticketId);
-    Task<List<TicketDto>> GetAll();
-    Task<List<TicketDto>> GetTicketsBySprintId(Guid domainSprintSprintId);
+    Task<Ticket?> GetTicketById(Guid ticketId);
+    Task<List<Ticket>> GetAll();
+    Task<List<Ticket>> GetTicketsBySprintId(Guid domainSprintSprintId);
+    Task<List<Ticket>> GetTicketsForCurrentSprint();
 }

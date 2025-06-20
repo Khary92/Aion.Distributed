@@ -1,4 +1,5 @@
 using Domain.Interfaces;
+using Service.Server.Communication.Ticket;
 using Service.Server.CQRS.Commands.Entities.Tickets;
 using Service.Server.Old.Translators.Tickets;
 
@@ -6,26 +7,25 @@ namespace Service.Server.Old.Services.Entities.Tickets;
 
 public class TicketCommandsService(
     ITicketEventsStore ticketEventStore,
-    IMediator mediator,
-    ITicketCommandsToEventTranslator eventTranslator,
-    ITicketCommandsToNotificationTranslator notificationTranslator)
+    TicketNotificationService ticketNotificationService,
+    ITicketCommandsToEventTranslator eventTranslator)
     : ITicketCommandsService
 {
     public async Task UpdateData(UpdateTicketDataCommand updateTicketDataCommand)
     {
         await ticketEventStore.StoreEventAsync(eventTranslator.ToEvent(updateTicketDataCommand));
-        await mediator.Publish(notificationTranslator.ToNotification(updateTicketDataCommand));
+        await ticketNotificationService.SendNotificationAsync(updateTicketDataCommand.ToNotification());
     }
 
     public async Task UpdateDocumentation(UpdateTicketDocumentationCommand updateTicketDocumentationCommand)
     {
         await ticketEventStore.StoreEventAsync(eventTranslator.ToEvent(updateTicketDocumentationCommand));
-        await mediator.Publish(notificationTranslator.ToNotification(updateTicketDocumentationCommand));
+        await ticketNotificationService.SendNotificationAsync(updateTicketDocumentationCommand.ToNotification());
     }
 
     public async Task Create(CreateTicketCommand createTicketCommand)
     {
         await ticketEventStore.StoreEventAsync(eventTranslator.ToEvent(createTicketCommand));
-        await mediator.Publish(notificationTranslator.ToNotification(createTicketCommand));
+        await ticketNotificationService.SendNotificationAsync(createTicketCommand.ToNotification());
     }
 }

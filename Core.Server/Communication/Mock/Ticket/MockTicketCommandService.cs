@@ -2,10 +2,11 @@ using Grpc.Core;
 using Proto.Command.Tickets;
 using Proto.Notifications.Ticket;
 using Service.Server.Communication.Ticket;
+using TicketNotificationService = Service.Server.Communication.Ticket.TicketNotificationService;
 
 namespace Service.Server.Communication.Mock.Ticket;
 
-public class MockTicketCommandService(TicketNotificationServiceImpl ticketNotificationService)
+public class MockTicketCommandService(TicketNotificationService ticketNotificationService)
     : TicketCommandProtoService.TicketCommandProtoServiceBase
 {
     public override async Task<CommandResponse> CreateTicket(CreateTicketCommandProto request, ServerCallContext context)

@@ -13,7 +13,7 @@ public class AddTicketToActiveSprintCommandHandler(
 {
     public async Task Handle(AddTicketToActiveSprintCommand command)
     {
-        var ticketDto = await ticketRequestsService.GetTicketAsync(command.TicketId);
+        var ticketDto = await ticketRequestsService.GetTicketById(command.TicketId);
 
         if (ticketDto == null) return;
 

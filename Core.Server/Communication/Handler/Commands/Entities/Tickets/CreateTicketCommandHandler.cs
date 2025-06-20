@@ -2,6 +2,7 @@ using Service.Server.CQRS.Commands.Entities.Sprints;
 using Service.Server.CQRS.Commands.Entities.Tickets;
 using Service.Server.CQRS.Requests.Sprints;
 using Service.Server.Old.Services.Entities.Settings;
+using Service.Server.Old.Services.Entities.Sprints;
 using Service.Server.Old.Services.Entities.Tickets;
 
 namespace Service.Server.Old.Handler.Commands.Entities.Tickets;
@@ -9,16 +10,15 @@ namespace Service.Server.Old.Handler.Commands.Entities.Tickets;
 public class CreateTicketCommandHandler(
     ITicketCommandsService ticketCommandsService,
     ISettingsRequestsService settingsRequestsService,
-    IMediator mediator)
-    : IRequestHandler<CreateTicketCommand, Unit>
+    ISprintRequestsService sprintsRequestsService)
 {
-    public async Task<Unit> Handle(CreateTicketCommand command, CancellationToken cancellationToken)
+    public async Task Handle(CreateTicketCommand command)
     {
         var config = await settingsRequestsService.Get();
 
-        if (config!.IsAddNewTicketsToCurrentSprintActive)
+        if (config.IsAddNewTicketsToCurrentSprintActive)
         {
-            var activeSprint = await mediator.Send(new GetActiveSprintRequest(), cancellationToken);
+            var activeSprint = await sprintsRequestsService.GetActiveSprint(); 
 
             if (activeSprint != null)
             {
@@ -29,6 +29,5 @@ public class CreateTicketCommandHandler(
         }
 
         await ticketCommandsService.Create(command);
-        return Unit.Value;
     }
 }

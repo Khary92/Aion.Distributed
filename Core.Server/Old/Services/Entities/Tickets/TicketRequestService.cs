@@ -1,22 +1,21 @@
 using Domain.Entities;
 using Domain.Interfaces;
 using Service.Server.Communication.Mapper;
+using Service.Server.Old.Services.Entities.Sprints;
 
 namespace Service.Server.Old.Services.Entities.Tickets;
 
 public class TicketRequestService(
-    ITicketEventsStore ticketEventStore,
-    IDtoMapper<TicketDto, Ticket> ticketMapper) : ITicketRequestsService
+    ITicketEventsStore ticketEventStore, ISprintRequestsService sprintRequestsService) : ITicketRequestsService
 {
-    public async Task<TicketDto?> GetTicketAsync(Guid ticketId)
+    public async Task<Ticket?> GetTicketById(Guid ticketId)
     {
         var ticketEvents = await ticketEventStore.GetEventsForAggregateAsync(ticketId);
 
-        var domainTicket = Ticket.Rehydrate(ticketEvents);
-        return ticketMapper.ToDto(domainTicket);
+        return Ticket.Rehydrate(ticketEvents);
     }
 
-    public async Task<List<TicketDto>> GetAll()
+    public async Task<List<Ticket>> GetAll()
     {
         var allEvents = await ticketEventStore.GetAllEventsAsync();
 
@@ -27,11 +26,10 @@ public class TicketRequestService(
 
         return groupedEvents
             .Select(group => Ticket.Rehydrate(group.ToList()))
-            .Select(ticketMapper.ToDto)
             .ToList();
     }
 
-    public async Task<List<TicketDto>> GetTicketsBySprintId(Guid sprintId)
+    public async Task<List<Ticket>> GetTicketsBySprintId(Guid sprintId)
     {
         var allEvents = await ticketEventStore.GetAllEventsAsync();
 
@@ -41,8 +39,16 @@ public class TicketRequestService(
 
         return groupedEvents
             .Select(group => Ticket.Rehydrate(group.ToList()))
-            .Select(ticketMapper.ToDto)
             .Where(t => t.SprintIds.Contains(sprintId))
             .ToList();
+    }
+
+    public async Task<List<Ticket>> GetTicketsForCurrentSprint()
+    {
+        var activeSprint = await sprintRequestsService.GetActiveSprint();
+
+        if (activeSprint == null) return [];
+        
+        return await GetTicketsBySprintId(activeSprint.SprintId);
     }
 }

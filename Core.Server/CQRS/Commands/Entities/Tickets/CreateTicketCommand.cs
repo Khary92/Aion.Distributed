@@ -6,4 +6,4 @@ public record CreateTicketCommand(
     Guid TicketId,
     string Name,
     string BookingNumber,
-    Collection<Guid> SprintIds);
+    List<Guid> SprintIds);

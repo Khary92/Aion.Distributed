@@ -79,7 +79,7 @@ public class ExportService(
 
         foreach (var timeSlot in timeSlots)
         {
-            var ticket = await ticketRequestsService.GetTicketAsync(timeSlot.SelectedTicketId);
+            var ticket = await ticketRequestsService.GetTicketById(timeSlot.SelectedTicketId);
             var elapsedSeconds = (int)(timeSlot.EndTime - timeSlot.StartTime).TotalSeconds;
 
             if (!result.TryGetValue(workDay.Date, out var ticketDataList))

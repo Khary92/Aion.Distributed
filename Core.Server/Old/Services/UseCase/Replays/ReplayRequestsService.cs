@@ -8,7 +8,7 @@ public class ReplayRequestsService(ITicketRequestsService ticketRequestsService,
 {
     public async Task<TicketReplayDecorator> GetTicketReplayById(Guid ticketId)
     {
-        var ticket = await ticketRequestsService.GetTicketAsync(ticketId);
+        var ticket = await ticketRequestsService.GetTicketById(ticketId);
 
         if (ticket == null) throw new Exception("Ticket not found");
 
