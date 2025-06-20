@@ -14,12 +14,21 @@ message GetWorkDayByDateRequestProto {
   google.protobuf.Timestamp date = 1;
 }
 
+message IsWorkDayExistingRequestProto {
+  google.protobuf.Timestamp date = 1;
+}
+
 message WorkDayListProto {
   repeated WorkDayProto work_days = 1;
+}
+
+message WorkDayExistsResponseProto {
+  bool exists = 1;
 }
 
 service WorkDayRequestService {
   rpc GetAllWorkDays(GetAllWorkDaysRequestProto) returns (WorkDayListProto);
   rpc GetSelectedWorkDay(GetSelectedWorkDayRequestProto) returns (WorkDayProto);
   rpc GetWorkDayByDate(GetWorkDayByDateRequestProto) returns (WorkDayProto);
+  rpc IsWorkDayExisting(IsWorkDayExistingRequestProto) returns (WorkDayExistsResponseProto);
 }

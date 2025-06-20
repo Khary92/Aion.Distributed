@@ -108,13 +108,7 @@ public static class SprintProtoExtensions
             }
         };
     }
-
-
-    public static GetActiveSprintRequest ToCommand()
-    {
-        return new GetActiveSprintRequest();
-    }
-
+    
     public static SprintProto ToProto(this Domain.Entities.Sprint sprint)
     {
         return new SprintProto

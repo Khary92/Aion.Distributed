@@ -19,7 +19,8 @@ public class TimeSlotControlService(
 {
     public async Task Create(Guid ticketId)
     {
-        var currentWorkDayId = (await workDayRequestsService.GetAll())
+        var workDays = await workDayRequestsService.GetAll();
+        var currentWorkDayId = workDays
             .First(wd => wd.Date.Date == runTimeSettings.SelectedDate.Date).WorkDayId;
 
         var newTimeSlotId = Guid.NewGuid();

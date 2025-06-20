@@ -39,6 +39,18 @@ public class WorkDaysModel(
 
     public async Task InitializeAsync()
     {
+        if (!await requestSender.Send(new IsWorkDayExistingRequestProto
+            {
+                Date = DateTimeOffset.Now.ToTimestamp(),
+            }))
+        {
+            await commandSender.Send(new CreateWorkDayCommandProto
+            {
+                WorkDayId = Guid.NewGuid().ToString(),
+                Date = DateTimeOffset.Now.ToTimestamp(),
+            });
+        }
+
         WorkDays.Clear();
         WorkDays.AddRange(await requestSender.Send(new GetAllWorkDaysRequestProto()));
     }

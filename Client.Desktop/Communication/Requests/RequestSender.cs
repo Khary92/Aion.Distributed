@@ -180,6 +180,11 @@ public class RequestSender(
         return await workDayRequestSender.Send(request);
     }
 
+    public async Task<bool> Send(IsWorkDayExistingRequestProto request)
+    {
+        return await workDayRequestSender.Send(request);
+    }
+
     public async Task<List<DocumentationReplayDto>> Send(GetTicketReplaysByIdRequestProto request)
     {
         return await ticketReplayRequestSender.Send(request);

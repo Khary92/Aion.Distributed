@@ -63,4 +63,10 @@ public class WorkDayRequestsService(
             .Select(group => WorkDay.Rehydrate(group.ToList()))
             .FirstOrDefault(wd => wd.Date.Date == date.Date);
     }
+
+    public async Task<bool> IsWorkDayExisting(DateTimeOffset toDateTimeOffset)
+    {
+        var workDayByDate = await GetWorkDayByDate(toDateTimeOffset.Date.Date);
+        return workDayByDate != null;
+    }
 }

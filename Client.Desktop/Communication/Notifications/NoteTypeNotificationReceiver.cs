@@ -36,11 +36,11 @@ public class NoteTypeNotificationReceiver(
 
                         Dispatcher.UIThread.Post(() =>
                         {
-                            messenger.Send(messenger.Send(new NewNoteTypeMessage(new NoteTypeDto(
+                            messenger.Send(new NewNoteTypeMessage(new NoteTypeDto(
                                 Guid.Parse(created.NoteTypeId),
                                 created.Name,
                                 created.Color
-                            ))));
+                            )));
                         });
 
                         break;

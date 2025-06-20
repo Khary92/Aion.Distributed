@@ -27,10 +27,16 @@ public class WorkDayRequestSender : IWorkDayRequestSender
         return ToDto(response);
     }
 
-    public async Task<WorkDayDto?> Send(GetWorkDayByDateRequestProto request)
+    public async Task<WorkDayDto> Send(GetWorkDayByDateRequestProto request)
     {
         var response = await _client.GetWorkDayByDateAsync(request);
         return ToDto(response);
+    }
+    
+    public async Task<bool> Send(IsWorkDayExistingRequestProto request)
+    {
+        var response = await _client.IsWorkDayExistingAsync(request);
+        return response.Exists;
     }
 
     private static WorkDayDto ToDto(WorkDayProto proto)

@@ -107,11 +107,11 @@ public class TimeTrackingModel(
         messenger.Register<TicketAddedToSprintNotification>(this, async void (_, _) => { await Initialize(); });
         messenger.Register<TicketAddedToActiveSprintNotification>(this, async void (_, _) => { await Initialize(); });
 
-        messenger.Register<TimeSlotControlCreatedNotification>(this,
-            (_, m) =>
+        messenger.Register<TimeSlotControlCreatedNotification>(this, async void(_, m) =>
             {
-                timeSlotViewModelFactory.Create(Guid.Parse(m.TicketId), Guid.Parse(m.StatisticsDataId),
-                    Guid.Parse(m.TimeSlotId));
+                TimeSlotViewModels.Add(await 
+                    timeSlotViewModelFactory.Create(Guid.Parse(m.TicketId), Guid.Parse(m.StatisticsDataId),
+                        Guid.Parse(m.TimeSlotId)));
             });
 
         messenger.Register<SprintSelectionChangedNotification>(this, async void (_, _) =>

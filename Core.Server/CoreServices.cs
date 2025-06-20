@@ -3,6 +3,7 @@ using Core.Server.Communication.Services.Note;
 using Core.Server.Communication.Services.NoteType;
 using Core.Server.Communication.Services.Settings;
 using Core.Server.Communication.Services.Sprint;
+using Core.Server.Communication.Services.Sprint.Handlers;
 using Core.Server.Communication.Services.StatisticsData;
 using Core.Server.Communication.Services.Tag;
 using Core.Server.Communication.Services.Ticket;
@@ -46,14 +47,24 @@ public static class CoreServices
         AddRequestsServices(services);
         AddCommandsServices(services);
         AddCommandToEventTranslators(services);
+        AddCommandHandler(services);
     }
 
     private static void AddCommonServices(this IServiceCollection services)
     {
-        services.AddSingleton<IRunTimeSettings, RunTimeSettings>();
         services.AddSingleton<TimerService>();
+        
+        services.AddSingleton<IRunTimeSettings, RunTimeSettings>();
+        services.AddScoped<ITimeSlotControlService, TimeSlotControlService>();
     }
-
+    
+    private static void AddCommandHandler(this IServiceCollection services)
+    {
+        services.AddScoped<AddTicketToActiveSprintCommandHandler>();
+        services.AddScoped<AddTicketToSprintCommandHandler>();
+        services.AddScoped<SetSprintActiveStatusCommandHandler>();
+    }
+    
     private static void AddRequestsServices(this IServiceCollection services)
     {
         services.AddSingleton<IAiSettingsRequestsService, AiSettingsRequestsService>();

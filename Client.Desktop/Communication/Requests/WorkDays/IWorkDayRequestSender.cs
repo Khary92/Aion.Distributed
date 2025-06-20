@@ -10,4 +10,5 @@ public interface IWorkDayRequestSender
     Task<List<WorkDayDto>> Send(GetAllWorkDaysRequestProto request);
     Task<WorkDayDto> Send(GetSelectedWorkDayRequestProto request);
     Task<WorkDayDto> Send(GetWorkDayByDateRequestProto request);
+    Task<bool> Send(IsWorkDayExistingRequestProto request);
 }

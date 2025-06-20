@@ -8,4 +8,5 @@ public interface IWorkDayRequestsService
     Task<List<WorkDay>> GetAll();
     Task<List<WorkDay>> GetWorkDaysInDateRange(DateTimeOffset startDate, DateTimeOffset endDate);
     Task<WorkDay?> GetWorkDayByDate(DateTimeOffset date);
+    Task<bool> IsWorkDayExisting(DateTimeOffset toDateTimeOffset);
 }
