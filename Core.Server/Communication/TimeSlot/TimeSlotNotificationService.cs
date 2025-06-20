@@ -3,7 +3,7 @@ using Proto.Notifications.TimeSlots;
 
 namespace Service.Server.Communication.TimeSlot;
 
-public class TimeSlotNotificationServiceImpl : TimeSlotNotificationService.TimeSlotNotificationServiceBase
+public class TimeSlotNotificationService : Proto.Notifications.TimeSlots.TimeSlotNotificationService.TimeSlotNotificationServiceBase
 {
     private IServerStreamWriter<TimeSlotNotification>? _responseStream;
     private CancellationToken _cancellationToken;

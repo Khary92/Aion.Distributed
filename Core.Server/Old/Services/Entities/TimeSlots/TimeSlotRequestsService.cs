@@ -5,26 +5,23 @@ using Service.Server.Communication.Mapper;
 
 namespace Service.Server.Old.Services.Entities.TimeSlots;
 
-public class TimeSlotRequestsService(
-    IEventStore<TimeSlotEvent> timeSlotEventsStore,
-    IDtoMapper<TimeSlotDto, TimeSlot> timeSlotMapper) : ITimeSlotRequestsService
+public class TimeSlotRequestsService(IEventStore<TimeSlotEvent> timeSlotEventsStore) : ITimeSlotRequestsService
 {
-    public async Task<TimeSlotDto> GetById(Guid timeSlotId)
+    public async Task<TimeSlot> GetById(Guid timeSlotId)
     {
         var timeSlotEvents = await timeSlotEventsStore
             .GetEventsForAggregateAsync(timeSlotId);
-
-        var domainTimeSlot = TimeSlot.Rehydrate(timeSlotEvents);
-        return timeSlotMapper.ToDto(domainTimeSlot);
+        
+        return TimeSlot.Rehydrate(timeSlotEvents);
     }
 
-    public async Task<List<TimeSlotDto>> GetTimeSlotsForWorkDayId(Guid workDayId)
+    public async Task<List<TimeSlot>> GetTimeSlotsForWorkDayId(Guid workDayId)
     {
         var timeSlotDtos = await GetAll();
         return timeSlotDtos.Where(x => x.WorkDayId == workDayId).ToList();
     }
 
-    public async Task<List<TimeSlotDto>> GetAll()
+    public async Task<List<TimeSlot>> GetAll()
     {
         var allEvents = await timeSlotEventsStore.GetAllEventsAsync();
 
@@ -35,7 +32,6 @@ public class TimeSlotRequestsService(
 
         return groupedEvents
             .Select(group => TimeSlot.Rehydrate(group.ToList()))
-            .Select(timeSlotMapper.ToDto)
             .ToList();
     }
 }
