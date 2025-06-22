@@ -3,7 +3,7 @@ using Core.Server.Services.Entities.TimerSettings;
 using Domain.Entities;
 using Proto.Notifications.UseCase;
 using Timer = System.Timers.Timer;
-using UseCaseNotificationService = Core.Server.Communication.Services.UseCase.UseCaseNotificationService;
+using UseCaseNotificationService = Core.Server.Communication.Endpoints.UseCase.UseCaseNotificationService;
 
 namespace Core.Server.Services.UseCase;
 

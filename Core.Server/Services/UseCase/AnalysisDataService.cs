@@ -1,6 +1,6 @@
-﻿using Core.Server.Communication.Services.StatisticsData;
-using Core.Server.Communication.Services.Ticket;
-using Core.Server.Communication.Services.TimeSlot;
+﻿using Core.Server.Communication.Endpoints.StatisticsData;
+using Core.Server.Communication.Endpoints.Ticket;
+using Core.Server.Communication.Endpoints.TimeSlot;
 using Core.Server.Services.Entities.StatisticsData;
 using Core.Server.Services.Entities.Tags;
 using Core.Server.Services.Entities.Tickets;

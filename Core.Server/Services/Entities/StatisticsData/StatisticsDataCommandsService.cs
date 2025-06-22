@@ -1,6 +1,6 @@
-using Core.Server.Communication.CQRS.Commands.Entities.StatisticsData;
-using Core.Server.Communication.Services.StatisticsData;
-using Core.Server.Translators.StatisticsData;
+using Core.Server.Communication.Endpoints.StatisticsData;
+using Core.Server.Communication.Records.Commands.Entities.StatisticsData;
+using Core.Server.Translators.Commands.StatisticsData;
 using Domain.Events.StatisticsData;
 using Domain.Interfaces;
 

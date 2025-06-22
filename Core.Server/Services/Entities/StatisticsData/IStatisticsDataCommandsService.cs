@@ -1,4 +1,4 @@
-using Core.Server.Communication.CQRS.Commands.Entities.StatisticsData;
+using Core.Server.Communication.Records.Commands.Entities.StatisticsData;
 
 namespace Core.Server.Services.Entities.StatisticsData;
 

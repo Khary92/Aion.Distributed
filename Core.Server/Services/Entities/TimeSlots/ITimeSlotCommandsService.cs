@@ -1,4 +1,4 @@
-using Core.Server.Communication.CQRS.Commands.Entities.TimeSlots;
+using Core.Server.Communication.Records.Commands.Entities.TimeSlots;
 
 namespace Core.Server.Services.Entities.TimeSlots;
 

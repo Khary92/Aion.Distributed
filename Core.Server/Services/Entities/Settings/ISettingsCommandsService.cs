@@ -1,4 +1,4 @@
-using Core.Server.Communication.CQRS.Commands.Entities.Settings;
+using Core.Server.Communication.Records.Commands.Entities.Settings;
 
 namespace Core.Server.Services.Entities.Settings;
 

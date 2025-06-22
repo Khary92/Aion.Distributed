@@ -1,4 +1,4 @@
-using Core.Server.Communication.CQRS.Commands.Entities.TimerSettings;
+using Core.Server.Communication.Records.Commands.Entities.TimerSettings;
 
 namespace Core.Server.Services.Entities.TimerSettings;
 

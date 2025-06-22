@@ -1,6 +1,6 @@
-using Core.Server.Communication.CQRS.Commands.Entities.Tickets;
-using Core.Server.Communication.Services.Ticket;
-using Core.Server.Translators.Tickets;
+using Core.Server.Communication.Endpoints.Ticket;
+using Core.Server.Communication.Records.Commands.Entities.Tickets;
+using Core.Server.Translators.Commands.Tickets;
 using Domain.Interfaces;
 
 namespace Core.Server.Services.Entities.Tickets;

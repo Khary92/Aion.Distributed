@@ -1,4 +1,4 @@
-using Core.Server.Communication.CQRS.Commands.Entities.AiSettings;
+using Core.Server.Communication.Records.Commands.Entities.AiSettings;
 
 namespace Core.Server.Services.Entities.AiSettings;
 

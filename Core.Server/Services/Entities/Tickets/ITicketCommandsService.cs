@@ -1,4 +1,4 @@
-using Core.Server.Communication.CQRS.Commands.Entities.Tickets;
+using Core.Server.Communication.Records.Commands.Entities.Tickets;
 
 namespace Core.Server.Services.Entities.Tickets;
 

@@ -1,6 +1,6 @@
-using Core.Server.Communication.CQRS.Commands.Entities.TimeSlots;
-using Core.Server.Communication.Services.TimeSlot;
-using Core.Server.Translators.TimeSlots;
+using Core.Server.Communication.Endpoints.TimeSlot;
+using Core.Server.Communication.Records.Commands.Entities.TimeSlots;
+using Core.Server.Translators.Commands.TimeSlots;
 using Domain.Events.TimeSlots;
 using Domain.Interfaces;
 

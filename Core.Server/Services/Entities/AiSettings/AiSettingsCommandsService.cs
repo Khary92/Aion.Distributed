@@ -1,6 +1,6 @@
-using Core.Server.Communication.CQRS.Commands.Entities.AiSettings;
-using Core.Server.Communication.Services.AiSettings;
-using Core.Server.Translators.AiSettings;
+using Core.Server.Communication.Endpoints.AiSettings;
+using Core.Server.Communication.Records.Commands.Entities.AiSettings;
+using Core.Server.Translators.Commands.AiSettings;
 using Domain.Events.AiSettings;
 using Domain.Interfaces;
 

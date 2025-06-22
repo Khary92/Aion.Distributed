@@ -1,4 +1,4 @@
-using Core.Server.Communication.CQRS.Commands.Entities.Note;
+using Core.Server.Communication.Records.Commands.Entities.Note;
 
 namespace Core.Server.Services.Entities.Notes;
 

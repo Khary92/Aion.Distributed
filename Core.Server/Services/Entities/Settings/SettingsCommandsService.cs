@@ -1,6 +1,6 @@
-using Core.Server.Communication.CQRS.Commands.Entities.Settings;
-using Core.Server.Communication.Services.Settings;
-using Core.Server.Translators.Settings;
+using Core.Server.Communication.Endpoints.Settings;
+using Core.Server.Communication.Records.Commands.Entities.Settings;
+using Core.Server.Translators.Commands.Settings;
 using Domain.Events.Settings;
 using Domain.Interfaces;
 

@@ -1,4 +1,4 @@
-using Core.Server.Communication.CQRS.Commands.Entities.Sprints;
+using Core.Server.Communication.Records.Commands.Entities.Sprints;
 
 namespace Core.Server.Services.Entities.Sprints;
 

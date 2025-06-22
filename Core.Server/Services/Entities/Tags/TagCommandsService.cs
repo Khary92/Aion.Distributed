@@ -1,6 +1,6 @@
-using Core.Server.Communication.CQRS.Commands.Entities.Tags;
-using Core.Server.Communication.Services.Tag;
-using Core.Server.Translators.Tags;
+using Core.Server.Communication.Endpoints.Tag;
+using Core.Server.Communication.Records.Commands.Entities.Tags;
+using Core.Server.Translators.Commands.Tags;
 using Domain.Events.Tags;
 using Domain.Interfaces;
 

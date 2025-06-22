@@ -1,6 +1,6 @@
-using Core.Server.Communication.CQRS.Commands.Entities.WorkDays;
-using Core.Server.Communication.Services.WorkDay;
-using Core.Server.Translators.WorkDays;
+using Core.Server.Communication.Endpoints.WorkDay;
+using Core.Server.Communication.Records.Commands.Entities.WorkDays;
+using Core.Server.Translators.Commands.WorkDays;
 using Domain.Events.WorkDays;
 using Domain.Interfaces;
 

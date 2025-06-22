@@ -1,4 +1,4 @@
-using Core.Server.Communication.CQRS.Commands.Entities.Sprints;
+using Core.Server.Communication.Records.Commands.Entities.Sprints;
 using Domain.Entities;
 using Domain.Events.Sprints;
 using Domain.Interfaces;

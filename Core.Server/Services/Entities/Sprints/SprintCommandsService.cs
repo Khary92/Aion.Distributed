@@ -1,6 +1,6 @@
-using Core.Server.Communication.CQRS.Commands.Entities.Sprints;
-using Core.Server.Communication.Services.Sprint;
-using Core.Server.Translators.Sprints;
+using Core.Server.Communication.Endpoints.Sprint;
+using Core.Server.Communication.Records.Commands.Entities.Sprints;
+using Core.Server.Translators.Commands.Sprints;
 using Domain.Events.Sprints;
 using Domain.Interfaces;
 

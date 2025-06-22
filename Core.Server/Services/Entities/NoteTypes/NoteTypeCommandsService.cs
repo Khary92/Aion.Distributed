@@ -1,6 +1,6 @@
-using Core.Server.Communication.CQRS.Commands.Entities.NoteType;
-using Core.Server.Communication.Services.NoteType;
-using Core.Server.Translators.NoteTypes;
+using Core.Server.Communication.Endpoints.NoteType;
+using Core.Server.Communication.Records.Commands.Entities.NoteType;
+using Core.Server.Translators.Commands.NoteTypes;
 using Domain.Events.NoteTypes;
 using Domain.Interfaces;
 

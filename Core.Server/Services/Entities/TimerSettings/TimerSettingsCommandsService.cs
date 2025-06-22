@@ -1,6 +1,6 @@
-using Core.Server.Communication.CQRS.Commands.Entities.TimerSettings;
-using Core.Server.Communication.Services.TimerSettings;
-using Core.Server.Translators.TimerSettings;
+using Core.Server.Communication.Endpoints.TimerSettings;
+using Core.Server.Communication.Records.Commands.Entities.TimerSettings;
+using Core.Server.Translators.Commands.TimerSettings;
 using Domain.Events.TimerSettings;
 using Domain.Interfaces;
 

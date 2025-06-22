@@ -1,4 +1,4 @@
-using Core.Server.Communication.CQRS.Commands.Entities.WorkDays;
+using Core.Server.Communication.Records.Commands.Entities.WorkDays;
 
 namespace Core.Server.Services.Entities.WorkDays;
 

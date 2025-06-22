@@ -1,4 +1,4 @@
-using Core.Server.Communication.CQRS.Commands.Entities.Tags;
+using Core.Server.Communication.Records.Commands.Entities.Tags;
 
 namespace Core.Server.Services.Entities.Tags;
 

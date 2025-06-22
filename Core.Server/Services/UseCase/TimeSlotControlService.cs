@@ -1,12 +1,12 @@
-﻿using Core.Server.Communication.CQRS.Commands.Entities.StatisticsData;
-using Core.Server.Communication.CQRS.Commands.Entities.TimeSlots;
-using Core.Server.Communication.Services.UseCase;
+﻿using Core.Server.Communication.Endpoints.UseCase;
+using Core.Server.Communication.Records.Commands.Entities.StatisticsData;
+using Core.Server.Communication.Records.Commands.Entities.TimeSlots;
 using Core.Server.Services.Entities.StatisticsData;
 using Core.Server.Services.Entities.Tickets;
 using Core.Server.Services.Entities.TimeSlots;
 using Core.Server.Services.Entities.WorkDays;
 using Domain.Entities;
-using UseCaseNotificationService = Core.Server.Communication.Services.UseCase.UseCaseNotificationService;
+using UseCaseNotificationService = Core.Server.Communication.Endpoints.UseCase.UseCaseNotificationService;
 
 namespace Core.Server.Services.UseCase;
 
@@ -22,12 +22,12 @@ public class TimeSlotControlService(
 {
     public async Task Create(Guid ticketId)
     {
+        // TODO RuntimeSettings are meant for client only. Not for the server side.
         var workDays = await workDayRequestsService.GetAll();
         var currentWorkDayId = workDays
             .First(wd => wd.Date.Date == runTimeSettings.SelectedDate.Date).WorkDayId;
 
         var existingTicket = await ticketRequestsService.GetTicketById(ticketId);
-
         if (existingTicket is null) throw new Exception("Ticket is null. Something went horribly wrong.");
 
         var newTimeSlot = new TimeSlot
