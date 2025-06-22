@@ -24,7 +24,6 @@ using Core.Server.Communication.Mocks.TimeSlot;
 using Core.Server.Communication.Mocks.TraceReport;
 using Core.Server.Communication.Mocks.UseCase;
 using Core.Server.Communication.Mocks.WorkDay;
-using Core.Server.Services.Entities.TimeSlots;
 
 namespace Core.Server;
 
@@ -48,7 +47,7 @@ public static class EndpointServices
         app.MapGrpcService<TagCommandReceiver>();
         app.MapGrpcService<TicketCommandReceiver>();
         app.MapGrpcService<TimerSettingsCommandReceiver>();
-        app.MapGrpcService<TimeSlotCommandService>();
+        app.MapGrpcService<TimeSlotCommandReceiver>();
         app.MapGrpcService<UseCaseCommandReceiver>();
         app.MapGrpcService<WorkDayCommandReceiver>();
     }

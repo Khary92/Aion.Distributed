@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Client.Desktop.Communication.Commands;
 using Client.Desktop.FileSystem;
 using Proto.Command.TimeSlots;
 
 namespace Client.Desktop.Services.Cache;
 
 public class EndTimeChangedCache(
+    ICommandSender commandSender,
     IFileSystemWrapper fileSystemWrapper,
     IFileSystemWriter fileSystemWriter,
     IFileSystemReader fileSystemReader) : IPersistentCache<SetEndTimeCommandProto>
@@ -22,7 +24,7 @@ public class EndTimeChangedCache(
 
         var data = await fileSystemReader.GetObject<Dictionary<Guid, SetEndTimeCommandProto>>(Path);
 
-        //foreach (var command in data.Values) await timeSlotCommandsService.SetEndTime(command);
+        foreach (var command in data.Values) await commandSender.Send(command);
 
         CleanUp();
     }

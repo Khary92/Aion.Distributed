@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Client.Desktop.Communication.Commands;
 using Client.Desktop.FileSystem;
 using Proto.Command.TimeSlots;
 
 namespace Client.Desktop.Services.Cache;
 
 public class StartTimeChangedCache(
+    ICommandSender commandSender,
     IFileSystemWrapper fileSystemWrapper,
     IFileSystemWriter fileSystemWriter,
     IFileSystemReader fileSystemReader) : IPersistentCache<SetStartTimeCommandProto>
@@ -22,7 +24,7 @@ public class StartTimeChangedCache(
 
         var data = await fileSystemReader.GetObject<Dictionary<Guid, SetStartTimeCommandProto>>(Path);
 
-        //  foreach (var command in data.Values) await timeSlotCommandsService.SetStartTime(command);
+        foreach (var command in data.Values) await commandSender.Send(command);
 
         CleanUp();
     }
