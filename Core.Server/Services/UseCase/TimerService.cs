@@ -15,7 +15,12 @@ public class TimerService
     private int _docuSeconds;
     private int _snapshotSeconds;
 
-    private TimerSettings? _timerSettings;
+    private TimerSettings _timerSettings = new()
+    {
+        TimerSettingsId = Guid.Empty,
+        SnapshotSaveInterval = 30,
+        DocumentationSaveInterval = 30
+    };
 
     public TimerService(ITimerSettingsRequestsService timerSettingsRequestsService,
         UseCaseNotificationService useCaseNotificationService)
