@@ -5,6 +5,7 @@ using Proto.Command.Sprints;
 using Proto.DTO.Sprint;
 using Proto.Notifications.Sprint;
 using Proto.Requests.Sprints;
+using Proto.Shared;
 
 namespace Core.Server.Communication.Services.Sprint;
 

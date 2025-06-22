@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests;
+using Client.Desktop.DTO;
 using Client.Desktop.Models.TimeTracking;
 using Client.Desktop.Replays;
 using Client.Desktop.Views.Custom;
@@ -13,42 +14,25 @@ namespace Client.Desktop.Factories;
 
 public class TimeSlotViewModelFactory(IServiceProvider serviceProvider, IRequestSender requestSender)
     : ITimeSlotViewModelFactory
-{
-    public async Task<TimeSlotViewModel> Create(Guid ticketId, Guid statisticsDataId, Guid timeSlotId)
+{ 
+    public async Task<TimeSlotViewModel> Create(TicketDto ticket, StatisticsDataDto statisticsData, TimeSlotDto timeSlot)
     {
         var timeSlotViewModel = serviceProvider.GetRequiredService<TimeSlotViewModel>();
-
-        var ticketDto = await requestSender.Send(new GetTicketByIdRequestProto
+        
+        var replayDecorator = new TicketReplayDecorator(requestSender, ticket)
         {
-            TicketId = ticketId.ToString()
-        });
-
-        var replayDecorator = new TicketReplayDecorator(requestSender, ticketDto)
-        {
-            DisplayedDocumentation = ticketDto.Documentation,
+            DisplayedDocumentation = ticket.Documentation,
             IsReplayMode = false
         };
 
         timeSlotViewModel.Model.TicketReplayDecorator = replayDecorator;
-
-        var timeSlotDto = await requestSender.Send(new GetTimeSlotByIdRequestProto
-        {
-            TimeSlotId = timeSlotId.ToString()
-        });
-
-        timeSlotViewModel.Model.TimeSlot = timeSlotDto;
-
-        var statisticsDataDto = await requestSender.Send(new GetStatisticsDataByTimeSlotIdRequestProto
-        {
-            TimeSlotId = timeSlotDto.TimeSlotId.ToString()
-        });
-
-        timeSlotViewModel.StatisticsViewModel.StatisticsData = statisticsDataDto;
+        timeSlotViewModel.Model.TimeSlot = timeSlot;
+        timeSlotViewModel.StatisticsViewModel.StatisticsData = statisticsData;
 
         await timeSlotViewModel.StatisticsViewModel.Initialize();
         timeSlotViewModel.StatisticsViewModel.RegisterMessenger();
 
-        timeSlotViewModel.NoteStreamViewModel.TimeSlotId = timeSlotId;
+        timeSlotViewModel.NoteStreamViewModel.TimeSlotId = timeSlot.TimeSlotId;
         await timeSlotViewModel.NoteStreamViewModel.InitializeAsync();
         timeSlotViewModel.NoteStreamViewModel.RegisterMessenger();
 

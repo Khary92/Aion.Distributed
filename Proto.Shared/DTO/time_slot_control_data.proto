@@ -2,8 +2,12 @@
 
 option csharp_namespace = "Proto.Requests.UseCase";
 
+import "DTO/ticket.proto";
+import "DTO/time_slot.proto";
+import "DTO/statistics_data.proto";
+
 message TimeSlotControlDataProto {
-  string ticket_id = 1;
-  string time_slot_id = 2;
-  string statistics_data_id = 3;
+  TicketProto ticket_proto = 1;
+  TimeSlotProto time_slot_proto = 2;
+  StatisticsDataProto statistics_data_proto = 3;
 }

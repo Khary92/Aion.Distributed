@@ -4,16 +4,10 @@ option csharp_namespace = "Proto.Command.UseCases";
 
 service UseCaseCommandProtoService {
   rpc CreateTimeSlotControl (CreateTimeSlotControlCommandProto) returns (CommandResponse);
-  rpc LoadTimeSlotControl (LoadTimeSlotControlCommandProto) returns (CommandResponse);
 }
 
 message CreateTimeSlotControlCommandProto {
   string ticketId = 1;
-}
-
-message LoadTimeSlotControlCommandProto {
-  string timeSlotId = 1;
-  string viewId = 2;
 }
 
 message CommandResponse {

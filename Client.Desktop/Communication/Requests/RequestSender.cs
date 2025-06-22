@@ -190,7 +190,7 @@ public class RequestSender(
         return await ticketReplayRequestSender.Send(request);
     }
 
-    public async Task<TimeSlotControlDataProto> Send(GetTimeSlotControlDataRequestProto request)
+    public async Task<TimeSlotControlDataListProto> Send(GetTimeSlotControlDataRequestProto request)
     {
         return await useCaseRequestSender.Send(request);
     }

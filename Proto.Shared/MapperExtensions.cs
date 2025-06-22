@@ -1,6 +1,6 @@
 ﻿using Google.Protobuf.Collections;
 
-namespace Core.Server.Communication;
+namespace Proto.Shared;
 
 public static class MapperExtensions
 {

@@ -3,6 +3,7 @@ using Proto.Command.Tickets;
 using Proto.DTO.Ticket;
 using Proto.Notifications.Ticket;
 using Proto.Requests.Tickets;
+using Proto.Shared;
 
 namespace Core.Server.Communication.Services.Ticket;
 

@@ -13,12 +13,4 @@ public class MockUseCaseCommandService : UseCaseCommandProtoService.UseCaseComma
 
         return Task.FromResult(new CommandResponse { Success = true });
     }
-
-    public override Task<CommandResponse> LoadTimeSlotControl(LoadTimeSlotControlCommandProto request,
-        ServerCallContext context)
-    {
-        Console.WriteLine($"[LoadTimeSlotControl] TimeSlotId: {request.TimeSlotId}, ViewId: {request.ViewId}");
-
-        return Task.FromResult(new CommandResponse { Success = true });
-    }
 }

@@ -66,6 +66,7 @@ public static class EndpointServices
         app.MapGrpcService<TimerSettingsRequestReceiver>();
         app.MapGrpcService<TimeSlotRequestReceiver>();
         app.MapGrpcService<WorkDayRequestReceiver>();
+        app.MapGrpcService<UseCaseRequestReceiver>();
 
         //TODO
         //app.MapGrpcService<UseCaseRequestReceiver>();

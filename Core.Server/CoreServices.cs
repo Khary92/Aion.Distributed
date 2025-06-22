@@ -11,6 +11,7 @@ using Core.Server.Communication.Services.TimerSettings;
 using Core.Server.Communication.Services.TimeSlot;
 using Core.Server.Communication.Services.TraceReport;
 using Core.Server.Communication.Services.UseCase;
+using Core.Server.Communication.Services.UseCase.Handler;
 using Core.Server.Communication.Services.WorkDay;
 using Core.Server.Services.Entities.AiSettings;
 using Core.Server.Services.Entities.Notes;
@@ -47,7 +48,7 @@ public static class CoreServices
         AddRequestsServices(services);
         AddCommandsServices(services);
         AddCommandToEventTranslators(services);
-        AddCommandHandler(services);
+        AddHandlers(services);
     }
 
     private static void AddCommonServices(this IServiceCollection services)
@@ -58,11 +59,13 @@ public static class CoreServices
         services.AddScoped<ITimeSlotControlService, TimeSlotControlService>();
     }
     
-    private static void AddCommandHandler(this IServiceCollection services)
+    private static void AddHandlers(this IServiceCollection services)
     {
         services.AddScoped<AddTicketToActiveSprintCommandHandler>();
         services.AddScoped<AddTicketToSprintCommandHandler>();
         services.AddScoped<SetSprintActiveStatusCommandHandler>();
+        
+        services.AddScoped<LoadTimeSlotControlDataHandler>();
     }
     
     private static void AddRequestsServices(this IServiceCollection services)

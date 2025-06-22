@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "DTO/time_slot_control_data.proto";
+
 option csharp_namespace = "Proto.Notifications.UseCase";
 
 service NotificationService {
@@ -33,9 +35,7 @@ message SaveDocumentationNotification {}
 message SprintSelectionChangedNotification {}
 
 message TimeSlotControlCreatedNotification {
-  string statisticsDataId = 1;
-  string timeSlotId = 2;
-  string ticketId = 3;
+  TimeSlotControlDataProto time_slot_control_data = 1;
 }
 
 message TraceReportSentNotification {

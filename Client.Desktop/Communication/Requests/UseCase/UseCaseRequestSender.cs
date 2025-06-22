@@ -10,7 +10,7 @@ public class UseCaseRequestSender : IUseCaseRequestSender
     private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly UseCaseRequestService.UseCaseRequestServiceClient _client = new(Channel);
 
-    public async Task<TimeSlotControlDataProto> Send(GetTimeSlotControlDataRequestProto request)
+    public async Task<TimeSlotControlDataListProto> Send(GetTimeSlotControlDataRequestProto request)
     {
         return await _client.GetTimeSlotControlDataByIdAsync(request);
     }

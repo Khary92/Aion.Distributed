@@ -2,6 +2,7 @@
 using Grpc.Core;
 using Proto.DTO.Tag;
 using Proto.Requests.Tags;
+using Proto.Shared;
 
 namespace Core.Server.Communication.Services.Tag;
 

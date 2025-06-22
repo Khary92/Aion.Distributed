@@ -15,10 +15,4 @@ public class UseCaseCommandSender : IUseCaseCommandSender
         var response = await _client.CreateTimeSlotControlAsync(command);
         return response.Success;
     }
-
-    public async Task<bool> Send(LoadTimeSlotControlCommandProto command)
-    {
-        var response = await _client.LoadTimeSlotControlAsync(command);
-        return response.Success;
-    }
 }

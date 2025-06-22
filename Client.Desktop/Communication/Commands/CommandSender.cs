@@ -208,11 +208,6 @@ public class CommandSender(
         return await useCaseCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(LoadTimeSlotControlCommandProto command)
-    {
-        return await useCaseCommandSender.Send(command);
-    }
-
     public async Task<bool> Send(CreateWorkDayCommandProto command)
     {
         return await workDayCommandSender.Send(command);

@@ -15,13 +15,4 @@ public class UseCaseCommandReceiver(ITimeSlotControlService timeSlotControlServi
         await timeSlotControlService.Create(Guid.Parse(request.TicketId));
         return new CommandResponse { Success = true };
     }
-
-    public override async Task<CommandResponse> LoadTimeSlotControl(LoadTimeSlotControlCommandProto request,
-        ServerCallContext context)
-    {
-        Console.WriteLine($"[LoadTimeSlotControl] TimeSlotId: {request.TimeSlotId}, ViewId: {request.ViewId}");
-
-        await timeSlotControlService.Create(Guid.Parse(request.TimeSlotId));
-        return new CommandResponse { Success = true };
-    }
 }

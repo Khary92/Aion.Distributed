@@ -2,8 +2,10 @@
 using Core.Server.Communication.CQRS.Commands.Entities.TimeSlots;
 using Core.Server.Communication.Services.UseCase;
 using Core.Server.Services.Entities.StatisticsData;
+using Core.Server.Services.Entities.Tickets;
 using Core.Server.Services.Entities.TimeSlots;
 using Core.Server.Services.Entities.WorkDays;
+using Domain.Entities;
 using UseCaseNotificationService = Core.Server.Communication.Services.UseCase.UseCaseNotificationService;
 
 namespace Core.Server.Services.UseCase;
@@ -15,6 +17,7 @@ public class TimeSlotControlService(
     IStatisticsDataCommandsService statisticsDataCommandsService,
     ITimeSlotRequestsService timeSlotRequestsService,
     IStatisticsDataRequestsService statisticsDataRequestsService,
+    ITicketRequestsService ticketRequestsService,
     UseCaseNotificationService useCaseNotificationService) : ITimeSlotControlService
 {
     public async Task Create(Guid ticketId)
@@ -23,27 +26,53 @@ public class TimeSlotControlService(
         var currentWorkDayId = workDays
             .First(wd => wd.Date.Date == runTimeSettings.SelectedDate.Date).WorkDayId;
 
-        var newTimeSlotId = Guid.NewGuid();
-        await timeSlotCommandsService.Create(new CreateTimeSlotCommand(newTimeSlotId, ticketId,
-            currentWorkDayId, DateTimeOffset.Now, DateTimeOffset.Now, false));
+        var existingTicket = await ticketRequestsService.GetTicketById(ticketId);
 
-        var newStatisticsDataId = Guid.NewGuid();
-        await statisticsDataCommandsService.Create(new CreateStatisticsDataCommand(newStatisticsDataId,
-            true, false, false, [], newTimeSlotId));
+        if (existingTicket is null) throw new Exception("Ticket is null. Something went horribly wrong.");
+
+        var newTimeSlot = new TimeSlot
+        {
+            TimeSlotId = Guid.NewGuid(),
+            SelectedTicketId = ticketId,
+            WorkDayId = currentWorkDayId,
+            StartTime = DateTimeOffset.Now,
+            EndTime = DateTimeOffset.Now,
+            IsTimerRunning = false,
+        };
+
+        await timeSlotCommandsService.Create(new CreateTimeSlotCommand(newTimeSlot.TimeSlotId,
+            newTimeSlot.SelectedTicketId,
+            newTimeSlot.WorkDayId, newTimeSlot.StartTime, newTimeSlot.EndTime, newTimeSlot.IsTimerRunning));
+
+        var newStatisticsData = new StatisticsData
+        {
+            StatisticsId = Guid.NewGuid(),
+            IsProductive = true,
+            IsNeutral = false,
+            IsUnproductive = false,
+            TagIds = []
+        };
+
+        await statisticsDataCommandsService.Create(new CreateStatisticsDataCommand(newStatisticsData.StatisticsId,
+            newStatisticsData.IsProductive, newStatisticsData.IsNeutral, newStatisticsData.IsUnproductive,
+            newStatisticsData.TagIds, newTimeSlot.TimeSlotId));
 
         await useCaseNotificationService.SendNotificationAsync(
-            UseCaseProtoExtensions.ToNotification(newTimeSlotId, newStatisticsDataId, ticketId));
+            UseCaseProtoExtensions.ToNotification(newTimeSlot, newStatisticsData, existingTicket));
     }
 
     public async Task Load(Guid timeSlotId)
     {
         var timeSlot = await timeSlotRequestsService.GetById(timeSlotId);
+        if (timeSlot is null) throw new Exception("TimeSlot is null. Something went horribly wrong.");
+
+        var ticket = await ticketRequestsService.GetTicketById(timeSlot.SelectedTicketId);
+        if (ticket is null) throw new Exception("Ticket is null. Something went horribly wrong.");
 
         var statisticsData = await statisticsDataRequestsService.GetStatisticsDataByTimeSlotId(timeSlotId);
-
-        if (statisticsData is null) throw new Exception("StatisticsData is null");
+        if (statisticsData is null) throw new Exception("StatisticsData is null. Something went horribly wrong.");
 
         await useCaseNotificationService.SendNotificationAsync(
-            UseCaseProtoExtensions.ToNotification(statisticsData.StatisticsId, timeSlotId, timeSlot.SelectedTicketId));
+            UseCaseProtoExtensions.ToNotification(timeSlot, statisticsData, ticket));
     }
 }

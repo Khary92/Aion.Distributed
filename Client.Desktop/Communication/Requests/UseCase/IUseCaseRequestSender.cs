@@ -5,5 +5,5 @@ namespace Client.Desktop.Communication.Requests.UseCase;
 
 public interface IUseCaseRequestSender
 {
-    Task<TimeSlotControlDataProto> Send(GetTimeSlotControlDataRequestProto request);
+    Task<TimeSlotControlDataListProto> Send(GetTimeSlotControlDataRequestProto request);
 }

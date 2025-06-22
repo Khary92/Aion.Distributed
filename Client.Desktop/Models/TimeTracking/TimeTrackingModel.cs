@@ -16,9 +16,7 @@ using Proto.Notifications.Ticket;
 using Proto.Notifications.UseCase;
 using Proto.Requests.Sprints;
 using Proto.Requests.Tickets;
-using Proto.Requests.TimeSlots;
 using Proto.Requests.UseCase;
-using Proto.Requests.WorkDays;
 using ReactiveUI;
 using ListEx = DynamicData.ListEx;
 
@@ -107,12 +105,13 @@ public class TimeTrackingModel(
         messenger.Register<TicketAddedToSprintNotification>(this, async void (_, _) => { await Initialize(); });
         messenger.Register<TicketAddedToActiveSprintNotification>(this, async void (_, _) => { await Initialize(); });
 
-        messenger.Register<TimeSlotControlCreatedNotification>(this, async void(_, m) =>
-            {
-                TimeSlotViewModels.Add(await 
-                    timeSlotViewModelFactory.Create(Guid.Parse(m.TicketId), Guid.Parse(m.StatisticsDataId),
-                        Guid.Parse(m.TimeSlotId)));
-            });
+        messenger.Register<TimeSlotControlCreatedNotification>(this, async void (_, m) =>
+        {
+            TimeSlotViewModels.Add(await
+                timeSlotViewModelFactory.Create(m.TimeSlotControlData.TicketProto.ToDto(),
+                    m.TimeSlotControlData.StatisticsDataProto.ToDto(),
+                    m.TimeSlotControlData.TimeSlotProto.ToDto()));
+        });
 
         messenger.Register<SprintSelectionChangedNotification>(this, async void (_, _) =>
         {
@@ -169,28 +168,15 @@ public class TimeTrackingModel(
     {
         TimeSlotViewModels.Clear();
 
-        var selectedWorkDay = await requestSender.Send(new GetSelectedWorkDayRequestProto
+        var controlDataList = await requestSender.Send(new GetTimeSlotControlDataRequestProto
         {
-            WorkDayId = (await requestSender.Send(new GetWorkDayByDateRequestProto
-            {
-                Date = Timestamp.FromDateTimeOffset(runtimeSettings.SelectedDate)
-            })).WorkDayId.ToString()
+            Date = Timestamp.FromDateTimeOffset(runtimeSettings.SelectedDate)
         });
 
-        var timeSlots = await requestSender.Send(new GetTimeSlotsForWorkDayIdRequestProto
+        foreach (var controlData in controlDataList.TimeSlotControlData)
         {
-            WorkDayId = selectedWorkDay.WorkDayId.ToString()
-        });
-
-        foreach (var timeSlotDto in timeSlots)
-        {
-            var data = await requestSender.Send(new GetTimeSlotControlDataRequestProto
-            {
-                TimeSlotId = timeSlotDto.TimeSlotId.ToString()
-            });
-
-            var timeSlotViewModel = await timeSlotViewModelFactory.Create(Guid.Parse(data.TicketId),
-                Guid.Parse(data.StatisticsDataId), Guid.Parse(data.TimeSlotId));
+            var timeSlotViewModel = await timeSlotViewModelFactory.Create(controlData.TicketProto.ToDto(),
+                controlData.StatisticsDataProto.ToDto(), controlData.TimeSlotProto.ToDto());
             TimeSlotViewModels.Add(timeSlotViewModel);
         }
 

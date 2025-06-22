@@ -1,15 +1,18 @@
 syntax = "proto3";
 
 import "DTO/time_slot_control_data.proto";
+import "google/protobuf/timestamp.proto";
 
 option csharp_namespace = "Proto.Requests.UseCase";
 
 message GetTimeSlotControlDataRequestProto {
-  string time_slot_id = 1;
+  google.protobuf.Timestamp date = 1;
 }
 
-
+message TimeSlotControlDataListProto {
+  repeated TimeSlotControlDataProto time_slot_control_data = 1;
+}
 
 service UseCaseRequestService {
-  rpc GetTimeSlotControlDataById(GetTimeSlotControlDataRequestProto) returns (TimeSlotControlDataProto);
+  rpc GetTimeSlotControlDataById(GetTimeSlotControlDataRequestProto) returns (TimeSlotControlDataListProto);
 }
