@@ -47,13 +47,6 @@ public class NoteStreamViewModel(
             TimeSlotId = _timeSlotId.ToString(),
             TimeStamp = Timestamp.FromDateTimeOffset(DateTimeOffset.Now)
         });
-
-        //TODO This must be done on server side. Obviously
-        //await commandSender.Send(new AddNot
-        //{
-        //    NoteId = noteId.ToString(),
-        //    TimeSlotId = TimeSlotId.ToString()
-        //});
     }
 
     public void RegisterMessenger()

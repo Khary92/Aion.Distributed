@@ -84,7 +84,7 @@ public class NoteViewModel : ReactiveObject
         {
             NoteId = Note.NoteId.ToString(),
             Text = Note.Text,
-            NoteTypeId = Note.NoteTypeId.ToString(),
+            NoteTypeId = Note.NoteType == null ? Guid.Empty.ToString() : Note.NoteType.NoteTypeId.ToString(),
             TimeSlotId = Note.TimeSlotId.ToString()
         });
     }

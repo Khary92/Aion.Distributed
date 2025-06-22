@@ -16,7 +16,7 @@ public class NoteRequestReceiver(INoteRequestsService noteRequestsService) : Not
     public override async Task<GetNotesResponseProto> GetNotesByTimeSlotId(GetNotesByTimeSlotIdRequestProto request,
         ServerCallContext context)
     {
-        var notesByTimeSlotId = await noteRequestsService.GetNotesByTicketId(Guid.Parse(request.TimeSlotId));
+        var notesByTimeSlotId = await noteRequestsService.GetNotesByTimeSlotId(Guid.Parse(request.TimeSlotId));
         return notesByTimeSlotId.ToProtoList();
     }
 }
