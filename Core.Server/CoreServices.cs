@@ -57,6 +57,7 @@ public static class CoreServices
         
         services.AddSingleton<IRunTimeSettings, RunTimeSettings>();
         services.AddScoped<ITimeSlotControlService, TimeSlotControlService>();
+        services.AddScoped<IAnalysisDataService, AnalysisDataService>();
     }
     
     private static void AddHandlers(this IServiceCollection services)

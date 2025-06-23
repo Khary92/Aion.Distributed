@@ -22,7 +22,6 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Communication\Endpoints\" />
         <Folder Include="Translators\Commands\" />
     </ItemGroup>
 

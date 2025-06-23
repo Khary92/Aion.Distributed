@@ -1,4 +1,5 @@
 ﻿using Core.Server.Communication.Endpoints.AiSettings;
+using Core.Server.Communication.Endpoints.Analysis;
 using Core.Server.Communication.Endpoints.Note;
 using Core.Server.Communication.Endpoints.NoteType;
 using Core.Server.Communication.Endpoints.Settings;
@@ -66,13 +67,10 @@ public static class EndpointServices
         app.MapGrpcService<TimeSlotRequestReceiver>();
         app.MapGrpcService<WorkDayRequestReceiver>();
         app.MapGrpcService<UseCaseRequestReceiver>();
-
-        //TODO
-        //app.MapGrpcService<UseCaseRequestReceiver>();
-        //app.MapGrpcService<AnalysisRequestReceiver>();
+        app.MapGrpcService<AnalysisRequestReceiver>();
     }
 
-    public static void AddNotificationEndPoints(WebApplication app)
+    private static void AddNotificationEndPoints(WebApplication app)
     {
         app.MapGrpcService<AiSettingsNotificationService>();
         app.MapGrpcService<NoteNotificationService>();
