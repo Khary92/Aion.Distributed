@@ -12,21 +12,21 @@ public class SettingsCommandsService(
     ISettingsCommandsToEventTranslator eventTranslator)
     : ISettingsCommandsService
 {
-    public Task ChangeAutomaticTicketAddingToSprint(ChangeAutomaticTicketAddingToSprintCommand command)
+    public async Task ChangeAutomaticTicketAddingToSprint(ChangeAutomaticTicketAddingToSprintCommand command)
     {
-        throw new NotImplementedException();
+        await settingsEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
+        await settingsNotificationService.SendNotificationAsync(command.ToNotification());
     }
 
-    public Task ChangeExportPath(ChangeExportPathCommand command)
+    public async Task ChangeExportPath(ChangeExportPathCommand command)
     {
-        throw new NotImplementedException();
+        await settingsEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
+        await settingsNotificationService.SendNotificationAsync(command.ToNotification());
     }
 
-    public async Task Create(CreateSettingsCommand createSettingsCommand)
+    public async Task Create(CreateSettingsCommand command)
     {
-        await settingsEventStore.StoreEventAsync(
-            eventTranslator.ToEvent(createSettingsCommand));
-
-        await settingsNotificationService.SendNotificationAsync(createSettingsCommand.ToNotification());
+        await settingsEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
+        await settingsNotificationService.SendNotificationAsync(command.ToNotification());
     }
 }

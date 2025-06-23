@@ -17,12 +17,19 @@ public class SettingsCommandsToEventTranslator : ISettingsCommandsToEventTransla
 
     public SettingsEvent ToEvent(ChangeExportPathCommand command)
     {
-        throw new NotImplementedException();
+        var domainEvent = new ExportPathChangedEvent(command.SettingsId, command.ExportPath);
+
+        return CreateDatabaseEvent(nameof(SettingsCreatedEvent), command.SettingsId,
+            JsonSerializer.Serialize(domainEvent));
     }
 
     public SettingsEvent ToEvent(ChangeAutomaticTicketAddingToSprintCommand command)
     {
-        throw new NotImplementedException();
+        var domainEvent = new AutomaticAddingTicketToSprintChangedEvent(command.SettingsId,
+            command.IsAddNewTicketsToCurrentSprintActive);
+
+        return CreateDatabaseEvent(nameof(SettingsCreatedEvent), command.SettingsId,
+            JsonSerializer.Serialize(domainEvent));
     }
 
 

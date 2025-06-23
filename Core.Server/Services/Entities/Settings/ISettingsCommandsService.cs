@@ -6,5 +6,5 @@ public interface ISettingsCommandsService
 {
     Task ChangeAutomaticTicketAddingToSprint(ChangeAutomaticTicketAddingToSprintCommand command);
     Task ChangeExportPath(ChangeExportPathCommand command);
-    Task Create(CreateSettingsCommand createSettingsCommand);
+    Task Create(CreateSettingsCommand command);
 }

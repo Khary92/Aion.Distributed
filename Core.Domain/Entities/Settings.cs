@@ -29,10 +29,16 @@ public class Settings
                 IsAddNewTicketsToCurrentSprintActive = created.IsAddNewTicketsToCurrentSprintActive;
                 break;
 
-            case nameof(SettingsUpdatedEvent):
-                var updated = JsonSerializer.Deserialize<SettingsUpdatedEvent>(evt.EventPayload);
-                ExportPath = updated!.ExportPath;
-                IsAddNewTicketsToCurrentSprintActive = updated.IsAddNewTicketsToCurrentSprintActive;
+            case nameof(ExportPathChangedEvent):
+                var exportPath = JsonSerializer.Deserialize<ExportPathChangedEvent>(evt.EventPayload);
+                ExportPath = exportPath!.ExportPath;
+                break;
+
+            case nameof(AutomaticAddingTicketToSprintChangedEvent):
+                var isAddNewTicketsToCurrentSprintActive =
+                    JsonSerializer.Deserialize<AutomaticAddingTicketToSprintChangedEvent>(evt.EventPayload);
+                IsAddNewTicketsToCurrentSprintActive =
+                    isAddNewTicketsToCurrentSprintActive!.IsAddNewTicketsToCurrentSprintActive;
                 break;
         }
     }
