@@ -8,31 +8,47 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace Core.Boot;
-
 public class BootStrap
 {
     public static async Task Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddCoreServices();
-        builder.Services.AddInfrastructureServices();
-        
-        builder.WebHost.ConfigureKestrel(options =>
+        builder.Services.AddGrpc(options =>
         {
-            options.ListenLocalhost(5000, o => o.Protocols = HttpProtocols.Http2);
+            options.EnableDetailedErrors = true;
+            options.MaxReceiveMessageSize = 2 * 1024 * 1024; // 2 MB
+            options.MaxSendMessageSize = 2 * 1024 * 1024;    // 2 MB
         });
         
+        builder.Services.AddCoreServices();
+        builder.Services.AddInfrastructureServices();
+
+        // Kestrel-Konfiguration
+        builder.WebHost.ConfigureKestrel(options =>
+        {
+            options.ListenAnyIP(8080, o => 
+            {
+                o.Protocols = HttpProtocols.Http2;
+            });
+        });
+
+        // Logging hinzufügen
+        builder.Logging.AddConsole();
+        builder.Logging.SetMinimumLevel(LogLevel.Debug);
+
         var app = builder.Build();
+
+        // Middleware in der richtigen Reihenfolge
+        app.UseRouting();
 
         using (var scope = app.Services.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             await db.Database.MigrateAsync();
-
-            //This is required or else the service will not be created
             scope.ServiceProvider.GetRequiredService(typeof(TimerService));
         }
 
@@ -42,7 +58,13 @@ public class BootStrap
         {
             var endpointDataSource = app.Services.GetRequiredService<EndpointDataSource>();
             foreach (var endpoint in endpointDataSource.Endpoints)
+            {
+                if (endpoint.DisplayName!.Contains("Unimplemented"))
+                {
+                    continue;
+                }
                 Console.WriteLine($"[Endpoint] {endpoint.DisplayName}");
+            }
         });
 
         await app.RunAsync();
