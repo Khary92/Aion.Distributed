@@ -53,9 +53,9 @@ public static class CoreServices
 
     private static void AddCommonServices(this IServiceCollection services)
     {
-        services.AddSingleton<TimerService>();
-        
         services.AddSingleton<IRunTimeSettings, RunTimeSettings>();
+        
+        services.AddScoped<TimerService>();
         services.AddScoped<ITimeSlotControlService, TimeSlotControlService>();
         services.AddScoped<IAnalysisDataService, AnalysisDataService>();
     }
@@ -71,32 +71,32 @@ public static class CoreServices
     
     private static void AddRequestsServices(this IServiceCollection services)
     {
-        services.AddSingleton<IAiSettingsRequestsService, AiSettingsRequestsService>();
-        services.AddSingleton<INoteRequestsService, NoteRequestsService>();
-        services.AddSingleton<INoteTypeRequestsService, NoteTypeRequestsService>();
-        services.AddSingleton<ISprintRequestsService, SprintRequestService>();
-        services.AddSingleton<ITicketRequestsService, TicketRequestService>();
-        services.AddSingleton<IWorkDayRequestsService, WorkDayRequestsService>();
-        services.AddSingleton<ITagRequestsService, TagRequestsService>();
-        services.AddSingleton<ITimeSlotRequestsService, TimeSlotRequestsService>();
-        services.AddSingleton<IStatisticsDataRequestsService, StatisticsDataRequestsService>();
-        services.AddSingleton<ISettingsRequestsService, SettingsRequestsService>();
-        services.AddSingleton<ITimerSettingsRequestsService, TimerSettingsRequestsService>();
+        services.AddScoped<IAiSettingsRequestsService, AiSettingsRequestsService>();
+        services.AddScoped<INoteRequestsService, NoteRequestsService>();
+        services.AddScoped<INoteTypeRequestsService, NoteTypeRequestsService>();
+        services.AddScoped<ISprintRequestsService, SprintRequestService>();
+        services.AddScoped<ITicketRequestsService, TicketRequestService>();
+        services.AddScoped<IWorkDayRequestsService, WorkDayRequestsService>();
+        services.AddScoped<ITagRequestsService, TagRequestsService>();
+        services.AddScoped<ITimeSlotRequestsService, TimeSlotRequestsService>();
+        services.AddScoped<IStatisticsDataRequestsService, StatisticsDataRequestsService>();
+        services.AddScoped<ISettingsRequestsService, SettingsRequestsService>();
+        services.AddScoped<ITimerSettingsRequestsService, TimerSettingsRequestsService>();
     }
 
     private static void AddCommandsServices(this IServiceCollection services)
     {
-        services.AddSingleton<IAiSettingsCommandsService, AiSettingsCommandsService>();
-        services.AddSingleton<INoteCommandsService, NoteCommandsService>();
-        services.AddSingleton<INoteTypeCommandsService, NoteTypeCommandsService>();
-        services.AddSingleton<ISprintCommandsService, SprintCommandsService>();
-        services.AddSingleton<ITicketCommandsService, TicketCommandsService>();
-        services.AddSingleton<IWorkDayCommandsService, WorkDayCommandsService>();
-        services.AddSingleton<ITagCommandsService, TagCommandsService>();
-        services.AddSingleton<ITimeSlotCommandsService, TimeSlotCommandService>();
-        services.AddSingleton<IStatisticsDataCommandsService, StatisticsDataCommandsService>();
-        services.AddSingleton<ISettingsCommandsService, SettingsCommandsService>();
-        services.AddSingleton<ITimerSettingsCommandsService, TimerSettingsCommandsService>();
+        services.AddScoped<IAiSettingsCommandsService, AiSettingsCommandsService>();
+        services.AddScoped<INoteCommandsService, NoteCommandsService>();
+        services.AddScoped<INoteTypeCommandsService, NoteTypeCommandsService>();
+        services.AddScoped<ISprintCommandsService, SprintCommandsService>();
+        services.AddScoped<ITicketCommandsService, TicketCommandsService>();
+        services.AddScoped<IWorkDayCommandsService, WorkDayCommandsService>();
+        services.AddScoped<ITagCommandsService, TagCommandsService>();
+        services.AddScoped<ITimeSlotCommandsService, TimeSlotCommandService>();
+        services.AddScoped<IStatisticsDataCommandsService, StatisticsDataCommandsService>();
+        services.AddScoped<ISettingsCommandsService, SettingsCommandsService>();
+        services.AddScoped<ITimerSettingsCommandsService, TimerSettingsCommandsService>();
     }
 
     private static void AddCommandToEventTranslators(this IServiceCollection services)

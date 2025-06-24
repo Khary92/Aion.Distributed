@@ -27,9 +27,8 @@ public static class InfrastructureServices
 
     private static void AddDatabaseServices(this IServiceCollection services)
     {
-        services.AddDbContext<AppDbContext>(options =>
+        services.AddDbContextFactory<AppDbContext>(options =>
             options.UseSqlite($"Data Source={DatabaseName}"));
-        services.AddDbContextFactory<AppDbContext>();
 
         services.AddScoped<IEventStore<AiSettingsEvent>, AiSettingsEventsStore>();
         services.AddScoped<IEventStore<NoteEvent>, NoteEventsStore>();

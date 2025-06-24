@@ -17,14 +17,14 @@ public class BootStrap
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.Services.AddCoreServices();
+        builder.Services.AddInfrastructureServices();
+        
         builder.WebHost.ConfigureKestrel(options =>
         {
             options.ListenLocalhost(5000, o => o.Protocols = HttpProtocols.Http2);
         });
-
-        builder.Services.AddCoreServices();
-        builder.Services.AddInfrastructureServices();
-
+        
         var app = builder.Build();
 
         using (var scope = app.Services.CreateScope())

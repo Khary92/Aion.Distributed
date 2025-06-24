@@ -21,7 +21,7 @@ public class TimerSettingsRequestsService(IEventStore<TimerSettingsEvent> timerS
     {
         var events = await timerSettingsEventStore.GetAllEventsAsync();
 
-        //There is only oen aggregate. No events means no that TimerSettings do not exist yet or were deleted.
+        //There is only one aggregate. No events mean that TimerSettings do not exist yet or were deleted.
         return events.Count != 0;
     }
 }

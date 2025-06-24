@@ -43,8 +43,6 @@ public class TimerService
 
     private void OnTick(object? sender, ElapsedEventArgs e)
     {
-        if (_timerSettings == null) return;
-
         _snapshotSeconds++;
         _docuSeconds++;
 
