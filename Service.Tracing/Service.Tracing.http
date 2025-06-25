@@ -1,6 +1,0 @@
-@Service.Tracing_HostAddress = http://localhost:5028
-
-GET {{Service.Tracing_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

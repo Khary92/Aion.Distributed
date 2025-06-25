@@ -11,7 +11,6 @@ COPY ["Core.Domain/Core.Domain.csproj", "Core.Domain/"]
 COPY ["Core.Persistence/Core.Persistence.csproj", "Core.Persistence/"]
 COPY ["Core.Server/Core.Server.csproj", "Core.Server/"]
 COPY ["Proto.Shared/Proto.Shared.csproj", "Proto.Shared/"]
-RUN install 
 RUN dotnet restore "Core.Boot/Core.Boot.csproj"
 COPY . .
 WORKDIR "/src/Core.Boot"

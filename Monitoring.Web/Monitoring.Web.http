@@ -1,6 +1,0 @@
-@Monitoring.Web_HostAddress = http://localhost:5111
-
-GET {{Monitoring.Web_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

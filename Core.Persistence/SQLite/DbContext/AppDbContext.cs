@@ -13,33 +13,29 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Core.Persistence.SQLite.DbContext;
 
-public sealed class AppDbContext(DbContextOptions<AppDbContext> options)
-    : Microsoft.EntityFrameworkCore.DbContext(options)
+public sealed class AppDbContext : Microsoft.EntityFrameworkCore.DbContext
 {
-    private const string DatabaseName = "sqlite.db";
-
-    public AppDbContext() : this(null!)
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
         Database.Migrate();
     }
 
-    public DbSet<TicketEvent> TicketEvents { get; set; }
-    public DbSet<SprintEvent> SprintEvents { get; set; }
-    public DbSet<StatisticsDataEvent> StatisticsDataEvents { get; set; }
-    public DbSet<TimeSlotEvent> TimeSlotEvents { get; set; }
-    public DbSet<WorkDayEvent> WorkDayEvents { get; set; }
-    public DbSet<NoteEvent> NoteEvents { get; set; }
-    public DbSet<NoteTypeEvent> NoteTypeEvents { get; set; }
-    public DbSet<TagEvent> TagEvents { get; set; }
-    public DbSet<SettingsEvent> SettingsEvents { get; set; }
-    public DbSet<AiSettingsEvent> AiSettingsEvents { get; set; }
-    public DbSet<TimerSettingsEvent> TimerSettingsEvents { get; set; }
+    public DbSet<TicketEvent> TicketEvents { get; set; } = null!;
+    public DbSet<SprintEvent> SprintEvents { get; set; } = null!;
+    public DbSet<StatisticsDataEvent> StatisticsDataEvents { get; set; } = null!;
+    public DbSet<TimeSlotEvent> TimeSlotEvents { get; set; } = null!;
+    public DbSet<WorkDayEvent> WorkDayEvents { get; set; } = null!;
+    public DbSet<NoteEvent> NoteEvents { get; set; } = null!;
+    public DbSet<NoteTypeEvent> NoteTypeEvents { get; set; } = null!;
+    public DbSet<TagEvent> TagEvents { get; set; } = null!;
+    public DbSet<SettingsEvent> SettingsEvents { get; set; } = null!;
+    public DbSet<AiSettingsEvent> AiSettingsEvents { get; set; } = null!;
+    public DbSet<TimerSettingsEvent> TimerSettingsEvents { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (optionsBuilder.IsConfigured) return;
-
-        optionsBuilder.UseSqlite($"Data Source={DatabaseName}");
+        optionsBuilder.UseNpgsql(DatabaseConfiguration.GetConnectionString());
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

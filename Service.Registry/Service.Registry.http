@@ -1,6 +1,0 @@
-@Service.Registry_HostAddress = http://localhost:5107
-
-GET {{Service.Registry_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

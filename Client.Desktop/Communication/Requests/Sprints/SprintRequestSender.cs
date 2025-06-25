@@ -18,8 +18,7 @@ public class SprintRequestSender : ISprintRequestSender
     public async Task<SprintDto?> Send(GetActiveSprintRequestProto request)
     {
         var response = await _client.GetActiveSprintAsync(request);
-
-        return response == null ? null : ToDto(response, true);
+        return response.SprintId == string.Empty ? null : ToDto(response, true);
     }
 
     public async Task<List<SprintDto>> Send(GetAllSprintsRequestProto request)

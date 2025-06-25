@@ -13,7 +13,7 @@ public class SprintRequestReceiver(
         ServerCallContext context)
     {
         var sprint = await sprintRequestsService.GetActiveSprint();
-        return sprint?.ToProto();
+        return sprint == null ? new SprintProto() : sprint?.ToProto();
     }
 
     public override async Task<SprintListProto> GetAllSprints(GetAllSprintsRequestProto request,

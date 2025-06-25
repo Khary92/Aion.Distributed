@@ -18,8 +18,6 @@ namespace Core.Persistence;
 
 public static class InfrastructureServices
 {
-    private const string DatabaseName = "events.db";
-
     public static void AddInfrastructureServices(this IServiceCollection services)
     {
         AddDatabaseServices(services);
@@ -28,7 +26,7 @@ public static class InfrastructureServices
     private static void AddDatabaseServices(this IServiceCollection services)
     {
         services.AddDbContextFactory<AppDbContext>(options =>
-            options.UseSqlite($"Data Source={DatabaseName}"));
+            options.UseNpgsql(DatabaseConfiguration.GetConnectionString()));
 
         services.AddScoped<IEventStore<AiSettingsEvent>, AiSettingsEventsStore>();
         services.AddScoped<IEventStore<NoteEvent>, NoteEventsStore>();

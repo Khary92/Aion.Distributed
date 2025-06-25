@@ -27,17 +27,17 @@ public class TimerService
     {
         _timerSettingsRequestsService = timerSettingsRequestsService;
         _useCaseNotificationService = useCaseNotificationService;
-
+        
         _timer = new Timer(1000);
-        _timer.Elapsed += OnTick;
-        _timer.AutoReset = true;
-
+        
         _ = InitializeAndStart();
     }
 
     private async Task InitializeAndStart()
     {
         _timerSettings = await _timerSettingsRequestsService.Get();
+        _timer.Elapsed += OnTick;
+        _timer.AutoReset = true;
         _timer.Start();
     }
 

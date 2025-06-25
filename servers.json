@@ -1,0 +1,13 @@
+{
+  "Servers": {
+    "1": {
+      "Name": "Aion DB",
+      "Group": "Servers",
+      "Host": "postgres",
+      "Port": 5432,
+      "MaintenanceDB": "aion",
+      "Username": "aionuser",
+      "SSLMode": "prefer"
+    }
+  }
+}
