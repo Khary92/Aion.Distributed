@@ -29,7 +29,7 @@ public static class BootStrap
 
         builder.WebHost.ConfigureKestrel(options =>
         {
-            options.ListenAnyIP(8081, o => { o.Protocols = HttpProtocols.Http2; });
+            options.ListenAnyIP(8080, o => { o.Protocols = HttpProtocols.Http2; });
         });
 
         builder.Logging.AddConsole();
