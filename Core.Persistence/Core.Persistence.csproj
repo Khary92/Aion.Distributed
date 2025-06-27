@@ -5,41 +5,41 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
-    
+
     <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.6" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.6"/>
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.6">
             <PrivateAssets>all</PrivateAssets>
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         </PackageReference>
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.6" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.6" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="9.0.6" />
-        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.6" />
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.6" />
-        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.6"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.6"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="9.0.6"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.6"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.6"/>
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Core.Domain\Core.Domain.csproj" />
+        <ProjectReference Include="..\Core.Domain\Core.Domain.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Reference Include="Microsoft.Extensions.Configuration">
-        <HintPath>..\..\..\.nuget\packages\microsoft.extensions.configuration\9.0.5\lib\net9.0\Microsoft.Extensions.Configuration.dll</HintPath>
-      </Reference>
+        <Reference Include="Microsoft.Extensions.Configuration">
+            <HintPath>..\..\..\.nuget\packages\microsoft.extensions.configuration\9.0.5\lib\net9.0\Microsoft.Extensions.Configuration.dll</HintPath>
+        </Reference>
     </ItemGroup>
 
     <ItemGroup>
-      <Content Update="appsettings.json">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </Content>
+        <Content Update="appsettings.json">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>
-      <None Update="appsettings.json">
-        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      </None>
+        <None Update="appsettings.json">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>

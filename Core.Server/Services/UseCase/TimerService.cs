@@ -27,9 +27,9 @@ public class TimerService
     {
         _timerSettingsRequestsService = timerSettingsRequestsService;
         _useCaseNotificationService = useCaseNotificationService;
-        
+
         _timer = new Timer(1000);
-        
+
         _ = InitializeAndStart();
     }
 

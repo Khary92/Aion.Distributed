@@ -111,7 +111,7 @@ public class TimeTrackingModel(
                 timeSlotViewModelFactory.Create(m.TimeSlotControlData.TicketProto.ToDto(),
                     m.TimeSlotControlData.StatisticsDataProto.ToDto(),
                     m.TimeSlotControlData.TimeSlotProto.ToDto()));
-            
+
             CurrentViewModelIndex = TimeSlotViewModels.Count - 1;
             SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.TicketReplayDecorator.Ticket.Name;
         });
@@ -189,7 +189,7 @@ public class TimeTrackingModel(
             SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.TicketReplayDecorator.Ticket.Name;
         }
     }
-    
+
     public async Task CreateNewTimeSlotViewModel()
     {
         if (SelectedTicket == null) return;

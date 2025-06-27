@@ -6,19 +6,17 @@ using Client.Desktop.Models.TimeTracking;
 using Client.Desktop.Replays;
 using Client.Desktop.Views.Custom;
 using Microsoft.Extensions.DependencyInjection;
-using Proto.Requests.StatisticsData;
-using Proto.Requests.Tickets;
-using Proto.Requests.TimeSlots;
 
 namespace Client.Desktop.Factories;
 
 public class TimeSlotViewModelFactory(IServiceProvider serviceProvider, IRequestSender requestSender)
     : ITimeSlotViewModelFactory
-{ 
-    public async Task<TimeSlotViewModel> Create(TicketDto ticket, StatisticsDataDto statisticsData, TimeSlotDto timeSlot)
+{
+    public async Task<TimeSlotViewModel> Create(TicketDto ticket, StatisticsDataDto statisticsData,
+        TimeSlotDto timeSlot)
     {
         var timeSlotViewModel = serviceProvider.GetRequiredService<TimeSlotViewModel>();
-        
+
         var replayDecorator = new TicketReplayDecorator(requestSender, ticket)
         {
             DisplayedDocumentation = ticket.Documentation,

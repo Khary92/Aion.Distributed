@@ -54,6 +54,7 @@ using Client.Desktop.Views.Tracking;
 using CommunityToolkit.Mvvm.Messaging;
 using Grpc.Net.Client;
 using Microsoft.Extensions.DependencyInjection;
+using Proto.Client;
 using Proto.Command.TimeSlots;
 using Proto.Notifications.AiSettings;
 using Proto.Notifications.Note;
@@ -65,7 +66,6 @@ using Proto.Notifications.Ticket;
 using Proto.Notifications.TimerSettings;
 using Proto.Notifications.UseCase;
 using Proto.Notifications.WorkDay;
-using Proto.Shared;
 
 namespace Client.Desktop;
 

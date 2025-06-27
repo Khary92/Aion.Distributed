@@ -1,10 +1,10 @@
 ﻿using Core.Server.Communication.Records.Commands.Entities.Sprints;
 using Google.Protobuf.WellKnownTypes;
+using Proto.Client;
 using Proto.Command.Sprints;
 using Proto.DTO.Sprint;
 using Proto.Notifications.Sprint;
 using Proto.Requests.Sprints;
-using Proto.Shared;
 
 namespace Core.Server.Communication.Endpoints.Sprint;
 
@@ -108,7 +108,7 @@ public static class SprintProtoExtensions
             }
         };
     }
-    
+
     public static SprintProto ToProto(this Domain.Entities.Sprint sprint)
     {
         return new SprintProto

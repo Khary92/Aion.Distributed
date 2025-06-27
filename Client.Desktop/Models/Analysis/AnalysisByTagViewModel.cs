@@ -6,7 +6,7 @@ using LiveChartsCore;
 using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
-using Proto.Shared;
+using Proto.Client;
 using ReactiveUI;
 using SkiaSharp;
 

@@ -10,6 +10,6 @@ public class UseCaseRequestReceiver(LoadTimeSlotControlDataHandler loadTimeSlotC
     public override async Task<TimeSlotControlDataListProto> GetTimeSlotControlDataById(
         GetTimeSlotControlDataRequestProto request, ServerCallContext context)
     {
-       return await loadTimeSlotControlDataHandler.Handle(request.ToRequest());
+        return await loadTimeSlotControlDataHandler.Handle(request.ToRequest());
     }
 }

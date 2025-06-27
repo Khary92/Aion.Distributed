@@ -1,8 +1,8 @@
 ﻿using Core.Server.Communication.Records.Commands.Entities.StatisticsData;
+using Proto.Client;
 using Proto.Command.StatisticsData;
 using Proto.DTO.StatisticsData;
 using Proto.Notifications.StatisticsData;
-using Proto.Shared;
 
 namespace Core.Server.Communication.Endpoints.StatisticsData;
 

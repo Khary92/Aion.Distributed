@@ -25,7 +25,8 @@ public class SettingsModel(ICommandSender commandSender, IRequestSender requestS
 
     public async Task InitializeAsync()
     {
-        if (await requestSender.Send(new SettingsExistsRequestProto())) {
+        if (await requestSender.Send(new SettingsExistsRequestProto()))
+        {
             Settings = await requestSender.Send(new GetSettingsRequestProto());
             return;
         }

@@ -3,8 +3,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using Client.Desktop.DTO;
 using Grpc.Net.Client;
+using Proto.Client;
 using Proto.Requests.StatisticsData;
-using Proto.Shared;
 
 namespace Client.Desktop.Communication.Requests.StatisticsData;
 

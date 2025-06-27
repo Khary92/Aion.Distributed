@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Grpc.Net.Client;
+using Proto.Client;
 using Proto.Command.NoteTypes;
-using Proto.Shared;
 
 namespace Client.Desktop.Communication.Commands.NoteTypes;
 

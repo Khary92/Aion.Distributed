@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Client.Desktop.DTO;
 using Grpc.Net.Client;
+using Proto.Client;
 using Proto.DTO.TimerSettings;
 using Proto.Requests.WorkDays;
-using Proto.Shared;
 
 namespace Client.Desktop.Communication.Requests.WorkDays;
 
@@ -32,7 +32,7 @@ public class WorkDayRequestSender : IWorkDayRequestSender
         var response = await _client.GetWorkDayByDateAsync(request);
         return ToDto(response);
     }
-    
+
     public async Task<bool> Send(IsWorkDayExistingRequestProto request)
     {
         var response = await _client.IsWorkDayExistingAsync(request);

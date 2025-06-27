@@ -29,7 +29,7 @@ public class LoadTimeSlotControlDataHandler(
         {
             var statisticsData = await statisticsDataRequestsService.GetStatisticsDataByTimeSlotId(timeSlot.TimeSlotId);
             var ticket = await ticketRequestsService.GetTicketById(timeSlot.SelectedTicketId);
-            
+
             timeSlotControlDataList.TimeSlotControlData.Add(new TimeSlotControlDataProto
             {
                 StatisticsDataProto = statisticsData.ToProto(),

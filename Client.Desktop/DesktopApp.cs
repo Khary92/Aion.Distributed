@@ -24,7 +24,7 @@ public static class DesktopApp
         var serviceProvider = host.Services;
 
         await StartupPreparation(serviceProvider);
-        
+
         BuildAvaloniaApp(serviceProvider)
             .StartWithClassicDesktopLifetime(args);
 

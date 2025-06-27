@@ -1,10 +1,10 @@
 ﻿using System;
 using Client.Desktop.DTO;
+using Proto.Client;
 using Proto.DTO.AiSettings;
 using Proto.DTO.StatisticsData;
 using Proto.DTO.Ticket;
 using Proto.DTO.TimeSlots;
-using Proto.Shared;
 
 namespace Client.Desktop.Communication.Requests;
 

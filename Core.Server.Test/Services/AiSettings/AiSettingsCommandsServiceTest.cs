@@ -17,8 +17,9 @@ public class AiSettingsCommandsServiceTest
     {
         _eventStoreMock = new Mock<IEventStore<AiSettingsEvent>>();
         _eventsTranslatorMock = new Mock<IAiSettingsCommandsToEventTranslator>();
-        
-        _instance = new AiSettingsCommandsService(_eventStoreMock.Object, _eventsTranslatorMock.Object, _notificationServiceMock.Object);
+
+        _instance = new AiSettingsCommandsService(_eventStoreMock.Object, _eventsTranslatorMock.Object,
+            _notificationServiceMock.Object);
     }
 
     private Mock<IEventStore<AiSettingsEvent>> _eventStoreMock;

@@ -28,10 +28,10 @@ public static class InfrastructureServices
     {
         var configuration = new ConfigurationBuilder()
             .SetBasePath(AppContext.BaseDirectory)
-            .AddJsonFile("./appsettings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile("./appsettings.json", false, true)
             .Build();
 
-        string connectionString = configuration.GetConnectionString("DefaultConnection")!;
+        var connectionString = configuration.GetConnectionString("DefaultConnection")!;
 
         services.AddDbContextFactory<AppDbContext>(options =>
             options.UseNpgsql(connectionString));
