@@ -12,7 +12,14 @@ public class TracingDataCommandSender : ITracingDataCommandSender
 
     public async Task<bool> Send(TraceDataCommand command)
     {
-        var response = await _client.SendTraceDataAsync(command.ToProto());
-        return response.Success;
+        try
+        {
+            var response = await _client.SendTraceDataAsync(command.ToProto());
+            return response.Success;
+        }
+        catch (Exception e)
+        {
+            return false;
+        }
     }
 }
