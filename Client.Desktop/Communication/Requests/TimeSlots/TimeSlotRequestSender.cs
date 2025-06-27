@@ -4,9 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Client.Desktop.DTO;
 using Grpc.Net.Client;
+using Proto.Client;
 using Proto.DTO.TimeSlots;
 using Proto.Requests.TimeSlots;
-using Proto.Shared;
 
 namespace Client.Desktop.Communication.Requests.TimeSlots;
 

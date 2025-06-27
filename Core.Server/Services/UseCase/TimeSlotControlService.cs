@@ -37,7 +37,7 @@ public class TimeSlotControlService(
             WorkDayId = currentWorkDayId,
             StartTime = DateTimeOffset.Now,
             EndTime = DateTimeOffset.Now,
-            IsTimerRunning = false,
+            IsTimerRunning = false
         };
 
         await timeSlotCommandsService.Create(new CreateTimeSlotCommand(newTimeSlot.TimeSlotId,

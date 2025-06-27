@@ -19,7 +19,7 @@ public class SettingsTest : SettingsTestBase
         var aggregate = Rehydrate(events);
         AssertSettingsState(aggregate, InitialId, InitialExportPath, InitialAddToSprint);
     }
-    
+
     [Test]
     public void ExportPathChangedEventChangesFields()
     {
@@ -33,7 +33,7 @@ public class SettingsTest : SettingsTestBase
 
         AssertSettingsState(aggregate, InitialId, newPath, InitialAddToSprint);
     }
-    
+
     [Test]
     public void AutomaticAddingTicketToSprintChangedEventChangesFields()
     {

@@ -1,4 +1,4 @@
-namespace Proto.Shared;
+namespace Proto.Client;
 
 public enum Productivity
 {

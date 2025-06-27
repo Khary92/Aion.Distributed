@@ -9,7 +9,7 @@ public class SprintTest : SprintTestBase
 {
     private const string InitialName = "InitialName";
     private const bool InitialIsActive = true;
-    
+
     private readonly Guid _initialSprintId = Guid.NewGuid();
     private readonly DateTimeOffset _initialStartDate = DateTimeOffset.Now.AddDays(-5);
     private readonly DateTimeOffset _initialEndDate = DateTimeOffset.Now.AddDays(-3);

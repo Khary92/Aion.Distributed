@@ -7,7 +7,6 @@
 
     <ItemGroup>
         <PackageReference Include="Google.Protobuf" Version="3.31.1"/>
-        <PackageReference Include="Grpc.Net.Client" Version="2.71.0"/>
         <PackageReference Include="Grpc.Tools" Version="2.72.0">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
@@ -15,7 +14,13 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Protobuf Include="**/*.proto" ProtoRoot="." GrpcServices="Both"/>
+        <Protobuf Include="**/*.proto"
+                  ProtoRoot="."
+                  GrpcServices="Both"
+                  Access="Public"
+                  ProtoCompile="True"
+                  CompileOutputs="True"
+                  OutputDir="obj\Debug\net9.0\"
+                  Generator="MSBuild:Compile"/>
     </ItemGroup>
-
 </Project>

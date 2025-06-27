@@ -54,21 +54,21 @@ public static class CoreServices
     private static void AddCommonServices(this IServiceCollection services)
     {
         services.AddSingleton<IRunTimeSettings, RunTimeSettings>();
-        
+
         services.AddScoped<TimerService>();
         services.AddScoped<ITimeSlotControlService, TimeSlotControlService>();
         services.AddScoped<IAnalysisDataService, AnalysisDataService>();
     }
-    
+
     private static void AddHandlers(this IServiceCollection services)
     {
         services.AddScoped<AddTicketToActiveSprintCommandHandler>();
         services.AddScoped<AddTicketToSprintCommandHandler>();
         services.AddScoped<SetSprintActiveStatusCommandHandler>();
-        
+
         services.AddScoped<LoadTimeSlotControlDataHandler>();
     }
-    
+
     private static void AddRequestsServices(this IServiceCollection services)
     {
         services.AddScoped<IAiSettingsRequestsService, AiSettingsRequestsService>();

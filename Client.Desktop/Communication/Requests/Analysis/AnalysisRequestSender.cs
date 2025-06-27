@@ -8,11 +8,11 @@ using Client.Desktop.Decorators.Entities;
 using Client.Desktop.DTO;
 using Google.Protobuf.Collections;
 using Grpc.Net.Client;
+using Proto.Client;
 using Proto.DTO.StatisticsData;
 using Proto.DTO.Ticket;
 using Proto.DTO.TimeSlots;
 using Proto.Requests.AnalysisData;
-using Proto.Shared;
 
 namespace Client.Desktop.Communication.Requests.Analysis;
 

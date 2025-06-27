@@ -8,7 +8,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Persistence", "Core.Pe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Server", "Core.Server\Core.Server.csproj", "{F0B66804-9A5D-41BE-A8B1-CD71BEF6D7F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proto.Shared", "Proto.Shared\Proto.Shared.csproj", "{099A9566-91C2-4FCF-883A-7E9115DBA043}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proto.Client", "Proto.Client\Proto.Client.csproj", "{099A9566-91C2-4FCF-883A-7E9115DBA043}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Boot", "Core.Boot\Core.Boot.csproj", "{4D9F97AE-828E-4194-BCB0-298366287063}"
 EndProject
@@ -17,6 +17,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Server.Test", "Core.Server.Test\Core.Server.Test.csproj", "{553488D2-8029-4036-AC0D-EC0A0B14B7AE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.Desktop.Test", "Client.Desktop.Test\Client.Desktop.Test.csproj", "{C05526D5-9BF7-4F70-80C8-28A50F631640}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proto.Common", "Proto.Common\Proto.Common.csproj", "{9DC7E2C3-742D-4749-8A36-082A3FF88BC3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -60,5 +62,9 @@ Global
 		{C05526D5-9BF7-4F70-80C8-28A50F631640}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C05526D5-9BF7-4F70-80C8-28A50F631640}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C05526D5-9BF7-4F70-80C8-28A50F631640}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9DC7E2C3-742D-4749-8A36-082A3FF88BC3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9DC7E2C3-742D-4749-8A36-082A3FF88BC3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9DC7E2C3-742D-4749-8A36-082A3FF88BC3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9DC7E2C3-742D-4749-8A36-082A3FF88BC3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

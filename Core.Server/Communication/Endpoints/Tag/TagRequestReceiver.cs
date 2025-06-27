@@ -1,8 +1,8 @@
 ﻿using Core.Server.Services.Entities.Tags;
 using Grpc.Core;
+using Proto.Client;
 using Proto.DTO.Tag;
 using Proto.Requests.Tags;
-using Proto.Shared;
 
 namespace Core.Server.Communication.Endpoints.Tag;
 

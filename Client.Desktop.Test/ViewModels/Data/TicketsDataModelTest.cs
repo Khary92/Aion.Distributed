@@ -24,7 +24,7 @@ public class TicketsDataModelTest
         _instance = new TicketsDataModel(_commandSender.Object, _requestSender.Object, _messenger);
         _instance.RegisterMessenger();
     }
-    
+
     private Mock<ICommandSender> _commandSender;
     private Mock<IRequestSender> _requestSender;
     private StrongReferenceMessenger _messenger;

@@ -28,7 +28,7 @@ public class WorkDayRequestReceiver(IWorkDayRequestsService workDayRequestsServi
         var workDay = await workDayRequestsService.GetWorkDayByDate(request.Date.ToDateTimeOffset());
         return workDay == null ? new WorkDayProto() : workDay.ToProto();
     }
-    
+
     public override async Task<WorkDayExistsResponseProto> IsWorkDayExisting(IsWorkDayExistingRequestProto request,
         ServerCallContext context)
     {
