@@ -1,4 +1,4 @@
-﻿namespace Proto.Client;
+﻿namespace Client.Desktop.Proto;
 
 public class TempConnectionStatic
 {

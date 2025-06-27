@@ -18,7 +18,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Core.Domain\Core.Domain.csproj"/>
-        <ProjectReference Include="..\Proto.Client\Proto.Client.csproj"/>
+        <ProjectReference Include="..\Client.Desktop.Proto\Client.Desktop.Proto.csproj" />
     </ItemGroup>
 
     <ItemGroup>

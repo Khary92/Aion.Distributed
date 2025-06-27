@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Client.Desktop.DTO;
+using Client.Desktop.Proto;
 using Grpc.Net.Client;
-using Proto.Client;
 using Proto.Requests.NoteTypes;
 
 namespace Client.Desktop.Communication.Requests.NoteTypes;

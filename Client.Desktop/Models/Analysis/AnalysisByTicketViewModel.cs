@@ -5,11 +5,11 @@ using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
 using Client.Desktop.DTO;
+using Client.Desktop.Proto;
 using LiveChartsCore;
 using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
-using Proto.Client;
 using ReactiveUI;
 using SkiaSharp;
 

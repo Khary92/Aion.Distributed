@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
+using Client.Desktop.Proto;
 using Grpc.Net.Client;
-using Proto.Client;
 using Proto.Command.TimeSlots;
 
 namespace Client.Desktop.Communication.Commands.TimeSlots;

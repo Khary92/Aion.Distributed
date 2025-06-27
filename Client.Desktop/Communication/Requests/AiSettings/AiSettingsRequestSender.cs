@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Client.Desktop.DTO;
+using Client.Desktop.Proto;
 using Grpc.Net.Client;
-using Proto.Client;
 using Proto.Requests.AiSettings;
 
 namespace Client.Desktop.Communication.Requests.AiSettings;

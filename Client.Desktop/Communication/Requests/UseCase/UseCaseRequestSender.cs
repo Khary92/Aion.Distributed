@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
+using Client.Desktop.Proto;
 using Grpc.Net.Client;
-using Proto.Client;
 using Proto.Requests.UseCase;
 
 namespace Client.Desktop.Communication.Requests.UseCase;

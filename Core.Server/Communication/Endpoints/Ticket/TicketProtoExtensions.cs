@@ -1,5 +1,5 @@
-﻿using Core.Server.Communication.Records.Commands.Entities.Tickets;
-using Proto.Client;
+﻿using Client.Desktop.Proto;
+using Core.Server.Communication.Records.Commands.Entities.Tickets;
 using Proto.Command.Tickets;
 using Proto.DTO.Ticket;
 using Proto.Notifications.Ticket;

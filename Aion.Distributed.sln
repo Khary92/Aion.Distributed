@@ -8,7 +8,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Persistence", "Core.Pe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Server", "Core.Server\Core.Server.csproj", "{F0B66804-9A5D-41BE-A8B1-CD71BEF6D7F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proto.Client", "Proto.Client\Proto.Client.csproj", "{099A9566-91C2-4FCF-883A-7E9115DBA043}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.Desktop.Proto", "Client.Desktop.Proto\Client.Desktop.Proto.csproj", "{099A9566-91C2-4FCF-883A-7E9115DBA043}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Boot", "Core.Boot\Core.Boot.csproj", "{4D9F97AE-828E-4194-BCB0-298366287063}"
 EndProject

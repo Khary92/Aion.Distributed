@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
+using Client.Desktop.Proto;
 using Grpc.Net.Client;
-using Proto.Client;
 using Proto.Command.WorkDays;
 
 namespace Client.Desktop.Communication.Commands.WorkDays;

@@ -1,6 +1,6 @@
-﻿using Core.Server.Services.Entities.Tags;
+﻿using Client.Desktop.Proto;
+using Core.Server.Services.Entities.Tags;
 using Grpc.Core;
-using Proto.Client;
 using Proto.DTO.Tag;
 using Proto.Requests.Tags;
 
