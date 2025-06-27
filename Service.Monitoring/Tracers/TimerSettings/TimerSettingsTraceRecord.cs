@@ -7,5 +7,5 @@ public record TimerSettingsTraceRecord(
     LoggingMeta LoggingMeta,
     Guid TraceId,
     string TicketUseCase,
-    Type OriginClassType,
+    string OriginClassType,
     string Log);

@@ -5,5 +5,5 @@ namespace Service.Monitoring.Tracers.Export;
 public record ExportTraceRecord(DateTimeOffset TimeStamp,
     LoggingMeta LoggingMeta,
     string TicketUseCase,
-    Type OriginClassType,
+    string OriginClassType,
     string Log);

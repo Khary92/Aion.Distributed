@@ -25,8 +25,7 @@ public class TicketUseCaseVerifier()
         }
 
         Log += ToString(traceRecord);
-        
-     }
+    }
 
     private DateTimeOffset? _lastTimestamp;
 

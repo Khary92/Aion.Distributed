@@ -7,12 +7,13 @@ service TraceDataCommandProtoService {
 }
 
 message TraceDataCommandProto {
-  google.protobuf.Timestamp time_stamp = 1;
-  string logging_meta = 2;
-  string trace_id = 3;
-  string use_case_meta = 4;
+  string trace_id = 1;
+  string trace_sink_id = 2;
+  string use_case_meta = 3;
+  string logging_meta = 4;
   string origin_class_type = 5;
   string log = 6;
+  google.protobuf.Timestamp time_stamp = 7;
 }
 
 message CommandResponse {

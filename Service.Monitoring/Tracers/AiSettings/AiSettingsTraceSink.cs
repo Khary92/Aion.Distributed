@@ -1,20 +1,13 @@
-using System.Collections.ObjectModel;
-using Service.Monitoring.Enums;
+using Client.Desktop.Proto.Tracing.Enums;
+using Proto.Command.TraceData;
 
 namespace Service.Monitoring.Tracers.AiSettings;
 
-public class AiSettingsTraceSink : ITraceSink<AiSettingsTraceRecord>
+public class AiSettingsTraceSink : ITraceSink
 {
-    private readonly Collection<AiSettingsTraceRecord> _aiSettingsTraces = [];
-    public Collection<AiSettingsTraceRecord> GetTraces()
-    {
-        return _aiSettingsTraces;
-    }
+    public TraceSinkId TraceSinkId => TraceSinkId.AiSettings;
 
-    public void AddTrace(DateTimeOffset timeStamp, LoggingMeta loggingMeta, Guid traceId, string useCaseMeta,
-        Type originClassType, string log)
+    public void AddTrace(TraceDataCommandProto traceDataCommandProto)
     {
-        _aiSettingsTraces.Add(new AiSettingsTraceRecord(timeStamp, loggingMeta, traceId, useCaseMeta,
-            originClassType, log));
     }
 }

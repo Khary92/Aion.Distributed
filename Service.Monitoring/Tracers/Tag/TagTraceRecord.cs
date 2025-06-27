@@ -7,5 +7,5 @@ public record TagTraceRecord(
     LoggingMeta LoggingMeta,
     Guid TraceId,
     string TagUseCase,
-    Type OriginClassType,
+    string OriginClassType,
     string Log);

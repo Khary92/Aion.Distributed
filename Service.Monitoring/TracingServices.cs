@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Service.Monitoring.Tracers;
 using Service.Monitoring.Tracers.AiSettings;
 using Service.Monitoring.Tracers.Export;
 using Service.Monitoring.Tracers.Note;
@@ -8,7 +9,6 @@ using Service.Monitoring.Tracers.Tag;
 using Service.Monitoring.Tracers.Ticket;
 using Service.Monitoring.Tracers.TimerSettings;
 using Service.Monitoring.Tracers.WorkDay;
-using NoteTraceRecord = Service.Monitoring.Tracers.Note.NoteTraceRecord;
 
 namespace Service.Monitoring;
 
@@ -21,14 +21,14 @@ public static class TracingServices
 
     private static void AddASinks(this IServiceCollection services)
     {
-        services.AddSingleton<ITraceSink<AiSettingsTraceRecord>, AiSettingsTraceSink>();
-        services.AddSingleton<ITraceSink<ExportTraceRecord>, ExportTraceSink>();
-        services.AddSingleton<ITraceSink<NoteTraceRecord>, NoteTraceSink>();
-        services.AddSingleton<ITraceSink<NoteTypeTraceRecord>, NoteTypeTraceSink>();
-        services.AddSingleton<ITraceSink<SprintTraceRecord>, SprintTraceSink>();
-        services.AddSingleton<ITraceSink<TagTraceRecord>, TagTraceSink>();
-        services.AddSingleton<ITraceSink<TicketTraceRecord>, TicketTraceSink>();
-        services.AddSingleton<ITraceSink<TimerSettingsTraceRecord>, TimerSettingsTraceSink>();
-        services.AddSingleton<ITraceSink<WorkDayTraceRecord>, WorkDayTraceSink>();
+        services.AddSingleton<ITraceSink, AiSettingsTraceSink>();
+        services.AddSingleton<ITraceSink, ExportTraceSink>();
+        services.AddSingleton<ITraceSink, NoteTraceSink>();
+        services.AddSingleton<ITraceSink, SprintTraceSink>();
+        services.AddSingleton<ITraceSink, NoteTypeTraceSink>();
+        services.AddSingleton<ITraceSink, TagTraceSink>();
+        services.AddSingleton<ITraceSink, TicketTraceSink>();
+        services.AddSingleton<ITraceSink, TimerSettingsTraceSink>();
+        services.AddSingleton<ITraceSink, WorkDayTraceSink>();
     }
 }

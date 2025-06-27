@@ -1,20 +1,13 @@
-using System.Collections.ObjectModel;
-using Service.Monitoring.Enums;
+using Client.Desktop.Proto.Tracing.Enums;
+using Proto.Command.TraceData;
 
 namespace Service.Monitoring.Tracers.Export;
 
-public class ExportTraceSink : ITraceSink<ExportTraceRecord>
+public class ExportTraceSink : ITraceSink
 {
-    private readonly Collection<ExportTraceRecord> _exportTraces = [];
-    public Collection<ExportTraceRecord> GetTraces()
-    {
-        return _exportTraces;
-    }
+    public TraceSinkId TraceSinkId => TraceSinkId.Export;
 
-    public void AddTrace(DateTimeOffset timeStamp, LoggingMeta loggingMeta, Guid traceId, string useCaseMeta,
-        Type originClassType, string log)
+    public void AddTrace(TraceDataCommandProto traceDataCommandProto)
     {
-        // TraceId is lost here. There is no traceable id
-        _exportTraces.Add(new ExportTraceRecord(timeStamp, loggingMeta, useCaseMeta, originClassType, log));
     }
 }

@@ -1,21 +1,13 @@
-using System.Collections.ObjectModel;
-using Service.Monitoring.Enums;
+using Client.Desktop.Proto.Tracing.Enums;
+using Proto.Command.TraceData;
 
 namespace Service.Monitoring.Tracers.WorkDay;
 
-public class WorkDayTraceSink : ITraceSink<WorkDayTraceRecord>
+public class WorkDayTraceSink : ITraceSink
 {
-    private readonly Collection<WorkDayTraceRecord> _workDayTraces = [];
+    public TraceSinkId TraceSinkId => TraceSinkId.WorkDay;
 
-    public Collection<WorkDayTraceRecord> GetTraces()
+    public void AddTrace(TraceDataCommandProto traceDataCommandProto)
     {
-        return _workDayTraces;
-    }
-
-    public void AddTrace(DateTimeOffset timeStamp, LoggingMeta loggingMeta, Guid traceId, string useCaseMeta,
-        Type originClassType, string log)
-    {
-        _workDayTraces.Add(new WorkDayTraceRecord(timeStamp, loggingMeta, traceId, useCaseMeta,
-            originClassType, log));
     }
 }

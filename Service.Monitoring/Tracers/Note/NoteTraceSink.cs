@@ -1,20 +1,13 @@
-using System.Collections.ObjectModel;
-using Service.Monitoring.Enums;
+using Client.Desktop.Proto.Tracing.Enums;
+using Proto.Command.TraceData;
 
 namespace Service.Monitoring.Tracers.Note;
 
-public class NoteTraceSink : ITraceSink<NoteTraceRecord>
+public class NoteTraceSink : ITraceSink
 {
-    private readonly Collection<NoteTraceRecord> _noteTraces = [];
-    public Collection<NoteTraceRecord> GetTraces()
-    {
-        return _noteTraces;
-    }
+    public TraceSinkId TraceSinkId => TraceSinkId.Note;
 
-    public void AddTrace(DateTimeOffset timeStamp, LoggingMeta loggingMeta, Guid traceId, string useCaseMeta,
-        Type originClassType, string log)
+    public void AddTrace(TraceDataCommandProto traceDataCommandProto)
     {
-        _noteTraces.Add(new NoteTraceRecord(timeStamp, loggingMeta, traceId, useCaseMeta,
-            originClassType, log));
     }
 }

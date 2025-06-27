@@ -1,14 +1,13 @@
-using Service.Monitoring.Enums;
+using Client.Desktop.Proto.Tracing.Enums;
+using Proto.Command.TraceData;
 
 namespace Service.Monitoring.Tracers.Ticket;
 
-public class TicketTraceSink() : ITraceSink<TicketTraceRecord>
+public class TicketTraceSink : ITraceSink
 {
-    private readonly Dictionary<Guid, TicketUseCaseVerifier> _useCaseVerifiers = new();
+    public TraceSinkId TraceSinkId => TraceSinkId.Ticket;
 
-    public void AddTrace(DateTimeOffset timeStamp, LoggingMeta loggingMeta, Guid traceId, string useCaseMeta,
-        Type originClassType, string log)
+    public void AddTrace(TraceDataCommandProto traceDataCommandProto)
     {
-
     }
 }

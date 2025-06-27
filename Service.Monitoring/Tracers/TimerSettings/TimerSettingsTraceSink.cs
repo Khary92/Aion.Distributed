@@ -1,21 +1,13 @@
-using System.Collections.ObjectModel;
-using Service.Monitoring.Enums;
+using Client.Desktop.Proto.Tracing.Enums;
+using Proto.Command.TraceData;
 
 namespace Service.Monitoring.Tracers.TimerSettings;
 
-public class TimerSettingsTraceSink : ITraceSink<TimerSettingsTraceRecord>
+public class TimerSettingsTraceSink : ITraceSink
 {
-    private readonly Collection<TimerSettingsTraceRecord> _timerSettingsTraces = [];
+    public TraceSinkId TraceSinkId => TraceSinkId.TimerSettings;
 
-    public Collection<TimerSettingsTraceRecord> GetTraces()
+    public void AddTrace(TraceDataCommandProto traceDataCommandProto)
     {
-        return _timerSettingsTraces;
-    }
-
-    public void AddTrace(DateTimeOffset timeStamp, LoggingMeta loggingMeta, Guid traceId, string useCaseMeta,
-        Type originClassType, string log)
-    {
-        _timerSettingsTraces.Add(new TimerSettingsTraceRecord(timeStamp, loggingMeta, traceId, useCaseMeta,
-            originClassType, log));
     }
 }

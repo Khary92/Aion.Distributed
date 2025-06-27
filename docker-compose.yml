@@ -3,7 +3,7 @@ services:
   core-service:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: DockerfileServer
     ports:
       - "8081:8080"
     environment:
@@ -11,6 +11,16 @@ services:
       - ConnectionStrings__DefaultConnection=Host=postgres;Database=aion;Username=aionuser;Password=aionpass
     depends_on:
       - postgres
+    restart: unless-stopped
+  
+  monitoring-service:
+    build:
+      context: .
+      dockerfile: DockerfileMonitoring
+    ports:
+      - "8082:8080"
+    environment:
+      - ASPNETCORE_URLS=http://+:8082
     restart: unless-stopped
 
   postgres:

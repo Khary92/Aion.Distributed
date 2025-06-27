@@ -8,11 +8,12 @@ public static class TraceDataExtensions
     public static TraceDataCommandProto ToProto(this TraceDataCommand command)
         => new()
         {
-            TimeStamp = Timestamp.FromDateTimeOffset(command.TimeStamp),
-            Log = command.Log,
+            TraceId = command.TraceId.ToString(),
+            TraceSinkId = "Ticket", //TODO
+            UseCaseMeta = command.UseCaseMeta,
             LoggingMeta = command.LoggingMeta.ToString(),
             OriginClassType = command.OriginClassType.FullName,
-            TraceId = command.TraceId.ToString(),
-            UseCaseMeta = command.UseCaseMeta
+            Log = command.Log,
+            TimeStamp = Timestamp.FromDateTimeOffset(command.TimeStamp)
         };
 }

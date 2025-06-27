@@ -7,5 +7,5 @@ public record NoteTypeTraceRecord(
     LoggingMeta LoggingMeta,
     Guid TraceId,
     string TicketUseCase,
-    Type OriginClassType,
+    string OriginClassType,
     string Log);
