@@ -1,5 +1,5 @@
-using Core.Persistence.SQLite.DbContext;
-using Core.Persistence.SQLite.EventStores;
+using Core.Persistence.DbContext;
+using Core.Persistence.EventStores;
 using Domain.Events.AiSettings;
 using Domain.Events.Note;
 using Domain.Events.NoteTypes;
@@ -12,6 +12,7 @@ using Domain.Events.TimeSlots;
 using Domain.Events.WorkDays;
 using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Core.Persistence;
@@ -25,8 +26,16 @@ public static class InfrastructureServices
 
     private static void AddDatabaseServices(this IServiceCollection services)
     {
+        var configuration = new ConfigurationBuilder()
+            .SetBasePath(AppContext.BaseDirectory)
+            .AddJsonFile("./appsettings.json", optional: false, reloadOnChange: true)
+            .Build();
+
+        string connectionString = configuration.GetConnectionString("DefaultConnection")!;
+
         services.AddDbContextFactory<AppDbContext>(options =>
-            options.UseNpgsql(DatabaseConfiguration.GetConnectionString()));
+            options.UseNpgsql(connectionString));
+
 
         services.AddScoped<IEventStore<AiSettingsEvent>, AiSettingsEventsStore>();
         services.AddScoped<IEventStore<NoteEvent>, NoteEventsStore>();

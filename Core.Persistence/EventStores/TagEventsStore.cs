@@ -1,36 +1,36 @@
-using Core.Persistence.SQLite.DbContext;
-using Domain.Events.WorkDays;
+using Core.Persistence.DbContext;
+using Domain.Events.Tags;
 using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace Core.Persistence.SQLite.EventStores;
+namespace Core.Persistence.EventStores;
 
-public class WorkDayEventsStore(IDbContextFactory<AppDbContext> appDbContextFactory) : IEventStore<WorkDayEvent>
+public class TagEventsStore(IDbContextFactory<AppDbContext> appDbContextFactory) : IEventStore<TagEvent>
 {
-    public async Task StoreEventAsync(WorkDayEvent @event)
+    public async Task StoreEventAsync(TagEvent @event)
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
 
-        await appDbContext.WorkDayEvents.AddAsync(@event);
+        await appDbContext.TagEvents.AddAsync(@event);
         await appDbContext.SaveChangesAsync();
     }
 
-    public async Task<List<WorkDayEvent>> GetEventsForAggregateAsync(Guid entityId)
+    public async Task<List<TagEvent>> GetEventsForAggregateAsync(Guid entityId)
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
 
-        return await appDbContext.WorkDayEvents
+        return await appDbContext.TagEvents
             .Where(e => e.EntityId == entityId)
             .OrderBy(e => e.TimeStamp)
             .AsNoTracking()
             .ToListAsync();
     }
 
-    public async Task<List<WorkDayEvent>> GetAllEventsAsync()
+    public async Task<List<TagEvent>> GetAllEventsAsync()
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
 
-        return await appDbContext.WorkDayEvents
+        return await appDbContext.TagEvents
             .OrderBy(e => e.TimeStamp)
             .AsNoTracking()
             .ToListAsync();

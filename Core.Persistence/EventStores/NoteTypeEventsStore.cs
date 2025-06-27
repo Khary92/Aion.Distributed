@@ -1,37 +1,36 @@
-using Core.Persistence.SQLite.DbContext;
-using Domain.Events.StatisticsData;
+using Core.Persistence.DbContext;
+using Domain.Events.NoteTypes;
 using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace Core.Persistence.SQLite.EventStores;
+namespace Core.Persistence.EventStores;
 
-public class StatisticsDataEventsStore(IDbContextFactory<AppDbContext> appDbContextFactory)
-    : IEventStore<StatisticsDataEvent>
+public class NoteTypeEventsStore(IDbContextFactory<AppDbContext> appDbContextFactory) : IEventStore<NoteTypeEvent>
 {
-    public async Task StoreEventAsync(StatisticsDataEvent @event)
+    public async Task StoreEventAsync(NoteTypeEvent @event)
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
 
-        await appDbContext.StatisticsDataEvents.AddAsync(@event);
+        await appDbContext.NoteTypeEvents.AddAsync(@event);
         await appDbContext.SaveChangesAsync();
     }
 
-    public async Task<List<StatisticsDataEvent>> GetEventsForAggregateAsync(Guid entityId)
+    public async Task<List<NoteTypeEvent>> GetEventsForAggregateAsync(Guid entityId)
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
 
-        return await appDbContext.StatisticsDataEvents
+        return await appDbContext.NoteTypeEvents
             .Where(e => e.EntityId == entityId)
             .OrderBy(e => e.TimeStamp)
             .AsNoTracking()
             .ToListAsync();
     }
 
-    public async Task<List<StatisticsDataEvent>> GetAllEventsAsync()
+    public async Task<List<NoteTypeEvent>> GetAllEventsAsync()
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
 
-        return await appDbContext.StatisticsDataEvents
+        return await appDbContext.NoteTypeEvents
             .OrderBy(e => e.TimeStamp)
             .AsNoTracking()
             .ToListAsync();

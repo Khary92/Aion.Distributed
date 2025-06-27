@@ -1,9 +1,9 @@
-using Core.Persistence.SQLite.DbContext;
+using Core.Persistence.DbContext;
 using Domain.Events.Settings;
 using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace Core.Persistence.SQLite.EventStores;
+namespace Core.Persistence.EventStores;
 
 public class SettingsEventsStore(IDbContextFactory<AppDbContext> appDbContextFactory) : IEventStore<SettingsEvent>
 {

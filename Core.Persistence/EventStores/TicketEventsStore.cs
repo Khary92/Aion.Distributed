@@ -1,10 +1,10 @@
 using System.Text.Json;
-using Core.Persistence.SQLite.DbContext;
+using Core.Persistence.DbContext;
 using Domain.Events.Tickets;
 using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace Core.Persistence.SQLite.EventStores;
+namespace Core.Persistence.EventStores;
 
 public class TicketEventsStore(IDbContextFactory<AppDbContext> appDbContextFactory) : ITicketEventsStore
 {

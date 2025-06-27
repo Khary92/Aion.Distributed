@@ -1,36 +1,37 @@
-using Core.Persistence.SQLite.DbContext;
-using Domain.Events.NoteTypes;
+using Core.Persistence.DbContext;
+using Domain.Events.TimerSettings;
 using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
-namespace Core.Persistence.SQLite.EventStores;
+namespace Core.Persistence.EventStores;
 
-public class NoteTypeEventsStore(IDbContextFactory<AppDbContext> appDbContextFactory) : IEventStore<NoteTypeEvent>
+public class TimerSettingsEventsStore(IDbContextFactory<AppDbContext> appDbContextFactory)
+    : IEventStore<TimerSettingsEvent>
 {
-    public async Task StoreEventAsync(NoteTypeEvent @event)
+    public async Task StoreEventAsync(TimerSettingsEvent @event)
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
 
-        await appDbContext.NoteTypeEvents.AddAsync(@event);
+        await appDbContext.TimerSettingsEvents.AddAsync(@event);
         await appDbContext.SaveChangesAsync();
     }
 
-    public async Task<List<NoteTypeEvent>> GetEventsForAggregateAsync(Guid entityId)
+    public async Task<List<TimerSettingsEvent>> GetEventsForAggregateAsync(Guid entityId)
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
 
-        return await appDbContext.NoteTypeEvents
+        return await appDbContext.TimerSettingsEvents
             .Where(e => e.EntityId == entityId)
             .OrderBy(e => e.TimeStamp)
             .AsNoTracking()
             .ToListAsync();
     }
 
-    public async Task<List<NoteTypeEvent>> GetAllEventsAsync()
+    public async Task<List<TimerSettingsEvent>> GetAllEventsAsync()
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
 
-        return await appDbContext.NoteTypeEvents
+        return await appDbContext.TimerSettingsEvents
             .OrderBy(e => e.TimeStamp)
             .AsNoTracking()
             .ToListAsync();

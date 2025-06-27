@@ -1,5 +1,5 @@
 ﻿using Core.Persistence;
-using Core.Persistence.SQLite.DbContext;
+using Core.Persistence.DbContext;
 using Core.Server;
 using Core.Server.Services.UseCase;
 using Microsoft.AspNetCore.Builder;

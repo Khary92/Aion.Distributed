@@ -4,7 +4,7 @@ namespace Core.Persistence;
 
 public static class DatabaseConfiguration
 {
-    public static IConfiguration GetConfiguration()
+    private static IConfiguration GetConfiguration()
     {
         var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") ?? "Production";
         
