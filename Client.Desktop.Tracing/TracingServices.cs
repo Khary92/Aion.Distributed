@@ -39,7 +39,7 @@ public static class TracingServices
 
     private static void AddACommonTracingServices(this IServiceCollection services)
     {
-        services.AddSingleton<ITracingCollectorProvider, TracingCollectorProvider>();
+        services.AddSingleton<ITraceCollector, TraceCollector>();
     }
 
     private static void AddAiSettingsTracingServices(this IServiceCollection services)

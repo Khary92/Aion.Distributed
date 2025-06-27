@@ -21,7 +21,7 @@ public class NotesDataModel(
     ICommandSender commandSender,
     IRequestSender requestSender,
     IMessenger messenger,
-    ITracingCollectorProvider tracer)
+    ITraceCollector tracer)
     : ReactiveObject
 {
     private ObservableCollection<NoteTypeDto> _noteTypes = [];

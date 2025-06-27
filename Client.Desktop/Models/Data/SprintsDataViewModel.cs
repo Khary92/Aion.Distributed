@@ -3,6 +3,8 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Client.Desktop.DTO;
+using Client.Desktop.Tracing;
+using Client.Desktop.Tracing.Tracing.Tracers;
 using ReactiveUI;
 using Unit = System.Reactive.Unit;
 
@@ -10,7 +12,7 @@ namespace Client.Desktop.Models.Data;
 
 public class SprintsDataViewModel : ReactiveObject
 {
-    // private readonly ITracingCollectorProvider _tracer;
+    private readonly ITraceCollector _tracer;
     private string _editButtonText = string.Empty;
 
     private DateTimeOffset _endTime = DateTimeOffset.Now.AddDays(7);
@@ -23,9 +25,9 @@ public class SprintsDataViewModel : ReactiveObject
 
     private DateTimeOffset _startTime = DateTimeOffset.Now;
 
-    public SprintsDataViewModel(SprintsDataModel dataModel) //ITracingCollectorProvider tracer)
+    public SprintsDataViewModel(SprintsDataModel dataModel, ITraceCollector tracer)
     {
-        // //_tracer = tracer;
+        _tracer = tracer;
         DataModel = dataModel;
 
         CreateSprintCommand = ReactiveCommand.CreateFromTask(PersistSprint,
@@ -123,8 +125,8 @@ public class SprintsDataViewModel : ReactiveObject
             .ToList()
             .ForEach(s => s.IsActive = false);
 
-        //_tracer.Sprint.ActiveStatus.StartUseCase(GetType(), SelectedSprint.SprintId,
-        //   SelectedSprint.AsTraceAttributes());
+        _tracer.Sprint.ActiveStatus.StartUseCase(GetType(), SelectedSprint.SprintId,
+            SelectedSprint.AsTraceAttributes());
 
         await DataModel.SetSprintActive(SelectedSprint);
     }
@@ -136,8 +138,8 @@ public class SprintsDataViewModel : ReactiveObject
             var updateSprintDto = new SprintDto(SelectedSprint.SprintId, NewSprintName, SelectedSprint.IsActive,
                 StartTime, EndTime, SelectedSprint.TicketIds);
 
-            //_tracer.Sprint.Update.StartUseCase(GetType(), updateSprintDto.SprintId,
-            //updateSprintDto.AsTraceAttributes());
+            _tracer.Sprint.Update.StartUseCase(GetType(), updateSprintDto.SprintId,
+                updateSprintDto.AsTraceAttributes());
             await DataModel.UpdateSprint(updateSprintDto);
 
             IsEditMode = false;
@@ -147,7 +149,7 @@ public class SprintsDataViewModel : ReactiveObject
         }
 
         var createSprintDto = new SprintDto(Guid.NewGuid(), NewSprintName, false, StartTime, EndTime, []);
-        //_tracer.Sprint.Create.StartUseCase(GetType(), createSprintDto.SprintId, createSprintDto.AsTraceAttributes());
+        _tracer.Sprint.Create.StartUseCase(GetType(), createSprintDto.SprintId, createSprintDto.AsTraceAttributes());
         await DataModel.CreateSprint(createSprintDto);
 
         ResetData();

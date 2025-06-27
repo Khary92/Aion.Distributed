@@ -2,6 +2,8 @@ using System;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Client.Desktop.DTO;
+using Client.Desktop.Tracing;
+using Client.Desktop.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using Proto.Command.Sprints;
 using ReactiveUI;
@@ -11,7 +13,7 @@ namespace Client.Desktop.Models.Data;
 
 public class TicketsDataViewModel : ReactiveObject
 {
-    // private readonly ITracingCollectorProvider _tracer;
+    private readonly ITraceCollector _tracer;
     private string _editButtonText = string.Empty;
 
     private bool _isEditMode;
@@ -24,8 +26,9 @@ public class TicketsDataViewModel : ReactiveObject
 
     private TicketDto? _selectedTicket;
 
-    public TicketsDataViewModel(IMessenger messenger, TicketsDataModel ticketsDataModel)
+    public TicketsDataViewModel(IMessenger messenger, ITraceCollector tracer, TicketsDataModel ticketsDataModel)
     {
+        _tracer = tracer;
         DataModel = ticketsDataModel;
 
         EditTicketCommand = ReactiveCommand.Create(ToggleTagEditMode);
@@ -114,8 +117,8 @@ public class TicketsDataViewModel : ReactiveObject
 
     private async Task AddTicketToActiveSprint()
     {
-        //_tracer.Ticket.AddTicketToSprint.StartUseCase(GetType(), SelectedTicket!.TicketId,
-        //SelectedTicket.AsTraceAttributes());
+        _tracer.Ticket.AddTicketToSprint.StartUseCase(GetType(), SelectedTicket!.TicketId,
+            SelectedTicket.AsTraceAttributes());
 
         await DataModel.AddTicketToCurrentSprint(SelectedTicket!);
         ResetData();
@@ -128,7 +131,7 @@ public class TicketsDataViewModel : ReactiveObject
             var updatedTicket = new TicketDto(SelectedTicket!.TicketId, NewTicketName, NewTicketBookingNumber,
                 SelectedTicket.Documentation, SelectedTicket.SprintIds);
 
-            // _tracer.Ticket.Update.StartUseCase(GetType(), SelectedTicket!.TicketId, updatedTicket.AsTraceAttributes());
+            _tracer.Ticket.Update.StartUseCase(GetType(), SelectedTicket!.TicketId, updatedTicket.AsTraceAttributes());
 
             await DataModel.UpdateTicket(updatedTicket);
 
@@ -139,7 +142,7 @@ public class TicketsDataViewModel : ReactiveObject
 
         var createTicketDto = new TicketDto(Guid.NewGuid(), NewTicketName, NewTicketBookingNumber, string.Empty, []);
 
-        //_tracer.Ticket.Create.StartUseCase(GetType(), createTicketDto.TicketId, createTicketDto.AsTraceAttributes());
+        _tracer.Ticket.Create.StartUseCase(GetType(), createTicketDto.TicketId, createTicketDto.AsTraceAttributes());
 
         await DataModel.CreateTicket(createTicketDto);
         ResetData();

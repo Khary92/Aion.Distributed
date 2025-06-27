@@ -1,4 +1,3 @@
-using Client.Desktop.Tracing.Tracing.Tracers;
 using Client.Desktop.Tracing.Tracing.Tracers.AiSettings;
 using Client.Desktop.Tracing.Tracing.Tracers.Export;
 using Client.Desktop.Tracing.Tracing.Tracers.Note;
@@ -9,9 +8,9 @@ using Client.Desktop.Tracing.Tracing.Tracers.Ticket;
 using Client.Desktop.Tracing.Tracing.Tracers.TimerSettings;
 using Client.Desktop.Tracing.Tracing.Tracers.WorkDay;
 
-namespace Client.Desktop.Tracing.Tracing;
+namespace Client.Desktop.Tracing.Tracing.Tracers;
 
-public class TracingCollectorProvider(
+public class TraceCollector(
     ITicketUseCaseSelector ticketUseCaseSelector,
     INoteTypeUseCaseSelector noteTypeUseCaseSelector,
     ISprintUseCaseSelector sprintUseCaseSelector,
@@ -20,7 +19,7 @@ public class TracingCollectorProvider(
     IExportUseCaseSelector exportUseCaseSelector,
     IWorkDayUseCaseSelector workDayUseCaseSelector,
     IAiSettingsUseCaseSelector aiSettingsUseCaseSelector,
-    ITimerSettingsUseCaseSelector timerSettingsUseCaseSelector) : ITracingCollectorProvider
+    ITimerSettingsUseCaseSelector timerSettingsUseCaseSelector) : ITraceCollector
 {
     public ITicketUseCaseSelector Ticket => ticketUseCaseSelector;
     public INoteTypeUseCaseSelector NoteType => noteTypeUseCaseSelector;

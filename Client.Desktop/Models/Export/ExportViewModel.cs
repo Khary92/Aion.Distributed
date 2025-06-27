@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Client.Desktop.Tracing.Tracing.Tracers;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Dto;
 using MsBox.Avalonia.Enums;
@@ -9,8 +10,11 @@ namespace Client.Desktop.Models.Export;
 
 public class ExportViewModel : ReactiveObject
 {
-    public ExportViewModel(ExportModel exportModel)
+    private readonly ITraceCollector _tracer;
+
+    public ExportViewModel(ITraceCollector tracer, ExportModel exportModel)
     {
+        _tracer = tracer;
         Model = exportModel;
 
         ExportCommand = ReactiveCommand.CreateFromTask(ExportFile);
@@ -31,7 +35,7 @@ public class ExportViewModel : ReactiveObject
 
     private async Task ExportFile()
     {
-        //_tracer.Export.ToFile.StartUseCase(GetType());
+        _tracer.Export.ToFile.StartUseCase(GetType());
 
         var success = await Model.ExportFileAsync();
         if (!success)
@@ -40,7 +44,7 @@ public class ExportViewModel : ReactiveObject
             return;
         }
 
-        //_tracer.Export.ToFile.ExportSuccessful(GetType());
+        _tracer.Export.ToFile.ExportSuccessful(GetType());
         await ShowMessageBox("Great success!", "File exported successfully");
     }
 

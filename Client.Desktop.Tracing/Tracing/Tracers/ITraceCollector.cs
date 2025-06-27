@@ -10,7 +10,7 @@ using Client.Desktop.Tracing.Tracing.Tracers.WorkDay;
 
 namespace Client.Desktop.Tracing.Tracing.Tracers;
 
-public interface ITracingCollectorProvider
+public interface ITraceCollector
 {
     ITicketUseCaseSelector Ticket { get; }
     INoteTypeUseCaseSelector NoteType { get; }

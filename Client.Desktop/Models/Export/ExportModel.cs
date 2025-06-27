@@ -6,6 +6,8 @@ using Client.Desktop.Communication.NotificationWrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.DTO;
 using Client.Desktop.Services;
+using Client.Desktop.Tracing;
+using Client.Desktop.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using Proto.Requests.Settings;
@@ -20,7 +22,7 @@ public class ExportModel : ReactiveObject
     private readonly IMessenger _messenger;
 
     private readonly IRequestSender _requestSender;
-    //private readonly ITracingCollectorProvider _tracer;
+    private readonly ITraceCollector _tracer;
 
     private string _markdownText = null!;
 
@@ -47,9 +49,9 @@ public class ExportModel : ReactiveObject
     {
         _messenger.Register<NewWorkDayMessage>(this, (_, m) =>
         {
-            //_tracer.WorkDay.Create.AggregateReceived(GetType(), m.WorkDay.WorkDayId, m.WorkDay.AsTraceAttributes());
+            _tracer.WorkDay.Create.AggregateReceived(GetType(), m.WorkDay.WorkDayId, m.WorkDay.AsTraceAttributes());
             WorkDays.Add(m.WorkDay);
-            //_tracer.WorkDay.Create.AggregateAdded(GetType(), m.WorkDay.WorkDayId);
+            _tracer.WorkDay.Create.AggregateAdded(GetType(), m.WorkDay.WorkDayId);
         });
     }
 
@@ -61,10 +63,11 @@ public class ExportModel : ReactiveObject
 
     public async Task<bool> ExportFileAsync()
     {
-        if (await _requestSender.Send(new IsExportPathValidRequestProto()))
+        var isExportPathValidRequestProto = new IsExportPathValidRequestProto();
+        if (await _requestSender.Send(isExportPathValidRequestProto))
             return await _exportService.ExportToFile(WorkDays);
 
-        //_tracer.Export.ToFile.PathSettingsInvalid(GetType(), new IsExportPathValidRequest());
+        _tracer.Export.ToFile.PathSettingsInvalid(GetType(), isExportPathValidRequestProto);
         return false;
     }
 
@@ -76,7 +79,7 @@ public class ExportModel : ReactiveObject
         }
         catch (Exception exception)
         {
-            //_tracer.Export.ToFile.ExceptionOccured(GetType(), exception);
+            _tracer.Export.ToFile.ExceptionOccured(GetType(), exception);
         }
     }
 

@@ -4,6 +4,7 @@ using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.NotificationWrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.DTO;
+using Client.Desktop.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using Proto.Command.AiSettings;
 using Proto.Notifications.AiSettings;
@@ -15,7 +16,9 @@ namespace Client.Desktop.Models.Settings;
 public class AiSettingsModel(
     ICommandSender commandSender,
     IRequestSender requestSender,
-    IMessenger messenger) : ReactiveObject
+    IMessenger messenger,
+    ITraceCollector tracer) : ReactiveObject
+
 {
     private AiSettingsDto _aiSettings = new(Guid.NewGuid(), "settings not loaded", "settings not loaded");
     private string _previousLanguageModelPath = string.Empty;
@@ -63,10 +66,12 @@ public class AiSettingsModel(
 
     public async Task ChangePrompt()
     {
-        if (_previousPrompt == AiSettings!.Prompt)
-            //tracer.AiSettings.ChangePrompt.PropertyNotChanged(GetType(), AiSettings.AiSettingsId,
-            //     ("prompt", AiSettings!.Prompt));
+        if (_previousPrompt == AiSettings.Prompt)
+        {
+            tracer.AiSettings.ChangePrompt.PropertyNotChanged(GetType(), AiSettings.AiSettingsId,
+                ("prompt", AiSettings.Prompt));
             return;
+        }
 
         var changePromptCommand = new ChangePromptCommandProto
         {
@@ -76,17 +81,19 @@ public class AiSettingsModel(
 
         await commandSender.Send(changePromptCommand);
 
-        //tracer.AiSettings.ChangePrompt.CommandSent(GetType(), AiSettings.AiSettingsId, changePromptCommand);
+        tracer.AiSettings.ChangePrompt.CommandSent(GetType(), AiSettings.AiSettingsId, changePromptCommand);
 
         _previousPrompt = AiSettings.Prompt;
     }
 
     public async Task ChangeLanguageModelPath()
     {
-        if (_previousLanguageModelPath == AiSettings!.LanguageModelPath)
-            //tracer.AiSettings.ChangeLanguageModel.PropertyNotChanged(GetType(), AiSettings.AiSettingsId,
-            //   ("languageModelPath", AiSettings!.LanguageModelPath));
+        if (_previousLanguageModelPath == AiSettings.LanguageModelPath)
+        {
+            tracer.AiSettings.ChangeLanguageModel.PropertyNotChanged(GetType(), AiSettings.AiSettingsId,
+                ("languageModelPath", AiSettings!.LanguageModelPath));
             return;
+        }
 
         var changeLanguageModelCommand =
             new ChangeLanguageModelCommandProto
@@ -97,8 +104,8 @@ public class AiSettingsModel(
 
         await commandSender.Send(changeLanguageModelCommand);
 
-        //tracer.AiSettings.ChangeLanguageModel.CommandSent(GetType(), AiSettings.AiSettingsId,
-        //     changeLanguageModelCommand);
+        tracer.AiSettings.ChangeLanguageModel.CommandSent(GetType(), AiSettings.AiSettingsId,
+            changeLanguageModelCommand);
 
         _previousLanguageModelPath = AiSettings.LanguageModelPath;
     }

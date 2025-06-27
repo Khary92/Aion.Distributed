@@ -13,11 +13,9 @@ using ReactiveUI;
 using Unit = System.Reactive.Unit;
 
 
-//TODO!
 namespace Client.Desktop.Models.Main;
 
 public class ContentWrapperViewModel : ReactiveObject
-// INotificationHandler<WorkDaySelectionChangedNotification>
 {
     private const int ZeroConstant = 0;
     private const int MenuTransitionDelay = 250;

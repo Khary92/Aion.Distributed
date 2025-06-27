@@ -6,6 +6,8 @@ using Client.Desktop.Communication.NotificationWrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.DTO;
 using Client.Desktop.Services;
+using Client.Desktop.Tracing;
+using Client.Desktop.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using Google.Protobuf.WellKnownTypes;
@@ -23,7 +25,8 @@ public class WorkDaysModel(
     ICommandSender commandSender,
     IRequestSender requestSender,
     IMessenger messenger,
-    IRunTimeSettings runTimeSettings) : ReactiveObject
+    IRunTimeSettings runTimeSettings,
+    ITraceCollector tracer) : ReactiveObject
 {
     public ObservableCollection<WorkDayDto> WorkDays { get; } = [];
 
@@ -31,9 +34,9 @@ public class WorkDaysModel(
     {
         messenger.Register<NewWorkDayMessage>(this, (_, m) =>
         {
-            //tracer.WorkDay.Create.AggregateReceived(GetType(), m.WorkDay.WorkDayId, m.WorkDay.AsTraceAttributes());
+            tracer.WorkDay.Create.AggregateReceived(GetType(), m.WorkDay.WorkDayId, m.WorkDay.AsTraceAttributes());
             WorkDays.Add(m.WorkDay);
-            //tracer.WorkDay.Create.AggregateAdded(GetType(), m.WorkDay.WorkDayId);
+            tracer.WorkDay.Create.AggregateAdded(GetType(), m.WorkDay.WorkDayId);
         });
     }
 
@@ -75,7 +78,7 @@ public class WorkDaysModel(
         };
         await commandSender.Send(createWorkDayCommand);
 
-        //tracer.WorkDay.Create.CommandSent(GetType(), newGuid, createWorkDayCommand);
+        tracer.WorkDay.Create.CommandSent(GetType(), newGuid, createWorkDayCommand);
     }
 
     private static async Task ShowMessageBox(string title, string message)

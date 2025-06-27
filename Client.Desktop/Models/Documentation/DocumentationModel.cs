@@ -7,6 +7,8 @@ using Client.Desktop.Communication.Requests;
 using Client.Desktop.DTO;
 using Client.Desktop.Factories;
 using Client.Desktop.Models.TimeTracking.DynamicControls;
+using Client.Desktop.Tracing;
+using Client.Desktop.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using Proto.Notifications.Note;
@@ -22,7 +24,8 @@ namespace Client.Desktop.Models.Documentation;
 public class DocumentationModel(
     IRequestSender requestSender,
     IMessenger messenger,
-    INoteViewFactory noteViewFactory)
+    INoteViewFactory noteViewFactory,
+    ITraceCollector tracer)
     : ReactiveObject
 {
     private ObservableCollection<NoteViewModel> _allNotes = [];
@@ -128,18 +131,18 @@ public class DocumentationModel(
         {
             try
             {
-                //tracer.Note.Create.AggregateReceived(GetType(), m.Note.NoteTypeId, m.Note.AsTraceAttributes());
+                tracer.Note.Create.AggregateReceived(GetType(), m.Note.NoteTypeId, m.Note.AsTraceAttributes());
 
                 var noteViewModel = await noteViewFactory.Create(m.Note);
 
                 AllNotes.Add(noteViewModel);
 
-                //tracer.Note.Create.AggregateAdded(GetType(), m.Note.NoteTypeId);
+                tracer.Note.Create.AggregateAdded(GetType(), m.Note.NoteTypeId);
                 FilterNotes();
             }
             catch (Exception exception)
             {
-                //tracer.Note.Create.ExceptionOccured(GetType(), m.Note.NoteTypeId, exception);
+                tracer.Note.Create.ExceptionOccured(GetType(), m.Note.NoteTypeId, exception);
             }
         });
 
@@ -148,14 +151,15 @@ public class DocumentationModel(
             var parsedNoteId = Guid.Parse(m.NoteId);
             try
             {
-                //tracer.Note.Update.NotificationReceived(GetType(), parsedNoteId, m);
+                tracer.Note.Update.NotificationReceived(GetType(), parsedNoteId, m);
 
                 var noteViewModel = AllNotes.FirstOrDefault(n => n.Note.NoteId == parsedNoteId);
 
-                if (noteViewModel == null)
-                    //tracer.Note.Update.NoAggregateFound(GetType(), parsedNoteId);
+                if (noteViewModel == null) {
+                    tracer.Note.Update.NoAggregateFound(GetType(), parsedNoteId);
                     return;
-
+                }
+                
                 var noteType = await requestSender.Send(new GetNoteTypeByIdRequestProto
                 {
                     NoteTypeId = m.NoteTypeId
@@ -164,12 +168,12 @@ public class DocumentationModel(
                 noteViewModel.Note.NoteType = noteType;
                 noteViewModel.Note.Apply(m);
 
-                //tracer.Note.Update.ChangesApplied(GetType(), parsedNoteId);
+                tracer.Note.Update.ChangesApplied(GetType(), parsedNoteId);
                 FilterNotes();
             }
             catch (Exception e)
             {
-                //tracer.Note.Update.ExceptionOccured(GetType(), parsedNoteId, e);
+                tracer.Note.Update.ExceptionOccured(GetType(), parsedNoteId, e);
             }
         });
     }
@@ -178,7 +182,7 @@ public class DocumentationModel(
     {
         messenger.Register<NewNoteTypeMessage>(this, (_, m) =>
         {
-            //tracer.NoteType.Create.AggregateReceived(GetType(), m.NoteType.NoteTypeId, m.NoteType.AsTraceAttributes());
+            tracer.NoteType.Create.AggregateReceived(GetType(), m.NoteType.NoteTypeId, m.NoteType.AsTraceAttributes());
 
             Options.Add(new TypeCheckBoxViewModel(requestSender)
             {
@@ -187,19 +191,20 @@ public class DocumentationModel(
                 IsChecked = false
             });
 
-            //tracer.NoteType.Create.AggregateAdded(GetType(), m.NoteType.NoteTypeId);
+            tracer.NoteType.Create.AggregateAdded(GetType(), m.NoteType.NoteTypeId);
         });
 
         messenger.Register<NoteTypeNameChangedNotification>(this, (_, m) =>
         {
             var parsedId = Guid.Parse(m.NoteTypeId);
-            //tracer.NoteType.ChangeName.NotificationReceived(GetType(), parsedId, m);
+            tracer.NoteType.ChangeName.NotificationReceived(GetType(), parsedId, m);
 
             var typeCheckBoxViewModel = Options.FirstOrDefault(opt => opt.NoteTypeId == parsedId);
 
-            if (typeCheckBoxViewModel is null)
-                //tracer.NoteType.ChangeName.NoAggregateFound(GetType(), parsedId);
+            if (typeCheckBoxViewModel is null) {
+                tracer.NoteType.ChangeName.NoAggregateFound(GetType(), parsedId);
                 return;
+            }
 
             typeCheckBoxViewModel.NoteType!.Apply(m);
         });
@@ -207,16 +212,17 @@ public class DocumentationModel(
         messenger.Register<NoteTypeColorChangedNotification>(this, (_, m) =>
         {
             var parsedId = Guid.Parse(m.NoteTypeId);
-            //tracer.NoteType.ChangeColor.NotificationReceived(GetType(), parsedId, m);
+            tracer.NoteType.ChangeColor.NotificationReceived(GetType(), parsedId, m);
 
             var typeCheckBoxViewModel = Options.FirstOrDefault(opt => opt.NoteTypeId == parsedId);
 
-            if (typeCheckBoxViewModel is null)
-                //tracer.NoteType.ChangeColor.NoAggregateFound(GetType(), parsedId);
+            if (typeCheckBoxViewModel is null) {
+                tracer.NoteType.ChangeColor.NoAggregateFound(GetType(), parsedId);
                 return;
-
+            }
+            
             typeCheckBoxViewModel.NoteType!.Apply(m);
-            //tracer.NoteType.ChangeColor.ChangesApplied(GetType(), parsedId);
+            tracer.NoteType.ChangeColor.ChangesApplied(GetType(), parsedId);
         });
     }
 
@@ -224,24 +230,25 @@ public class DocumentationModel(
     {
         messenger.Register<NewTicketMessage>(this, (_, m) =>
         {
-            //tracer.Ticket.Create.AggregateReceived(GetType(), m.Ticket.TicketId, m.Ticket.AsTraceAttributes());
+            tracer.Ticket.Create.AggregateReceived(GetType(), m.Ticket.TicketId, m.Ticket.AsTraceAttributes());
             AllTickets.Add(m.Ticket);
-            //tracer.Ticket.Create.AggregateAdded(GetType(), m.Ticket.TicketId);
+            tracer.Ticket.Create.AggregateAdded(GetType(), m.Ticket.TicketId);
         });
 
         messenger.Register<TicketDataUpdatedNotification>(this, (_, m) =>
         {
             var parsedId = Guid.Parse(m.TicketId);
-            //tracer.Ticket.Update.NotificationReceived(GetType(), parsedId, m);
+            tracer.Ticket.Update.NotificationReceived(GetType(), parsedId, m);
 
             var ticket = AllTickets.FirstOrDefault(t => t.TicketId == parsedId);
 
-            if (ticket is null)
-                //tracer.Ticket.Update.NoAggregateFound(GetType(), parsedId);
+            if (ticket is null) {
+                tracer.Ticket.Update.NoAggregateFound(GetType(), parsedId);
                 return;
-
+            }
+            
             ticket.Apply(m);
-            //tracer.Ticket.Update.ChangesApplied(GetType(), parsedId);
+            tracer.Ticket.Update.ChangesApplied(GetType(), parsedId);
         });
     }
 }

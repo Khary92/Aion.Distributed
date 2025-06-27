@@ -6,6 +6,8 @@ using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.NotificationWrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.DTO;
+using Client.Desktop.Tracing;
+using Client.Desktop.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using Proto.Command.Sprints;
@@ -17,10 +19,10 @@ using ReactiveUI;
 namespace Client.Desktop.Models.Data;
 
 public class TicketsDataModel(
-        ICommandSender commandSender,
-        IRequestSender requestSender,
-        IMessenger messenger)
-    //ITracingCollectorProvider //tracer)
+    ICommandSender commandSender,
+    IRequestSender requestSender,
+    IMessenger messenger,
+    ITraceCollector tracer)
     : ReactiveObject
 {
     public ObservableCollection<TicketDto> Tickets { get; } = [];
@@ -42,24 +44,26 @@ public class TicketsDataModel(
     {
         messenger.Register<NewTicketMessage>(this, (_, m) =>
         {
-            //tracer.Ticket.Create.AggregateReceived(GetType(), m.Ticket.TicketId, m.Ticket.AsTraceAttributes());
+            tracer.Ticket.Create.AggregateReceived(GetType(), m.Ticket.TicketId, m.Ticket.AsTraceAttributes());
             Tickets.Add(m.Ticket);
-            //tracer.Ticket.Create.AggregateAdded(GetType(), m.Ticket.TicketId);
+            tracer.Ticket.Create.AggregateAdded(GetType(), m.Ticket.TicketId);
         });
 
         messenger.Register<TicketDataUpdatedNotification>(this, (_, m) =>
         {
             var parsedId = Guid.Parse(m.TicketId);
-            //tracer.Ticket.Update.NotificationReceived(GetType(), parsedId, m);
+            tracer.Ticket.Update.NotificationReceived(GetType(), parsedId, m);
 
             var ticket = Tickets.FirstOrDefault(t => t.TicketId == parsedId);
 
             if (ticket is null)
-                //tracer.Ticket.Update.NoAggregateFound(GetType(), parsedId);
+            {
+                tracer.Ticket.Update.NoAggregateFound(GetType(), parsedId);
                 return;
+            }
 
             ticket.Apply(m);
-            //tracer.Ticket.Update.ChangesApplied(GetType(), parsedId);
+            tracer.Ticket.Update.ChangesApplied(GetType(), parsedId);
         });
     }
 
@@ -70,8 +74,8 @@ public class TicketsDataModel(
 
         await commandSender.Send(addTicketToActiveSprintCommand);
 
-        //tracer.Ticket.AddTicketToSprint.CommandSent(GetType(), ticketDto.TicketId,
-        //   addTicketToActiveSprintCommand);
+        tracer.Ticket.AddTicketToSprint.CommandSent(GetType(), ticketDto.TicketId,
+            addTicketToActiveSprintCommand);
     }
 
     public async Task UpdateTicket(TicketDto selectedTicket)
@@ -86,7 +90,7 @@ public class TicketsDataModel(
 
         await commandSender.Send(updateTicketDataCommand);
 
-        //tracer.Ticket.Update.CommandSent(GetType(), selectedTicket.TicketId, updateTicketDataCommand);
+        tracer.Ticket.Update.CommandSent(GetType(), selectedTicket.TicketId, updateTicketDataCommand);
     }
 
     public async Task CreateTicket(TicketDto createTicketDto)
@@ -99,7 +103,7 @@ public class TicketsDataModel(
             SprintIds = { createTicketDto.SprintIds.Select(guid => guid.ToString()) }
         };
 
-        //tracer.Ticket.Create.CommandSent(GetType(), createTicketDto.TicketId, createTicketCommand);
+        tracer.Ticket.Create.CommandSent(GetType(), createTicketDto.TicketId, createTicketCommand);
 
         await commandSender.Send(createTicketCommand);
     }

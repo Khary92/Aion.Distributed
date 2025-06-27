@@ -6,6 +6,8 @@ using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.NotificationWrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.DTO;
+using Client.Desktop.Tracing;
+using Client.Desktop.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using Google.Protobuf.WellKnownTypes;
@@ -17,10 +19,10 @@ using ReactiveUI;
 namespace Client.Desktop.Models.Data;
 
 public class SprintsDataModel(
-        ICommandSender commandSender,
-        IRequestSender requestSender,
-        IMessenger messenger)
-    //ITracingCollectorProvider tracer)
+    ICommandSender commandSender,
+    IRequestSender requestSender,
+    IMessenger messenger,
+    ITraceCollector tracer)
     : ReactiveObject
 {
     public ObservableCollection<SprintDto> Sprints { get; } = [];
@@ -29,39 +31,43 @@ public class SprintsDataModel(
     {
         messenger.Register<NewSprintMessage>(this, (_, m) =>
         {
-            //tracer.Sprint.Create.AggregateReceived(GetType(), m.Sprint.SprintId, m.Sprint.AsTraceAttributes());
+            tracer.Sprint.Create.AggregateReceived(GetType(), m.Sprint.SprintId, m.Sprint.AsTraceAttributes());
             Sprints.Add(m.Sprint);
-            //tracer.Sprint.Create.AggregateAdded(GetType(), m.Sprint.SprintId);
+            tracer.Sprint.Create.AggregateAdded(GetType(), m.Sprint.SprintId);
         });
 
         messenger.Register<SprintDataUpdatedNotification>(this, (_, m) =>
         {
             var parsedId = Guid.Parse(m.SprintId);
-            //tracer.Sprint.Update.NotificationReceived(GetType(), parsedId, m);
+            tracer.Sprint.Update.NotificationReceived(GetType(), parsedId, m);
 
             var sprint = Sprints.FirstOrDefault(s => parsedId == s.SprintId);
 
             if (sprint is null)
-                //tracer.Sprint.Update.NoAggregateFound(GetType(), parsedId);
+            {
+                tracer.Sprint.Update.NoAggregateFound(GetType(), parsedId);
                 return;
-
+            }
+                
             sprint.Apply(m);
-            //tracer.Sprint.Update.ChangesApplied(GetType(), parsedId);
+            tracer.Sprint.Update.ChangesApplied(GetType(), parsedId);
         });
 
         messenger.Register<TicketAddedToSprintNotification>(this, (_, m) =>
         {
             var parsedId = Guid.Parse(m.SprintId);
-            //tracer.Sprint.AddTicketToSprint.NotificationReceived(GetType(), parsedId, m);
+            tracer.Sprint.AddTicketToSprint.NotificationReceived(GetType(), parsedId, m);
 
             var sprint = Sprints.FirstOrDefault(s => parsedId == s.SprintId);
 
             if (sprint is null)
-                //tracer.Sprint.AddTicketToSprint.NoAggregateFound(GetType(), parsedId);
+            {
+                tracer.Sprint.AddTicketToSprint.NoAggregateFound(GetType(), parsedId);
                 return;
+            }
 
             sprint.Apply(m);
-            //tracer.Sprint.AddTicketToSprint.ChangesApplied(GetType(), parsedId);
+            tracer.Sprint.AddTicketToSprint.ChangesApplied(GetType(), parsedId);
         });
 
         messenger.Register<SprintActiveStatusSetNotification>(this, (_, m) =>
