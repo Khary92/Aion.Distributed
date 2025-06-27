@@ -1,8 +1,8 @@
 using System;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
+using Client.Desktop.Converter;
 using Client.Desktop.DTO;
-using Client.Desktop.Tracing;
 using Client.Desktop.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using Proto.Command.Sprints;
@@ -117,7 +117,7 @@ public class TicketsDataViewModel : ReactiveObject
 
     private async Task AddTicketToActiveSprint()
     {
-        _tracer.Ticket.AddTicketToSprint.StartUseCase(GetType(), SelectedTicket!.TicketId,
+        await _tracer.Ticket.AddTicketToSprint.StartUseCase(GetType(), SelectedTicket!.TicketId,
             SelectedTicket.AsTraceAttributes());
 
         await DataModel.AddTicketToCurrentSprint(SelectedTicket!);
@@ -131,7 +131,8 @@ public class TicketsDataViewModel : ReactiveObject
             var updatedTicket = new TicketDto(SelectedTicket!.TicketId, NewTicketName, NewTicketBookingNumber,
                 SelectedTicket.Documentation, SelectedTicket.SprintIds);
 
-            _tracer.Ticket.Update.StartUseCase(GetType(), SelectedTicket!.TicketId, updatedTicket.AsTraceAttributes());
+            await _tracer.Ticket.Update.StartUseCase(GetType(), SelectedTicket!.TicketId,
+                updatedTicket.AsTraceAttributes());
 
             await DataModel.UpdateTicket(updatedTicket);
 
@@ -142,7 +143,8 @@ public class TicketsDataViewModel : ReactiveObject
 
         var createTicketDto = new TicketDto(Guid.NewGuid(), NewTicketName, NewTicketBookingNumber, string.Empty, []);
 
-        _tracer.Ticket.Create.StartUseCase(GetType(), createTicketDto.TicketId, createTicketDto.AsTraceAttributes());
+        await _tracer.Ticket.Create.StartUseCase(GetType(), createTicketDto.TicketId,
+            createTicketDto.AsTraceAttributes());
 
         await DataModel.CreateTicket(createTicketDto);
         ResetData();

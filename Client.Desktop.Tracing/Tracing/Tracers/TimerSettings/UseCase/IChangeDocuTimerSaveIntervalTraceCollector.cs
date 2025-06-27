@@ -2,11 +2,11 @@ namespace Client.Desktop.Tracing.Tracing.Tracers.TimerSettings.UseCase;
 
 public interface IChangeDocuTimerSaveIntervalTraceCollector
 {
-    void StartUseCase(Type originClassType, Guid traceId, Dictionary<string, string> attributes);
-    void CommandSent(Type originClassType, Guid traceId, object command);
-    void NotificationReceived(Type originClassType, Guid traceId, object notification);
-    void NoAggregateFound(Type originClassType, Guid traceId);
-    void ChangesApplied(Type originClassType, Guid traceId);
-    void PropertyNotChanged(Type originClassType, Guid traceId, Dictionary<string, string> asTraceAttributes);
+    Task StartUseCase(Type originClassType, Guid traceId, Dictionary<string, string> attributes);
+    Task CommandSent(Type originClassType, Guid traceId, object command);
+    Task NotificationReceived(Type originClassType, Guid traceId, object notification);
+    Task NoAggregateFound(Type originClassType, Guid traceId);
+    Task ChangesApplied(Type originClassType, Guid traceId);
+    Task PropertyNotChanged(Type originClassType, Guid traceId, Dictionary<string, string> asTraceAttributes);
     
 }

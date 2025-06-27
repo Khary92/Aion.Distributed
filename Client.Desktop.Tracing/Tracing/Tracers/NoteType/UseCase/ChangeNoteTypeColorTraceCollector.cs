@@ -1,34 +1,43 @@
+using Client.Desktop.Tracing.Communication.Tracing;
+using Client.Desktop.Tracing.Tracing.Enums;
+
 namespace Client.Desktop.Tracing.Tracing.Tracers.NoteType.UseCase;
 
-public class ChangeNoteTypeColorTraceCollector(): IChangeNoteTypeColorTraceCollector
+public class ChangeNoteTypeColorTraceCollector(ITracingDataCommandSender commandSender)
+    : IChangeNoteTypeColorTraceCollector
 {
-    public void StartUseCase(Type originClassType, Guid traceId, Dictionary<string, string> attributes)
+    public async Task StartUseCase(Type originClassType, Guid traceId, Dictionary<string, string> attributes)
     {
         var log = $"Change Color requested for {attributes}";
-        //sink.AddTrace(DateTimeOffset.Now, LoggingMeta.ActionRequested, traceId, "toBeReplaced", originClassType, log);
+        await commandSender.Send(new TraceDataCommand(DateTimeOffset.Now, LoggingMeta.ActionRequested, traceId,
+            "toBeReplaced", originClassType, log));
     }
 
-    public void CommandSent(Type originClassType, Guid traceId, object command)
+    public async Task CommandSent(Type originClassType, Guid traceId, object command)
     {
         var log = ($"Sent {command}");
-        //sink.AddTrace(DateTimeOffset.Now, LoggingMeta.ActionRequested, traceId, "toBeReplaced", originClassType, log);
+        await commandSender.Send(new TraceDataCommand(DateTimeOffset.Now, LoggingMeta.ActionRequested, traceId,
+            "toBeReplaced", originClassType, log));
     }
 
-    public void NotificationReceived(Type originClassType, Guid traceId, object notification)
+    public async Task NotificationReceived(Type originClassType, Guid traceId, object notification)
     {
         var log = ($"Received {notification}");
-        //sink.AddTrace(DateTimeOffset.Now, LoggingMeta.ActionRequested, traceId, "toBeReplaced", originClassType, log);
+        await commandSender.Send(new TraceDataCommand(DateTimeOffset.Now, LoggingMeta.ActionRequested, traceId,
+            "toBeReplaced", originClassType, log));
     }
 
-    public void NoAggregateFound(Type originClassType, Guid traceId)
+    public async Task NoAggregateFound(Type originClassType, Guid traceId)
     {
         var log = ($"Aggregate not found id:{traceId}");
-        //sink.AddTrace(DateTimeOffset.Now, LoggingMeta.ActionRequested, traceId, "toBeReplaced", originClassType, log);
+        await commandSender.Send(new TraceDataCommand(DateTimeOffset.Now, LoggingMeta.ActionRequested, traceId,
+            "toBeReplaced", originClassType, log));
     }
 
-    public void ChangesApplied(Type originClassType, Guid traceId)
+    public async Task ChangesApplied(Type originClassType, Guid traceId)
     {
         var log = ($"Changed applied id:{traceId}");
-        //sink.AddTrace(DateTimeOffset.Now, LoggingMeta.ActionRequested, traceId, "toBeReplaced", originClassType, log);
+        await commandSender.Send(new TraceDataCommand(DateTimeOffset.Now, LoggingMeta.ActionRequested, traceId,
+            "toBeReplaced", originClassType, log));
     }
 }

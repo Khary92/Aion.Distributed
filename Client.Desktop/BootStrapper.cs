@@ -9,7 +9,6 @@ using Client.Desktop.Communication.Commands.Tags;
 using Client.Desktop.Communication.Commands.Tickets;
 using Client.Desktop.Communication.Commands.TimerSettings;
 using Client.Desktop.Communication.Commands.TimeSlots;
-using Client.Desktop.Communication.Commands.TraceReports;
 using Client.Desktop.Communication.Commands.UseCases;
 using Client.Desktop.Communication.Commands.WorkDays;
 using Client.Desktop.Communication.Notifications;
@@ -45,6 +44,7 @@ using Client.Desktop.Proto;
 using Client.Desktop.Replays;
 using Client.Desktop.Services;
 using Client.Desktop.Services.Cache;
+using Client.Desktop.Tracing.Communication.Tracing;
 using Client.Desktop.Views.Analysis;
 using Client.Desktop.Views.Data;
 using Client.Desktop.Views.Documentation;
@@ -226,7 +226,6 @@ public static class Bootstrapper
         services.AddScoped<ITicketCommandSender, TicketCommandSender>();
         services.AddScoped<ITimerSettingsCommandSender, TimerSettingsCommandSender>();
         services.AddScoped<ITimeSlotCommandSender, TimeSlotCommandSender>();
-        services.AddScoped<ITraceReportCommandSender, TraceReportCommandSender>();
         services.AddScoped<IUseCaseCommandSender, UseCaseCommandSender>();
         services.AddScoped<IWorkDayCommandSender, WorkDayCommandSender>();
     }

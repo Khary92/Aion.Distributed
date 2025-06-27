@@ -1,0 +1,20 @@
+syntax = "proto3";
+import "google/protobuf/timestamp.proto";
+option csharp_namespace = "Proto.Command.TraceData";
+
+service TraceDataCommandProtoService {
+  rpc SendTraceData (TraceDataCommandProto) returns (CommandResponse);
+}
+
+message TraceDataCommandProto {
+  google.protobuf.Timestamp time_stamp = 1;
+  string logging_meta = 2;
+  string trace_id = 3;
+  string use_case_meta = 4;
+  string origin_class_type = 5;
+  string log = 6;
+}
+
+message CommandResponse {
+  bool success = 1;
+}

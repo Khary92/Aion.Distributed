@@ -8,7 +8,6 @@ using Client.Desktop.Communication.Commands.Tags;
 using Client.Desktop.Communication.Commands.Tickets;
 using Client.Desktop.Communication.Commands.TimerSettings;
 using Client.Desktop.Communication.Commands.TimeSlots;
-using Client.Desktop.Communication.Commands.TraceReports;
 using Client.Desktop.Communication.Commands.UseCases;
 using Client.Desktop.Communication.Commands.WorkDays;
 
@@ -25,6 +24,5 @@ public interface ICommandSender :
     ITicketCommandSender,
     ITimerSettingsCommandSender,
     ITimeSlotCommandSender,
-    ITraceReportCommandSender,
     IUseCaseCommandSender,
     IWorkDayCommandSender;

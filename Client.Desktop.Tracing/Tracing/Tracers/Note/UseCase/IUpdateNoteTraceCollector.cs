@@ -2,10 +2,10 @@ namespace Client.Desktop.Tracing.Tracing.Tracers.Note.UseCase;
 
 public interface IUpdateNoteTraceCollector
 {
-    void StartUseCase(Type originClassType, Guid traceId, Dictionary<string, string> attributes);
-    void CommandSent(Type originClassType, Guid traceId, object command);
-    void NotificationReceived(Type originClassType, Guid traceId, object notification);
-    void NoAggregateFound(Type originClassType, Guid traceId);
-    void ChangesApplied(Type originClassType, Guid traceId);
-    void ExceptionOccured(Type originClassType, Guid traceId, Exception exception);
+    Task StartUseCase(Type originClassType, Guid traceId, Dictionary<string, string> attributes);
+    Task CommandSent(Type originClassType, Guid traceId, object command);
+    Task NotificationReceived(Type originClassType, Guid traceId, object notification);
+    Task NoAggregateFound(Type originClassType, Guid traceId);
+    Task ChangesApplied(Type originClassType, Guid traceId);
+    Task ExceptionOccured(Type originClassType, Guid traceId, Exception exception);
 }

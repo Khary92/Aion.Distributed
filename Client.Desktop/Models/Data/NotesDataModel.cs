@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.NotificationWrappers;
 using Client.Desktop.Communication.Requests;
+using Client.Desktop.Converter;
 using Client.Desktop.DTO;
 using Client.Desktop.Tracing;
 using Client.Desktop.Tracing.Tracing.Tracers;
@@ -34,45 +35,45 @@ public class NotesDataModel(
 
     public void RegisterMessenger()
     {
-        messenger.Register<NewNoteTypeMessage>(this, (_, m) =>
+        messenger.Register<NewNoteTypeMessage>(this, async (_, m) =>
         {
-            tracer.NoteType.Create.AggregateReceived(GetType(), m.NoteType.NoteTypeId, m.NoteType.AsTraceAttributes());
+            await tracer.NoteType.Create.AggregateReceived(GetType(), m.NoteType.NoteTypeId, m.NoteType.AsTraceAttributes());
             NoteTypes.Add(m.NoteType);
-            tracer.NoteType.Create.AggregateAdded(GetType(), m.NoteType.NoteTypeId);
+            await tracer.NoteType.Create.AggregateAdded(GetType(), m.NoteType.NoteTypeId);
         });
 
-        messenger.Register<NoteTypeColorChangedNotification>(this, (_, m) =>
+        messenger.Register<NoteTypeColorChangedNotification>(this, async (_, m) =>
         {
             var parsedId = Guid.Parse(m.NoteTypeId);
-            tracer.NoteType.ChangeColor.NotificationReceived(GetType(), parsedId, m);
+            await tracer.NoteType.ChangeColor.NotificationReceived(GetType(), parsedId, m);
 
             var noteType = NoteTypes.FirstOrDefault(n => n.NoteTypeId == parsedId);
 
             if (noteType == null)
             {
-                tracer.NoteType.ChangeColor.NoAggregateFound(GetType(), parsedId);
+                await tracer.NoteType.ChangeColor.NoAggregateFound(GetType(), parsedId);
                 return;
             }
 
             noteType.Apply(m);
-            tracer.NoteType.ChangeColor.ChangesApplied(GetType(), parsedId);
+            await tracer.NoteType.ChangeColor.ChangesApplied(GetType(), parsedId);
         });
 
-        messenger.Register<NoteTypeNameChangedNotification>(this, (_, m) =>
+        messenger.Register<NoteTypeNameChangedNotification>(this, async (_, m) =>
         {
             var parsedId = Guid.Parse(m.NoteTypeId);
-            tracer.NoteType.ChangeName.NotificationReceived(GetType(), parsedId, m);
+            await tracer.NoteType.ChangeName.NotificationReceived(GetType(), parsedId, m);
 
             var noteType = NoteTypes.FirstOrDefault(n => n.NoteTypeId == parsedId);
 
             if (noteType == null)
             {
-                tracer.NoteType.ChangeName.NoAggregateFound(GetType(), parsedId);
+                await tracer.NoteType.ChangeName.NoAggregateFound(GetType(), parsedId);
                 return;
             }
 
             noteType.Apply(m);
-            tracer.NoteType.ChangeName.ChangesApplied(GetType(), parsedId);
+            await tracer.NoteType.ChangeName.ChangesApplied(GetType(), parsedId);
         });
     }
 
@@ -94,7 +95,7 @@ public class NotesDataModel(
 
         await commandSender.Send(createNoteTypeCommand);
 
-        tracer.NoteType.Create.CommandSent(GetType(), Guid.Parse(createNoteTypeCommand.NoteTypeId),
+        await tracer.NoteType.Create.CommandSent(GetType(), Guid.Parse(createNoteTypeCommand.NoteTypeId),
             createNoteTypeCommand);
     }
 
@@ -108,7 +109,7 @@ public class NotesDataModel(
 
         await commandSender.Send(changeNoteTypeNameCommand);
 
-        tracer.NoteType.ChangeName.CommandSent(GetType(), noteType.NoteTypeId, changeNoteTypeNameCommand);
+        await tracer.NoteType.ChangeName.CommandSent(GetType(), noteType.NoteTypeId, changeNoteTypeNameCommand);
     }
 
     public async Task ChangeNoteTypeColor(NoteTypeDto noteType)
@@ -121,6 +122,6 @@ public class NotesDataModel(
 
         await commandSender.Send(changeNoteTypeColorCommand);
 
-        tracer.NoteType.ChangeColor.CommandSent(GetType(), noteType.NoteTypeId, changeNoteTypeColorCommand);
+        await tracer.NoteType.ChangeColor.CommandSent(GetType(), noteType.NoteTypeId, changeNoteTypeColorCommand);
     }
 }

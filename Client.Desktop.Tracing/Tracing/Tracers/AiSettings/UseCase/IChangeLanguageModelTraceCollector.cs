@@ -2,7 +2,7 @@ namespace Client.Desktop.Tracing.Tracing.Tracers.AiSettings.UseCase;
 
 public interface IChangeLanguageModelTraceCollector
 {
-    void StartUseCase(Type originClassType, Guid traceId, (string, string) attribute);
-    void CommandSent(Type originClassType, Guid traceId, object command);
-    void PropertyNotChanged(Type originClassType, Guid traceId, (string, string) attribute);
+    Task StartUseCase(Type originClassType, Guid traceId, (string, string) attribute);
+    Task CommandSent(Type originClassType, Guid traceId, object command);
+    Task PropertyNotChanged(Type originClassType, Guid traceId, (string, string) attribute);
 }

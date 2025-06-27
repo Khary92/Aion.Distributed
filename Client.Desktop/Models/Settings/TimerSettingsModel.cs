@@ -3,8 +3,8 @@ using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.NotificationWrappers;
 using Client.Desktop.Communication.Requests;
+using Client.Desktop.Converter;
 using Client.Desktop.DTO;
-using Client.Desktop.Tracing;
 using Client.Desktop.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using Proto.Command.TimerSettings;
@@ -48,34 +48,34 @@ public class TimerSettingsModel(
 
     public void RegisterMessenger()
     {
-        messenger.Register<NewTimerSettingsMessage>(this, (_, m) =>
+        messenger.Register<NewTimerSettingsMessage>(this, async (_, m) =>
         {
-            tracer.TimerSettings.Create.AggregateReceived(GetType(), m.TimerSettingsDto.TimerSettingsId,
+            await tracer.TimerSettings.Create.AggregateReceived(GetType(), m.TimerSettingsDto.TimerSettingsId,
                 m.TimerSettingsDto.AsTraceAttributes());
 
             TimerSettingsDto = m.TimerSettingsDto;
 
-            tracer.TimerSettings.Create.AggregateAdded(GetType(), m.TimerSettingsDto.TimerSettingsId);
+            await tracer.TimerSettings.Create.AggregateAdded(GetType(), m.TimerSettingsDto.TimerSettingsId);
         });
 
-        messenger.Register<DocuTimerSaveIntervalChangedNotification>(this, (_, m) =>
+        messenger.Register<DocuTimerSaveIntervalChangedNotification>(this, async (_, m) =>
         {
             var parsedId = Guid.Parse(m.TimerSettingsId);
-            tracer.TimerSettings.ChangeDocuTimerInterval.NotificationReceived(GetType(), parsedId, m);
+            await tracer.TimerSettings.ChangeDocuTimerInterval.NotificationReceived(GetType(), parsedId, m);
 
             TimerSettingsDto?.Apply(m);
 
-            tracer.TimerSettings.ChangeDocuTimerInterval.ChangesApplied(GetType(), parsedId);
+            await tracer.TimerSettings.ChangeDocuTimerInterval.ChangesApplied(GetType(), parsedId);
         });
 
-        messenger.Register<SnapshotSaveIntervalChangedNotification>(this, (_, m) =>
+        messenger.Register<SnapshotSaveIntervalChangedNotification>(this, async (_, m) =>
         {
             var parsedId = Guid.Parse(m.TimerSettingsId);
-            tracer.TimerSettings.ChangeSnapshotInterval.NotificationReceived(GetType(), parsedId, m);
+            await tracer.TimerSettings.ChangeSnapshotInterval.NotificationReceived(GetType(), parsedId, m);
 
             TimerSettingsDto?.Apply(m);
 
-            tracer.TimerSettings.ChangeSnapshotInterval.ChangesApplied(GetType(), parsedId);
+            await tracer.TimerSettings.ChangeSnapshotInterval.ChangesApplied(GetType(), parsedId);
         });
     }
 
@@ -91,7 +91,8 @@ public class TimerSettingsModel(
     {
         if (!TimerSettingsDto!.IsDocuIntervalChanged())
         {
-            tracer.TimerSettings.ChangeDocuTimerInterval.PropertyNotChanged(GetType(), TimerSettingsDto.TimerSettingsId,
+            await tracer.TimerSettings.ChangeDocuTimerInterval.PropertyNotChanged(GetType(),
+                TimerSettingsDto.TimerSettingsId,
                 TimerSettingsDto.AsTraceAttributes());
             return;
         }
@@ -104,15 +105,17 @@ public class TimerSettingsModel(
 
         await commandSender.Send(changeDocuTimerSaveIntervalCommand);
 
-        tracer.TimerSettings.ChangeDocuTimerInterval.CommandSent(GetType(), TimerSettingsDto.TimerSettingsId,
+        await tracer.TimerSettings.ChangeDocuTimerInterval.CommandSent(GetType(), TimerSettingsDto.TimerSettingsId,
             changeDocuTimerSaveIntervalCommand);
     }
 
     private async Task CheckSnapShotIntervalChanged()
     {
-        if (!TimerSettingsDto!.IsSnapshotIntervalChanged()) {
-            tracer.TimerSettings.ChangeSnapshotInterval.PropertyNotChanged(GetType(), TimerSettingsDto.TimerSettingsId,
-            TimerSettingsDto.AsTraceAttributes());
+        if (!TimerSettingsDto!.IsSnapshotIntervalChanged())
+        {
+            await tracer.TimerSettings.ChangeSnapshotInterval.PropertyNotChanged(GetType(),
+                TimerSettingsDto.TimerSettingsId,
+                TimerSettingsDto.AsTraceAttributes());
             return;
         }
 
@@ -124,7 +127,7 @@ public class TimerSettingsModel(
 
         await commandSender.Send(changeSnapshotSaveIntervalCommand);
 
-        tracer.TimerSettings.ChangeSnapshotInterval.CommandSent(GetType(), TimerSettingsDto.TimerSettingsId,
-           changeSnapshotSaveIntervalCommand);
+        await tracer.TimerSettings.ChangeSnapshotInterval.CommandSent(GetType(), TimerSettingsDto.TimerSettingsId,
+            changeSnapshotSaveIntervalCommand);
     }
 }

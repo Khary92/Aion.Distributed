@@ -35,7 +35,7 @@ public class ExportViewModel : ReactiveObject
 
     private async Task ExportFile()
     {
-        _tracer.Export.ToFile.StartUseCase(GetType());
+        await _tracer.Export.ToFile.StartUseCase(GetType());
 
         var success = await Model.ExportFileAsync();
         if (!success)
@@ -44,7 +44,7 @@ public class ExportViewModel : ReactiveObject
             return;
         }
 
-        _tracer.Export.ToFile.ExportSuccessful(GetType());
+        await _tracer.Export.ToFile.ExportSuccessful(GetType());
         await ShowMessageBox("Great success!", "File exported successfully");
     }
 

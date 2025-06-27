@@ -2,7 +2,7 @@ namespace Client.Desktop.Tracing.Tracing.Tracers.AiSettings.UseCase;
 
 public interface IChangePromptTraceCollector
 {
-    void StartUseCase(Type originClassType, Guid traceId, (string, string) property);
-    void CommandSent(Type originClassType, Guid traceId, object command);
-    void PropertyNotChanged(Type originClassType, Guid traceId, (string, string) property);
+    Task StartUseCase(Type originClassType, Guid traceId, (string, string) property);
+    Task CommandSent(Type originClassType, Guid traceId, object command);
+    Task PropertyNotChanged(Type originClassType, Guid traceId, (string, string) property);
 }

@@ -4,9 +4,9 @@ using System.Collections.Specialized;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.NotificationWrappers;
 using Client.Desktop.Communication.Requests;
+using Client.Desktop.Converter;
 using Client.Desktop.DTO;
 using Client.Desktop.Services;
-using Client.Desktop.Tracing;
 using Client.Desktop.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
@@ -27,11 +27,12 @@ public class ExportModel : ReactiveObject
     private string _markdownText = null!;
 
     public ExportModel(IRequestSender requestSender, IMessenger messenger,
-        IExportService exportService)
+        IExportService exportService, ITraceCollector tracer)
     {
         _requestSender = requestSender;
         _messenger = messenger;
         _exportService = exportService;
+        _tracer = tracer;
 
         SelectedWorkDays.CollectionChanged += RefreshMarkdownViewerHandler;
     }
@@ -47,11 +48,12 @@ public class ExportModel : ReactiveObject
 
     public void RegisterMessenger()
     {
-        _messenger.Register<NewWorkDayMessage>(this, (_, m) =>
+        _messenger.Register<NewWorkDayMessage>(this, async (_, m) =>
         {
-            _tracer.WorkDay.Create.AggregateReceived(GetType(), m.WorkDay.WorkDayId, m.WorkDay.AsTraceAttributes());
+            await _tracer.WorkDay.Create.AggregateReceived(GetType(), m.WorkDay.WorkDayId,
+                m.WorkDay.AsTraceAttributes());
             WorkDays.Add(m.WorkDay);
-            _tracer.WorkDay.Create.AggregateAdded(GetType(), m.WorkDay.WorkDayId);
+            await _tracer.WorkDay.Create.AggregateAdded(GetType(), m.WorkDay.WorkDayId);
         });
     }
 
@@ -67,7 +69,7 @@ public class ExportModel : ReactiveObject
         if (await _requestSender.Send(isExportPathValidRequestProto))
             return await _exportService.ExportToFile(WorkDays);
 
-        _tracer.Export.ToFile.PathSettingsInvalid(GetType(), isExportPathValidRequestProto);
+        await _tracer.Export.ToFile.PathSettingsInvalid(GetType(), isExportPathValidRequestProto);
         return false;
     }
 
@@ -79,7 +81,7 @@ public class ExportModel : ReactiveObject
         }
         catch (Exception exception)
         {
-            _tracer.Export.ToFile.ExceptionOccured(GetType(), exception);
+            await _tracer.Export.ToFile.ExceptionOccured(GetType(), exception);
         }
     }
 

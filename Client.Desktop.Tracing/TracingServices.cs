@@ -1,3 +1,4 @@
+using Client.Desktop.Tracing.Communication.Tracing;
 using Client.Desktop.Tracing.Tracing.Tracers;
 using Client.Desktop.Tracing.Tracing.Tracers.AiSettings;
 using Client.Desktop.Tracing.Tracing.Tracers.AiSettings.UseCase;
@@ -39,6 +40,8 @@ public static class TracingServices
 
     private static void AddACommonTracingServices(this IServiceCollection services)
     {
+        services.AddScoped<ITracingDataCommandSender, TracingDataCommandSender>();
+        
         services.AddSingleton<ITraceCollector, TraceCollector>();
     }
 

@@ -9,7 +9,6 @@ using Client.Desktop.Communication.Commands.Tags;
 using Client.Desktop.Communication.Commands.Tickets;
 using Client.Desktop.Communication.Commands.TimerSettings;
 using Client.Desktop.Communication.Commands.TimeSlots;
-using Client.Desktop.Communication.Commands.TraceReports;
 using Client.Desktop.Communication.Commands.UseCases;
 using Client.Desktop.Communication.Commands.WorkDays;
 using Proto.Command.AiSettings;
@@ -22,7 +21,7 @@ using Proto.Command.Tags;
 using Proto.Command.Tickets;
 using Proto.Command.TimerSettings;
 using Proto.Command.TimeSlots;
-using Proto.Command.TraceReports;
+using Proto.Command.TraceData;
 using Proto.Command.UseCases;
 using Proto.Command.WorkDays;
 
@@ -39,7 +38,6 @@ public class CommandSender(
     ITicketCommandSender ticketCommandSender,
     ITimerSettingsCommandSender timerSettingsCommandSender,
     ITimeSlotCommandSender timeSlotCommandSender,
-    ITraceReportCommandSender traceReportCommandSender,
     IUseCaseCommandSender useCaseCommandSender,
     IWorkDayCommandSender workDayCommandSender) : ICommandSender
 {
@@ -196,11 +194,6 @@ public class CommandSender(
     public async Task<bool> Send(SetEndTimeCommandProto command)
     {
         return await timeSlotCommandSender.Send(command);
-    }
-
-    public async Task<bool> Send(SendTraceReportCommandProto command)
-    {
-        return await traceReportCommandSender.Send(command);
     }
 
     public async Task<bool> Send(CreateTimeSlotControlCommandProto command)

@@ -2,8 +2,8 @@ namespace Client.Desktop.Tracing.Tracing.Tracers.WorkDay.UseCase;
 
 public interface ICreateWorkDayTraceCollector
 {
-    void StartUseCase(Type originClassType, Guid traceId, Dictionary<string, string> attributes);
-    void CommandSent(Type originClassType, Guid traceId, object command);
-    void AggregateReceived(Type originClassType, Guid traceId, Dictionary<string, string> attributes);
-    void AggregateAdded(Type originClassType, Guid traceId);
+    Task StartUseCase(Type originClassType, Guid traceId, Dictionary<string, string> attributes);
+    Task CommandSent(Type originClassType, Guid traceId, object command);
+    Task AggregateReceived(Type originClassType, Guid traceId, Dictionary<string, string> attributes);
+    Task AggregateAdded(Type originClassType, Guid traceId);
 }

@@ -68,7 +68,7 @@ public class AiSettingsModel(
     {
         if (_previousPrompt == AiSettings.Prompt)
         {
-            tracer.AiSettings.ChangePrompt.PropertyNotChanged(GetType(), AiSettings.AiSettingsId,
+            await tracer.AiSettings.ChangePrompt.PropertyNotChanged(GetType(), AiSettings.AiSettingsId,
                 ("prompt", AiSettings.Prompt));
             return;
         }
@@ -81,7 +81,7 @@ public class AiSettingsModel(
 
         await commandSender.Send(changePromptCommand);
 
-        tracer.AiSettings.ChangePrompt.CommandSent(GetType(), AiSettings.AiSettingsId, changePromptCommand);
+        await tracer.AiSettings.ChangePrompt.CommandSent(GetType(), AiSettings.AiSettingsId, changePromptCommand);
 
         _previousPrompt = AiSettings.Prompt;
     }
@@ -90,7 +90,7 @@ public class AiSettingsModel(
     {
         if (_previousLanguageModelPath == AiSettings.LanguageModelPath)
         {
-            tracer.AiSettings.ChangeLanguageModel.PropertyNotChanged(GetType(), AiSettings.AiSettingsId,
+            await tracer.AiSettings.ChangeLanguageModel.PropertyNotChanged(GetType(), AiSettings.AiSettingsId,
                 ("languageModelPath", AiSettings!.LanguageModelPath));
             return;
         }
@@ -104,7 +104,7 @@ public class AiSettingsModel(
 
         await commandSender.Send(changeLanguageModelCommand);
 
-        tracer.AiSettings.ChangeLanguageModel.CommandSent(GetType(), AiSettings.AiSettingsId,
+        await tracer.AiSettings.ChangeLanguageModel.CommandSent(GetType(), AiSettings.AiSettingsId,
             changeLanguageModelCommand);
 
         _previousLanguageModelPath = AiSettings.LanguageModelPath;

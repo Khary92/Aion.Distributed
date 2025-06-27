@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Client.Desktop.DTO;
 
-namespace Client.Desktop.Tracing;
+namespace Client.Desktop.Converter;
 
 public static class TracingExtensions
 {

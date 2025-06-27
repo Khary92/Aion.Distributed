@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.NotificationWrappers;
 using Client.Desktop.Communication.Requests;
+using Client.Desktop.Converter;
 using Client.Desktop.DTO;
 using Client.Desktop.Services;
 using Client.Desktop.Tracing;
@@ -32,11 +33,11 @@ public class WorkDaysModel(
 
     public void RegisterMessenger()
     {
-        messenger.Register<NewWorkDayMessage>(this, (_, m) =>
+        messenger.Register<NewWorkDayMessage>(this, async (_, m) =>
         {
-            tracer.WorkDay.Create.AggregateReceived(GetType(), m.WorkDay.WorkDayId, m.WorkDay.AsTraceAttributes());
+            await tracer.WorkDay.Create.AggregateReceived(GetType(), m.WorkDay.WorkDayId, m.WorkDay.AsTraceAttributes());
             WorkDays.Add(m.WorkDay);
-            tracer.WorkDay.Create.AggregateAdded(GetType(), m.WorkDay.WorkDayId);
+            await tracer.WorkDay.Create.AggregateAdded(GetType(), m.WorkDay.WorkDayId);
         });
     }
 
@@ -78,7 +79,7 @@ public class WorkDaysModel(
         };
         await commandSender.Send(createWorkDayCommand);
 
-        tracer.WorkDay.Create.CommandSent(GetType(), newGuid, createWorkDayCommand);
+        await tracer.WorkDay.Create.CommandSent(GetType(), newGuid, createWorkDayCommand);
     }
 
     private static async Task ShowMessageBox(string title, string message)

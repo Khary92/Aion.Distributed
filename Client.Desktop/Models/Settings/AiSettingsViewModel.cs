@@ -1,13 +1,17 @@
 using System.Reactive;
 using System.Threading.Tasks;
+using Client.Desktop.Tracing.Tracing.Tracers;
 using ReactiveUI;
 
 namespace Client.Desktop.Models.Settings;
 
 public class AiSettingsViewModel : ReactiveObject
 {
-    public AiSettingsViewModel(AiSettingsModel aiSettingsModel)
+    private readonly ITraceCollector _tracer;
+
+    public AiSettingsViewModel(ITraceCollector tracer, AiSettingsModel aiSettingsModel)
     {
+        _tracer = tracer;
         ChangePromptCommand = ReactiveCommand.CreateFromTask(ChangePrompt);
         ChangeLanguageModelPathCommand = ReactiveCommand.CreateFromTask(ChangeLanguageModelPath);
 
@@ -23,15 +27,15 @@ public class AiSettingsViewModel : ReactiveObject
 
     private async Task ChangePrompt()
     {
-        //_tracer.AiSettings.ChangePrompt.StartUseCase(GetType(), Model.AiSettings!.AiSettingsId,
-        //     ("prompt", Model.AiSettings.Prompt));
+        await _tracer.AiSettings.ChangePrompt.StartUseCase(GetType(), Model.AiSettings!.AiSettingsId,
+            ("prompt", Model.AiSettings.Prompt));
         await Model.ChangePrompt();
     }
 
     private async Task ChangeLanguageModelPath()
     {
-        //_tracer.AiSettings.ChangeLanguageModel.StartUseCase(GetType(), Model.AiSettings!.AiSettingsId,
-        //    ("languageModelPath", Model.AiSettings!.LanguageModelPath));
+        await _tracer.AiSettings.ChangeLanguageModel.StartUseCase(GetType(), Model.AiSettings!.AiSettingsId,
+            ("languageModelPath", Model.AiSettings!.LanguageModelPath));
         await Model.ChangeLanguageModelPath();
     }
 }
