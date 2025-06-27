@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.ReactiveUI;
 using Client.Desktop.Services.Cache;
+using Client.Desktop.Tracing;
 using Client.Desktop.Views.Main;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -16,7 +17,11 @@ public static class DesktopApp
     public static async Task Main(string[] args)
     {
         var host = Host.CreateDefaultBuilder(args)
-            .ConfigureServices(services => { services.AddPresentationServices(); })
+            .ConfigureServices(services =>
+            {
+                services.AddPresentationServices();
+                services.AddTracingServices();
+            })
             .Build();
 
         await host.StartAsync();

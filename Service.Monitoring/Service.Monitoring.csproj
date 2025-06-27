@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Proto.Monitoring\Proto.Monitoring.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Tracers\Sprint\UseCase\" />
+      <Folder Include="Tracers\Tag\UseCase\" />
+      <Folder Include="Tracers\Ticket\UseCase\" />
+      <Folder Include="Tracers\TimerSettings\UseCase\" />
+      <Folder Include="Tracers\WorkDay\UseCase\" />
+    </ItemGroup>
+
+</Project>

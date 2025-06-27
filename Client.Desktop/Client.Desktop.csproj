@@ -37,6 +37,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Client.Desktop.Tracing\Client.Desktop.Tracing.csproj" />
         <ProjectReference Include="..\Proto.Client\Proto.Client.csproj"/>
     </ItemGroup>
 
