@@ -2,20 +2,28 @@
 
     <PropertyGroup>
         <TargetFramework>net9.0</TargetFramework>
+        <OutputType>Exe</OutputType>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
-
-    <ItemGroup>
-      <ProjectReference Include="..\Proto.Monitoring\Proto.Monitoring.csproj" />
-    </ItemGroup>
 
     <ItemGroup>
       <Folder Include="Tracers\Sprint\UseCase\" />
       <Folder Include="Tracers\Tag\UseCase\" />
-      <Folder Include="Tracers\Ticket\UseCase\" />
       <Folder Include="Tracers\TimerSettings\UseCase\" />
       <Folder Include="Tracers\WorkDay\UseCase\" />
+    </ItemGroup>
+    
+    <ItemGroup>
+      <ProjectReference Include="..\Client.Desktop.Proto\Client.Desktop.Proto.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.6" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.6" />
+      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.6" />
+      <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.6" />
     </ItemGroup>
 
 </Project>

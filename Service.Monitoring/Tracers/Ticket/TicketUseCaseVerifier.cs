@@ -4,7 +4,7 @@ using Service.Monitoring.Enums;
 
 namespace Service.Monitoring.Tracers.Ticket;
 
-public class TicketUseCaseVerifier(IReportDispatcher reportDispatcher)
+public class TicketUseCaseVerifier()
 {
     private const string Alrighty = "Alrighty";
 
@@ -26,7 +26,6 @@ public class TicketUseCaseVerifier(IReportDispatcher reportDispatcher)
 
         Log += ToString(traceRecord);
         
-        await reportDispatcher.Send(new TraceReportDto(Log));
      }
 
     private DateTimeOffset? _lastTimestamp;

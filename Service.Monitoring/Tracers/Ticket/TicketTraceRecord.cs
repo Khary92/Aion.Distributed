@@ -5,6 +5,6 @@ namespace Service.Monitoring.Tracers.Ticket;
 public record TicketTraceRecord(DateTimeOffset TimeStamp,
     LoggingMeta LoggingMeta,
     Guid TraceId,
-    TicketUseCase TicketUseCase,
+    string TicketUseCase,
     Type OriginClassType,
     string Log);
