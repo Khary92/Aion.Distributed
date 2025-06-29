@@ -28,8 +28,8 @@ public class Program
             options.ListenAnyIP(8080, o => { o.Protocols = HttpProtocols.Http2; });
         });
 
-        builder.Logging.AddConsole();
-        builder.Logging.SetMinimumLevel(LogLevel.Debug);
+       // builder.Logging.AddConsole();
+       // builder.Logging.SetMinimumLevel(LogLevel.Debug);
 
         var app = builder.Build();
 

@@ -10,9 +10,13 @@ public class TraceDataCommandReceiver(IEnumerable<ITraceSink> traceSinks)
 {
     private readonly Dictionary<TraceSinkId, ITraceSink> _sinks = traceSinks.ToDictionary(ts => ts.TraceSinkId);
 
+    private readonly List<TraceDataCommandProto> _traceDataCommands = new();
+    
     public override Task<CommandResponse> SendTraceData(TraceDataCommandProto traceData,
         ServerCallContext context)
     {
+        _traceDataCommands.Add(traceData);
+        
         Console.WriteLine(
             $"[{traceData.UseCaseMeta}] Timestamp: {traceData.TimeStamp} ID: {traceData.TraceId}, OriginClass: {traceData.OriginClassType}, LoggingMeta: {traceData.LoggingMeta} Log: {traceData.Log}");
 
@@ -24,6 +28,6 @@ public class TraceDataCommandReceiver(IEnumerable<ITraceSink> traceSinks)
         }
 
         _sinks[traceSinkId].AddTrace(traceData);
-        return Task.FromResult<CommandResponse>(new CommandResponse { Success = true });
+        return Task.FromResult(new CommandResponse { Success = true });
     }
 }

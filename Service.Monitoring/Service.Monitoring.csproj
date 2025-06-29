@@ -17,6 +17,7 @@
     
     <ItemGroup>
       <ProjectReference Include="..\Client.Desktop.Proto\Client.Desktop.Proto.csproj" />
+      <ProjectReference Include="..\Service.Monitoring.Shared\Service.Monitoring.Shared.csproj" />
     </ItemGroup>
 
     <ItemGroup>
