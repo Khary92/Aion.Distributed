@@ -1,5 +1,5 @@
+using Client.Desktop.Proto.Tracing.Enums;
 using Client.Desktop.Tracing.Communication.Tracing;
-using Client.Desktop.Tracing.Tracing.Enums;
 
 namespace Client.Desktop.Tracing.Tracing.Tracers.AiSettings.UseCase;
 
@@ -8,23 +8,42 @@ public class ChangePromptTraceCollector(ITracingDataCommandSender commandSender)
     public async Task StartUseCase(Type originClassType, Guid traceId, (string, string) attributes)
     {
         var log = ($"Change Prompt requested for {attributes.Item1}:{attributes.Item2}");
-        await commandSender.Send(new TraceDataCommand(DateTimeOffset.Now, LoggingMeta.ActionRequested, traceId,
-            "toBeReplaced", originClassType, log));
+        await commandSender.Send(new TraceDataCommand(
+            TraceSinkId.AiSettings,
+            UseCaseMeta.ChangePrompt,
+            LoggingMeta.ActionRequested,
+            originClassType,
+            traceId,
+            log,
+            DateTimeOffset.Now));
     }
+
 
     public async Task CommandSent(Type originClassType, Guid traceId, object command)
     {
         var log = ($"Sent {command}");
-        await commandSender.Send(new TraceDataCommand(DateTimeOffset.Now, LoggingMeta.ActionRequested, traceId,
-            "toBeReplaced",
-            originClassType, log));
+
+        await commandSender.Send(new TraceDataCommand(
+            TraceSinkId.AiSettings,
+            UseCaseMeta.ChangePrompt,
+            LoggingMeta.ActionRequested,
+            originClassType,
+            traceId,
+            log,
+            DateTimeOffset.Now));
     }
 
     public async Task PropertyNotChanged(Type originClassType, Guid traceId, (string, string) property)
     {
         var log = ($"Request aborted {property.Item1}:{property.Item2}");
-        await commandSender.Send(new TraceDataCommand(DateTimeOffset.Now, LoggingMeta.PropertyNotChanged, traceId,
-            "toBeReplaced",
-            originClassType, log));
+
+        await commandSender.Send(new TraceDataCommand(
+            TraceSinkId.AiSettings,
+            UseCaseMeta.ChangePrompt,
+            LoggingMeta.ActionRequested,
+            originClassType,
+            traceId,
+            log,
+            DateTimeOffset.Now));
     }
 }

@@ -9,5 +9,9 @@ public enum LoggingMeta
     CommandSent,
     InvalidSettings,
     ActionCompleted,
-    ExceptionOccured
+    ExceptionOccured,
+    AggregateReceived,
+    AggregateAdded,
+    AggregateNotFound,
+    PropertyChanged
 }

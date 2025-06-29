@@ -1,5 +1,5 @@
+using Client.Desktop.Proto.Tracing.Enums;
 using Client.Desktop.Tracing.Communication.Tracing;
-using Client.Desktop.Tracing.Tracing.Enums;
 
 namespace Client.Desktop.Tracing.Tracing.Tracers.Export.UseCase;
 
@@ -7,26 +7,49 @@ public class ExportTraceCollector(ITracingDataCommandSender commandSender) : IEx
 {
     public async Task StartUseCase(Type originClassType)
     {
-        await commandSender.Send(new TraceDataCommand(DateTimeOffset.Now, LoggingMeta.ActionRequested, Guid.Empty,
-            "toBeReplaced", originClassType, "Export requested"));
+        await commandSender.Send(new TraceDataCommand(
+            TraceSinkId.Export,
+            UseCaseMeta.ExportData,
+            LoggingMeta.ActionRequested,
+            originClassType,
+            Guid.Empty,
+            "Export requested",
+            DateTimeOffset.Now));
     }
 
     public async Task PathSettingsInvalid(Type originClassType, object command)
     {
-        await commandSender.Send(new TraceDataCommand(DateTimeOffset.Now, LoggingMeta.InvalidSettings, Guid.Empty,
-            "toBeReplaced", originClassType,
-            "PathSettingsInvalid!"));
+        await commandSender.Send(new TraceDataCommand(
+            TraceSinkId.Export,
+            UseCaseMeta.ExportData,
+            LoggingMeta.InvalidSettings,
+            originClassType,
+            Guid.Empty,
+            "Path settings invalid",
+            DateTimeOffset.Now));
     }
 
     public async Task ExportSuccessful(Type originClassType)
     {
-        await commandSender.Send(new TraceDataCommand(DateTimeOffset.Now, LoggingMeta.ActionCompleted, Guid.Empty,
-            "toBeReplaced", originClassType, "Export successful"));
+        await commandSender.Send(new TraceDataCommand(
+            TraceSinkId.Export,
+            UseCaseMeta.ExportData,
+            LoggingMeta.ActionCompleted,
+            originClassType,
+            Guid.Empty,
+            "Export completed",
+            DateTimeOffset.Now));
     }
 
     public async Task ExceptionOccured(Type originClassType, Exception exception)
     {
-        await commandSender.Send(new TraceDataCommand(DateTimeOffset.Now, LoggingMeta.ExceptionOccured, Guid.Empty,
-            "toBeReplaced", originClassType, "Exception occured: " + exception.StackTrace));
+        await commandSender.Send(new TraceDataCommand(
+            TraceSinkId.Export,
+            UseCaseMeta.ExportData,
+            LoggingMeta.ExceptionOccured,
+            originClassType,
+            Guid.Empty,
+            exception.ToString(),
+            DateTimeOffset.Now));
     }
 }
