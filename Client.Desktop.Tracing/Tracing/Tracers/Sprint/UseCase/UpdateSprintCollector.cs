@@ -1,5 +1,6 @@
-using Client.Desktop.Proto.Tracing.Enums;
 using Client.Desktop.Tracing.Communication.Tracing;
+using Service.Monitoring.Shared;
+using Service.Monitoring.Shared.Enums;
 
 namespace Client.Desktop.Tracing.Tracing.Tracers.Sprint.UseCase;
 
@@ -9,7 +10,7 @@ public class UpdateSprintCollector(ITracingDataCommandSender commandSender) : IU
     {
         var log = $"Change sprint data requested for {attributes}";
         
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Sprint,
             UseCaseMeta.UpdateSprint,
             LoggingMeta.ActionRequested,
@@ -23,7 +24,7 @@ public class UpdateSprintCollector(ITracingDataCommandSender commandSender) : IU
     {
         var log = ($"Sent {command}");
         
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Sprint,
             UseCaseMeta.UpdateSprint,
             LoggingMeta.CommandSent,
@@ -37,7 +38,7 @@ public class UpdateSprintCollector(ITracingDataCommandSender commandSender) : IU
     {
         var log = ($"Received {notification}");
         
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Sprint,
             UseCaseMeta.UpdateSprint,
             LoggingMeta.NotificationReceived,
@@ -51,7 +52,7 @@ public class UpdateSprintCollector(ITracingDataCommandSender commandSender) : IU
     {
         var log = ($"Aggregate not found id:{traceId}");
         
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Sprint,
             UseCaseMeta.UpdateSprint,
             LoggingMeta.AggregateNotFound,
@@ -65,7 +66,7 @@ public class UpdateSprintCollector(ITracingDataCommandSender commandSender) : IU
     {
         var log = ($"Changed applied id:{traceId}");
     
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Sprint,
             UseCaseMeta.UpdateSprint,
             LoggingMeta.PropertyChanged,

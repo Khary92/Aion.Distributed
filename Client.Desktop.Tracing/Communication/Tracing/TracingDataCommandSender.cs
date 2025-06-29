@@ -2,6 +2,7 @@
 using Client.Desktop.Tracing.Tracing;
 using Grpc.Net.Client;
 using Proto.Command.TraceData;
+using Service.Monitoring.Shared;
 
 namespace Client.Desktop.Tracing.Communication.Tracing;
 
@@ -10,7 +11,7 @@ public class TracingDataCommandSender : ITracingDataCommandSender
     private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.MonitoringAddress);
     private readonly TraceDataCommandProtoService.TraceDataCommandProtoServiceClient _client = new(Channel);
 
-    public async Task<bool> Send(TraceDataCommand command)
+    public async Task<bool> Send(ServiceTraceDataCommand command)
     {
         try
         {

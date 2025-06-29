@@ -1,5 +1,6 @@
-using Client.Desktop.Proto.Tracing.Enums;
 using Client.Desktop.Tracing.Communication.Tracing;
+using Service.Monitoring.Shared;
+using Service.Monitoring.Shared.Enums;
 
 namespace Client.Desktop.Tracing.Tracing.Tracers.Ticket.UseCase;
 
@@ -9,7 +10,7 @@ public class CreateTicketTraceCollector(ITracingDataCommandSender commandSender)
     {
         var log = $"Create Ticket requested for {attributes}";
    
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
             UseCaseMeta.CreateTicket,
             LoggingMeta.ActionRequested,
@@ -23,7 +24,7 @@ public class CreateTicketTraceCollector(ITracingDataCommandSender commandSender)
     {
         var log = ($"Sent {command}");
     
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
             UseCaseMeta.CreateTicket,
             LoggingMeta.CommandSent,
@@ -36,7 +37,7 @@ public class CreateTicketTraceCollector(ITracingDataCommandSender commandSender)
     public async Task AggregateReceived(Type originClassType, Guid traceId, Dictionary<string, string> attributes)
     {
         var log = ($"Received aggregate {attributes}");
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
             UseCaseMeta.CreateTicket,
             LoggingMeta.AggregateReceived,
@@ -49,7 +50,7 @@ public class CreateTicketTraceCollector(ITracingDataCommandSender commandSender)
     public async Task AggregateAdded(Type originClassType, Guid traceId)
     {
         var log = ($"Added aggregate with id:{traceId}");
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
             UseCaseMeta.CreateTicket,
             LoggingMeta.AggregateAdded,

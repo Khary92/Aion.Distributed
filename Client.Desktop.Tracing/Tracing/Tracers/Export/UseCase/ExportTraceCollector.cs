@@ -1,5 +1,6 @@
-using Client.Desktop.Proto.Tracing.Enums;
 using Client.Desktop.Tracing.Communication.Tracing;
+using Service.Monitoring.Shared;
+using Service.Monitoring.Shared.Enums;
 
 namespace Client.Desktop.Tracing.Tracing.Tracers.Export.UseCase;
 
@@ -7,7 +8,7 @@ public class ExportTraceCollector(ITracingDataCommandSender commandSender) : IEx
 {
     public async Task StartUseCase(Type originClassType)
     {
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Export,
             UseCaseMeta.ExportData,
             LoggingMeta.ActionRequested,
@@ -19,7 +20,7 @@ public class ExportTraceCollector(ITracingDataCommandSender commandSender) : IEx
 
     public async Task PathSettingsInvalid(Type originClassType, object command)
     {
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Export,
             UseCaseMeta.ExportData,
             LoggingMeta.InvalidSettings,
@@ -31,7 +32,7 @@ public class ExportTraceCollector(ITracingDataCommandSender commandSender) : IEx
 
     public async Task ExportSuccessful(Type originClassType)
     {
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Export,
             UseCaseMeta.ExportData,
             LoggingMeta.ActionCompleted,
@@ -43,7 +44,7 @@ public class ExportTraceCollector(ITracingDataCommandSender commandSender) : IEx
 
     public async Task ExceptionOccured(Type originClassType, Exception exception)
     {
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Export,
             UseCaseMeta.ExportData,
             LoggingMeta.ExceptionOccured,

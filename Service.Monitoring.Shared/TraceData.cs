@@ -1,12 +1,12 @@
-using Client.Desktop.Proto.Tracing.Enums;
+using Service.Monitoring.Shared.Enums;
 
-namespace Client.Desktop.Tracing.Tracing;
+namespace Service.Monitoring.Shared;
 
-public record TraceDataCommand(
+public record TraceData(
     TraceSinkId TraceSinkId,
     UseCaseMeta UseCaseMeta,
     LoggingMeta LoggingMeta,
-    Type OriginClassType,
+    string OriginClassType,
     Guid TraceId,
     string Log,
     DateTimeOffset TimeStamp);

@@ -1,5 +1,6 @@
-using Client.Desktop.Proto.Tracing.Enums;
 using Client.Desktop.Tracing.Communication.Tracing;
+using Service.Monitoring.Shared;
+using Service.Monitoring.Shared.Enums;
 
 namespace Client.Desktop.Tracing.Tracing.Tracers.Sprint.UseCase;
 
@@ -9,7 +10,7 @@ public class SprintActiveStatusCollector(ITracingDataCommandSender commandSender
     {
         var log = $"Change active status requested for {attributes}";
 
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Sprint,
             UseCaseMeta.ChangeSprintActiveStatus,
             LoggingMeta.ActionRequested,
@@ -22,7 +23,7 @@ public class SprintActiveStatusCollector(ITracingDataCommandSender commandSender
     public async Task CommandSent(Type originClassType, Guid traceId, object command)
     {
         var log = ($"Sent {command}");
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Sprint,
             UseCaseMeta.ChangeSprintActiveStatus,
             LoggingMeta.CommandSent,
@@ -35,7 +36,7 @@ public class SprintActiveStatusCollector(ITracingDataCommandSender commandSender
     public async Task NotificationReceived(Type originClassType, Guid traceId, object notification)
     {
         var log = ($"Received {notification}");
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Sprint,
             UseCaseMeta.ChangeSprintActiveStatus,
             LoggingMeta.NotificationReceived,
@@ -48,7 +49,7 @@ public class SprintActiveStatusCollector(ITracingDataCommandSender commandSender
     public async Task NoAggregateFound(Type originClassType, Guid traceId)
     {
         var log = ($"Aggregate not found id:{traceId}");
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Sprint,
             UseCaseMeta.ChangeSprintActiveStatus,
             LoggingMeta.AggregateNotFound,
@@ -61,7 +62,7 @@ public class SprintActiveStatusCollector(ITracingDataCommandSender commandSender
     public async Task ChangesApplied(Type originClassType, Guid traceId)
     {
         var log = ($"Changed applied id:{traceId}");
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Sprint,
             UseCaseMeta.ChangeSprintActiveStatus,
             LoggingMeta.PropertyChanged,

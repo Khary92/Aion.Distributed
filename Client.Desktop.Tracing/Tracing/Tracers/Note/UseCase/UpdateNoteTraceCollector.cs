@@ -1,5 +1,6 @@
-using Client.Desktop.Proto.Tracing.Enums;
 using Client.Desktop.Tracing.Communication.Tracing;
+using Service.Monitoring.Shared;
+using Service.Monitoring.Shared.Enums;
 
 namespace Client.Desktop.Tracing.Tracing.Tracers.Note.UseCase;
 
@@ -8,7 +9,7 @@ public class UpdateNoteTraceCollector(ITracingDataCommandSender commandSender) :
     public async Task StartUseCase(Type originClassType, Guid traceId, Dictionary<string, string> attributes)
     {
         var log = $"Update Note requested {attributes}";
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Note,
             UseCaseMeta.UpdateNote,
             LoggingMeta.ActionRequested,
@@ -21,7 +22,7 @@ public class UpdateNoteTraceCollector(ITracingDataCommandSender commandSender) :
     public async Task CommandSent(Type originClassType, Guid traceId, object command)
     {
         var log = ($"Sent {command}");
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Note,
             UseCaseMeta.UpdateNote,
             LoggingMeta.CommandSent,
@@ -34,7 +35,7 @@ public class UpdateNoteTraceCollector(ITracingDataCommandSender commandSender) :
     public async Task NotificationReceived(Type originClassType, Guid traceId, object notification)
     {
         var log = ($"Received {notification}");
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Note,
             UseCaseMeta.UpdateNote,
             LoggingMeta.NotificationReceived,
@@ -47,7 +48,7 @@ public class UpdateNoteTraceCollector(ITracingDataCommandSender commandSender) :
     public async Task NoAggregateFound(Type originClassType, Guid traceId)
     {
         var log = ($"Aggregate not found id:{traceId}");
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Note,
             UseCaseMeta.UpdateNote,
             LoggingMeta.AggregateNotFound,
@@ -60,7 +61,7 @@ public class UpdateNoteTraceCollector(ITracingDataCommandSender commandSender) :
     public async Task ChangesApplied(Type originClassType, Guid traceId)
     {
         var log = ($"Changed applied id:{traceId}");
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Note,
             UseCaseMeta.UpdateNote,
             LoggingMeta.ActionRequested,
@@ -73,7 +74,7 @@ public class UpdateNoteTraceCollector(ITracingDataCommandSender commandSender) :
     public async Task ExceptionOccured(Type originClassType, Guid traceId, Exception exception)
     {
         var log = $"Exception occured {exception}";
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Note,
             UseCaseMeta.UpdateNote,
             LoggingMeta.ExceptionOccured,

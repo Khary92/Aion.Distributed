@@ -1,5 +1,6 @@
-using Client.Desktop.Proto.Tracing.Enums;
 using Client.Desktop.Tracing.Communication.Tracing;
+using Service.Monitoring.Shared;
+using Service.Monitoring.Shared.Enums;
 
 namespace Client.Desktop.Tracing.Tracing.Tracers.TimerSettings.UseCase;
 
@@ -10,7 +11,7 @@ public class CreateTimerSettingsTraceCollector(ITracingDataCommandSender command
     {
         var log = $"Create Sprint requested for {attributes}";
         
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
             UseCaseMeta.CreateTimerSettings,
             LoggingMeta.ActionRequested,
@@ -24,7 +25,7 @@ public class CreateTimerSettingsTraceCollector(ITracingDataCommandSender command
     {
         var log = ($"Sent {command}");
     
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
             UseCaseMeta.CreateTimerSettings,
             LoggingMeta.CommandSent,
@@ -38,7 +39,7 @@ public class CreateTimerSettingsTraceCollector(ITracingDataCommandSender command
     {
         var log = ($"Received aggregate {attributes}");
     
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
             UseCaseMeta.CreateTimerSettings,
             LoggingMeta.AggregateReceived,
@@ -52,7 +53,7 @@ public class CreateTimerSettingsTraceCollector(ITracingDataCommandSender command
     {
         var log = ($"Added aggregate with id:{traceId}");
     
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
             UseCaseMeta.CreateTimerSettings,
             LoggingMeta.AggregateAdded,

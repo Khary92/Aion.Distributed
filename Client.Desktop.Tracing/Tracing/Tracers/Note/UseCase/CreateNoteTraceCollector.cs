@@ -1,5 +1,6 @@
-using Client.Desktop.Proto.Tracing.Enums;
 using Client.Desktop.Tracing.Communication.Tracing;
+using Service.Monitoring.Shared;
+using Service.Monitoring.Shared.Enums;
 
 namespace Client.Desktop.Tracing.Tracing.Tracers.Note.UseCase;
 
@@ -8,7 +9,7 @@ public class CreateNoteTraceCollector(ITracingDataCommandSender commandSender) :
     public async Task StartUseCase(Type originClassType, Guid traceId, Dictionary<string, string> attributes)
     {
         var log = $"Note creation requested {attributes}";
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Note,
             UseCaseMeta.CreateNote,
             LoggingMeta.ActionRequested,
@@ -21,7 +22,7 @@ public class CreateNoteTraceCollector(ITracingDataCommandSender commandSender) :
     public async Task CommandSent(Type originClassType, Guid traceId, object command)
     {
         var log = ($"Sent {command}");
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Note,
             UseCaseMeta.CreateNote,
             LoggingMeta.CommandSent,
@@ -34,7 +35,7 @@ public class CreateNoteTraceCollector(ITracingDataCommandSender commandSender) :
     public async Task AggregateReceived(Type originClassType, Guid traceId, Dictionary<string, string> attributes)
     {
         var log = ($"Received aggregate {attributes}");
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Note,
             UseCaseMeta.CreateNote,
             LoggingMeta.AggregateReceived,
@@ -47,7 +48,7 @@ public class CreateNoteTraceCollector(ITracingDataCommandSender commandSender) :
     public async Task AggregateAdded(Type originClassType, Guid traceId)
     {
         var log = ($"Added aggregate with id:{traceId}");
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Note,
             UseCaseMeta.CreateNote,
             LoggingMeta.AggregateAdded,
@@ -60,7 +61,7 @@ public class CreateNoteTraceCollector(ITracingDataCommandSender commandSender) :
     public async Task ExceptionOccured(Type originClassType, Guid traceId, Exception exception)
     {
         var log = $"Exception occured {exception}";
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Note,
             UseCaseMeta.CreateNote,
             LoggingMeta.ExceptionOccured,

@@ -1,5 +1,6 @@
-using Client.Desktop.Proto.Tracing.Enums;
 using Proto.Command.TraceData;
+using Service.Monitoring.Shared;
+using Service.Monitoring.Shared.Enums;
 
 namespace Service.Monitoring.Tracers.NoteType;
 
@@ -7,7 +8,7 @@ public class NoteTypeTraceSink : ITraceSink
 {
     public TraceSinkId TraceSinkId => TraceSinkId.NoteType;
 
-    public void AddTrace(TraceDataCommandProto traceDataCommandProto)
+    public void AddTrace(TraceData traceData)
     {
     }
 }

@@ -1,5 +1,6 @@
-using Client.Desktop.Proto.Tracing.Enums;
 using Client.Desktop.Tracing.Communication.Tracing;
+using Service.Monitoring.Shared;
+using Service.Monitoring.Shared.Enums;
 
 namespace Client.Desktop.Tracing.Tracing.Tracers.TimerSettings.UseCase;
 
@@ -9,7 +10,7 @@ public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataCommandSender 
     {
         var log = $"Change active status requested for {attributes}";
         
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
             UseCaseMeta.ChangeSnapshotSaveInterval,
             LoggingMeta.ActionRequested,
@@ -23,7 +24,7 @@ public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataCommandSender 
     {
         var log = ($"Sent {command}");
         
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
             UseCaseMeta.ChangeSnapshotSaveInterval,
             LoggingMeta.CommandSent,
@@ -37,7 +38,7 @@ public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataCommandSender 
     {
         var log = ($"Received {notification}");
         
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
             UseCaseMeta.ChangeSnapshotSaveInterval,
             LoggingMeta.NotificationReceived,
@@ -51,7 +52,7 @@ public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataCommandSender 
     {
         var log = ($"Aggregate not found id:{traceId}");
         
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
             UseCaseMeta.ChangeSnapshotSaveInterval,
             LoggingMeta.AggregateNotFound,
@@ -65,7 +66,7 @@ public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataCommandSender 
     {
         var log = ($"Changed applied id:{traceId}");
         
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
             UseCaseMeta.ChangeSnapshotSaveInterval,
             LoggingMeta.PropertyChanged,
@@ -79,7 +80,7 @@ public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataCommandSender 
     {
         var log = ($"Request aborted {asTraceAttributes}");
     
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
             UseCaseMeta.ChangeSnapshotSaveInterval,
             LoggingMeta.PropertyNotChanged,

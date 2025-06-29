@@ -1,6 +1,7 @@
-using Client.Desktop.Proto.Tracing.Enums;
 using Grpc.Core;
 using Proto.Command.TraceData;
+using Service.Monitoring.Shared;
+using Service.Monitoring.Shared.Enums;
 using Service.Monitoring.Tracers;
 
 namespace Service.Monitoring.Communication;
@@ -27,7 +28,7 @@ public class TraceDataCommandReceiver(IEnumerable<ITraceSink> traceSinks)
             throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid TraceSinkId"));
         }
 
-        _sinks[traceSinkId].AddTrace(traceData);
+        _sinks[traceSinkId].AddTrace(traceData.ToRecord());
         return Task.FromResult(new CommandResponse { Success = true });
     }
 }

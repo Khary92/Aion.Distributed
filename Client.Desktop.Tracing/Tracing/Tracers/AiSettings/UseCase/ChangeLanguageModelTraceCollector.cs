@@ -1,5 +1,6 @@
-using Client.Desktop.Proto.Tracing.Enums;
 using Client.Desktop.Tracing.Communication.Tracing;
+using Service.Monitoring.Shared;
+using Service.Monitoring.Shared.Enums;
 
 namespace Client.Desktop.Tracing.Tracing.Tracers.AiSettings.UseCase;
 
@@ -10,7 +11,7 @@ public class ChangeLanguageModelTraceCollector(ITracingDataCommandSender command
     {
         var log = ($"Change LanguageModel requested for {attribute.Item1}:{attribute.Item2}");
 
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.AiSettings,
             UseCaseMeta.ChangeLanguageModel,
             LoggingMeta.ActionRequested,
@@ -24,7 +25,7 @@ public class ChangeLanguageModelTraceCollector(ITracingDataCommandSender command
     {
         var log = ($"Sent {command}");
 
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.AiSettings,
             UseCaseMeta.ChangeLanguageModel,
             LoggingMeta.CommandSent,
@@ -37,7 +38,7 @@ public class ChangeLanguageModelTraceCollector(ITracingDataCommandSender command
     {
         var log = ($"Request aborted {attribute.Item1}:{attribute.Item2}");
         
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.AiSettings,
             UseCaseMeta.ChangeLanguageModel,
             LoggingMeta.PropertyNotChanged,

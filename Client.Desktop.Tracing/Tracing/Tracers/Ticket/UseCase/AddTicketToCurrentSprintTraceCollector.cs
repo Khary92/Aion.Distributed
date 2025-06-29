@@ -1,5 +1,6 @@
-using Client.Desktop.Proto.Tracing.Enums;
 using Client.Desktop.Tracing.Communication.Tracing;
+using Service.Monitoring.Shared;
+using Service.Monitoring.Shared.Enums;
 
 namespace Client.Desktop.Tracing.Tracing.Tracers.Ticket.UseCase;
 
@@ -9,7 +10,7 @@ public class AddTicketToCurrentSprintTraceCollector(ITracingDataCommandSender co
     public async Task StartUseCase(Type originClassType, Guid traceId, Dictionary<string, string> attributes)
     {
         var log = $"Add ticket to sprint requested for {attributes}";
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
             UseCaseMeta.AddTicketToCurrentSprint,
             LoggingMeta.ActionRequested,
@@ -22,7 +23,7 @@ public class AddTicketToCurrentSprintTraceCollector(ITracingDataCommandSender co
     public async Task CommandSent(Type originClassType, Guid traceId, object command)
     {
         var log = ($"Sent {command}");
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
             UseCaseMeta.AddTicketToCurrentSprint,
             LoggingMeta.CommandSent,

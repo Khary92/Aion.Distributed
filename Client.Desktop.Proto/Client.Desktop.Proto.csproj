@@ -23,5 +23,6 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Proto.Common\Proto.Common.csproj"/>
+        <ProjectReference Include="..\Service.Monitoring.Shared\Service.Monitoring.Shared.csproj" />
     </ItemGroup>
 </Project>

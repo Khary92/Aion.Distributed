@@ -1,5 +1,5 @@
-using Client.Desktop.Proto.Tracing.Enums;
-using Proto.Command.TraceData;
+using Service.Monitoring.Shared;
+using Service.Monitoring.Shared.Enums;
 
 namespace Service.Monitoring.Tracers.AiSettings;
 
@@ -7,7 +7,7 @@ public class AiSettingsTraceSink : ITraceSink
 {
     public TraceSinkId TraceSinkId => TraceSinkId.AiSettings;
 
-    public void AddTrace(TraceDataCommandProto traceDataCommandProto)
+    public void AddTrace(TraceData traceData)
     {
     }
 }

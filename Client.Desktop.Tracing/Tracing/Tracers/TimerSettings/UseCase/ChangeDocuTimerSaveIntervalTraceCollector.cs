@@ -1,5 +1,6 @@
-using Client.Desktop.Proto.Tracing.Enums;
 using Client.Desktop.Tracing.Communication.Tracing;
+using Service.Monitoring.Shared;
+using Service.Monitoring.Shared.Enums;
 
 namespace Client.Desktop.Tracing.Tracing.Tracers.TimerSettings.UseCase;
 
@@ -10,7 +11,7 @@ public class ChangeDocuTimerSaveIntervalTraceCollector(ITracingDataCommandSender
     {
         var log = $"Change documentation timer save interval requested for {attributes}";
     
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
             UseCaseMeta.ChangeDocuTimerSaveInterval,
             LoggingMeta.ActionRequested,
@@ -24,7 +25,7 @@ public class ChangeDocuTimerSaveIntervalTraceCollector(ITracingDataCommandSender
     {
         var log = ($"Sent {command}");
         
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
             UseCaseMeta.ChangeDocuTimerSaveInterval,
             LoggingMeta.CommandSent,
@@ -38,7 +39,7 @@ public class ChangeDocuTimerSaveIntervalTraceCollector(ITracingDataCommandSender
     {
         var log = ($"Received {notification}");
         
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
             UseCaseMeta.ChangeDocuTimerSaveInterval,
             LoggingMeta.NotificationReceived,
@@ -52,7 +53,7 @@ public class ChangeDocuTimerSaveIntervalTraceCollector(ITracingDataCommandSender
     {
         var log = ($"Aggregate not found id:{traceId}");
        
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
             UseCaseMeta.ChangeDocuTimerSaveInterval,
             LoggingMeta.AggregateNotFound,
@@ -66,7 +67,7 @@ public class ChangeDocuTimerSaveIntervalTraceCollector(ITracingDataCommandSender
     {
         var log = ($"Changed applied id:{traceId}");
         
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
             UseCaseMeta.ChangeDocuTimerSaveInterval,
             LoggingMeta.PropertyChanged,
@@ -81,7 +82,7 @@ public class ChangeDocuTimerSaveIntervalTraceCollector(ITracingDataCommandSender
     {
         var log = ($"Request aborted {asTraceAttributes}");
    
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
             UseCaseMeta.ChangeDocuTimerSaveInterval,
             LoggingMeta.PropertyNotChanged,

@@ -1,4 +1,4 @@
-namespace Client.Desktop.Proto.Tracing.Enums;
+namespace Service.Monitoring.Shared.Enums;
 
 public enum UseCaseMeta
 {

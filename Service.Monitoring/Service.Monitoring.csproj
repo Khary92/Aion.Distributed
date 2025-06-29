@@ -7,16 +7,8 @@
         <Nullable>enable</Nullable>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
-
-    <ItemGroup>
-      <Folder Include="Tracers\Sprint\UseCase\" />
-      <Folder Include="Tracers\Tag\UseCase\" />
-      <Folder Include="Tracers\TimerSettings\UseCase\" />
-      <Folder Include="Tracers\WorkDay\UseCase\" />
-    </ItemGroup>
     
     <ItemGroup>
-      <ProjectReference Include="..\Client.Desktop.Proto\Client.Desktop.Proto.csproj" />
       <ProjectReference Include="..\Service.Monitoring.Shared\Service.Monitoring.Shared.csproj" />
     </ItemGroup>
 

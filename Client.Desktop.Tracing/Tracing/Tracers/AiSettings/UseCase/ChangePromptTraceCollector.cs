@@ -1,5 +1,6 @@
-using Client.Desktop.Proto.Tracing.Enums;
 using Client.Desktop.Tracing.Communication.Tracing;
+using Service.Monitoring.Shared;
+using Service.Monitoring.Shared.Enums;
 
 namespace Client.Desktop.Tracing.Tracing.Tracers.AiSettings.UseCase;
 
@@ -8,7 +9,7 @@ public class ChangePromptTraceCollector(ITracingDataCommandSender commandSender)
     public async Task StartUseCase(Type originClassType, Guid traceId, (string, string) attributes)
     {
         var log = ($"Change Prompt requested for {attributes.Item1}:{attributes.Item2}");
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.AiSettings,
             UseCaseMeta.ChangePrompt,
             LoggingMeta.ActionRequested,
@@ -23,7 +24,7 @@ public class ChangePromptTraceCollector(ITracingDataCommandSender commandSender)
     {
         var log = ($"Sent {command}");
 
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.AiSettings,
             UseCaseMeta.ChangePrompt,
             LoggingMeta.ActionRequested,
@@ -37,7 +38,7 @@ public class ChangePromptTraceCollector(ITracingDataCommandSender commandSender)
     {
         var log = ($"Request aborted {property.Item1}:{property.Item2}");
 
-        await commandSender.Send(new TraceDataCommand(
+        await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.AiSettings,
             UseCaseMeta.ChangePrompt,
             LoggingMeta.ActionRequested,
