@@ -1,18 +1,18 @@
 using Core.Server.Services.Entities.Tickets;
+using Core.Server.Tracing.Tracing.Tracers;
 using Grpc.Core;
 using Proto.Command.Tickets;
 
 namespace Core.Server.Communication.Endpoints.Ticket;
 
-public class TicketCommandReceiver(ITicketCommandsService ticketCommandsService)
+public class TicketCommandReceiver(ITicketCommandsService ticketCommandsService, ITraceCollector tracer)
     : TicketCommandProtoService.TicketCommandProtoServiceBase
 {
     public override async Task<CommandResponse> CreateTicket(CreateTicketCommandProto request,
         ServerCallContext context)
     {
-        Console.WriteLine(
-            $"[CreateTicket] ID: {request.TicketId}, Name: {request.Name}, BookingNumber: {request.BookingNumber}");
-
+        await tracer.Ticket.Create.CommandReceived(GetType(), Guid.Parse(request.TicketId), request);
+        
         await ticketCommandsService.Create(request.ToCommand());
         return new CommandResponse { Success = true };
     }

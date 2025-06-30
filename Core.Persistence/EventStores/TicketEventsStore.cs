@@ -14,6 +14,7 @@ public class TicketEventsStore(IDbContextFactory<AppDbContext> appDbContextFacto
 
         await appDbContext.TicketEvents.AddAsync(@event);
         await appDbContext.SaveChangesAsync();
+        
     }
 
     public async Task<List<TicketEvent>> GetEventsForAggregateAsync(Guid entityId)

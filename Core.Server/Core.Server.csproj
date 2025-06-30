@@ -19,6 +19,7 @@
     <ItemGroup>
         <ProjectReference Include="..\Core.Domain\Core.Domain.csproj"/>
         <ProjectReference Include="..\Client.Desktop.Proto\Client.Desktop.Proto.csproj" />
+        <ProjectReference Include="..\Core.Tracing\Core.Tracing.csproj" />
     </ItemGroup>
 
     <ItemGroup>

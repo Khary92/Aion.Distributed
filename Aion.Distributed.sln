@@ -26,6 +26,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.Desktop.Tracing", "C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Monitoring.Shared", "Service.Monitoring.Shared\Service.Monitoring.Shared.csproj", "{00CFA98D-80DC-475A-A803-AFEA927D3A22}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Tracing", "Core.Tracing\Core.Tracing.csproj", "{D67C17F7-7B93-4410-9E1F-051E390BFB01}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -84,5 +86,9 @@ Global
 		{00CFA98D-80DC-475A-A803-AFEA927D3A22}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{00CFA98D-80DC-475A-A803-AFEA927D3A22}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{00CFA98D-80DC-475A-A803-AFEA927D3A22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D67C17F7-7B93-4410-9E1F-051E390BFB01}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D67C17F7-7B93-4410-9E1F-051E390BFB01}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D67C17F7-7B93-4410-9E1F-051E390BFB01}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D67C17F7-7B93-4410-9E1F-051E390BFB01}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

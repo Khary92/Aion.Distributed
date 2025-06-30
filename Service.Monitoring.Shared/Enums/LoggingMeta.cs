@@ -4,7 +4,6 @@ public enum LoggingMeta
 {
     ActionRequested,
     PropertyNotChanged,
-    NotificationSent,
     NotificationReceived,
     CommandSent,
     InvalidSettings,
@@ -13,5 +12,6 @@ public enum LoggingMeta
     AggregateReceived,
     AggregateAdded,
     AggregateNotFound,
-    PropertyChanged
+    PropertyChanged,
+    CommandReceived
 }

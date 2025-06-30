@@ -17,7 +17,7 @@ public class TicketVerifier
     
 
     private readonly List<TraceData> _traceData = new();
-    private readonly Timer _timer = new(1000W);
+    private readonly Timer _timer = new(1000);
     
     public TicketVerifier()
     {

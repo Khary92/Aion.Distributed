@@ -12,6 +12,7 @@ COPY ["Core.Persistence/Core.Persistence.csproj", "Core.Persistence/"]
 COPY ["Core.Server/Core.Server.csproj", "Core.Server/"]
 COPY ["Client.Desktop.Proto/Client.Desktop.Proto.csproj", "Core.Client.Proto/"]
 COPY ["Proto.Common/Proto.Common.csproj", "Proto.Common/"]
+COPY ["Service.Monitoring.Shared/Service.Monitoring.Shared.csproj", "Service.Monitoring.Shared/"]
 RUN dotnet restore "Core.Boot/Core.Boot.csproj"
 COPY . .
 WORKDIR "/src/Core.Boot"

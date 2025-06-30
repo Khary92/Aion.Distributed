@@ -2,6 +2,7 @@
 using Core.Persistence.DbContext;
 using Core.Server;
 using Core.Server.Services.UseCase;
+using Core.Server.Tracing;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
@@ -26,6 +27,7 @@ public static class BootStrap
 
         builder.Services.AddCoreServices();
         builder.Services.AddInfrastructureServices();
+        builder.Services.AddTracingServices();
 
         builder.WebHost.ConfigureKestrel(options =>
         {
