@@ -1,7 +1,6 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 USER $APP_UID
 WORKDIR /app
-EXPOSE 8080  
 
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
@@ -10,9 +9,10 @@ COPY ["Core.Boot/Core.Boot.csproj", "Core.Boot/"]
 COPY ["Core.Domain/Core.Domain.csproj", "Core.Domain/"]
 COPY ["Core.Persistence/Core.Persistence.csproj", "Core.Persistence/"]
 COPY ["Core.Server/Core.Server.csproj", "Core.Server/"]
-COPY ["Client.Desktop.Proto/Client.Desktop.Proto.csproj", "Core.Client.Proto/"]
 COPY ["Proto.Common/Proto.Common.csproj", "Proto.Common/"]
+COPY ["Client.Desktop.Proto/Client.Desktop.Proto.csproj", "Client.Desktop.Proto/"]
 COPY ["Service.Monitoring.Shared/Service.Monitoring.Shared.csproj", "Service.Monitoring.Shared/"]
+COPY ["Core.Tracing/Core.Tracing.csproj", "Core.Tracing/"]
 RUN dotnet restore "Core.Boot/Core.Boot.csproj"
 COPY . .
 WORKDIR "/src/Core.Boot"

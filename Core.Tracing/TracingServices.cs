@@ -40,7 +40,7 @@ public static class TracingServices
 
     private static void AddACommonTracingServices(this IServiceCollection services)
     {
-        services.AddScoped<ITracingDataCommandSender, TracingDataCommandSender>();
+        services.AddSingleton<ITracingDataCommandSender, TracingDataCommandSender>();
         
         services.AddSingleton<ITraceCollector, TraceCollector>();
     }
