@@ -1,4 +1,4 @@
-﻿using Client.Desktop.Proto;
+﻿using Client.Proto;
 using Core.Server.Communication.Records.Commands.Entities.Tickets;
 using Proto.Command.Tickets;
 using Proto.DTO.Ticket;

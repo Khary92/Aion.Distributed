@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Client.Desktop.Proto;
 using Client.Desktop.Replays;
+using Client.Proto;
 using Grpc.Net.Client;
 using Proto.Requests.TicketReplay;
 

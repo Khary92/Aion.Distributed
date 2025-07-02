@@ -22,6 +22,8 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Core.Domain\Core.Domain.csproj"/>
+        <ProjectReference Include="..\Core.Tracing\Core.Tracing.csproj" />
+        <ProjectReference Include="..\Service.Monitoring.Shared\Service.Monitoring.Shared.csproj" />
     </ItemGroup>
 
     <ItemGroup>

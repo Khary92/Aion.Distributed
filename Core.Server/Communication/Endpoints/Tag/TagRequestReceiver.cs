@@ -1,4 +1,4 @@
-﻿using Client.Desktop.Proto;
+﻿using Client.Proto;
 using Core.Server.Services.Entities.Tags;
 using Grpc.Core;
 using Proto.DTO.Tag;

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Client.Desktop.DTO;
-using Client.Desktop.Proto;
+using Client.Proto;
 using Grpc.Net.Client;
 using Proto.DTO.TimerSettings;
 using Proto.Requests.WorkDays;

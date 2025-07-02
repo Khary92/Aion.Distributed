@@ -1,6 +1,4 @@
-﻿using Core.Server.Tracing;
-using Core.Server.Tracing.Communication.Tracing;
-using Grpc.Net.Client;
+﻿using Grpc.Net.Client;
 using Proto.Command.TraceData;
 
 namespace Service.Monitoring.Shared.Tracing;
@@ -9,9 +7,9 @@ public class TracingDataCommandSender : ITracingDataCommandSender
 {
     private readonly TraceDataCommandProtoService.TraceDataCommandProtoServiceClient _client;
 
-    public TracingDataCommandSender()
+    public TracingDataCommandSender(string address)
     {
-        var channel = GrpcChannel.ForAddress(TempConnectionStatic.MonitoringAddress);
+        var channel = GrpcChannel.ForAddress(address);
         _client = new(channel);
     }
 

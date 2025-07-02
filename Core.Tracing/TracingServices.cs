@@ -1,4 +1,3 @@
-using Core.Server.Tracing.Communication.Tracing;
 using Core.Server.Tracing.Tracing.Tracers;
 using Core.Server.Tracing.Tracing.Tracers.AiSettings;
 using Core.Server.Tracing.Tracing.Tracers.AiSettings.UseCase;
@@ -41,8 +40,7 @@ public static class TracingServices
 
     private static void AddACommonTracingServices(this IServiceCollection services)
     {
-        services.AddSingleton<ITracingDataCommandSender, TracingDataCommandSender>();
-        
+        services.AddSingleton<ITracingDataCommandSender>(sp => new TracingDataCommandSender("http://monitoring-service:8080"));
         services.AddSingleton<ITraceCollector, TraceCollector>();
     }
 

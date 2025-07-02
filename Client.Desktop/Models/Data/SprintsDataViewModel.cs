@@ -4,8 +4,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Client.Desktop.Converter;
 using Client.Desktop.DTO;
-using Client.Desktop.Tracing;
-using Client.Desktop.Tracing.Tracing.Tracers;
+using Client.Tracing.Tracing.Tracers;
 using ReactiveUI;
 using Unit = System.Reactive.Unit;
 

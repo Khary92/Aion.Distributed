@@ -1,6 +1,6 @@
 ﻿using System;
 using Client.Desktop.DTO;
-using Client.Desktop.Proto;
+using Client.Proto;
 using Proto.DTO.AiSettings;
 using Proto.DTO.StatisticsData;
 using Proto.DTO.Ticket;

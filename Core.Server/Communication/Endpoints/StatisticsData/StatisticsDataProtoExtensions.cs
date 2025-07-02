@@ -1,4 +1,4 @@
-﻿using Client.Desktop.Proto;
+﻿using Client.Proto;
 using Core.Server.Communication.Records.Commands.Entities.StatisticsData;
 using Proto.Command.StatisticsData;
 using Proto.DTO.StatisticsData;

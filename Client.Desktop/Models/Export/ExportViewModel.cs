@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Client.Desktop.Tracing.Tracing.Tracers;
+using Client.Tracing.Tracing.Tracers;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Dto;
 using MsBox.Avalonia.Enums;

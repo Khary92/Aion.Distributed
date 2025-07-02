@@ -6,7 +6,7 @@ using Client.Desktop.Communication.Requests.Tags;
 using Client.Desktop.Decorators;
 using Client.Desktop.Decorators.Entities;
 using Client.Desktop.DTO;
-using Client.Desktop.Proto;
+using Client.Proto;
 using Google.Protobuf.Collections;
 using Grpc.Net.Client;
 using Proto.DTO.StatisticsData;

@@ -5,7 +5,7 @@ using Client.Desktop.Communication.NotificationWrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.Converter;
 using Client.Desktop.DTO;
-using Client.Desktop.Tracing.Tracing.Tracers;
+using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using Proto.Command.TimerSettings;
 using Proto.Notifications.TimerSettings;

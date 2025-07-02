@@ -7,7 +7,7 @@ using Client.Desktop.Communication.Requests;
 using Client.Desktop.Converter;
 using Client.Desktop.DTO;
 using Client.Desktop.Services;
-using Client.Desktop.Tracing.Tracing.Tracers;
+using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using Proto.Requests.Settings;

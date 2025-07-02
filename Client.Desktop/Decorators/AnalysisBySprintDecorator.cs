@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Client.Desktop.Decorators.Entities;
-using Client.Desktop.Proto;
+using Client.Proto;
 
 namespace Client.Desktop.Decorators;
 

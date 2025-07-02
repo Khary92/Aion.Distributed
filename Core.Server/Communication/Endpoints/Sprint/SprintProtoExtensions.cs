@@ -1,4 +1,4 @@
-﻿using Client.Desktop.Proto;
+﻿using Client.Proto;
 using Core.Server.Communication.Records.Commands.Entities.Sprints;
 using Google.Protobuf.WellKnownTypes;
 using Proto.Command.Sprints;

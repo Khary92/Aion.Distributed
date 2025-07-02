@@ -4,7 +4,7 @@ using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.NotificationWrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.DTO;
-using Client.Desktop.Tracing.Tracing.Tracers;
+using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using Proto.Command.AiSettings;
 using Proto.Notifications.AiSettings;

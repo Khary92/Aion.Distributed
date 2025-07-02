@@ -13,5 +13,6 @@ public enum LoggingMeta
     AggregateAdded,
     AggregateNotFound,
     PropertyChanged,
-    CommandReceived
+    CommandReceived,
+    EventPersisted
 }

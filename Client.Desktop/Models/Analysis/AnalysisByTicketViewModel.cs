@@ -5,7 +5,7 @@ using System.Globalization;
 using System.Text;
 using System.Threading.Tasks;
 using Client.Desktop.DTO;
-using Client.Desktop.Proto;
+using Client.Proto;
 using LiveChartsCore;
 using LiveChartsCore.Measure;
 using LiveChartsCore.SkiaSharpView;

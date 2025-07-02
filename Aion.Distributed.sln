@@ -8,7 +8,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Persistence", "Core.Pe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Server", "Core.Server\Core.Server.csproj", "{F0B66804-9A5D-41BE-A8B1-CD71BEF6D7F9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.Desktop.Proto", "Client.Desktop.Proto\Client.Desktop.Proto.csproj", "{099A9566-91C2-4FCF-883A-7E9115DBA043}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.Proto", "Client.Proto\Client.Proto.csproj", "{099A9566-91C2-4FCF-883A-7E9115DBA043}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Boot", "Core.Boot\Core.Boot.csproj", "{4D9F97AE-828E-4194-BCB0-298366287063}"
 EndProject
@@ -22,7 +22,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proto.Common", "Proto.Commo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Monitoring", "Service.Monitoring\Service.Monitoring.csproj", "{AF2A2ABC-ECE8-4DAB-B551-F3ADF1A2E570}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.Desktop.Tracing", "Client.Desktop.Tracing\Client.Desktop.Tracing.csproj", "{6F531BCE-5E75-440C-86B7-98D9E95CD43C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.Tracing", "Client.Tracing\Client.Tracing.csproj", "{6F531BCE-5E75-440C-86B7-98D9E95CD43C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Monitoring.Shared", "Service.Monitoring.Shared\Service.Monitoring.Shared.csproj", "{00CFA98D-80DC-475A-A803-AFEA927D3A22}"
 EndProject
