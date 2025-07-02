@@ -11,10 +11,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Communication\" />
-    </ItemGroup>
-
-    <ItemGroup>
       <Reference Include="Grpc.Net.Client">
         <HintPath>..\..\..\.nuget\packages\grpc.net.client\2.71.0\lib\net8.0\Grpc.Net.Client.dll</HintPath>
       </Reference>

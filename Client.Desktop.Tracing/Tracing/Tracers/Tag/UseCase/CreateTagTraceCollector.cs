@@ -1,4 +1,4 @@
-using Client.Desktop.Tracing.Communication.Tracing;
+using Core.Server.Tracing.Communication.Tracing;
 using Service.Monitoring.Shared;
 using Service.Monitoring.Shared.Enums;
 

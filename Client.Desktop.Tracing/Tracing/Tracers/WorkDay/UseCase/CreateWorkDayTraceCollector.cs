@@ -1,4 +1,4 @@
-using Client.Desktop.Tracing.Communication.Tracing;
+using Core.Server.Tracing.Communication.Tracing;
 using Service.Monitoring.Shared;
 using Service.Monitoring.Shared.Enums;
 
@@ -9,7 +9,7 @@ public class CreateWorkDayTraceCollector(ITracingDataCommandSender commandSender
     public async Task StartUseCase(Type originClassType, Guid traceId, Dictionary<string, string> attributes)
     {
         var log = $"Create WorkDay requested for {attributes}";
-    
+
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.WorkDay,
             UseCaseMeta.CreateWorkDay,
@@ -23,7 +23,7 @@ public class CreateWorkDayTraceCollector(ITracingDataCommandSender commandSender
     public async Task CommandSent(Type originClassType, Guid traceId, object command)
     {
         var log = ($"Sent {command}");
-    
+
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.WorkDay,
             UseCaseMeta.CommandSent,
@@ -37,7 +37,7 @@ public class CreateWorkDayTraceCollector(ITracingDataCommandSender commandSender
     public async Task AggregateReceived(Type originClassType, Guid traceId, Dictionary<string, string> attributes)
     {
         var log = ($"Received aggregate {attributes}");
-    
+
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.WorkDay,
             UseCaseMeta.CreateWorkDay,
@@ -51,7 +51,7 @@ public class CreateWorkDayTraceCollector(ITracingDataCommandSender commandSender
     public async Task AggregateAdded(Type originClassType, Guid traceId)
     {
         var log = ($"Added aggregate with id:{traceId}");
-    
+
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.WorkDay,
             UseCaseMeta.CreateWorkDay,

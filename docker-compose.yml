@@ -21,6 +21,8 @@ services:
       - "8082:8080"
     environment:
       - ASPNETCORE_URLS=http://+:8082
+    depends_on:
+      - core-service
     restart: unless-stopped
 
   postgres:

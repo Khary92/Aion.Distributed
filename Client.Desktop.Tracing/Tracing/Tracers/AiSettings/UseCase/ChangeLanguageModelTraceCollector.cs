@@ -1,4 +1,4 @@
-using Client.Desktop.Tracing.Communication.Tracing;
+using Core.Server.Tracing.Communication.Tracing;
 using Service.Monitoring.Shared;
 using Service.Monitoring.Shared.Enums;
 
@@ -20,7 +20,7 @@ public class ChangeLanguageModelTraceCollector(ITracingDataCommandSender command
             log,
             DateTimeOffset.Now));
     }
-    
+
     public async Task CommandSent(Type originClassType, Guid traceId, object command)
     {
         var log = ($"Sent {command}");
@@ -32,12 +32,13 @@ public class ChangeLanguageModelTraceCollector(ITracingDataCommandSender command
             originClassType,
             traceId,
             log,
-            DateTimeOffset.Now));}
+            DateTimeOffset.Now));
+    }
 
     public async Task PropertyNotChanged(Type originClassType, Guid traceId, (string, string) attribute)
     {
         var log = ($"Request aborted {attribute.Item1}:{attribute.Item2}");
-        
+
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.AiSettings,
             UseCaseMeta.ChangeLanguageModel,
@@ -45,5 +46,6 @@ public class ChangeLanguageModelTraceCollector(ITracingDataCommandSender command
             originClassType,
             traceId,
             log,
-            DateTimeOffset.Now));}
+            DateTimeOffset.Now));
+    }
 }

@@ -44,7 +44,6 @@ using Client.Desktop.Proto;
 using Client.Desktop.Replays;
 using Client.Desktop.Services;
 using Client.Desktop.Services.Cache;
-using Client.Desktop.Tracing.Communication.Tracing;
 using Client.Desktop.Views.Analysis;
 using Client.Desktop.Views.Data;
 using Client.Desktop.Views.Documentation;

@@ -1,4 +1,3 @@
-using Client.Desktop.Tracing.Communication.Tracing;
 using Client.Desktop.Tracing.Tracing.Tracers;
 using Client.Desktop.Tracing.Tracing.Tracers.AiSettings;
 using Client.Desktop.Tracing.Tracing.Tracers.AiSettings.UseCase;
@@ -18,7 +17,9 @@ using Client.Desktop.Tracing.Tracing.Tracers.TimerSettings;
 using Client.Desktop.Tracing.Tracing.Tracers.TimerSettings.UseCase;
 using Client.Desktop.Tracing.Tracing.Tracers.WorkDay;
 using Client.Desktop.Tracing.Tracing.Tracers.WorkDay.UseCase;
+using Core.Server.Tracing.Communication.Tracing;
 using Microsoft.Extensions.DependencyInjection;
+using Service.Monitoring.Shared.Tracing;
 
 namespace Client.Desktop.Tracing;
 

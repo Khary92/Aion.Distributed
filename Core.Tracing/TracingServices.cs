@@ -19,6 +19,7 @@ using Core.Server.Tracing.Tracing.Tracers.TimerSettings.UseCase;
 using Core.Server.Tracing.Tracing.Tracers.WorkDay;
 using Core.Server.Tracing.Tracing.Tracers.WorkDay.UseCase;
 using Microsoft.Extensions.DependencyInjection;
+using Service.Monitoring.Shared.Tracing;
 
 namespace Core.Server.Tracing;
 

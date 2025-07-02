@@ -1,4 +1,4 @@
-using Client.Desktop.Tracing.Communication.Tracing;
+using Core.Server.Tracing.Communication.Tracing;
 using Service.Monitoring.Shared;
 using Service.Monitoring.Shared.Enums;
 
@@ -9,7 +9,7 @@ public class UpdateTicketTraceCollector(ITracingDataCommandSender commandSender)
     public async Task StartUseCase(Type originClassType, Guid traceId, Dictionary<string, string> attributes)
     {
         var log = $"Update ticket requested for {attributes}";
-    
+
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
             UseCaseMeta.UpdateTicket,
@@ -23,7 +23,7 @@ public class UpdateTicketTraceCollector(ITracingDataCommandSender commandSender)
     public async Task CommandSent(Type originClassType, Guid traceId, object command)
     {
         var log = ($"Sent {command}");
-        
+
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
             UseCaseMeta.UpdateTicket,

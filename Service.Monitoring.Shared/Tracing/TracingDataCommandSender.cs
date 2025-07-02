@@ -1,15 +1,20 @@
-﻿using Client.Desktop.Proto;
-using Client.Desktop.Tracing.Tracing;
+﻿using Core.Server.Tracing;
+using Core.Server.Tracing.Communication.Tracing;
 using Grpc.Net.Client;
 using Proto.Command.TraceData;
-using Service.Monitoring.Shared;
 
-namespace Client.Desktop.Tracing.Communication.Tracing;
+namespace Service.Monitoring.Shared.Tracing;
 
 public class TracingDataCommandSender : ITracingDataCommandSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.MonitoringAddress);
-    private readonly TraceDataCommandProtoService.TraceDataCommandProtoServiceClient _client = new(Channel);
+    private readonly TraceDataCommandProtoService.TraceDataCommandProtoServiceClient _client;
+
+    public TracingDataCommandSender()
+    {
+        var channel = GrpcChannel.ForAddress(TempConnectionStatic.MonitoringAddress);
+        _client = new(channel);
+    }
+
 
     public async Task<bool> Send(ServiceTraceDataCommand command)
     {
