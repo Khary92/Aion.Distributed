@@ -1,16 +1,14 @@
 ﻿@page "/weather"
 @using Service.Admin.Web.Communication
-@inject IReportReceiver ReportReceiver
-@implements IDisposable
+@inject ReportEventBridge Bridge
+@inject ILogger<Weather> Logger 
 @attribute [StreamRendering]
 
-<PageTitle>Weather</PageTitle>
+<PageTitle>Tracing results</PageTitle>
 
-<h1>Weather</h1>
+<h1>Use cases</h1>
 
-<p>This component demonstrates showing data.</p>
-
-@if (forecasts == null)
+@if (!_reports.Any())
 {
     <p>
         <em>Loading...</em>
@@ -22,19 +20,18 @@ else
         <thead>
         <tr>
             <th>Date</th>
-            <th aria-label="Temperature in Celsius">Temp. (C)</th>
-            <th aria-label="Temperature in Farenheit">Temp. (F)</th>
+            <th aria-label="A">Oh man</th>
+            <th aria-label="B">what is this</th>
             <th>Summary</th>
         </tr>
         </thead>
         <tbody>
-        @foreach (var forecast in forecasts)
+        @foreach (var report in _reports)
         {
             <tr>
-                <td>@forecast.Date.ToShortDateString()</td>
-                <td>@forecast.TemperatureC</td>
-                <td>@forecast.TemperatureF</td>
-                <td>@forecast.Summary</td>
+                <td>@report.TimeStamp</td>
+                <td>@report.State</td>
+                <td>@string.Join("<br>", report.Traces)</td>
             </tr>
         }
         </tbody>
@@ -42,53 +39,22 @@ else
 }
 
 @code {
-    private WeatherForecast[]? forecasts;
+    private IReadOnlyCollection<ReportRecord> _reports = Array.Empty<ReportRecord>();
 
     protected override void OnInitialized()
     {
-        // Subscribe to the ReportReceived event
-        ReportReceiver.ReportReceived += HandleReportReceived;
+        _reports = Bridge.Reports;
+        Bridge.OnNewReport += async (report) => await HandleNewReport(report);
         base.OnInitialized();
     }
-
-    private async void HandleReportReceived(object? sender, ReportRecord e)
+    
+    private async Task HandleNewReport(ReportRecord report)
     {
-        // Since we're updating the UI from an event, we need to notify Blazor
         await InvokeAsync(() =>
         {
-            // Handle the report here
-            // For example, you could update your forecasts or show a notification
-            
-            StateHasChanged(); // Notify Blazor to re-render the component
+            Logger.Log(LogLevel.Information, "Report handled in razor page");
+            _reports = Bridge.Reports;
+            StateHasChanged();
         });
-    }
-
-    public void Dispose()
-    {
-        // Unsubscribe from the event when the component is disposed
-        ReportReceiver.ReportReceived -= HandleReportReceived;
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        // Simulate asynchronous loading to demonstrate streaming rendering
-        await Task.Delay(500);
-
-        var startDate = DateOnly.FromDateTime(DateTime.Now);
-        var summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
-        forecasts = Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        {
-            Date = startDate.AddDays(index),
-            TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = summaries[Random.Shared.Next(summaries.Length)]
-        }).ToArray();
-    }
-
-    private class WeatherForecast
-    {
-        public DateOnly Date { get; set; }
-        public int TemperatureC { get; set; }
-        public string? Summary { get; set; }
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
     }
 }

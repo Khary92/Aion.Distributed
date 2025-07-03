@@ -1,16 +1,16 @@
-using Proto.Command.TraceData;
+using Service.Monitoring.Communication;
 using Service.Monitoring.Shared;
 using Service.Monitoring.Shared.Enums;
 using Service.Monitoring.Verifiers;
 
 namespace Service.Monitoring.Tracers.Ticket;
 
-public class TicketTraceSink : ITraceSink
+public class TicketTraceSink(IReportSender reportSender) : ITraceSink
 {
     public TraceSinkId TraceSinkId => TraceSinkId.Ticket;
 
     private readonly Dictionary<Guid, TicketVerifier> _ticketVerifiers = new();
-    
+
     public void AddTrace(TraceData traceData)
     {
         if (!_ticketVerifiers.TryGetValue(traceData.TraceId, out var verifier))
@@ -23,12 +23,19 @@ public class TicketTraceSink : ITraceSink
 
             return;
         }
-        
+
         verifier.Add(traceData);
     }
 
-    private void SaveReport(object? sender, Report e)
+    private async void SaveReport(object? sender, Report e)
     {
-        string teee = "2";
+        try
+        {
+            await reportSender.Send(e);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
     }
 }

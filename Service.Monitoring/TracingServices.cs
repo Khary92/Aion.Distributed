@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Service.Monitoring.Communication;
 using Service.Monitoring.Tracers;
 using Service.Monitoring.Tracers.AiSettings;
 using Service.Monitoring.Tracers.Export;
@@ -16,10 +17,12 @@ public static class TracingServices
 {
     public static void AddTracingServices(this IServiceCollection services)
     {
-        AddASinks(services);
+        AddSinks(services);
+
+        services.AddSingleton<IReportSender>(sp => new ReportSender("http://admin-web:8081"));
     }
 
-    private static void AddASinks(this IServiceCollection services)
+    private static void AddSinks(this IServiceCollection services)
     {
         services.AddSingleton<ITraceSink, AiSettingsTraceSink>();
         services.AddSingleton<ITraceSink, ExportTraceSink>();

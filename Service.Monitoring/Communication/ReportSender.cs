@@ -4,7 +4,7 @@ using Service.Monitoring.Verifiers;
 
 namespace Service.Monitoring.Communication;
 
-public class ReportSender
+public class ReportSender : IReportSender
 {
     private readonly ReportProtoService.ReportProtoServiceClient _client;
     

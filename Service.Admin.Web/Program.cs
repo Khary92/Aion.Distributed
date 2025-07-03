@@ -17,8 +17,14 @@ builder.Services.AddGrpc(options =>
 });
 
 // Register ReportReceiver as singleton to ensure same instance is used everywhere
+builder.Services.AddSingleton<ReportEventHandler>();
+builder.Services.AddSingleton<IReportEventHandler>(sp => sp.GetRequiredService<ReportEventHandler>());
+
+// Register ReportReceiver as singleton and as gRPC service
 builder.Services.AddSingleton<ReportReceiver>();
 builder.Services.AddSingleton<IReportReceiver>(sp => sp.GetRequiredService<ReportReceiver>());
+
+builder.Services.AddSingleton<ReportEventBridge>();
 
 builder.WebHost.ConfigureKestrel(options =>
 {
@@ -51,5 +57,7 @@ app.MapGrpcService<ReportReceiver>();
 app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
+
+builder.Logging.AddConsole();
 
 app.Run();
