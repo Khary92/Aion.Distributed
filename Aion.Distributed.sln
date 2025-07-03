@@ -28,6 +28,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Monitoring.Shared",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Tracing", "Core.Tracing\Core.Tracing.csproj", "{D67C17F7-7B93-4410-9E1F-051E390BFB01}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Admin.Web", "Service.Admin.Web\Service.Admin.Web.csproj", "{EE822821-F086-4A81-BB4E-81058F3501A4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Admin.Proto", "Service.Admin.Proto\Service.Admin.Proto.csproj", "{D51E25EA-7BC0-4861-BF6A-5BF883A266BE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -90,5 +94,13 @@ Global
 		{D67C17F7-7B93-4410-9E1F-051E390BFB01}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D67C17F7-7B93-4410-9E1F-051E390BFB01}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D67C17F7-7B93-4410-9E1F-051E390BFB01}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE822821-F086-4A81-BB4E-81058F3501A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE822821-F086-4A81-BB4E-81058F3501A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE822821-F086-4A81-BB4E-81058F3501A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE822821-F086-4A81-BB4E-81058F3501A4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D51E25EA-7BC0-4861-BF6A-5BF883A266BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D51E25EA-7BC0-4861-BF6A-5BF883A266BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D51E25EA-7BC0-4861-BF6A-5BF883A266BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D51E25EA-7BC0-4861-BF6A-5BF883A266BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

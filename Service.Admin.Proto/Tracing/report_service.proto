@@ -1,0 +1,17 @@
+syntax = "proto3";
+import "google/protobuf/timestamp.proto";
+option csharp_namespace = "Proto.Report";
+
+service ReportProtoService {
+  rpc SendReport (ReportProto) returns (ResponseProto);
+}
+
+message ReportProto {
+  google.protobuf.Timestamp time_stamp = 1;
+  string state = 2;
+  repeated string traces = 3;
+}
+
+message ResponseProto {
+  bool success = 1;
+}

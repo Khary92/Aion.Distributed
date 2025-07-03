@@ -4,13 +4,13 @@ namespace Service.Monitoring.Verifiers;
 
 public static class TraceDataExtensions
 {
-    public static string GetClassTrace(this List<TraceData> traceData)
+    public static List<string> GetClassTrace(this List<TraceData> traceData)
     {
-        string result = string.Empty;
+        var result = new List<string>();
 
         foreach (var trace in traceData)
         {
-            result += trace.TimeStamp +  " | " +  trace.OriginClassType + " | " + trace.Log + "\n";
+            result.Add(trace.TimeStamp + " | " + trace.OriginClassType + " | " + trace.Log);
         }
 
         return result;

@@ -14,11 +14,11 @@ public class TicketVerifier
         new VerificationStep(LoggingMeta.CommandSent, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.AggregateReceived, Invoked.AtLeast, 1),
         new VerificationStep(LoggingMeta.AggregateAdded, Invoked.AtLeast, 1));
-    
+
 
     private readonly List<TraceData> _traceData = new();
     private readonly Timer _timer = new(10000);
-    
+
     public TicketVerifier()
     {
         _timer.Elapsed += Elapsed;
@@ -30,7 +30,8 @@ public class TicketVerifier
     private void Elapsed(object? sender, ElapsedEventArgs e)
     {
         var result = GetResultState();
-        VerificationCompleted?.Invoke(this, new Report(result, _traceData.GetClassTrace()));
+        VerificationCompleted?.Invoke(this,
+            new Report(_traceData.First().TimeStamp, result, _traceData.GetClassTrace()));
     }
 
 

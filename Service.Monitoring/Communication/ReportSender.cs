@@ -1,0 +1,23 @@
+using Grpc.Net.Client;
+using Proto.Report;
+using Service.Monitoring.Verifiers;
+
+namespace Service.Monitoring.Communication;
+
+public class ReportSender
+{
+    private readonly ReportProtoService.ReportProtoServiceClient _client;
+    
+    public ReportSender(string address)
+    {
+        var channel = GrpcChannel.ForAddress(address);
+        _client = new(channel);
+    }
+
+    public async Task Send(Report report)
+    {
+        await _client.SendReportAsync(report.ToProto());
+    }
+
+
+}
