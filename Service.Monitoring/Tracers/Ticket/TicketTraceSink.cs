@@ -15,7 +15,7 @@ public class TicketTraceSink(IReportSender reportSender) : ITraceSink
     {
         if (!_ticketVerifiers.TryGetValue(traceData.TraceId, out var verifier))
         {
-            var ticketVerifier = new TicketVerifier();
+            var ticketVerifier = new TicketVerifier(traceData.TraceSinkId);
             ticketVerifier.Add(traceData);
             _ticketVerifiers.Add(traceData.TraceId, ticketVerifier);
 

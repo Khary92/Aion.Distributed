@@ -2,7 +2,12 @@ namespace Service.Monitoring.Shared.Enums;
 
 public enum UseCaseMeta
 {
+    //Ticket
     CreateTicket,
+    UpdateTicket,
+    UpdateTicketDocumentation,
+    
+    //AI Settings
     ChangeLanguageModel,
     ChangePrompt,
     ExportData,
@@ -18,7 +23,6 @@ public enum UseCaseMeta
     TicketAddedToSprint,
     UpdateSprint,
     AddTicketToCurrentSprint,
-    UpdateTicket,
     ChangeDocuTimerSaveInterval,
     ChangeSnapshotSaveInterval,
     CreateTimerSettings,

@@ -19,7 +19,7 @@ public class TicketVerifier
     private readonly List<TraceData> _traceData = new();
     private readonly Timer _timer = new(10000);
 
-    public TicketVerifier()
+    public TicketVerifier(TraceSinkId traceDataTraceSinkId)
     {
         _timer.Elapsed += Elapsed;
         _timer.AutoReset = false;
