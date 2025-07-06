@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Service.Proto.Shared;
 
 namespace Core.Boot;
 
@@ -28,6 +29,7 @@ public static class BootStrap
         builder.Services.AddCoreServices();
         builder.Services.AddInfrastructureServices();
         builder.Services.AddTracingServices();
+        builder.Services.AddSharedDataServices();
 
         builder.WebHost.ConfigureKestrel(options =>
         {

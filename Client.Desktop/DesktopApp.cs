@@ -8,6 +8,7 @@ using Client.Tracing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Proto.Command.TimeSlots;
+using Service.Proto.Shared;
 
 namespace Client.Desktop;
 
@@ -21,6 +22,7 @@ public static class DesktopApp
             {
                 services.AddPresentationServices();
                 services.AddTracingServices();
+                services.AddSharedDataServices();
             })
             .Build();
 

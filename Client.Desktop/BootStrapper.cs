@@ -223,7 +223,6 @@ public static class Bootstrapper
         services.AddScoped<ISprintCommandSender, SprintCommandSender>();
         services.AddScoped<IStatisticsDataCommandSender, StatisticsDataCommandSender>();
         services.AddScoped<ITagCommandSender, TagCommandSender>();
-        services.AddScoped<ITicketCommandSender, TicketCommandSender>();
         services.AddScoped<ITimerSettingsCommandSender, TimerSettingsCommandSender>();
         services.AddScoped<ITimeSlotCommandSender, TimeSlotCommandSender>();
         services.AddScoped<IUseCaseCommandSender, UseCaseCommandSender>();
@@ -241,7 +240,6 @@ public static class Bootstrapper
         services.AddScoped<ISprintRequestSender, SprintRequestSender>();
         services.AddScoped<IStatisticsDataRequestSender, StatisticsDataRequestSender>();
         services.AddScoped<ITagRequestSender, TagRequestSender>();
-        services.AddScoped<ITicketRequestSender, TicketRequestSender>();
         services.AddScoped<ITimerSettingsRequestSender, TimerSettingsRequestSender>();
         services.AddScoped<ITimeSlotRequestSender, TimeSlotRequestSender>();
         services.AddScoped<IWorkDayRequestSender, WorkDayRequestSender>();
