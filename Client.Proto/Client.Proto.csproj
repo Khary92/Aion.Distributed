@@ -17,12 +17,12 @@
     <ItemGroup>
         <Protobuf Include="**/*.proto"
                   ProtoRoot="."
-                  AdditionalImportDirs="$(SolutionDir)Proto.Common/"
+                  AdditionalImportDirs="$(SolutionDir)Service.Proto.Shared/"
                   GrpcServices="Both"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Proto.Common\Proto.Common.csproj"/>
+        <ProjectReference Include="..\Service.Proto.Shared\Service.Proto.Shared.csproj" />
         <ProjectReference Include="..\Service.Monitoring.Shared\Service.Monitoring.Shared.csproj" />
     </ItemGroup>
 </Project>

@@ -21,8 +21,8 @@ public interface ICommandSender :
     ISprintCommandSender,
     IStatisticsDataCommandSender,
     ITagCommandSender,
-    ITicketCommandSender,
     ITimerSettingsCommandSender,
     ITimeSlotCommandSender,
     IUseCaseCommandSender,
-    IWorkDayCommandSender;
+    IWorkDayCommandSender,
+    ITicketCommandSender;

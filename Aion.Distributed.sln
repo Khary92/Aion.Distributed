@@ -18,7 +18,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Server.Test", "Core.Se
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.Desktop.Test", "Client.Desktop.Test\Client.Desktop.Test.csproj", "{C05526D5-9BF7-4F70-80C8-28A50F631640}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proto.Common", "Proto.Common\Proto.Common.csproj", "{9DC7E2C3-742D-4749-8A36-082A3FF88BC3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Proto.Shared", "Service.Proto.Shared\Service.Proto.Shared.csproj", "{9DC7E2C3-742D-4749-8A36-082A3FF88BC3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Monitoring", "Service.Monitoring\Service.Monitoring.csproj", "{AF2A2ABC-ECE8-4DAB-B551-F3ADF1A2E570}"
 EndProject

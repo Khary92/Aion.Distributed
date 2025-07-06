@@ -21,7 +21,6 @@ using Proto.Command.Tags;
 using Proto.Command.Tickets;
 using Proto.Command.TimerSettings;
 using Proto.Command.TimeSlots;
-using Proto.Command.TraceData;
 using Proto.Command.UseCases;
 using Proto.Command.WorkDays;
 
@@ -35,11 +34,11 @@ public class CommandSender(
     ISprintCommandSender sprintCommandSender,
     IStatisticsDataCommandSender statisticsDataCommandSender,
     ITagCommandSender tagCommandSender,
-    ITicketCommandSender ticketCommandSender,
     ITimerSettingsCommandSender timerSettingsCommandSender,
     ITimeSlotCommandSender timeSlotCommandSender,
     IUseCaseCommandSender useCaseCommandSender,
-    IWorkDayCommandSender workDayCommandSender) : ICommandSender
+    IWorkDayCommandSender workDayCommandSender,
+    ITicketCommandSender ticketCommandSender) : ICommandSender
 {
     public async Task<bool> Send(ChangeLanguageModelCommandProto command)
     {
@@ -146,21 +145,6 @@ public class CommandSender(
         return await tagCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(CreateTicketCommandProto command)
-    {
-        return await ticketCommandSender.Send(command);
-    }
-
-    public async Task<bool> Send(UpdateTicketDataCommandProto command)
-    {
-        return await ticketCommandSender.Send(command);
-    }
-
-    public async Task<bool> Send(UpdateTicketDocumentationCommandProto command)
-    {
-        return await ticketCommandSender.Send(command);
-    }
-
     public async Task<bool> Send(CreateTimerSettingsCommandProto createTicketCommand)
     {
         return await timerSettingsCommandSender.Send(createTicketCommand);
@@ -204,5 +188,20 @@ public class CommandSender(
     public async Task<bool> Send(CreateWorkDayCommandProto command)
     {
         return await workDayCommandSender.Send(command);
+    }
+
+    public async Task<bool> Send(CreateTicketCommandProto command)
+    {
+        return await ticketCommandSender.Send(command);
+    }
+
+    public async Task<bool> Send(UpdateTicketDataCommandProto command)
+    {
+        return await ticketCommandSender.Send(command);
+    }
+
+    public async Task<bool> Send(UpdateTicketDocumentationCommandProto command)
+    {
+        return await ticketCommandSender.Send(command);
     }
 }

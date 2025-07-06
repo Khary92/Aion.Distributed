@@ -15,6 +15,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Service.Admin.Proto\Service.Admin.Proto.csproj" />
+      <ProjectReference Include="..\Service.Proto.Shared\Service.Proto.Shared.csproj" />
     </ItemGroup>
 
     <ItemGroup>
