@@ -9,7 +9,6 @@ using Client.Desktop.Communication.Requests.Settings;
 using Client.Desktop.Communication.Requests.Sprints;
 using Client.Desktop.Communication.Requests.StatisticsData;
 using Client.Desktop.Communication.Requests.Tags;
-using Client.Desktop.Communication.Requests.Tickets;
 using Client.Desktop.Communication.Requests.TimerSettings;
 using Client.Desktop.Communication.Requests.TimeSlots;
 using Client.Desktop.Communication.Requests.UseCase;
@@ -31,6 +30,7 @@ using Proto.Requests.TimerSettings;
 using Proto.Requests.TimeSlots;
 using Proto.Requests.UseCase;
 using Proto.Requests.WorkDays;
+using Service.Proto.Shared.Requests.Tickets;
 
 namespace Client.Desktop.Communication.Requests;
 
@@ -127,22 +127,26 @@ public class RequestSender(
 
     public async Task<List<TicketDto>> Send(GetAllTicketsRequestProto request)
     {
-        return await ticketRequestSender.Send(request);
+        var ticketListProto = await ticketRequestSender.Send(request);
+        return ticketListProto.ToDtoList();
     }
 
     public async Task<List<TicketDto>> Send(GetTicketsForCurrentSprintRequestProto request)
     {
-        return await ticketRequestSender.Send(request);
+        var ticketListProto = await ticketRequestSender.Send(request);
+        return ticketListProto.ToDtoList();
     }
 
     public async Task<List<TicketDto>> Send(GetTicketsWithShowAllSwitchRequestProto request)
     {
-        return await ticketRequestSender.Send(request);
+        var ticketListProto = await ticketRequestSender.Send(request);
+        return ticketListProto.ToDtoList();
     }
 
     public async Task<TicketDto> Send(GetTicketByIdRequestProto request)
     {
-        return await ticketRequestSender.Send(request);
+        var ticketProto = await ticketRequestSender.Send(request);
+        return ticketProto.ToDto();
     }
 
     public async Task<TimerSettingsDto> Send(GetTimerSettingsRequestProto request)

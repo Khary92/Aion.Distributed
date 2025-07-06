@@ -1,13 +1,12 @@
-﻿using System.Threading.Tasks;
-using Client.Proto;
+﻿using Client.Desktop.Communication.Commands.Tickets;
 using Grpc.Net.Client;
 using Proto.Command.Tickets;
 
-namespace Client.Desktop.Communication.Commands.Tickets;
+namespace Service.Proto.Shared.Commands.Ticket;
 
 public class TicketCommandSender : ITicketCommandSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
+    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress("http://127.0.0.1:8081");
     private readonly TicketCommandProtoService.TicketCommandProtoServiceClient _client = new(Channel);
 
     public async Task<bool> Send(CreateTicketCommandProto command)

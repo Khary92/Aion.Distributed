@@ -22,7 +22,6 @@ using Client.Desktop.Communication.Requests.Settings;
 using Client.Desktop.Communication.Requests.Sprints;
 using Client.Desktop.Communication.Requests.StatisticsData;
 using Client.Desktop.Communication.Requests.Tags;
-using Client.Desktop.Communication.Requests.Tickets;
 using Client.Desktop.Communication.Requests.TimerSettings;
 using Client.Desktop.Communication.Requests.TimeSlots;
 using Client.Desktop.Communication.Requests.UseCase;
@@ -65,6 +64,8 @@ using Proto.Notifications.Ticket;
 using Proto.Notifications.TimerSettings;
 using Proto.Notifications.UseCase;
 using Proto.Notifications.WorkDay;
+using Service.Proto.Shared.Commands.Ticket;
+using Service.Proto.Shared.Requests.Tickets;
 
 namespace Client.Desktop;
 

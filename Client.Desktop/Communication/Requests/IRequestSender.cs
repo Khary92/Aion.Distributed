@@ -7,7 +7,6 @@ using Client.Desktop.Communication.Requests.Settings;
 using Client.Desktop.Communication.Requests.Sprints;
 using Client.Desktop.Communication.Requests.StatisticsData;
 using Client.Desktop.Communication.Requests.Tags;
-using Client.Desktop.Communication.Requests.Tickets;
 using Client.Desktop.Communication.Requests.TimerSettings;
 using Client.Desktop.Communication.Requests.TimeSlots;
 using Client.Desktop.Communication.Requests.UseCase;
@@ -23,10 +22,10 @@ public interface IRequestSender :
     ISprintRequestSender,
     IStatisticsDataRequestSender,
     ITagRequestSender,
-    ITicketRequestSender,
     ITimerSettingsRequestSender,
     ITimeSlotRequestSender,
     IWorkDayRequestSender,
     ITicketReplayRequestSender,
     IUseCaseRequestSender,
-    IAnalysisRequestSender;
+    IAnalysisRequestSender, 
+    ISharedRequestSender;

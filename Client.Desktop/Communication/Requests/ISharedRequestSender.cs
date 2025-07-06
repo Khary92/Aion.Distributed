@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Client.Desktop.DTO;
 using Proto.Requests.Tickets;
 
-namespace Client.Desktop.Communication.Requests.Tickets;
+namespace Client.Desktop.Communication.Requests;
 
-public interface ITicketRequestSender
+public interface ISharedRequestSender
 {
     Task<List<TicketDto>> Send(GetAllTicketsRequestProto request);
     Task<List<TicketDto>> Send(GetTicketsForCurrentSprintRequestProto request);
