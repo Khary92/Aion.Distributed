@@ -10,6 +10,9 @@ using Service.Monitoring.Tracers.Tag;
 using Service.Monitoring.Tracers.Ticket;
 using Service.Monitoring.Tracers.TimerSettings;
 using Service.Monitoring.Tracers.WorkDay;
+using Service.Monitoring.Verifiers.Common;
+using Service.Monitoring.Verifiers.Common.Factories;
+using Service.Monitoring.Verifiers.Ticket;
 
 namespace Service.Monitoring;
 
@@ -18,6 +21,7 @@ public static class TracingServices
     public static void AddTracingServices(this IServiceCollection services)
     {
         AddSinks(services);
+        AddVerifiers(services);
 
         services.AddSingleton<IReportSender>(sp => new ReportSender("http://admin-web:8081"));
     }
@@ -33,5 +37,12 @@ public static class TracingServices
         services.AddSingleton<ITraceSink, TicketTraceSink>();
         services.AddSingleton<ITraceSink, TimerSettingsTraceSink>();
         services.AddSingleton<ITraceSink, WorkDayTraceSink>();
+    }
+
+    private static void AddVerifiers(this IServiceCollection services)
+    {
+        services.AddSingleton<IVerifierFactory, VerifierFactory>();
+        
+        services.AddSingleton<IVerificationProvider, TicketVerificationProvider>();
     }
 }

@@ -1,6 +1,7 @@
 using Google.Protobuf.WellKnownTypes;
 using Proto.Report;
 using Service.Monitoring.Verifiers;
+using Service.Monitoring.Verifiers.Common.Records;
 
 namespace Service.Monitoring.Communication;
 

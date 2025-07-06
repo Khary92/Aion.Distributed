@@ -1,6 +1,6 @@
 using Service.Monitoring.Shared;
 
-namespace Service.Monitoring.Verifiers;
+namespace Service.Monitoring.Verifiers.Common;
 
 public static class TraceDataExtensions
 {

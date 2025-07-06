@@ -1,14 +1,26 @@
 using System.Collections.Immutable;
 using Service.Monitoring.Shared.Enums;
-using Service.Monitoring.Verifiers;
+using Service.Monitoring.Verifiers.Common;
 using Service.Monitoring.Verifiers.Common.Enums;
 using Service.Monitoring.Verifiers.Common.Records;
 
-namespace Service.Monitoring.Tracers.Ticket;
+namespace Service.Monitoring.Verifiers.Ticket;
 
-public class TicketUseCasesSteps
+public class TicketVerificationProvider : IVerificationProvider
 {
-    public static ImmutableList<VerificationStep> CreateTicket => ImmutableList.Create(
+    public TraceSinkId TraceSinkId => TraceSinkId.Ticket;
+    
+    public ImmutableList<VerificationStep> GetVerificationSteps(UseCaseMeta useCaseMeta)
+    {
+        if (useCaseMeta == UseCaseMeta.CreateTicket)
+        {
+            return _createTicketSteps;
+        }
+
+        return ImmutableList.Create<VerificationStep>();
+    }
+
+    private readonly ImmutableList<VerificationStep> _createTicketSteps  = ImmutableList.Create(
         new VerificationStep(LoggingMeta.ActionRequested, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.CommandSent, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.CommandReceived, Invoked.Equals, 1),

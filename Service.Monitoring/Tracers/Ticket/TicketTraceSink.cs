@@ -1,25 +1,27 @@
 using Service.Monitoring.Communication;
 using Service.Monitoring.Shared;
 using Service.Monitoring.Shared.Enums;
-using Service.Monitoring.Verifiers;
+using Service.Monitoring.Verifiers.Common;
+using Service.Monitoring.Verifiers.Common.Factories;
+using Service.Monitoring.Verifiers.Common.Records;
 
 namespace Service.Monitoring.Tracers.Ticket;
 
-public class TicketTraceSink(IReportSender reportSender) : ITraceSink
+public class TicketTraceSink(IReportSender reportSender, IVerifierFactory verifierFactory) : ITraceSink
 {
     public TraceSinkId TraceSinkId => TraceSinkId.Ticket;
 
-    private readonly Dictionary<Guid, TicketVerifier> _ticketVerifiers = new();
+    private readonly Dictionary<Guid, IVerifier> _ticketVerifiers = new();
 
     public void AddTrace(TraceData traceData)
     {
         if (!_ticketVerifiers.TryGetValue(traceData.TraceId, out var verifier))
         {
-            var ticketVerifier = new TicketVerifier(traceData.TraceSinkId);
-            ticketVerifier.Add(traceData);
-            _ticketVerifiers.Add(traceData.TraceId, ticketVerifier);
+            var newVerifier = verifierFactory.Create(traceData.TraceSinkId, traceData.UseCaseMeta);
+            newVerifier.Add(traceData);
+            _ticketVerifiers.Add(traceData.TraceId, newVerifier);
 
-            ticketVerifier.VerificationCompleted += SaveReport;
+            newVerifier.VerificationCompleted += SaveReport;
 
             return;
         }

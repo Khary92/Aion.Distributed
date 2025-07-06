@@ -1,4 +1,4 @@
-namespace Service.Monitoring.Verifiers;
+namespace Service.Monitoring.Verifiers.Common.Enums;
 
 public enum Result
 {
