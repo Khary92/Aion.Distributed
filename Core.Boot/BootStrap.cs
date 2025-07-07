@@ -4,6 +4,7 @@ using Core.Server;
 using Core.Server.Services.UseCase;
 using Core.Server.Tracing;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
@@ -29,8 +30,10 @@ public static class BootStrap
         builder.Services.AddCoreServices();
         builder.Services.AddInfrastructureServices();
         builder.Services.AddTracingServices();
-        builder.Services.AddSharedDataServices();
 
+        builder.Services.AddDataProtection()
+            .PersistKeysToFileSystem(new DirectoryInfo("/app/.aspnet/DataProtection-Keys"));
+        
         builder.WebHost.ConfigureKestrel(options =>
         {
             options.ListenAnyIP(8080, o => { o.Protocols = HttpProtocols.Http2; });

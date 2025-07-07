@@ -1,0 +1,9 @@
+﻿using Service.Proto.Shared.Requests.Sprints;
+using Service.Proto.Shared.Requests.Tickets;
+
+namespace Service.Admin.Web.Communication;
+
+public interface ISharedRequestSender : ITicketRequestSender, ISprintRequestSender
+{
+    
+}

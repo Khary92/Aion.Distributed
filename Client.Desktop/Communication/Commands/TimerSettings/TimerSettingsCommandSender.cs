@@ -10,9 +10,9 @@ public class TimerSettingsCommandSender : ITimerSettingsCommandSender
     private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly TimerSettingsCommandProtoService.TimerSettingsCommandProtoServiceClient _client = new(Channel);
 
-    public async Task<bool> Send(CreateTimerSettingsCommandProto createTicketCommand)
+    public async Task<bool> Send(CreateTimerSettingsCommandProto command)
     {
-        var response = await _client.CreateTimerSettingsAsync(createTicketCommand);
+        var response = await _client.CreateTimerSettingsAsync(command);
         return response.Success;
     }
 

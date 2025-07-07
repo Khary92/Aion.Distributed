@@ -3,10 +3,8 @@ using Client.Desktop.Communication.Commands.AiSettings;
 using Client.Desktop.Communication.Commands.Notes;
 using Client.Desktop.Communication.Commands.NoteTypes;
 using Client.Desktop.Communication.Commands.Settings;
-using Client.Desktop.Communication.Commands.Sprints;
 using Client.Desktop.Communication.Commands.StatisticsData;
 using Client.Desktop.Communication.Commands.Tags;
-using Client.Desktop.Communication.Commands.Tickets;
 using Client.Desktop.Communication.Commands.TimerSettings;
 using Client.Desktop.Communication.Commands.TimeSlots;
 using Client.Desktop.Communication.Commands.UseCases;
@@ -23,6 +21,8 @@ using Proto.Command.TimerSettings;
 using Proto.Command.TimeSlots;
 using Proto.Command.UseCases;
 using Proto.Command.WorkDays;
+using Service.Proto.Shared.Commands.Sprints;
+using Service.Proto.Shared.Commands.Tickets;
 
 namespace Client.Desktop.Communication.Commands;
 
@@ -145,9 +145,9 @@ public class CommandSender(
         return await tagCommandSender.Send(command);
     }
 
-    public async Task<bool> Send(CreateTimerSettingsCommandProto createTicketCommand)
+    public async Task<bool> Send(CreateTimerSettingsCommandProto command)
     {
-        return await timerSettingsCommandSender.Send(createTicketCommand);
+        return await timerSettingsCommandSender.Send(command);
     }
 
     public async Task<bool> Send(ChangeSnapshotSaveIntervalCommandProto command)

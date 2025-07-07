@@ -5,7 +5,7 @@ using Proto.Requests.Sprints;
 
 namespace Core.Server.Communication.Mocks.Sprint;
 
-public class MockSprintRequestService : SprintRequestService.SprintRequestServiceBase
+public class MockSprintRequestService : SprintProtoRequestService.SprintProtoRequestServiceBase
 {
     public override Task<SprintProto> GetActiveSprint(GetActiveSprintRequestProto request, ServerCallContext context)
     {

@@ -3,10 +3,8 @@ using Client.Desktop.Communication.Commands.AiSettings;
 using Client.Desktop.Communication.Commands.Notes;
 using Client.Desktop.Communication.Commands.NoteTypes;
 using Client.Desktop.Communication.Commands.Settings;
-using Client.Desktop.Communication.Commands.Sprints;
 using Client.Desktop.Communication.Commands.StatisticsData;
 using Client.Desktop.Communication.Commands.Tags;
-using Client.Desktop.Communication.Commands.Tickets;
 using Client.Desktop.Communication.Commands.TimerSettings;
 using Client.Desktop.Communication.Commands.TimeSlots;
 using Client.Desktop.Communication.Commands.UseCases;
@@ -19,7 +17,6 @@ using Client.Desktop.Communication.Requests.Notes;
 using Client.Desktop.Communication.Requests.NoteTypes;
 using Client.Desktop.Communication.Requests.Replays;
 using Client.Desktop.Communication.Requests.Settings;
-using Client.Desktop.Communication.Requests.Sprints;
 using Client.Desktop.Communication.Requests.StatisticsData;
 using Client.Desktop.Communication.Requests.Tags;
 using Client.Desktop.Communication.Requests.TimerSettings;
@@ -64,7 +61,9 @@ using Proto.Notifications.Ticket;
 using Proto.Notifications.TimerSettings;
 using Proto.Notifications.UseCase;
 using Proto.Notifications.WorkDay;
-using Service.Proto.Shared.Commands.Ticket;
+using Service.Proto.Shared.Commands.Sprints;
+using Service.Proto.Shared.Commands.Tickets;
+using Service.Proto.Shared.Requests.Sprints;
 using Service.Proto.Shared.Requests.Tickets;
 
 namespace Client.Desktop;
@@ -73,6 +72,7 @@ public static class Bootstrapper
 {
     public static void AddPresentationServices(this IServiceCollection services)
     {
+        AddSharedDataServices(services);
         AddSynchronizationServices(services);
         AddViews(services);
         AddModels(services);
@@ -85,6 +85,16 @@ public static class Bootstrapper
         services.AddSingleton<IRunTimeSettings, RunTimeSettings>();
         services.AddSingleton<IExportService, ExportService>();
         services.AddSingleton<ILanguageModelApi, LanguageModelApiStub>();
+    }
+    
+    private static readonly string ServerAddress = "http://localhost:8081";
+    private static void AddSharedDataServices(this IServiceCollection services)
+    {
+        services.AddScoped<ITicketCommandSender>(sp => new TicketCommandSender(ServerAddress));
+        services.AddScoped<ITicketRequestSender>(sp => new TicketRequestSender(ServerAddress));
+
+        services.AddScoped<ISprintCommandSender>(sp => new SprintCommandSender(ServerAddress));
+        services.AddScoped<ISprintRequestSender>(sp => new SprintRequestSender(ServerAddress));
     }
 
     private static void AddFileSystemServices(this IServiceCollection services)
@@ -220,7 +230,6 @@ public static class Bootstrapper
         services.AddScoped<INoteCommandSender, NoteCommandSender>();
         services.AddScoped<INoteTypeCommandSender, NoteTypeCommandSender>();
         services.AddScoped<ISettingsCommandSender, SettingsCommandSender>();
-        services.AddScoped<ISprintCommandSender, SprintCommandSender>();
         services.AddScoped<IStatisticsDataCommandSender, StatisticsDataCommandSender>();
         services.AddScoped<ITagCommandSender, TagCommandSender>();
         services.AddScoped<ITimerSettingsCommandSender, TimerSettingsCommandSender>();
@@ -237,13 +246,11 @@ public static class Bootstrapper
         services.AddScoped<INotesRequestSender, NotesRequestSender>();
         services.AddScoped<INoteTypesRequestSender, NoteTypesRequestSender>();
         services.AddScoped<ISettingsRequestSender, SettingsRequestSender>();
-        services.AddScoped<ISprintRequestSender, SprintRequestSender>();
         services.AddScoped<IStatisticsDataRequestSender, StatisticsDataRequestSender>();
         services.AddScoped<ITagRequestSender, TagRequestSender>();
         services.AddScoped<ITimerSettingsRequestSender, TimerSettingsRequestSender>();
         services.AddScoped<ITimeSlotRequestSender, TimeSlotRequestSender>();
         services.AddScoped<IWorkDayRequestSender, WorkDayRequestSender>();
-        services.AddScoped<ITicketReplayRequestSender, TicketReplayRequestSender>();
         services.AddScoped<ITicketReplayRequestSender, TicketReplayRequestSender>();
         services.AddScoped<IUseCaseRequestSender, UseCaseRequestSender>();
         services.AddScoped<IAnalysisRequestSender, AnalysisRequestSender>();

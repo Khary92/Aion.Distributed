@@ -6,9 +6,14 @@ namespace Service.Proto.Shared.Requests.Tickets;
 
 public class TicketRequestSender : ITicketRequestSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress("http://127.0.0.1:8081");
-    private readonly TicketRequestService.TicketRequestServiceClient _client = new(Channel);
-
+    private readonly TicketProtoRequestService.TicketProtoRequestServiceClient _client;
+    
+    public TicketRequestSender(string address)
+    {
+        var channel = GrpcChannel.ForAddress(address);
+        _client = new(channel);
+    }
+    
     public async Task<TicketListProto> Send(GetAllTicketsRequestProto request)
     {
         return await _client.GetAllTicketsAsync(request);

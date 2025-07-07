@@ -1,15 +1,18 @@
-﻿using System.Threading.Tasks;
-using Client.Proto;
-using Grpc.Net.Client;
+﻿using Grpc.Net.Client;
 using Proto.Command.Sprints;
 
-namespace Client.Desktop.Communication.Commands.Sprints;
+namespace Service.Proto.Shared.Commands.Sprints;
 
 public class SprintCommandSender : ISprintCommandSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
-    private readonly SprintCommandProtoService.SprintCommandProtoServiceClient _client = new(Channel);
-
+    private readonly SprintCommandProtoService.SprintCommandProtoServiceClient _client;
+    
+    public SprintCommandSender(string address)
+    {
+        var channel = GrpcChannel.ForAddress(address);
+        _client = new(channel);
+    }
+    
     public async Task<bool> Send(CreateSprintCommandProto command)
     {
         var response = await _client.CreateSprintAsync(command);

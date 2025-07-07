@@ -1,119 +1,159 @@
-@page "/tickets"
+@page "/ticketData"
+@rendermode InteractiveServer
+@using System.Collections.ObjectModel
+@using global::Proto.Command.Sprints
+@using global::Proto.Command.Tickets
+@using global::Proto.Requests.Tickets
+@using Service.Admin.Web.Communication
+@using Service.Admin.Web.DTO
+@inject ISharedCommandSender CommandSender
+@inject ISharedRequestSender RequestSender
 
-<div class="grid-container">
-    <div class="left-column">
-        <div class="header">
-            <h1>Tickets</h1>
+@code {
+    private readonly ObservableCollection<TicketDto> _tickets = new();
+    private string _newTicketName = string.Empty;
+    private string _newTicketBookingNumber = string.Empty;
+    private TicketDto? _selectedTicket;
+    private bool _isShowAllTicketsActive;
+    private bool _isEditMode;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTickets();
+    }
+
+    private async Task LoadTickets()
+    {
+        _tickets.Clear();
+        var tickets = _isShowAllTicketsActive ? 
+            await RequestSender.Send(new GetAllTicketsRequestProto()) : 
+            await RequestSender.Send(new GetTicketsForCurrentSprintRequestProto());
+
+        foreach (var ticket in tickets.ToDtoList())
+        {
+            _tickets.Add(ticket);
+        }
+    }
+
+    private async Task CreateOrUpdateTicket()
+    {
+        if (_isEditMode && _selectedTicket != null)
+        {
+            _selectedTicket.Name = _newTicketName;
+            _selectedTicket.BookingNumber = _newTicketBookingNumber;
+            await CommandSender.Send(new UpdateTicketDataCommandProto
+            {
+                TicketId = _selectedTicket.TicketId.ToString(),
+                Name = _newTicketName,
+                BookingNumber = _newTicketBookingNumber,
+                SprintIds = { _selectedTicket.SprintIds.ToRepeatedField() }
+            });
+            return;
+        }
+
+        await CommandSender.Send(new CreateTicketCommandProto
+        {
+            TicketId = Guid.NewGuid().ToString(),
+            Name = _newTicketName,
+            BookingNumber = _newTicketBookingNumber,
+            SprintIds = { }
+        });
+
+        _newTicketName = _newTicketBookingNumber = string.Empty;
+        _isEditMode = false;
+        await LoadTickets();
+    }
+
+    private void SetEditMode()
+    {
+        if (_selectedTicket != null)
+        {
+            _isEditMode = !_isEditMode;
+            if (_isEditMode)
+            {
+                _newTicketName = _selectedTicket.Name;
+                _newTicketBookingNumber = _selectedTicket.BookingNumber;
+            }
+            else
+            {
+                _newTicketName = _newTicketBookingNumber = "";
+            }
+        }
+    }
+
+    private async Task AddTicketToCurrentSprint()
+    {
+        if (_selectedTicket != null)
+        {
+            await CommandSender.Send(new AddTicketToActiveSprintCommandProto()
+            {
+                TicketId = _selectedTicket.TicketId.ToString()
+            });
+
+            await LoadTickets();
+        }
+    }
+
+    private async Task ToggleShowAllTickets(ChangeEventArgs e)
+    {
+        _isShowAllTicketsActive = (bool)e.Value!;
+        await LoadTickets();
+    }
+}
+<h1>TicketData COMPONENT WIRD GERENDERT</h1>
+
+<div class="row">
+    <div class="col-5">
+        <h2>Tickets</h2>
+        <div class="mb-2">
+            <label>Ticket name</label>
+            <input @bind="_newTicketName" class="form-control"/>
         </div>
-        <div class="form-container">
-            <div class="form-group">
-                <label for="ticketName">Ticket name</label>
-                <input type="text" id="ticketName" @bind="NewTicketName" class="form-control" />
-            </div>
-            <div class="form-group">
-                <label for="bookingNumber">Booking number</label>
-                <input type="text" id="bookingNumber" @bind="NewTicketBookingNumber" class="form-control" />
-            </div>
-            <div class="button-group">
-                <button type="button" 
-                        class="btn btn-primary" 
-                        @onclick="CreateTicket">Save</button>
-                
-                <button type="button" 
-                        class="btn btn-secondary"
-                        disabled="@(SelectedTicket == null)"
-                        @onclick="EditTicket">@EditButtonText</button>
-                
-                <button type="button" 
-                        class="btn btn-secondary"
-                        disabled="@(SelectedTicket == null)"
-                        @onclick="AddToSprint">Add to sprint</button>
-                
-                <div class="form-check">
-                    <input type="checkbox" 
-                           class="form-check-input" 
-                           id="showAllTickets" 
-                           @bind="IsShowAllTicketsActive" />
-                    <label class="form-check-label" for="showAllTickets">Show all tickets</label>
-                </div>
-            </div>
+        <div class="mb-2">
+            <label>Booking number</label>
+            <input @bind="_newTicketBookingNumber" class="form-control"/>
+        </div>
+        <div class="mb-2">
+            <button class="btn btn-success me-2"
+                    disabled="@(!CanSave)"
+                    @onclick="CreateOrUpdateTicket">Save</button>
+            <button class="btn btn-warning me-2"
+                    disabled="@(_selectedTicket == null)"
+                    @onclick="SetEditMode">@EditButtonText</button>
+            <button class="btn btn-primary me-2"
+                    disabled="@(_selectedTicket == null)"
+                    @onclick="AddTicketToCurrentSprint">Add to sprint
+            </button>
+            <input type="checkbox" @bind="_isShowAllTicketsActive"/>
+            <span class="ms-2">Show all tickets</span>
         </div>
     </div>
-
-    <div class="right-column">
-        <table class="table table-bordered">
+    <div class="col-7">
+        <table class="table table-bordered table-sm">
             <thead>
-                <tr>
-                    <th>Name</th>
-                    <th>Booking number</th>
-                </tr>
+            <tr>
+                <th>Name</th>
+                <th>Booking number</th>
+            </tr>
             </thead>
             <tbody>
-                @foreach (var ticket in DataModel.Tickets)
-                {
-                    <tr class="@(SelectedTicket?.Id == ticket.Id ? "selected" : "")"
-                        @onclick="() => SelectTicket(ticket)">
-                        <td>@ticket.Name</td>
-                        <td>@ticket.BookingNumber</td>
-                    </tr>
-                }
+            @foreach (var ticket in _tickets)
+            {
+                <tr class="@(_selectedTicket == ticket ? "table-active" : "")"
+                    @onclick="() => _selectedTicket = ticket">
+                    <td>@ticket.Name</td>
+                    <td>@ticket.BookingNumber</td>
+                </tr>
+            }
             </tbody>
         </table>
     </div>
 </div>
 
 @code {
-    private string NewTicketName { get; set; }
-    private string NewTicketBookingNumber { get; set; }
-    private bool IsShowAllTicketsActive { get; set; }
-    private string EditButtonText => "Edit";
-    private TicketDto SelectedTicket { get; set; }
-    private DataModel DataModel { get; set; }
 
-    private void CreateTicket()
-    {
-        // Implementiere die Create-Logik
-    }
-    
-    private void EditTicket()
-    {
-        // Implementiere die Edit-Logik
-    }
-    
-    private void AddToSprint()
-    {
-        // Implementiere die Add-to-Sprint-Logik
-    }
+    private bool CanSave => !string.IsNullOrWhiteSpace(_newTicketName)
+                            && !string.IsNullOrWhiteSpace(_newTicketBookingNumber);
 
-   // private void SelectTicket(TicketDto ticket)
-   // {
-   //     SelectedTicket = ticket;
-   // }
+    private string EditButtonText => _isEditMode ? "Cancel Edit" : "Edit";
 }
-
-<style>
-    .grid-container {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        gap: 20px;
-    }
-    
-    .form-container {
-        display: grid;
-        gap: 15px;
-    }
-    
-    .button-group {
-        display: flex;
-        gap: 10px;
-        align-items: center;
-    }
-    
-    .selected {
-        background-color: #e8e8e8;
-    }
-    
-    .table {
-        width: 100%;
-    }
-</style>

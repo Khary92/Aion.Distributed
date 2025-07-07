@@ -1,7 +1,6 @@
-﻿using System.Threading.Tasks;
-using Proto.Command.Tickets;
+﻿using Proto.Command.Tickets;
 
-namespace Client.Desktop.Communication.Commands.Tickets;
+namespace Service.Proto.Shared.Commands.Tickets;
 
 public interface ITicketCommandSender
 {

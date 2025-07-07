@@ -19,7 +19,7 @@ message TicketListProto {
   repeated TicketProto tickets = 1;
 }
 
-service TicketRequestService {
+service TicketProtoRequestService {
   rpc GetTicketById(GetTicketByIdRequestProto) returns (TicketProto);
   rpc GetAllTickets(GetAllTicketsRequestProto) returns (TicketListProto);
   rpc GetTicketsForCurrentSprint(GetTicketsForCurrentSprintRequestProto) returns (TicketListProto);

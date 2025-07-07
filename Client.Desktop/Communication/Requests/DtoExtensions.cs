@@ -4,9 +4,11 @@ using System.Linq;
 using Client.Desktop.DTO;
 using Client.Proto;
 using Proto.DTO.AiSettings;
+using Proto.DTO.Sprint;
 using Proto.DTO.StatisticsData;
 using Proto.DTO.Ticket;
 using Proto.DTO.TimeSlots;
+using Proto.Requests.Sprints;
 using Proto.Requests.Tickets;
 
 namespace Client.Desktop.Communication.Requests;
@@ -37,6 +39,34 @@ public static class DtoExtensions
             [..sprintIds]
         );
     }
+    
+    public static List<SprintDto?> ToDtoList(this SprintListProto? sprintListProto)
+    {
+        if (sprintListProto == null) return [];
+
+        return sprintListProto.Sprints
+            .Select(ToDto)
+            .ToList();
+    }
+
+    public static SprintDto? ToDto(this SprintProto? sprint)
+    {
+        if (sprint == null) return null;
+        var ticketIds = sprint.TicketIds
+            .Select(idStr => Guid.TryParse(idStr, out var guid) ? guid : Guid.Empty)
+            .Where(guid => guid != Guid.Empty)
+            .ToList();
+
+        return new SprintDto(
+            Guid.Parse(sprint.SprintId),
+            sprint.Name,
+            sprint.IsActive,
+            sprint.Start.ToDateTimeOffset(),
+            sprint.End.ToDateTimeOffset(),
+            [..ticketIds]
+        );
+    }
+    
     
     public static AiSettingsDto ToDto(this AiSettingsProto proto)
     {

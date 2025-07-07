@@ -6,7 +6,6 @@ using Client.Desktop.Communication.Requests.Notes;
 using Client.Desktop.Communication.Requests.NoteTypes;
 using Client.Desktop.Communication.Requests.Replays;
 using Client.Desktop.Communication.Requests.Settings;
-using Client.Desktop.Communication.Requests.Sprints;
 using Client.Desktop.Communication.Requests.StatisticsData;
 using Client.Desktop.Communication.Requests.Tags;
 using Client.Desktop.Communication.Requests.TimerSettings;
@@ -16,6 +15,7 @@ using Client.Desktop.Communication.Requests.WorkDays;
 using Client.Desktop.Decorators;
 using Client.Desktop.DTO;
 using Client.Desktop.Replays;
+using Proto.DTO.Sprint;
 using Proto.Requests.AiSettings;
 using Proto.Requests.AnalysisData;
 using Proto.Requests.Notes;
@@ -30,6 +30,7 @@ using Proto.Requests.TimerSettings;
 using Proto.Requests.TimeSlots;
 using Proto.Requests.UseCase;
 using Proto.Requests.WorkDays;
+using Service.Proto.Shared.Requests.Sprints;
 using Service.Proto.Shared.Requests.Tickets;
 
 namespace Client.Desktop.Communication.Requests;
@@ -97,12 +98,14 @@ public class RequestSender(
 
     public async Task<SprintDto?> Send(GetActiveSprintRequestProto request)
     {
-        return await sprintRequestSender.Send(request);
+        var sprintProto = await sprintRequestSender.Send(request);
+        return sprintProto.ToDto();
     }
-
-    public async Task<List<SprintDto>> Send(GetAllSprintsRequestProto request)
+    
+    public async Task<List<SprintDto?>> Send(GetAllSprintsRequestProto request)
     {
-        return await sprintRequestSender.Send(request);
+        var sprintListProto = await sprintRequestSender.Send(request);
+        return sprintListProto.ToDtoList();
     }
 
     public async Task<StatisticsDataDto> Send(GetStatisticsDataByTimeSlotIdRequestProto request)

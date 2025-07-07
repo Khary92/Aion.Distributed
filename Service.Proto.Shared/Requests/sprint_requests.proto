@@ -11,7 +11,7 @@ message SprintListProto {
   repeated SprintProto sprints = 1;
 }
 
-service SprintRequestService {
+service SprintProtoRequestService {
   rpc GetActiveSprint(GetActiveSprintRequestProto) returns (SprintProto);
   rpc GetAllSprints(GetAllSprintsRequestProto) returns (SprintListProto);
 }

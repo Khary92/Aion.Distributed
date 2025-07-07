@@ -1,7 +1,6 @@
-﻿using System.Threading.Tasks;
-using Proto.Command.Sprints;
+﻿using Proto.Command.Sprints;
 
-namespace Client.Desktop.Communication.Commands.Sprints;
+namespace Service.Proto.Shared.Commands.Sprints;
 
 public interface ISprintCommandSender
 {

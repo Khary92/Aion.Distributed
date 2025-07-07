@@ -1,0 +1,50 @@
+﻿using Proto.Command.Sprints;
+using Proto.Command.Tickets;
+using Service.Proto.Shared.Commands.Sprints;
+using Service.Proto.Shared.Commands.Tickets;
+
+namespace Service.Admin.Web.Communication;
+
+public class SharedCommandSender(ITicketCommandSender ticketCommandSender, ISprintCommandSender sprintCommandSender)
+    : ISharedCommandSender
+{
+    public async Task<bool> Send(CreateTicketCommandProto command)
+    {
+        return await ticketCommandSender.Send(command);
+    }
+
+    public async Task<bool> Send(UpdateTicketDataCommandProto command)
+    {
+        return await ticketCommandSender.Send(command);
+    }
+
+    public async Task<bool> Send(UpdateTicketDocumentationCommandProto command)
+    {
+        return await ticketCommandSender.Send(command);
+    }
+
+    public async Task<bool> Send(CreateSprintCommandProto command)
+    {
+        return await sprintCommandSender.Send(command);
+    }
+
+    public async Task<bool> Send(AddTicketToActiveSprintCommandProto command)
+    {
+        return await sprintCommandSender.Send(command);
+    }
+
+    public async Task<bool> Send(AddTicketToSprintCommandProto command)
+    {
+        return await sprintCommandSender.Send(command);
+    }
+
+    public async Task<bool> Send(SetSprintActiveStatusCommandProto command)
+    {
+        return await sprintCommandSender.Send(command);
+    }
+
+    public async Task<bool> Send(UpdateSprintDataCommandProto command)
+    {
+        return await sprintCommandSender.Send(command);
+    }
+}
