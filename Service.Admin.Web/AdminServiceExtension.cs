@@ -9,10 +9,13 @@ namespace Service.Admin.Web;
 
 public static class AdminServiceExtension
 {
+    private static readonly string ServerAddress = "http://core-service:8080";
+    
     public static void AddWebServices(this IServiceCollection services)
     {
         services.AddRazorComponents()
             .AddInteractiveServerComponents();
+        
         
         services.AddGrpc(options =>
         {
@@ -28,12 +31,11 @@ public static class AdminServiceExtension
         services.AddSingleton<ReportReceiver>();
         services.AddSingleton<IReportReceiver>(sp => sp.GetRequiredService<ReportReceiver>());
         services.AddSingleton<ReportEventBridge>();
-
+        
         services.AddScoped<ISharedCommandSender, SharedCommandSender>();
         services.AddScoped<ISharedRequestSender, SharedRequestSender>();
     }
-
-    private static readonly string ServerAddress = "http://core-service:8080";
+    
     private static void AddSharedDataServices(this IServiceCollection services)
     {
         services.AddScoped<ITicketCommandSender>(sp => new TicketCommandSender(ServerAddress));
