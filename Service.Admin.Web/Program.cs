@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Service.Admin.Web;
 using Service.Admin.Web.Communication;
 using Service.Admin.Web.Communication.Reports;
+using Service.Admin.Web.Communication.Ticket;
 using Service.Admin.Web.Components;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -39,6 +40,8 @@ app.UseHttpsRedirection();
 app.UseRouting();
 
 app.UseAntiforgery();
+
+app.MapGrpcService<TicketNotifications>();
 
 app.MapGrpcService<ReportReceiver>();
 app.MapStaticAssets();
