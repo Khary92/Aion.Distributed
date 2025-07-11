@@ -5,16 +5,23 @@ WORKDIR /app
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
+
 COPY ["Core.Boot/Core.Boot.csproj", "Core.Boot/"]
 COPY ["Core.Domain/Core.Domain.csproj", "Core.Domain/"]
 COPY ["Core.Persistence/Core.Persistence.csproj", "Core.Persistence/"]
-COPY ["Core.Server/Core.Server.csproj", "Core.Server/"]
-COPY ["Proto.Common/Proto.Common.csproj", "Proto.Common/"]
-COPY ["Client.Desktop.Proto/Client.Desktop.Proto.csproj", "Client.Desktop.Proto/"]
-COPY ["Service.Monitoring.Shared/Service.Monitoring.Shared.csproj", "Service.Monitoring.Shared/"]
 COPY ["Core.Tracing/Core.Tracing.csproj", "Core.Tracing/"]
+COPY ["Service.Monitoring.Shared/Service.Monitoring.Shared.csproj", "Service.Monitoring.Shared/"]
+COPY ["Core.Server/Core.Server.csproj", "Core.Server/"]
+COPY ["Client.Proto/Client.Proto.csproj", "Client.Proto/"]
+COPY ["Service.Proto.Shared/Service.Proto.Shared.csproj", "Service.Proto.Shared/"]
+
+COPY ["Service.Proto.Shared/", "Service.Proto.Shared/"]
+COPY ["Client.Proto/", "Client.Proto/"]
+
 RUN dotnet restore "Core.Boot/Core.Boot.csproj"
+
 COPY . .
+
 WORKDIR "/src/Core.Boot"
 RUN dotnet build "./Core.Boot.csproj" -c $BUILD_CONFIGURATION -o /app/build
 

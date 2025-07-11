@@ -6,8 +6,9 @@ FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["Service.Monitoring/Service.Monitoring.csproj", "Service.Monitoring/"]
-COPY ["Servie.Monitoring.Shared/Servie.Monitoring.Shared.csproj", "Servie.Monitoring.Shared/"]
-COPY ["Proto.Common/Proto.Common.csproj", "Proto.Common/"]
+COPY ["Service.Monitoring.Shared/Service.Monitoring.Shared.csproj", "Service.Monitoring.Shared/"]
+COPY ["Service.Admin.Proto/Service.Admin.Proto.csproj", "Service.Admin.Proto/"]
+
 RUN dotnet restore "Service.Monitoring/Service.Monitoring.csproj"
 COPY . .
 WORKDIR "/src/Service.Monitoring"

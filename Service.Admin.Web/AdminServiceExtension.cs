@@ -1,4 +1,5 @@
 ﻿using Service.Admin.Web.Communication;
+using Service.Admin.Web.Communication.Reports;
 using Service.Proto.Shared.Commands.Sprints;
 using Service.Proto.Shared.Commands.Tickets;
 using Service.Proto.Shared.Requests.Sprints;

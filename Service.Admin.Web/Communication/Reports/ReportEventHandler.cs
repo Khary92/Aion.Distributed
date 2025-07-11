@@ -1,3 +1,5 @@
+using Service.Admin.Web.Communication.Reports;
+
 namespace Service.Admin.Web.Communication;
 
 public class ReportEventHandler(ILogger<ReportEventHandler> logger, ReportEventBridge bridge) : IReportEventHandler

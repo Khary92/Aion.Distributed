@@ -1,6 +1,6 @@
 using System.Collections.Concurrent;
 
-namespace Service.Admin.Web.Communication;
+namespace Service.Admin.Web.Communication.Reports;
 
 public class ReportEventBridge
 {

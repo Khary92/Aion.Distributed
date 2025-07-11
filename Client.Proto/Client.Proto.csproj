@@ -3,6 +3,7 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
@@ -17,7 +18,7 @@
     <ItemGroup>
         <Protobuf Include="**/*.proto"
                   ProtoRoot="."
-                  AdditionalImportDirs="$(SolutionDir)Service.Proto.Shared/"
+                  AdditionalImportDirs="../Service.Proto.Shared/"
                   GrpcServices="Both"/>
     </ItemGroup>
 
