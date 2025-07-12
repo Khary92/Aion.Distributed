@@ -1,4 +1,5 @@
 using Proto.Notifications.Ticket;
+using Service.Admin.Web.Communication.Tickets.Commands;
 
 namespace Service.Admin.Web.DTO;
 
@@ -51,23 +52,6 @@ public class TicketDto
         set => _documentation = value;
     }
 
-    public void Apply(TicketDataUpdatedNotification notification)
-    {
-        BookingNumber = notification.BookingNumber;
-        Name = notification.Name;
-
-        var guidList = notification.SprintIds
-            .Select(Guid.Parse)
-            .ToList();
-
-        SprintIds = new List<Guid>(guidList);
-    }
-
-    public void Apply(TicketDocumentationUpdatedNotification notification)
-    {
-        Documentation = notification.Documentation;
-    }
-
     public void SynchronizeDocumentation(string documentation)
     {
         PreviousDocumentation = Documentation;
@@ -79,5 +63,17 @@ public class TicketDto
         var result = !PreviousDocumentation.Equals(Documentation);
         PreviousDocumentation = Documentation;
         return result;
+    }
+
+    public void Apply(WebTicketDataUpdatedNotification notification)
+    {
+        BookingNumber = notification.BookingNumber;
+        Name = notification.Name;
+        SprintIds = notification.SprintIds;
+    }
+
+    public void Apply(WebTicketDocumentationUpdatedNotification notification)
+    {
+        Documentation = notification.Documentation;
     }
 }

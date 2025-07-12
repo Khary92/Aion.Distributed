@@ -4,6 +4,7 @@ using Service.Admin.Web;
 using Service.Admin.Web.Communication;
 using Service.Admin.Web.Communication.Reports;
 using Service.Admin.Web.Communication.Ticket;
+using Service.Admin.Web.Communication.Tickets;
 using Service.Admin.Web.Components;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,6 +33,7 @@ var app = builder.Build();
 app.UseResponseCompression();
 
 app.MapHub<ReportHub>("/reportHub");
+app.MapHub<TicketHub>("/ticketHub");
 
 if (!app.Environment.IsDevelopment())
 {

@@ -1,4 +1,6 @@
-﻿namespace Service.Admin.Web.Communication.Ticket;
+﻿using Service.Admin.Web.Communication.Tickets;
+
+namespace Service.Admin.Web.Communication.Ticket;
 
 public class TicketNotificationHostedService : BackgroundService
 {

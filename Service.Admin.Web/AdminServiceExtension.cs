@@ -2,6 +2,7 @@
 using Service.Admin.Web.Communication;
 using Service.Admin.Web.Communication.Reports;
 using Service.Admin.Web.Communication.Ticket;
+using Service.Admin.Web.Communication.Tickets;
 using Service.Proto.Shared.Commands.Sprints;
 using Service.Proto.Shared.Commands.Tickets;
 using Service.Proto.Shared.Requests.Sprints;
@@ -54,6 +55,7 @@ public static class AdminServiceExtension
         });
         
         services.AddSingleton<ReportHub>();
+        services.AddSingleton<TicketHub>();
     }
     
     private static void AddSharedDataServices(this IServiceCollection services)

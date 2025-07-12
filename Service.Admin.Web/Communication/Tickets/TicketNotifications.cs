@@ -2,17 +2,10 @@
 using Grpc.Net.Client;
 using Proto.Notifications.Ticket;
 
-namespace Service.Admin.Web.Communication.Ticket;
+namespace Service.Admin.Web.Communication.Tickets;
 
-public class TicketNotifications
+public class TicketNotifications(ILogger<TicketNotifications> logger, TicketHub ticketHub)
 {
-    private readonly ILogger<TicketNotifications> _logger;
-
-    public TicketNotifications(ILogger<TicketNotifications> logger)
-    {
-        _logger = logger;
-    }
-
     public async Task SubscribeToNotifications(CancellationToken stoppingToken = default)
     {
         var channelOptions = new GrpcChannelOptions
@@ -33,7 +26,7 @@ public class TicketNotifications
         {
             try
             {
-                _logger.LogInformation("Starte Ticket-Notification Stream...");
+                logger.LogInformation("Starte Ticket-Notification Stream...");
                 using var call = client.SubscribeTicketNotifications(new SubscribeRequest(), cancellationToken: stoppingToken);
 
                 await foreach (var notification in call.ResponseStream.ReadAllAsync(stoppingToken))
@@ -41,32 +34,35 @@ public class TicketNotifications
                     switch (notification.NotificationCase)
                     {
                         case TicketNotification.NotificationOneofCase.TicketCreated:
-                            _logger.LogInformation("Neues Ticket erstellt: {TicketId}", notification.TicketCreated.TicketId);
+                            logger.LogInformation("Neues Ticket erstellt: {TicketId}", notification.TicketCreated.TicketId);
+                            await ticketHub.ReceiveTicketCreated(notification.TicketCreated.ToDto());
                             break;
 
                         case TicketNotification.NotificationOneofCase.TicketDataUpdated:
-                            _logger.LogInformation("Ticket aktualisiert: {TicketId}", notification.TicketDataUpdated.TicketId);
+                            logger.LogInformation("Ticket aktualisiert: {TicketId}", notification.TicketDataUpdated.TicketId);
+                            await ticketHub.ReceiveTicketDataUpdate(notification.TicketDataUpdated.ToCommand());
                             break;
 
                         case TicketNotification.NotificationOneofCase.TicketDocumentationUpdated:
-                            _logger.LogInformation("Ticket-Dokumentation aktualisiert: {TicketId}", notification.TicketDocumentationUpdated.TicketId);
+                            logger.LogInformation("Ticket-Dokumentation aktualisiert: {TicketId}", notification.TicketDocumentationUpdated.TicketId);
+                            await ticketHub.ReceiveTicketDocumentationUpdated(notification.TicketDocumentationUpdated.ToCommand());
                             break;
                     }
                 }
             }
             catch (RpcException ex) when (ex.StatusCode == StatusCode.Unavailable)
             {
-                _logger.LogWarning("Verbindung zum Server verloren. Versuche Neuverbindung in 5 Sekunden...");
+                logger.LogWarning("Verbindung zum Server verloren. Versuche Neuverbindung in 5 Sekunden...");
                 await Task.Delay(5000, stoppingToken);
             }
             catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
             {
-                _logger.LogInformation("Ticket-Notification Stream wird beendet");
+                logger.LogInformation("Ticket-Notification Stream wird beendet");
                 break;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Fehler beim Empfangen der Benachrichtigungen");
+                logger.LogError(ex, "Fehler beim Empfangen der Benachrichtigungen");
                 await Task.Delay(5000, stoppingToken);
             }
         }

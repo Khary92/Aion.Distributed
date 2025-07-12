@@ -1,11 +1,14 @@
 @page "/ticketData"
-@rendermode InteractiveServer
 @using System.Collections.ObjectModel
 @using global::Proto.Command.Sprints
 @using global::Proto.Command.Tickets
 @using global::Proto.Requests.Tickets
+@using Microsoft.AspNetCore.SignalR.Client
 @using Service.Admin.Web.Communication
+@using Service.Admin.Web.Communication.Tickets
+@using Service.Admin.Web.Communication.Tickets.Commands
 @using Service.Admin.Web.DTO
+@rendermode InteractiveServer
 @inject ISharedCommandSender CommandSender
 @inject ISharedRequestSender RequestSender
 
@@ -17,17 +20,50 @@
     private bool _isShowAllTicketsActive;
     private bool _isEditMode;
 
+    private HubConnection? _hubConnection;
+
     protected override async Task OnInitializedAsync()
     {
+        _hubConnection = new HubConnectionBuilder()
+            .WithUrl($"http://localhost:8080/ticketHub")
+            .WithAutomaticReconnect()
+            .Build();
+
+        _hubConnection.On<TicketDto>(TicketHub.Notifications.TicketCreated, (ticketDto) =>
+        {
+            _tickets.Add(ticketDto);
+            InvokeAsync(StateHasChanged);
+        });
+        
+        _hubConnection.On<WebTicketDataUpdatedNotification>(TicketHub.Notifications.TicketDataUpdated, (notification) =>
+        {
+            var ticket = _tickets.FirstOrDefault(t => t.TicketId == notification.TicketId);
+
+            if (ticket == null) return;
+            
+            ticket.Apply(notification);
+            InvokeAsync(StateHasChanged);
+        });
+        
+        _hubConnection.On<WebTicketDocumentationUpdatedNotification>(TicketHub.Notifications.TicketDocumentationUpdated, (notification) =>
+        {
+            var ticket = _tickets.FirstOrDefault(t => t.TicketId == notification.TicketId);
+
+            if (ticket == null) return;
+            
+            ticket.Apply(notification);
+            InvokeAsync(StateHasChanged);
+        });
+
+        await _hubConnection.StartAsync();
+        await base.OnInitializedAsync();
         await LoadTickets();
     }
 
     private async Task LoadTickets()
     {
         _tickets.Clear();
-        var tickets = _isShowAllTicketsActive ? 
-            await RequestSender.Send(new GetAllTicketsRequestProto()) : 
-            await RequestSender.Send(new GetTicketsForCurrentSprintRequestProto());
+        var tickets = _isShowAllTicketsActive ? await RequestSender.Send(new GetAllTicketsRequestProto()) : await RequestSender.Send(new GetTicketsForCurrentSprintRequestProto());
 
         foreach (var ticket in tickets.ToDtoList())
         {
@@ -99,8 +135,8 @@
         _isShowAllTicketsActive = (bool)e.Value!;
         await LoadTickets();
     }
+
 }
-<h1>TicketData COMPONENT WIRD GERENDERT</h1>
 
 <div class="row">
     <div class="col-5">
@@ -116,7 +152,8 @@
         <div class="mb-2">
             <button class="btn btn-success me-2"
                     disabled="@(!CanSave)"
-                    @onclick="CreateOrUpdateTicket">Save</button>
+                    @onclick="CreateOrUpdateTicket">Save
+            </button>
             <button class="btn btn-warning me-2"
                     disabled="@(_selectedTicket == null)"
                     @onclick="SetEditMode">@EditButtonText</button>
