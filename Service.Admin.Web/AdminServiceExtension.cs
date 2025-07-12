@@ -1,4 +1,5 @@
-﻿using Service.Admin.Web.Communication;
+﻿using Microsoft.AspNetCore.ResponseCompression;
+using Service.Admin.Web.Communication;
 using Service.Admin.Web.Communication.Reports;
 using Service.Admin.Web.Communication.Ticket;
 using Service.Proto.Shared.Commands.Sprints;
@@ -14,6 +15,8 @@ public static class AdminServiceExtension
     
     public static void AddWebServices(this IServiceCollection services)
     {
+        AddSignalRServices(services);
+        
         services.AddRazorComponents()
             .AddInteractiveServerComponents();
         
@@ -28,16 +31,29 @@ public static class AdminServiceExtension
         services.AddHostedService<TicketNotificationHostedService>();
 
         AddSharedDataServices(services);
-
-
-        services.AddSingleton<ReportEventHandler>();
-        services.AddSingleton<IReportEventHandler>(sp => sp.GetRequiredService<ReportEventHandler>());
+        
         services.AddSingleton<ReportReceiver>();
         services.AddSingleton<IReportReceiver>(sp => sp.GetRequiredService<ReportReceiver>());
-        services.AddSingleton<ReportEventBridge>();
         
         services.AddScoped<ISharedCommandSender, SharedCommandSender>();
         services.AddScoped<ISharedRequestSender, SharedRequestSender>();
+    }
+
+    private static void AddSignalRServices(this IServiceCollection services)
+    {
+        services.AddSignalR(options =>
+        {
+            options.ClientTimeoutInterval = TimeSpan.FromSeconds(30);
+            options.KeepAliveInterval = TimeSpan.FromSeconds(15);
+        });
+
+        services.AddResponseCompression(opts =>
+        {
+            opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
+                [ "application/octet-stream" ]);
+        });
+        
+        services.AddSingleton<ReportHub>();
     }
     
     private static void AddSharedDataServices(this IServiceCollection services)

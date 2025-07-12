@@ -25,9 +25,13 @@ builder.WebHost.ConfigureKestrel(options =>
     options.ListenAnyIP(8081, o => { o.Protocols = HttpProtocols.Http2; });
 });
 
+
 builder.Logging.AddConsole();
 
 var app = builder.Build();
+app.UseResponseCompression();
+
+app.MapHub<ReportHub>("/reportHub");
 
 if (!app.Environment.IsDevelopment())
 {

@@ -1,9 +1,11 @@
 ﻿@page "/weather"
+@using Microsoft.AspNetCore.SignalR.Client
 @using Service.Admin.Web.Communication
 @using Service.Admin.Web.Communication.Reports
-@inject ReportEventBridge Bridge
 @inject ILogger<Weather> Logger
-@attribute [StreamRendering]
+@rendermode InteractiveServer
+@inject NavigationManager Navigation
+@implements IAsyncDisposable
 
 <PageTitle>Tracing results</PageTitle>
 
@@ -62,23 +64,33 @@ else
 }
 
 @code {
-    private IReadOnlyCollection<ReportRecord> _reports = Array.Empty<ReportRecord>();
-
-    protected override void OnInitialized()
+    private List<ReportRecord> _reports = new();
+    private HubConnection? _hubConnection;
+    protected override async Task OnInitializedAsync()
     {
-        _reports = Bridge.Reports;
-        Bridge.OnNewReport += async (report) => await HandleNewReport(report);
-        base.OnInitialized();
-    }
-
-    private async Task HandleNewReport(ReportRecord report)
-    {
-        await InvokeAsync(() =>
+        _hubConnection = new HubConnectionBuilder()
+            .WithUrl($"http://localhost:8080/reportHub") 
+            .WithAutomaticReconnect() 
+            .Build();
+        
+        _hubConnection.On<ReportRecord>("ReceiveReport", (record) =>
         {
-            Logger.Log(LogLevel.Information, "Report handled in razor page");
-            _reports = Bridge.Reports;
-            StateHasChanged();
+            _reports.Add(record);
+            InvokeAsync(StateHasChanged);
         });
-    }
 
+        await _hubConnection.StartAsync();
+        await base.OnInitializedAsync();
+    }
+    
+    public bool IsConnected =>
+        _hubConnection?.State == HubConnectionState.Connected;
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_hubConnection is not null)
+        {
+            await _hubConnection.DisposeAsync();
+        }
+    }
 }
