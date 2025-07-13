@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.ResponseCompression;
 using Service.Admin.Web.Communication;
 using Service.Admin.Web.Communication.Reports;
-using Service.Admin.Web.Communication.Ticket;
 using Service.Admin.Web.Communication.Tickets;
 using Service.Proto.Shared.Commands.Sprints;
 using Service.Proto.Shared.Commands.Tickets;
@@ -28,7 +27,7 @@ public static class AdminServiceExtension
             options.MaxSendMessageSize = 2 * 1024 * 1024;
         });
 
-        services.AddSingleton<TicketNotifications>();
+        services.AddSingleton<TicketNotificationsReceiver>();
         services.AddHostedService<TicketNotificationHostedService>();
 
         AddSharedDataServices(services);

@@ -4,7 +4,7 @@ using Proto.Notifications.Ticket;
 
 namespace Service.Admin.Web.Communication.Tickets;
 
-public class TicketNotifications(ILogger<TicketNotifications> logger, TicketHub ticketHub)
+public class TicketNotificationsReceiver(ILogger<TicketNotificationsReceiver> logger, TicketHub ticketHub)
 {
     public async Task SubscribeToNotifications(CancellationToken stoppingToken = default)
     {
@@ -40,12 +40,12 @@ public class TicketNotifications(ILogger<TicketNotifications> logger, TicketHub 
 
                         case TicketNotification.NotificationOneofCase.TicketDataUpdated:
                             logger.LogInformation("Ticket aktualisiert: {TicketId}", notification.TicketDataUpdated.TicketId);
-                            await ticketHub.ReceiveTicketDataUpdate(notification.TicketDataUpdated.ToCommand());
+                            await ticketHub.ReceiveTicketDataUpdate(notification.TicketDataUpdated.ToNotification());
                             break;
 
                         case TicketNotification.NotificationOneofCase.TicketDocumentationUpdated:
                             logger.LogInformation("Ticket-Dokumentation aktualisiert: {TicketId}", notification.TicketDocumentationUpdated.TicketId);
-                            await ticketHub.ReceiveTicketDocumentationUpdated(notification.TicketDocumentationUpdated.ToCommand());
+                            await ticketHub.ReceiveTicketDocumentationUpdated(notification.TicketDocumentationUpdated.ToNotification());
                             break;
                     }
                 }

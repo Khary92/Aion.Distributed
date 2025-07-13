@@ -12,13 +12,13 @@ public static class TicketExtensions
             string.Empty, notification.SprintIds.ToGuidList());
     }
 
-    public static WebTicketDataUpdatedNotification ToCommand(this TicketDataUpdatedNotification notification)
+    public static WebTicketDataUpdatedNotification ToNotification(this TicketDataUpdatedNotification notification)
     {
         return new WebTicketDataUpdatedNotification(Guid.Parse(notification.TicketId), notification.Name,
             notification.BookingNumber, notification.SprintIds.ToGuidList());
     }
 
-    public static WebTicketDocumentationUpdatedNotification ToCommand(
+    public static WebTicketDocumentationUpdatedNotification ToNotification(
         this TicketDocumentationUpdatedNotification notification)
     {
         return new WebTicketDocumentationUpdatedNotification(Guid.Parse(notification.TicketId),
