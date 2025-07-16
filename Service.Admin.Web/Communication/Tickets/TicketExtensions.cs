@@ -1,5 +1,5 @@
 ﻿using Proto.Notifications.Ticket;
-using Service.Admin.Web.Communication.Tickets.Commands;
+using Service.Admin.Web.Communication.Tickets.Notifications;
 using Service.Admin.Web.DTO;
 
 namespace Service.Admin.Web.Communication.Tickets;

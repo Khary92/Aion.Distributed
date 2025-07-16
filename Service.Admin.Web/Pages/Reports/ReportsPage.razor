@@ -1,7 +1,6 @@
 ﻿@page "/reports"
 @rendermode InteractiveServer
 @inject ILogger<ReportsPage> Logger
-@inject IReportHubService ReportHubService
 @inject IReportStateService ReportState
 @using Service.Admin.Web.Communication.Reports
 @using Service.Admin.Web.Communication.Reports.State
@@ -14,18 +13,23 @@
 
     <ErrorBoundary>
         <ChildContent>
-            @if (_isLoading)
+            @if (_isLoading || !ReportState.Reports.Any())
             {
                 <LoadingSpinner />
             }
-            else if (!ReportState.Reports.Any())
-            {
-                <div class="alert alert-info">
-                    Keine Berichte verfügbar.
-                </div>
-            }
             else
             {
+                <div class="mb-3">
+                    <label for="reportSelect" class="form-label">Report auswählen:</label>
+                    <select id="reportSelect" class="form-select" @bind="_selectedReportId">
+                        <option value="">Alle Reports</option>
+                        @foreach (var report in ReportState.Reports)
+                        {
+                            <option value="@report.ReportId">@report.TimeStamp - @report.State</option>
+                        }
+                    </select>
+                </div>
+
                 <ReportTable Items="@ReportState.Reports" T="ReportRecord">
                     <HeaderTemplate>
                         <th>Datum</th>
@@ -38,7 +42,7 @@
                 </ReportTable>
 
                 <h2>Traces</h2>
-                <ReportTable Items="@GetTraces()" T="TraceInfo">
+                <ReportTable Items="@GetFilteredTraces()" T="TraceInfo">
                     <HeaderTemplate>
                         <th>Zeitstempel</th>
                         <th>Ergebnis</th>
@@ -62,13 +66,13 @@
 
 @code {
     private bool _isLoading = true;
+    private Guid _selectedReportId = Guid.Empty;
 
-    protected override async Task OnInitializedAsync()
+    protected override Task OnInitializedAsync()
     {
         try
         {
             ReportState.OnStateChanged += StateHasChanged;
-            await ReportHubService.InitializeAsync();
         }
         catch (Exception ex)
         {
@@ -79,20 +83,29 @@
         {
             _isLoading = false;
         }
+
+        return Task.CompletedTask;
     }
 
-    private IEnumerable<TraceInfo> GetTraces()
+    private IEnumerable<TraceInfo> GetFilteredTraces()
     {
-        return ReportState.Reports.SelectMany(r => r.Traces.Select(t =>
+        var report = ReportState.Reports.FirstOrDefault(r => r.ReportId == _selectedReportId);
+        
+        if (report == null)
         {
-            var data = t.Split('|');
+            return [];
+        }
+        
+        return report.Traces.Select(trace =>
+        {
+            var data = trace.Split('|');
             return new TraceInfo
             {
                 TimeStamp = data[0],
                 Result = data[1],
                 LogInfo = data[2]
             };
-        }));
+        });
     }
 
     public void Dispose()

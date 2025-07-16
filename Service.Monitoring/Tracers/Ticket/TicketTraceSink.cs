@@ -18,8 +18,8 @@ public class TicketTraceSink(IReportSender reportSender, IVerifierFactory verifi
         if (!_ticketVerifiers.TryGetValue(traceData.TraceId, out var verifier))
         {
             var newVerifier = verifierFactory.Create(traceData.TraceSinkId, traceData.UseCaseMeta);
-            newVerifier.Add(traceData);
             _ticketVerifiers.Add(traceData.TraceId, newVerifier);
+            newVerifier.Add(traceData);
 
             newVerifier.VerificationCompleted += SaveReport;
 

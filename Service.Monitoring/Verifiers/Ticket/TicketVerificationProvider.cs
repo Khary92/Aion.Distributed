@@ -25,6 +25,7 @@ public class TicketVerificationProvider : IVerificationProvider
         new VerificationStep(LoggingMeta.CommandSent, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.CommandReceived, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.EventPersisted, Invoked.Equals, 1),
+        new VerificationStep(LoggingMeta.NotificationSent, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.NotificationReceived, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.AggregateReceived, Invoked.AtLeast, 1),
         new VerificationStep(LoggingMeta.AggregateAdded, Invoked.AtLeast, 1));

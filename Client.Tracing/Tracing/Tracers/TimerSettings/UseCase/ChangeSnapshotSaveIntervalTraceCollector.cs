@@ -7,7 +7,7 @@ namespace Client.Tracing.Tracing.Tracers.TimerSettings.UseCase;
 public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataCommandSender commandSender)
     : IChangeSnapshotSaveIntervalTraceCollector
 {
-    public async Task StartUseCase(Type originClassType, Guid traceId, Dictionary<string, string> attributes)
+    public async Task StartUseCase(Type originClassType, Guid traceId,string attributes)
     {
         var log = $"Change active status requested for {attributes}";
 
@@ -77,8 +77,7 @@ public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataCommandSender 
             DateTimeOffset.Now));
     }
 
-    public async Task PropertyNotChanged(Type originClassType, Guid traceId,
-        Dictionary<string, string> asTraceAttributes)
+    public async Task PropertyNotChanged(Type originClassType, Guid traceId, string asTraceAttributes)
     {
         var log = ($"Request aborted {asTraceAttributes}");
 

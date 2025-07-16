@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.ResponseCompression;
 using Service.Admin.Web.Communication;
 using Service.Admin.Web.Communication.Reports;
-using Service.Admin.Web.Communication.Reports.Hub;
 using Service.Admin.Web.Communication.Reports.State;
 using Service.Admin.Web.Communication.Tickets;
 using Service.Proto.Shared.Commands.Sprints;
@@ -17,7 +16,6 @@ public static class AdminServiceExtension
     
     public static void AddWebServices(this IServiceCollection services)
     {
-        services.AddScoped<IReportHubService, ReportHubService>();
         services.AddSingleton<IReportStateService, ReportStateService>();
 
         AddSignalRServices(services);
@@ -58,7 +56,6 @@ public static class AdminServiceExtension
                 [ "application/octet-stream" ]);
         });
         
-        services.AddSingleton<ReportHub>();
         services.AddSingleton<TicketHub>();
     }
     

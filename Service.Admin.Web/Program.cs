@@ -30,7 +30,6 @@ builder.Logging.AddConsole();
 var app = builder.Build();
 app.UseResponseCompression();
 
-app.MapHub<ReportHub>("/reportHub");
 app.MapHub<TicketHub>("/ticketHub");
 
 if (!app.Environment.IsDevelopment())

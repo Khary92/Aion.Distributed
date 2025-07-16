@@ -1,7 +1,7 @@
 using Grpc.Core;
 using Proto.Report;
 
-namespace Service.Admin.Web.Communication;
+namespace Service.Admin.Web.Communication.Reports;
 
 public interface IReportReceiver
 {

@@ -7,7 +7,7 @@ namespace Client.Tracing.Tracing.Tracers.Ticket.UseCase;
 public class AddTicketToCurrentSprintTraceCollector(ITracingDataCommandSender commandSender)
     : IAddTicketToCurrentSprintTraceCollector
 {
-    public async Task StartUseCase(Type originClassType, Guid traceId, Dictionary<string, string> attributes)
+    public async Task StartUseCase(Type originClassType, Guid traceId, string attributes)
     {
         var log = $"Add ticket to sprint requested for {attributes}";
         await commandSender.Send(new ServiceTraceDataCommand(

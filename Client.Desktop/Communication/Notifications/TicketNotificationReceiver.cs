@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Avalonia.Threading;
 using Client.Desktop.Communication.NotificationWrappers;
 using Client.Desktop.DTO;
+using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using Grpc.Core;
 using Proto.Notifications.Ticket;
@@ -13,6 +14,7 @@ namespace Client.Desktop.Communication.Notifications;
 
 public class TicketNotificationReceiver(
     TicketNotificationService.TicketNotificationServiceClient client,
+    ITraceCollector tracer,
     IMessenger messenger)
 {
     public async Task StartListeningAsync(CancellationToken cancellationToken)
@@ -28,6 +30,10 @@ public class TicketNotificationReceiver(
                     case TicketNotification.NotificationOneofCase.TicketCreated:
                     {
                         var created = notification.TicketCreated;
+
+                        await tracer.Ticket.Create.NotificationReceived(GetType(), Guid.Parse(created.TicketId),
+                            created);
+
                         var sprintGuids = new List<Guid>();
                         foreach (var id in created.SprintIds)
                             if (Guid.TryParse(id, out var guid))

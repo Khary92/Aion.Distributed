@@ -8,8 +8,8 @@ public class CreateTicketTraceCollector(ITracingDataCommandSender commandSender)
 {
     public async Task CommandReceived(Type originClassType, Guid traceId, object protoCommand)
     {
-        var log = ($"Command received {protoCommand.GetType()}:{protoCommand}");
-        
+        var log = ($"Command received {GetName(protoCommand)}:{protoCommand}");
+
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
             UseCaseMeta.CreateTicket,
@@ -19,11 +19,11 @@ public class CreateTicketTraceCollector(ITracingDataCommandSender commandSender)
             log,
             DateTimeOffset.Now));
     }
-    
+
     public async Task EventPersisted(Type originClassType, Guid traceId, object @event)
     {
-        var log = ($"Notification sent {@event.GetType()}:{@event}");
-        
+        var log = ($"Event persisted {@event}");
+
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
             UseCaseMeta.CreateTicket,
@@ -36,15 +36,21 @@ public class CreateTicketTraceCollector(ITracingDataCommandSender commandSender)
 
     public async Task NotificationSent(Type originClassType, Guid traceId, object notification)
     {
-        var log = ($"Notification sent {notification.GetType()}:{notification}");
-        
+        var log = ($"Notification sent {GetName(notification)}:{notification}");
+
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
             UseCaseMeta.CreateTicket,
-            LoggingMeta.CommandReceived,
+            LoggingMeta.NotificationSent,
             originClassType,
             traceId,
             log,
             DateTimeOffset.Now));
+    }
+
+    private static string GetName(object @object)
+    {
+        var commandType = @object.GetType();
+        return commandType.Name;
     }
 }

@@ -6,7 +6,7 @@ namespace Client.Tracing.Tracing.Tracers.Ticket.UseCase;
 
 public class UpdateTicketTraceCollector(ITracingDataCommandSender commandSender) : IUpdateTicketTraceCollector
 {
-    public async Task StartUseCase(Type originClassType, Guid traceId, Dictionary<string, string> attributes)
+    public async Task StartUseCase(Type originClassType, Guid traceId, string attributes)
     {
         var log = $"Update ticket requested for {attributes}";
 

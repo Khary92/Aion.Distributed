@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.SignalR;
 using Service.Admin.Web.Communication.Sprints.Notifications;
-using Service.Admin.Web.Communication.Tickets.Commands;
 using Service.Admin.Web.DTO;
 
 namespace Service.Admin.Web.Communication.Sprints;

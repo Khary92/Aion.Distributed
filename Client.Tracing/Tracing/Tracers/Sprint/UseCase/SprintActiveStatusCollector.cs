@@ -6,7 +6,7 @@ namespace Client.Tracing.Tracing.Tracers.Sprint.UseCase;
 
 public class SprintActiveStatusCollector(ITracingDataCommandSender commandSender) : ISprintActiveStatusCollector
 {
-    public async Task StartUseCase(Type originClassType, Guid traceId, Dictionary<string, string> attributes)
+    public async Task StartUseCase(Type originClassType, Guid traceId, string attributes)
     {
         var log = $"Change active status requested for {attributes}";
 
