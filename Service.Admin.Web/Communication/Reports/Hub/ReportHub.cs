@@ -2,7 +2,7 @@
 
 namespace Service.Admin.Web.Communication.Reports;
 
-public class ReportHub : Hub
+public class ReportHub : Microsoft.AspNetCore.SignalR.Hub
 {
     public async Task SendMessage(ReportRecord report)
     {

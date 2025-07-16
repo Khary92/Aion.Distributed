@@ -1,0 +1,30 @@
+﻿@typeparam T
+
+<div class="table-responsive">
+    <table class="table">
+        <thead>
+        <tr>
+            @HeaderTemplate
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Items)
+        {
+            <tr>
+                @RowTemplate(item)
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public IEnumerable<T> Items { get; set; } = default!;
+
+    [Parameter, EditorRequired]
+    public RenderFragment HeaderTemplate { get; set; } = default!;
+
+    [Parameter, EditorRequired]
+    public RenderFragment<T> RowTemplate { get; set; } = default!;
+}

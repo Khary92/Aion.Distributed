@@ -23,4 +23,15 @@
       </Content>
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Components\Layout\MainLayout.razor" />
+      <_ContentIncludedByDefault Remove="Components\Layout\NavMenu.razor" />
+      <_ContentIncludedByDefault Remove="Components\Pages\Counter.razor" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <AdditionalFiles Include="Pages\Layout\MainLayout.razor" />
+      <AdditionalFiles Include="Pages\Layout\NavMenu.razor" />
+    </ItemGroup>
+
 </Project>
