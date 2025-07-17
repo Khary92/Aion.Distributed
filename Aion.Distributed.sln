@@ -32,6 +32,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Admin.Web", "Servic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Admin.Proto", "Service.Admin.Proto\Service.Admin.Proto.csproj", "{D51E25EA-7BC0-4861-BF6A-5BF883A266BE}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Admin.Tracing", "Service.Admin.Tracing\Service.Admin.Tracing.csproj", "{913B576F-F8E1-40DD-9DA8-4E87D3213376}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -102,5 +104,9 @@ Global
 		{D51E25EA-7BC0-4861-BF6A-5BF883A266BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D51E25EA-7BC0-4861-BF6A-5BF883A266BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D51E25EA-7BC0-4861-BF6A-5BF883A266BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{913B576F-F8E1-40DD-9DA8-4E87D3213376}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{913B576F-F8E1-40DD-9DA8-4E87D3213376}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{913B576F-F8E1-40DD-9DA8-4E87D3213376}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{913B576F-F8E1-40DD-9DA8-4E87D3213376}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

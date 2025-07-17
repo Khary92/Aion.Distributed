@@ -1,5 +1,7 @@
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Service.Admin.Tracing;
 using Service.Admin.Web;
 using Service.Admin.Web.Communication.Reports;
 using Service.Admin.Web.Communication.Tickets;
@@ -8,6 +10,7 @@ using Service.Admin.Web.Pages;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddWebServices();
+builder.Services.AddTracingServices();
 
 builder.Services.AddDataProtection()
     .PersistKeysToFileSystem(new DirectoryInfo("/app/.aspnet/DataProtection-Keys"));

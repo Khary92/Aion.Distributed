@@ -9,12 +9,14 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Service.Admin.Proto\Service.Admin.Proto.csproj" />
+      <ProjectReference Include="..\Service.Admin.Tracing\Service.Admin.Tracing.csproj" />
       <ProjectReference Include="..\Service.Proto.Shared\Service.Proto.Shared.csproj" />
     </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="Grpc.AspNetCore.Server" Version="2.71.0" />
       <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="9.0.7" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     </ItemGroup>
 
     <ItemGroup>
@@ -32,6 +34,12 @@
     <ItemGroup>
       <AdditionalFiles Include="Pages\Layout\MainLayout.razor" />
       <AdditionalFiles Include="Pages\Layout\NavMenu.razor" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Newtonsoft.Json">
+        <HintPath>..\..\..\.nuget\packages\newtonsoft.json\13.0.1\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

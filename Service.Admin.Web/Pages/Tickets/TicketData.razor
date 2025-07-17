@@ -4,6 +4,7 @@
 @using global::Proto.Command.Tickets
 @using global::Proto.Requests.Tickets
 @using Microsoft.AspNetCore.SignalR.Client
+@using Service.Admin.Tracing
 @using Service.Admin.Web.Communication
 @using Service.Admin.Web.Communication.Tickets
 @using Service.Admin.Web.Communication.Tickets.Notifications
@@ -11,6 +12,7 @@
 @rendermode InteractiveServer
 @inject ISharedCommandSender CommandSender
 @inject ISharedRequestSender RequestSender
+@inject ITraceCollector Tracer
 
 @code {
     private readonly ObservableCollection<TicketDto> _tickets = new();
@@ -29,28 +31,30 @@
             .WithAutomaticReconnect()
             .Build();
 
-        _hubConnection.On<TicketDto>(TicketHub.Notifications.TicketCreated, (ticketDto) =>
+        _hubConnection.On<TicketDto>(TicketHub.Notifications.TicketCreated, async (ticketDto) =>
         {
+            await Tracer.Ticket.Create.AggregateReceived(GetType(), ticketDto.TicketId, ticketDto.AsTraceAttributes());
             _tickets.Add(ticketDto);
-            InvokeAsync(StateHasChanged);
+            await Tracer.Ticket.Create.AggregateAdded(GetType(), ticketDto.TicketId);
+            await InvokeAsync(StateHasChanged);
         });
-        
+
         _hubConnection.On<WebTicketDataUpdatedNotification>(TicketHub.Notifications.TicketDataUpdated, (notification) =>
         {
             var ticket = _tickets.FirstOrDefault(t => t.TicketId == notification.TicketId);
 
             if (ticket == null) return;
-            
+
             ticket.Apply(notification);
             InvokeAsync(StateHasChanged);
         });
-        
+
         _hubConnection.On<WebTicketDocumentationUpdatedNotification>(TicketHub.Notifications.TicketDocumentationUpdated, (notification) =>
         {
             var ticket = _tickets.FirstOrDefault(t => t.TicketId == notification.TicketId);
 
             if (ticket == null) return;
-            
+
             ticket.Apply(notification);
             InvokeAsync(StateHasChanged);
         });
@@ -87,13 +91,18 @@
             return;
         }
 
-        await CommandSender.Send(new CreateTicketCommandProto
+        var createTicketCommandProto = new CreateTicketCommandProto
         {
             TicketId = Guid.NewGuid().ToString(),
             Name = _newTicketName,
             BookingNumber = _newTicketBookingNumber,
             SprintIds = { }
-        });
+        };
+
+        // TODO well there is no more ViewModel
+        await Tracer.Ticket.Create.StartUseCase(GetType(), Guid.Parse(createTicketCommandProto.TicketId), createTicketCommandProto);
+        await Tracer.Ticket.Create.CommandSent(GetType(), Guid.Parse(createTicketCommandProto.TicketId), createTicketCommandProto);
+        await CommandSender.Send(createTicketCommandProto);
 
         _newTicketName = _newTicketBookingNumber = string.Empty;
         _isEditMode = false;
