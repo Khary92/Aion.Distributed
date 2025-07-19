@@ -7,13 +7,13 @@ namespace Service.Admin.Web.Communication.Reports;
 public class ReportReceiver(IReportStateService reportState, ILogger<ReportReceiver> logger)
     : ReportProtoService.ReportProtoServiceBase, IReportReceiver
 {
-    public override async Task<ResponseProto> SendReport(ReportProto request, ServerCallContext context)
+    public override Task<ResponseProto> SendReport(ReportProto request, ServerCallContext context)
     {
         logger.LogInformation("Received report with state: {State}", request.State);
 
         var report = new ReportRecord(Guid.NewGuid(), DateTimeOffset.Now, request.State, request.Traces.ToList());
         reportState.AddReport(report);
 
-        return new ResponseProto { Success = true };
+        return Task.FromResult(new ResponseProto { Success = true });
     }
 }

@@ -6,5 +6,4 @@ public interface IReportStateService
     event Action? OnStateChanged;
     void AddReport(ReportRecord report);
     void ClearReports();
-
 }

@@ -3,6 +3,7 @@ using Service.Admin.Web.Communication;
 using Service.Admin.Web.Communication.Reports;
 using Service.Admin.Web.Communication.Reports.State;
 using Service.Admin.Web.Communication.Tickets;
+using Service.Admin.Web.Communication.Tickets.State;
 using Service.Proto.Shared.Commands.Sprints;
 using Service.Proto.Shared.Commands.Tickets;
 using Service.Proto.Shared.Requests.Sprints;
@@ -17,8 +18,7 @@ public static class AdminServiceExtension
     public static void AddWebServices(this IServiceCollection services)
     {
         services.AddSingleton<IReportStateService, ReportStateService>();
-
-        AddSignalRServices(services);
+        services.AddSingleton<ITicketStateService, TicketStateService>();
         
         services.AddRazorComponents()
             .AddInteractiveServerComponents();
@@ -40,23 +40,6 @@ public static class AdminServiceExtension
         
         services.AddScoped<ISharedCommandSender, SharedCommandSender>();
         services.AddScoped<ISharedRequestSender, SharedRequestSender>();
-    }
-
-    private static void AddSignalRServices(this IServiceCollection services)
-    {
-        services.AddSignalR(options =>
-        {
-            options.ClientTimeoutInterval = TimeSpan.FromSeconds(30);
-            options.KeepAliveInterval = TimeSpan.FromSeconds(15);
-        });
-
-        services.AddResponseCompression(opts =>
-        {
-            opts.MimeTypes = ResponseCompressionDefaults.MimeTypes.Concat(
-                [ "application/octet-stream" ]);
-        });
-        
-        services.AddSingleton<TicketHub>();
     }
     
     private static void AddSharedDataServices(this IServiceCollection services)

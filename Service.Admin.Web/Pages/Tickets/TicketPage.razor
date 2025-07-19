@@ -1,78 +1,28 @@
 @page "/ticketData"
-@using System.Collections.ObjectModel
 @using global::Proto.Command.Sprints
 @using global::Proto.Command.Tickets
-@using global::Proto.Requests.Tickets
-@using Microsoft.AspNetCore.SignalR.Client
 @using Service.Admin.Tracing
 @using Service.Admin.Web.Communication
-@using Service.Admin.Web.Communication.Tickets
-@using Service.Admin.Web.Communication.Tickets.Notifications
+@using Service.Admin.Web.Communication.Tickets.State
 @using Service.Admin.Web.DTO
 @rendermode InteractiveServer
 @inject ISharedCommandSender CommandSender
 @inject ISharedRequestSender RequestSender
 @inject ITraceCollector Tracer
+@inject ITicketStateService TicketStateService
 
 @code {
-    private readonly ObservableCollection<TicketDto> _tickets = new();
+    private TicketDto? _selectedTicket;
+
     private string _newTicketName = string.Empty;
     private string _newTicketBookingNumber = string.Empty;
-    private TicketDto? _selectedTicket;
     private bool _isShowAllTicketsActive;
     private bool _isEditMode;
 
-    private HubConnection? _hubConnection;
 
     protected override async Task OnInitializedAsync()
     {
-        _hubConnection = new HubConnectionBuilder()
-            .WithUrl($"http://localhost:8080/ticketHub")
-            .WithAutomaticReconnect()
-            .Build();
-
-        _hubConnection.On<TicketDto>(TicketHub.Notifications.TicketCreated, async (ticketDto) =>
-        {
-            await Tracer.Ticket.Create.AggregateReceived(GetType(), ticketDto.TicketId, ticketDto.AsTraceAttributes());
-            _tickets.Add(ticketDto);
-            await Tracer.Ticket.Create.AggregateAdded(GetType(), ticketDto.TicketId);
-            await InvokeAsync(StateHasChanged);
-        });
-
-        _hubConnection.On<WebTicketDataUpdatedNotification>(TicketHub.Notifications.TicketDataUpdated, (notification) =>
-        {
-            var ticket = _tickets.FirstOrDefault(t => t.TicketId == notification.TicketId);
-
-            if (ticket == null) return;
-
-            ticket.Apply(notification);
-            InvokeAsync(StateHasChanged);
-        });
-
-        _hubConnection.On<WebTicketDocumentationUpdatedNotification>(TicketHub.Notifications.TicketDocumentationUpdated, (notification) =>
-        {
-            var ticket = _tickets.FirstOrDefault(t => t.TicketId == notification.TicketId);
-
-            if (ticket == null) return;
-
-            ticket.Apply(notification);
-            InvokeAsync(StateHasChanged);
-        });
-
-        await _hubConnection.StartAsync();
-        await base.OnInitializedAsync();
-        await LoadTickets();
-    }
-
-    private async Task LoadTickets()
-    {
-        _tickets.Clear();
-        var tickets = _isShowAllTicketsActive ? await RequestSender.Send(new GetAllTicketsRequestProto()) : await RequestSender.Send(new GetTicketsForCurrentSprintRequestProto());
-
-        foreach (var ticket in tickets.ToDtoList())
-        {
-            _tickets.Add(ticket);
-        }
+        await TicketStateService.LoadTickets();
     }
 
     private async Task CreateOrUpdateTicket()
@@ -106,7 +56,6 @@
 
         _newTicketName = _newTicketBookingNumber = string.Empty;
         _isEditMode = false;
-        await LoadTickets();
     }
 
     private void SetEditMode()
@@ -134,15 +83,13 @@
             {
                 TicketId = _selectedTicket.TicketId.ToString()
             });
-
-            await LoadTickets();
         }
     }
 
-    private async Task ToggleShowAllTickets(ChangeEventArgs e)
+    private Task ToggleShowAllTickets(ChangeEventArgs e)
     {
         _isShowAllTicketsActive = (bool)e.Value!;
-        await LoadTickets();
+        return Task.CompletedTask;
     }
 
 }
@@ -183,7 +130,7 @@
             </tr>
             </thead>
             <tbody>
-            @foreach (var ticket in _tickets)
+            @foreach (var ticket in @TicketStateService.Tickets)
             {
                 <tr class="@(_selectedTicket == ticket ? "table-active" : "")"
                     @onclick="() => _selectedTicket = ticket">
