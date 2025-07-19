@@ -1,4 +1,4 @@
-@page "/ticketData"
+@page "/sprintData"
 @using global::Proto.Command.Sprints
 @using global::Proto.Command.Tickets
 @using Service.Admin.Tracing
@@ -19,10 +19,10 @@
     private bool _isShowAllTicketsActive;
     private bool _isEditMode;
 
+
     protected override async Task OnInitializedAsync()
     {
-        TicketStateService.OnStateChanged += async () => await InvokeAsync(StateHasChanged);
-        await InvokeAsync(async () => await TicketStateService.LoadTickets());
+        await TicketStateService.LoadTickets();
     }
 
     private async Task CreateOrUpdateTicket()
@@ -60,17 +60,19 @@
 
     private void SetEditMode()
     {
-        if (_selectedTicket == null) return;
-
-        _isEditMode = !_isEditMode;
-        if (_isEditMode)
+        if (_selectedTicket != null)
         {
-            _newTicketName = _selectedTicket.Name;
-            _newTicketBookingNumber = _selectedTicket.BookingNumber;
-            return;
+            _isEditMode = !_isEditMode;
+            if (_isEditMode)
+            {
+                _newTicketName = _selectedTicket.Name;
+                _newTicketBookingNumber = _selectedTicket.BookingNumber;
+            }
+            else
+            {
+                _newTicketName = _newTicketBookingNumber = "";
+            }
         }
-
-        _newTicketName = _newTicketBookingNumber = "";
     }
 
     private async Task AddTicketToCurrentSprint()
