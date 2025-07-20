@@ -78,7 +78,7 @@ public static class EndpointServices
         app.MapGrpcService<SettingsNotificationService>();
         app.MapGrpcService<SprintNotificationService>();
         app.MapGrpcService<StatisticsDataNotificationService>();
-        app.MapGrpcService<TagNotificationServiceImpl>();
+        app.MapGrpcService<TagNotificationService>();
         app.MapGrpcService<TicketNotificationService>();
         app.MapGrpcService<TimerSettingsNotificationService>();
         app.MapGrpcService<TimeSlotNotificationService>();

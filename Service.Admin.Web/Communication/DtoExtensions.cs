@@ -1,6 +1,9 @@
 using Google.Protobuf.Collections;
 using Proto.DTO.Sprint;
+using Proto.DTO.Tag;
 using Proto.DTO.Ticket;
+using Proto.Requests.Sprints;
+using Proto.Requests.Tags;
 using Proto.Requests.Tickets;
 using Service.Admin.Web.DTO;
 
@@ -8,6 +11,20 @@ namespace Service.Admin.Web.Communication;
 
 public static class DtoExtensions
 {
+    public static List<TagDto> ToDtoList(this TagListProto? tagListProto)
+    {
+        if (tagListProto == null) return [];
+
+        return tagListProto.Tags
+            .Select(ToDto)
+            .ToList();
+    }
+
+    private static TagDto ToDto(this TagProto tag)
+    {
+        return new TagDto(Guid.Parse(tag.TagId), tag.Name, tag.IsSelected);
+    }
+    
     public static List<TicketDto> ToDtoList(this TicketListProto? ticketListProto)
     {
         if (ticketListProto == null) return [];
@@ -17,7 +34,7 @@ public static class DtoExtensions
             .ToList();
     }
 
-    public static TicketDto ToDto(this TicketProto ticket)
+    private static TicketDto ToDto(this TicketProto ticket)
     {
         var sprintIds = ticket.SprintIds
             .Select(idStr => Guid.TryParse(idStr, out var guid) ? guid : Guid.Empty)
@@ -30,6 +47,23 @@ public static class DtoExtensions
             ticket.BookingNumber,
             ticket.Documentation,
             [..sprintIds]
+        );
+    }
+    
+    public static SprintDto ToDto(this SprintProto sprint)
+    {
+        var ticketIds = sprint.TicketIds
+            .Select(idStr => Guid.TryParse(idStr, out var guid) ? guid : Guid.Empty)
+            .Where(guid => guid != Guid.Empty)
+            .ToList();
+
+        return new SprintDto(
+            Guid.Parse(sprint.SprintId),
+            sprint.Name,
+            sprint.IsActive,
+            sprint.Start.ToDateTimeOffset(),
+            sprint.End.ToDateTimeOffset(),
+            sprint.TicketIds.ToGuidList()
         );
     }
 
@@ -65,5 +99,14 @@ public static class DtoExtensions
             proto.Start.ToDateTimeOffset(),
             proto.End.ToDateTimeOffset(),
             ticketIds);
+    }
+    
+    public static List<SprintDto> ToDtoList(this SprintListProto? sprintListProto)
+    {
+        if (sprintListProto == null) return [];
+
+        return sprintListProto.Sprints
+            .Select(ToDto)
+            .ToList();
     }
 }

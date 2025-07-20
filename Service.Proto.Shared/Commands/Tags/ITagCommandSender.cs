@@ -1,7 +1,6 @@
-﻿using System.Threading.Tasks;
 using Proto.Command.Tags;
 
-namespace Client.Desktop.Communication.Commands.Tags;
+namespace Service.Proto.Shared.Commands.Tags;
 
 public interface ITagCommandSender
 {

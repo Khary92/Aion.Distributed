@@ -6,15 +6,31 @@ using Client.Proto;
 using Proto.DTO.AiSettings;
 using Proto.DTO.Sprint;
 using Proto.DTO.StatisticsData;
+using Proto.DTO.Tag;
 using Proto.DTO.Ticket;
 using Proto.DTO.TimeSlots;
 using Proto.Requests.Sprints;
+using Proto.Requests.Tags;
 using Proto.Requests.Tickets;
 
 namespace Client.Desktop.Communication.Requests;
 
 public static class DtoExtensions
 {
+    public static List<TagDto> ToDtoList(this TagListProto? tagListProto)
+    {
+        if (tagListProto == null) return [];
+
+        return tagListProto.Tags
+            .Select(ToDto)
+            .ToList();
+    }
+
+    public static TagDto ToDto(this TagProto tag)
+    {
+        return new TagDto(Guid.Parse(tag.TagId), tag.Name, tag.IsSelected);
+    }
+    
     public static List<TicketDto> ToDtoList(this TicketListProto? ticketListProto)
     {
         if (ticketListProto == null) return [];

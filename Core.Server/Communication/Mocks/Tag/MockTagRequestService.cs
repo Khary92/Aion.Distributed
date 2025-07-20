@@ -4,7 +4,7 @@ using Proto.Requests.Tags;
 
 namespace Core.Server.Communication.Mocks.Tag;
 
-public class MockTagRequestService : TagRequestService.TagRequestServiceBase
+public class MockTagRequestService : TagProtoRequestService.TagProtoRequestServiceBase
 {
     public override Task<TagListProto> GetAllTags(GetAllTagsRequestProto request, ServerCallContext context)
     {

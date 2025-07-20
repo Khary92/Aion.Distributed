@@ -27,8 +27,10 @@ public static class TracingExtensions
         });
     }
 
-    public static string AsTraceAttributes(this SprintDto dto)
+    public static string AsTraceAttributes(this SprintDto? dto)
     {
+        if (dto == null) return string.Empty;
+        
         return JsonConvert.SerializeObject(new
         {
             sprintId = dto.SprintId.ToString(),

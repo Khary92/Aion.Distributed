@@ -7,7 +7,6 @@ using Client.Desktop.Communication.Requests.NoteTypes;
 using Client.Desktop.Communication.Requests.Replays;
 using Client.Desktop.Communication.Requests.Settings;
 using Client.Desktop.Communication.Requests.StatisticsData;
-using Client.Desktop.Communication.Requests.Tags;
 using Client.Desktop.Communication.Requests.TimerSettings;
 using Client.Desktop.Communication.Requests.TimeSlots;
 using Client.Desktop.Communication.Requests.UseCase;
@@ -15,7 +14,6 @@ using Client.Desktop.Communication.Requests.WorkDays;
 using Client.Desktop.Decorators;
 using Client.Desktop.DTO;
 using Client.Desktop.Replays;
-using Proto.DTO.Sprint;
 using Proto.Requests.AiSettings;
 using Proto.Requests.AnalysisData;
 using Proto.Requests.Notes;
@@ -31,6 +29,7 @@ using Proto.Requests.TimeSlots;
 using Proto.Requests.UseCase;
 using Proto.Requests.WorkDays;
 using Service.Proto.Shared.Requests.Sprints;
+using Service.Proto.Shared.Requests.Tags;
 using Service.Proto.Shared.Requests.Tickets;
 
 namespace Client.Desktop.Communication.Requests;
@@ -101,7 +100,7 @@ public class RequestSender(
         var sprintProto = await sprintRequestSender.Send(request);
         return sprintProto.ToDto();
     }
-    
+
     public async Task<List<SprintDto?>> Send(GetAllSprintsRequestProto request)
     {
         var sprintListProto = await sprintRequestSender.Send(request);
@@ -115,17 +114,20 @@ public class RequestSender(
 
     public async Task<List<TagDto>> Send(GetAllTagsRequestProto request)
     {
-        return await tagRequestSender.Send(request);
+        var tagDtos = await tagRequestSender.Send(request);
+        return tagDtos.ToDtoList();
     }
 
     public async Task<TagDto> Send(GetTagByIdRequestProto request)
     {
-        return await tagRequestSender.Send(request);
+        var tagProto = await tagRequestSender.Send(request);
+        return tagProto.ToDto();
     }
 
     public async Task<List<TagDto>> Send(GetTagsByIdsRequestProto request)
     {
-        return await tagRequestSender.Send(request);
+        var tagListProto = await tagRequestSender.Send(request);
+        return tagListProto.ToDtoList();
     }
 
     public async Task<List<TicketDto>> Send(GetAllTicketsRequestProto request)

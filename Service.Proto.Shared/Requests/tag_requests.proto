@@ -18,7 +18,7 @@ message TagListProto {
   repeated TagProto tags = 1;
 }
 
-service TagRequestService {
+service TagProtoRequestService {
   rpc GetAllTags(GetAllTagsRequestProto) returns (TagListProto);
   rpc GetTagById(GetTagByIdRequestProto) returns (TagProto);
   rpc GetTagsByIds(GetTagsByIdsRequestProto) returns (TagListProto);

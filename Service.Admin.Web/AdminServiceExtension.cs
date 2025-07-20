@@ -2,11 +2,15 @@
 using Service.Admin.Web.Communication;
 using Service.Admin.Web.Communication.Reports;
 using Service.Admin.Web.Communication.Reports.State;
+using Service.Admin.Web.Communication.Tags;
+using Service.Admin.Web.Communication.Tags.State;
 using Service.Admin.Web.Communication.Tickets;
 using Service.Admin.Web.Communication.Tickets.State;
 using Service.Proto.Shared.Commands.Sprints;
+using Service.Proto.Shared.Commands.Tags;
 using Service.Proto.Shared.Commands.Tickets;
 using Service.Proto.Shared.Requests.Sprints;
+using Service.Proto.Shared.Requests.Tags;
 using Service.Proto.Shared.Requests.Tickets;
 
 namespace Service.Admin.Web;
@@ -19,6 +23,7 @@ public static class AdminServiceExtension
     {
         services.AddSingleton<IReportStateService, ReportStateService>();
         services.AddSingleton<ITicketStateService, TicketStateService>();
+        services.AddSingleton<ITagStateService, TagStateService>();
         
         services.AddRazorComponents()
             .AddInteractiveServerComponents();
@@ -32,6 +37,9 @@ public static class AdminServiceExtension
 
         services.AddSingleton<TicketNotificationsReceiver>();
         services.AddHostedService<TicketNotificationHostedService>();
+        
+        services.AddSingleton<TagNotificationsReceiver>();
+        services.AddHostedService<TagNotificationHostedService>();
 
         AddSharedDataServices(services);
         
@@ -49,5 +57,8 @@ public static class AdminServiceExtension
 
         services.AddScoped<ISprintCommandSender>(sp => new SprintCommandSender(ServerAddress));
         services.AddScoped<ISprintRequestSender>(sp => new SprintRequestSender(ServerAddress));
+        
+        services.AddScoped<ITagCommandSender>(sp => new TagCommandSender(ServerAddress));
+        services.AddScoped<ITagRequestSender>(sp => new TagRequestSender(ServerAddress));
     }
 }

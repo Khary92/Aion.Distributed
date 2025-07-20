@@ -6,7 +6,6 @@ public class SprintDto
     private DateTimeOffset _endTime;
     private bool _isActive;
     private string _name = string.Empty;
-    private Guid _sprintId;
     private DateTimeOffset _startTime;
 
     public SprintDto(Guid sprintId, string name, bool isActive, DateTimeOffset startTime, DateTimeOffset endTime, List<Guid> ticketIds)
@@ -19,16 +18,12 @@ public class SprintDto
         TicketIds = ticketIds;
     }
 
-    public Guid SprintId
-    {
-        get => _sprintId;
-        set => _sprintId = value;
-    }
+    public Guid SprintId { get; set; }
 
     public string Name
     {
         get => _name;
-        set => _name = value;
+        private set => _name = value;
     }
 
     public DateTimeOffset StartTime

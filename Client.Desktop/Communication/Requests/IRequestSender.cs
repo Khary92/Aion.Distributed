@@ -5,12 +5,12 @@ using Client.Desktop.Communication.Requests.NoteTypes;
 using Client.Desktop.Communication.Requests.Replays;
 using Client.Desktop.Communication.Requests.Settings;
 using Client.Desktop.Communication.Requests.StatisticsData;
-using Client.Desktop.Communication.Requests.Tags;
 using Client.Desktop.Communication.Requests.TimerSettings;
 using Client.Desktop.Communication.Requests.TimeSlots;
 using Client.Desktop.Communication.Requests.UseCase;
 using Client.Desktop.Communication.Requests.WorkDays;
 using Service.Proto.Shared.Requests.Sprints;
+using Service.Proto.Shared.Requests.Tags;
 
 namespace Client.Desktop.Communication.Requests;
 
@@ -20,7 +20,6 @@ public interface IRequestSender :
     INoteTypesRequestSender,
     ISettingsRequestSender,
     IStatisticsDataRequestSender,
-    ITagRequestSender,
     ITimerSettingsRequestSender,
     ITimeSlotRequestSender,
     IWorkDayRequestSender,

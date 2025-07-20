@@ -125,7 +125,7 @@ public static class CoreServices
         services.AddSingleton<SettingsNotificationService>();
         services.AddSingleton<SprintNotificationService>();
         services.AddSingleton<StatisticsDataNotificationService>();
-        services.AddSingleton<TagNotificationServiceImpl>();
+        services.AddSingleton<TagNotificationService>();
         services.AddSingleton<TicketNotificationService>();
         services.AddSingleton<TimerSettingsNotificationService>();
         services.AddSingleton<TimeSlotNotificationService>();

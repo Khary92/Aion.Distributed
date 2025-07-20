@@ -4,7 +4,6 @@ using Client.Desktop.Communication.Commands.Notes;
 using Client.Desktop.Communication.Commands.NoteTypes;
 using Client.Desktop.Communication.Commands.Settings;
 using Client.Desktop.Communication.Commands.StatisticsData;
-using Client.Desktop.Communication.Commands.Tags;
 using Client.Desktop.Communication.Commands.TimerSettings;
 using Client.Desktop.Communication.Commands.TimeSlots;
 using Client.Desktop.Communication.Commands.UseCases;
@@ -18,7 +17,6 @@ using Client.Desktop.Communication.Requests.NoteTypes;
 using Client.Desktop.Communication.Requests.Replays;
 using Client.Desktop.Communication.Requests.Settings;
 using Client.Desktop.Communication.Requests.StatisticsData;
-using Client.Desktop.Communication.Requests.Tags;
 using Client.Desktop.Communication.Requests.TimerSettings;
 using Client.Desktop.Communication.Requests.TimeSlots;
 using Client.Desktop.Communication.Requests.UseCase;
@@ -62,8 +60,10 @@ using Proto.Notifications.TimerSettings;
 using Proto.Notifications.UseCase;
 using Proto.Notifications.WorkDay;
 using Service.Proto.Shared.Commands.Sprints;
+using Service.Proto.Shared.Commands.Tags;
 using Service.Proto.Shared.Commands.Tickets;
 using Service.Proto.Shared.Requests.Sprints;
+using Service.Proto.Shared.Requests.Tags;
 using Service.Proto.Shared.Requests.Tickets;
 
 namespace Client.Desktop;
@@ -95,6 +95,9 @@ public static class Bootstrapper
 
         services.AddScoped<ISprintCommandSender>(sp => new SprintCommandSender(ServerAddress));
         services.AddScoped<ISprintRequestSender>(sp => new SprintRequestSender(ServerAddress));
+        
+        services.AddScoped<ITagCommandSender>(sp => new TagCommandSender(ServerAddress));
+        services.AddScoped<ITagRequestSender>(sp => new TagRequestSender(ServerAddress));
     }
 
     private static void AddFileSystemServices(this IServiceCollection services)
@@ -231,7 +234,6 @@ public static class Bootstrapper
         services.AddScoped<INoteTypeCommandSender, NoteTypeCommandSender>();
         services.AddScoped<ISettingsCommandSender, SettingsCommandSender>();
         services.AddScoped<IStatisticsDataCommandSender, StatisticsDataCommandSender>();
-        services.AddScoped<ITagCommandSender, TagCommandSender>();
         services.AddScoped<ITimerSettingsCommandSender, TimerSettingsCommandSender>();
         services.AddScoped<ITimeSlotCommandSender, TimeSlotCommandSender>();
         services.AddScoped<IUseCaseCommandSender, UseCaseCommandSender>();
@@ -247,7 +249,6 @@ public static class Bootstrapper
         services.AddScoped<INoteTypesRequestSender, NoteTypesRequestSender>();
         services.AddScoped<ISettingsRequestSender, SettingsRequestSender>();
         services.AddScoped<IStatisticsDataRequestSender, StatisticsDataRequestSender>();
-        services.AddScoped<ITagRequestSender, TagRequestSender>();
         services.AddScoped<ITimerSettingsRequestSender, TimerSettingsRequestSender>();
         services.AddScoped<ITimeSlotRequestSender, TimeSlotRequestSender>();
         services.AddScoped<IWorkDayRequestSender, WorkDayRequestSender>();

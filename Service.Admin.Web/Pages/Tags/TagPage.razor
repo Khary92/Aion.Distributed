@@ -1,0 +1,113 @@
+@page "/tagData"
+@using global::Proto.Command.Tags
+@using Service.Admin.Tracing
+@using Service.Admin.Web.Communication
+@using Service.Admin.Web.Communication.Tags.State
+@using Service.Admin.Web.DTO
+@rendermode InteractiveServer
+@inject ISharedCommandSender CommandSender
+@inject ITraceCollector Tracer
+@inject ITagStateService TagStateService
+
+@code {
+    private TagDto? _selectedTag;
+    private string _inputTagName = string.Empty;
+    private bool _isEditMode;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTags();
+    }
+
+    private async Task LoadTags()
+    {
+        await TagStateService.LoadTags();
+    }
+
+    private async Task PersistTag()
+    {
+        if (_isEditMode && _selectedTag != null)
+        {
+            _selectedTag.Name = _inputTagName;
+
+            await Tracer.Tag.Update.StartUseCase(GetType(), _selectedTag.TagId, _selectedTag.AsTraceAttributes());
+
+            var updateTagCommand = new UpdateTagCommandProto
+            {
+                TagId = _selectedTag.TagId.ToString(),
+                Name = _inputTagName
+            };
+
+            await CommandSender.Send(updateTagCommand);
+            await Tracer.Tag.Update.CommandSent(GetType(), _selectedTag.TagId, updateTagCommand);
+        }
+        else
+        {
+            var createTagDto = new TagDto(Guid.NewGuid(), _inputTagName, false);
+
+            await Tracer.Tag.Create.StartUseCase(GetType(), createTagDto.TagId, createTagDto.AsTraceAttributes());
+
+            var createTagCommand = new CreateTagCommandProto
+            {
+                TagId = createTagDto.TagId.ToString(),
+                Name = _inputTagName
+            };
+
+            await CommandSender.Send(createTagCommand);
+            await Tracer.Tag.Create.CommandSent(GetType(), createTagDto.TagId, createTagCommand);
+        }
+
+        _inputTagName = string.Empty;
+        _isEditMode = false;
+        await LoadTags();
+    }
+
+    private void ToggleTagEditMode()
+    {
+        _isEditMode = !_isEditMode;
+        _inputTagName = string.Empty;
+
+        if (_isEditMode && _selectedTag != null)
+        {
+            _inputTagName = _selectedTag.Name;
+        }
+    }
+
+}
+
+<div class="row">
+    <div class="col-5">
+        <h2>Tags</h2>
+        <div class="mb-2">
+            <label>Name</label>
+            <input @bind="_inputTagName" class="form-control"/>
+        </div>
+        <div class="mb-2">
+            <button class="btn btn-success me-2"
+                    disabled="@(string.IsNullOrWhiteSpace(_inputTagName))"
+                    @onclick="PersistTag">Save
+            </button>
+            <button class="btn btn-warning me-2"
+                    disabled="@(_selectedTag == null)"
+                    @onclick="ToggleTagEditMode">@(_isEditMode ? "Cancel Edit" : "Edit")</button>
+        </div>
+    </div>
+    <div class="col-7">
+        <table class="table table-bordered table-sm">
+            <thead>
+            <tr>
+                <th>Tag Name</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var tag in @TagStateService.Tickets)
+            {
+                <tr class="@(_selectedTag == tag ? "table-active" : "")"
+                    @onclick="() => _selectedTag = tag">
+                    <td>@tag.Name</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>

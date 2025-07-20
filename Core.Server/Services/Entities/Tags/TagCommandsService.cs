@@ -8,7 +8,7 @@ namespace Core.Server.Services.Entities.Tags;
 
 public class TagCommandsService(
     IEventStore<TagEvent> tagEventStore,
-    TagNotificationServiceImpl tagNotificationService,
+    TagNotificationService tagNotificationService,
     ITagCommandsToEventTranslator eventTranslator) : ITagCommandsService
 {
     public async Task Update(UpdateTagCommand updateTagCommand)

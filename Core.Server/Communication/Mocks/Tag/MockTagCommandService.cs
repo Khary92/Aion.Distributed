@@ -2,10 +2,11 @@
 using Grpc.Core;
 using Proto.Command.Tags;
 using Proto.Notifications.Tag;
+using TagNotificationService = Core.Server.Communication.Endpoints.Tag.TagNotificationService;
 
 namespace Core.Server.Communication.Mocks.Tag;
 
-public class MockTagCommandService(TagNotificationServiceImpl tagNotificationService)
+public class MockTagCommandService(TagNotificationService tagNotificationService)
     : TagCommandProtoService.TagCommandProtoServiceBase
 {
     public override async Task<CommandResponse> CreateTag(CreateTagCommandProto request, ServerCallContext context)

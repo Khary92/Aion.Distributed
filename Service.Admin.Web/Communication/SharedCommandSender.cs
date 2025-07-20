@@ -1,11 +1,13 @@
 ﻿using Proto.Command.Sprints;
+using Proto.Command.Tags;
 using Proto.Command.Tickets;
 using Service.Proto.Shared.Commands.Sprints;
+using Service.Proto.Shared.Commands.Tags;
 using Service.Proto.Shared.Commands.Tickets;
 
 namespace Service.Admin.Web.Communication;
 
-public class SharedCommandSender(ITicketCommandSender ticketCommandSender, ISprintCommandSender sprintCommandSender)
+public class SharedCommandSender(ITicketCommandSender ticketCommandSender, ISprintCommandSender sprintCommandSender, ITagCommandSender tagCommandSender)
     : ISharedCommandSender
 {
     public async Task<bool> Send(CreateTicketCommandProto command)
@@ -46,5 +48,15 @@ public class SharedCommandSender(ITicketCommandSender ticketCommandSender, ISpri
     public async Task<bool> Send(UpdateSprintDataCommandProto command)
     {
         return await sprintCommandSender.Send(command);
+    }
+
+    public async Task<bool> Send(CreateTagCommandProto command)
+    {
+        return await tagCommandSender.Send(command);
+    }
+
+    public async Task<bool> Send(UpdateTagCommandProto command)
+    {
+        return await tagCommandSender.Send(command);
     }
 }

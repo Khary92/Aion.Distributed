@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Client.Desktop.DTO;
 using Proto.Requests.Sprints;
+using Proto.Requests.Tags;
 using Proto.Requests.Tickets;
 
 namespace Client.Desktop.Communication.Requests;
@@ -17,4 +18,9 @@ public interface ISharedRequestSender
     //Sprint
     Task<SprintDto?> Send(GetActiveSprintRequestProto request);
     Task<List<SprintDto?>> Send(GetAllSprintsRequestProto request);
+    
+    //Tags
+    Task<List<TagDto>> Send(GetAllTagsRequestProto request);
+    Task<TagDto> Send(GetTagByIdRequestProto request);
+    Task<List<TagDto>> Send(GetTagsByIdsRequestProto request);
 }
