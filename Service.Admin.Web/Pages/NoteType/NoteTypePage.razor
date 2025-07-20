@@ -1,0 +1,167 @@
+@page "/noteTypeData"
+@using global::Proto.Command.NoteTypes
+@using global::Proto.Requests.NoteTypes
+@using Service.Admin.Tracing
+@using Service.Admin.Web.Communication
+@using Service.Admin.Web.DTO
+@rendermode InteractiveServer
+@inject ISharedCommandSender CommandSender
+@inject ISharedRequestSender RequestSender
+@inject ITraceCollector Tracer
+
+<div class="row">
+    <div class="col-5">
+        <h2>Note Types</h2>
+        <div class="mb-2">
+            <label>Note type name</label>
+            <input @bind="_noteName" class="form-control"/>
+        </div>
+        <div class="mb-2">
+            <label>Color</label>
+            <input type="color" @bind="_selectedColor" class="form-control"/>
+        </div>
+        <div class="mb-2">
+            <button class="btn btn-success me-2"
+                    disabled="@(!CanSave)"
+                    @onclick="PersistNoteType">Save
+            </button>
+            <button class="btn btn-warning me-2"
+                    disabled="@(_selectedNoteType is null)"
+                    @onclick="ToggleEditMode">@EditButtonText
+            </button>
+        </div>
+    </div>
+
+    <div class="col-7">
+        <table class="table table-bordered table-sm">
+            <thead>
+            <tr>
+                <th>Type</th>
+                <th>Color</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var noteType in _noteTypes)
+            {
+                <tr class="@(_selectedNoteType == noteType ? "table-active" : "")"
+                    @onclick="() => _selectedNoteType = noteType">
+                    <td>@noteType.Name</td>
+                    <td>
+                        <div class="color-box" style="background-color: @noteType.Color"></div>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .color-box {
+        width: 30px;
+        height: 20px;
+        border: 1px solid #ddd;
+    }
+</style>
+
+@code {
+    private List<NoteTypeDto> _noteTypes = new();
+    private NoteTypeDto? _selectedNoteType;
+    private string _noteName = string.Empty;
+    private string _selectedColor = "#000000";
+    private bool _isEditMode;
+
+    private bool CanSave => !string.IsNullOrWhiteSpace(_noteName) &&
+                            !string.IsNullOrWhiteSpace(_selectedColor);
+
+    private string EditButtonText => _isEditMode ? "Cancel Edit" : "Edit";
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadNoteTypes();
+    }
+
+    private async Task LoadNoteTypes()
+    {
+        var noteTypeList = await RequestSender.Send(new GetAllNoteTypesRequestProto());
+        _noteTypes = noteTypeList.ToDtoList();
+        StateHasChanged();
+    }
+
+    private void ResetData()
+    {
+        _noteName = string.Empty;
+        _selectedColor = "#000000";
+    }
+
+    private void ToggleEditMode()
+    {
+        _isEditMode = !_isEditMode;
+        ResetData();
+
+        if (!_isEditMode || _selectedNoteType is null) return;
+        _noteName = _selectedNoteType.Name;
+        _selectedColor = _selectedNoteType.Color;
+    }
+
+    private async Task PersistNoteType()
+    {
+        if (_isEditMode && _selectedNoteType != null)
+        {
+            var originalName = _selectedNoteType.Name;
+            var originalColor = _selectedNoteType.Color;
+
+            if (_noteName != originalName)
+            {
+                await Tracer.NoteType.ChangeName.StartUseCase(GetType(), _selectedNoteType.NoteTypeId,
+                    _selectedNoteType);
+
+                var nameCommand = new ChangeNoteTypeNameCommandProto
+                {
+                    NoteTypeId = _selectedNoteType.NoteTypeId.ToString(),
+                    Name = _noteName
+                };
+
+                await CommandSender.Send(nameCommand);
+                await Tracer.NoteType.ChangeName.CommandSent(GetType(), _selectedNoteType.NoteTypeId, nameCommand);
+            }
+
+            if (_selectedColor != originalColor)
+            {
+                await Tracer.NoteType.ChangeColor.StartUseCase(GetType(), _selectedNoteType.NoteTypeId,
+                    _selectedNoteType);
+
+                var colorCommand = new ChangeNoteTypeColorCommandProto
+                {
+                    NoteTypeId = _selectedNoteType.NoteTypeId.ToString(),
+                    Color = _selectedColor
+                };
+
+                await CommandSender.Send(colorCommand);
+                await Tracer.NoteType.ChangeColor.CommandSent(GetType(), _selectedNoteType.NoteTypeId, colorCommand);
+            }
+
+            _isEditMode = false;
+            ResetData();
+            await LoadNoteTypes();
+            return;
+        }
+
+        var noteTypeId = Guid.NewGuid();
+
+        var createCommand = new CreateNoteTypeCommandProto
+        {
+            NoteTypeId = noteTypeId.ToString(),
+            Name = _noteName,
+            Color = _selectedColor
+        };
+        
+        await Tracer.NoteType.Create.StartUseCase(GetType(), noteTypeId, createCommand.ToString());
+        await CommandSender.Send(createCommand);
+        await Tracer.NoteType.Create.CommandSent(GetType(), noteTypeId, createCommand);
+
+        ResetData();
+        await LoadNoteTypes();
+    }
+
+}

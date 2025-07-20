@@ -3,9 +3,7 @@ using Proto.Notifications.NoteType;
 
 namespace Core.Server.Communication.Endpoints.NoteType;
 
-public class
-    NoteTypeNotificationService : Proto.Notifications.NoteType.NoteTypeNotificationService.
-    NoteTypeNotificationServiceBase
+public class NoteTypeNotificationService : NoteTypeProtoNotificationService.NoteTypeProtoNotificationServiceBase
 {
     private CancellationToken _cancellationToken;
     private IServerStreamWriter<NoteTypeNotification>? _responseStream;

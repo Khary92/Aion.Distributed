@@ -1,7 +1,6 @@
 using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.Commands.AiSettings;
 using Client.Desktop.Communication.Commands.Notes;
-using Client.Desktop.Communication.Commands.NoteTypes;
 using Client.Desktop.Communication.Commands.Settings;
 using Client.Desktop.Communication.Commands.StatisticsData;
 using Client.Desktop.Communication.Commands.TimerSettings;
@@ -13,7 +12,6 @@ using Client.Desktop.Communication.Requests;
 using Client.Desktop.Communication.Requests.AiSettings;
 using Client.Desktop.Communication.Requests.Analysis;
 using Client.Desktop.Communication.Requests.Notes;
-using Client.Desktop.Communication.Requests.NoteTypes;
 using Client.Desktop.Communication.Requests.Replays;
 using Client.Desktop.Communication.Requests.Settings;
 using Client.Desktop.Communication.Requests.StatisticsData;
@@ -59,9 +57,11 @@ using Proto.Notifications.Ticket;
 using Proto.Notifications.TimerSettings;
 using Proto.Notifications.UseCase;
 using Proto.Notifications.WorkDay;
+using Service.Proto.Shared.Commands.NoteTypes;
 using Service.Proto.Shared.Commands.Sprints;
 using Service.Proto.Shared.Commands.Tags;
 using Service.Proto.Shared.Commands.Tickets;
+using Service.Proto.Shared.Requests.NoteTypes;
 using Service.Proto.Shared.Requests.Sprints;
 using Service.Proto.Shared.Requests.Tags;
 using Service.Proto.Shared.Requests.Tickets;
@@ -86,8 +86,9 @@ public static class Bootstrapper
         services.AddSingleton<IExportService, ExportService>();
         services.AddSingleton<ILanguageModelApi, LanguageModelApiStub>();
     }
-    
+
     private static readonly string ServerAddress = "http://localhost:8081";
+
     private static void AddSharedDataServices(this IServiceCollection services)
     {
         services.AddScoped<ITicketCommandSender>(sp => new TicketCommandSender(ServerAddress));
@@ -95,9 +96,12 @@ public static class Bootstrapper
 
         services.AddScoped<ISprintCommandSender>(sp => new SprintCommandSender(ServerAddress));
         services.AddScoped<ISprintRequestSender>(sp => new SprintRequestSender(ServerAddress));
-        
+
         services.AddScoped<ITagCommandSender>(sp => new TagCommandSender(ServerAddress));
         services.AddScoped<ITagRequestSender>(sp => new TagRequestSender(ServerAddress));
+
+        services.AddScoped<INoteTypeCommandSender>(sp => new NoteTypeCommandSender(ServerAddress));
+        services.AddScoped<INoteTypeRequestSender>(sp => new NoteTypeRequestSender(ServerAddress));
     }
 
     private static void AddFileSystemServices(this IServiceCollection services)
@@ -217,12 +221,12 @@ public static class Bootstrapper
         services.AddSingleton(new SettingsNotificationService.SettingsNotificationServiceClient(channel));
         services.AddSingleton(new TicketNotificationService.TicketNotificationServiceClient(channel));
         services.AddSingleton(new NoteNotificationService.NoteNotificationServiceClient(channel));
-        services.AddSingleton(new NoteTypeNotificationService.NoteTypeNotificationServiceClient(channel));
         services.AddSingleton(new SprintNotificationService.SprintNotificationServiceClient(channel));
         services.AddSingleton(new TagNotificationService.TagNotificationServiceClient(channel));
         services.AddSingleton(new TimerSettingsNotificationService.TimerSettingsNotificationServiceClient(channel));
         services.AddSingleton(new UseCaseNotificationService.UseCaseNotificationServiceClient(channel));
         services.AddSingleton(new WorkDayNotificationService.WorkDayNotificationServiceClient(channel));
+        services.AddSingleton(new NoteTypeProtoNotificationService.NoteTypeProtoNotificationServiceClient(channel));
     }
 
     private static void AddCommandSenders(this IServiceCollection services)
@@ -231,7 +235,6 @@ public static class Bootstrapper
 
         services.AddScoped<IAiSettingsCommandSender, AiSettingsCommandSender>();
         services.AddScoped<INoteCommandSender, NoteCommandSender>();
-        services.AddScoped<INoteTypeCommandSender, NoteTypeCommandSender>();
         services.AddScoped<ISettingsCommandSender, SettingsCommandSender>();
         services.AddScoped<IStatisticsDataCommandSender, StatisticsDataCommandSender>();
         services.AddScoped<ITimerSettingsCommandSender, TimerSettingsCommandSender>();
@@ -246,7 +249,6 @@ public static class Bootstrapper
 
         services.AddScoped<IAiSettingsRequestSender, AiSettingsRequestSender>();
         services.AddScoped<INotesRequestSender, NotesRequestSender>();
-        services.AddScoped<INoteTypesRequestSender, NoteTypesRequestSender>();
         services.AddScoped<ISettingsRequestSender, SettingsRequestSender>();
         services.AddScoped<IStatisticsDataRequestSender, StatisticsDataRequestSender>();
         services.AddScoped<ITimerSettingsRequestSender, TimerSettingsRequestSender>();

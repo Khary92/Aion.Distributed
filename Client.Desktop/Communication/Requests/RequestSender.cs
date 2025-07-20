@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests.AiSettings;
 using Client.Desktop.Communication.Requests.Analysis;
 using Client.Desktop.Communication.Requests.Notes;
-using Client.Desktop.Communication.Requests.NoteTypes;
 using Client.Desktop.Communication.Requests.Replays;
 using Client.Desktop.Communication.Requests.Settings;
 using Client.Desktop.Communication.Requests.StatisticsData;
@@ -28,6 +27,7 @@ using Proto.Requests.TimerSettings;
 using Proto.Requests.TimeSlots;
 using Proto.Requests.UseCase;
 using Proto.Requests.WorkDays;
+using Service.Proto.Shared.Requests.NoteTypes;
 using Service.Proto.Shared.Requests.Sprints;
 using Service.Proto.Shared.Requests.Tags;
 using Service.Proto.Shared.Requests.Tickets;
@@ -37,7 +37,7 @@ namespace Client.Desktop.Communication.Requests;
 public class RequestSender(
     IAiSettingsRequestSender aiSettingsRequestSender,
     INotesRequestSender notesRequestSender,
-    INoteTypesRequestSender noteTypesRequestSender,
+    INoteTypeRequestSender noteTypeRequestSender,
     ISettingsRequestSender settingsRequestSender,
     ISprintRequestSender sprintRequestSender,
     IStatisticsDataRequestSender statisticsDataRequestSender,
@@ -72,12 +72,14 @@ public class RequestSender(
 
     public async Task<List<NoteTypeDto>> Send(GetAllNoteTypesRequestProto request)
     {
-        return await noteTypesRequestSender.Send(request);
+        var getAllNoteTypesResponseProto = await noteTypeRequestSender.Send(request);
+        return getAllNoteTypesResponseProto.ToDtoList();
     }
 
     public async Task<NoteTypeDto> Send(GetNoteTypeByIdRequestProto request)
     {
-        return await noteTypesRequestSender.Send(request);
+        var noteTypeProto = await noteTypeRequestSender.Send(request);
+        return noteTypeProto.ToDto();
     }
 
     public async Task<SettingsDto> Send(GetSettingsRequestProto request)

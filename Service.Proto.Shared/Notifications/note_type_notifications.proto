@@ -8,7 +8,7 @@ service NotificationService {
   rpc SendNoteTypeNameChanged(NoteTypeNameChangedNotification) returns (NotificationResponse);
 }
 
-service NoteTypeNotificationService {
+service NoteTypeProtoNotificationService {
   rpc SubscribeNoteNotifications(SubscribeRequest) returns (stream NoteTypeNotification);
 }
 

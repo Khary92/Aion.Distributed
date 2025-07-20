@@ -1,15 +1,17 @@
-﻿using System.Threading.Tasks;
-using Client.Proto;
-using Grpc.Net.Client;
+﻿using Grpc.Net.Client;
 using Proto.Command.NoteTypes;
 
-namespace Client.Desktop.Communication.Commands.NoteTypes;
+namespace Service.Proto.Shared.Commands.NoteTypes;
 
 public class NoteTypeCommandSender : INoteTypeCommandSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
-    private readonly NoteTypeCommandProtoService.NoteTypeCommandProtoServiceClient _client = new(Channel);
-
+    private readonly NoteTypeProtoCommandService.NoteTypeProtoCommandServiceClient _client;
+    
+    public NoteTypeCommandSender(string address)
+    {
+        var channel = GrpcChannel.ForAddress(address);
+        _client = new(channel);
+    }
     public async Task<bool> Send(CreateNoteTypeCommandProto command)
     {
         var response = await _client.CreateNoteTypeAsync(command);

@@ -1,9 +1,12 @@
-﻿using Proto.DTO.Sprint;
+﻿using Proto.DTO.NoteType;
+using Proto.DTO.Sprint;
 using Proto.DTO.Tag;
 using Proto.DTO.Ticket;
+using Proto.Requests.NoteTypes;
 using Proto.Requests.Sprints;
 using Proto.Requests.Tags;
 using Proto.Requests.Tickets;
+using Service.Proto.Shared.Requests.NoteTypes;
 using Service.Proto.Shared.Requests.Sprints;
 using Service.Proto.Shared.Requests.Tags;
 using Service.Proto.Shared.Requests.Tickets;
@@ -13,7 +16,8 @@ namespace Service.Admin.Web.Communication;
 public class SharedRequestSender(
     ITicketRequestSender ticketRequestSender,
     ISprintRequestSender sprintRequestSender,
-    ITagRequestSender tagRequestSender)
+    ITagRequestSender tagRequestSender,
+    INoteTypeRequestSender noteTypeRequestSender)
     : ISharedRequestSender
 {
     public async Task<TicketListProto> Send(GetAllTicketsRequestProto request)
@@ -59,5 +63,15 @@ public class SharedRequestSender(
     public async Task<TagListProto> Send(GetTagsByIdsRequestProto request)
     {
         return await tagRequestSender.Send(request);
+    }
+
+    public async Task<GetAllNoteTypesResponseProto> Send(GetAllNoteTypesRequestProto request)
+    {
+        return await noteTypeRequestSender.Send(request);
+    }
+
+    public async Task<NoteTypeProto> Send(GetNoteTypeByIdRequestProto request)
+    {
+        return await noteTypeRequestSender.Send(request);
     }
 }

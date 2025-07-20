@@ -1,7 +1,9 @@
 using Google.Protobuf.Collections;
+using Proto.DTO.NoteType;
 using Proto.DTO.Sprint;
 using Proto.DTO.Tag;
 using Proto.DTO.Ticket;
+using Proto.Requests.NoteTypes;
 using Proto.Requests.Sprints;
 using Proto.Requests.Tags;
 using Proto.Requests.Tickets;
@@ -11,6 +13,21 @@ namespace Service.Admin.Web.Communication;
 
 public static class DtoExtensions
 {
+    public static List<NoteTypeDto> ToDtoList(this GetAllNoteTypesResponseProto? noteTypeListProto)
+    {
+        if (noteTypeListProto == null) return [];
+
+        return noteTypeListProto.NoteTypes
+            .Select(ToDto)
+            .ToList();
+    }
+
+    private static NoteTypeDto ToDto(this NoteTypeProto noteType)
+    {
+        return new NoteTypeDto(Guid.Parse(noteType.NoteTypeId), noteType.Name, noteType.Color);
+    }
+    
+    
     public static List<TagDto> ToDtoList(this TagListProto? tagListProto)
     {
         if (tagListProto == null) return [];

@@ -31,7 +31,6 @@ public class TicketStateService(ISharedRequestSender requestSender, ITraceCollec
         }
 
         ticket.Apply(ticketDataUpdatedNotification);
-        
         NotifyStateChanged();
     }
 
@@ -45,7 +44,6 @@ public class TicketStateService(ISharedRequestSender requestSender, ITraceCollec
         }
 
         ticket.Apply(ticketDocumentationUpdatedNotification);
-        
         NotifyStateChanged();
     }
 

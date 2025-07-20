@@ -1,4 +1,7 @@
+using Client.Tracing.Tracing.Tracers.NoteType;
+using Client.Tracing.Tracing.Tracers.NoteType.UseCase;
 using Microsoft.Extensions.DependencyInjection;
+using Service.Admin.Tracing.Tracing.NoteType.UseCase;
 using Service.Admin.Tracing.Tracing.Sprint;
 using Service.Admin.Tracing.Tracing.Sprint.UseCase;
 using Service.Admin.Tracing.Tracing.Tag;
@@ -42,5 +45,12 @@ public static class TracingServices
         services.AddSingleton<IUpdateTagTraceCollector, UpdateTagTraceCollector>();
 
         services.AddSingleton<ITagUseCaseSelector, TagUseCaseSelector>();
+        
+        services.AddSingleton<ICreateNoteTypeTraceCollector, CreateNoteTypeTraceCollector>();
+        services.AddSingleton<IChangeNoteTypeColorTraceCollector, ChangeNoteTypeColorTraceCollector>();
+        services.AddSingleton<IChangeNoteTypeNameTraceCollector, ChangeNoteTypeNameTraceCollector>();
+
+        services.AddSingleton<INoteTypeUseCaseSelector, NoteTypeUseCaseSelector>();
+
     }
 }

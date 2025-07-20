@@ -1,8 +1,10 @@
+using Service.Admin.Web.Communication.Sprints.Notifications;
+
 namespace Service.Admin.Web.DTO;
 
 public class SprintDto
 {
-    private readonly List<Guid> _ticketIds = [];
+    private List<Guid> _ticketIds = [];
     private DateTimeOffset _endTime;
     private bool _isActive;
     private string _name = string.Empty;
@@ -51,41 +53,30 @@ public class SprintDto
     public List<Guid> TicketIds
     {
         get => _ticketIds;
-        init
-        {
-            _ticketIds.Clear();
-            if (value != null)
-                _ticketIds.AddRange(value);
-        }
+        set => _ticketIds = value;
     }
 
-    public void Apply(dynamic notification)
+    // TODO: Seriously check if these two Notifications are really required this way
+    public void Apply(WebAddTicketToActiveSprintNotification notification)
     {
-        if (notification?.EndTime is DateTimeOffset end)
-            EndTime = end;
-        if (notification?.StartTime is DateTimeOffset start)
-            StartTime = start;
-        if (notification?.Name is string nameVal)
-            Name = nameVal;
+        TicketIds.Add(notification.TicketId);
     }
 
-    public void ApplyTicketAdded(dynamic notification)
+    // TODO: Seriously check if these two Notifications are really required this way
+    public void Apply(WebAddTicketToSprintNotification notification)
     {
-        var idString = (string)notification.TicketId;
-        if (Guid.TryParse(idString, out var parsedGuid) && !TicketIds.Contains(parsedGuid))
-        {
-            TicketIds.Add(parsedGuid);
-        }
+        TicketIds.Add(notification.TicketId);
     }
 
-    public void ApplyActiveStatus(dynamic notification)
+    public void Apply(WebSetSprintActiveStatusNotification notification)
     {
-        if (notification?.IsActive is bool status)
-            IsActive = status;
+        IsActive = notification.IsActive;
     }
 
-    public override string ToString()
+    public void Apply(WebSprintDataUpdatedNotification notification)
     {
-        return $"SprintDto:{{sprintId:'{SprintId}', Name:'{Name}', isActive:'{IsActive}', startTime:'{StartTime}', endTime:'{EndTime}', ticketIds:'{string.Join(",", TicketIds)}'}}";
+        Name = notification.Name;
+        StartTime = notification.StartTime;
+        EndTime = notification.EndTime;
     }
 }

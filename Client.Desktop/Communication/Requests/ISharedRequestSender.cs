@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Client.Desktop.DTO;
+using Proto.DTO.NoteType;
+using Proto.Requests.NoteTypes;
 using Proto.Requests.Sprints;
 using Proto.Requests.Tags;
 using Proto.Requests.Tickets;
@@ -23,4 +25,8 @@ public interface ISharedRequestSender
     Task<List<TagDto>> Send(GetAllTagsRequestProto request);
     Task<TagDto> Send(GetTagByIdRequestProto request);
     Task<List<TagDto>> Send(GetTagsByIdsRequestProto request);
+    
+    //NoteTypes
+    Task<List<NoteTypeDto>> Send(GetAllNoteTypesRequestProto request);
+    Task<NoteTypeDto> Send(GetNoteTypeByIdRequestProto request);
 }

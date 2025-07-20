@@ -4,11 +4,13 @@ using System.Linq;
 using Client.Desktop.DTO;
 using Client.Proto;
 using Proto.DTO.AiSettings;
+using Proto.DTO.NoteType;
 using Proto.DTO.Sprint;
 using Proto.DTO.StatisticsData;
 using Proto.DTO.Tag;
 using Proto.DTO.Ticket;
 using Proto.DTO.TimeSlots;
+using Proto.Requests.NoteTypes;
 using Proto.Requests.Sprints;
 using Proto.Requests.Tags;
 using Proto.Requests.Tickets;
@@ -17,10 +19,20 @@ namespace Client.Desktop.Communication.Requests;
 
 public static class DtoExtensions
 {
+    public static List<NoteTypeDto> ToDtoList(this GetAllNoteTypesResponseProto? noteTypeListProto)
+    {
+        return noteTypeListProto == null ? [] : noteTypeListProto.NoteTypes.Select(ToDto).ToList();
+    }
+
+    public static NoteTypeDto ToDto(this NoteTypeProto noteType)
+    {
+        return new NoteTypeDto(Guid.Parse(noteType.NoteTypeId), noteType.Name, noteType.Color);
+    }
+    
     public static List<TagDto> ToDtoList(this TagListProto? tagListProto)
     {
         if (tagListProto == null) return [];
-
+        
         return tagListProto.Tags
             .Select(ToDto)
             .ToList();
@@ -82,7 +94,6 @@ public static class DtoExtensions
             [..ticketIds]
         );
     }
-    
     
     public static AiSettingsDto ToDto(this AiSettingsProto proto)
     {

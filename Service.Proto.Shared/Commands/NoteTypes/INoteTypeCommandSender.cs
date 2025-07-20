@@ -1,7 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿
 using Proto.Command.NoteTypes;
 
-namespace Client.Desktop.Communication.Commands.NoteTypes;
+namespace Service.Proto.Shared.Commands.NoteTypes;
 
 public interface INoteTypeCommandSender
 {

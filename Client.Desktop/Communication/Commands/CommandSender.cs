@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands.AiSettings;
 using Client.Desktop.Communication.Commands.Notes;
-using Client.Desktop.Communication.Commands.NoteTypes;
 using Client.Desktop.Communication.Commands.Settings;
 using Client.Desktop.Communication.Commands.StatisticsData;
 using Client.Desktop.Communication.Commands.TimerSettings;
@@ -20,6 +19,7 @@ using Proto.Command.TimerSettings;
 using Proto.Command.TimeSlots;
 using Proto.Command.UseCases;
 using Proto.Command.WorkDays;
+using Service.Proto.Shared.Commands.NoteTypes;
 using Service.Proto.Shared.Commands.Sprints;
 using Service.Proto.Shared.Commands.Tags;
 using Service.Proto.Shared.Commands.Tickets;

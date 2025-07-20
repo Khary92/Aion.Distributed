@@ -15,7 +15,7 @@ message GetNoteTypeByIdRequestProto {
   string note_type_id = 1;
 }
 
-service NoteTypesRequestService {
+service NoteTypeProtoRequestService {
   rpc GetAllNoteTypes(GetAllNoteTypesRequestProto) returns (GetAllNoteTypesResponseProto);
   rpc GetNoteTypeById(GetNoteTypeByIdRequestProto) returns (NoteTypeProto);
 }
