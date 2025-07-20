@@ -1,17 +1,15 @@
 using System;
-using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.DTO;
-using Proto.Requests.NoteTypes;
 using ReactiveUI;
 
 namespace Client.Desktop.Models.Documentation;
 
-public class TypeCheckBoxViewModel(IRequestSender requestSender) : ReactiveObject
+public class TypeCheckBoxViewModel(IRequestSender requestSender, NoteTypeDto noteTypeDto) : ReactiveObject
 {
-    private readonly Guid _noteTypeId;
+    private readonly Guid _noteTypeId = noteTypeDto.NoteTypeId;
     private bool _isChecked;
-    private NoteTypeDto? _noteType;
+    private NoteTypeDto _noteType = noteTypeDto;
 
     public Guid NoteTypeId
     {
@@ -25,22 +23,9 @@ public class TypeCheckBoxViewModel(IRequestSender requestSender) : ReactiveObjec
         set => this.RaiseAndSetIfChanged(ref _isChecked, value);
     }
 
-    public NoteTypeDto? NoteType
+    public NoteTypeDto NoteType
     {
-        get
-        {
-            if (_noteType == null) _ = LoadNoteTypeAsync();
-
-            return _noteType;
-        }
+        get => _noteType;
         init => this.RaiseAndSetIfChanged(ref _noteType, value);
-    }
-
-    private async Task LoadNoteTypeAsync()
-    {
-        _noteType ??= await requestSender.Send(new GetNoteTypeByIdRequestProto
-        {
-            NoteTypeId = _noteTypeId.ToString()
-        });
     }
 }

@@ -144,6 +144,9 @@ public static class Bootstrapper
 
         services.AddTransient<INoteStreamViewModelFactory, NoteStreamViewModelFactory>();
         services.AddTransient<NoteStreamViewModel>();
+        
+        services.AddTransient<ITypeCheckBoxViewModelFactory, TypeCheckBoxViewModelFactory>();
+        services.AddTransient<NoteStreamViewModel>();
 
         services.AddTransient<INoteViewFactory, NoteViewFactory>();
         services.AddTransient<NoteViewModel>();
