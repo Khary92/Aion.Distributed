@@ -7,6 +7,11 @@ public class LocalSettingsCommandSender(IMessenger messenger) : ILocalSettingsCo
 {
     public void Send(SetExportPathCommand command)
     {
-        messenger.Send(command);
+        messenger.Send(new ExportPathSetNotification(command.ExportPath));
+    }
+
+    public void Send(SetWorkDaySelectionCommand command)
+    {
+        messenger.Send(new WorkDaySelectedNotification(command.Date));       
     }
 }

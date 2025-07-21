@@ -82,9 +82,9 @@ public static class Bootstrapper
         AddFileSystemServices(services);
 
         //TODO fix it
+        services.AddSingleton<ILocalSettingsService, LocalSettingsProjector>();
         services.AddSingleton<IServiceInitializer, ServiceInitializer>();
         services.AddSingleton<ILocalSettingsCommandSender, LocalSettingsCommandSender>();
-        services.AddSingleton<LocalSettingsProjector>();
         services.AddSingleton<IExportService, ExportService>();
         services.AddSingleton<ILanguageModelApi, LanguageModelApiStub>();
     }

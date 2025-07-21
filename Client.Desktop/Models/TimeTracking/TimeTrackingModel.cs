@@ -7,7 +7,7 @@ using Client.Desktop.Communication.NotificationWrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.DTO;
 using Client.Desktop.Factories;
-using Client.Desktop.Services;
+using Client.Desktop.Services.LocalSettings;
 using CommunityToolkit.Mvvm.Messaging;
 using Google.Protobuf.WellKnownTypes;
 using Proto.Command.UseCases;
@@ -23,9 +23,9 @@ using ListEx = DynamicData.ListEx;
 namespace Client.Desktop.Models.TimeTracking;
 
 public class TimeTrackingModel(
-    ILocalSettingsService localSettingsService,
     ICommandSender commandSender,
     IRequestSender requestSender,
+    ILocalSettingsService localSettingsService,
     IMessenger messenger,
     ITimeSlotViewModelFactory timeSlotViewModelFactory) : ReactiveObject
 {

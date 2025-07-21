@@ -7,6 +7,7 @@ using Client.Desktop.Communication.Requests;
 using Client.Desktop.Converter;
 using Client.Desktop.DTO;
 using Client.Desktop.Services;
+using Client.Desktop.Services.LocalSettings;
 using Client.Desktop.Services.LocalSettings.Commands;
 using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;

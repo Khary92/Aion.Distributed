@@ -7,7 +7,7 @@ using Client.Desktop.Communication.NotificationWrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.DTO;
 using Client.Desktop.Factories;
-using Client.Desktop.Services;
+using Client.Desktop.Services.LocalSettings;
 using CommunityToolkit.Mvvm.Messaging;
 using Google.Protobuf.WellKnownTypes;
 using Proto.Command.Notes;
@@ -20,6 +20,7 @@ namespace Client.Desktop.Models.TimeTracking.DynamicControls;
 public class NoteStreamViewModel(
     ICommandSender commandSender,
     IRequestSender requestSender,
+    ILocalSettingsService localSettingsService,
     IMessenger messenger,
     INoteViewFactory noteViewFactory)
     : ReactiveObject

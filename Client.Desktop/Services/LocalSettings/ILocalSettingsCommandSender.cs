@@ -1,4 +1,3 @@
-using System.Threading.Tasks;
 using Client.Desktop.Services.LocalSettings.Commands;
 
 namespace Client.Desktop.Services.LocalSettings;
@@ -6,4 +5,5 @@ namespace Client.Desktop.Services.LocalSettings;
 public interface ILocalSettingsCommandSender
 {
     void Send(SetExportPathCommand command);
+    void Send(SetWorkDaySelectionCommand command);
 }

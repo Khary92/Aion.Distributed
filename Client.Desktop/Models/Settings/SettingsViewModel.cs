@@ -17,7 +17,7 @@ public class SettingsViewModel : ReactiveObject
     {
         Model = settingsModel;
         _exportPathInput = settingsModel.Settings.ExportPath;
-        SaveConfigCommand = ReactiveCommand.CreateFromTask(() => Model.SetExportPath(ExportPathInput));
+        SaveConfigCommand = ReactiveCommand.Create(() => Model.SetExportPath(ExportPathInput));
     }
 
     public SettingsModel Model { get; }

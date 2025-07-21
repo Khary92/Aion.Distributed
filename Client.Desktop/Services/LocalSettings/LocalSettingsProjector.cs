@@ -41,15 +41,21 @@ public class LocalSettingsProjector(
 
     public async Task InitializeAsync()
     {
+        messenger.Register<SettingsDto>(this, async void (_, m) =>
+        {
+            ProjectionReferenceInstance = m; 
+            await SaveSettings();
+        });
+        
         messenger.Register<ExportPathSetNotification>(this, async void (_, m) =>
         {
             ProjectionReferenceInstance!.ExportPath = m.ExportPath;
             await SaveSettings();
         });
         
-        messenger.Register<SettingsDto>(this, async void (_, m) =>
+        messenger.Register<WorkDaySelectedNotification>(this, async void (_, m) =>
         {
-            ProjectionReferenceInstance = m; 
+            ProjectionReferenceInstance!.SelectedDate = m.Date;
             await SaveSettings();
         });
         
@@ -59,5 +65,12 @@ public class LocalSettingsProjector(
     public bool IsExportPathValid()
     {
         return fileSystemWrapper.IsFileExisting(ProjectionReferenceInstance!.ExportPath);
+    }
+
+    public DateTimeOffset SelectedDate => ProjectionReferenceInstance!.SelectedDate;
+    
+    public bool IsSelectedDateCurrentDate()
+    {
+        return SelectedDate.Date == DateTimeOffset.Now.Date;
     }
 }
