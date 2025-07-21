@@ -22,7 +22,7 @@ public class NoteStreamViewModel(
     IRequestSender requestSender,
     IMessenger messenger,
     INoteViewFactory noteViewFactory,
-    IRunTimeSettings runTimeSettings)
+    ILocalSettingsService localSettingsService)
     : ReactiveObject
 {
     private Guid _timeSlotId;
@@ -36,7 +36,7 @@ public class NoteStreamViewModel(
 
     public async Task AddNoteControl()
     {
-        if (!runTimeSettings.IsSelectedDateCurrentDate()) return;
+        if (!localSettingsService.IsSelectedDateCurrentDate()) return;
 
         var noteId = Guid.NewGuid();
         await commandSender.Send(new CreateNoteCommandProto

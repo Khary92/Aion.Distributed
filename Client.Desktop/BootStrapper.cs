@@ -13,7 +13,6 @@ using Client.Desktop.Communication.Requests.AiSettings;
 using Client.Desktop.Communication.Requests.Analysis;
 using Client.Desktop.Communication.Requests.Notes;
 using Client.Desktop.Communication.Requests.Replays;
-using Client.Desktop.Communication.Requests.Settings;
 using Client.Desktop.Communication.Requests.StatisticsData;
 using Client.Desktop.Communication.Requests.TimerSettings;
 using Client.Desktop.Communication.Requests.TimeSlots;
@@ -82,7 +81,7 @@ public static class Bootstrapper
         AddFileSystemServices(services);
 
         //TODO fix it
-        services.AddSingleton<IRunTimeSettings, RunTimeSettings>();
+        services.AddSingleton<ILocalSettingsService, LocalSettingsService>();
         services.AddSingleton<IExportService, ExportService>();
         services.AddSingleton<ILanguageModelApi, LanguageModelApiStub>();
     }
@@ -209,7 +208,6 @@ public static class Bootstrapper
         services.AddSingleton<NotificationReceiverStarter>();
 
         services.AddSingleton<AiSettingsNotificationReceiver>();
-        services.AddSingleton<SettingsNotificationReceiver>();
         services.AddSingleton<TicketNotificationReceiver>();
         services.AddSingleton<NoteNotificationReceiver>();
         services.AddSingleton<NoteTypeNotificationReceiver>();
@@ -252,7 +250,6 @@ public static class Bootstrapper
 
         services.AddScoped<IAiSettingsRequestSender, AiSettingsRequestSender>();
         services.AddScoped<INotesRequestSender, NotesRequestSender>();
-        services.AddScoped<ISettingsRequestSender, SettingsRequestSender>();
         services.AddScoped<IStatisticsDataRequestSender, StatisticsDataRequestSender>();
         services.AddScoped<ITimerSettingsRequestSender, TimerSettingsRequestSender>();
         services.AddScoped<ITimeSlotRequestSender, TimeSlotRequestSender>();

@@ -26,12 +26,6 @@
             </StackPanel>
         </Border>
 
-        <Border Grid.Row="2" Margin="0,20,0,10">
-            <CheckBox IsChecked="{Binding Model.Settings.IsAddNewTicketsToCurrentSprintActive, Mode=TwoWay}"
-                      Name="CheckBoxAddNewTicketsToCurrentSprint"
-                      Content="Always add new tickets to active sprint" />
-        </Border>
-
         <Grid Grid.Row="3" />
 
         <Border Grid.Row="4" Margin="0,20,0,0">

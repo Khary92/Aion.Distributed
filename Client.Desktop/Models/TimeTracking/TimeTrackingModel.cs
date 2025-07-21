@@ -23,7 +23,7 @@ using ListEx = DynamicData.ListEx;
 namespace Client.Desktop.Models.TimeTracking;
 
 public class TimeTrackingModel(
-    IRunTimeSettings runtimeSettings,
+    ILocalSettingsService localSettingsService,
     ICommandSender commandSender,
     IRequestSender requestSender,
     IMessenger messenger,
@@ -173,7 +173,7 @@ public class TimeTrackingModel(
 
         var controlDataList = await requestSender.Send(new GetTimeSlotControlDataRequestProto
         {
-            Date = Timestamp.FromDateTimeOffset(runtimeSettings.SelectedDate)
+            Date = Timestamp.FromDateTimeOffset(localSettingsService.SelectedDate)
         });
 
         foreach (var controlData in controlDataList.TimeSlotControlData)

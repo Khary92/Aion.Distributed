@@ -25,7 +25,7 @@ public class WorkDaysModel(
     ICommandSender commandSender,
     IRequestSender requestSender,
     IMessenger messenger,
-    IRunTimeSettings runTimeSettings,
+    ILocalSettingsService localSettingsService,
     ITraceCollector tracer) : ReactiveObject
 {
     public ObservableCollection<WorkDayDto> WorkDays { get; } = [];
@@ -94,7 +94,7 @@ public class WorkDaysModel(
 
     public void SetSelectedWorkday(WorkDayDto selectedWorkDay)
     {
-        runTimeSettings.SelectedDate = selectedWorkDay.Date;
+        localSettingsService.SelectedDate = selectedWorkDay.Date;
 
         var workDaySelectionChangedNotification = new WorkDaySelectionChangedNotification();
 

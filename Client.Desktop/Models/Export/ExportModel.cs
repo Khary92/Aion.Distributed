@@ -19,6 +19,7 @@ namespace Client.Desktop.Models.Export;
 public class ExportModel : ReactiveObject
 {
     private readonly IExportService _exportService;
+    private readonly ILocalSettingsService _localSettingsService;
     private readonly IMessenger _messenger;
 
     private readonly IRequestSender _requestSender;
@@ -27,11 +28,12 @@ public class ExportModel : ReactiveObject
     private string _markdownText = null!;
 
     public ExportModel(IRequestSender requestSender, IMessenger messenger,
-        IExportService exportService, ITraceCollector tracer)
+        IExportService exportService, ILocalSettingsService localSettingsService, ITraceCollector tracer)
     {
         _requestSender = requestSender;
         _messenger = messenger;
         _exportService = exportService;
+        _localSettingsService = localSettingsService;
         _tracer = tracer;
 
         SelectedWorkDays.CollectionChanged += RefreshMarkdownViewerHandler;
@@ -65,11 +67,12 @@ public class ExportModel : ReactiveObject
 
     public async Task<bool> ExportFileAsync()
     {
-        var isExportPathValidRequestProto = new IsExportPathValidRequestProto();
-        if (await _requestSender.Send(isExportPathValidRequestProto))
+        if (_localSettingsService.IsExportPathValid())
+        {
             return await _exportService.ExportToFile(WorkDays);
+        }
 
-        await _tracer.Export.ToFile.PathSettingsInvalid(GetType(), isExportPathValidRequestProto);
+        await _tracer.Export.ToFile.PathSettingsInvalid(GetType(), _localSettingsService.ExportPath);
         return false;
     }
 

@@ -4,7 +4,6 @@ using Client.Desktop.Communication.Requests.AiSettings;
 using Client.Desktop.Communication.Requests.Analysis;
 using Client.Desktop.Communication.Requests.Notes;
 using Client.Desktop.Communication.Requests.Replays;
-using Client.Desktop.Communication.Requests.Settings;
 using Client.Desktop.Communication.Requests.StatisticsData;
 using Client.Desktop.Communication.Requests.TimerSettings;
 using Client.Desktop.Communication.Requests.TimeSlots;
@@ -17,7 +16,6 @@ using Proto.Requests.AiSettings;
 using Proto.Requests.AnalysisData;
 using Proto.Requests.Notes;
 using Proto.Requests.NoteTypes;
-using Proto.Requests.Settings;
 using Proto.Requests.Sprints;
 using Proto.Requests.StatisticsData;
 using Proto.Requests.Tags;
@@ -38,7 +36,6 @@ public class RequestSender(
     IAiSettingsRequestSender aiSettingsRequestSender,
     INotesRequestSender notesRequestSender,
     INoteTypeRequestSender noteTypeRequestSender,
-    ISettingsRequestSender settingsRequestSender,
     ISprintRequestSender sprintRequestSender,
     IStatisticsDataRequestSender statisticsDataRequestSender,
     ITagRequestSender tagRequestSender,
@@ -81,22 +78,7 @@ public class RequestSender(
         var noteTypeProto = await noteTypeRequestSender.Send(request);
         return noteTypeProto.ToDto();
     }
-
-    public async Task<SettingsDto> Send(GetSettingsRequestProto request)
-    {
-        return await settingsRequestSender.Send(request);
-    }
-
-    public async Task<bool> Send(IsExportPathValidRequestProto request)
-    {
-        return await settingsRequestSender.Send(request);
-    }
-
-    public async Task<bool> Send(SettingsExistsRequestProto request)
-    {
-        return await settingsRequestSender.Send(request);
-    }
-
+    
     public async Task<SprintDto?> Send(GetActiveSprintRequestProto request)
     {
         var sprintProto = await sprintRequestSender.Send(request);

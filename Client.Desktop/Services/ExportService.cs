@@ -16,7 +16,8 @@ namespace Client.Desktop.Services;
 
 public class ExportService(
     IRequestSender requestSender,
-    IFileSystemWriter fileSystemWriter)
+    IFileSystemWriter fileSystemWriter,
+    ILocalSettingsService localSettingsService)
     : IExportService
 {
     public async Task<bool> ExportToFile(Collection<WorkDayDto> workDayDtos)
@@ -24,8 +25,7 @@ public class ExportService(
         if (workDayDtos.Count == 0) return false;
 
         var markdownString = await GetMarkdownString(workDayDtos);
-        var config = await requestSender.Send(new GetSettingsRequestProto());
-        var filePath = BuildFilePath(workDayDtos.First().Date.Date, config.ExportPath);
+        var filePath = BuildFilePath(workDayDtos.First().Date.Date, localSettingsService.ExportPath);
 
         try
         {
