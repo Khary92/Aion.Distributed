@@ -34,6 +34,8 @@ using Client.Desktop.Models.TimeTracking.DynamicControls;
 using Client.Desktop.Replays;
 using Client.Desktop.Services;
 using Client.Desktop.Services.Cache;
+using Client.Desktop.Services.Initializer;
+using Client.Desktop.Services.LocalSettings;
 using Client.Desktop.Views.Analysis;
 using Client.Desktop.Views.Data;
 using Client.Desktop.Views.Documentation;
@@ -49,7 +51,6 @@ using Proto.Command.TimeSlots;
 using Proto.Notifications.AiSettings;
 using Proto.Notifications.Note;
 using Proto.Notifications.NoteType;
-using Proto.Notifications.Settings;
 using Proto.Notifications.Sprint;
 using Proto.Notifications.Tag;
 using Proto.Notifications.Ticket;
@@ -81,7 +82,9 @@ public static class Bootstrapper
         AddFileSystemServices(services);
 
         //TODO fix it
-        services.AddSingleton<ILocalSettingsService, LocalSettingsService>();
+        services.AddSingleton<IServiceInitializer, ServiceInitializer>();
+        services.AddSingleton<ILocalSettingsCommandSender, LocalSettingsCommandSender>();
+        services.AddSingleton<LocalSettingsProjector>();
         services.AddSingleton<IExportService, ExportService>();
         services.AddSingleton<ILanguageModelApi, LanguageModelApiStub>();
     }
@@ -219,7 +222,6 @@ public static class Bootstrapper
 
         var channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
         services.AddSingleton(new AiSettingsNotificationService.AiSettingsNotificationServiceClient(channel));
-        services.AddSingleton(new SettingsNotificationService.SettingsNotificationServiceClient(channel));
         services.AddSingleton(new TicketNotificationService.TicketNotificationServiceClient(channel));
         services.AddSingleton(new NoteNotificationService.NoteNotificationServiceClient(channel));
         services.AddSingleton(new SprintNotificationService.SprintNotificationServiceClient(channel));

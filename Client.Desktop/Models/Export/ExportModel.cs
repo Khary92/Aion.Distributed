@@ -7,10 +7,10 @@ using Client.Desktop.Communication.Requests;
 using Client.Desktop.Converter;
 using Client.Desktop.DTO;
 using Client.Desktop.Services;
+using Client.Desktop.Services.LocalSettings.Commands;
 using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
-using Proto.Requests.Settings;
 using Proto.Requests.WorkDays;
 using ReactiveUI;
 
@@ -19,22 +19,24 @@ namespace Client.Desktop.Models.Export;
 public class ExportModel : ReactiveObject
 {
     private readonly IExportService _exportService;
-    private readonly ILocalSettingsService _localSettingsService;
     private readonly IMessenger _messenger;
 
     private readonly IRequestSender _requestSender;
     private readonly ITraceCollector _tracer;
+    private readonly ILocalSettingsService _localSettingsService;
+
+    private SettingsDto? Settings { get; set; }
 
     private string _markdownText = null!;
 
     public ExportModel(IRequestSender requestSender, IMessenger messenger,
-        IExportService exportService, ILocalSettingsService localSettingsService, ITraceCollector tracer)
+        IExportService exportService, ITraceCollector tracer, ILocalSettingsService localSettingsService)
     {
         _requestSender = requestSender;
         _messenger = messenger;
         _exportService = exportService;
-        _localSettingsService = localSettingsService;
         _tracer = tracer;
+        _localSettingsService = localSettingsService;
 
         SelectedWorkDays.CollectionChanged += RefreshMarkdownViewerHandler;
     }
@@ -48,23 +50,6 @@ public class ExportModel : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref _markdownText, value);
     }
 
-    public void RegisterMessenger()
-    {
-        _messenger.Register<NewWorkDayMessage>(this, async (_, m) =>
-        {
-            await _tracer.WorkDay.Create.AggregateReceived(GetType(), m.WorkDay.WorkDayId,
-                m.WorkDay.AsTraceAttributes());
-            WorkDays.Add(m.WorkDay);
-            await _tracer.WorkDay.Create.AggregateAdded(GetType(), m.WorkDay.WorkDayId);
-        });
-    }
-
-    public async Task InitializeAsync()
-    {
-        WorkDays.Clear();
-        WorkDays.AddRange(await _requestSender.Send(new GetAllWorkDaysRequestProto()));
-    }
-
     public async Task<bool> ExportFileAsync()
     {
         if (_localSettingsService.IsExportPathValid())
@@ -72,7 +57,7 @@ public class ExportModel : ReactiveObject
             return await _exportService.ExportToFile(WorkDays);
         }
 
-        await _tracer.Export.ToFile.PathSettingsInvalid(GetType(), _localSettingsService.ExportPath);
+        await _tracer.Export.ToFile.PathSettingsInvalid(GetType(), Settings!.ExportPath);
         return false;
     }
 
@@ -91,5 +76,24 @@ public class ExportModel : ReactiveObject
     public async Task<string> GetMarkdownTextAsync()
     {
         return await _exportService.GetMarkdownString(SelectedWorkDays);
+    }
+
+    public async Task InitializeAsync()
+    {
+        WorkDays.Clear();
+        WorkDays.AddRange(await _requestSender.Send(new GetAllWorkDaysRequestProto()));
+
+        _messenger.Register<ExportPathSetNotification>(this,
+            async void (_, m) => { Settings!.ExportPath = m.ExportPath; });
+
+        _messenger.Register<SettingsDto>(this, async void (_, m) => { Settings = m; });
+
+        _messenger.Register<NewWorkDayMessage>(this, async (_, m) =>
+        {
+            await _tracer.WorkDay.Create.AggregateReceived(GetType(), m.WorkDay.WorkDayId,
+                m.WorkDay.AsTraceAttributes());
+            WorkDays.Add(m.WorkDay);
+            await _tracer.WorkDay.Create.AggregateAdded(GetType(), m.WorkDay.WorkDayId);
+        });
     }
 }

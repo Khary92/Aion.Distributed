@@ -2,7 +2,6 @@
 using Core.Server.Communication.Endpoints.Analysis;
 using Core.Server.Communication.Endpoints.Note;
 using Core.Server.Communication.Endpoints.NoteType;
-using Core.Server.Communication.Endpoints.Settings;
 using Core.Server.Communication.Endpoints.Sprint;
 using Core.Server.Communication.Endpoints.StatisticsData;
 using Core.Server.Communication.Endpoints.Tag;
@@ -15,7 +14,6 @@ using Core.Server.Communication.Mocks.AiSettings;
 using Core.Server.Communication.Mocks.Analysis;
 using Core.Server.Communication.Mocks.Note;
 using Core.Server.Communication.Mocks.NoteType;
-using Core.Server.Communication.Mocks.Settings;
 using Core.Server.Communication.Mocks.Sprint;
 using Core.Server.Communication.Mocks.StatisticsData;
 using Core.Server.Communication.Mocks.Tag;
@@ -42,7 +40,6 @@ public static class EndpointServices
         app.MapGrpcService<AiSettingsCommandReceiver>();
         app.MapGrpcService<NoteCommandReceiver>();
         app.MapGrpcService<NoteTypeCommandReceiver>();
-        app.MapGrpcService<SettingsCommandReceiver>();
         app.MapGrpcService<SprintCommandReceiver>();
         app.MapGrpcService<StatisticsDataCommandReceiver>();
         app.MapGrpcService<TagCommandReceiver>();
@@ -58,7 +55,6 @@ public static class EndpointServices
         app.MapGrpcService<AiSettingsRequestReceiver>();
         app.MapGrpcService<NoteRequestReceiver>();
         app.MapGrpcService<NoteTypeRequestReceiver>();
-        app.MapGrpcService<SettingsRequestReceiver>();
         app.MapGrpcService<SprintRequestReceiver>();
         app.MapGrpcService<StatisticsDataRequestReceiver>();
         app.MapGrpcService<TagRequestReceiver>();
@@ -75,7 +71,6 @@ public static class EndpointServices
         app.MapGrpcService<AiSettingsNotificationService>();
         app.MapGrpcService<NoteNotificationService>();
         app.MapGrpcService<NoteTypeNotificationService>();
-        app.MapGrpcService<SettingsNotificationService>();
         app.MapGrpcService<SprintNotificationService>();
         app.MapGrpcService<StatisticsDataNotificationService>();
         app.MapGrpcService<TagNotificationService>();
@@ -91,7 +86,6 @@ public static class EndpointServices
         app.MapGrpcService<MockAiSettingsCommandReceiver>();
         app.MapGrpcService<MockNoteCommandReceiver>();
         app.MapGrpcService<MockNoteTypeCommandService>();
-        app.MapGrpcService<MockSettingsCommandService>();
         app.MapGrpcService<MockSprintCommandService>();
         app.MapGrpcService<MockStatisticsDataCommandService>();
         app.MapGrpcService<MockTagCommandService>();
@@ -105,7 +99,6 @@ public static class EndpointServices
         app.MapGrpcService<MockAiSettingsRequestReceiver>();
         app.MapGrpcService<NoteRequestReceiver>();
         app.MapGrpcService<MockNoteTypeRequestService>();
-        app.MapGrpcService<MockSettingsRequestService>();
         app.MapGrpcService<MockSprintRequestService>();
         app.MapGrpcService<MockStatisticsDataRequestService>();
         app.MapGrpcService<MockTagRequestService>();

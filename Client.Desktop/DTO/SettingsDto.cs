@@ -1,5 +1,3 @@
-using System;
-using Proto.Notifications.Settings;
 using ReactiveUI;
 
 namespace Client.Desktop.DTO;
@@ -21,11 +19,6 @@ public class SettingsDto : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref _exportPath, value);
     }
     
-    public void Apply(ExportPathChangedNotification notification)
-    {
-        ExportPath = notification.ExportPath;
-    }
-
     public bool IsExportPathChanged()
     {
         if (ExportPath == _previousExportPath) return false;

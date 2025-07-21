@@ -21,8 +21,7 @@ public class NoteStreamViewModel(
     ICommandSender commandSender,
     IRequestSender requestSender,
     IMessenger messenger,
-    INoteViewFactory noteViewFactory,
-    ILocalSettingsService localSettingsService)
+    INoteViewFactory noteViewFactory)
     : ReactiveObject
 {
     private Guid _timeSlotId;

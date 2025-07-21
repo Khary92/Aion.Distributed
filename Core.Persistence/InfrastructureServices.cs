@@ -3,7 +3,6 @@ using Core.Persistence.EventStores;
 using Domain.Events.AiSettings;
 using Domain.Events.Note;
 using Domain.Events.NoteTypes;
-using Domain.Events.Settings;
 using Domain.Events.Sprints;
 using Domain.Events.StatisticsData;
 using Domain.Events.Tags;
@@ -46,7 +45,6 @@ public static class InfrastructureServices
         services.AddScoped<IEventStore<TimeSlotEvent>, TimeSlotEventsStore>();
         services.AddScoped<IEventStore<TagEvent>, TagEventsStore>();
         services.AddScoped<IEventStore<WorkDayEvent>, WorkDayEventsStore>();
-        services.AddScoped<IEventStore<SettingsEvent>, SettingsEventsStore>();
         services.AddScoped<IEventStore<TimerSettingsEvent>, TimerSettingsEventsStore>();
     }
 }

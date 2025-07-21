@@ -1,14 +1,18 @@
 using System.Threading.Tasks;
 using Client.Desktop.DTO;
-using Client.Desktop.Services;
+using Client.Desktop.Services.Initializer;
+using Client.Desktop.Services.LocalSettings;
+using Client.Desktop.Services.LocalSettings.Commands;
+using CommunityToolkit.Mvvm.Messaging;
 using ReactiveUI;
 
 namespace Client.Desktop.Models.Settings;
 
-public class SettingsModel(ILocalSettingsService localSettingsService)
-    : ReactiveObject
+public class SettingsModel(IMessenger messenger,
+    ILocalSettingsCommandSender localSettingsCommandService)
+    : ReactiveObject, IInitializeAsync
 {
-    private SettingsDto _settingsDto = localSettingsService.LocalSettings;
+    private SettingsDto _settingsDto = new SettingsDto("Not loaded yet");
 
     public SettingsDto Settings
     {
@@ -16,8 +20,19 @@ public class SettingsModel(ILocalSettingsService localSettingsService)
         private set => this.RaiseAndSetIfChanged(ref _settingsDto, value);
     }
 
-    public async Task SetExportPath(string exportPath)
+    public void SetExportPath(string exportPath)
     {
-        await localSettingsService.SetExportPath(exportPath);
+        if (exportPath != Settings.ExportPath) return;
+        
+        localSettingsCommandService.Send(new SetExportPathCommand(exportPath));
+    }
+
+    public Task InitializeAsync()
+    {
+        messenger.Register<ExportPathSetNotification>(this,
+            async void (_, m) => { Settings!.ExportPath = m.ExportPath; });
+
+        messenger.Register<SettingsDto>(this, async void (_, m) => { Settings = m; });
+        return Task.CompletedTask;
     }
 }

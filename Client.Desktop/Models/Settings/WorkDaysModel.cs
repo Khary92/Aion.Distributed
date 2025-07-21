@@ -25,7 +25,6 @@ public class WorkDaysModel(
     ICommandSender commandSender,
     IRequestSender requestSender,
     IMessenger messenger,
-    ILocalSettingsService localSettingsService,
     ITraceCollector tracer) : ReactiveObject
 {
     public ObservableCollection<WorkDayDto> WorkDays { get; } = [];
