@@ -14,17 +14,17 @@ public class SettingsModel(IMessenger messenger,
     : ReactiveObject, IRegisterMessenger
 {
     
-    private SettingsDto _settingsDto = new SettingsDto("Not loaded yet");
+    private SettingsDto? _settingsDto;
 
-    public SettingsDto Settings
+    public SettingsDto? Settings
     {
         get => _settingsDto;
         private set => this.RaiseAndSetIfChanged(ref _settingsDto, value);
     }
 
-    public void SetExportPath(string exportPath)
+    public void SetExportPath()
     {
-        localSettingsCommandService.Send(new SetExportPathCommand(exportPath));
+        localSettingsCommandService.Send(new SetExportPathCommand(Settings!.ExportPath));;
     }
     
     public void RegisterMessenger()

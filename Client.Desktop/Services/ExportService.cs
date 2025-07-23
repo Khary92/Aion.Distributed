@@ -65,9 +65,9 @@ public class ExportService(
 
     private static string BuildFilePath(DateTime date, string exportPath)
     {
-        return Path.Combine(exportPath, $"{date:MM/dd/yyyy}.md");
+        return Path.Combine(exportPath, $"{date:MM-dd-yyyy}.md");
     }
-
+    
     private async Task<Dictionary<DateTimeOffset, List<TicketDataHolder>>> GetDataForSelectedWorkDays(
         Collection<WorkDayDto> workDayDtos)
     {

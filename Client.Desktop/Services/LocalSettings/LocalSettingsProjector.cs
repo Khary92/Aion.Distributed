@@ -67,7 +67,7 @@ public class LocalSettingsProjector(
 
     public bool IsExportPathValid()
     {
-        return fileSystemWrapper.IsFileExisting(ProjectionReferenceInstance!.ExportPath);
+        return fileSystemWrapper.IsDirectoryExisting(ProjectionReferenceInstance!.ExportPath);
     }
 
     public DateTimeOffset SelectedDate => ProjectionReferenceInstance!.SelectedDate;

@@ -178,6 +178,8 @@ public static class Bootstrapper
 
         services.AddSingleton<ExportViewModel>();
         services.AddSingleton<ExportModel>();
+        services.AddSingleton<IRegisterMessenger>(sp => sp.GetRequiredService<ExportModel>());
+        services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<ExportModel>());
 
         services.AddSingleton<AiSettingsViewModel>();
         services.AddSingleton<AiSettingsModel>();

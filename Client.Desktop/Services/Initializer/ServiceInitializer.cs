@@ -12,7 +12,7 @@ public class ServiceInitializer(
 {
     private readonly List<InitializationType> _order =
     [
-        //InitializationType.Model,
+        InitializationType.Model,
         InitializationType.Service
     ];
 
