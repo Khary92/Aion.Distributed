@@ -1,7 +1,7 @@
 using System;
 using ReactiveUI;
 
-namespace Client.Desktop.DTO;
+namespace Client.Desktop.DTO.Local;
 
 public class SettingsDto(string exportPath) : ReactiveObject
 {

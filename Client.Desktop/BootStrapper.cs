@@ -82,10 +82,16 @@ public static class Bootstrapper
         AddFileSystemServices(services);
 
         //TODO fix it
-        services.AddSingleton<ILocalSettingsService, LocalSettingsProjector>();
+        services.AddSingleton<LocalSettingsProjector>();
+        services.AddSingleton<ILocalSettingsService>(sp => sp.GetRequiredService<LocalSettingsProjector>());
+        services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<LocalSettingsProjector>());
+        
         services.AddSingleton<IServiceInitializer, ServiceInitializer>();
         services.AddSingleton<ILocalSettingsCommandSender, LocalSettingsCommandSender>();
-        services.AddSingleton<IExportService, ExportService>();
+
+        services.AddSingleton<ExportService>();
+        services.AddSingleton<IExportService>(sp => sp.GetRequiredService<ExportService>());
+        services.AddSingleton<IRegisterMessenger>(sp => sp.GetRequiredService<ExportService>());
         services.AddSingleton<ILanguageModelApi, LanguageModelApiStub>();
     }
 
@@ -161,6 +167,7 @@ public static class Bootstrapper
 
         services.AddSingleton<SettingsViewModel>();
         services.AddSingleton<SettingsModel>();
+        services.AddSingleton<IRegisterMessenger>(sp => sp.GetRequiredService<SettingsModel>());
 
         services.AddSingleton<WorkDaysViewModel>();
         services.AddSingleton<WorkDaysModel>();

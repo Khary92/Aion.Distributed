@@ -6,6 +6,7 @@ using Client.Desktop.Communication.NotificationWrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.Converter;
 using Client.Desktop.DTO;
+using Client.Desktop.DTO.Local;
 using Client.Desktop.Services;
 using Client.Desktop.Services.LocalSettings;
 using Client.Desktop.Services.LocalSettings.Commands;

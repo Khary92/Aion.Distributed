@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.DTO;
+using Client.Desktop.DTO.Local;
 using Client.Desktop.FileSystem;
 using Client.Desktop.Services.Initializer;
 using Client.Desktop.Services.LocalSettings.Commands;
@@ -20,7 +21,7 @@ public class ExportService(
     IRequestSender requestSender,
     IFileSystemWriter fileSystemWriter,
     IMessenger messenger)
-    : IExportService, IInitializeAsync
+    : IExportService, IRegisterMessenger
 {
     private SettingsDto? LocalSettings { get; set; }
 
@@ -127,13 +128,10 @@ public class ExportService(
         }
     }
 
-    public Task InitializeAsync()
+    public void RegisterMessenger()
     {
-        messenger.Register<ExportPathSetNotification>(this,
-            async void (_, m) => { LocalSettings!.ExportPath = m.ExportPath; });
+        messenger.Register<ExportPathSetNotification>(this, (_, m) => { LocalSettings!.ExportPath = m.ExportPath; });
 
-        messenger.Register<SettingsDto>(this, async void (_, m) => { LocalSettings = m; });
-        
-        return Task.CompletedTask;
+        messenger.Register<SettingsDto>(this, (_, m) => { LocalSettings = m; });
     }
 }

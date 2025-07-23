@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Client.Desktop.DTO;
+using Client.Desktop.DTO.Local;
 using Client.Desktop.FileSystem;
 using Client.Desktop.Services.Initializer;
 using Client.Desktop.Services.LocalSettings.Commands;
@@ -22,7 +23,7 @@ public class LocalSettingsProjector(
     private async Task PrepareProjection()
     {
         var settings = fileSystemWrapper.IsFileExisting(SettingsFileName) ?
-            await fileSystemReader.GetObject<SettingsDto>(SettingsFileName) :
+            (await fileSystemReader.GetObject<SettingsJto>(SettingsFileName)).ToDto() :
             new SettingsDto("not set");
         
         messenger.Send(settings);
@@ -35,9 +36,11 @@ public class LocalSettingsProjector(
             throw new NullReferenceException();
         }
 
-        var jsonString = JsonConvert.SerializeObject(ProjectionReferenceInstance);
+        var jsonString = JsonConvert.SerializeObject(ProjectionReferenceInstance.ToJto());
         await fileSystemWriter.Write(jsonString, SettingsFileName);
     }
+
+    public InitializationType Type => InitializationType.Service;
 
     public async Task InitializeAsync()
     {
