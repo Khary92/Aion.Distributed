@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.Threading.Tasks;
 using Client.Desktop.DTO;
 using Client.Proto;
 using LiveChartsCore;
@@ -12,22 +13,13 @@ using SkiaSharp;
 
 namespace Client.Desktop.Models.Analysis;
 
-public class AnalysisByTagViewModel : ReactiveObject
+public class AnalysisByTagViewModel(AnalysisByTagModel analysisByTagModel) : ReactiveObject
 {
     private ObservableCollection<ISeries> _productivityTimeSpentBarChart = [];
 
     private TagDto? _selectedTag;
 
-    public AnalysisByTagViewModel()
-    {
-    }
-
-    public AnalysisByTagViewModel(AnalysisByTagModel analysisByTagModel)
-    {
-        Model = analysisByTagModel;
-    }
-
-    public AnalysisByTagModel Model { get; } = null!;
+    public AnalysisByTagModel Model { get; } = analysisByTagModel;
 
     public TagDto? SelectedTag
     {
@@ -35,7 +27,7 @@ public class AnalysisByTagViewModel : ReactiveObject
         set
         {
             this.RaiseAndSetIfChanged(ref _selectedTag, value);
-            LoadAnalysisByTagAsync();
+            _ = LoadAnalysisByTagAsync();
         }
     }
 
@@ -70,7 +62,7 @@ public class AnalysisByTagViewModel : ReactiveObject
         }
     ];
 
-    private async void LoadAnalysisByTagAsync()
+    private async Task LoadAnalysisByTagAsync()
     {
         if (SelectedTag is null) return;
 
@@ -79,7 +71,6 @@ public class AnalysisByTagViewModel : ReactiveObject
         UpdateProductivityByTimeSpentPieChart();
         UpdateProductivityByTimeSpentBarChart();
     }
-
 
     private void UpdateProductivityPieChart()
     {

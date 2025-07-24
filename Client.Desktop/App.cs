@@ -12,7 +12,7 @@ using Proto.Command.TimeSlots;
 
 namespace Client.Desktop;
 
-public static class DesktopApp
+public static class App
 {
     [STAThread]
     public static async Task Main(string[] args)
@@ -40,7 +40,7 @@ public static class DesktopApp
 
     private static AppBuilder BuildAvaloniaApp(IServiceProvider serviceProvider)
     {
-        return AppBuilder.Configure(() => new App(serviceProvider))
+        return AppBuilder.Configure(() => new Views.Main.App(serviceProvider))
             .UsePlatformDetect()
             .WithInterFont()
             .LogToTrace()

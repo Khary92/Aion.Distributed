@@ -61,7 +61,7 @@ using Service.Proto.Shared.Requests.TimerSettings;
 
 namespace Client.Desktop;
 
-public static class Bootstrapper
+public static class ClientServiceExtensions
 {
     public static void AddPresentationServices(this IServiceCollection services)
     {
@@ -70,6 +70,7 @@ public static class Bootstrapper
         AddSynchronizationServices(services);
         AddViews(services);
         AddModels(services);
+        AddViewFactories(services);
         AddNotificationReceivers(services);
         AddRequestSenders(services);
         AddCommandSenders(services);
@@ -135,14 +136,60 @@ public static class Bootstrapper
 
     private static void AddModels(this IServiceCollection services)
     {
-        services.AddSingleton<DocumentationViewModel>();
-        services.AddSingleton<DocumentationModel>();
-
         services.AddTransient<TypeCheckBoxViewModel>();
-
         services.AddTransient<TimeSlotViewModel>();
         services.AddTransient<TimeSlotModel>();
+        
+        services.AddSingleton<AnalysisByTagViewModel>();
+        services.AddSingleton<AnalysisByTicketViewModel>();
+        services.AddSingleton<AnalysisBySprintViewModel>();
+        
+        services.AddSingleton<AnalysisControlWrapperViewModel>();
+        services.AddSingleton<ContentWrapperViewModel>();
+        services.AddSingleton<SettingsCompositeViewModel>();
+        
+        services.AddSingleton<WorkDaysViewModel>();
+        services.AddSingleton<TimeTrackingViewModel>();
+        services.AddSingleton<SettingsViewModel>();
+        services.AddSingleton<ExportViewModel>();
+        
+        services.AddSingleton<DocumentationViewModel>();
+        services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<DocumentationViewModel>());
+        
+        services.AddSingleton<DocumentationModel>();
+        services.AddSingleton<IRegisterMessenger>(sp => sp.GetRequiredService<DocumentationModel>());
+        services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<DocumentationModel>());
+        
+        services.AddSingleton<SettingsModel>();
+        services.AddSingleton<IRegisterMessenger>(sp => sp.GetRequiredService<SettingsModel>());
+        
+        services.AddSingleton<WorkDaysModel>();
+        services.AddSingleton<IRegisterMessenger>(sp => sp.GetRequiredService<WorkDaysModel>());
+        services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<WorkDaysModel>());
+        
+        services.AddSingleton<TimeTrackingModel>();
+        services.AddSingleton<IRegisterMessenger>(sp => sp.GetRequiredService<TimeTrackingModel>());
+        services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<TimeTrackingModel>());
+        
+        services.AddSingleton<ExportModel>();
+        services.AddSingleton<IRegisterMessenger>(sp => sp.GetRequiredService<ExportModel>());
+        services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<ExportModel>());
+        
+        services.AddSingleton<AnalysisByTagModel>();
+        services.AddSingleton<IRegisterMessenger>(sp => sp.GetRequiredService<AnalysisByTagModel>());
+        services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<AnalysisByTagModel>());
 
+        services.AddSingleton<AnalysisByTicketModel>();
+        services.AddSingleton<IRegisterMessenger>(sp => sp.GetRequiredService<AnalysisByTicketModel>());
+        services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<AnalysisByTicketModel>());
+        
+        services.AddSingleton<AnalysisBySprintModel>();
+        services.AddSingleton<IRegisterMessenger>(sp => sp.GetRequiredService<AnalysisBySprintModel>());
+        services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<AnalysisBySprintModel>());
+    }
+
+    private static void AddViewFactories(this IServiceCollection services)
+    {
         services.AddTransient<INoteStreamViewModelFactory, NoteStreamViewModelFactory>();
         services.AddTransient<NoteStreamViewModel>();
         
@@ -157,39 +204,11 @@ public static class Bootstrapper
 
         services.AddSingleton<IStatisticsViewModelFactory, StatisticsViewModelFactory>();
         services.AddTransient<StatisticsViewModel>();
-
-        services.AddSingleton<SettingsViewModel>();
-        services.AddSingleton<SettingsModel>();
-        services.AddSingleton<IRegisterMessenger>(sp => sp.GetRequiredService<SettingsModel>());
-
-        services.AddSingleton<WorkDaysViewModel>();
-        services.AddSingleton<WorkDaysModel>();
-
+        
         services.AddSingleton<ITimeSlotViewModelFactory, TimeSlotViewModelFactory>();
-        services.AddSingleton<TimeTrackingViewModel>();
-        services.AddSingleton<TimeTrackingModel>();
-
-        services.AddSingleton<ExportViewModel>();
-        services.AddSingleton<ExportModel>();
-        services.AddSingleton<IRegisterMessenger>(sp => sp.GetRequiredService<ExportModel>());
-        services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<ExportModel>());
-
-        services.AddSingleton<AnalysisByTagViewModel>();
-        services.AddSingleton<AnalysisByTagModel>();
-
-        services.AddSingleton<AnalysisByTicketViewModel>();
-        services.AddSingleton<AnalysisByTicketModel>();
-
-        services.AddSingleton<AnalysisBySprintViewModel>();
-        services.AddSingleton<AnalysisBySprintModel>();
-
-        services.AddSingleton<AnalysisControlWrapperViewModel>();
-
-        services.AddSingleton<ContentWrapperViewModel>();
-        services.AddSingleton<SettingsCompositeViewModel>();
+        
     }
-
-
+    
     private static void AddNotificationReceivers(this IServiceCollection services)
     {
         services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);

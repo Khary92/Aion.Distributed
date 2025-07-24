@@ -7,6 +7,7 @@ using Client.Desktop.Communication.NotificationWrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.DTO;
 using Client.Desktop.Factories;
+using Client.Desktop.Services.Initializer;
 using Client.Desktop.Services.LocalSettings;
 using CommunityToolkit.Mvvm.Messaging;
 using Google.Protobuf.WellKnownTypes;
@@ -27,7 +28,7 @@ public class TimeTrackingModel(
     IRequestSender requestSender,
     ILocalSettingsService localSettingsService,
     IMessenger messenger,
-    ITimeSlotViewModelFactory timeSlotViewModelFactory) : ReactiveObject
+    ITimeSlotViewModelFactory timeSlotViewModelFactory) : ReactiveObject, IInitializeAsync, IRegisterMessenger
 {
     private int _currentViewModelIndex;
     private ObservableCollection<TicketDto> _filteredTickets = [];
@@ -68,17 +69,6 @@ public class TimeTrackingModel(
 
     private ObservableCollection<TicketDto> AllTickets { get; } = [];
 
-    public async Task Initialize()
-    {
-        var currentSprint = await requestSender.Send(new GetActiveSprintRequestProto());
-
-        if (currentSprint == null) return;
-
-        FilteredTickets.Clear();
-        var tickets = await requestSender.Send(new GetTicketsForCurrentSprintRequestProto());
-        ListEx.AddRange(FilteredTickets, tickets);
-    }
-
     public void RegisterMessenger()
     {
         messenger.Register<NewTicketMessage>(this, async void (_, m) =>
@@ -102,8 +92,9 @@ public class TimeTrackingModel(
             ticketDto.Apply(m);
         });
 
-        messenger.Register<TicketAddedToSprintNotification>(this, async void (_, _) => { await Initialize(); });
-        messenger.Register<TicketAddedToActiveSprintNotification>(this, async void (_, _) => { await Initialize(); });
+        //TODO This implementation is bad. Fix that 
+        messenger.Register<TicketAddedToSprintNotification>(this, async void (_, _) => { await InitializeAsync(); });
+        messenger.Register<TicketAddedToActiveSprintNotification>(this, async void (_, _) => { await InitializeAsync(); });
 
         messenger.Register<TimeSlotControlCreatedNotification>(this, async void (_, m) =>
         {
@@ -198,5 +189,18 @@ public class TimeTrackingModel(
         {
             TicketId = SelectedTicket.TicketId.ToString()
         });
+    }
+
+    public InitializationType Type => InitializationType.Model;
+
+    public async Task InitializeAsync()
+    {
+        var currentSprint = await requestSender.Send(new GetActiveSprintRequestProto());
+
+        if (currentSprint == null) return;
+
+        FilteredTickets.Clear();
+        var tickets = await requestSender.Send(new GetTicketsForCurrentSprintRequestProto());
+        ListEx.AddRange(FilteredTickets, tickets);
     }
 }

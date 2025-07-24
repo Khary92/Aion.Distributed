@@ -13,7 +13,8 @@ public class ServiceInitializer(
     private readonly List<InitializationType> _order =
     [
         InitializationType.Model,
-        InitializationType.Service
+        InitializationType.Service,
+        InitializationType.ViewModel
     ];
 
     private Dictionary<InitializationType, List<IInitializeAsync>> LoadingStrategy =>

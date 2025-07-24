@@ -12,11 +12,6 @@
              HorizontalAlignment="Stretch"
              VerticalAlignment="Stretch"
              Background="Transparent">
-
-    <UserControl.DataContext>
-        <analysis:AnalysisByTagViewModel />
-    </UserControl.DataContext>
-
     <Grid ColumnDefinitions="200,*"
           RowDefinitions="*">
 

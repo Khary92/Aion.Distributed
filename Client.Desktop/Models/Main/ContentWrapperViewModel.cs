@@ -19,7 +19,6 @@ public class ContentWrapperViewModel : ReactiveObject
     private const int ZeroConstant = 0;
     private const int MenuTransitionDelay = 250;
     private const int MaxMenuWidth = 200;
-    private readonly TimeTrackingViewModel _timeTrackingViewModel;
 
     private Control _currentControl;
 
@@ -75,8 +74,7 @@ public class ContentWrapperViewModel : ReactiveObject
         ToggleSidePanelCommand = ReactiveCommand.Create(ToggleMenu);
 
         _currentControl = timeTrackingControl;
-        _timeTrackingViewModel = timeTrackingViewModel;
-        _timeTrackingViewModel.Model.LoadTimeSlotViewModels().ConfigureAwait(false);
+        timeTrackingViewModel.Model.LoadTimeSlotViewModels().ConfigureAwait(false);
     }
 
     public Control CurrentControl
@@ -98,18 +96,12 @@ public class ContentWrapperViewModel : ReactiveObject
     }
 
     public ReactiveCommand<Unit, Unit> OnTrackingClickCommand { get; }
-    public ReactiveCommand<Unit, Unit> OnDataClickCommand { get; }
     public ReactiveCommand<Unit, Unit> OnExportClickCommand { get; }
     public ReactiveCommand<Unit, Unit> OnAnalysisClickCommand { get; }
     public ReactiveCommand<Unit, Unit> OnSettingsClickCommand { get; }
     public ReactiveCommand<Unit, Unit> ToggleSidePanelCommand { get; }
     public ReactiveCommand<Unit, Unit> OnDocumentationClickCommand { get; }
-
-    public async Task Handle(WorkDaySelectionChangedNotification notification, CancellationToken cancellationToken)
-    {
-        await _timeTrackingViewModel.Model.LoadTimeSlotViewModels();
-    }
-
+    
     private void ToggleMenu()
     {
         IsMenuOpen = !IsMenuOpen;

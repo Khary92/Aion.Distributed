@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Proto.Command.Tickets;
 using Proto.Notifications.Ticket;
 using ReactiveUI;
 
@@ -84,5 +85,11 @@ public class TicketDto : ReactiveObject
         var result = !PreviousDocumentation.Equals(Documentation);
         PreviousDocumentation = Documentation;
         return result;
+    }
+
+    public void Apply(UpdateTicketDataCommandProto notification)
+    {
+        Name = notification.Name;
+        BookingNumber = notification.BookingNumber;
     }
 }

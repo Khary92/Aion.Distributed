@@ -19,30 +19,17 @@ using ReactiveUI;
 
 namespace Client.Desktop.Models.Export;
 
-public class ExportModel : ReactiveObject, IInitializeAsync, IRegisterMessenger
+public class ExportModel(
+    IRequestSender requestSender,
+    IMessenger messenger,
+    IExportService exportService,
+    ITraceCollector tracer,
+    ILocalSettingsService localSettingsService)
+    : ReactiveObject, IInitializeAsync, IRegisterMessenger
 {
-    private readonly IExportService _exportService;
-    private readonly IMessenger _messenger;
-
-    private readonly IRequestSender _requestSender;
-    private readonly ITraceCollector _tracer;
-    private readonly ILocalSettingsService _localSettingsService;
-
     private SettingsDto? Settings { get; set; }
 
     private string _markdownText = null!;
-
-    public ExportModel(IRequestSender requestSender, IMessenger messenger,
-        IExportService exportService, ITraceCollector tracer, ILocalSettingsService localSettingsService)
-    {
-        _requestSender = requestSender;
-        _messenger = messenger;
-        _exportService = exportService;
-        _tracer = tracer;
-        _localSettingsService = localSettingsService;
-
-        SelectedWorkDays.CollectionChanged += RefreshMarkdownViewerHandler;
-    }
 
     public ObservableCollection<WorkDayDto> WorkDays { get; } = [];
     public ObservableCollection<WorkDayDto> SelectedWorkDays { get; } = [];
@@ -55,12 +42,12 @@ public class ExportModel : ReactiveObject, IInitializeAsync, IRegisterMessenger
 
     public async Task<bool> ExportFileAsync()
     {
-        if (_localSettingsService.IsExportPathValid())
+        if (localSettingsService.IsExportPathValid())
         {
-            return await _exportService.ExportToFile(WorkDays);
+            return await exportService.ExportToFile(WorkDays);
         }
 
-        await _tracer.Export.ToFile.PathSettingsInvalid(GetType(), Settings!.ExportPath);
+        await tracer.Export.ToFile.PathSettingsInvalid(GetType(), Settings!.ExportPath);
         return false;
     }
 
@@ -72,36 +59,38 @@ public class ExportModel : ReactiveObject, IInitializeAsync, IRegisterMessenger
         }
         catch (Exception exception)
         {
-            await _tracer.Export.ToFile.ExceptionOccured(GetType(), exception);
+            await tracer.Export.ToFile.ExceptionOccured(GetType(), exception);
         }
     }
 
     public async Task<string> GetMarkdownTextAsync()
     {
-        return await _exportService.GetMarkdownString(SelectedWorkDays);
+        return await exportService.GetMarkdownString(SelectedWorkDays);
     }
 
     public InitializationType Type => InitializationType.Model;
 
     public async Task InitializeAsync()
     {
+        SelectedWorkDays.CollectionChanged += RefreshMarkdownViewerHandler;
+        
         WorkDays.Clear();
-        WorkDays.AddRange(await _requestSender.Send(new GetAllWorkDaysRequestProto()));
+        WorkDays.AddRange(await requestSender.Send(new GetAllWorkDaysRequestProto()));
     }
 
     public void RegisterMessenger()
     {
-        _messenger.Register<ExportPathSetNotification>(this,
+        messenger.Register<ExportPathSetNotification>(this,
             async void (_, m) => { Settings!.ExportPath = m.ExportPath; });
 
-        _messenger.Register<SettingsDto>(this, (_, m) => { Settings = m; });
+        messenger.Register<SettingsDto>(this, (_, m) => { Settings = m; });
 
-        _messenger.Register<NewWorkDayMessage>(this, async void (_, m) =>
+        messenger.Register<NewWorkDayMessage>(this, async void (_, m) =>
         {
-            await _tracer.WorkDay.Create.AggregateReceived(GetType(), m.WorkDay.WorkDayId,
+            await tracer.WorkDay.Create.AggregateReceived(GetType(), m.WorkDay.WorkDayId,
                 m.WorkDay.AsTraceAttributes());
             WorkDays.Add(m.WorkDay);
-            await _tracer.WorkDay.Create.AggregateAdded(GetType(), m.WorkDay.WorkDayId);
+            await tracer.WorkDay.Create.AggregateAdded(GetType(), m.WorkDay.WorkDayId);
         });
     }
 }

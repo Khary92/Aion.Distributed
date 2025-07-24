@@ -70,10 +70,10 @@ public class TimeSlotViewModel : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref _currentView, value);
     }
 
-    public Guid ViewId
+    private Guid ViewId
     {
         get => _viewId;
-        private init => this.RaiseAndSetIfChanged(ref _viewId, value);
+        init => this.RaiseAndSetIfChanged(ref _viewId, value);
     }
 
     public string TimerButtonText

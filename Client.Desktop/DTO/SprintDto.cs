@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Proto.Command.Sprints;
 using Proto.Notifications.Sprint;
 using ReactiveUI;
 
@@ -28,7 +29,7 @@ public class SprintDto : ReactiveObject
     public Guid SprintId
     {
         get => _sprintId;
-        set => this.RaiseAndSetIfChanged(ref _sprintId, value);
+        private init => this.RaiseAndSetIfChanged(ref _sprintId, value);
     }
 
     public string Name
@@ -98,5 +99,12 @@ public class SprintDto : ReactiveObject
     {
         return $"SprintDto:{{sprintId:'{SprintId}', Name:'{Name}', isActive:'{IsActive}'," +
                $" startTime:'{StartTime}', endTime:'{EndTime}', ticketIds:'{TicketIds}'}}";
+    }
+
+    public void Apply(UpdateSprintDataCommandProto notification)
+    {
+        Name = notification.Name;
+        StartTime = notification.StartTime.ToDateTimeOffset();
+        EndTime = notification.EndTime.ToDateTimeOffset();
     }
 }

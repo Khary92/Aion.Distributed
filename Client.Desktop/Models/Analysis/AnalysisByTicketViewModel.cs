@@ -31,7 +31,7 @@ public class AnalysisByTicketViewModel(AnalysisByTicketModel analysisByTicketMod
         set
         {
             this.RaiseAndSetIfChanged(ref _selectedTicket, value);
-            LoadAnalysisByTicketAsync();
+            _ = LoadAnalysisByTicketAsync();
         }
     }
 
@@ -70,7 +70,7 @@ public class AnalysisByTicketViewModel(AnalysisByTicketModel analysisByTicketMod
         set => this.RaiseAndSetIfChanged(ref _mostRelevantTagsByProductivityText, value);
     }
 
-    private async void LoadAnalysisByTicketAsync()
+    private async Task LoadAnalysisByTicketAsync()
     {
         if (SelectedTicket is null) return;
 

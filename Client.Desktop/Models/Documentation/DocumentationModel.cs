@@ -8,6 +8,7 @@ using Client.Desktop.Converter;
 using Client.Desktop.DTO;
 using Client.Desktop.Factories;
 using Client.Desktop.Models.TimeTracking.DynamicControls;
+using Client.Desktop.Services.Initializer;
 using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
@@ -27,7 +28,7 @@ public class DocumentationModel(
     INoteViewFactory noteViewFactory,
     ITypeCheckBoxViewModelFactory typeCheckBoxViewModelFactory,
     ITraceCollector tracer)
-    : ReactiveObject
+    : ReactiveObject, IInitializeAsync, IRegisterMessenger
 {
     private ObservableCollection<NoteViewModel> _allNotes = [];
     private ObservableCollection<TicketDto> _allTickets = [];
@@ -93,29 +94,7 @@ public class DocumentationModel(
 
         SelectedNotes = new ObservableCollection<NoteViewModel>(filteredNotes);
     }
-
-    public async Task Initialize()
-    {
-        var noteTypeDtos = await requestSender.Send(new GetAllNoteTypesRequestProto());
-
-        Options.Clear();
-
-        foreach (var option in noteTypeDtos)
-        {
-            var typeCheckBoxViewModel = typeCheckBoxViewModelFactory.Create(option);
-
-            Options.Add(typeCheckBoxViewModel);
-
-            typeCheckBoxViewModel.WhenAnyValue(x => x.IsChecked)
-                .Subscribe(_ => FilterNotes());
-        }
-
-        AllTickets.Clear();
-        AllTickets.AddRange(await requestSender.Send(new GetAllTicketsRequestProto()));
-
-        if (AllTickets.Any()) SelectedTicket = AllTickets[0];
-    }
-
+    
     public void RegisterMessenger()
     {
         RegisterTicketNotifications();
@@ -250,5 +229,28 @@ public class DocumentationModel(
             ticket.Apply(m);
             await tracer.Ticket.Update.ChangesApplied(GetType(), parsedId);
         });
+    }
+
+    public InitializationType Type => InitializationType.Model;
+    public async Task InitializeAsync()
+    {
+        var noteTypeDtos = await requestSender.Send(new GetAllNoteTypesRequestProto());
+
+        Options.Clear();
+
+        foreach (var option in noteTypeDtos)
+        {
+            var typeCheckBoxViewModel = typeCheckBoxViewModelFactory.Create(option);
+
+            Options.Add(typeCheckBoxViewModel);
+
+            typeCheckBoxViewModel.WhenAnyValue(x => x.IsChecked)
+                .Subscribe(_ => FilterNotes());
+        }
+
+        AllTickets.Clear();
+        AllTickets.AddRange(await requestSender.Send(new GetAllTicketsRequestProto()));
+
+        if (AllTickets.Any()) SelectedTicket = AllTickets[0];
     }
 }

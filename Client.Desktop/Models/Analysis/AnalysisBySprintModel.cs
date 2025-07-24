@@ -1,29 +1,28 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AvaloniaEdit.Utils;
+using Client.Desktop.Communication.NotificationWrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.Decorators;
 using Client.Desktop.DTO;
-using DynamicData;
+using Client.Desktop.Services.Initializer;
+using CommunityToolkit.Mvvm.Messaging;
+using Proto.Command.Sprints;
 using Proto.Requests.AnalysisData;
 using Proto.Requests.Sprints;
 using ReactiveUI;
 
 namespace Client.Desktop.Models.Analysis;
 
-public class AnalysisBySprintModel : ReactiveObject
+public class AnalysisBySprintModel(IMessenger messenger, IRequestSender requestSender)
+    : ReactiveObject, IRegisterMessenger, IInitializeAsync
 {
     private const int AmountOfTagsShown = 3;
-    private readonly IRequestSender _requestSender;
 
     private AnalysisBySprintDecorator? _analysisBySprint;
-
-    public AnalysisBySprintModel(IRequestSender requestSender)
-    {
-        _requestSender = requestSender;
-        InitializeAsync().ConfigureAwait(false);
-    }
 
     public ObservableCollection<SprintDto> Sprints { get; } = [];
 
@@ -129,17 +128,33 @@ public class AnalysisBySprintModel : ReactiveObject
         return builder.ToString();
     }
 
-    private async Task InitializeAsync()
+    public InitializationType Type => InitializationType.Model;
+
+    public async Task InitializeAsync()
     {
         Sprints.Clear();
-        Sprints.AddRange(await _requestSender.Send(new GetAllSprintsRequestProto()));
+        Sprints!.AddRange(await requestSender.Send(new GetAllSprintsRequestProto()));
     }
 
     public async Task SetAnalysisForSprint(SprintDto selectedSprint)
     {
-        AnalysisBySprint = await _requestSender.Send(new GetSprintAnalysisById
+        AnalysisBySprint = await requestSender.Send(new GetSprintAnalysisById
         {
             SprintId = selectedSprint.SprintId.ToString()
+        });
+    }
+
+    public void RegisterMessenger()
+    {
+        messenger.Register<NewSprintMessage>(this, (_, m) => { Sprints.Add(m.Sprint); });
+
+        messenger.Register<UpdateSprintDataCommandProto>(this, (_, m) =>
+        {
+            var sprint = Sprints.FirstOrDefault(s => s.SprintId == Guid.Parse(m.SprintId));
+
+            if (sprint == null) return;
+
+            sprint.Apply(m);
         });
     }
 }

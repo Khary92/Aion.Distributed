@@ -6,6 +6,7 @@ using Client.Desktop.Communication.NotificationWrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.Converter;
 using Client.Desktop.DTO;
+using Client.Desktop.Services.Initializer;
 using Client.Desktop.Services.LocalSettings;
 using Client.Desktop.Services.LocalSettings.Commands;
 using Client.Tracing.Tracing.Tracers;
@@ -16,7 +17,6 @@ using MsBox.Avalonia;
 using MsBox.Avalonia.Dto;
 using MsBox.Avalonia.Enums;
 using Proto.Command.WorkDays;
-using Proto.Notifications.UseCase;
 using Proto.Requests.WorkDays;
 using ReactiveUI;
 
@@ -27,19 +27,22 @@ public class WorkDaysModel(
     IRequestSender requestSender,
     ILocalSettingsCommandSender localSettingsCommandSender,
     IMessenger messenger,
-    ITraceCollector tracer) : ReactiveObject
+    ITraceCollector tracer) : ReactiveObject, IInitializeAsync, IRegisterMessenger
 {
     public ObservableCollection<WorkDayDto> WorkDays { get; } = [];
 
     public void RegisterMessenger()
     {
-        messenger.Register<NewWorkDayMessage>(this, async (_, m) =>
+        messenger.Register<NewWorkDayMessage>(this, async void (_, m) =>
         {
-            await tracer.WorkDay.Create.AggregateReceived(GetType(), m.WorkDay.WorkDayId, m.WorkDay.AsTraceAttributes());
+            await tracer.WorkDay.Create.AggregateReceived(GetType(), m.WorkDay.WorkDayId,
+                m.WorkDay.AsTraceAttributes());
             WorkDays.Add(m.WorkDay);
             await tracer.WorkDay.Create.AggregateAdded(GetType(), m.WorkDay.WorkDayId);
         });
     }
+
+    public InitializationType Type => InitializationType.Model;
 
     public async Task InitializeAsync()
     {

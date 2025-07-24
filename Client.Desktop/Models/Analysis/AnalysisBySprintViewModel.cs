@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
+using System.Threading.Tasks;
 using Client.Desktop.DTO;
 using Client.Proto;
 using LiveChartsCore.Measure;
@@ -34,7 +35,7 @@ public class AnalysisBySprintViewModel(AnalysisBySprintModel analysisBySprintMod
         set
         {
             this.RaiseAndSetIfChanged(ref _selectedSprint, value);
-            LoadAnalysisBySprintAsync();
+            _ = LoadAnalysisBySprintAsync();
         }
     }
 
@@ -47,7 +48,7 @@ public class AnalysisBySprintViewModel(AnalysisBySprintModel analysisBySprintMod
         set => this.RaiseAndSetIfChanged(ref _timeSpentByTicketText, value);
     }
 
-    private async void LoadAnalysisBySprintAsync()
+    private async Task LoadAnalysisBySprintAsync()
     {
         if (SelectedSprint is null) return;
 

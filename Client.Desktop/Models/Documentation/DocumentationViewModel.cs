@@ -1,49 +1,24 @@
 using System;
 using System.Reactive.Linq;
-using Client.Desktop.Communication.Requests;
+using System.Threading.Tasks;
+using Client.Desktop.Services.Initializer;
 using ReactiveUI;
-using Unit = System.Reactive.Unit;
 
 namespace Client.Desktop.Models.Documentation;
 
-public class DocumentationViewModel : ReactiveObject
+public class DocumentationViewModel(DocumentationModel documentationModel) : ReactiveObject, IInitializeAsync
 {
-    private readonly IRequestSender _requestSender;
-    private string _inputText = string.Empty;
+    public DocumentationModel Model { get; } = documentationModel;
 
-    private string _responseText = string.Empty;
+    public InitializationType Type => InitializationType.ViewModel;
 
-    public DocumentationViewModel(IRequestSender requestSender, DocumentationModel documentationModel)
+    public Task InitializeAsync()
     {
-        _requestSender = requestSender;
-        
-        Model = documentationModel;
-
-        Model.Initialize().ConfigureAwait(false);
-        Model.RegisterMessenger();
-
         this.WhenAnyValue(x => x.Model.SelectedTicket)
             .Where(ticket => ticket != null)
             .SelectMany(_ => Observable.FromAsync(Model.UpdateNotesForSelectedTicket))
             .Subscribe();
+
+        return Task.CompletedTask;
     }
-
-    public DocumentationModel Model { get; }
-
-    public string ResponseText
-    {
-        get => _responseText;
-        set => this.RaiseAndSetIfChanged(ref _responseText, value);
-    }
-
-    public string InputText
-    {
-        get => _inputText;
-        set => this.RaiseAndSetIfChanged(ref _inputText, value);
-    }
-
-    public ReactiveCommand<Unit, Unit> LoadModelCommand { get; }
-    public ReactiveCommand<Unit, Unit> CancelPromptCommand { get; }
-    public ReactiveCommand<Unit, Unit> SendRequestCommand { get; }
-    public ReactiveCommand<Unit, Unit> SetPromptCommand { get; }
 }

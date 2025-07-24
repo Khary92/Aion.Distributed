@@ -9,8 +9,7 @@ using ReactiveUI;
 
 namespace Client.Desktop.Models.Settings;
 
-public class SettingsModel(IMessenger messenger,
-    ILocalSettingsCommandSender localSettingsCommandService)
+public class SettingsModel(IMessenger messenger, ILocalSettingsCommandSender localSettingsCommandService)
     : ReactiveObject, IRegisterMessenger
 {
     

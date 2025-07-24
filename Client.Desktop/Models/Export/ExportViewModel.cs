@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Avalonia.Threading;
 using Client.Desktop.Services.Initializer;
 using Client.Tracing.Tracing.Tracers;
 using MsBox.Avalonia;
@@ -17,18 +18,19 @@ public class ExportViewModel : ReactiveObject
     {
         _tracer = tracer;
         Model = exportModel;
-
+        
         ExportCommand = ReactiveCommand.CreateFromTask(ExportFile);
-
+            
         Model.SelectedWorkDays.CollectionChanged += async (_, _) =>
         {
             Model.MarkdownText = await Model.GetMarkdownTextAsync();
         };
-    }
 
+    }
+    
     public ExportModel Model { get; }
 
-    public ReactiveCommand<Unit, Unit> ExportCommand { get; }
+    public ReactiveCommand<Unit, Unit>? ExportCommand { get; internal set; }
 
     private async Task ExportFile()
     {

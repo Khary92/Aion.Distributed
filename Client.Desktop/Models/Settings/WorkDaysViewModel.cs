@@ -1,6 +1,9 @@
 using System;
 using System.Reactive.Linq;
+using System.Threading.Tasks;
+using Avalonia.Threading;
 using Client.Desktop.DTO;
+using Client.Desktop.Services.Initializer;
 using CommunityToolkit.Mvvm.Messaging;
 using Proto.Notifications.UseCase;
 using ReactiveUI;
@@ -10,36 +13,32 @@ namespace Client.Desktop.Models.Settings;
 
 public class WorkDaysViewModel : ReactiveObject
 {
-    private WorkDayDto _selectedWorkDay = null!;
+    private WorkDayDto? _selectedWorkDay;
 
     public WorkDaysViewModel(IMessenger messenger, WorkDaysModel workDaysModel)
     {
         Model = workDaysModel;
-
+        
         LoadSelectedDateCommand = ReactiveCommand.Create(
             () =>
             {
-                workDaysModel.SetSelectedWorkday(SelectedWorkDay);
+                Model.SetSelectedWorkday(SelectedWorkDay!);
                 messenger.Send(new WorkDaySelectionChangedNotification());
             },
             this.WhenAnyValue(x => x.SelectedWorkDay).Any()
         );
 
-        CreateNewDateCommand = ReactiveCommand.CreateFromTask<DateTimeOffset>(workDaysModel.AddWorkDayAsync);
-
-        Model.RegisterMessenger();
-        Model.InitializeAsync().ConfigureAwait(false);
+        CreateNewDateCommand = ReactiveCommand.CreateFromTask<DateTimeOffset>(Model.AddWorkDayAsync);
     }
-
+    
     public WorkDaysModel Model { get; }
 
-    public ReactiveCommand<DateTimeOffset, Unit> CreateNewDateCommand { get; }
+    public ReactiveCommand<DateTimeOffset, Unit>? CreateNewDateCommand { get; internal set; }
+    public ReactiveCommand<Unit, Unit>? LoadSelectedDateCommand { get; internal set; }
 
-    public WorkDayDto SelectedWorkDay
+    public WorkDayDto? SelectedWorkDay
     {
         get => _selectedWorkDay;
         set => this.RaiseAndSetIfChanged(ref _selectedWorkDay, value);
     }
-
-    public ReactiveCommand<Unit, Unit> LoadSelectedDateCommand { get; }
 }
