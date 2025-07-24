@@ -1,5 +1,4 @@
 ﻿using Client.Desktop.Communication.Commands.Notes;
-using Client.Desktop.Communication.Commands.Settings;
 using Client.Desktop.Communication.Commands.StatisticsData;
 using Client.Desktop.Communication.Commands.TimeSlots;
 using Client.Desktop.Communication.Commands.UseCases;
@@ -15,7 +14,6 @@ namespace Client.Desktop.Communication.Commands;
 public interface ICommandSender :
     INoteCommandSender,
     INoteTypeCommandSender,
-    ISettingsCommandSender,
     ISprintCommandSender,
     IStatisticsDataCommandSender,
     ITagCommandSender,

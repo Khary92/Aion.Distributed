@@ -1,7 +1,6 @@
 using System;
 using System.Reactive.Linq;
 using Client.Desktop.Communication.Requests;
-using Client.Desktop.Communication.RequiresChange;
 using ReactiveUI;
 using Unit = System.Reactive.Unit;
 
@@ -9,18 +8,15 @@ namespace Client.Desktop.Models.Documentation;
 
 public class DocumentationViewModel : ReactiveObject
 {
-    private readonly ILanguageModelApi _languageModelApi;
     private readonly IRequestSender _requestSender;
     private string _inputText = string.Empty;
 
     private string _responseText = string.Empty;
 
-    public DocumentationViewModel(IRequestSender requestSender, DocumentationModel documentationModel,
-        ILanguageModelApi languageModelApi)
+    public DocumentationViewModel(IRequestSender requestSender, DocumentationModel documentationModel)
     {
         _requestSender = requestSender;
-        _languageModelApi = languageModelApi;
-
+        
         Model = documentationModel;
 
         Model.Initialize().ConfigureAwait(false);

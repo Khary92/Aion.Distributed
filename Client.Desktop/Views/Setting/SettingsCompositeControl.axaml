@@ -17,11 +17,6 @@
                     <setting:SettingsControl DataContext="{Binding SettingsViewModel}" />
                 </StackPanel>
                 <StackPanel>
-                    <TextBlock Text="Timer settings"
-                               FontWeight="Bold" FontSize="16" Margin="10" HorizontalAlignment="Center" />
-                    <setting:TimerSettingsControl DataContext="{Binding TimerSettingsViewModel}" />
-                </StackPanel>
-                <StackPanel>
                     <TextBlock Text="Work days"
                                FontWeight="Bold" FontSize="16" Margin="10" HorizontalAlignment="Center" />
                     <setting:WorkDaysControl DataContext="{Binding WorkDaysViewModel}" />

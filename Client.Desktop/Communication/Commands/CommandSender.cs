@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands.Notes;
-using Client.Desktop.Communication.Commands.Settings;
 using Client.Desktop.Communication.Commands.StatisticsData;
 using Client.Desktop.Communication.Commands.TimeSlots;
 using Client.Desktop.Communication.Commands.UseCases;
@@ -27,7 +26,6 @@ namespace Client.Desktop.Communication.Commands;
 public class CommandSender(
     INoteCommandSender noteCommandSender,
     INoteTypeCommandSender noteTypeCommandSender,
-    ISettingsCommandSender settingsCommandSender,
     ISprintCommandSender sprintCommandSender,
     IStatisticsDataCommandSender statisticsDataCommandSender,
     ITagCommandSender tagCommandSender,
@@ -60,21 +58,6 @@ public class CommandSender(
     public async Task<bool> Send(ChangeNoteTypeColorCommandProto command)
     {
         return await noteTypeCommandSender.Send(command);
-    }
-
-    public async Task<bool> Send(CreateSettingsCommandProto command)
-    {
-        return await settingsCommandSender.Send(command);
-    }
-
-    public async Task<bool> Send(ChangeExportPathCommandProto command)
-    {
-        return await settingsCommandSender.Send(command);
-    }
-
-    public async Task<bool> Send(ChangeAutomaticTicketAddingToSprintCommandProto command)
-    {
-        return await settingsCommandSender.Send(command);
     }
 
     public async Task<bool> Send(CreateSprintCommandProto command)

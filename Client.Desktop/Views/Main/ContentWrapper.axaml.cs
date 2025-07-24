@@ -46,7 +46,7 @@ public partial class ContentWrapper : Window
 
 
         if (result == ButtonResult.Yes &&
-            Avalonia.Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopApp)
+            Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopApp)
             desktopApp.Shutdown();
     }
 
