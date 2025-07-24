@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
-using Client.Desktop.Communication.NotificationWrappers;
+using Client.Desktop.Communication.Notifications.NotificationWrappers;
 using Client.Desktop.DTO;
 using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;

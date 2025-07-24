@@ -1,6 +1,5 @@
-using Client.Tracing.Tracing.Tracers.NoteType;
-using Client.Tracing.Tracing.Tracers.NoteType.UseCase;
 using Microsoft.Extensions.DependencyInjection;
+using Service.Admin.Tracing.Tracing.NoteType;
 using Service.Admin.Tracing.Tracing.NoteType.UseCase;
 using Service.Admin.Tracing.Tracing.Sprint;
 using Service.Admin.Tracing.Tracing.Sprint.UseCase;

@@ -1,7 +1,6 @@
-using Client.Tracing.Tracing.Tracers.NoteType.UseCase;
 using Service.Admin.Tracing.Tracing.NoteType.UseCase;
 
-namespace Client.Tracing.Tracing.Tracers.NoteType;
+namespace Service.Admin.Tracing.Tracing.NoteType;
 
 public interface INoteTypeUseCaseSelector
 {

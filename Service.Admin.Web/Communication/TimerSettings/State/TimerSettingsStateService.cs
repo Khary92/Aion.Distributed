@@ -1,6 +1,6 @@
 ﻿using Proto.Command.TimerSettings;
 using Proto.Requests.TimerSettings;
-using Service.Admin.Web.Communication.TimerSettings.Notifications.TimerSettings;
+using Service.Admin.Web.Communication.TimerSettings.Notifications;
 using Service.Admin.Web.DTO;
 
 namespace Service.Admin.Web.Communication.TimerSettings.State;

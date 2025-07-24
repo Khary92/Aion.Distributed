@@ -1,4 +1,4 @@
-namespace Client.Tracing.Tracing.Tracers.NoteType.UseCase;
+namespace Service.Admin.Tracing.Tracing.NoteType.UseCase;
 
 public interface IChangeNoteTypeColorTraceCollector
 {

@@ -1,4 +1,4 @@
-namespace Service.Admin.Web.Communication.TimerSettings.Notifications.TimerSettings;
+namespace Service.Admin.Web.Communication.TimerSettings.Notifications;
 
 public record WebSnapshotIntervalChangedNotification(
     Guid TimerSettingsId,

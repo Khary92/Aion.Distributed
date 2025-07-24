@@ -1,3 +1,3 @@
-namespace Client.Desktop.Communication.NotificationWrappers;
+namespace Client.Desktop.Communication.Notifications.NotificationWrappers;
 
 public record NewStatisticDataMessage;

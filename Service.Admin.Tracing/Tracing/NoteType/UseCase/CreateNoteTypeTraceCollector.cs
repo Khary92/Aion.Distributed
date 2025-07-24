@@ -1,9 +1,8 @@
-using Service.Admin.Tracing.Tracing.NoteType.UseCase;
 using Service.Monitoring.Shared;
 using Service.Monitoring.Shared.Enums;
 using Service.Monitoring.Shared.Tracing;
 
-namespace Client.Tracing.Tracing.Tracers.NoteType.UseCase;
+namespace Service.Admin.Tracing.Tracing.NoteType.UseCase;
 
 public class CreateNoteTypeTraceCollector(ITracingDataCommandSender commandSender) : ICreateNoteTypeTraceCollector
 {

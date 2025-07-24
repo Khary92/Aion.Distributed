@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AvaloniaEdit.Utils;
-using Client.Desktop.Communication.NotificationWrappers;
+using Client.Desktop.Communication.Notifications.NotificationWrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.Decorators;
 using Client.Desktop.DTO;
