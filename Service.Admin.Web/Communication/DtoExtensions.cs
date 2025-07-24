@@ -3,6 +3,7 @@ using Proto.DTO.NoteType;
 using Proto.DTO.Sprint;
 using Proto.DTO.Tag;
 using Proto.DTO.Ticket;
+using Proto.DTO.TimerSettings;
 using Proto.Requests.NoteTypes;
 using Proto.Requests.Sprints;
 using Proto.Requests.Tags;
@@ -13,6 +14,12 @@ namespace Service.Admin.Web.Communication;
 
 public static class DtoExtensions
 {
+    public static TimerSettingsDto ToDto(this TimerSettingsProto timerSettings)
+    {
+        return new TimerSettingsDto(Guid.Parse(timerSettings.TimerSettingsId), timerSettings.DocumentationSaveInterval,
+            timerSettings.SnapshotSaveInterval);
+    }
+
     public static List<NoteTypeDto> ToDtoList(this GetAllNoteTypesResponseProto? noteTypeListProto)
     {
         if (noteTypeListProto == null) return [];
@@ -26,8 +33,7 @@ public static class DtoExtensions
     {
         return new NoteTypeDto(Guid.Parse(noteType.NoteTypeId), noteType.Name, noteType.Color);
     }
-    
-    
+
     public static List<TagDto> ToDtoList(this TagListProto? tagListProto)
     {
         if (tagListProto == null) return [];
@@ -41,7 +47,7 @@ public static class DtoExtensions
     {
         return new TagDto(Guid.Parse(tag.TagId), tag.Name, tag.IsSelected);
     }
-    
+
     public static List<TicketDto> ToDtoList(this TicketListProto? ticketListProto)
     {
         if (ticketListProto == null) return [];
@@ -66,7 +72,7 @@ public static class DtoExtensions
             [..sprintIds]
         );
     }
-    
+
     public static SprintDto ToDto(this SprintProto sprint)
     {
         var ticketIds = sprint.TicketIds
@@ -101,7 +107,7 @@ public static class DtoExtensions
 
         return repeatedField;
     }
-    
+
     private static SprintDto ToDto(SprintProto proto, bool isActive)
     {
         var ticketIds = proto.TicketIds
@@ -117,7 +123,7 @@ public static class DtoExtensions
             proto.End.ToDateTimeOffset(),
             ticketIds);
     }
-    
+
     public static List<SprintDto> ToDtoList(this SprintListProto? sprintListProto)
     {
         if (sprintListProto == null) return [];

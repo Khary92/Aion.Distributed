@@ -6,6 +6,7 @@ using Proto.Requests.NoteTypes;
 using Proto.Requests.Sprints;
 using Proto.Requests.Tags;
 using Proto.Requests.Tickets;
+using Proto.Requests.TimerSettings;
 
 namespace Client.Desktop.Communication.Requests;
 
@@ -29,4 +30,8 @@ public interface ISharedRequestSender
     //NoteTypes
     Task<List<NoteTypeDto>> Send(GetAllNoteTypesRequestProto request);
     Task<NoteTypeDto> Send(GetNoteTypeByIdRequestProto request);
+    
+    //TimerSettings
+    Task<TimerSettingsDto> Send(GetTimerSettingsRequestProto request);
+    Task<bool> Send(IsTimerSettingExistingRequestProto request);
 }

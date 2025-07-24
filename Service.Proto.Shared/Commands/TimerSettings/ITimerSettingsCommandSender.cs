@@ -1,7 +1,6 @@
-﻿using System.Threading.Tasks;
-using Proto.Command.TimerSettings;
+﻿using Proto.Command.TimerSettings;
 
-namespace Client.Desktop.Communication.Commands.TimerSettings;
+namespace Service.Proto.Shared.Commands.TimerSettings;
 
 public interface ITimerSettingsCommandSender
 {

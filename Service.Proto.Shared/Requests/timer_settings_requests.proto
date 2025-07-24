@@ -13,7 +13,7 @@ message TimerSettingExistsProto {
   bool exists = 1;
 }
 
-service TimerSettingsRequestService {
+service TimerSettingsProtoRequestService {
   rpc GetTimerSettings(GetTimerSettingsRequestProto) returns (TimerSettingsProto);
   rpc IsTimerSettingExisting(IsTimerSettingExistingRequestProto) returns (TimerSettingExistsProto);
 }

@@ -2,10 +2,12 @@
 using Proto.Command.Sprints;
 using Proto.Command.Tags;
 using Proto.Command.Tickets;
+using Proto.Command.TimerSettings;
 using Service.Proto.Shared.Commands.NoteTypes;
 using Service.Proto.Shared.Commands.Sprints;
 using Service.Proto.Shared.Commands.Tags;
 using Service.Proto.Shared.Commands.Tickets;
+using Service.Proto.Shared.Commands.TimerSettings;
 
 namespace Service.Admin.Web.Communication;
 
@@ -13,7 +15,8 @@ public class SharedCommandSender(
     ITicketCommandSender ticketCommandSender,
     ISprintCommandSender sprintCommandSender,
     ITagCommandSender tagCommandSender,
-    INoteTypeCommandSender noteTypeCommandSender)
+    INoteTypeCommandSender noteTypeCommandSender,
+    ITimerSettingsCommandSender timerSettingsCommandSender)
     : ISharedCommandSender
 {
     public async Task<bool> Send(CreateTicketCommandProto command)
@@ -79,5 +82,20 @@ public class SharedCommandSender(
     public async Task<bool> Send(ChangeNoteTypeColorCommandProto command)
     {
         return await noteTypeCommandSender.Send(command);
+    }
+
+    public async Task<bool> Send(CreateTimerSettingsCommandProto command)
+    {
+        return await timerSettingsCommandSender.Send(command);
+    }
+
+    public async Task<bool> Send(ChangeSnapshotSaveIntervalCommandProto command)
+    {
+        return await timerSettingsCommandSender.Send(command);
+    }
+
+    public async Task<bool> Send(ChangeDocuTimerSaveIntervalCommandProto command)
+    {
+        return await timerSettingsCommandSender.Send(command);
     }
 }

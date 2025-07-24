@@ -8,6 +8,7 @@ using Proto.DTO.Sprint;
 using Proto.DTO.StatisticsData;
 using Proto.DTO.Tag;
 using Proto.DTO.Ticket;
+using Proto.DTO.TimerSettings;
 using Proto.DTO.TimeSlots;
 using Proto.Requests.NoteTypes;
 using Proto.Requests.Sprints;
@@ -18,6 +19,12 @@ namespace Client.Desktop.Communication.Requests;
 
 public static class DtoExtensions
 {
+    public static TimerSettingsDto ToDto(this TimerSettingsProto timerSettings)
+    {
+        return new TimerSettingsDto(Guid.Parse(timerSettings.TimerSettingsId), timerSettings.DocumentationSaveInterval,
+            timerSettings.SnapshotSaveInterval);
+    }
+
     public static List<NoteTypeDto> ToDtoList(this GetAllNoteTypesResponseProto? noteTypeListProto)
     {
         return noteTypeListProto == null ? [] : noteTypeListProto.NoteTypes.Select(ToDto).ToList();
@@ -27,11 +34,11 @@ public static class DtoExtensions
     {
         return new NoteTypeDto(Guid.Parse(noteType.NoteTypeId), noteType.Name, noteType.Color);
     }
-    
+
     public static List<TagDto> ToDtoList(this TagListProto? tagListProto)
     {
         if (tagListProto == null) return [];
-        
+
         return tagListProto.Tags
             .Select(ToDto)
             .ToList();
@@ -41,7 +48,7 @@ public static class DtoExtensions
     {
         return new TagDto(Guid.Parse(tag.TagId), tag.Name, tag.IsSelected);
     }
-    
+
     public static List<TicketDto> ToDtoList(this TicketListProto? ticketListProto)
     {
         if (ticketListProto == null) return [];
@@ -66,7 +73,7 @@ public static class DtoExtensions
             [..sprintIds]
         );
     }
-    
+
     public static List<SprintDto?> ToDtoList(this SprintListProto? sprintListProto)
     {
         if (sprintListProto == null) return [];
@@ -93,7 +100,7 @@ public static class DtoExtensions
             [..ticketIds]
         );
     }
-    
+
     public static StatisticsDataDto ToDto(this StatisticsDataProto proto)
     {
         return new StatisticsDataDto(Guid.Parse(proto.StatisticsId), Guid.Parse(proto.TimeSlotId),

@@ -1,12 +1,12 @@
 ﻿using Grpc.Core;
 using Grpc.Net.Client;
-using Proto.Notifications.Ticket;
-using Service.Admin.Tracing;
-using Service.Admin.Web.Communication.Tickets.State;
+using Proto.Notifications.TimerSettings;
+using Service.Admin.Web.Communication.TimerSettings.State;
+using SubscribeRequest = Proto.Notifications.TimerSettings.SubscribeRequest;
 
-namespace Service.Admin.Web.Communication.Tickets;
+namespace Service.Admin.Web.Communication.TimerSettings;
 
-public class TicketNotificationsReceiver(ITraceCollector tracer, ITicketStateService ticketStateService)
+public class TimerSettingsNotificationsReceiver(ITimerSettingsStateService timerSettingsStateService)
 {
     public async Task SubscribeToNotifications(CancellationToken stoppingToken = default)
     {
@@ -22,32 +22,29 @@ public class TicketNotificationsReceiver(ITraceCollector tracer, ITicketStateSer
         };
 
         var channel = GrpcChannel.ForAddress("http://core-service:8080", channelOptions);
-        var client = new TicketNotificationService.TicketNotificationServiceClient(channel);
+        var client = new TimerSettingsNotificationService.TimerSettingsNotificationServiceClient(channel);
 
         while (!stoppingToken.IsCancellationRequested)
         {
             try
             {
                 using var call =
-                    client.SubscribeTicketNotifications(new SubscribeRequest(), cancellationToken: stoppingToken);
+                    client.SubscribeTimerSettingsNotifications(new SubscribeRequest(), cancellationToken: stoppingToken);
 
                 await foreach (var notification in call.ResponseStream.ReadAllAsync(stoppingToken))
                 {
                     switch (notification.NotificationCase)
                     {
-                        case TicketNotification.NotificationOneofCase.TicketCreated:
-                            var notificationTicketCreated = notification.TicketCreated;
-                            await tracer.Ticket.Create.NotificationReceived(GetType(),
-                                Guid.Parse(notificationTicketCreated.TicketId), notificationTicketCreated);
-                            await ticketStateService.AddTicket(notificationTicketCreated.ToDto());
+                        case TimerSettingsNotification.NotificationOneofCase.TimerSettingsCreated:
+                            await timerSettingsStateService.SetTimerSettings(notification.TimerSettingsCreated.ToDto());
                             break;
 
-                        case TicketNotification.NotificationOneofCase.TicketDataUpdated:
-                            ticketStateService.Apply(notification.TicketDataUpdated.ToNotification());
+                        case TimerSettingsNotification.NotificationOneofCase.DocuTimerSaveIntervalChanged:
+                            timerSettingsStateService.Apply(notification.DocuTimerSaveIntervalChanged.ToNotification());
                             break;
 
-                        case TicketNotification.NotificationOneofCase.TicketDocumentationUpdated:
-                            ticketStateService.Apply(notification.TicketDocumentationUpdated.ToNotification());
+                        case TimerSettingsNotification.NotificationOneofCase.SnapshotSaveIntervalChanged:
+                            timerSettingsStateService.Apply(notification.SnapshotSaveIntervalChanged.ToNotification());
                             break;
                     }
                 }

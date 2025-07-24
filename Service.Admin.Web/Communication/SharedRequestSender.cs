@@ -2,14 +2,17 @@
 using Proto.DTO.Sprint;
 using Proto.DTO.Tag;
 using Proto.DTO.Ticket;
+using Proto.DTO.TimerSettings;
 using Proto.Requests.NoteTypes;
 using Proto.Requests.Sprints;
 using Proto.Requests.Tags;
 using Proto.Requests.Tickets;
+using Proto.Requests.TimerSettings;
 using Service.Proto.Shared.Requests.NoteTypes;
 using Service.Proto.Shared.Requests.Sprints;
 using Service.Proto.Shared.Requests.Tags;
 using Service.Proto.Shared.Requests.Tickets;
+using Service.Proto.Shared.Requests.TimerSettings;
 
 namespace Service.Admin.Web.Communication;
 
@@ -17,7 +20,8 @@ public class SharedRequestSender(
     ITicketRequestSender ticketRequestSender,
     ISprintRequestSender sprintRequestSender,
     ITagRequestSender tagRequestSender,
-    INoteTypeRequestSender noteTypeRequestSender)
+    INoteTypeRequestSender noteTypeRequestSender,
+    ITimerSettingsRequestSender timerSettingsRequestSender)
     : ISharedRequestSender
 {
     public async Task<TicketListProto> Send(GetAllTicketsRequestProto request)
@@ -73,5 +77,15 @@ public class SharedRequestSender(
     public async Task<NoteTypeProto> Send(GetNoteTypeByIdRequestProto request)
     {
         return await noteTypeRequestSender.Send(request);
+    }
+
+    public async Task<TimerSettingsProto> Send(GetTimerSettingsRequestProto request)
+    {
+        return await timerSettingsRequestSender.Send(request);
+    }
+
+    public async Task<bool> Send(IsTimerSettingExistingRequestProto request)
+    {
+        return await timerSettingsRequestSender.Send(request);
     }
 }

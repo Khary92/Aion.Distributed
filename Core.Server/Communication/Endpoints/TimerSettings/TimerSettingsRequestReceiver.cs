@@ -6,7 +6,7 @@ using Proto.Requests.TimerSettings;
 namespace Core.Server.Communication.Endpoints.TimerSettings;
 
 public class TimerSettingsRequestReceiver(ITimerSettingsRequestsService timerSettingsRequestsService)
-    : TimerSettingsRequestService.TimerSettingsRequestServiceBase
+    : TimerSettingsProtoRequestService.TimerSettingsProtoRequestServiceBase
 {
     public override async Task<TimerSettingsProto> GetTimerSettings(GetTimerSettingsRequestProto request,
         ServerCallContext context)

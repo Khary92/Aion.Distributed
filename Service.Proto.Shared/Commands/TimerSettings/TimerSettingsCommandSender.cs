@@ -1,15 +1,17 @@
-﻿using System.Threading.Tasks;
-using Client.Proto;
-using Grpc.Net.Client;
+﻿using Grpc.Net.Client;
 using Proto.Command.TimerSettings;
 
-namespace Client.Desktop.Communication.Commands.TimerSettings;
+namespace Service.Proto.Shared.Commands.TimerSettings;
 
 public class TimerSettingsCommandSender : ITimerSettingsCommandSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
-    private readonly TimerSettingsCommandProtoService.TimerSettingsCommandProtoServiceClient _client = new(Channel);
-
+    private readonly TimerSettingsCommandProtoService.TimerSettingsCommandProtoServiceClient _client;
+    
+    public TimerSettingsCommandSender(string address)
+    {
+        var channel = GrpcChannel.ForAddress(address);
+        _client = new(channel);
+    }
     public async Task<bool> Send(CreateTimerSettingsCommandProto command)
     {
         var response = await _client.CreateTimerSettingsAsync(command);

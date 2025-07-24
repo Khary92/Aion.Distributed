@@ -9,14 +9,18 @@ using Service.Admin.Web.Communication.Tags;
 using Service.Admin.Web.Communication.Tags.State;
 using Service.Admin.Web.Communication.Tickets;
 using Service.Admin.Web.Communication.Tickets.State;
+using Service.Admin.Web.Communication.TimerSettings;
+using Service.Admin.Web.Communication.TimerSettings.State;
 using Service.Proto.Shared.Commands.NoteTypes;
 using Service.Proto.Shared.Commands.Sprints;
 using Service.Proto.Shared.Commands.Tags;
 using Service.Proto.Shared.Commands.Tickets;
+using Service.Proto.Shared.Commands.TimerSettings;
 using Service.Proto.Shared.Requests.NoteTypes;
 using Service.Proto.Shared.Requests.Sprints;
 using Service.Proto.Shared.Requests.Tags;
 using Service.Proto.Shared.Requests.Tickets;
+using Service.Proto.Shared.Requests.TimerSettings;
 
 namespace Service.Admin.Web;
 
@@ -31,6 +35,7 @@ public static class AdminServiceExtension
         services.AddSingleton<ITagStateService, TagStateService>();
         services.AddSingleton<INoteTypeStateService, NoteTypeStateService>();
         services.AddSingleton<ISprintStateService, SprintStateService>();
+        services.AddSingleton<ITimerSettingsStateService, TimerSettingsStateService>();
 
         services.AddRazorComponents()
             .AddInteractiveServerComponents();
@@ -53,6 +58,9 @@ public static class AdminServiceExtension
         
         services.AddSingleton<NoteTypeNotificationReceiver>();
         services.AddHostedService<NoteTypeNotificationHostedService>();
+        
+        services.AddSingleton<TimerSettingsNotificationsReceiver>();
+        services.AddHostedService<TimerSettingsNotificationHostedService>();
 
         AddSharedDataServices(services);
 
@@ -76,5 +84,8 @@ public static class AdminServiceExtension
 
         services.AddSingleton<INoteTypeCommandSender>(sp => new NoteTypeCommandSender(ServerAddress));
         services.AddSingleton<INoteTypeRequestSender>(sp => new NoteTypeRequestSender(ServerAddress));
+        
+        services.AddSingleton<ITimerSettingsCommandSender>(sp => new TimerSettingsCommandSender(ServerAddress));
+        services.AddSingleton<ITimerSettingsRequestSender>(sp => new TimerSettingsRequestSender(ServerAddress));
     }
 }

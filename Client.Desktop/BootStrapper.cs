@@ -2,7 +2,6 @@ using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.Commands.Notes;
 using Client.Desktop.Communication.Commands.Settings;
 using Client.Desktop.Communication.Commands.StatisticsData;
-using Client.Desktop.Communication.Commands.TimerSettings;
 using Client.Desktop.Communication.Commands.TimeSlots;
 using Client.Desktop.Communication.Commands.UseCases;
 using Client.Desktop.Communication.Commands.WorkDays;
@@ -12,7 +11,6 @@ using Client.Desktop.Communication.Requests.Analysis;
 using Client.Desktop.Communication.Requests.Notes;
 using Client.Desktop.Communication.Requests.Replays;
 using Client.Desktop.Communication.Requests.StatisticsData;
-using Client.Desktop.Communication.Requests.TimerSettings;
 using Client.Desktop.Communication.Requests.TimeSlots;
 using Client.Desktop.Communication.Requests.UseCase;
 using Client.Desktop.Communication.Requests.WorkDays;
@@ -35,7 +33,6 @@ using Client.Desktop.Services.Cache;
 using Client.Desktop.Services.Initializer;
 using Client.Desktop.Services.LocalSettings;
 using Client.Desktop.Views.Analysis;
-using Client.Desktop.Views.Data;
 using Client.Desktop.Views.Documentation;
 using Client.Desktop.Views.Export;
 using Client.Desktop.Views.Main;
@@ -58,10 +55,13 @@ using Service.Proto.Shared.Commands.NoteTypes;
 using Service.Proto.Shared.Commands.Sprints;
 using Service.Proto.Shared.Commands.Tags;
 using Service.Proto.Shared.Commands.Tickets;
+using Service.Proto.Shared.Commands.TimerSettings;
 using Service.Proto.Shared.Requests.NoteTypes;
 using Service.Proto.Shared.Requests.Sprints;
 using Service.Proto.Shared.Requests.Tags;
 using Service.Proto.Shared.Requests.Tickets;
+using Service.Proto.Shared.Requests.TimerSettings;
+using ITimerSettingsCommandSender = Service.Proto.Shared.Commands.TimerSettings.ITimerSettingsCommandSender;
 
 namespace Client.Desktop;
 
@@ -129,7 +129,6 @@ public static class Bootstrapper
         services.AddSingleton<SettingsCompositeControl>();
         services.AddSingleton<TimeTrackingControl>();
         services.AddSingleton<DocumentationControl>();
-        services.AddSingleton<DataCompositeControl>();
         services.AddSingleton<ExportControl>();
         services.AddSingleton<AnalysisControlWrapper>();
     }

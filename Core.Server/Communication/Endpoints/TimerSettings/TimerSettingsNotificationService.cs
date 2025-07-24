@@ -3,45 +3,75 @@ using Proto.Notifications.TimerSettings;
 
 namespace Core.Server.Communication.Endpoints.TimerSettings;
 
-public class TimerSettingsNotificationService : Proto.Notifications.TimerSettings.TimerSettingsNotificationService.
-    TimerSettingsNotificationServiceBase
+public class TimerSettingsNotificationService : Proto.Notifications.TimerSettings.TimerSettingsNotificationService.TimerSettingsNotificationServiceBase
 {
-    private CancellationToken _cancellationToken;
-    private IServerStreamWriter<TimerSettingsNotification>? _responseStream;
+    private readonly Dictionary<Guid, (IServerStreamWriter<TimerSettingsNotification> Stream, CancellationToken Token)>
+        _clients
+            = new();
+
+    private readonly object _lock = new();
 
     public override async Task SubscribeTimerSettingsNotifications(
         SubscribeRequest request,
         IServerStreamWriter<TimerSettingsNotification> responseStream,
         ServerCallContext context)
     {
-        _responseStream = responseStream;
-        _cancellationToken = context.CancellationToken;
+        var clientId = Guid.NewGuid();
+
+        lock (_lock)
+        {
+            _clients.Add(clientId, (responseStream, context.CancellationToken));
+        }
 
         try
         {
-            await Task.Delay(Timeout.Infinite, _cancellationToken);
+            await Task.Delay(Timeout.Infinite, context.CancellationToken);
         }
         catch (OperationCanceledException)
         {
-            // Verbindung wurde abgebrochen
+            // Verbindung des Clients wurde abgebrochen
         }
         finally
         {
-            _responseStream = null;
+            lock (_lock)
+            {
+                _clients.Remove(clientId);
+            }
         }
     }
 
     public async Task SendNotificationAsync(TimerSettingsNotification notification)
     {
-        if (_responseStream is not null && !_cancellationToken.IsCancellationRequested)
+        List<Guid> clientsToRemove = new();
+
+        foreach (var (clientId, (stream, token)) in _clients)
+        {
+            if (token.IsCancellationRequested)
+            {
+                clientsToRemove.Add(clientId);
+                continue;
+            }
+
             try
             {
-                await _responseStream.WriteAsync(notification, _cancellationToken);
+                await stream.WriteAsync(notification, token);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Fehler beim Senden der TimerSettingsNotification: {ex.Message}");
-                _responseStream = null;
+                Console.WriteLine($"Fehler beim Senden an Client {clientId}: {ex.Message}");
+                clientsToRemove.Add(clientId);
             }
+        }
+
+        if (clientsToRemove.Count > 0)
+        {
+            lock (_lock)
+            {
+                foreach (var clientId in clientsToRemove)
+                {
+                    _clients.Remove(clientId);
+                }
+            }
+        }
     }
 }
