@@ -6,7 +6,7 @@ using Proto.Requests.Tags;
 
 namespace Core.Server.Communication.Endpoints.Tag;
 
-public class TagRequestReceiver(ITagRequestsService tagRequestsService) : TagRequestService.TagRequestServiceBase
+public class TagRequestReceiver(ITagRequestsService tagRequestsService) : TagProtoRequestService.TagProtoRequestServiceBase
 {
     public override async Task<TagListProto> GetAllTags(GetAllTagsRequestProto request, ServerCallContext context)
     {

@@ -4,7 +4,7 @@ using Proto.Requests.NoteTypes;
 
 namespace Core.Server.Communication.Mocks.NoteType;
 
-public class MockNoteTypeRequestService : NoteTypesRequestService.NoteTypesRequestServiceBase
+public class MockNoteTypeRequestService : NoteTypeProtoRequestService.NoteTypeProtoRequestServiceBase
 {
     public override Task<GetAllNoteTypesResponseProto> GetAllNoteTypes(GetAllNoteTypesRequestProto request,
         ServerCallContext context)

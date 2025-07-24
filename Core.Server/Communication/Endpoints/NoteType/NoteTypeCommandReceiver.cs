@@ -6,7 +6,7 @@ namespace Core.Server.Communication.Endpoints.NoteType;
 
 public class NoteTypeCommandReceiver(
     INoteTypeCommandsService noteTypeCommandsService)
-    : NoteTypeCommandProtoService.NoteTypeCommandProtoServiceBase
+    : NoteTypeProtoCommandService.NoteTypeProtoCommandServiceBase
 {
     public override async Task<CommandResponse> ChangeNoteTypeColor(ChangeNoteTypeColorCommandProto request,
         ServerCallContext context)

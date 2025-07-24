@@ -18,7 +18,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Server.Test", "Core.Se
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.Desktop.Test", "Client.Desktop.Test\Client.Desktop.Test.csproj", "{C05526D5-9BF7-4F70-80C8-28A50F631640}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Proto.Common", "Proto.Common\Proto.Common.csproj", "{9DC7E2C3-742D-4749-8A36-082A3FF88BC3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Proto.Shared", "Service.Proto.Shared\Service.Proto.Shared.csproj", "{9DC7E2C3-742D-4749-8A36-082A3FF88BC3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Monitoring", "Service.Monitoring\Service.Monitoring.csproj", "{AF2A2ABC-ECE8-4DAB-B551-F3ADF1A2E570}"
 EndProject
@@ -31,6 +31,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Admin.Web", "Service.Admin.Web\Service.Admin.Web.csproj", "{EE822821-F086-4A81-BB4E-81058F3501A4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Admin.Proto", "Service.Admin.Proto\Service.Admin.Proto.csproj", "{D51E25EA-7BC0-4861-BF6A-5BF883A266BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Admin.Tracing", "Service.Admin.Tracing\Service.Admin.Tracing.csproj", "{913B576F-F8E1-40DD-9DA8-4E87D3213376}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -102,5 +104,9 @@ Global
 		{D51E25EA-7BC0-4861-BF6A-5BF883A266BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D51E25EA-7BC0-4861-BF6A-5BF883A266BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D51E25EA-7BC0-4861-BF6A-5BF883A266BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{913B576F-F8E1-40DD-9DA8-4E87D3213376}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{913B576F-F8E1-40DD-9DA8-4E87D3213376}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{913B576F-F8E1-40DD-9DA8-4E87D3213376}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{913B576F-F8E1-40DD-9DA8-4E87D3213376}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

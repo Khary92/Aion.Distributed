@@ -17,11 +17,6 @@
                     <setting:SettingsControl DataContext="{Binding SettingsViewModel}" />
                 </StackPanel>
                 <StackPanel>
-                    <TextBlock Text="Documentation settings"
-                               FontWeight="Bold" FontSize="16" Margin="10" HorizontalAlignment="Center" />
-                    <setting:AiSettingsControl DataContext="{Binding AiSettingsViewModel}" />
-                </StackPanel>
-                <StackPanel>
                     <TextBlock Text="Timer settings"
                                FontWeight="Bold" FontSize="16" Margin="10" HorizontalAlignment="Center" />
                     <setting:TimerSettingsControl DataContext="{Binding TimerSettingsViewModel}" />

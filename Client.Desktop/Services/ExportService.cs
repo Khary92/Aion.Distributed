@@ -7,8 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.DTO;
+using Client.Desktop.DTO.Local;
 using Client.Desktop.FileSystem;
-using Proto.Requests.Settings;
+using Client.Desktop.Services.Initializer;
+using Client.Desktop.Services.LocalSettings.Commands;
+using CommunityToolkit.Mvvm.Messaging;
 using Proto.Requests.Tickets;
 using Proto.Requests.TimeSlots;
 
@@ -16,16 +19,18 @@ namespace Client.Desktop.Services;
 
 public class ExportService(
     IRequestSender requestSender,
-    IFileSystemWriter fileSystemWriter)
-    : IExportService
+    IFileSystemWriter fileSystemWriter,
+    IMessenger messenger)
+    : IExportService, IRegisterMessenger
 {
+    private SettingsDto? LocalSettings { get; set; }
+
     public async Task<bool> ExportToFile(Collection<WorkDayDto> workDayDtos)
     {
         if (workDayDtos.Count == 0) return false;
 
         var markdownString = await GetMarkdownString(workDayDtos);
-        var config = await requestSender.Send(new GetSettingsRequestProto());
-        var filePath = BuildFilePath(workDayDtos.First().Date.Date, config.ExportPath);
+        var filePath = BuildFilePath(workDayDtos.First().Date.Date, LocalSettings!.ExportPath);
 
         try
         {
@@ -60,9 +65,9 @@ public class ExportService(
 
     private static string BuildFilePath(DateTime date, string exportPath)
     {
-        return Path.Combine(exportPath, $"{date:MM/dd/yyyy}.md");
+        return Path.Combine(exportPath, $"{date:MM-dd-yyyy}.md");
     }
-
+    
     private async Task<Dictionary<DateTimeOffset, List<TicketDataHolder>>> GetDataForSelectedWorkDays(
         Collection<WorkDayDto> workDayDtos)
     {
@@ -121,5 +126,12 @@ public class ExportService(
         {
             return TimeSpan.FromSeconds(ElapsedSeconds).ToString(@"hh\:mm") + "h";
         }
+    }
+
+    public void RegisterMessenger()
+    {
+        messenger.Register<ExportPathSetNotification>(this, (_, m) => { LocalSettings!.ExportPath = m.ExportPath; });
+
+        messenger.Register<SettingsDto>(this, (_, m) => { LocalSettings = m; });
     }
 }

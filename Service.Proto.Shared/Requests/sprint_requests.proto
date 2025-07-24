@@ -1,0 +1,17 @@
+syntax = "proto3";
+import "DTO/sprint.proto";
+
+option csharp_namespace = "Proto.Requests.Sprints";
+
+message GetActiveSprintRequestProto {}
+
+message GetAllSprintsRequestProto {}
+
+message SprintListProto {
+  repeated SprintProto sprints = 1;
+}
+
+service SprintProtoRequestService {
+  rpc GetActiveSprint(GetActiveSprintRequestProto) returns (SprintProto);
+  rpc GetAllSprints(GetAllSprintsRequestProto) returns (SprintListProto);
+}

@@ -1,0 +1,172 @@
+@page "/sprintData"
+@using global::Proto.Command.Sprints
+@using Google.Protobuf.WellKnownTypes
+@using Service.Admin.Tracing
+@using Service.Admin.Web.Communication
+@using Service.Admin.Web.Communication.Sprints.State
+@using Service.Admin.Web.DTO
+@rendermode InteractiveServer
+@inject ISharedCommandSender CommandSender
+@inject ITraceCollector Tracer
+@inject ISprintStateService SprintStateService
+
+<div class="row">
+    <div class="col-5">
+        <h2>Sprints</h2>
+        <div class="mb-2">
+            <label>Sprint name</label>
+            <input @bind="_newSprintName" class="form-control"/>
+        </div>
+        <div class="mb-2">
+            <label>Start date</label>
+            <InputDate @bind-Value="_startTime" class="form-control"/>
+        </div>
+        <div class="mb-2">
+            <label>End date</label>
+            <InputDate @bind-Value="_endTime" class="form-control"/>
+        </div>
+        <div class="mb-2">
+            <button class="btn btn-success me-2"
+                    disabled="@(!CanSave)"
+                    @onclick="PersistSprint">Save
+            </button>
+            <button class="btn btn-warning me-2"
+                    disabled="@(_selectedSprint is null)"
+                    @onclick="ToggleEditMode">@EditButtonText
+            </button>
+            <button class="btn btn-primary me-2"
+                    disabled="@(_selectedSprint is null)"
+                    @onclick="SetSelectedSprintActive">Set active
+            </button>
+        </div>
+    </div>
+
+    <div class="col-7">
+        <table class="table table-bordered table-sm">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Start date</th>
+                <th>End date</th>
+                <th>Is active sprint</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var sprint in @SprintStateService.Sprints)
+            {
+                <tr class="@(_selectedSprint == sprint ? "table-active" : "")"
+                    @onclick="() => _selectedSprint = sprint">
+                    <td>@sprint.Name</td>
+                    <td>@sprint.StartTime.ToString("d")</td>
+                    <td>@sprint.EndTime.ToString("d")</td>
+                    <td>@sprint.IsActive</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+    private SprintDto? _selectedSprint;
+    private string _newSprintName = string.Empty;
+    private DateTimeOffset _startTime = DateTimeOffset.Now;
+    private DateTimeOffset _endTime = DateTimeOffset.Now.AddDays(7);
+    private bool _isEditMode;
+
+    private bool CanSave => !string.IsNullOrWhiteSpace(_newSprintName) &&
+                            _startTime != default &&
+                            _endTime != default &&
+                            _startTime < _endTime;
+
+    private string EditButtonText => _isEditMode ? "Cancel Edit" : "Edit";
+
+    protected override async Task OnInitializedAsync()
+    {
+        SprintStateService.OnStateChanged += async () => await InvokeAsync(StateHasChanged);
+        await SprintStateService.LoadSprints();
+    }
+
+    private void ResetData()
+    {
+        _newSprintName = string.Empty;
+        _startTime = DateTimeOffset.Now;
+        _endTime = DateTimeOffset.Now.AddDays(7);
+    }
+
+    private void ToggleEditMode()
+    {
+        _isEditMode = !_isEditMode;
+        ResetData();
+
+        if (!_isEditMode || _selectedSprint is null) return;
+        _newSprintName = _selectedSprint.Name;
+        _startTime = _selectedSprint.StartTime;
+        _endTime = _selectedSprint.EndTime;
+    }
+
+    private async Task SetSelectedSprintActive()
+    {
+        if (_selectedSprint == null)
+            return;
+
+        await Tracer.Sprint.ActiveStatus.StartUseCase(GetType(), _selectedSprint.SprintId,
+            _selectedSprint.AsTraceAttributes());
+
+        var command = new SetSprintActiveStatusCommandProto
+        {
+            SprintId = _selectedSprint.SprintId.ToString(),
+            IsActive = true
+        };
+
+        await CommandSender.Send(command);
+        await Tracer.Sprint.ActiveStatus.CommandSent(GetType(), _selectedSprint.SprintId, command);
+    }
+
+    private async Task PersistSprint()
+    {
+        if (_isEditMode && _selectedSprint != null)
+        {
+            var updateSprintDto = new SprintDto(_selectedSprint.SprintId, _newSprintName,
+                _selectedSprint.IsActive, _startTime, _endTime, _selectedSprint.TicketIds);
+
+            await Tracer.Sprint.Update.StartUseCase(GetType(), updateSprintDto.SprintId,
+                updateSprintDto.AsTraceAttributes());
+
+            var command = new UpdateSprintDataCommandProto
+            {
+                SprintId = updateSprintDto.SprintId.ToString(),
+                Name = updateSprintDto.Name,
+                StartTime = Timestamp.FromDateTime(updateSprintDto.StartTime.UtcDateTime),
+                EndTime = Timestamp.FromDateTime(updateSprintDto.EndTime.UtcDateTime)
+            };
+
+            await CommandSender.Send(command);
+            await Tracer.Sprint.ActiveStatus.CommandSent(GetType(), updateSprintDto.SprintId, command);
+
+            _isEditMode = false;
+            ResetData();
+            return;
+        }
+
+        var createSprintDto = new SprintDto(Guid.NewGuid(), _newSprintName, false, _startTime, _endTime, []);
+
+        await Tracer.Sprint.Create.StartUseCase(GetType(), createSprintDto.SprintId,
+            createSprintDto.AsTraceAttributes());
+
+        var createCommand = new CreateSprintCommandProto
+        {
+            SprintId = createSprintDto.SprintId.ToString(),
+            Name = createSprintDto.Name,
+            StartTime = Timestamp.FromDateTime(createSprintDto.StartTime.UtcDateTime),
+            EndTime = Timestamp.FromDateTime(createSprintDto.EndTime.UtcDateTime),
+            IsActive = createSprintDto.IsActive
+        };
+
+        await CommandSender.Send(createCommand);
+        await Tracer.Sprint.Create.CommandSent(GetType(), createSprintDto.SprintId, createCommand);
+
+        ResetData();
+    }
+
+}

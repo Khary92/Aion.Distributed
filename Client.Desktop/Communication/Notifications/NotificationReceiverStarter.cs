@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 namespace Client.Desktop.Communication.Notifications;
 
 public class NotificationReceiverStarter(
-    AiSettingsNotificationReceiver aiSettingsNotificationReceiver,
-    AiSettingsNotificationReceiver settingsNotificationReceiver,
     NoteNotificationReceiver noteNotificationReceiver,
     NoteTypeNotificationReceiver noteTypeNotificationReceiver,
     SprintNotificationReceiver sprintNotificationReceiver,
@@ -19,8 +17,6 @@ public class NotificationReceiverStarter(
     {
         var tasks = new[]
         {
-            aiSettingsNotificationReceiver.StartListeningAsync(CancellationToken.None),
-            settingsNotificationReceiver.StartListeningAsync(CancellationToken.None),
             noteNotificationReceiver.StartListeningAsync(CancellationToken.None),
             noteTypeNotificationReceiver.StartListeningAsync(CancellationToken.None),
             sprintNotificationReceiver.StartListeningAsync(CancellationToken.None),

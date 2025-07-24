@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Client.Desktop.Communication.Requests.Tags;
 using Client.Desktop.Decorators;
 using Client.Desktop.Decorators.Entities;
 using Client.Desktop.DTO;
@@ -13,10 +12,11 @@ using Proto.DTO.StatisticsData;
 using Proto.DTO.Ticket;
 using Proto.DTO.TimeSlots;
 using Proto.Requests.AnalysisData;
+using Service.Proto.Shared.Requests.Tags;
 
 namespace Client.Desktop.Communication.Requests.Analysis;
 
-public class AnalysisRequestSender(ITagRequestSender tagRequestSender) : IAnalysisRequestSender
+public class AnalysisRequestSender(ITagRequestSender requestSender) : IAnalysisRequestSender
 {
     private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly AnalysisRequestService.AnalysisRequestServiceClient _client = new(Channel);
@@ -50,7 +50,7 @@ public class AnalysisRequestSender(ITagRequestSender tagRequestSender) : IAnalys
             StatisticData = GetStatisticsData(response.StatisticData)
         };
 
-        return new AnalysisByTicketDecorator(analysisByTicket, tagRequestSender);
+        return new AnalysisByTicketDecorator(analysisByTicket, requestSender);
     }
 
     public async Task<AnalysisByTagDecorator> Send(GetTagAnalysisById request)

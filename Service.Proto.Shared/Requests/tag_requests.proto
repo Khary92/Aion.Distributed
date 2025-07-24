@@ -1,0 +1,25 @@
+syntax = "proto3";
+import "DTO/tag.proto";
+
+option csharp_namespace = "Proto.Requests.Tags";
+
+
+message GetAllTagsRequestProto {}
+
+message GetTagByIdRequestProto {
+  string tag_id = 1;
+}
+
+message GetTagsByIdsRequestProto {
+  repeated string tag_ids = 1;
+}
+
+message TagListProto {
+  repeated TagProto tags = 1;
+}
+
+service TagProtoRequestService {
+  rpc GetAllTags(GetAllTagsRequestProto) returns (TagListProto);
+  rpc GetTagById(GetTagByIdRequestProto) returns (TagProto);
+  rpc GetTagsByIds(GetTagsByIdsRequestProto) returns (TagListProto);
+}

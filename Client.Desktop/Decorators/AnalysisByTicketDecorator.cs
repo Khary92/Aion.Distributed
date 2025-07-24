@@ -2,15 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Client.Desktop.Communication.Requests.Tags;
+using Client.Desktop.Communication.Requests;
 using Client.Desktop.Decorators.Entities;
 using Client.Proto;
 using Google.Protobuf.Collections;
 using Proto.Requests.Tags;
+using Service.Proto.Shared.Requests.Tags;
 
 namespace Client.Desktop.Decorators;
 
-public class AnalysisByTicketDecorator(AnalysisByTicket analysisByTicket, ITagRequestSender tagRequestSender)
+public class AnalysisByTicketDecorator(AnalysisByTicket analysisByTicket, ITagRequestSender requestSender)
 {
     public readonly string TicketName = analysisByTicket.TicketName;
     private int _timeSpentNeutral;
@@ -70,10 +71,12 @@ public class AnalysisByTicketDecorator(AnalysisByTicket analysisByTicket, ITagRe
         var tagIdsRepeated = new RepeatedField<string>();
         foreach (var tagId in tagIds) tagIdsRepeated.Add(tagId.ToString());
 
-        var usedTags = await tagRequestSender.Send(new GetTagsByIdsRequestProto
+        var tagListProto = await requestSender.Send(new GetTagsByIdsRequestProto
         {
             TagIds = { tagIdsRepeated }
         });
+        
+        var usedTags = tagListProto.ToDtoList();
 
         var countByTagProductive = usedTags.ToDictionary(tag => tag.TagId, _ => 0);
         var countByTagNeutral = usedTags.ToDictionary(tag => tag.TagId, _ => 0);

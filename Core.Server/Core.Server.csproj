@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <ImplicitUsings>enable</ImplicitUsings>
         <OutputType>Library</OutputType>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
 
     <ItemGroup>
@@ -20,10 +21,7 @@
         <ProjectReference Include="..\Core.Domain\Core.Domain.csproj"/>
         <ProjectReference Include="..\Client.Proto\Client.Proto.csproj" />
         <ProjectReference Include="..\Core.Tracing\Core.Tracing.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Folder Include="Translators\Commands\"/>
+        <ProjectReference Include="..\Service.Proto.Shared\Service.Proto.Shared.csproj" />
     </ItemGroup>
 
 </Project>

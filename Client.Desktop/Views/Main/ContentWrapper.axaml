@@ -57,7 +57,7 @@
                         </Transitions>
                     </Border.Transitions>
 
-                    <Grid RowDefinitions="*,*,*,*,*,*" Width="{Binding MenuWidth}" DockPanel.Dock="Left"
+                    <Grid RowDefinitions="*,*,*,*,*" Width="{Binding MenuWidth}" DockPanel.Dock="Left"
                           IsVisible="{Binding IsMenuOpen}">
                         <Button Grid.Row="0" HorizontalContentAlignment="Center"
                                 VerticalContentAlignment="Center" VerticalAlignment="Stretch"
@@ -66,20 +66,16 @@
                         <Button Grid.Row="1" HorizontalContentAlignment="Center"
                                 VerticalContentAlignment="Center" VerticalAlignment="Stretch"
                                 HorizontalAlignment="Stretch"
-                                Content="Data" Command="{Binding OnDataClickCommand}" />
+                                Content="Export" Command="{Binding OnExportClickCommand}" />
                         <Button Grid.Row="2" HorizontalContentAlignment="Center"
                                 VerticalContentAlignment="Center" VerticalAlignment="Stretch"
                                 HorizontalAlignment="Stretch"
-                                Content="Export" Command="{Binding OnExportClickCommand}" />
+                                Content="Documentation" Command="{Binding OnDocumentationClickCommand}" />
                         <Button Grid.Row="3" HorizontalContentAlignment="Center"
                                 VerticalContentAlignment="Center" VerticalAlignment="Stretch"
                                 HorizontalAlignment="Stretch"
-                                Content="Documentation" Command="{Binding OnDocumentationClickCommand}" />
-                        <Button Grid.Row="4" HorizontalContentAlignment="Center"
-                                VerticalContentAlignment="Center" VerticalAlignment="Stretch"
-                                HorizontalAlignment="Stretch"
                                 Content="Analysis" Command="{Binding OnAnalysisClickCommand}" />
-                        <Button Grid.Row="5" HorizontalContentAlignment="Center"
+                        <Button Grid.Row="4" HorizontalContentAlignment="Center"
                                 VerticalContentAlignment="Center" VerticalAlignment="Stretch"
                                 HorizontalAlignment="Stretch"
                                 Content="Settings" Command="{Binding OnSettingsClickCommand}" />

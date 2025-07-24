@@ -6,7 +6,8 @@ using Client.Desktop.Communication.NotificationWrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.Converter;
 using Client.Desktop.DTO;
-using Client.Desktop.Services;
+using Client.Desktop.Services.LocalSettings;
+using Client.Desktop.Services.LocalSettings.Commands;
 using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
@@ -24,8 +25,8 @@ namespace Client.Desktop.Models.Settings;
 public class WorkDaysModel(
     ICommandSender commandSender,
     IRequestSender requestSender,
+    ILocalSettingsCommandSender localSettingsCommandSender,
     IMessenger messenger,
-    IRunTimeSettings runTimeSettings,
     ITraceCollector tracer) : ReactiveObject
 {
     public ObservableCollection<WorkDayDto> WorkDays { get; } = [];
@@ -94,13 +95,6 @@ public class WorkDaysModel(
 
     public void SetSelectedWorkday(WorkDayDto selectedWorkDay)
     {
-        runTimeSettings.SelectedDate = selectedWorkDay.Date;
-
-        var workDaySelectionChangedNotification = new WorkDaySelectionChangedNotification();
-
-        //TODO This is wrong. Fix it
-        //mediator.Publish(workDaySelectionChangedNotification);
-        //TODO hmmm how to trace simple Events?
-        //logger.LogNotificationPublished(workDaySelectionChangedNotification);
+        localSettingsCommandSender.Send(new SetWorkDaySelectionCommand(selectedWorkDay.Date));
     }
 }

@@ -2,12 +2,11 @@
 using Grpc.Core;
 using Proto.DTO.Ticket;
 using Proto.Requests.Tickets;
-using TicketRequestService = Proto.Requests.Tickets.TicketRequestService;
 
 namespace Core.Server.Communication.Endpoints.Ticket;
 
 public class TicketRequestReceiver(ITicketRequestsService ticketRequestsService)
-    : TicketRequestService.TicketRequestServiceBase
+    : TicketProtoRequestService.TicketProtoRequestServiceBase
 {
     public override async Task<TicketListProto> GetAllTickets(GetAllTicketsRequestProto request,
         ServerCallContext context)

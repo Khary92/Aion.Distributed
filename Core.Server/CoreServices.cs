@@ -1,7 +1,5 @@
-using Core.Server.Communication.Endpoints.AiSettings;
 using Core.Server.Communication.Endpoints.Note;
 using Core.Server.Communication.Endpoints.NoteType;
-using Core.Server.Communication.Endpoints.Settings;
 using Core.Server.Communication.Endpoints.Sprint;
 using Core.Server.Communication.Endpoints.Sprint.Handlers;
 using Core.Server.Communication.Endpoints.StatisticsData;
@@ -13,10 +11,8 @@ using Core.Server.Communication.Endpoints.TraceReport;
 using Core.Server.Communication.Endpoints.UseCase;
 using Core.Server.Communication.Endpoints.UseCase.Handler;
 using Core.Server.Communication.Endpoints.WorkDay;
-using Core.Server.Services.Entities.AiSettings;
 using Core.Server.Services.Entities.Notes;
 using Core.Server.Services.Entities.NoteTypes;
-using Core.Server.Services.Entities.Settings;
 using Core.Server.Services.Entities.Sprints;
 using Core.Server.Services.Entities.StatisticsData;
 using Core.Server.Services.Entities.Tags;
@@ -25,10 +21,8 @@ using Core.Server.Services.Entities.TimerSettings;
 using Core.Server.Services.Entities.TimeSlots;
 using Core.Server.Services.Entities.WorkDays;
 using Core.Server.Services.UseCase;
-using Core.Server.Translators.Commands.AiSettings;
 using Core.Server.Translators.Commands.Notes;
 using Core.Server.Translators.Commands.NoteTypes;
-using Core.Server.Translators.Commands.Settings;
 using Core.Server.Translators.Commands.Sprints;
 using Core.Server.Translators.Commands.StatisticsData;
 using Core.Server.Translators.Commands.Tags;
@@ -71,7 +65,6 @@ public static class CoreServices
 
     private static void AddRequestsServices(this IServiceCollection services)
     {
-        services.AddScoped<IAiSettingsRequestsService, AiSettingsRequestsService>();
         services.AddScoped<INoteRequestsService, NoteRequestsService>();
         services.AddScoped<INoteTypeRequestsService, NoteTypeRequestsService>();
         services.AddScoped<ISprintRequestsService, SprintRequestService>();
@@ -80,13 +73,11 @@ public static class CoreServices
         services.AddScoped<ITagRequestsService, TagRequestsService>();
         services.AddScoped<ITimeSlotRequestsService, TimeSlotRequestsService>();
         services.AddScoped<IStatisticsDataRequestsService, StatisticsDataRequestsService>();
-        services.AddScoped<ISettingsRequestsService, SettingsRequestsService>();
         services.AddScoped<ITimerSettingsRequestsService, TimerSettingsRequestsService>();
     }
 
     private static void AddCommandsServices(this IServiceCollection services)
     {
-        services.AddScoped<IAiSettingsCommandsService, AiSettingsCommandsService>();
         services.AddScoped<INoteCommandsService, NoteCommandsService>();
         services.AddScoped<INoteTypeCommandsService, NoteTypeCommandsService>();
         services.AddScoped<ISprintCommandsService, SprintCommandsService>();
@@ -95,13 +86,11 @@ public static class CoreServices
         services.AddScoped<ITagCommandsService, TagCommandsService>();
         services.AddScoped<ITimeSlotCommandsService, TimeSlotCommandService>();
         services.AddScoped<IStatisticsDataCommandsService, StatisticsDataCommandsService>();
-        services.AddScoped<ISettingsCommandsService, SettingsCommandsService>();
         services.AddScoped<ITimerSettingsCommandsService, TimerSettingsCommandsService>();
     }
 
     private static void AddCommandToEventTranslators(this IServiceCollection services)
     {
-        services.AddSingleton<ISettingsCommandsToEventTranslator, SettingsCommandsToEventTranslator>();
         services.AddSingleton<INoteCommandsToEventTranslator, NoteCommandsToEventTranslator>();
         services.AddSingleton<ISprintCommandsToEventTranslator, SprintCommandsToEventTranslator>();
         services.AddSingleton<IStatisticsDataCommandsToEventTranslator, StatisticsDataCommandsToEventTranslator>();
@@ -109,7 +98,6 @@ public static class CoreServices
         services.AddSingleton<ITicketCommandsToEventTranslator, TicketCommandsToEventTranslator>();
         services.AddSingleton<ITimeSlotCommandsToEventTranslator, TimeSlotCommandsToEventTranslator>();
         services.AddSingleton<IWorkDayCommandsToEventTranslator, WorkDayCommandsToEventTranslator>();
-        services.AddSingleton<IAiSettingsCommandsToEventTranslator, AiSettingsCommandsToEventTranslator>();
         services.AddSingleton<INoteTypeCommandsToEventTranslator, NoteTypeCommandsToEventTranslator>();
         services.AddSingleton<ITimerSettingsCommandsToEventTranslator, TimerSettingsCommandsToEventTranslator>();
     }
@@ -119,13 +107,11 @@ public static class CoreServices
         services.AddGrpc();
         services.AddGrpcReflection();
 
-        services.AddSingleton<AiSettingsNotificationService>();
         services.AddSingleton<NoteNotificationService>();
         services.AddSingleton<NoteTypeNotificationService>();
-        services.AddSingleton<SettingsNotificationService>();
         services.AddSingleton<SprintNotificationService>();
         services.AddSingleton<StatisticsDataNotificationService>();
-        services.AddSingleton<TagNotificationServiceImpl>();
+        services.AddSingleton<TagNotificationService>();
         services.AddSingleton<TicketNotificationService>();
         services.AddSingleton<TimerSettingsNotificationService>();
         services.AddSingleton<TimeSlotNotificationService>();

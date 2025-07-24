@@ -1,67 +1,89 @@
-using System.Collections.Generic;
+using System;
+using Newtonsoft.Json;
 using Client.Desktop.DTO;
 
 namespace Client.Desktop.Converter;
 
 public static class TracingExtensions
 {
-    public static Dictionary<string, string> AsTraceAttributes(this TicketDto dto) => new()
+    public static string AsTraceAttributes(this TicketDto dto)
     {
-        { "ticketId", dto.TicketId.ToString() },
-        { "name", dto.Name },
-        { "bookingNumber", dto.BookingNumber },
-        { "sprintIds", string.Join(",", dto.SprintIds) }
-    };
+        return JsonConvert.SerializeObject(new
+        {
+            ticketId = dto.TicketId.ToString(),
+            name = dto.Name,
+            bookingNumber = dto.BookingNumber,
+            sprintIds = string.Join(",", dto.SprintIds)
+        });
+    }
 
-    public static Dictionary<string, string> AsTraceAttributes(this NoteTypeDto dto) => new()
+    public static string AsTraceAttributes(this NoteTypeDto dto)
     {
-        { "ticketId", dto.NoteTypeId.ToString() },
-        { "name", dto.Name },
-        { "color", dto.Color },
-    };
+        return JsonConvert.SerializeObject(new
+        {
+            ticketId = dto.NoteTypeId.ToString(),
+            name = dto.Name,
+            color = dto.Color
+        });
+    }
 
-    public static Dictionary<string, string> AsTraceAttributes(this SprintDto dto) => new()
+    public static string AsTraceAttributes(this SprintDto? dto)
     {
-        { "sprintId", dto.SprintId.ToString() },
-        { "name", dto.Name },
-        { "startTime", dto.StartTime.ToString() },
-        { "endTime", dto.EndTime.ToString() },
-        { "isActive", dto.IsActive.ToString() },
-        { "ticketIds", string.Join(",", dto.TicketIds) }
-    };
+        if (dto == null) return string.Empty;
+        
+        return JsonConvert.SerializeObject(new
+        {
+            sprintId = dto.SprintId.ToString(),
+            name = dto.Name,
+            startTime = dto.StartTime.ToString(),
+            endTime = dto.EndTime.ToString(),
+            isActive = dto.IsActive.ToString(),
+            ticketIds = string.Join(",", dto.TicketIds)
+        });
+    }
 
-    public static Dictionary<string, string> AsTraceAttributes(this TagDto dto) => new()
+    public static string AsTraceAttributes(this TagDto dto)
     {
-        { "sprintId", dto.TagId.ToString() },
-        { "name", dto.Name },
-    };
+        return JsonConvert.SerializeObject(new
+        {
+            sprintId = dto.TagId.ToString(),
+            name = dto.Name
+        });
+    }
 
-    public static Dictionary<string, string> AsTraceAttributes(this NoteDto dto) => new()
+    public static string AsTraceAttributes(this NoteDto dto)
     {
-        { "noteId", dto.NoteId.ToString() },
-        { "noteTypeId", dto.NoteTypeId.ToString() },
-        { "timeSlotId", dto.TimeSlotId.ToString() },
-        { "text", dto.Text },
-        { "timeStamp", dto.TimeStamp.ToString() },
-    };
+        return JsonConvert.SerializeObject(new
+        {
+            noteId = dto.NoteId.ToString(),
+            noteTypeId = dto.NoteTypeId.ToString(),
+            timeSlotId = dto.TimeSlotId.ToString(),
+            text = dto.Text,
+            timeStamp = dto.TimeStamp.ToString()
+        });
+    }
 
-    public static Dictionary<string, string> AsTraceAttributes(this WorkDayDto dto) => new()
+    public static string AsTraceAttributes(this WorkDayDto dto)
     {
-        { "workDayId", dto.WorkDayId.ToString() },
-        { "date", dto.Date.ToString() }
-    };
+        return JsonConvert.SerializeObject(new
+        {
+            workDayId = dto.WorkDayId.ToString(),
+            date = dto.Date.ToString()
+        });
+    }
+    
+    public static string AsTraceAttributes(this TimerSettingsDto dto)
+    {
+        return JsonConvert.SerializeObject(new
+        {
+            timerSettingsId = dto.TimerSettingsId.ToString(),
+            documentationSaveInterval = dto.DocumentationSaveInterval.ToString(),
+            snapshotSaveInterval = dto.SnapshotSaveInterval.ToString()
+        });
+    }
 
-    public static Dictionary<string, string> AsTraceAttributes(this AiSettingsDto dto) => new()
+    public static string AsTypeString(this Type type)
     {
-        { "aiSettingsId", dto.AiSettingsId.ToString() },
-        { "languageModelPath", dto.LanguageModelPath },
-        { "prompt", dto.Prompt }
-    };
-
-    public static Dictionary<string, string> AsTraceAttributes(this TimerSettingsDto dto) => new()
-    {
-        { "timerSettingsId", dto.TimerSettingsId.ToString() },
-        { "documentationSaveInterval", dto.DocumentationSaveInterval.ToString() },
-        { "snapshotSaveInterval", dto.SnapshotSaveInterval.ToString() }
-    };
+        return type.BaseType!.Name;
+    }
 }

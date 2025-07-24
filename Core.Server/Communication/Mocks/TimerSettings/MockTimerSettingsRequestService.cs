@@ -4,7 +4,7 @@ using Proto.Requests.TimerSettings;
 
 namespace Core.Server.Communication.Mocks.TimerSettings;
 
-public class MockTimerSettingsRequestService : TimerSettingsRequestService.TimerSettingsRequestServiceBase
+public class MockTimerSettingsRequestService : TimerSettingsProtoRequestService.TimerSettingsProtoRequestServiceBase
 {
     public override Task<TimerSettingsProto> GetTimerSettings(GetTimerSettingsRequestProto request,
         ServerCallContext context)

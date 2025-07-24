@@ -6,7 +6,7 @@ using Proto.Requests.NoteTypes;
 namespace Core.Server.Communication.Endpoints.NoteType;
 
 public class NoteTypeRequestReceiver(INoteTypeRequestsService noteTypeRequestsService)
-    : NoteTypesRequestService.NoteTypesRequestServiceBase
+    : NoteTypeProtoRequestService.NoteTypeProtoRequestServiceBase
 {
     public override async Task<GetAllNoteTypesResponseProto> GetAllNoteTypes(GetAllNoteTypesRequestProto request,
         ServerCallContext context)

@@ -6,9 +6,9 @@ namespace Client.Tracing.Tracing.Tracers.Ticket.UseCase;
 
 public class CreateTicketTraceCollector(ITracingDataCommandSender commandSender) : ICreateTicketTraceCollector
 {
-    public async Task StartUseCase(Type originClassType, Guid traceId, Dictionary<string, string> attributes)
+    public async Task StartUseCase(Type originClassType, Guid traceId, object command)
     {
-        var log = $"Create Ticket requested for {attributes}";
+        var log = $"Create Ticket requested for {command}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
@@ -22,7 +22,7 @@ public class CreateTicketTraceCollector(ITracingDataCommandSender commandSender)
 
     public async Task CommandSent(Type originClassType, Guid traceId, object command)
     {
-        var log = ($"Sent {command}");
+        var log = ($"Sent {GetName(command)}:{command}");
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
@@ -33,8 +33,22 @@ public class CreateTicketTraceCollector(ITracingDataCommandSender commandSender)
             log,
             DateTimeOffset.Now));
     }
+    
+    public async Task NotificationReceived(Type originClassType, Guid traceId, object notification)
+    {
+        var log = ($"Received {GetName(notification)}:{notification}");
 
-    public async Task AggregateReceived(Type originClassType, Guid traceId, Dictionary<string, string> attributes)
+        await commandSender.Send(new ServiceTraceDataCommand(
+            TraceSinkId.Ticket,
+            UseCaseMeta.CreateTicket,
+            LoggingMeta.NotificationReceived,
+            originClassType,
+            traceId,
+            log,
+            DateTimeOffset.Now));
+    }
+
+    public async Task AggregateReceived(Type originClassType, Guid traceId, string attributes)
     {
         var log = ($"Received aggregate {attributes}");
         await commandSender.Send(new ServiceTraceDataCommand(
@@ -58,5 +72,11 @@ public class CreateTicketTraceCollector(ITracingDataCommandSender commandSender)
             traceId,
             log,
             DateTimeOffset.Now));
+    }
+    
+    private static string GetName(object @object)
+    {
+        var commandType = @object.GetType();
+        return commandType.Name;
     }
 }

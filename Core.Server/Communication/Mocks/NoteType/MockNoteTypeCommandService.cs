@@ -6,7 +6,7 @@ using NoteTypeNotificationService = Core.Server.Communication.Endpoints.NoteType
 namespace Core.Server.Communication.Mocks.NoteType;
 
 public class MockNoteTypeCommandService(NoteTypeNotificationService noteTypeNotificationService)
-    : NoteTypeCommandProtoService.NoteTypeCommandProtoServiceBase
+    : NoteTypeProtoCommandService.NoteTypeProtoCommandServiceBase
 {
     public override async Task<CommandResponse> ChangeNoteTypeColor(ChangeNoteTypeColorCommandProto request,
         ServerCallContext context)

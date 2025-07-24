@@ -25,6 +25,7 @@ public class DocumentationModel(
     IRequestSender requestSender,
     IMessenger messenger,
     INoteViewFactory noteViewFactory,
+    ITypeCheckBoxViewModelFactory typeCheckBoxViewModelFactory,
     ITraceCollector tracer)
     : ReactiveObject
 {
@@ -99,16 +100,13 @@ public class DocumentationModel(
 
         Options.Clear();
 
-        //TODO this is weird. Why have i done this?
-        foreach (var option in noteTypeDtos.Select(type => new TypeCheckBoxViewModel(requestSender)
-                 {
-                     IsChecked = false,
-                     NoteTypeId = type.NoteTypeId
-                 }))
+        foreach (var option in noteTypeDtos)
         {
-            Options.Add(option);
+            var typeCheckBoxViewModel = typeCheckBoxViewModelFactory.Create(option);
 
-            option.WhenAnyValue(x => x.IsChecked)
+            Options.Add(typeCheckBoxViewModel);
+
+            typeCheckBoxViewModel.WhenAnyValue(x => x.IsChecked)
                 .Subscribe(_ => FilterNotes());
         }
 
@@ -181,17 +179,14 @@ public class DocumentationModel(
 
     private void RegisterNoteTypeNotifications()
     {
-        messenger.Register<NewNoteTypeMessage>(this, async (_, m) =>
+        messenger.Register<NewNoteTypeMessage>(this, async void (_, m) =>
         {
             await tracer.NoteType.Create.AggregateReceived(GetType(), m.NoteType.NoteTypeId,
                 m.NoteType.AsTraceAttributes());
 
-            Options.Add(new TypeCheckBoxViewModel(requestSender)
-            {
-                NoteTypeId = m.NoteType.NoteTypeId,
-                NoteType = m.NoteType,
-                IsChecked = false
-            });
+            var typeCheckBoxViewModel = typeCheckBoxViewModelFactory.Create(m.NoteType);
+            
+            Options.Add(typeCheckBoxViewModel);
 
             await tracer.NoteType.Create.AggregateAdded(GetType(), m.NoteType.NoteTypeId);
         });
@@ -232,14 +227,14 @@ public class DocumentationModel(
 
     private void RegisterTicketNotifications()
     {
-        messenger.Register<NewTicketMessage>(this, async (_, m) =>
+        messenger.Register<NewTicketMessage>(this, async void (_, m) =>
         {
             await tracer.Ticket.Create.AggregateReceived(GetType(), m.Ticket.TicketId, m.Ticket.AsTraceAttributes());
             AllTickets.Add(m.Ticket);
             await tracer.Ticket.Create.AggregateAdded(GetType(), m.Ticket.TicketId);
         });
 
-        messenger.Register<TicketDataUpdatedNotification>(this, async (_, m) =>
+        messenger.Register<TicketDataUpdatedNotification>(this, async void (_, m) =>
         {
             var parsedId = Guid.Parse(m.TicketId);
             await tracer.Ticket.Update.NotificationReceived(GetType(), parsedId, m);

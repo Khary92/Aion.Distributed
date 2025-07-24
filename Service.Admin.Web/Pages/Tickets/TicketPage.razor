@@ -1,0 +1,149 @@
+@page "/ticketData"
+@using global::Proto.Command.Sprints
+@using global::Proto.Command.Tickets
+@using Service.Admin.Tracing
+@using Service.Admin.Web.Communication
+@using Service.Admin.Web.Communication.Tickets.State
+@using Service.Admin.Web.DTO
+@rendermode InteractiveServer
+@inject ISharedCommandSender CommandSender
+@inject ITraceCollector Tracer
+@inject ITicketStateService TicketStateService
+
+@code {
+    private TicketDto? _selectedTicket;
+
+    private string _newTicketName = string.Empty;
+    private string _newTicketBookingNumber = string.Empty;
+    private bool _isShowAllTicketsActive;
+    private bool _isEditMode;
+
+    protected override async Task OnInitializedAsync()
+    {
+        TicketStateService.OnStateChanged += async () => await InvokeAsync(StateHasChanged);
+        await TicketStateService.LoadTickets();
+    }
+
+    private async Task CreateOrUpdateTicket()
+    {
+        if (_isEditMode && _selectedTicket != null)
+        {
+            _selectedTicket.Name = _newTicketName;
+            _selectedTicket.BookingNumber = _newTicketBookingNumber;
+            await CommandSender.Send(new UpdateTicketDataCommandProto
+            {
+                TicketId = _selectedTicket.TicketId.ToString(),
+                Name = _newTicketName,
+                BookingNumber = _newTicketBookingNumber,
+                SprintIds = { _selectedTicket.SprintIds.ToRepeatedField() }
+            });
+            return;
+        }
+
+        var createTicketCommandProto = new CreateTicketCommandProto
+        {
+            TicketId = Guid.NewGuid().ToString(),
+            Name = _newTicketName,
+            BookingNumber = _newTicketBookingNumber,
+            SprintIds = { }
+        };
+
+        // TODO well there is no more ViewModel
+        await Tracer.Ticket.Create.StartUseCase(GetType(), Guid.Parse(createTicketCommandProto.TicketId), createTicketCommandProto);
+        await Tracer.Ticket.Create.CommandSent(GetType(), Guid.Parse(createTicketCommandProto.TicketId), createTicketCommandProto);
+        await CommandSender.Send(createTicketCommandProto);
+
+        _newTicketName = _newTicketBookingNumber = string.Empty;
+        _isEditMode = false;
+    }
+
+    private void SetEditMode()
+    {
+        if (_selectedTicket == null) return;
+
+        _isEditMode = !_isEditMode;
+        if (_isEditMode)
+        {
+            _newTicketName = _selectedTicket.Name;
+            _newTicketBookingNumber = _selectedTicket.BookingNumber;
+            return;
+        }
+
+        _newTicketName = _newTicketBookingNumber = "";
+    }
+
+    private async Task AddTicketToCurrentSprint()
+    {
+        if (_selectedTicket != null)
+        {
+            await CommandSender.Send(new AddTicketToActiveSprintCommandProto()
+            {
+                TicketId = _selectedTicket.TicketId.ToString()
+            });
+        }
+    }
+
+    private Task ToggleShowAllTickets(ChangeEventArgs e)
+    {
+        _isShowAllTicketsActive = (bool)e.Value!;
+        return Task.CompletedTask;
+    }
+
+}
+
+<div class="row">
+    <div class="col-5">
+        <h2>Tickets</h2>
+        <div class="mb-2">
+            <label>Ticket name</label>
+            <input @bind="_newTicketName" class="form-control"/>
+        </div>
+        <div class="mb-2">
+            <label>Booking number</label>
+            <input @bind="_newTicketBookingNumber" class="form-control"/>
+        </div>
+        <div class="mb-2">
+            <button class="btn btn-success me-2"
+                    disabled="@(!CanSave)"
+                    @onclick="CreateOrUpdateTicket">Save
+            </button>
+            <button class="btn btn-warning me-2"
+                    disabled="@(_selectedTicket == null)"
+                    @onclick="SetEditMode">@EditButtonText</button>
+            <button class="btn btn-primary me-2"
+                    disabled="@(_selectedTicket == null)"
+                    @onclick="AddTicketToCurrentSprint">Add to sprint
+            </button>
+            <input type="checkbox" @bind="_isShowAllTicketsActive"/>
+            <span class="ms-2">Show all tickets</span>
+        </div>
+    </div>
+    <div class="col-7">
+        <table class="table table-bordered table-sm">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Booking number</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var ticket in @TicketStateService.Tickets)
+            {
+                <tr class="@(_selectedTicket == ticket ? "table-active" : "")"
+                    @onclick="() => _selectedTicket = ticket">
+                    <td>@ticket.Name</td>
+                    <td>@ticket.BookingNumber</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@code {
+
+    private bool CanSave => !string.IsNullOrWhiteSpace(_newTicketName)
+                            && !string.IsNullOrWhiteSpace(_newTicketBookingNumber);
+
+    private string EditButtonText => _isEditMode ? "Cancel Edit" : "Edit";
+}

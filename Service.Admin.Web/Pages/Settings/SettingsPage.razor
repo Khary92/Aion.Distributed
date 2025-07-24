@@ -1,0 +1,65 @@
+@page "/timerSettings"
+@using global::Proto.Command.TimerSettings
+@rendermode InteractiveServer
+@using Service.Admin.Tracing
+@using Service.Admin.Web.Communication
+@using Service.Admin.Web.Communication.TimerSettings.State
+@inject ISharedCommandSender CommandSender
+@inject ITraceCollector Tracer
+@inject ITimerSettingsStateService TimerSettingsStateService
+
+<h3>Timer Settings</h3>
+
+<div class="mb-3">
+    <label for="documentationInterval" class="form-label">Documentation Save Interval</label>
+    <input type="number" min="1" id="documentationInterval" class="form-control"
+           @bind="@TimerSettingsStateService.TimerSettings.DocumentationSaveInterval"/>
+</div>
+
+<div class="mb-3">
+    <label for="snapshotInterval" class="form-label">Snapshot Save Interval</label>
+    <input type="number" min="1" id="snapshotInterval" class="form-control"
+           @bind="@TimerSettingsStateService.TimerSettings.SnapshotSaveInterval"/>
+</div>
+
+<button class="btn btn-primary" @onclick="SaveSettingsAsync">Save</button>
+
+@code {
+
+    private int _previousSnapshotSaveInterval;
+    private int _previousDocumentationSaveInterval;
+
+    protected override async Task OnInitializedAsync()
+    {
+        TimerSettingsStateService.OnStateChanged += async () => await InvokeAsync(StateHasChanged);
+        await TimerSettingsStateService.LoadSettings();
+        _previousSnapshotSaveInterval = TimerSettingsStateService.TimerSettings.SnapshotSaveInterval;
+        _previousDocumentationSaveInterval = TimerSettingsStateService.TimerSettings.DocumentationSaveInterval;
+    }
+
+    private async Task SaveSettingsAsync()
+    {
+        if (_previousSnapshotSaveInterval != TimerSettingsStateService.TimerSettings.SnapshotSaveInterval)
+        {
+            await CommandSender.Send(new ChangeSnapshotSaveIntervalCommandProto()
+            {
+                TimerSettingsId = TimerSettingsStateService.TimerSettings.TimerSettingsId.ToString(),
+                SnapshotSaveInterval = TimerSettingsStateService.TimerSettings.SnapshotSaveInterval
+            });
+
+            _previousSnapshotSaveInterval = TimerSettingsStateService.TimerSettings.SnapshotSaveInterval;
+        }
+
+        if (_previousDocumentationSaveInterval != TimerSettingsStateService.TimerSettings.DocumentationSaveInterval)
+        {
+            await CommandSender.Send(new ChangeDocuTimerSaveIntervalCommandProto()
+            {
+                TimerSettingsId = TimerSettingsStateService.TimerSettings.TimerSettingsId.ToString(),
+                DocuTimerSaveInterval = TimerSettingsStateService.TimerSettings.DocumentationSaveInterval
+            });
+
+            _previousDocumentationSaveInterval = TimerSettingsStateService.TimerSettings.DocumentationSaveInterval;
+        }
+    }
+
+}

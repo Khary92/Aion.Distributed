@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.ReactiveUI;
 using Client.Desktop.Services.Cache;
+using Client.Desktop.Services.Initializer;
 using Client.Desktop.Views.Main;
 using Client.Tracing;
 using Microsoft.Extensions.DependencyInjection;
@@ -50,6 +51,7 @@ public static class DesktopApp
     {
         AppDomain.CurrentDomain.ProcessExit += (_, _) => { PersistCaches(serviceProvider).GetAwaiter().GetResult(); };
 
+        await serviceProvider.GetRequiredService<IServiceInitializer>().InitializeServicesAsync();
         await PersistCaches(serviceProvider);
     }
 

@@ -1,4 +1,3 @@
-using Client.Tracing.Tracing.Tracers.AiSettings;
 using Client.Tracing.Tracing.Tracers.Export;
 using Client.Tracing.Tracing.Tracers.Note;
 using Client.Tracing.Tracing.Tracers.NoteType;
@@ -18,7 +17,6 @@ public class TraceCollector(
     INoteUseCaseSelector noteUseCaseSelector,
     IExportUseCaseSelector exportUseCaseSelector,
     IWorkDayUseCaseSelector workDayUseCaseSelector,
-    IAiSettingsUseCaseSelector aiSettingsUseCaseSelector,
     ITimerSettingsUseCaseSelector timerSettingsUseCaseSelector) : ITraceCollector
 {
     public ITicketUseCaseSelector Ticket => ticketUseCaseSelector;
@@ -28,6 +26,5 @@ public class TraceCollector(
     public INoteUseCaseSelector Note => noteUseCaseSelector;
     public IExportUseCaseSelector Export => exportUseCaseSelector;
     public IWorkDayUseCaseSelector WorkDay => workDayUseCaseSelector;
-    public IAiSettingsUseCaseSelector AiSettings => aiSettingsUseCaseSelector;
     public ITimerSettingsUseCaseSelector TimerSettings => timerSettingsUseCaseSelector;
 }

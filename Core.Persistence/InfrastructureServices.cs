@@ -1,9 +1,7 @@
 using Core.Persistence.DbContext;
 using Core.Persistence.EventStores;
-using Domain.Events.AiSettings;
 using Domain.Events.Note;
 using Domain.Events.NoteTypes;
-using Domain.Events.Settings;
 using Domain.Events.Sprints;
 using Domain.Events.StatisticsData;
 using Domain.Events.Tags;
@@ -35,9 +33,7 @@ public static class InfrastructureServices
 
         services.AddDbContextFactory<AppDbContext>(options =>
             options.UseNpgsql(connectionString));
-
-
-        services.AddScoped<IEventStore<AiSettingsEvent>, AiSettingsEventsStore>();
+        
         services.AddScoped<IEventStore<NoteEvent>, NoteEventsStore>();
         services.AddScoped<IEventStore<NoteTypeEvent>, NoteTypeEventsStore>();
         services.AddScoped<ITicketEventsStore, TicketEventsStore>();
@@ -46,7 +42,6 @@ public static class InfrastructureServices
         services.AddScoped<IEventStore<TimeSlotEvent>, TimeSlotEventsStore>();
         services.AddScoped<IEventStore<TagEvent>, TagEventsStore>();
         services.AddScoped<IEventStore<WorkDayEvent>, WorkDayEventsStore>();
-        services.AddScoped<IEventStore<SettingsEvent>, SettingsEventsStore>();
         services.AddScoped<IEventStore<TimerSettingsEvent>, TimerSettingsEventsStore>();
     }
 }

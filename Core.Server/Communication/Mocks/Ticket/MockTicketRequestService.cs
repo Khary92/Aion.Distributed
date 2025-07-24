@@ -4,7 +4,7 @@ using Proto.Requests.Tickets;
 
 namespace Core.Server.Communication.Mocks.Ticket;
 
-public class MockTicketRequestService : TicketRequestService.TicketRequestServiceBase
+public class MockTicketRequestService : TicketProtoRequestService.TicketProtoRequestServiceBase
 {
     public override Task<TicketListProto> GetAllTickets(GetAllTicketsRequestProto request, ServerCallContext context)
     {

@@ -1,0 +1,19 @@
+syntax = "proto3";
+import "DTO/timer_settings.proto";
+
+option csharp_namespace = "Proto.Requests.TimerSettings";
+
+package contract.requests;
+
+message GetTimerSettingsRequestProto {}
+
+message IsTimerSettingExistingRequestProto {}
+
+message TimerSettingExistsProto {
+  bool exists = 1;
+}
+
+service TimerSettingsProtoRequestService {
+  rpc GetTimerSettings(GetTimerSettingsRequestProto) returns (TimerSettingsProto);
+  rpc IsTimerSettingExisting(IsTimerSettingExistingRequestProto) returns (TimerSettingExistsProto);
+}

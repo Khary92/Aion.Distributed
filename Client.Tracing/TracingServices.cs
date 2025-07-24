@@ -1,6 +1,4 @@
 using Client.Tracing.Tracing.Tracers;
-using Client.Tracing.Tracing.Tracers.AiSettings;
-using Client.Tracing.Tracing.Tracers.AiSettings.UseCase;
 using Client.Tracing.Tracing.Tracers.Export;
 using Client.Tracing.Tracing.Tracers.Export.UseCase;
 using Client.Tracing.Tracing.Tracers.Note;
@@ -27,7 +25,6 @@ public static class TracingServices
     public static void AddTracingServices(this IServiceCollection services)
     {
         AddACommonTracingServices(services);
-        AddAiSettingsTracingServices(services);
         AddExportTracingServices(services);
         AddNoteTracingServices(services);
         AddNoteTypeTracingServices(services);
@@ -41,18 +38,9 @@ public static class TracingServices
     private static void AddACommonTracingServices(this IServiceCollection services)
     {
         services.AddScoped<ITracingDataCommandSender>(sp => new TracingDataCommandSender("http://127.0.0.1:8082"));
-
-        services.AddSingleton<ITraceCollector, TraceCollector>();
+        services.AddScoped<ITraceCollector, TraceCollector>();
     }
-
-    private static void AddAiSettingsTracingServices(this IServiceCollection services)
-    {
-        services.AddSingleton<IChangeLanguageModelTraceCollector, ChangeLanguageModelTraceCollector>();
-        services.AddSingleton<IChangePromptTraceCollector, ChangePromptTraceCollector>();
-
-        services.AddSingleton<IAiSettingsUseCaseSelector, AiSettingsUseCaseSelector>();
-    }
-
+    
     private static void AddExportTracingServices(this IServiceCollection services)
     {
         services.AddSingleton<IExportTraceCollector, ExportTraceCollector>();

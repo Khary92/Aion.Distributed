@@ -6,7 +6,7 @@ namespace Client.Tracing.Tracing.Tracers.Tag.UseCase;
 
 public class CreateTagTraceCollector(ITracingDataCommandSender commandSender) : ICreateTagTraceCollector
 {
-    public async Task StartUseCase(Type originClassType, Guid traceId, Dictionary<string, string> attributes)
+    public async Task StartUseCase(Type originClassType, Guid traceId, string attributes)
     {
         var log = $"Create Tag requested for {attributes}";
         await commandSender.Send(new ServiceTraceDataCommand(
@@ -32,7 +32,7 @@ public class CreateTagTraceCollector(ITracingDataCommandSender commandSender) : 
             DateTimeOffset.Now));
     }
 
-    public async Task AggregateReceived(Type originClassType, Guid traceId, Dictionary<string, string> attributes)
+    public async Task AggregateReceived(Type originClassType, Guid traceId, string attributes)
     {
         var log = ($"Received aggregate {attributes}");
         await commandSender.Send(new ServiceTraceDataCommand(

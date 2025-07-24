@@ -7,7 +7,7 @@ using Client.Desktop.Communication.NotificationWrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.DTO;
 using Client.Desktop.Factories;
-using Client.Desktop.Services;
+using Client.Desktop.Services.LocalSettings;
 using CommunityToolkit.Mvvm.Messaging;
 using Google.Protobuf.WellKnownTypes;
 using Proto.Command.Notes;
@@ -20,9 +20,9 @@ namespace Client.Desktop.Models.TimeTracking.DynamicControls;
 public class NoteStreamViewModel(
     ICommandSender commandSender,
     IRequestSender requestSender,
+    ILocalSettingsService localSettingsService,
     IMessenger messenger,
-    INoteViewFactory noteViewFactory,
-    IRunTimeSettings runTimeSettings)
+    INoteViewFactory noteViewFactory)
     : ReactiveObject
 {
     private Guid _timeSlotId;
@@ -36,7 +36,7 @@ public class NoteStreamViewModel(
 
     public async Task AddNoteControl()
     {
-        if (!runTimeSettings.IsSelectedDateCurrentDate()) return;
+        if (!localSettingsService.IsSelectedDateCurrentDate()) return;
 
         var noteId = Guid.NewGuid();
         await commandSender.Send(new CreateNoteCommandProto

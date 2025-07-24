@@ -1,4 +1,3 @@
-using Client.Tracing.Tracing.Tracers.AiSettings;
 using Client.Tracing.Tracing.Tracers.Export;
 using Client.Tracing.Tracing.Tracers.Note;
 using Client.Tracing.Tracing.Tracers.NoteType;
@@ -19,6 +18,5 @@ public interface ITraceCollector
     INoteUseCaseSelector Note { get; }
     IExportUseCaseSelector Export { get; }
     IWorkDayUseCaseSelector WorkDay { get; }
-    IAiSettingsUseCaseSelector AiSettings { get; }
     ITimerSettingsUseCaseSelector TimerSettings { get; }
 }

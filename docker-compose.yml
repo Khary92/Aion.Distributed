@@ -3,24 +3,26 @@ services:
   core-service:
     build:
       context: .
-      dockerfile: DockerfileServer
+      dockerfile: ./Core.Boot/Dockerfile
     ports:
       - "8081:8080"
     environment:
-      - ASPNETCORE_URLS=http://+:8081
+      - ASPNETCORE_URLS=http://+:8080
       - ConnectionStrings__DefaultConnection=Host=postgres;Database=aion;Username=aionuser;Password=aionpass
     depends_on:
       - postgres
     restart: unless-stopped
-  
+    volumes:
+      - dataprotection-keys:/app/DataProtection-Keys
+
   monitoring-service:
     build:
       context: .
-      dockerfile: DockerfileMonitoring
+      dockerfile: ./Service.Monitoring/Dockerfile
     ports:
       - "8082:8080"
     environment:
-      - ASPNETCORE_URLS=http://+:8082
+      - ASPNETCORE_URLS=http://+:8080
     depends_on:
       - core-service
     restart: unless-stopped
@@ -28,15 +30,18 @@ services:
   admin-web:
     build:
       context: .
-      dockerfile: DockerfileAdminWeb
+      dockerfile: ./Service.Admin.Web/Dockerfile
     ports:
       - "5000:8080"
-      - "5001:8081"
     environment:
-      - ASPNETCORE_URLS=http://+:5200
+      - ASPNETCORE_URLS=http://+:8080    # Anführungszeichen entfernt
     depends_on:
       - monitoring-service
+      - core-service
     restart: unless-stopped
+    volumes:
+      - dataprotection-keys:/app/DataProtection-Keys
+
 
   postgres:
     image: postgres:16
@@ -49,7 +54,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready -U aionuser -d aion" ]
+      test: ["CMD-SHELL", "pg_isready -U aionuser -d aion"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -71,3 +76,4 @@ services:
 volumes:
   postgres_data:
   pgadmin_data:
+  dataprotection-keys:

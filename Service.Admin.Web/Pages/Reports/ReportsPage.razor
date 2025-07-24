@@ -1,0 +1,122 @@
+﻿@page "/reports"
+@rendermode InteractiveServer
+@inject ILogger<ReportsPage> Logger
+@inject IReportStateService ReportState
+@using Service.Admin.Web.Communication.Reports
+@using Service.Admin.Web.Communication.Reports.State
+@implements IDisposable
+
+<PageTitle>Tracing Results</PageTitle>
+
+<div class="container">
+    <h1>Use Cases</h1>
+
+    <ErrorBoundary>
+        <ChildContent>
+            @if (_isLoading || !ReportState.Reports.Any())
+            {
+                <LoadingSpinner />
+            }
+            else
+            {
+                <div class="mb-3">
+                    <label for="reportSelect" class="form-label">Report auswählen:</label>
+                    <select id="reportSelect" class="form-select" @bind="_selectedReportId">
+                        <option value="">Alle Reports</option>
+                        @foreach (var report in ReportState.Reports)
+                        {
+                            <option value="@report.ReportId">@report.TimeStamp - @report.State</option>
+                        }
+                    </select>
+                </div>
+
+                <ReportTable Items="@ReportState.Reports" T="ReportRecord">
+                    <HeaderTemplate>
+                        <th>Datum</th>
+                        <th>Status</th>
+                    </HeaderTemplate>
+                    <RowTemplate>
+                        <td>@context.TimeStamp</td>
+                        <td>@context.State</td>
+                    </RowTemplate>
+                </ReportTable>
+
+                <h2>Traces</h2>
+                <ReportTable Items="@GetFilteredTraces()" T="TraceInfo">
+                    <HeaderTemplate>
+                        <th>Zeitstempel</th>
+                        <th>Ergebnis</th>
+                        <th>Log Info</th>
+                    </HeaderTemplate>
+                    <RowTemplate>
+                        <td>@context.TimeStamp</td>
+                        <td>@context.Result</td>
+                        <td>@context.LogInfo</td>
+                    </RowTemplate>
+                </ReportTable>
+            }
+        </ChildContent>
+        <ErrorContent Context="ex">
+            <div class="alert alert-danger">
+                @ex.Message
+            </div>
+        </ErrorContent>
+    </ErrorBoundary>
+</div>
+
+@code {
+    private bool _isLoading = true;
+    private Guid _selectedReportId = Guid.Empty;
+
+    protected override Task OnInitializedAsync()
+    {
+        try
+        {
+            ReportState.OnStateChanged += StateHasChanged;
+        }
+        catch (Exception ex)
+        {
+            Logger.LogError(ex, "Fehler beim Initialisieren der Hub-Verbindung");
+            throw;
+        }
+        finally
+        {
+            _isLoading = false;
+        }
+
+        return Task.CompletedTask;
+    }
+
+    private IEnumerable<TraceInfo> GetFilteredTraces()
+    {
+        var report = ReportState.Reports.FirstOrDefault(r => r.ReportId == _selectedReportId);
+        
+        if (report == null)
+        {
+            return [];
+        }
+        
+        return report.Traces.Select(trace =>
+        {
+            var data = trace.Split('|');
+            return new TraceInfo
+            {
+                TimeStamp = data[0],
+                Result = data[1],
+                LogInfo = data[2]
+            };
+        });
+    }
+
+    public void Dispose()
+    {
+        ReportState.OnStateChanged -= StateHasChanged;
+    }
+
+    private record TraceInfo
+    {
+        public string TimeStamp { get; init; } = string.Empty;
+        public string Result { get; init; } = string.Empty;
+        public string LogInfo { get; init; } = string.Empty;
+    }
+}

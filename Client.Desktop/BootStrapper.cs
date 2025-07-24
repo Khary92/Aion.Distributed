@@ -1,29 +1,16 @@
 using Client.Desktop.Communication.Commands;
-using Client.Desktop.Communication.Commands.AiSettings;
 using Client.Desktop.Communication.Commands.Notes;
-using Client.Desktop.Communication.Commands.NoteTypes;
 using Client.Desktop.Communication.Commands.Settings;
-using Client.Desktop.Communication.Commands.Sprints;
 using Client.Desktop.Communication.Commands.StatisticsData;
-using Client.Desktop.Communication.Commands.Tags;
-using Client.Desktop.Communication.Commands.Tickets;
-using Client.Desktop.Communication.Commands.TimerSettings;
 using Client.Desktop.Communication.Commands.TimeSlots;
 using Client.Desktop.Communication.Commands.UseCases;
 using Client.Desktop.Communication.Commands.WorkDays;
 using Client.Desktop.Communication.Notifications;
 using Client.Desktop.Communication.Requests;
-using Client.Desktop.Communication.Requests.AiSettings;
 using Client.Desktop.Communication.Requests.Analysis;
 using Client.Desktop.Communication.Requests.Notes;
-using Client.Desktop.Communication.Requests.NoteTypes;
 using Client.Desktop.Communication.Requests.Replays;
-using Client.Desktop.Communication.Requests.Settings;
-using Client.Desktop.Communication.Requests.Sprints;
 using Client.Desktop.Communication.Requests.StatisticsData;
-using Client.Desktop.Communication.Requests.Tags;
-using Client.Desktop.Communication.Requests.Tickets;
-using Client.Desktop.Communication.Requests.TimerSettings;
 using Client.Desktop.Communication.Requests.TimeSlots;
 using Client.Desktop.Communication.Requests.UseCase;
 using Client.Desktop.Communication.Requests.WorkDays;
@@ -43,8 +30,9 @@ using Client.Desktop.Models.TimeTracking.DynamicControls;
 using Client.Desktop.Replays;
 using Client.Desktop.Services;
 using Client.Desktop.Services.Cache;
+using Client.Desktop.Services.Initializer;
+using Client.Desktop.Services.LocalSettings;
 using Client.Desktop.Views.Analysis;
-using Client.Desktop.Views.Data;
 using Client.Desktop.Views.Documentation;
 using Client.Desktop.Views.Export;
 using Client.Desktop.Views.Main;
@@ -55,16 +43,25 @@ using CommunityToolkit.Mvvm.Messaging;
 using Grpc.Net.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Proto.Command.TimeSlots;
-using Proto.Notifications.AiSettings;
 using Proto.Notifications.Note;
 using Proto.Notifications.NoteType;
-using Proto.Notifications.Settings;
 using Proto.Notifications.Sprint;
 using Proto.Notifications.Tag;
 using Proto.Notifications.Ticket;
 using Proto.Notifications.TimerSettings;
 using Proto.Notifications.UseCase;
 using Proto.Notifications.WorkDay;
+using Service.Proto.Shared.Commands.NoteTypes;
+using Service.Proto.Shared.Commands.Sprints;
+using Service.Proto.Shared.Commands.Tags;
+using Service.Proto.Shared.Commands.Tickets;
+using Service.Proto.Shared.Commands.TimerSettings;
+using Service.Proto.Shared.Requests.NoteTypes;
+using Service.Proto.Shared.Requests.Sprints;
+using Service.Proto.Shared.Requests.Tags;
+using Service.Proto.Shared.Requests.Tickets;
+using Service.Proto.Shared.Requests.TimerSettings;
+using ITimerSettingsCommandSender = Service.Proto.Shared.Commands.TimerSettings.ITimerSettingsCommandSender;
 
 namespace Client.Desktop;
 
@@ -72,6 +69,7 @@ public static class Bootstrapper
 {
     public static void AddPresentationServices(this IServiceCollection services)
     {
+        AddSharedDataServices(services);
         AddSynchronizationServices(services);
         AddViews(services);
         AddModels(services);
@@ -81,9 +79,34 @@ public static class Bootstrapper
         AddFileSystemServices(services);
 
         //TODO fix it
-        services.AddSingleton<IRunTimeSettings, RunTimeSettings>();
-        services.AddSingleton<IExportService, ExportService>();
+        services.AddSingleton<LocalSettingsProjector>();
+        services.AddSingleton<ILocalSettingsService>(sp => sp.GetRequiredService<LocalSettingsProjector>());
+        services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<LocalSettingsProjector>());
+        
+        services.AddSingleton<IServiceInitializer, ServiceInitializer>();
+        services.AddSingleton<ILocalSettingsCommandSender, LocalSettingsCommandSender>();
+
+        services.AddSingleton<ExportService>();
+        services.AddSingleton<IExportService>(sp => sp.GetRequiredService<ExportService>());
+        services.AddSingleton<IRegisterMessenger>(sp => sp.GetRequiredService<ExportService>());
         services.AddSingleton<ILanguageModelApi, LanguageModelApiStub>();
+    }
+
+    private static readonly string ServerAddress = "http://localhost:8081";
+
+    private static void AddSharedDataServices(this IServiceCollection services)
+    {
+        services.AddScoped<ITicketCommandSender>(sp => new TicketCommandSender(ServerAddress));
+        services.AddScoped<ITicketRequestSender>(sp => new TicketRequestSender(ServerAddress));
+
+        services.AddScoped<ISprintCommandSender>(sp => new SprintCommandSender(ServerAddress));
+        services.AddScoped<ISprintRequestSender>(sp => new SprintRequestSender(ServerAddress));
+
+        services.AddScoped<ITagCommandSender>(sp => new TagCommandSender(ServerAddress));
+        services.AddScoped<ITagRequestSender>(sp => new TagRequestSender(ServerAddress));
+
+        services.AddScoped<INoteTypeCommandSender>(sp => new NoteTypeCommandSender(ServerAddress));
+        services.AddScoped<INoteTypeRequestSender>(sp => new NoteTypeRequestSender(ServerAddress));
     }
 
     private static void AddFileSystemServices(this IServiceCollection services)
@@ -106,7 +129,6 @@ public static class Bootstrapper
         services.AddSingleton<SettingsCompositeControl>();
         services.AddSingleton<TimeTrackingControl>();
         services.AddSingleton<DocumentationControl>();
-        services.AddSingleton<DataCompositeControl>();
         services.AddSingleton<ExportControl>();
         services.AddSingleton<AnalysisControlWrapper>();
     }
@@ -126,6 +148,9 @@ public static class Bootstrapper
 
         services.AddTransient<INoteStreamViewModelFactory, NoteStreamViewModelFactory>();
         services.AddTransient<NoteStreamViewModel>();
+        
+        services.AddTransient<ITypeCheckBoxViewModelFactory, TypeCheckBoxViewModelFactory>();
+        services.AddTransient<NoteStreamViewModel>();
 
         services.AddTransient<INoteViewFactory, NoteViewFactory>();
         services.AddTransient<NoteViewModel>();
@@ -138,6 +163,7 @@ public static class Bootstrapper
 
         services.AddSingleton<SettingsViewModel>();
         services.AddSingleton<SettingsModel>();
+        services.AddSingleton<IRegisterMessenger>(sp => sp.GetRequiredService<SettingsModel>());
 
         services.AddSingleton<WorkDaysViewModel>();
         services.AddSingleton<WorkDaysModel>();
@@ -148,10 +174,9 @@ public static class Bootstrapper
 
         services.AddSingleton<ExportViewModel>();
         services.AddSingleton<ExportModel>();
-
-        services.AddSingleton<AiSettingsViewModel>();
-        services.AddSingleton<AiSettingsModel>();
-
+        services.AddSingleton<IRegisterMessenger>(sp => sp.GetRequiredService<ExportModel>());
+        services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<ExportModel>());
+        
         services.AddSingleton<SprintsDataViewModel>();
         services.AddSingleton<SprintsDataModel>();
 
@@ -187,8 +212,6 @@ public static class Bootstrapper
 
         services.AddSingleton<NotificationReceiverStarter>();
 
-        services.AddSingleton<AiSettingsNotificationReceiver>();
-        services.AddSingleton<SettingsNotificationReceiver>();
         services.AddSingleton<TicketNotificationReceiver>();
         services.AddSingleton<NoteNotificationReceiver>();
         services.AddSingleton<NoteTypeNotificationReceiver>();
@@ -199,30 +222,23 @@ public static class Bootstrapper
         services.AddSingleton<WorkDayNotificationReceiver>();
 
         var channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
-        services.AddSingleton(new AiSettingsNotificationService.AiSettingsNotificationServiceClient(channel));
-        services.AddSingleton(new SettingsNotificationService.SettingsNotificationServiceClient(channel));
         services.AddSingleton(new TicketNotificationService.TicketNotificationServiceClient(channel));
         services.AddSingleton(new NoteNotificationService.NoteNotificationServiceClient(channel));
-        services.AddSingleton(new NoteTypeNotificationService.NoteTypeNotificationServiceClient(channel));
         services.AddSingleton(new SprintNotificationService.SprintNotificationServiceClient(channel));
         services.AddSingleton(new TagNotificationService.TagNotificationServiceClient(channel));
         services.AddSingleton(new TimerSettingsNotificationService.TimerSettingsNotificationServiceClient(channel));
         services.AddSingleton(new UseCaseNotificationService.UseCaseNotificationServiceClient(channel));
         services.AddSingleton(new WorkDayNotificationService.WorkDayNotificationServiceClient(channel));
+        services.AddSingleton(new NoteTypeProtoNotificationService.NoteTypeProtoNotificationServiceClient(channel));
     }
 
     private static void AddCommandSenders(this IServiceCollection services)
     {
         services.AddScoped<ICommandSender, CommandSender>();
 
-        services.AddScoped<IAiSettingsCommandSender, AiSettingsCommandSender>();
         services.AddScoped<INoteCommandSender, NoteCommandSender>();
-        services.AddScoped<INoteTypeCommandSender, NoteTypeCommandSender>();
         services.AddScoped<ISettingsCommandSender, SettingsCommandSender>();
-        services.AddScoped<ISprintCommandSender, SprintCommandSender>();
         services.AddScoped<IStatisticsDataCommandSender, StatisticsDataCommandSender>();
-        services.AddScoped<ITagCommandSender, TagCommandSender>();
-        services.AddScoped<ITicketCommandSender, TicketCommandSender>();
         services.AddScoped<ITimerSettingsCommandSender, TimerSettingsCommandSender>();
         services.AddScoped<ITimeSlotCommandSender, TimeSlotCommandSender>();
         services.AddScoped<IUseCaseCommandSender, UseCaseCommandSender>();
@@ -233,18 +249,11 @@ public static class Bootstrapper
     {
         services.AddScoped<IRequestSender, RequestSender>();
 
-        services.AddScoped<IAiSettingsRequestSender, AiSettingsRequestSender>();
         services.AddScoped<INotesRequestSender, NotesRequestSender>();
-        services.AddScoped<INoteTypesRequestSender, NoteTypesRequestSender>();
-        services.AddScoped<ISettingsRequestSender, SettingsRequestSender>();
-        services.AddScoped<ISprintRequestSender, SprintRequestSender>();
         services.AddScoped<IStatisticsDataRequestSender, StatisticsDataRequestSender>();
-        services.AddScoped<ITagRequestSender, TagRequestSender>();
-        services.AddScoped<ITicketRequestSender, TicketRequestSender>();
         services.AddScoped<ITimerSettingsRequestSender, TimerSettingsRequestSender>();
         services.AddScoped<ITimeSlotRequestSender, TimeSlotRequestSender>();
         services.AddScoped<IWorkDayRequestSender, WorkDayRequestSender>();
-        services.AddScoped<ITicketReplayRequestSender, TicketReplayRequestSender>();
         services.AddScoped<ITicketReplayRequestSender, TicketReplayRequestSender>();
         services.AddScoped<IUseCaseRequestSender, UseCaseRequestSender>();
         services.AddScoped<IAnalysisRequestSender, AnalysisRequestSender>();

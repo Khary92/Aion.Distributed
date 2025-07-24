@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Client.Desktop.Services.Initializer;
 using Client.Tracing.Tracing.Tracers;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Dto;
@@ -23,10 +24,6 @@ public class ExportViewModel : ReactiveObject
         {
             Model.MarkdownText = await Model.GetMarkdownTextAsync();
         };
-
-
-        Model.InitializeAsync().ConfigureAwait(false);
-        Model.RegisterMessenger();
     }
 
     public ExportModel Model { get; }

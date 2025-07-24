@@ -6,7 +6,7 @@ namespace Client.Tracing.Tracing.Tracers.Sprint.UseCase;
 
 public class UpdateSprintCollector(ITracingDataCommandSender commandSender) : IUpdateSprintCollector
 {
-    public async Task StartUseCase(Type originClassType, Guid traceId, Dictionary<string, string> attributes)
+    public async Task StartUseCase(Type originClassType, Guid traceId, string attributes)
     {
         var log = $"Change sprint data requested for {attributes}";
 

@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Avalonia.Controls;
 using Client.Desktop.Models.TimeTracking;
 using Client.Desktop.Views.Analysis;
-using Client.Desktop.Views.Data;
 using Client.Desktop.Views.Documentation;
 using Client.Desktop.Views.Export;
 using Client.Desktop.Views.Setting;
@@ -30,7 +29,6 @@ public class ContentWrapperViewModel : ReactiveObject
 
     public ContentWrapperViewModel(SettingsCompositeControl settingsCompositeControl,
         TimeTrackingControl timeTrackingControl,
-        DataCompositeControl sprintDataCompositeControl,
         ExportControl exportControl, AnalysisControlWrapper analysisControlWrapper,
         TimeTrackingViewModel timeTrackingViewModel, DocumentationControl documentationControl)
     {
@@ -49,16 +47,7 @@ public class ContentWrapperViewModel : ReactiveObject
             IsMenuOpen = false;
             MenuWidth = ZeroConstant;
         });
-
-        OnDataClickCommand = ReactiveCommand.CreateFromTask(async () =>
-        {
-            CurrentControl = sprintDataCompositeControl;
-
-            await Task.Delay(MenuTransitionDelay);
-            IsMenuOpen = false;
-            MenuWidth = ZeroConstant;
-        });
-
+        
         OnExportClickCommand = ReactiveCommand.CreateFromTask(async () =>
         {
             CurrentControl = exportControl;

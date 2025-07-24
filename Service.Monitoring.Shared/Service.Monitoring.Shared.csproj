@@ -18,7 +18,7 @@
     <ItemGroup>
         <Protobuf Include="**/*.proto"
                   ProtoRoot="."
-                  AdditionalImportDirs="$(SolutionDir)Proto.Common/"
+                  AdditionalImportDirs="../Service.Proto.Shared/"
                   GrpcServices="Both"/>
     </ItemGroup>
 

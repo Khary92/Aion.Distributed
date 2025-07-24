@@ -14,5 +14,6 @@ public enum LoggingMeta
     AggregateNotFound,
     PropertyChanged,
     CommandReceived,
-    EventPersisted
+    EventPersisted,
+    NotificationSent
 }

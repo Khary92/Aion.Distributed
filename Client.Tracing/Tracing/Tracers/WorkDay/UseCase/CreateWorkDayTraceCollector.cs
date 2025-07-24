@@ -6,7 +6,7 @@ namespace Client.Tracing.Tracing.Tracers.WorkDay.UseCase;
 
 public class CreateWorkDayTraceCollector(ITracingDataCommandSender commandSender) : ICreateWorkDayTraceCollector
 {
-    public async Task StartUseCase(Type originClassType, Guid traceId, Dictionary<string, string> attributes)
+    public async Task StartUseCase(Type originClassType, Guid traceId, string attributes)
     {
         var log = $"Create WorkDay requested for {attributes}";
 
@@ -34,7 +34,7 @@ public class CreateWorkDayTraceCollector(ITracingDataCommandSender commandSender
             DateTimeOffset.Now));
     }
 
-    public async Task AggregateReceived(Type originClassType, Guid traceId, Dictionary<string, string> attributes)
+    public async Task AggregateReceived(Type originClassType, Guid traceId, string attributes)
     {
         var log = ($"Received aggregate {attributes}");
 

@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+option csharp_namespace = "Proto.Notifications.NoteType";
+
+service NotificationService {
+  rpc SendNoteTypeColorChanged(NoteTypeColorChangedNotification) returns (NotificationResponse);
+  rpc SendNoteTypeCreated(NoteTypeCreatedNotification) returns (NotificationResponse);
+  rpc SendNoteTypeNameChanged(NoteTypeNameChangedNotification) returns (NotificationResponse);
+}
+
+service NoteTypeProtoNotificationService {
+  rpc SubscribeNoteNotifications(SubscribeRequest) returns (stream NoteTypeNotification);
+}
+
+message NoteTypeNotification {
+  oneof notification {
+    NoteTypeColorChangedNotification noteTypeColorChanged = 1;
+    NoteTypeCreatedNotification noteTypeCreated = 2;
+    NoteTypeNameChangedNotification noteTypeNameChanged = 3;
+  }
+}
+
+message SubscribeRequest {
+}
+
+message NoteTypeColorChangedNotification {
+  string noteTypeId = 1;
+  string color = 2;
+}
+
+message NoteTypeCreatedNotification {
+  string noteTypeId = 1;
+  string name = 2;
+  string color = 3;
+}
+
+message NoteTypeNameChangedNotification {
+  string noteTypeId = 1;
+  string name = 2;
+}
+
+message NotificationResponse {
+  bool success = 1;
+}
