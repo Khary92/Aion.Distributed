@@ -14,7 +14,7 @@ public class EndTimeChangedCache(
     IFileSystemWriter fileSystemWriter,
     IFileSystemReader fileSystemReader) : IPersistentCache<SetEndTimeCommandProto>
 {
-    private const string Path = ".\\EndTimes.json";
+    private const string Path = "EndTimes.json";
 
     private readonly Dictionary<Guid, SetEndTimeCommandProto> _commands = new();
 

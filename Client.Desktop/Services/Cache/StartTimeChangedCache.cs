@@ -14,7 +14,7 @@ public class StartTimeChangedCache(
     IFileSystemWriter fileSystemWriter,
     IFileSystemReader fileSystemReader) : IPersistentCache<SetStartTimeCommandProto>
 {
-    private const string Path = ".\\StartTimes.json";
+    private const string Path = "StartTimes.json";
 
     private readonly Dictionary<Guid, SetStartTimeCommandProto> _commands = new();
 
