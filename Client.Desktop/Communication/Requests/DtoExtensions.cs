@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Client.Desktop.DTO;
 using Client.Proto;
-using Proto.DTO.AiSettings;
 using Proto.DTO.NoteType;
 using Proto.DTO.Sprint;
 using Proto.DTO.StatisticsData;
@@ -93,11 +92,6 @@ public static class DtoExtensions
             sprint.End.ToDateTimeOffset(),
             [..ticketIds]
         );
-    }
-    
-    public static AiSettingsDto ToDto(this AiSettingsProto proto)
-    {
-        return new AiSettingsDto(Guid.Parse(proto.AiSettingsId), proto.LanguageModelPath, proto.Prompt);
     }
     
     public static StatisticsDataDto ToDto(this StatisticsDataProto proto)

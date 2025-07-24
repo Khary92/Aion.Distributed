@@ -1,5 +1,4 @@
 using Client.Desktop.Communication.Commands;
-using Client.Desktop.Communication.Commands.AiSettings;
 using Client.Desktop.Communication.Commands.Notes;
 using Client.Desktop.Communication.Commands.Settings;
 using Client.Desktop.Communication.Commands.StatisticsData;
@@ -9,7 +8,6 @@ using Client.Desktop.Communication.Commands.UseCases;
 using Client.Desktop.Communication.Commands.WorkDays;
 using Client.Desktop.Communication.Notifications;
 using Client.Desktop.Communication.Requests;
-using Client.Desktop.Communication.Requests.AiSettings;
 using Client.Desktop.Communication.Requests.Analysis;
 using Client.Desktop.Communication.Requests.Notes;
 using Client.Desktop.Communication.Requests.Replays;
@@ -48,7 +46,6 @@ using CommunityToolkit.Mvvm.Messaging;
 using Grpc.Net.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Proto.Command.TimeSlots;
-using Proto.Notifications.AiSettings;
 using Proto.Notifications.Note;
 using Proto.Notifications.NoteType;
 using Proto.Notifications.Sprint;
@@ -180,10 +177,7 @@ public static class Bootstrapper
         services.AddSingleton<ExportModel>();
         services.AddSingleton<IRegisterMessenger>(sp => sp.GetRequiredService<ExportModel>());
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<ExportModel>());
-
-        services.AddSingleton<AiSettingsViewModel>();
-        services.AddSingleton<AiSettingsModel>();
-
+        
         services.AddSingleton<SprintsDataViewModel>();
         services.AddSingleton<SprintsDataModel>();
 
@@ -219,7 +213,6 @@ public static class Bootstrapper
 
         services.AddSingleton<NotificationReceiverStarter>();
 
-        services.AddSingleton<AiSettingsNotificationReceiver>();
         services.AddSingleton<TicketNotificationReceiver>();
         services.AddSingleton<NoteNotificationReceiver>();
         services.AddSingleton<NoteTypeNotificationReceiver>();
@@ -230,7 +223,6 @@ public static class Bootstrapper
         services.AddSingleton<WorkDayNotificationReceiver>();
 
         var channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
-        services.AddSingleton(new AiSettingsNotificationService.AiSettingsNotificationServiceClient(channel));
         services.AddSingleton(new TicketNotificationService.TicketNotificationServiceClient(channel));
         services.AddSingleton(new NoteNotificationService.NoteNotificationServiceClient(channel));
         services.AddSingleton(new SprintNotificationService.SprintNotificationServiceClient(channel));
@@ -245,7 +237,6 @@ public static class Bootstrapper
     {
         services.AddScoped<ICommandSender, CommandSender>();
 
-        services.AddScoped<IAiSettingsCommandSender, AiSettingsCommandSender>();
         services.AddScoped<INoteCommandSender, NoteCommandSender>();
         services.AddScoped<ISettingsCommandSender, SettingsCommandSender>();
         services.AddScoped<IStatisticsDataCommandSender, StatisticsDataCommandSender>();
@@ -259,7 +250,6 @@ public static class Bootstrapper
     {
         services.AddScoped<IRequestSender, RequestSender>();
 
-        services.AddScoped<IAiSettingsRequestSender, AiSettingsRequestSender>();
         services.AddScoped<INotesRequestSender, NotesRequestSender>();
         services.AddScoped<IStatisticsDataRequestSender, StatisticsDataRequestSender>();
         services.AddScoped<ITimerSettingsRequestSender, TimerSettingsRequestSender>();

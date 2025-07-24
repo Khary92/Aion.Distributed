@@ -1,5 +1,4 @@
-﻿using Core.Server.Communication.Endpoints.AiSettings;
-using Core.Server.Communication.Endpoints.Analysis;
+﻿using Core.Server.Communication.Endpoints.Analysis;
 using Core.Server.Communication.Endpoints.Note;
 using Core.Server.Communication.Endpoints.NoteType;
 using Core.Server.Communication.Endpoints.Sprint;
@@ -10,7 +9,6 @@ using Core.Server.Communication.Endpoints.TimerSettings;
 using Core.Server.Communication.Endpoints.TimeSlot;
 using Core.Server.Communication.Endpoints.UseCase;
 using Core.Server.Communication.Endpoints.WorkDay;
-using Core.Server.Communication.Mocks.AiSettings;
 using Core.Server.Communication.Mocks.Analysis;
 using Core.Server.Communication.Mocks.Note;
 using Core.Server.Communication.Mocks.NoteType;
@@ -37,7 +35,6 @@ public static class EndpointServices
 
     private static void AddCommandEndPoints(WebApplication app)
     {
-        app.MapGrpcService<AiSettingsCommandReceiver>();
         app.MapGrpcService<NoteCommandReceiver>();
         app.MapGrpcService<NoteTypeCommandReceiver>();
         app.MapGrpcService<SprintCommandReceiver>();
@@ -52,7 +49,6 @@ public static class EndpointServices
 
     private static void AddRequestEndPoints(WebApplication app)
     {
-        app.MapGrpcService<AiSettingsRequestReceiver>();
         app.MapGrpcService<NoteRequestReceiver>();
         app.MapGrpcService<NoteTypeRequestReceiver>();
         app.MapGrpcService<SprintRequestReceiver>();
@@ -68,7 +64,6 @@ public static class EndpointServices
 
     private static void AddNotificationEndPoints(WebApplication app)
     {
-        app.MapGrpcService<AiSettingsNotificationService>();
         app.MapGrpcService<NoteNotificationService>();
         app.MapGrpcService<NoteTypeNotificationService>();
         app.MapGrpcService<SprintNotificationService>();
@@ -83,7 +78,6 @@ public static class EndpointServices
 
     public static void AddMockingEndpoints(this WebApplication app)
     {
-        app.MapGrpcService<MockAiSettingsCommandReceiver>();
         app.MapGrpcService<MockNoteCommandReceiver>();
         app.MapGrpcService<MockNoteTypeCommandService>();
         app.MapGrpcService<MockSprintCommandService>();
@@ -96,7 +90,6 @@ public static class EndpointServices
         app.MapGrpcService<MockUseCaseCommandService>();
         app.MapGrpcService<MockWorkDayCommandService>();
 
-        app.MapGrpcService<MockAiSettingsRequestReceiver>();
         app.MapGrpcService<NoteRequestReceiver>();
         app.MapGrpcService<MockNoteTypeRequestService>();
         app.MapGrpcService<MockSprintRequestService>();

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Core.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250723182411_InitialCreate")]
+    [Migration("20250724121825_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -24,34 +24,6 @@ namespace Core.Persistence.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("Domain.Events.AiSettings.AiSettingsEvent", b =>
-                {
-                    b.Property<Guid>("EventId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("EntityId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("EventPayload")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<string>("EventType")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<TimeSpan>("Offset")
-                        .HasColumnType("interval");
-
-                    b.Property<DateTime>("TimeStamp")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.HasKey("EventId");
-
-                    b.ToTable("AiSettingsEvents");
-                });
 
             modelBuilder.Entity("Domain.Events.Note.NoteEvent", b =>
                 {

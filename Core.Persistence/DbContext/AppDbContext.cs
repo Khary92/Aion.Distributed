@@ -1,5 +1,4 @@
-﻿using Domain.Events.AiSettings;
-using Domain.Events.Note;
+﻿using Domain.Events.Note;
 using Domain.Events.NoteTypes;
 using Domain.Events.Sprints;
 using Domain.Events.StatisticsData;
@@ -27,7 +26,6 @@ public sealed class AppDbContext : Microsoft.EntityFrameworkCore.DbContext
     public DbSet<NoteEvent> NoteEvents { get; set; } = null!;
     public DbSet<NoteTypeEvent> NoteTypeEvents { get; set; } = null!;
     public DbSet<TagEvent> TagEvents { get; set; } = null!;
-    public DbSet<AiSettingsEvent> AiSettingsEvents { get; set; } = null!;
     public DbSet<TimerSettingsEvent> TimerSettingsEvents { get; set; } = null!;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -55,10 +53,7 @@ public sealed class AppDbContext : Microsoft.EntityFrameworkCore.DbContext
 
         modelBuilder.Entity<TagEvent>()
             .HasKey(te => te.EventId);
-
-        modelBuilder.Entity<AiSettingsEvent>()
-            .HasKey(te => te.EventId);
-
+        
         modelBuilder.Entity<NoteEvent>()
             .HasKey(te => te.EventId);
 

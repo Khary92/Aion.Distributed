@@ -1,11 +1,7 @@
 using System;
 using System.Reactive.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.Communication.RequiresChange;
-using Proto.Requests.AiSettings;
 using ReactiveUI;
 using Unit = System.Reactive.Unit;
 
@@ -24,17 +20,11 @@ public class DocumentationViewModel : ReactiveObject
     {
         _requestSender = requestSender;
         _languageModelApi = languageModelApi;
-        _languageModelApi.OnResponseReceived += WriteGptResponse;
 
         Model = documentationModel;
 
         Model.Initialize().ConfigureAwait(false);
         Model.RegisterMessenger();
-
-        LoadModelCommand = ReactiveCommand.CreateFromTask(ReloadGptModel);
-        CancelPromptCommand = ReactiveCommand.Create(CancelLanguageModelPrompt);
-        SetPromptCommand = ReactiveCommand.CreateFromTask(SetPreparedPrompt);
-        SendRequestCommand = ReactiveCommand.Create(SendLanguageModelRequest);
 
         this.WhenAnyValue(x => x.Model.SelectedTicket)
             .Where(ticket => ticket != null)
@@ -60,52 +50,4 @@ public class DocumentationViewModel : ReactiveObject
     public ReactiveCommand<Unit, Unit> CancelPromptCommand { get; }
     public ReactiveCommand<Unit, Unit> SendRequestCommand { get; }
     public ReactiveCommand<Unit, Unit> SetPromptCommand { get; }
-
-    private async Task SetPreparedPrompt()
-    {
-        InputText = string.Empty;
-        var aiSettingsDto = await _requestSender.Send(new GetAiSettingsRequestProto());
-
-        var inputBuilder = new StringBuilder();
-
-        inputBuilder.AppendLine(aiSettingsDto.Prompt);
-        inputBuilder.AppendLine();
-
-
-        foreach (var viewModel in Model.SelectedNotes)
-        {
-            var simpleObject = new
-            {
-                viewModel.Note.NoteTypeId,
-                viewModel.Note.Text
-            };
-
-            var json = JsonSerializer.Serialize(simpleObject);
-
-            inputBuilder.AppendLine(json);
-        }
-
-        InputText = inputBuilder.ToString();
-    }
-
-    private async Task ReloadGptModel()
-    {
-        await _languageModelApi.ReloadModel();
-    }
-
-    private void CancelLanguageModelPrompt()
-    {
-        _languageModelApi.CancelRequest();
-    }
-
-    private void SendLanguageModelRequest()
-    {
-        ResponseText = string.Empty;
-        _languageModelApi.StartRequest(InputText);
-    }
-
-    private void WriteGptResponse(object? sender, string e)
-    {
-        ResponseText += e;
-    }
 }

@@ -62,44 +62,15 @@
         </Border>
         <Border Grid.Column="2" Margin="10"
                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <TabControl>
-                <TabItem Header="Notes">
-                    <ItemsControl ItemsSource="{Binding Model.SelectedNotes}"
-                                  HorizontalAlignment="Stretch"
-                                  VerticalAlignment="Stretch">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate DataType="dynamicControls:NoteViewModel">
-                                <dynamicControl:NoteControl />
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </TabItem>
-
-                <TabItem Header="Documentation">
-                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="2*,1*">
-                        <TextBox Grid.Row="0" Grid.Column="0"
-                                 Text="{Binding ResponseText, Mode=TwoWay}"
-                                 AcceptsReturn="True"
-                                 TextWrapping="Wrap"
-                                 VerticalAlignment="Stretch" />
-
-                        <TextBox Grid.Row="1" Grid.Column="0"
-                                 Text="{Binding InputText, Mode=TwoWay}"
-                                 AcceptsReturn="True"
-                                 TextWrapping="Wrap"
-                                 VerticalAlignment="Stretch" />
-
-                        <StackPanel Grid.Row="0" Grid.Column="1" Margin="10,0,0,0"
-                                    VerticalAlignment="Top">
-                            <Button Content="Load model" Command="{Binding LoadModelCommand}" Margin="0,0,0,5" />
-                            <Button Content="Cancel prompt" Command="{Binding CancelPromptCommand}" Margin="0,0,0,5" />
-                            <Button Content="Generate prompt" Command="{Binding SetPromptCommand}" Margin="0,0,0,5" />
-                            <Button Content="Send request" Command="{Binding SendRequestCommand}" />
-                        </StackPanel>
-                    </Grid>
-                </TabItem>
-            </TabControl>
+            <ItemsControl ItemsSource="{Binding Model.SelectedNotes}"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Stretch">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="dynamicControls:NoteViewModel">
+                        <dynamicControl:NoteControl />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </Border>
-
     </Grid>
 </UserControl>

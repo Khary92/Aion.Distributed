@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Client.Desktop.Communication.Requests.AiSettings;
 using Client.Desktop.Communication.Requests.Analysis;
 using Client.Desktop.Communication.Requests.Notes;
 using Client.Desktop.Communication.Requests.Replays;
@@ -12,7 +11,6 @@ using Client.Desktop.Communication.Requests.WorkDays;
 using Client.Desktop.Decorators;
 using Client.Desktop.DTO;
 using Client.Desktop.Replays;
-using Proto.Requests.AiSettings;
 using Proto.Requests.AnalysisData;
 using Proto.Requests.Notes;
 using Proto.Requests.NoteTypes;
@@ -33,7 +31,6 @@ using Service.Proto.Shared.Requests.Tickets;
 namespace Client.Desktop.Communication.Requests;
 
 public class RequestSender(
-    IAiSettingsRequestSender aiSettingsRequestSender,
     INotesRequestSender notesRequestSender,
     INoteTypeRequestSender noteTypeRequestSender,
     ISprintRequestSender sprintRequestSender,
@@ -47,16 +44,6 @@ public class RequestSender(
     IUseCaseRequestSender useCaseRequestSender,
     IAnalysisRequestSender analysisRequestSender) : IRequestSender
 {
-    public async Task<AiSettingsDto> Send(GetAiSettingsRequestProto request)
-    {
-        return await aiSettingsRequestSender.Send(request);
-    }
-
-    public async Task<bool> Send(AiSettingExistsRequestProto request)
-    {
-        return await aiSettingsRequestSender.Send(request);
-    }
-
     public async Task<List<NoteDto>> Send(GetNotesByTicketIdRequestProto request)
     {
         return await notesRequestSender.Send(request);

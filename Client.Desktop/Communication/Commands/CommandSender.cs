@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Client.Desktop.Communication.Commands.AiSettings;
 using Client.Desktop.Communication.Commands.Notes;
 using Client.Desktop.Communication.Commands.Settings;
 using Client.Desktop.Communication.Commands.StatisticsData;
@@ -7,7 +6,6 @@ using Client.Desktop.Communication.Commands.TimerSettings;
 using Client.Desktop.Communication.Commands.TimeSlots;
 using Client.Desktop.Communication.Commands.UseCases;
 using Client.Desktop.Communication.Commands.WorkDays;
-using Proto.Command.AiSettings;
 using Proto.Command.Notes;
 using Proto.Command.NoteTypes;
 using Proto.Command.Settings;
@@ -27,7 +25,6 @@ using Service.Proto.Shared.Commands.Tickets;
 namespace Client.Desktop.Communication.Commands;
 
 public class CommandSender(
-    IAiSettingsCommandSender aiSettingsCommandSender,
     INoteCommandSender noteCommandSender,
     INoteTypeCommandSender noteTypeCommandSender,
     ISettingsCommandSender settingsCommandSender,
@@ -40,21 +37,6 @@ public class CommandSender(
     IWorkDayCommandSender workDayCommandSender,
     ITicketCommandSender ticketCommandSender) : ICommandSender
 {
-    public async Task<bool> Send(ChangeLanguageModelCommandProto command)
-    {
-        return await aiSettingsCommandSender.Send(command);
-    }
-
-    public async Task<bool> Send(ChangePromptCommandProto command)
-    {
-        return await aiSettingsCommandSender.Send(command);
-    }
-
-    public async Task<bool> Send(CreateAiSettingsCommandProto command)
-    {
-        return await aiSettingsCommandSender.Send(command);
-    }
-
     public async Task<bool> Send(CreateNoteCommandProto command)
     {
         return await noteCommandSender.Send(command);

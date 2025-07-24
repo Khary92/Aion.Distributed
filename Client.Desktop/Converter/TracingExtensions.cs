@@ -71,17 +71,7 @@ public static class TracingExtensions
             date = dto.Date.ToString()
         });
     }
-
-    public static string AsTraceAttributes(this AiSettingsDto dto)
-    {
-        return JsonConvert.SerializeObject(new
-        {
-            aiSettingsId = dto.AiSettingsId.ToString(),
-            languageModelPath = dto.LanguageModelPath,
-            prompt = dto.Prompt
-        });
-    }
-
+    
     public static string AsTraceAttributes(this TimerSettingsDto dto)
     {
         return JsonConvert.SerializeObject(new

@@ -12,22 +12,6 @@ namespace Core.Persistence.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AiSettingsEvents",
-                columns: table => new
-                {
-                    EventId = table.Column<Guid>(type: "uuid", nullable: false),
-                    TimeStamp = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    Offset = table.Column<TimeSpan>(type: "interval", nullable: false),
-                    EventType = table.Column<string>(type: "text", nullable: false),
-                    EntityId = table.Column<Guid>(type: "uuid", nullable: false),
-                    EventPayload = table.Column<string>(type: "text", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_AiSettingsEvents", x => x.EventId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "NoteEvents",
                 columns: table => new
                 {
@@ -175,9 +159,6 @@ namespace Core.Persistence.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "AiSettingsEvents");
-
             migrationBuilder.DropTable(
                 name: "NoteEvents");
 
