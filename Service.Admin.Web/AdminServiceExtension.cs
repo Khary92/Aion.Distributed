@@ -49,22 +49,22 @@ public static class AdminServiceExtension
         services.AddSingleton<ReportReceiver>();
         services.AddSingleton<IReportReceiver>(sp => sp.GetRequiredService<ReportReceiver>());
 
-        services.AddScoped<ISharedCommandSender, SharedCommandSender>();
-        services.AddScoped<ISharedRequestSender, SharedRequestSender>();
+        services.AddSingleton<ISharedCommandSender, SharedCommandSender>();
+        services.AddSingleton<ISharedRequestSender, SharedRequestSender>();
     }
 
     private static void AddSharedDataServices(this IServiceCollection services)
     {
-        services.AddScoped<ITicketCommandSender>(sp => new TicketCommandSender(ServerAddress));
-        services.AddScoped<ITicketRequestSender>(sp => new TicketRequestSender(ServerAddress));
+        services.AddSingleton<ITicketCommandSender>(sp => new TicketCommandSender(ServerAddress));
+        services.AddSingleton<ITicketRequestSender>(sp => new TicketRequestSender(ServerAddress));
 
-        services.AddScoped<ISprintCommandSender>(sp => new SprintCommandSender(ServerAddress));
-        services.AddScoped<ISprintRequestSender>(sp => new SprintRequestSender(ServerAddress));
+        services.AddSingleton<ISprintCommandSender>(sp => new SprintCommandSender(ServerAddress));
+        services.AddSingleton<ISprintRequestSender>(sp => new SprintRequestSender(ServerAddress));
 
-        services.AddScoped<ITagCommandSender>(sp => new TagCommandSender(ServerAddress));
-        services.AddScoped<ITagRequestSender>(sp => new TagRequestSender(ServerAddress));
+        services.AddSingleton<ITagCommandSender>(sp => new TagCommandSender(ServerAddress));
+        services.AddSingleton<ITagRequestSender>(sp => new TagRequestSender(ServerAddress));
 
-        services.AddScoped<INoteTypeCommandSender>(sp => new NoteTypeCommandSender(ServerAddress));
-        services.AddScoped<INoteTypeRequestSender>(sp => new NoteTypeRequestSender(ServerAddress));
+        services.AddSingleton<INoteTypeCommandSender>(sp => new NoteTypeCommandSender(ServerAddress));
+        services.AddSingleton<INoteTypeRequestSender>(sp => new NoteTypeRequestSender(ServerAddress));
     }
 }
