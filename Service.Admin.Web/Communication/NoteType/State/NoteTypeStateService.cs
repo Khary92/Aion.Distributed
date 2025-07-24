@@ -26,6 +26,7 @@ public class NoteTypeStateService(ISharedRequestSender requestSender) : INoteTyp
         }
 
         noteType.Apply(notification);
+        NotifyStateChanged();
     }
 
     public void Apply(WebNoteTypeNameChangedNotification notification)
@@ -38,6 +39,7 @@ public class NoteTypeStateService(ISharedRequestSender requestSender) : INoteTyp
         }
 
         noteType.Apply(notification);
+        NotifyStateChanged();
     }
 
     public async Task LoadNoteTypes()
@@ -45,4 +47,6 @@ public class NoteTypeStateService(ISharedRequestSender requestSender) : INoteTyp
         var getAllNoteTypesResponseProto = await requestSender.Send(new GetAllNoteTypesRequestProto());
         _noteTypes = getAllNoteTypesResponseProto.ToDtoList();
     }
+    
+    private void NotifyStateChanged() => OnStateChanged?.Invoke();
 }

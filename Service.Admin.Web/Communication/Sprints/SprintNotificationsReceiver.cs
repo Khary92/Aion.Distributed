@@ -44,11 +44,11 @@ public class SprintNotificationsReceiver(ISprintStateService sprintStateService)
                             break;
 
                         case SprintNotification.NotificationOneofCase.SprintActiveStatusSet:
-                            sprintStateService.Apply(notification.SprintDataUpdated.ToNotification());
+                            sprintStateService.Apply(notification.SprintActiveStatusSet.ToNotification());
                             break;
 
                         case SprintNotification.NotificationOneofCase.TicketAddedToActiveSprint:
-                            sprintStateService.Apply(notification.SprintDataUpdated.ToNotification());
+                            sprintStateService.Apply(notification.TicketAddedToActiveSprint.ToNotification());
                             break;
 
                         case SprintNotification.NotificationOneofCase.TicketAddedToSprint:

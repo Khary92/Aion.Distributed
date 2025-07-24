@@ -3,7 +3,7 @@
 namespace Service.Admin.Web.Communication.Tags;
 
 public class TagNotificationHostedService(TagNotificationsReceiver notificationsReceiver,
-    ILogger<TicketNotificationHostedService> logger) : BackgroundService
+    ILogger<TagNotificationHostedService> logger) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {

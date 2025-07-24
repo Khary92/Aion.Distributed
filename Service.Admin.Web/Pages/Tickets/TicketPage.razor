@@ -22,7 +22,7 @@
     protected override async Task OnInitializedAsync()
     {
         TicketStateService.OnStateChanged += async () => await InvokeAsync(StateHasChanged);
-        await InvokeAsync(async () => await TicketStateService.LoadTickets());
+        await TicketStateService.LoadTickets();
     }
 
     private async Task CreateOrUpdateTicket()

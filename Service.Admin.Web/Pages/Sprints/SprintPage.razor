@@ -1,14 +1,15 @@
 @page "/sprintData"
 @using global::Proto.Command.Sprints
-@using global::Proto.Requests.Sprints
 @using Google.Protobuf.WellKnownTypes
-@using Service.Admin.Web.Communication
-@using Service.Admin.Web.DTO
 @using Service.Admin.Tracing
+@using Service.Admin.Web.Communication
+@using Service.Admin.Web.Communication.Sprints.State
+@using Service.Admin.Web.DTO
 @rendermode InteractiveServer
 @inject ISharedCommandSender CommandSender
 @inject ISharedRequestSender RequestSender
 @inject ITraceCollector Tracer
+@inject ISprintStateService SprintStateService
 
 <div class="row">
     <div class="col-5">
@@ -52,7 +53,7 @@
             </tr>
             </thead>
             <tbody>
-            @foreach (var sprint in _sprints)
+            @foreach (var sprint in @SprintStateService.Sprints)
             {
                 <tr class="@(_selectedSprint == sprint ? "table-active" : "")"
                     @onclick="() => _selectedSprint = sprint">
@@ -68,7 +69,6 @@
 </div>
 
 @code {
-    private List<SprintDto> _sprints = new();
     private SprintDto? _selectedSprint;
     private string _newSprintName = string.Empty;
     private DateTimeOffset _startTime = DateTimeOffset.Now;
@@ -76,22 +76,16 @@
     private bool _isEditMode;
 
     private bool CanSave => !string.IsNullOrWhiteSpace(_newSprintName) &&
-                           _startTime != default &&
-                           _endTime != default &&
-                           _startTime < _endTime;
+                            _startTime != default &&
+                            _endTime != default &&
+                            _startTime < _endTime;
 
     private string EditButtonText => _isEditMode ? "Cancel Edit" : "Edit";
 
     protected override async Task OnInitializedAsync()
     {
-        await LoadSprints();
-    }
-
-    private async Task LoadSprints()
-    {
-        var sprintListProto = await RequestSender.Send(new GetAllSprintsRequestProto());
-        _sprints = sprintListProto.ToDtoList();
-        StateHasChanged();
+        SprintStateService.OnStateChanged += async () => await InvokeAsync(StateHasChanged);
+        await SprintStateService.LoadSprints();
     }
 
     private void ResetData()
@@ -114,12 +108,8 @@
 
     private async Task SetSelectedSprintActive()
     {
-        if (_selectedSprint is null) return;
-
-        foreach (var sprint in _sprints.Where(s => s.SprintId != _selectedSprint.SprintId))
-        {
-            sprint.IsActive = false;
-        }
+        if (_selectedSprint == null)
+            return;
 
         await Tracer.Sprint.ActiveStatus.StartUseCase(GetType(), _selectedSprint.SprintId,
             _selectedSprint.AsTraceAttributes());
@@ -157,12 +147,11 @@
 
             _isEditMode = false;
             ResetData();
-            await LoadSprints();
             return;
         }
 
         var createSprintDto = new SprintDto(Guid.NewGuid(), _newSprintName, false, _startTime, _endTime, []);
-        
+
         await Tracer.Sprint.Create.StartUseCase(GetType(), createSprintDto.SprintId,
             createSprintDto.AsTraceAttributes());
 
@@ -179,6 +168,6 @@
         await Tracer.Sprint.Create.CommandSent(GetType(), createSprintDto.SprintId, createCommand);
 
         ResetData();
-        await LoadSprints();
     }
+
 }

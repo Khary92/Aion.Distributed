@@ -28,6 +28,7 @@ public class SprintStateService(ISharedRequestSender requestSender) : ISprintSta
         }
 
         currentSprint.Apply(notification);
+        NotifyStateChanged();
     }
 
     public void Apply(WebAddTicketToSprintNotification notification)
@@ -40,18 +41,23 @@ public class SprintStateService(ISharedRequestSender requestSender) : ISprintSta
         }
 
         sprint.Apply(notification);
+        NotifyStateChanged();
     }
 
     public void Apply(WebSetSprintActiveStatusNotification notification)
     {
-        var sprint = _sprints.FirstOrDefault(s => s.SprintId == notification.SprintId);
-
-        if (sprint == null)
+        foreach (var loadedSprint in _sprints)
         {
-            return;
-        }
+            if (loadedSprint.SprintId == notification.SprintId)
+            {
+                loadedSprint.IsActive = true;
+                continue;
+            }
 
-        sprint.Apply(notification);
+            loadedSprint.IsActive = false;
+        }
+        
+        NotifyStateChanged();
     }
 
     public void Apply(WebSprintDataUpdatedNotification notification)
@@ -64,6 +70,7 @@ public class SprintStateService(ISharedRequestSender requestSender) : ISprintSta
         }
 
         sprint.Apply(notification);
+        NotifyStateChanged();
     }
 
     public async Task LoadSprints()
@@ -71,4 +78,6 @@ public class SprintStateService(ISharedRequestSender requestSender) : ISprintSta
         var sprintListProto = await requestSender.Send(new GetAllSprintsRequestProto());
         _sprints = sprintListProto.ToDtoList();
     }
+    
+    private void NotifyStateChanged() => OnStateChanged?.Invoke();
 }

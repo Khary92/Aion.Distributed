@@ -16,6 +16,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        TagStateService.OnStateChanged += async () => await InvokeAsync(StateHasChanged);
         await LoadTags();
     }
 

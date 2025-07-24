@@ -3,11 +3,13 @@
 @using global::Proto.Requests.NoteTypes
 @using Service.Admin.Tracing
 @using Service.Admin.Web.Communication
+@using Service.Admin.Web.Communication.NoteType.State
 @using Service.Admin.Web.DTO
 @rendermode InteractiveServer
 @inject ISharedCommandSender CommandSender
 @inject ISharedRequestSender RequestSender
 @inject ITraceCollector Tracer
+@inject INoteTypeStateService NoteTypeStateService
 
 <div class="row">
     <div class="col-5">
@@ -78,6 +80,7 @@
 
     protected override async Task OnInitializedAsync()
     {
+        NoteTypeStateService.OnStateChanged += async () => await InvokeAsync(StateHasChanged);
         await LoadNoteTypes();
     }
 
@@ -155,7 +158,7 @@
             Name = _noteName,
             Color = _selectedColor
         };
-        
+
         await Tracer.NoteType.Create.StartUseCase(GetType(), noteTypeId, createCommand.ToString());
         await CommandSender.Send(createCommand);
         await Tracer.NoteType.Create.CommandSent(GetType(), noteTypeId, createCommand);

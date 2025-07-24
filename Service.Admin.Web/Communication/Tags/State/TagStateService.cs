@@ -27,6 +27,7 @@ public class TagStateService(ISharedRequestSender requestSender) : ITagStateServ
         }
         
         tag.Apply(notification);
+        NotifyStateChanged();
     }
 
     public async Task LoadTags()

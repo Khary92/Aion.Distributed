@@ -1,7 +1,10 @@
 ﻿using Service.Admin.Web.Communication;
+using Service.Admin.Web.Communication.NoteType;
 using Service.Admin.Web.Communication.NoteType.State;
 using Service.Admin.Web.Communication.Reports;
 using Service.Admin.Web.Communication.Reports.State;
+using Service.Admin.Web.Communication.Sprints;
+using Service.Admin.Web.Communication.Sprints.State;
 using Service.Admin.Web.Communication.Tags;
 using Service.Admin.Web.Communication.Tags.State;
 using Service.Admin.Web.Communication.Tickets;
@@ -27,6 +30,7 @@ public static class AdminServiceExtension
         services.AddSingleton<ITicketStateService, TicketStateService>();
         services.AddSingleton<ITagStateService, TagStateService>();
         services.AddSingleton<INoteTypeStateService, NoteTypeStateService>();
+        services.AddSingleton<ISprintStateService, SprintStateService>();
 
         services.AddRazorComponents()
             .AddInteractiveServerComponents();
@@ -43,6 +47,12 @@ public static class AdminServiceExtension
 
         services.AddSingleton<TagNotificationsReceiver>();
         services.AddHostedService<TagNotificationHostedService>();
+        
+        services.AddSingleton<SprintNotificationsReceiver>();
+        services.AddHostedService<SprintNotificationHostedService>();
+        
+        services.AddSingleton<NoteTypeNotificationReceiver>();
+        services.AddHostedService<NoteTypeNotificationHostedService>();
 
         AddSharedDataServices(services);
 
