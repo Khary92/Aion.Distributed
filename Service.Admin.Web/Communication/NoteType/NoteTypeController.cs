@@ -1,6 +1,6 @@
 ﻿using Proto.Command.NoteTypes;
 using Service.Admin.Tracing;
-using Service.Admin.Web.DTO;
+using Service.Admin.Web.Models;
 
 namespace Service.Admin.Web.Communication.NoteType;
 
@@ -8,7 +8,7 @@ public class NoteTypeController(ISharedCommandSender commandSender, ITraceCollec
 {
     public string InputName { get; set; } = string.Empty;
     public string InputColor { get; set; } = "#000000";
-    public NoteTypeDto? SelectedNoteType { get; set; }
+    public NoteTypeWebModel? SelectedNoteType { get; set; }
 
     public bool IsEditMode { get; set; }
 

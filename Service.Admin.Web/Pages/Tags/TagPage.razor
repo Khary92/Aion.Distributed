@@ -3,14 +3,14 @@
 @using Service.Admin.Tracing
 @using Service.Admin.Web.Communication
 @using Service.Admin.Web.Communication.Tags.State
-@using Service.Admin.Web.DTO
+@using Service.Admin.Web.Models
 @rendermode InteractiveServer
 @inject ISharedCommandSender CommandSender
 @inject ITraceCollector Tracer
 @inject ITagStateService TagStateService
 
 @code {
-    private TagDto? _selectedTag;
+    private TagWebModel? _selectedTag;
     private string _inputTagName = string.Empty;
     private bool _isEditMode;
 
@@ -44,7 +44,7 @@
         }
         else
         {
-            var createTagDto = new TagDto(Guid.NewGuid(), _inputTagName, false);
+            var createTagDto = new TagWebModel(Guid.NewGuid(), _inputTagName, false);
 
             await Tracer.Tag.Create.StartUseCase(GetType(), createTagDto.TagId, createTagDto.AsTraceAttributes());
 

@@ -1,14 +1,14 @@
 using Proto.Notifications.Sprint;
 using Service.Admin.Web.Communication.Sprints.Notifications;
-using Service.Admin.Web.DTO;
+using Service.Admin.Web.Models;
 
 namespace Service.Admin.Web.Communication.Sprints;
 
 public static class SprintExtensions
 {
-    public static SprintDto ToDto(this SprintCreatedNotification notification)
+    public static SprintWebModel ToDto(this SprintCreatedNotification notification)
     {
-        return new SprintDto(Guid.Parse(notification.SprintId), notification.Name, notification.IsActive,
+        return new SprintWebModel(Guid.Parse(notification.SprintId), notification.Name, notification.IsActive,
             notification.StartTime.ToDateTimeOffset(), notification.EndTime.ToDateTimeOffset(),
             notification.TicketIds.ToGuidList());
     }

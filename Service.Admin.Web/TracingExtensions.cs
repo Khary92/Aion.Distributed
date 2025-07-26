@@ -1,18 +1,18 @@
 using Newtonsoft.Json;
-using Service.Admin.Web.DTO;
+using Service.Admin.Web.Models;
 
 namespace Service.Admin.Web;
 
 public static class TracingExtensions
 {
-    public static string AsTraceAttributes(this TicketDto dto)
+    public static string AsTraceAttributes(this TicketWebModel webModel)
     {
         return JsonConvert.SerializeObject(new
         {
-            ticketId = dto.TicketId.ToString(),
-            name = dto.Name,
-            bookingNumber = dto.BookingNumber,
-            sprintIds = string.Join(",", dto.SprintIds)
+            ticketId = webModel.TicketId.ToString(),
+            name = webModel.Name,
+            bookingNumber = webModel.BookingNumber,
+            sprintIds = string.Join(",", webModel.SprintIds)
         });
     }
 

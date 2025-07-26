@@ -1,8 +1,8 @@
 ﻿using Service.Admin.Web.Communication.NoteType.Notifications;
 
-namespace Service.Admin.Web.DTO;
+namespace Service.Admin.Web.Models;
 
-public class NoteTypeDto(Guid noteTypeId, string name, string color)
+public class NoteTypeWebModel(Guid noteTypeId, string name, string color)
 {
     public Guid NoteTypeId { get; private set; } = noteTypeId;
     public string Name { get; set; } = name;

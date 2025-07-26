@@ -8,19 +8,19 @@ using Proto.Requests.NoteTypes;
 using Proto.Requests.Sprints;
 using Proto.Requests.Tags;
 using Proto.Requests.Tickets;
-using Service.Admin.Web.DTO;
+using Service.Admin.Web.Models;
 
 namespace Service.Admin.Web.Communication;
 
 public static class DtoExtensions
 {
-    public static TimerSettingsDto ToDto(this TimerSettingsProto timerSettings)
+    public static TimerSettingsWebModel ToDto(this TimerSettingsProto timerSettings)
     {
-        return new TimerSettingsDto(Guid.Parse(timerSettings.TimerSettingsId), timerSettings.DocumentationSaveInterval,
+        return new TimerSettingsWebModel(Guid.Parse(timerSettings.TimerSettingsId), timerSettings.DocumentationSaveInterval,
             timerSettings.SnapshotSaveInterval);
     }
 
-    public static List<NoteTypeDto> ToDtoList(this GetAllNoteTypesResponseProto? noteTypeListProto)
+    public static List<NoteTypeWebModel> ToDtoList(this GetAllNoteTypesResponseProto? noteTypeListProto)
     {
         if (noteTypeListProto == null) return [];
 
@@ -29,12 +29,12 @@ public static class DtoExtensions
             .ToList();
     }
 
-    private static NoteTypeDto ToDto(this NoteTypeProto noteType)
+    private static NoteTypeWebModel ToDto(this NoteTypeProto noteType)
     {
-        return new NoteTypeDto(Guid.Parse(noteType.NoteTypeId), noteType.Name, noteType.Color);
+        return new NoteTypeWebModel(Guid.Parse(noteType.NoteTypeId), noteType.Name, noteType.Color);
     }
 
-    public static List<TagDto> ToDtoList(this TagListProto? tagListProto)
+    public static List<TagWebModel> ToDtoList(this TagListProto? tagListProto)
     {
         if (tagListProto == null) return [];
 
@@ -43,12 +43,12 @@ public static class DtoExtensions
             .ToList();
     }
 
-    private static TagDto ToDto(this TagProto tag)
+    private static TagWebModel ToDto(this TagProto tag)
     {
-        return new TagDto(Guid.Parse(tag.TagId), tag.Name, tag.IsSelected);
+        return new TagWebModel(Guid.Parse(tag.TagId), tag.Name, tag.IsSelected);
     }
 
-    public static List<TicketDto> ToDtoList(this TicketListProto? ticketListProto)
+    public static List<TicketWebModel> ToDtoList(this TicketListProto? ticketListProto)
     {
         if (ticketListProto == null) return [];
 
@@ -57,14 +57,14 @@ public static class DtoExtensions
             .ToList();
     }
 
-    private static TicketDto ToDto(this TicketProto ticket)
+    private static TicketWebModel ToDto(this TicketProto ticket)
     {
         var sprintIds = ticket.SprintIds
             .Select(idStr => Guid.TryParse(idStr, out var guid) ? guid : Guid.Empty)
             .Where(guid => guid != Guid.Empty)
             .ToList();
 
-        return new TicketDto(
+        return new TicketWebModel(
             Guid.Parse(ticket.TicketId),
             ticket.Name,
             ticket.BookingNumber,
@@ -73,14 +73,14 @@ public static class DtoExtensions
         );
     }
 
-    public static SprintDto ToDto(this SprintProto sprint)
+    public static SprintWebModel ToDto(this SprintProto sprint)
     {
         var ticketIds = sprint.TicketIds
             .Select(idStr => Guid.TryParse(idStr, out var guid) ? guid : Guid.Empty)
             .Where(guid => guid != Guid.Empty)
             .ToList();
 
-        return new SprintDto(
+        return new SprintWebModel(
             Guid.Parse(sprint.SprintId),
             sprint.Name,
             sprint.IsActive,
@@ -108,14 +108,14 @@ public static class DtoExtensions
         return repeatedField;
     }
 
-    private static SprintDto ToDto(SprintProto proto, bool isActive)
+    private static SprintWebModel ToDto(SprintProto proto, bool isActive)
     {
         var ticketIds = proto.TicketIds
             .Select(idStr => Guid.TryParse(idStr, out var guid) ? guid : Guid.Empty)
             .Where(guid => guid != Guid.Empty)
             .ToList();
 
-        return new SprintDto(
+        return new SprintWebModel(
             Guid.Parse(proto.SprintId),
             proto.Name,
             isActive,
@@ -124,7 +124,7 @@ public static class DtoExtensions
             ticketIds);
     }
 
-    public static List<SprintDto> ToDtoList(this SprintListProto? sprintListProto)
+    public static List<SprintWebModel> ToDtoList(this SprintListProto? sprintListProto)
     {
         if (sprintListProto == null) return [];
 

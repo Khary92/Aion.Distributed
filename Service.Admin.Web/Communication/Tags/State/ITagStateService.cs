@@ -1,13 +1,13 @@
 using Service.Admin.Web.Communication.Tags.Notifications;
-using Service.Admin.Web.DTO;
+using Service.Admin.Web.Models;
 
 namespace Service.Admin.Web.Communication.Tags.State;
 
 public interface ITagStateService
 {
-    IReadOnlyList<TagDto> Tickets { get; }
+    IReadOnlyList<TagWebModel> Tickets { get; }
     event Action? OnStateChanged;
-    Task AddTicket(TagDto tag);
+    Task AddTicket(TagWebModel tag);
     void Apply(WebTagUpdatedNotification notification);
     Task LoadTags();
 }

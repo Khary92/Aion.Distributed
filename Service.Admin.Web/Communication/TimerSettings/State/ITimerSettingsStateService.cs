@@ -1,13 +1,13 @@
 ﻿using Service.Admin.Web.Communication.TimerSettings.Notifications;
-using Service.Admin.Web.DTO;
+using Service.Admin.Web.Models;
 
 namespace Service.Admin.Web.Communication.TimerSettings.State;
 
 public interface ITimerSettingsStateService
 {
-    TimerSettingsDto TimerSettings { get; }
+    TimerSettingsWebModel TimerSettings { get; }
     event Action? OnStateChanged;
-    Task SetTimerSettings(TimerSettingsDto timerSettings);
+    Task SetTimerSettings(TimerSettingsWebModel timerSettings);
     Task LoadSettings();
     void Apply(WebDocuIntervalChangedNotification notification);
     void Apply(WebSnapshotIntervalChangedNotification notification);

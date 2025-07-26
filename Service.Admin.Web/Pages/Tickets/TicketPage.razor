@@ -4,14 +4,14 @@
 @using Service.Admin.Tracing
 @using Service.Admin.Web.Communication
 @using Service.Admin.Web.Communication.Tickets.State
-@using Service.Admin.Web.DTO
+@using Service.Admin.Web.Models
 @rendermode InteractiveServer
 @inject ISharedCommandSender CommandSender
 @inject ITraceCollector Tracer
 @inject ITicketStateService TicketStateService
 
 @code {
-    private TicketDto? _selectedTicket;
+    private TicketWebModel? _selectedTicket;
 
     private string _newTicketName = string.Empty;
     private string _newTicketBookingNumber = string.Empty;

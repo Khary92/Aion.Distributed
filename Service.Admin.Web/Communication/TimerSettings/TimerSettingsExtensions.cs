@@ -1,14 +1,14 @@
 ﻿using Proto.Notifications.TimerSettings;
 using Service.Admin.Web.Communication.TimerSettings.Notifications;
-using Service.Admin.Web.DTO;
+using Service.Admin.Web.Models;
 
 namespace Service.Admin.Web.Communication.TimerSettings;
 
 public static class TimerSettingsExtensions
 {
-    public static TimerSettingsDto ToDto(this TimerSettingsCreatedNotification timerSettings)
+    public static TimerSettingsWebModel ToDto(this TimerSettingsCreatedNotification timerSettings)
     {
-        return new TimerSettingsDto(Guid.Parse(timerSettings.TimerSettingsId), timerSettings.DocumentationSaveInterval,
+        return new TimerSettingsWebModel(Guid.Parse(timerSettings.TimerSettingsId), timerSettings.DocumentationSaveInterval,
             timerSettings.SnapshotSaveInterval);
     }
 

@@ -1,17 +1,17 @@
 ﻿using Proto.Requests.Sprints;
 using Service.Admin.Web.Communication.Sprints.Notifications;
-using Service.Admin.Web.DTO;
+using Service.Admin.Web.Models;
 
 namespace Service.Admin.Web.Communication.Sprints.State;
 
 public class SprintStateService(ISharedRequestSender requestSender) : ISprintStateService
 {
-    private List<SprintDto> _sprints = new();
-    public IReadOnlyList<SprintDto> Sprints => _sprints.AsReadOnly();
+    private List<SprintWebModel> _sprints = new();
+    public IReadOnlyList<SprintWebModel> Sprints => _sprints.AsReadOnly();
 
     public event Action? OnStateChanged;
 
-    public Task AddSprint(SprintDto sprint)
+    public Task AddSprint(SprintWebModel sprint)
     {
         _sprints.Add(sprint);
         return Task.CompletedTask;

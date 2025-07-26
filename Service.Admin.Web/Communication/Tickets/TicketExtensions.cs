@@ -1,14 +1,14 @@
 ﻿using Proto.Notifications.Ticket;
 using Service.Admin.Web.Communication.Tickets.Notifications;
-using Service.Admin.Web.DTO;
+using Service.Admin.Web.Models;
 
 namespace Service.Admin.Web.Communication.Tickets;
 
 public static class TicketExtensions
 {
-    public static TicketDto ToDto(this TicketCreatedNotification notification)
+    public static TicketWebModel ToDto(this TicketCreatedNotification notification)
     {
-        return new TicketDto(Guid.Parse(notification.TicketId), notification.Name, notification.BookingNumber,
+        return new TicketWebModel(Guid.Parse(notification.TicketId), notification.Name, notification.BookingNumber,
             string.Empty, notification.SprintIds.ToGuidList());
     }
 

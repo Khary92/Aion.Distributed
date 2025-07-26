@@ -1,18 +1,18 @@
 using Proto.Requests.Tickets;
 using Service.Admin.Tracing;
 using Service.Admin.Web.Communication.Tickets.Notifications;
-using Service.Admin.Web.DTO;
+using Service.Admin.Web.Models;
 
 namespace Service.Admin.Web.Communication.Tickets.State;
 
 public class TicketStateService(ISharedRequestSender requestSender, ITraceCollector tracer) : ITicketStateService
 {
-    private List<TicketDto> _tickets = new();
+    private List<TicketWebModel> _tickets = new();
 
-    public IReadOnlyList<TicketDto> Tickets => _tickets.AsReadOnly();
+    public IReadOnlyList<TicketWebModel> Tickets => _tickets.AsReadOnly();
     public event Action? OnStateChanged;
 
-    public async Task AddTicket(TicketDto ticket)
+    public async Task AddTicket(TicketWebModel ticket)
     {
         await tracer.Ticket.Create.AggregateReceived(GetType(), ticket.TicketId, ticket.AsTraceAttributes());
         _tickets.Add(ticket);

@@ -4,7 +4,7 @@
 @using Service.Admin.Tracing
 @using Service.Admin.Web.Communication
 @using Service.Admin.Web.Communication.Sprints.State
-@using Service.Admin.Web.DTO
+@using Service.Admin.Web.Models
 @rendermode InteractiveServer
 @inject ISharedCommandSender CommandSender
 @inject ITraceCollector Tracer
@@ -68,7 +68,7 @@
 </div>
 
 @code {
-    private SprintDto? _selectedSprint;
+    private SprintWebModel? _selectedSprint;
     private string _newSprintName = string.Empty;
     private DateTimeOffset _startTime = DateTimeOffset.Now;
     private DateTimeOffset _endTime = DateTimeOffset.Now.AddDays(7);
@@ -127,7 +127,7 @@
     {
         if (_isEditMode && _selectedSprint != null)
         {
-            var updateSprintDto = new SprintDto(_selectedSprint.SprintId, _newSprintName,
+            var updateSprintDto = new SprintWebModel(_selectedSprint.SprintId, _newSprintName,
                 _selectedSprint.IsActive, _startTime, _endTime, _selectedSprint.TicketIds);
 
             await Tracer.Sprint.Update.StartUseCase(GetType(), updateSprintDto.SprintId,
@@ -149,7 +149,7 @@
             return;
         }
 
-        var createSprintDto = new SprintDto(Guid.NewGuid(), _newSprintName, false, _startTime, _endTime, []);
+        var createSprintDto = new SprintWebModel(Guid.NewGuid(), _newSprintName, false, _startTime, _endTime, []);
 
         await Tracer.Sprint.Create.StartUseCase(GetType(), createSprintDto.SprintId,
             createSprintDto.AsTraceAttributes());

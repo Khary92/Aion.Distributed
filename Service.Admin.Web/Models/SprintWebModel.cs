@@ -1,10 +1,10 @@
 using Service.Admin.Web.Communication.Sprints.Notifications;
 
-namespace Service.Admin.Web.DTO;
+namespace Service.Admin.Web.Models;
 
-public class SprintDto
+public class SprintWebModel
 {
-    public SprintDto(Guid sprintId, string name, bool isActive, DateTimeOffset startTime, DateTimeOffset endTime,
+    public SprintWebModel(Guid sprintId, string name, bool isActive, DateTimeOffset startTime, DateTimeOffset endTime,
         List<Guid> ticketIds)
     {
         SprintId = sprintId;

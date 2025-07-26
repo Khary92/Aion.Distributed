@@ -1,13 +1,13 @@
 ﻿using Service.Admin.Web.Communication.Sprints.Notifications;
-using Service.Admin.Web.DTO;
+using Service.Admin.Web.Models;
 
 namespace Service.Admin.Web.Communication.Sprints.State;
 
 public interface ISprintStateService
 {
-    IReadOnlyList<SprintDto> Sprints { get; }
+    IReadOnlyList<SprintWebModel> Sprints { get; }
     event Action? OnStateChanged;
-    Task AddSprint(SprintDto sprint);
+    Task AddSprint(SprintWebModel sprint);
     void Apply(WebAddTicketToActiveSprintNotification notification);
     void Apply(WebAddTicketToSprintNotification notification);
     void Apply(WebSetSprintActiveStatusNotification notification);

@@ -1,10 +1,10 @@
 using Service.Admin.Web.Communication.Tickets.Notifications;
 
-namespace Service.Admin.Web.DTO;
+namespace Service.Admin.Web.Models;
 
-public class TicketDto
+public class TicketWebModel
 {
-    public TicketDto(Guid ticketId, string name, string bookingNumber, string documentation, List<Guid> sprintIds)
+    public TicketWebModel(Guid ticketId, string name, string bookingNumber, string documentation, List<Guid> sprintIds)
     {
         TicketId = ticketId;
         Name = name;

@@ -1,11 +1,11 @@
 using Newtonsoft.Json;
-using Service.Admin.Web.DTO;
+using Service.Admin.Web.Models;
 
 namespace Service.Admin.Web.Pages;
 
 public static class TracingStringExtensions
 {
-    public static string AsTraceAttributes(this SprintDto? dto)
+    public static string AsTraceAttributes(this SprintWebModel? dto)
     {
         if (dto == null) return string.Empty;
 
@@ -20,12 +20,12 @@ public static class TracingStringExtensions
         });
     }
 
-    public static string AsTraceAttributes(this TagDto dto)
+    public static string AsTraceAttributes(this TagWebModel webModel)
     {
         return JsonConvert.SerializeObject(new
         {
-            sprintId = dto.TagId.ToString(),
-            name = dto.Name
+            sprintId = webModel.TagId.ToString(),
+            name = webModel.Name
         });
     }
 }

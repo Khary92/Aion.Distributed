@@ -1,18 +1,18 @@
 ﻿using Proto.Command.TimerSettings;
 using Proto.Requests.TimerSettings;
 using Service.Admin.Web.Communication.TimerSettings.Notifications;
-using Service.Admin.Web.DTO;
+using Service.Admin.Web.Models;
 
 namespace Service.Admin.Web.Communication.TimerSettings.State;
 
 public class TimerSettingsStateService(ISharedRequestSender requestSender, ISharedCommandSender commandSender)
     : ITimerSettingsStateService
 {
-    public TimerSettingsDto TimerSettings { get; internal set; } = new(Guid.Empty, 0, 0);
+    public TimerSettingsWebModel TimerSettings { get; internal set; } = new(Guid.Empty, 0, 0);
 
     public event Action? OnStateChanged;
 
-    public Task SetTimerSettings(TimerSettingsDto timerSettings)
+    public Task SetTimerSettings(TimerSettingsWebModel timerSettings)
     {
         TimerSettings = timerSettings;
         return Task.CompletedTask;

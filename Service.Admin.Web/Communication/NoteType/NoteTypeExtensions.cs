@@ -1,14 +1,14 @@
 ﻿using Proto.Notifications.NoteType;
 using Service.Admin.Web.Communication.NoteType.Notifications;
-using Service.Admin.Web.DTO;
+using Service.Admin.Web.Models;
 
 namespace Service.Admin.Web.Communication.NoteType;
 
 public static class NoteTypeExtensions
 {
-    public static NoteTypeDto ToDto(this NoteTypeCreatedNotification notification)
+    public static NoteTypeWebModel ToDto(this NoteTypeCreatedNotification notification)
     {
-        return new NoteTypeDto(Guid.Parse(notification.NoteTypeId), notification.Name, notification.Color);
+        return new NoteTypeWebModel(Guid.Parse(notification.NoteTypeId), notification.Name, notification.Color);
     }
 
     public static WebNoteTypeColorChangedNotification ToNotification(this NoteTypeColorChangedNotification notification)

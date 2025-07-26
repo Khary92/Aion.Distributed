@@ -1,14 +1,14 @@
 ﻿using Proto.Notifications.Tag;
 using Service.Admin.Web.Communication.Tags.Notifications;
-using Service.Admin.Web.DTO;
+using Service.Admin.Web.Models;
 
 namespace Service.Admin.Web.Communication.Tags;
 
 public static class TagExtensions
 {
-    public static TagDto ToDto(this TagCreatedNotification notification)
+    public static TagWebModel ToDto(this TagCreatedNotification notification)
     {
-        return new TagDto(Guid.Parse(notification.TagId), notification.Name, false);
+        return new TagWebModel(Guid.Parse(notification.TagId), notification.Name, false);
     }
 
     public static WebTagUpdatedNotification ToNotification(this TagUpdatedNotification notification)

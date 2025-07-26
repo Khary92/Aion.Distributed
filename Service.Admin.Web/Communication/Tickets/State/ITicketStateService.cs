@@ -1,13 +1,13 @@
 using Service.Admin.Web.Communication.Tickets.Notifications;
-using Service.Admin.Web.DTO;
+using Service.Admin.Web.Models;
 
 namespace Service.Admin.Web.Communication.Tickets.State;
 
 public interface ITicketStateService
 {
-    IReadOnlyList<TicketDto> Tickets { get; }
+    IReadOnlyList<TicketWebModel> Tickets { get; }
     event Action? OnStateChanged;
-    Task AddTicket(TicketDto ticket);
+    Task AddTicket(TicketWebModel ticket);
     void Apply(WebTicketDataUpdatedNotification ticketDataUpdatedNotification);
     void Apply(WebTicketDocumentationUpdatedNotification ticketDocumentationUpdatedNotification);
     Task LoadTickets();
