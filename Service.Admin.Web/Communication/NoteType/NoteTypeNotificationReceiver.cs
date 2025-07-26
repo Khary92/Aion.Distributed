@@ -1,10 +1,11 @@
 ﻿using Grpc.Core;
 using Grpc.Net.Client;
 using Proto.Notifications.NoteType;
+using Service.Admin.Web.Communication.NoteType.State;
 
 namespace Service.Admin.Web.Communication.NoteType;
 
-public class NoteTypeNotificationReceiver
+public class NoteTypeNotificationReceiver(INoteTypeStateService noteTypeStateService)
 {
     public async Task SubscribeToNotifications(CancellationToken stoppingToken = default)
     {
@@ -33,15 +34,17 @@ public class NoteTypeNotificationReceiver
                     {
                         case NoteTypeNotification.NotificationOneofCase.NoteTypeCreated:
                         {
-                            var created = notification.NoteTypeCreated;
+                            await noteTypeStateService.AddNoteType(notification.NoteTypeCreated.ToDto());
                             break;
                         }
                         case NoteTypeNotification.NotificationOneofCase.NoteTypeColorChanged:
                         {
+                            noteTypeStateService.Apply(notification.NoteTypeColorChanged.ToNotification());
                             break;
                         }
                         case NoteTypeNotification.NotificationOneofCase.NoteTypeNameChanged:
                         {
+                            noteTypeStateService.Apply(notification.NoteTypeNameChanged.ToNotification());
                             break;
                         }
                     }
