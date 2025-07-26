@@ -32,6 +32,28 @@ public class AnalysisBySprintModel(IMessenger messenger, IRequestSender requestS
         private set => this.RaiseAndSetIfChanged(ref _analysisBySprint, value);
     }
 
+    public InitializationType Type => InitializationType.Model;
+
+    public async Task InitializeAsync()
+    {
+        Sprints.Clear();
+        Sprints!.AddRange(await requestSender.Send(new GetAllSprintsRequestProto()));
+    }
+
+    public void RegisterMessenger()
+    {
+        messenger.Register<NewSprintMessage>(this, (_, m) => { Sprints.Add(m.Sprint); });
+
+        messenger.Register<UpdateSprintDataCommandProto>(this, (_, m) =>
+        {
+            var sprint = Sprints.FirstOrDefault(s => s.SprintId == Guid.Parse(m.SprintId));
+
+            if (sprint == null) return;
+
+            sprint.Apply(m);
+        });
+    }
+
     public string GetMarkdownString()
     {
         if (AnalysisBySprint == null) return string.Empty;
@@ -128,33 +150,11 @@ public class AnalysisBySprintModel(IMessenger messenger, IRequestSender requestS
         return builder.ToString();
     }
 
-    public InitializationType Type => InitializationType.Model;
-
-    public async Task InitializeAsync()
-    {
-        Sprints.Clear();
-        Sprints!.AddRange(await requestSender.Send(new GetAllSprintsRequestProto()));
-    }
-
     public async Task SetAnalysisForSprint(SprintDto selectedSprint)
     {
         AnalysisBySprint = await requestSender.Send(new GetSprintAnalysisById
         {
             SprintId = selectedSprint.SprintId.ToString()
-        });
-    }
-
-    public void RegisterMessenger()
-    {
-        messenger.Register<NewSprintMessage>(this, (_, m) => { Sprints.Add(m.Sprint); });
-
-        messenger.Register<UpdateSprintDataCommandProto>(this, (_, m) =>
-        {
-            var sprint = Sprints.FirstOrDefault(s => s.SprintId == Guid.Parse(m.SprintId));
-
-            if (sprint == null) return;
-
-            sprint.Apply(m);
         });
     }
 }

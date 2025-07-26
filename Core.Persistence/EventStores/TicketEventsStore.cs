@@ -4,11 +4,11 @@ using Core.Server.Tracing.Tracing.Tracers;
 using Domain.Events.Tickets;
 using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Service.Monitoring.Shared.Tracing;
 
 namespace Core.Persistence.EventStores;
 
-public class TicketEventsStore(IDbContextFactory<AppDbContext> appDbContextFactory, ITraceCollector tracer) : ITicketEventsStore
+public class TicketEventsStore(IDbContextFactory<AppDbContext> appDbContextFactory, ITraceCollector tracer)
+    : ITicketEventsStore
 {
     public async Task StoreEventAsync(TicketEvent @event)
     {
@@ -16,7 +16,7 @@ public class TicketEventsStore(IDbContextFactory<AppDbContext> appDbContextFacto
 
         await appDbContext.TicketEvents.AddAsync(@event);
         await appDbContext.SaveChangesAsync();
-        
+
         await tracer.Ticket.Create.EventPersisted(GetType(), @event.EntityId, @event);
     }
 

@@ -11,7 +11,7 @@ public class TagRequestSender : ITagRequestSender
     public TagRequestSender(string address)
     {
         var channel = GrpcChannel.ForAddress(address);
-        _client = new(channel);
+        _client = new TagProtoRequestService.TagProtoRequestServiceClient(channel);
     }
 
     public async Task<TagListProto> Send(GetAllTagsRequestProto request)

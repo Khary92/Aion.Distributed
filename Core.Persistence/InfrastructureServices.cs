@@ -33,7 +33,7 @@ public static class InfrastructureServices
 
         services.AddDbContextFactory<AppDbContext>(options =>
             options.UseNpgsql(connectionString));
-        
+
         services.AddScoped<IEventStore<NoteEvent>, NoteEventsStore>();
         services.AddScoped<IEventStore<NoteTypeEvent>, NoteTypeEventsStore>();
         services.AddScoped<ITicketEventsStore, TicketEventsStore>();

@@ -1,9 +1,6 @@
 using System;
 using System.Reactive.Linq;
-using System.Threading.Tasks;
-using Avalonia.Threading;
 using Client.Desktop.DTO;
-using Client.Desktop.Services.Initializer;
 using CommunityToolkit.Mvvm.Messaging;
 using Proto.Notifications.UseCase;
 using ReactiveUI;
@@ -18,7 +15,7 @@ public class WorkDaysViewModel : ReactiveObject
     public WorkDaysViewModel(IMessenger messenger, WorkDaysModel workDaysModel)
     {
         Model = workDaysModel;
-        
+
         LoadSelectedDateCommand = ReactiveCommand.Create(
             () =>
             {
@@ -30,7 +27,7 @@ public class WorkDaysViewModel : ReactiveObject
 
         CreateNewDateCommand = ReactiveCommand.CreateFromTask<DateTimeOffset>(Model.AddWorkDayAsync);
     }
-    
+
     public WorkDaysModel Model { get; }
 
     public ReactiveCommand<DateTimeOffset, Unit>? CreateNewDateCommand { get; internal set; }

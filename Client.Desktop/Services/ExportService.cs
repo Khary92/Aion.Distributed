@@ -63,11 +63,18 @@ public class ExportService(
         return builder.ToString();
     }
 
+    public void RegisterMessenger()
+    {
+        messenger.Register<ExportPathSetNotification>(this, (_, m) => { LocalSettings!.ExportPath = m.ExportPath; });
+
+        messenger.Register<SettingsDto>(this, (_, m) => { LocalSettings = m; });
+    }
+
     private static string BuildFilePath(DateTime date, string exportPath)
     {
         return Path.Combine(exportPath, $"{date:MM-dd-yyyy}.md");
     }
-    
+
     private async Task<Dictionary<DateTimeOffset, List<TicketDataHolder>>> GetDataForSelectedWorkDays(
         Collection<WorkDayDto> workDayDtos)
     {
@@ -126,12 +133,5 @@ public class ExportService(
         {
             return TimeSpan.FromSeconds(ElapsedSeconds).ToString(@"hh\:mm") + "h";
         }
-    }
-
-    public void RegisterMessenger()
-    {
-        messenger.Register<ExportPathSetNotification>(this, (_, m) => { LocalSettings!.ExportPath = m.ExportPath; });
-
-        messenger.Register<SettingsDto>(this, (_, m) => { LocalSettings = m; });
     }
 }

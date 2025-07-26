@@ -1,6 +1,7 @@
 namespace Service.Admin.Web.Communication.Sprints;
 
-public class SprintNotificationHostedService(SprintNotificationsReceiver notifications,
+public class SprintNotificationHostedService(
+    SprintNotificationsReceiver notifications,
     ILogger<SprintNotificationHostedService> logger) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)

@@ -22,13 +22,9 @@ public class TicketStateService(ISharedRequestSender requestSender, ITraceCollec
 
     public void Apply(WebTicketDataUpdatedNotification ticketDataUpdatedNotification)
     {
-        
         var ticket = _tickets.FirstOrDefault(x => x.TicketId == ticketDataUpdatedNotification.TicketId);
 
-        if (ticket == null)
-        {
-            return;
-        }
+        if (ticket == null) return;
 
         ticket.Apply(ticketDataUpdatedNotification);
         NotifyStateChanged();
@@ -38,21 +34,21 @@ public class TicketStateService(ISharedRequestSender requestSender, ITraceCollec
     {
         var ticket = _tickets.FirstOrDefault(x => x.TicketId == ticketDocumentationUpdatedNotification.TicketId);
 
-        if (ticket == null)
-        {
-            return;
-        }
+        if (ticket == null) return;
 
         ticket.Apply(ticketDocumentationUpdatedNotification);
         NotifyStateChanged();
     }
 
-    public async  Task LoadTickets()
+    public async Task LoadTickets()
     {
         var ticketListProto = await requestSender.Send(new GetAllTicketsRequestProto());
         _tickets = ticketListProto.ToDtoList();
         NotifyStateChanged();
     }
 
-    private void NotifyStateChanged() => OnStateChanged?.Invoke();
+    private void NotifyStateChanged()
+    {
+        OnStateChanged?.Invoke();
+    }
 }

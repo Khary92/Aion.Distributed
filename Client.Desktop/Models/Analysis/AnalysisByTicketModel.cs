@@ -38,6 +38,20 @@ public class AnalysisByTicketModel(IMessenger messenger, IRequestSender requestS
         Tickets.AddRange(await requestSender.Send(new GetTicketsWithShowAllSwitchRequestProto { IsShowAll = true }));
     }
 
+    public void RegisterMessenger()
+    {
+        messenger.Register<NewTicketMessage>(this, (_, m) => { Tickets.Add(m.Ticket); });
+
+        messenger.Register<UpdateTicketDataCommandProto>(this, (_, m) =>
+        {
+            var ticket = Tickets.FirstOrDefault(t => t.TicketId == Guid.Parse(m.TicketId));
+
+            if (ticket == null) return;
+
+            ticket.Apply(m);
+        });
+    }
+
     public async Task SetAnalysisByTicket(TicketDto selectedTicket)
     {
         AnalysisByTicket = await requestSender.Send(new GetTicketAnalysisById
@@ -51,20 +65,6 @@ public class AnalysisByTicketModel(IMessenger messenger, IRequestSender requestS
         return await requestSender.Send(new GetTagByIdRequestProto
         {
             TagId = tagId.ToString()
-        });
-    }
-
-    public void RegisterMessenger()
-    {
-        messenger.Register<NewTicketMessage>(this, (_, m) => { Tickets.Add(m.Ticket); });
-
-        messenger.Register<UpdateTicketDataCommandProto>(this, (_, m) =>
-        {
-            var ticket = Tickets.FirstOrDefault(t => t.TicketId == Guid.Parse(m.TicketId));
-
-            if (ticket == null) return;
-
-            ticket.Apply(m);
         });
     }
 }

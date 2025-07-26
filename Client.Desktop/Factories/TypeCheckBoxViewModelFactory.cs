@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Client.Desktop.Communication.Requests;
+﻿using Client.Desktop.Communication.Requests;
 using Client.Desktop.DTO;
 using Client.Desktop.Models.Documentation;
 

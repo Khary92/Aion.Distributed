@@ -42,7 +42,7 @@ public static class TracingServices
     private static void AddVerifiers(this IServiceCollection services)
     {
         services.AddSingleton<IVerifierFactory, VerifierFactory>();
-        
+
         services.AddSingleton<IVerificationProvider, TicketVerificationProvider>();
     }
 }

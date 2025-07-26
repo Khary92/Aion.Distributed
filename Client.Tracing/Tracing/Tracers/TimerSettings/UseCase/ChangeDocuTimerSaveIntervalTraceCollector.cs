@@ -23,7 +23,7 @@ public class ChangeDocuTimerSaveIntervalTraceCollector(ITracingDataCommandSender
 
     public async Task CommandSent(Type originClassType, Guid traceId, object command)
     {
-        var log = ($"Sent {command}");
+        var log = $"Sent {command}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
@@ -37,7 +37,7 @@ public class ChangeDocuTimerSaveIntervalTraceCollector(ITracingDataCommandSender
 
     public async Task NotificationReceived(Type originClassType, Guid traceId, object notification)
     {
-        var log = ($"Received {notification}");
+        var log = $"Received {notification}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
@@ -51,7 +51,7 @@ public class ChangeDocuTimerSaveIntervalTraceCollector(ITracingDataCommandSender
 
     public async Task NoAggregateFound(Type originClassType, Guid traceId)
     {
-        var log = ($"Aggregate not found id:{traceId}");
+        var log = $"Aggregate not found id:{traceId}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
@@ -65,7 +65,7 @@ public class ChangeDocuTimerSaveIntervalTraceCollector(ITracingDataCommandSender
 
     public async Task ChangesApplied(Type originClassType, Guid traceId)
     {
-        var log = ($"Changed applied id:{traceId}");
+        var log = $"Changed applied id:{traceId}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
@@ -79,7 +79,7 @@ public class ChangeDocuTimerSaveIntervalTraceCollector(ITracingDataCommandSender
 
     public async Task PropertyNotChanged(Type originClassType, Guid traceId, string asTraceAttributes)
     {
-        var log = ($"Request aborted {asTraceAttributes}");
+        var log = $"Request aborted {asTraceAttributes}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,

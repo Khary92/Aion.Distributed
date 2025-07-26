@@ -53,7 +53,7 @@ public sealed class AppDbContext : Microsoft.EntityFrameworkCore.DbContext
 
         modelBuilder.Entity<TagEvent>()
             .HasKey(te => te.EventId);
-        
+
         modelBuilder.Entity<NoteEvent>()
             .HasKey(te => te.EventId);
 

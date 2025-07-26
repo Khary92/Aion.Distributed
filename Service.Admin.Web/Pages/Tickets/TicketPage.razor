@@ -44,8 +44,7 @@
         {
             TicketId = Guid.NewGuid().ToString(),
             Name = _newTicketName,
-            BookingNumber = _newTicketBookingNumber,
-            SprintIds = { }
+            BookingNumber = _newTicketBookingNumber
         };
 
         // TODO well there is no more ViewModel
@@ -76,7 +75,7 @@
     {
         if (_selectedTicket != null)
         {
-            await CommandSender.Send(new AddTicketToActiveSprintCommandProto()
+            await CommandSender.Send(new AddTicketToActiveSprintCommandProto
             {
                 TicketId = _selectedTicket.TicketId.ToString()
             });
@@ -127,7 +126,7 @@
             </tr>
             </thead>
             <tbody>
-            @foreach (var ticket in @TicketStateService.Tickets)
+            @foreach (var ticket in TicketStateService.Tickets)
             {
                 <tr class="@(_selectedTicket == ticket ? "table-active" : "")"
                     @onclick="() => _selectedTicket = ticket">

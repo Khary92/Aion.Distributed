@@ -6,7 +6,6 @@ using Client.Desktop.Communication.Commands.UseCases;
 using Client.Desktop.Communication.Commands.WorkDays;
 using Proto.Command.Notes;
 using Proto.Command.NoteTypes;
-using Proto.Command.Settings;
 using Proto.Command.Sprints;
 using Proto.Command.StatisticsData;
 using Proto.Command.Tags;

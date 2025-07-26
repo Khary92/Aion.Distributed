@@ -27,9 +27,8 @@ public class ExportModel(
     ILocalSettingsService localSettingsService)
     : ReactiveObject, IInitializeAsync, IRegisterMessenger
 {
-    private SettingsDto? Settings { get; set; }
-
     private string _markdownText = null!;
+    private SettingsDto? Settings { get; set; }
 
     public ObservableCollection<WorkDayDto> WorkDays { get; } = [];
     public ObservableCollection<WorkDayDto> SelectedWorkDays { get; } = [];
@@ -40,12 +39,35 @@ public class ExportModel(
         set => this.RaiseAndSetIfChanged(ref _markdownText, value);
     }
 
+    public InitializationType Type => InitializationType.Model;
+
+    public async Task InitializeAsync()
+    {
+        SelectedWorkDays.CollectionChanged += RefreshMarkdownViewerHandler;
+
+        WorkDays.Clear();
+        WorkDays.AddRange(await requestSender.Send(new GetAllWorkDaysRequestProto()));
+    }
+
+    public void RegisterMessenger()
+    {
+        messenger.Register<ExportPathSetNotification>(this,
+            async void (_, m) => { Settings!.ExportPath = m.ExportPath; });
+
+        messenger.Register<SettingsDto>(this, (_, m) => { Settings = m; });
+
+        messenger.Register<NewWorkDayMessage>(this, async void (_, m) =>
+        {
+            await tracer.WorkDay.Create.AggregateReceived(GetType(), m.WorkDay.WorkDayId,
+                m.WorkDay.AsTraceAttributes());
+            WorkDays.Add(m.WorkDay);
+            await tracer.WorkDay.Create.AggregateAdded(GetType(), m.WorkDay.WorkDayId);
+        });
+    }
+
     public async Task<bool> ExportFileAsync()
     {
-        if (localSettingsService.IsExportPathValid())
-        {
-            return await exportService.ExportToFile(WorkDays);
-        }
+        if (localSettingsService.IsExportPathValid()) return await exportService.ExportToFile(WorkDays);
 
         await tracer.Export.ToFile.PathSettingsInvalid(GetType(), Settings!.ExportPath);
         return false;
@@ -66,31 +88,5 @@ public class ExportModel(
     public async Task<string> GetMarkdownTextAsync()
     {
         return await exportService.GetMarkdownString(SelectedWorkDays);
-    }
-
-    public InitializationType Type => InitializationType.Model;
-
-    public async Task InitializeAsync()
-    {
-        SelectedWorkDays.CollectionChanged += RefreshMarkdownViewerHandler;
-        
-        WorkDays.Clear();
-        WorkDays.AddRange(await requestSender.Send(new GetAllWorkDaysRequestProto()));
-    }
-
-    public void RegisterMessenger()
-    {
-        messenger.Register<ExportPathSetNotification>(this,
-            async void (_, m) => { Settings!.ExportPath = m.ExportPath; });
-
-        messenger.Register<SettingsDto>(this, (_, m) => { Settings = m; });
-
-        messenger.Register<NewWorkDayMessage>(this, async void (_, m) =>
-        {
-            await tracer.WorkDay.Create.AggregateReceived(GetType(), m.WorkDay.WorkDayId,
-                m.WorkDay.AsTraceAttributes());
-            WorkDays.Add(m.WorkDay);
-            await tracer.WorkDay.Create.AggregateAdded(GetType(), m.WorkDay.WorkDayId);
-        });
     }
 }

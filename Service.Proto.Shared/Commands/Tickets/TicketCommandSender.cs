@@ -6,13 +6,13 @@ namespace Service.Proto.Shared.Commands.Tickets;
 public class TicketCommandSender : ITicketCommandSender
 {
     private readonly TicketCommandProtoService.TicketCommandProtoServiceClient _client;
-    
+
     public TicketCommandSender(string address)
     {
         var channel = GrpcChannel.ForAddress(address);
-        _client = new(channel);
+        _client = new TicketCommandProtoService.TicketCommandProtoServiceClient(channel);
     }
-    
+
     public async Task<bool> Send(CreateTicketCommandProto command)
     {
         var response = await _client.CreateTicketAsync(command);

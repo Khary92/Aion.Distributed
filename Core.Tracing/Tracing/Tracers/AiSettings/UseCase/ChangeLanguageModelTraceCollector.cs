@@ -9,7 +9,7 @@ public class ChangeLanguageModelTraceCollector(ITracingDataCommandSender command
 {
     public async Task StartUseCase(Type originClassType, Guid traceId, (string, string) attribute)
     {
-        var log = ($"Change LanguageModel requested for {attribute.Item1}:{attribute.Item2}");
+        var log = $"Change LanguageModel requested for {attribute.Item1}:{attribute.Item2}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.AiSettings,
@@ -20,10 +20,10 @@ public class ChangeLanguageModelTraceCollector(ITracingDataCommandSender command
             log,
             DateTimeOffset.Now));
     }
-    
+
     public async Task CommandSent(Type originClassType, Guid traceId, object command)
     {
-        var log = ($"Sent {command}");
+        var log = $"Sent {command}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.AiSettings,
@@ -32,12 +32,13 @@ public class ChangeLanguageModelTraceCollector(ITracingDataCommandSender command
             originClassType,
             traceId,
             log,
-            DateTimeOffset.Now));}
+            DateTimeOffset.Now));
+    }
 
     public async Task PropertyNotChanged(Type originClassType, Guid traceId, (string, string) attribute)
     {
-        var log = ($"Request aborted {attribute.Item1}:{attribute.Item2}");
-        
+        var log = $"Request aborted {attribute.Item1}:{attribute.Item2}";
+
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.AiSettings,
             UseCaseMeta.ChangeLanguageModel,
@@ -45,5 +46,6 @@ public class ChangeLanguageModelTraceCollector(ITracingDataCommandSender command
             originClassType,
             traceId,
             log,
-            DateTimeOffset.Now));}
+            DateTimeOffset.Now));
+    }
 }

@@ -10,7 +10,9 @@ using Proto.Notifications.NoteType;
 
 namespace Client.Desktop.Communication.Notifications;
 
-public class NoteTypeNotificationReceiver(NoteTypeProtoNotificationService.NoteTypeProtoNotificationServiceClient client, IMessenger messenger)
+public class NoteTypeNotificationReceiver(
+    NoteTypeProtoNotificationService.NoteTypeProtoNotificationServiceClient client,
+    IMessenger messenger)
 {
     public async Task StartListeningAsync(CancellationToken cancellationToken)
     {

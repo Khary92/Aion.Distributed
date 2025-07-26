@@ -8,7 +8,8 @@ namespace Service.Monitoring.Shared;
 public static class TraceDataExtensions
 {
     public static TraceDataCommandProto ToProto(this ServiceTraceDataCommand command)
-        => new()
+    {
+        return new TraceDataCommandProto
         {
             TraceSinkId = command.TraceSinkId.ToString(),
             UseCaseMeta = command.UseCaseMeta.ToString(),
@@ -18,6 +19,7 @@ public static class TraceDataExtensions
             Log = command.Log,
             TimeStamp = Timestamp.FromDateTimeOffset(command.TimeStamp)
         };
+    }
 
     public static TraceData ToRecord(this TraceDataCommandProto command)
     {

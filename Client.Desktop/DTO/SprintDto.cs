@@ -8,11 +8,11 @@ namespace Client.Desktop.DTO;
 
 public class SprintDto : ReactiveObject
 {
+    private readonly Guid _sprintId;
     private readonly List<Guid> _ticketIds = [];
     private DateTimeOffset _endTime;
     private bool _isActive;
     private string _name = string.Empty;
-    private Guid _sprintId;
     private DateTimeOffset _startTime;
 
     public SprintDto(Guid sprintId, string name, bool isActive, DateTimeOffset startTime, DateTimeOffset endTime,

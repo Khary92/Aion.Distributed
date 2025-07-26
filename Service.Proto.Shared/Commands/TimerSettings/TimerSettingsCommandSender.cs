@@ -6,12 +6,13 @@ namespace Service.Proto.Shared.Commands.TimerSettings;
 public class TimerSettingsCommandSender : ITimerSettingsCommandSender
 {
     private readonly TimerSettingsCommandProtoService.TimerSettingsCommandProtoServiceClient _client;
-    
+
     public TimerSettingsCommandSender(string address)
     {
         var channel = GrpcChannel.ForAddress(address);
-        _client = new(channel);
+        _client = new TimerSettingsCommandProtoService.TimerSettingsCommandProtoServiceClient(channel);
     }
+
     public async Task<bool> Send(CreateTimerSettingsCommandProto command)
     {
         var response = await _client.CreateTimerSettingsAsync(command);

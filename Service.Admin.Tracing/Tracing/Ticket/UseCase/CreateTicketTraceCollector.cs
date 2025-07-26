@@ -22,7 +22,7 @@ public class CreateTicketTraceCollector(ITracingDataCommandSender commandSender)
 
     public async Task CommandSent(Type originClassType, Guid traceId, object command)
     {
-        var log = ($"Sent {GetName(command)}:{command}");
+        var log = $"Sent {GetName(command)}:{command}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
@@ -33,10 +33,10 @@ public class CreateTicketTraceCollector(ITracingDataCommandSender commandSender)
             log,
             DateTimeOffset.Now));
     }
-    
+
     public async Task NotificationReceived(Type originClassType, Guid traceId, object notification)
     {
-        var log = ($"Received {GetName(notification)}:{notification}");
+        var log = $"Received {GetName(notification)}:{notification}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
@@ -50,7 +50,7 @@ public class CreateTicketTraceCollector(ITracingDataCommandSender commandSender)
 
     public async Task AggregateReceived(Type originClassType, Guid traceId, string attributes)
     {
-        var log = ($"Received aggregate {attributes}");
+        var log = $"Received aggregate {attributes}";
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
             UseCaseMeta.CreateTicket,
@@ -63,7 +63,7 @@ public class CreateTicketTraceCollector(ITracingDataCommandSender commandSender)
 
     public async Task AggregateAdded(Type originClassType, Guid traceId)
     {
-        var log = ($"Added aggregate with id:{traceId}");
+        var log = $"Added aggregate with id:{traceId}";
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
             UseCaseMeta.CreateTicket,
@@ -73,7 +73,7 @@ public class CreateTicketTraceCollector(ITracingDataCommandSender commandSender)
             log,
             DateTimeOffset.Now));
     }
-    
+
     private static string GetName(object @object)
     {
         var commandType = @object.GetType();

@@ -10,7 +10,7 @@ public class TracingDataCommandSender : ITracingDataCommandSender
     public TracingDataCommandSender(string address)
     {
         var channel = GrpcChannel.ForAddress(address);
-        _client = new(channel);
+        _client = new TraceDataCommandProtoService.TraceDataCommandProtoServiceClient(channel);
     }
 
 

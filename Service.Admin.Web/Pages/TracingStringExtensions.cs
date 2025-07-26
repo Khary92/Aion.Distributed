@@ -19,7 +19,7 @@ public static class TracingStringExtensions
             ticketIds = string.Join(",", dto.TicketIds)
         });
     }
-    
+
     public static string AsTraceAttributes(this TagDto dto)
     {
         return JsonConvert.SerializeObject(new

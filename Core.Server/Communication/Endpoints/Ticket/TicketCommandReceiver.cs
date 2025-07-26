@@ -12,7 +12,7 @@ public class TicketCommandReceiver(ITicketCommandsService ticketCommandsService,
         ServerCallContext context)
     {
         await tracer.Ticket.Create.CommandReceived(GetType(), Guid.Parse(request.TicketId), request);
-        
+
         await ticketCommandsService.Create(request.ToCommand());
         return new CommandResponse { Success = true };
     }

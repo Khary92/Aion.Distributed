@@ -7,24 +7,24 @@
         <Nullable>enable</Nullable>
         <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     </PropertyGroup>
-    
+
     <ItemGroup>
-      <ProjectReference Include="..\Service.Admin.Proto\Service.Admin.Proto.csproj" />
-      <ProjectReference Include="..\Service.Monitoring.Shared\Service.Monitoring.Shared.csproj" />
+        <ProjectReference Include="..\Service.Admin.Proto\Service.Admin.Proto.csproj"/>
+        <ProjectReference Include="..\Service.Monitoring.Shared\Service.Monitoring.Shared.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="Grpc.AspNetCore.Server.Reflection" Version="2.71.0" />
-      <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.6" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.6" />
-      <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.6" />
-      <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.6" />
+        <PackageReference Include="Grpc.AspNetCore.Server.Reflection" Version="2.71.0"/>
+        <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.6"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.6"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.6"/>
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.6"/>
     </ItemGroup>
 
     <ItemGroup>
-      <Content Include="..\.dockerignore">
-        <Link>.dockerignore</Link>
-      </Content>
+        <Content Include="..\.dockerignore">
+            <Link>.dockerignore</Link>
+        </Content>
     </ItemGroup>
 
 </Project>

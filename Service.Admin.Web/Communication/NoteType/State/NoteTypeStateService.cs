@@ -8,8 +8,9 @@ public class NoteTypeStateService(ISharedRequestSender requestSender) : INoteTyp
 {
     private List<NoteTypeDto> _noteTypes = new();
     public IReadOnlyList<NoteTypeDto> NoteTypes => _noteTypes.AsReadOnly();
-    
+
     public event Action? OnStateChanged;
+
     public Task AddNoteType(NoteTypeDto noteType)
     {
         _noteTypes.Add(noteType);
@@ -20,10 +21,7 @@ public class NoteTypeStateService(ISharedRequestSender requestSender) : INoteTyp
     {
         var noteType = _noteTypes.FirstOrDefault(nt => nt.NoteTypeId == notification.NoteTypeId);
 
-        if (noteType == null)
-        {
-            return;
-        }
+        if (noteType == null) return;
 
         noteType.Apply(notification);
         NotifyStateChanged();
@@ -33,10 +31,7 @@ public class NoteTypeStateService(ISharedRequestSender requestSender) : INoteTyp
     {
         var noteType = _noteTypes.FirstOrDefault(nt => nt.NoteTypeId == notification.NoteTypeId);
 
-        if (noteType == null)
-        {
-            return;
-        }
+        if (noteType == null) return;
 
         noteType.Apply(notification);
         NotifyStateChanged();
@@ -47,6 +42,9 @@ public class NoteTypeStateService(ISharedRequestSender requestSender) : INoteTyp
         var getAllNoteTypesResponseProto = await requestSender.Send(new GetAllNoteTypesRequestProto());
         _noteTypes = getAllNoteTypesResponseProto.ToDtoList();
     }
-    
-    private void NotifyStateChanged() => OnStateChanged?.Invoke();
+
+    private void NotifyStateChanged()
+    {
+        OnStateChanged?.Invoke();
+    }
 }

@@ -1,4 +1,3 @@
-using Proto.Command.TraceData;
 using Service.Monitoring.Shared;
 using Service.Monitoring.Shared.Enums;
 

@@ -25,14 +25,12 @@ public class SprintNotificationsReceiver(ISprintStateService sprintStateService)
         var client = new SprintNotificationService.SprintNotificationServiceClient(channel);
 
         while (!stoppingToken.IsCancellationRequested)
-        {
             try
             {
                 using var call =
                     client.SubscribeSprintNotifications(new SubscribeRequest(), cancellationToken: stoppingToken);
 
                 await foreach (var notification in call.ResponseStream.ReadAllAsync(stoppingToken))
-                {
                     switch (notification.NotificationCase)
                     {
                         case SprintNotification.NotificationOneofCase.SprintCreated:
@@ -55,7 +53,6 @@ public class SprintNotificationsReceiver(ISprintStateService sprintStateService)
                             sprintStateService.Apply(notification.SprintDataUpdated.ToNotification());
                             break;
                     }
-                }
             }
             catch (RpcException ex) when (ex.StatusCode == StatusCode.Unavailable)
             {
@@ -69,6 +66,5 @@ public class SprintNotificationsReceiver(ISprintStateService sprintStateService)
             {
                 await Task.Delay(5000, stoppingToken);
             }
-        }
     }
 }

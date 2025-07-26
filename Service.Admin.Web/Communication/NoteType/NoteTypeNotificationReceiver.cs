@@ -4,7 +4,7 @@ using Proto.Notifications.NoteType;
 
 namespace Service.Admin.Web.Communication.NoteType;
 
-public class NoteTypeNotificationReceiver()
+public class NoteTypeNotificationReceiver
 {
     public async Task SubscribeToNotifications(CancellationToken stoppingToken = default)
     {
@@ -23,14 +23,12 @@ public class NoteTypeNotificationReceiver()
         var client = new NoteTypeProtoNotificationService.NoteTypeProtoNotificationServiceClient(channel);
 
         while (!stoppingToken.IsCancellationRequested)
-        {
             try
             {
                 using var call =
                     client.SubscribeNoteNotifications(new SubscribeRequest(), cancellationToken: stoppingToken);
 
                 await foreach (var notification in call.ResponseStream.ReadAllAsync(stoppingToken))
-                {
                     switch (notification.NotificationCase)
                     {
                         case NoteTypeNotification.NotificationOneofCase.NoteTypeCreated:
@@ -47,7 +45,6 @@ public class NoteTypeNotificationReceiver()
                             break;
                         }
                     }
-                }
             }
             catch (RpcException ex) when (ex.StatusCode == StatusCode.Unavailable)
             {
@@ -61,6 +58,5 @@ public class NoteTypeNotificationReceiver()
             {
                 await Task.Delay(5000, stoppingToken);
             }
-        }
     }
 }

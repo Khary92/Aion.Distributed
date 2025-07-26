@@ -29,7 +29,7 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.5"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0-preview.5.25277.114"/>
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.5"/>
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
         <PackageReference Include="ReactiveUI" Version="20.3.1"/>
 
         <PackageReference Include="Google.Protobuf" Version="3.31.1"/>
@@ -38,8 +38,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Client.Tracing\Client.Tracing.csproj" />
-        <ProjectReference Include="..\Client.Proto\Client.Proto.csproj" />
+        <ProjectReference Include="..\Client.Tracing\Client.Tracing.csproj"/>
+        <ProjectReference Include="..\Client.Proto\Client.Proto.csproj"/>
     </ItemGroup>
 
     <ItemGroup>

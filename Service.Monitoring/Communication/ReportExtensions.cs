@@ -1,6 +1,5 @@
 using Google.Protobuf.WellKnownTypes;
 using Proto.Report;
-using Service.Monitoring.Verifiers;
 using Service.Monitoring.Verifiers.Common.Records;
 
 namespace Service.Monitoring.Communication;
@@ -8,10 +7,12 @@ namespace Service.Monitoring.Communication;
 public static class ReportExtensions
 {
     public static ReportProto ToProto(this Report report)
-        => new()
+    {
+        return new ReportProto
         {
             TimeStamp = Timestamp.FromDateTimeOffset(report.TimeStamp),
             State = report.Result.ToString(),
             Traces = { report.Traces }
         };
+    }
 }

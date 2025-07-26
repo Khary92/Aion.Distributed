@@ -8,7 +8,7 @@ public class CreateTicketTraceCollector(ITracingDataCommandSender commandSender)
 {
     public async Task CommandReceived(Type originClassType, Guid traceId, object protoCommand)
     {
-        var log = ($"Command received {GetName(protoCommand)}:{protoCommand}");
+        var log = $"Command received {GetName(protoCommand)}:{protoCommand}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
@@ -22,7 +22,7 @@ public class CreateTicketTraceCollector(ITracingDataCommandSender commandSender)
 
     public async Task EventPersisted(Type originClassType, Guid traceId, object @event)
     {
-        var log = ($"Event persisted {@event}");
+        var log = $"Event persisted {@event}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
@@ -36,7 +36,7 @@ public class CreateTicketTraceCollector(ITracingDataCommandSender commandSender)
 
     public async Task NotificationSent(Type originClassType, Guid traceId, object notification)
     {
-        var log = ($"Notification sent {GetName(notification)}:{notification}");
+        var log = $"Notification sent {GetName(notification)}:{notification}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,

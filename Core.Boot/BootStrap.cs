@@ -3,14 +3,9 @@ using Core.Persistence.DbContext;
 using Core.Server;
 using Core.Server.Services.UseCase;
 using Core.Server.Tracing;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Service.Proto.Shared;
 
 namespace Core.Boot;
 
@@ -33,7 +28,7 @@ public static class BootStrap
 
         builder.Services.AddDataProtection()
             .PersistKeysToFileSystem(new DirectoryInfo("/app/.aspnet/DataProtection-Keys"));
-        
+
         builder.WebHost.ConfigureKestrel(options =>
         {
             options.ListenAnyIP(8080, o => { o.Protocols = HttpProtocols.Http2; });

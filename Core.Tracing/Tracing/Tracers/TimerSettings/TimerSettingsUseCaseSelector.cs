@@ -10,6 +10,7 @@ public class TimerSettingsUseCaseSelector(
 {
     public ICreateTimerSettingsTraceCollector Create => timerSettingsTraceCollector;
     public IChangeSnapshotSaveIntervalTraceCollector ChangeSnapshotInterval => changeSnapshotSaveIntervalTraceCollector;
+
     public IChangeDocuTimerSaveIntervalTraceCollector ChangeDocuTimerInterval =>
         changeDocuTimerSaveIntervalTraceCollector;
 }

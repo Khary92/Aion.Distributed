@@ -12,6 +12,6 @@ public class LocalSettingsCommandSender(IMessenger messenger) : ILocalSettingsCo
 
     public void Send(SetWorkDaySelectionCommand command)
     {
-        messenger.Send(new WorkDaySelectedNotification(command.Date));       
+        messenger.Send(new WorkDaySelectedNotification(command.Date));
     }
 }

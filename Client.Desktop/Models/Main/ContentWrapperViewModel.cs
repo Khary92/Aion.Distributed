@@ -1,4 +1,3 @@
-using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Client.Desktop.Models.TimeTracking;
@@ -7,7 +6,6 @@ using Client.Desktop.Views.Documentation;
 using Client.Desktop.Views.Export;
 using Client.Desktop.Views.Setting;
 using Client.Desktop.Views.Tracking;
-using Proto.Notifications.UseCase;
 using ReactiveUI;
 using Unit = System.Reactive.Unit;
 
@@ -46,7 +44,7 @@ public class ContentWrapperViewModel : ReactiveObject
             IsMenuOpen = false;
             MenuWidth = ZeroConstant;
         });
-        
+
         OnExportClickCommand = ReactiveCommand.CreateFromTask(async () =>
         {
             CurrentControl = exportControl;
@@ -101,7 +99,7 @@ public class ContentWrapperViewModel : ReactiveObject
     public ReactiveCommand<Unit, Unit> OnSettingsClickCommand { get; }
     public ReactiveCommand<Unit, Unit> ToggleSidePanelCommand { get; }
     public ReactiveCommand<Unit, Unit> OnDocumentationClickCommand { get; }
-    
+
     private void ToggleMenu()
     {
         IsMenuOpen = !IsMenuOpen;

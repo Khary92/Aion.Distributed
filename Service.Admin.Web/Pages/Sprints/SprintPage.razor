@@ -52,7 +52,7 @@
             </tr>
             </thead>
             <tbody>
-            @foreach (var sprint in @SprintStateService.Sprints)
+            @foreach (var sprint in SprintStateService.Sprints)
             {
                 <tr class="@(_selectedSprint == sprint ? "table-active" : "")"
                     @onclick="() => _selectedSprint = sprint">

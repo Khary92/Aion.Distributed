@@ -4,7 +4,6 @@ using Avalonia;
 using Avalonia.ReactiveUI;
 using Client.Desktop.Services.Cache;
 using Client.Desktop.Services.Initializer;
-using Client.Desktop.Views.Main;
 using Client.Tracing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

@@ -7,12 +7,13 @@ namespace Service.Proto.Shared.Requests.NoteTypes;
 public class NoteTypeRequestSender : INoteTypeRequestSender
 {
     private readonly NoteTypeProtoRequestService.NoteTypeProtoRequestServiceClient _client;
-    
+
     public NoteTypeRequestSender(string address)
     {
         var channel = GrpcChannel.ForAddress(address);
-        _client = new(channel);
+        _client = new NoteTypeProtoRequestService.NoteTypeProtoRequestServiceClient(channel);
     }
+
     public async Task<GetAllNoteTypesResponseProto> Send(GetAllNoteTypesRequestProto request)
     {
         return await _client.GetAllNoteTypesAsync(request);

@@ -1,5 +1,4 @@
-﻿
-using Grpc.Core;
+﻿using Grpc.Core;
 using Proto.Notifications.Tag;
 
 namespace Core.Server.Communication.Endpoints.Tag;
@@ -8,6 +7,7 @@ public class TagNotificationService : Proto.Notifications.Tag.TagNotificationSer
 {
     private readonly Dictionary<Guid, (IServerStreamWriter<TagNotification> Stream, CancellationToken Token)> _clients
         = new();
+
     private readonly object _lock = new();
 
     public override async Task SubscribeTagNotifications(
@@ -16,7 +16,7 @@ public class TagNotificationService : Proto.Notifications.Tag.TagNotificationSer
         ServerCallContext context)
     {
         var clientId = Guid.NewGuid();
-        
+
         lock (_lock)
         {
             _clients.Add(clientId, (responseStream, context.CancellationToken));
@@ -41,7 +41,7 @@ public class TagNotificationService : Proto.Notifications.Tag.TagNotificationSer
     public async Task SendNotificationAsync(TagNotification notification)
     {
         List<Guid> clientsToRemove = new();
-        
+
         foreach (var (clientId, (stream, token)) in _clients)
         {
             if (token.IsCancellationRequested)
@@ -61,14 +61,9 @@ public class TagNotificationService : Proto.Notifications.Tag.TagNotificationSer
         }
 
         if (clientsToRemove.Count > 0)
-        {
             lock (_lock)
             {
-                foreach (var clientId in clientsToRemove)
-                {
-                    _clients.Remove(clientId);
-                }
+                foreach (var clientId in clientsToRemove) _clients.Remove(clientId);
             }
-        }
     }
 }

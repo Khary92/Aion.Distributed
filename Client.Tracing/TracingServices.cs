@@ -40,7 +40,7 @@ public static class TracingServices
         services.AddScoped<ITracingDataCommandSender>(sp => new TracingDataCommandSender("http://127.0.0.1:8082"));
         services.AddScoped<ITraceCollector, TraceCollector>();
     }
-    
+
     private static void AddExportTracingServices(this IServiceCollection services)
     {
         services.AddSingleton<IExportTraceCollector, ExportTraceCollector>();

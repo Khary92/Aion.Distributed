@@ -1,56 +1,30 @@
-using Proto.Notifications.Ticket;
 using Service.Admin.Web.Communication.Tickets.Notifications;
 
 namespace Service.Admin.Web.DTO;
 
 public class TicketDto
 {
-    private readonly Guid _ticketId;
-    private string _bookingNumber;
-    private string _documentation;
-    private string _name;
-    private List<Guid> _sprintIds;
-
     public TicketDto(Guid ticketId, string name, string bookingNumber, string documentation, List<Guid> sprintIds)
     {
-        _ticketId = ticketId;
-        _name = name;
-        _bookingNumber = bookingNumber;
-        _documentation = documentation;
-        _sprintIds = sprintIds;
+        TicketId = ticketId;
+        Name = name;
+        BookingNumber = bookingNumber;
+        Documentation = documentation;
+        SprintIds = sprintIds;
         PreviousDocumentation = documentation;
     }
 
     private string PreviousDocumentation { get; set; }
 
-    public Guid TicketId
-    {
-        get => _ticketId;
-    }
+    public Guid TicketId { get; }
 
-    public string Name
-    {
-        get => _name;
-        set => _name = value;
-    }
+    public string Name { get; set; }
 
-    public string BookingNumber
-    {
-        get => _bookingNumber;
-        set => _bookingNumber = value;
-    }
+    public string BookingNumber { get; set; }
 
-    public List<Guid> SprintIds
-    {
-        get => _sprintIds;
-        private set => _sprintIds = value;
-    }
+    public List<Guid> SprintIds { get; private set; }
 
-    public string Documentation
-    {
-        get => _documentation;
-        set => _documentation = value;
-    }
+    public string Documentation { get; set; }
 
     public void SynchronizeDocumentation(string documentation)
     {

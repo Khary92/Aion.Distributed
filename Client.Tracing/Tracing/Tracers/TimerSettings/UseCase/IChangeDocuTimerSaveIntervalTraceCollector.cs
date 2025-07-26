@@ -8,5 +8,4 @@ public interface IChangeDocuTimerSaveIntervalTraceCollector
     Task NoAggregateFound(Type originClassType, Guid traceId);
     Task ChangesApplied(Type originClassType, Guid traceId);
     Task PropertyNotChanged(Type originClassType, Guid traceId, string asTraceAttributes);
-    
 }

@@ -101,7 +101,7 @@
             </tr>
             </thead>
             <tbody>
-            @foreach (var tag in @TagStateService.Tickets)
+            @foreach (var tag in TagStateService.Tickets)
             {
                 <tr class="@(_selectedTag == tag ? "table-active" : "")"
                     @onclick="() => _selectedTag = tag">

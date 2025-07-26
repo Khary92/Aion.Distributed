@@ -1,5 +1,4 @@
-﻿using Core.Server.Communication.Endpoints.Tag;
-using Grpc.Core;
+﻿using Grpc.Core;
 using Proto.Command.Tags;
 using Proto.Notifications.Tag;
 using TagNotificationService = Core.Server.Communication.Endpoints.Tag.TagNotificationService;

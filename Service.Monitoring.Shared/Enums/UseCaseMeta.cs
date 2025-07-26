@@ -6,7 +6,7 @@ public enum UseCaseMeta
     CreateTicket,
     UpdateTicket,
     UpdateTicketDocumentation,
-    
+
     //AI Settings
     ChangeLanguageModel,
     ChangePrompt,

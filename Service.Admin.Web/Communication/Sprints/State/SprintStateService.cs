@@ -1,5 +1,4 @@
-﻿using Proto.Requests.NoteTypes;
-using Proto.Requests.Sprints;
+﻿using Proto.Requests.Sprints;
 using Service.Admin.Web.Communication.Sprints.Notifications;
 using Service.Admin.Web.DTO;
 
@@ -22,10 +21,7 @@ public class SprintStateService(ISharedRequestSender requestSender) : ISprintSta
     {
         var currentSprint = _sprints.FirstOrDefault(s => s.IsActive);
 
-        if (currentSprint == null)
-        {
-            return;
-        }
+        if (currentSprint == null) return;
 
         currentSprint.Apply(notification);
         NotifyStateChanged();
@@ -35,10 +31,7 @@ public class SprintStateService(ISharedRequestSender requestSender) : ISprintSta
     {
         var sprint = _sprints.FirstOrDefault(s => s.SprintId == notification.SprintId);
 
-        if (sprint == null)
-        {
-            return;
-        }
+        if (sprint == null) return;
 
         sprint.Apply(notification);
         NotifyStateChanged();
@@ -56,7 +49,7 @@ public class SprintStateService(ISharedRequestSender requestSender) : ISprintSta
 
             loadedSprint.IsActive = false;
         }
-        
+
         NotifyStateChanged();
     }
 
@@ -64,10 +57,7 @@ public class SprintStateService(ISharedRequestSender requestSender) : ISprintSta
     {
         var sprint = _sprints.FirstOrDefault(s => s.SprintId == notification.SprintId);
 
-        if (sprint == null)
-        {
-            return;
-        }
+        if (sprint == null) return;
 
         sprint.Apply(notification);
         NotifyStateChanged();
@@ -78,6 +68,9 @@ public class SprintStateService(ISharedRequestSender requestSender) : ISprintSta
         var sprintListProto = await requestSender.Send(new GetAllSprintsRequestProto());
         _sprints = sprintListProto.ToDtoList();
     }
-    
-    private void NotifyStateChanged() => OnStateChanged?.Invoke();
+
+    private void NotifyStateChanged()
+    {
+        OnStateChanged?.Invoke();
+    }
 }

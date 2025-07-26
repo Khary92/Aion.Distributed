@@ -7,20 +7,34 @@ namespace Service.Admin.Web.Communication.Sprints;
 public static class SprintExtensions
 {
     public static SprintDto ToDto(this SprintCreatedNotification notification)
-        => new(Guid.Parse(notification.SprintId), notification.Name, notification.IsActive,
+    {
+        return new SprintDto(Guid.Parse(notification.SprintId), notification.Name, notification.IsActive,
             notification.StartTime.ToDateTimeOffset(), notification.EndTime.ToDateTimeOffset(),
             notification.TicketIds.ToGuidList());
+    }
 
     public static WebSprintDataUpdatedNotification ToNotification(this SprintDataUpdatedNotification notification)
-        => new(Guid.Parse(notification.SprintId), notification.Name, notification.StartTime.ToDateTimeOffset(),
+    {
+        return new WebSprintDataUpdatedNotification(Guid.Parse(notification.SprintId), notification.Name,
+            notification.StartTime.ToDateTimeOffset(),
             notification.EndTime.ToDateTimeOffset());
-    
-    public static WebSetSprintActiveStatusNotification ToNotification(this SprintActiveStatusSetNotification notification)
-        => new(Guid.Parse(notification.SprintId), notification.IsActive);
-    
-    public static WebAddTicketToActiveSprintNotification ToNotification(this TicketAddedToActiveSprintNotification notification)
-        => new(Guid.Parse(notification.TicketId));
-    
+    }
+
+    public static WebSetSprintActiveStatusNotification ToNotification(
+        this SprintActiveStatusSetNotification notification)
+    {
+        return new WebSetSprintActiveStatusNotification(Guid.Parse(notification.SprintId), notification.IsActive);
+    }
+
+    public static WebAddTicketToActiveSprintNotification ToNotification(
+        this TicketAddedToActiveSprintNotification notification)
+    {
+        return new WebAddTicketToActiveSprintNotification(Guid.Parse(notification.TicketId));
+    }
+
     public static WebAddTicketToSprintNotification ToNotification(this TicketAddedToSprintNotification notification)
-        => new(Guid.Parse(notification.SprintId), Guid.Parse(notification.TicketId));
+    {
+        return new WebAddTicketToSprintNotification(Guid.Parse(notification.SprintId),
+            Guid.Parse(notification.TicketId));
+    }
 }

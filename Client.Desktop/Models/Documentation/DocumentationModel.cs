@@ -67,6 +67,37 @@ public class DocumentationModel(
         set => this.RaiseAndSetIfChanged(ref _selectedTicket, value);
     }
 
+    public InitializationType Type => InitializationType.Model;
+
+    public async Task InitializeAsync()
+    {
+        var noteTypeDtos = await requestSender.Send(new GetAllNoteTypesRequestProto());
+
+        Options.Clear();
+
+        foreach (var option in noteTypeDtos)
+        {
+            var typeCheckBoxViewModel = typeCheckBoxViewModelFactory.Create(option);
+
+            Options.Add(typeCheckBoxViewModel);
+
+            typeCheckBoxViewModel.WhenAnyValue(x => x.IsChecked)
+                .Subscribe(_ => FilterNotes());
+        }
+
+        AllTickets.Clear();
+        AllTickets.AddRange(await requestSender.Send(new GetAllTicketsRequestProto()));
+
+        if (AllTickets.Any()) SelectedTicket = AllTickets[0];
+    }
+
+    public void RegisterMessenger()
+    {
+        RegisterTicketNotifications();
+        RegisterNoteTypeNotifications();
+        RegisterNoteNotifications();
+    }
+
     public async Task UpdateNotesForSelectedTicket()
     {
         if (SelectedTicket == null) return;
@@ -93,13 +124,6 @@ public class DocumentationModel(
             .ToList();
 
         SelectedNotes = new ObservableCollection<NoteViewModel>(filteredNotes);
-    }
-    
-    public void RegisterMessenger()
-    {
-        RegisterTicketNotifications();
-        RegisterNoteTypeNotifications();
-        RegisterNoteNotifications();
     }
 
     private void RegisterNoteNotifications()
@@ -164,7 +188,7 @@ public class DocumentationModel(
                 m.NoteType.AsTraceAttributes());
 
             var typeCheckBoxViewModel = typeCheckBoxViewModelFactory.Create(m.NoteType);
-            
+
             Options.Add(typeCheckBoxViewModel);
 
             await tracer.NoteType.Create.AggregateAdded(GetType(), m.NoteType.NoteTypeId);
@@ -229,28 +253,5 @@ public class DocumentationModel(
             ticket.Apply(m);
             await tracer.Ticket.Update.ChangesApplied(GetType(), parsedId);
         });
-    }
-
-    public InitializationType Type => InitializationType.Model;
-    public async Task InitializeAsync()
-    {
-        var noteTypeDtos = await requestSender.Send(new GetAllNoteTypesRequestProto());
-
-        Options.Clear();
-
-        foreach (var option in noteTypeDtos)
-        {
-            var typeCheckBoxViewModel = typeCheckBoxViewModelFactory.Create(option);
-
-            Options.Add(typeCheckBoxViewModel);
-
-            typeCheckBoxViewModel.WhenAnyValue(x => x.IsChecked)
-                .Subscribe(_ => FilterNotes());
-        }
-
-        AllTickets.Clear();
-        AllTickets.AddRange(await requestSender.Send(new GetAllTicketsRequestProto()));
-
-        if (AllTickets.Any()) SelectedTicket = AllTickets[0];
     }
 }

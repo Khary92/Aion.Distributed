@@ -7,11 +7,9 @@ namespace Service.Monitoring.Verifiers.Common;
 
 public class Verifier : IVerifier
 {
-    private readonly UseCaseStateEvaluator _useCaseStateEvaluator;
-    private readonly List<TraceData> _traceData = new();
     private readonly Timer _timer = new(10000);
-
-    public event EventHandler<Report>? VerificationCompleted;
+    private readonly List<TraceData> _traceData = new();
+    private readonly UseCaseStateEvaluator _useCaseStateEvaluator;
 
     public Verifier(UseCaseStateEvaluator useCaseStateEvaluator)
     {
@@ -19,7 +17,16 @@ public class Verifier : IVerifier
         _timer.Elapsed += Elapsed;
         _timer.AutoReset = false;
     }
-    
+
+    public event EventHandler<Report>? VerificationCompleted;
+
+    public void Add(TraceData traceData)
+    {
+        _traceData.Add(traceData);
+        _timer.Stop();
+        _timer.Start();
+    }
+
     private void Elapsed(object? sender, ElapsedEventArgs e)
     {
         var report = new Report(_traceData.First().TimeStamp,
@@ -27,12 +34,5 @@ public class Verifier : IVerifier
             _traceData.GetClassTrace());
 
         VerificationCompleted?.Invoke(this, report);
-    }
-
-    public void Add(TraceData traceData)
-    {
-        _traceData.Add(traceData);
-        _timer.Stop();
-        _timer.Start();
     }
 }

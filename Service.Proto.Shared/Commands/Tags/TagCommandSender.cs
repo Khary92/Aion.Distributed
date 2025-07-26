@@ -10,7 +10,7 @@ public class TagCommandSender : ITagCommandSender
     public TagCommandSender(string address)
     {
         var channel = GrpcChannel.ForAddress(address);
-        _client = new(channel);
+        _client = new TagCommandProtoService.TagCommandProtoServiceClient(channel);
     }
 
     public async Task<bool> Send(CreateTagCommandProto command)

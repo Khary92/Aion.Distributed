@@ -1,6 +1,5 @@
 using System.Collections.Immutable;
 using Service.Monitoring.Shared.Enums;
-using Service.Monitoring.Verifiers;
 using Service.Monitoring.Verifiers.Common.Enums;
 using Service.Monitoring.Verifiers.Common.Records;
 

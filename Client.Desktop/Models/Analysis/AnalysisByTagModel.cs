@@ -22,11 +22,19 @@ public class AnalysisByTagModel(IRequestSender requestSender, IMessenger messeng
     private AnalysisByTagDecorator? _analysisByTag;
 
     public ObservableCollection<TagDto> Tags { get; } = [];
-    
+
     public AnalysisByTagDecorator? AnalysisByTag
     {
         get => _analysisByTag;
         private set => this.RaiseAndSetIfChanged(ref _analysisByTag, value);
+    }
+
+    public InitializationType Type => InitializationType.Model;
+
+    public async Task InitializeAsync()
+    {
+        Tags.Clear();
+        Tags.AddRange(await requestSender.Send(new GetAllTagsRequestProto()));
     }
 
     public void RegisterMessenger()
@@ -41,14 +49,6 @@ public class AnalysisByTagModel(IRequestSender requestSender, IMessenger messeng
 
             tag.Name = m.Name;
         });
-    }
-
-    public InitializationType Type => InitializationType.Model;
-
-    public async Task InitializeAsync()
-    {
-        Tags.Clear();
-        Tags.AddRange(await requestSender.Send(new GetAllTagsRequestProto()));
     }
 
     public async Task SetAnalysisForTag(TagDto selectedTag)

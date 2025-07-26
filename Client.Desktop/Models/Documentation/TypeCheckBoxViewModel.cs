@@ -7,9 +7,9 @@ namespace Client.Desktop.Models.Documentation;
 
 public class TypeCheckBoxViewModel(IRequestSender requestSender, NoteTypeDto noteTypeDto) : ReactiveObject
 {
+    private readonly NoteTypeDto _noteType = noteTypeDto;
     private readonly Guid _noteTypeId = noteTypeDto.NoteTypeId;
     private bool _isChecked;
-    private NoteTypeDto _noteType = noteTypeDto;
 
     public Guid NoteTypeId
     {

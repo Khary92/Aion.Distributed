@@ -32,10 +32,7 @@ public class ServiceInitializer(
             RegisterMessengers();
             ValidateInitializationComponents();
 
-            foreach (var type in _order)
-            {
-                await InitializeComponentsOfType(type);
-            }
+            foreach (var type in _order) await InitializeComponentsOfType(type);
         }
         catch (Exception ex)
         {
@@ -46,7 +43,6 @@ public class ServiceInitializer(
     private void RegisterMessengers()
     {
         foreach (var component in messengerComponents)
-        {
             try
             {
                 component.RegisterMessenger();
@@ -55,24 +51,19 @@ public class ServiceInitializer(
             {
                 throw new InitializationException($"Failed to register messenger for {component.GetType().Name}", ex);
             }
-        }
     }
 
     private void ValidateInitializationComponents()
     {
         var missingTypes = _order.Except(LoadingStrategy.Keys).ToList();
         if (missingTypes.Any())
-        {
             throw new ConstraintException(
                 $"Missing initialization components for types: {string.Join(", ", missingTypes)}");
-        }
 
         var unexpectedTypes = LoadingStrategy.Keys.Except(_order).ToList();
         if (unexpectedTypes.Any())
-        {
             throw new ConstraintException(
                 $"Unexpected initialization component types found: {string.Join(", ", unexpectedTypes)}");
-        }
     }
 
     private async Task InitializeComponentsOfType(InitializationType type)

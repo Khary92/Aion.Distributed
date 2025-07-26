@@ -75,7 +75,7 @@ public class AnalysisByTicketDecorator(AnalysisByTicket analysisByTicket, ITagRe
         {
             TagIds = { tagIdsRepeated }
         });
-        
+
         var usedTags = tagListProto.ToDtoList();
 
         var countByTagProductive = usedTags.ToDictionary(tag => tag.TagId, _ => 0);

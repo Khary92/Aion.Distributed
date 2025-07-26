@@ -25,14 +25,13 @@ public class TimerSettingsNotificationsReceiver(ITimerSettingsStateService timer
         var client = new TimerSettingsNotificationService.TimerSettingsNotificationServiceClient(channel);
 
         while (!stoppingToken.IsCancellationRequested)
-        {
             try
             {
                 using var call =
-                    client.SubscribeTimerSettingsNotifications(new SubscribeRequest(), cancellationToken: stoppingToken);
+                    client.SubscribeTimerSettingsNotifications(new SubscribeRequest(),
+                        cancellationToken: stoppingToken);
 
                 await foreach (var notification in call.ResponseStream.ReadAllAsync(stoppingToken))
-                {
                     switch (notification.NotificationCase)
                     {
                         case TimerSettingsNotification.NotificationOneofCase.TimerSettingsCreated:
@@ -47,7 +46,6 @@ public class TimerSettingsNotificationsReceiver(ITimerSettingsStateService timer
                             timerSettingsStateService.Apply(notification.SnapshotSaveIntervalChanged.ToNotification());
                             break;
                     }
-                }
             }
             catch (RpcException ex) when (ex.StatusCode == StatusCode.Unavailable)
             {
@@ -61,6 +59,5 @@ public class TimerSettingsNotificationsReceiver(ITimerSettingsStateService timer
             {
                 await Task.Delay(5000, stoppingToken);
             }
-        }
     }
 }

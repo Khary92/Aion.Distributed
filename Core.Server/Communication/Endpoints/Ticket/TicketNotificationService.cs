@@ -3,10 +3,13 @@ using Proto.Notifications.Ticket;
 
 namespace Core.Server.Communication.Endpoints.Ticket;
 
-public class TicketNotificationService : Proto.Notifications.Ticket.TicketNotificationService.TicketNotificationServiceBase
+public class
+    TicketNotificationService : Proto.Notifications.Ticket.TicketNotificationService.TicketNotificationServiceBase
 {
-    private readonly Dictionary<Guid, (IServerStreamWriter<TicketNotification> Stream, CancellationToken Token)> _clients
-        = new();
+    private readonly Dictionary<Guid, (IServerStreamWriter<TicketNotification> Stream, CancellationToken Token)>
+        _clients
+            = new();
+
     private readonly object _lock = new();
 
     public override async Task SubscribeTicketNotifications(
@@ -15,7 +18,7 @@ public class TicketNotificationService : Proto.Notifications.Ticket.TicketNotifi
         ServerCallContext context)
     {
         var clientId = Guid.NewGuid();
-        
+
         lock (_lock)
         {
             _clients.Add(clientId, (responseStream, context.CancellationToken));
@@ -40,7 +43,7 @@ public class TicketNotificationService : Proto.Notifications.Ticket.TicketNotifi
     public async Task SendNotificationAsync(TicketNotification notification)
     {
         List<Guid> clientsToRemove = new();
-        
+
         foreach (var (clientId, (stream, token)) in _clients)
         {
             if (token.IsCancellationRequested)
@@ -61,14 +64,9 @@ public class TicketNotificationService : Proto.Notifications.Ticket.TicketNotifi
         }
 
         if (clientsToRemove.Count > 0)
-        {
             lock (_lock)
             {
-                foreach (var clientId in clientsToRemove)
-                {
-                    _clients.Remove(clientId);
-                }
+                foreach (var clientId in clientsToRemove) _clients.Remove(clientId);
             }
-        }
     }
 }

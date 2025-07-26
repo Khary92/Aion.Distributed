@@ -7,13 +7,13 @@ namespace Service.Proto.Shared.Requests.Sprints;
 public class SprintRequestSender : ISprintRequestSender
 {
     private readonly SprintProtoRequestService.SprintProtoRequestServiceClient _client;
-    
+
     public SprintRequestSender(string address)
     {
         var channel = GrpcChannel.ForAddress(address);
-        _client = new(channel);
+        _client = new SprintProtoRequestService.SprintProtoRequestServiceClient(channel);
     }
-    
+
     public async Task<SprintProto?> Send(GetActiveSprintRequestProto request)
     {
         var response = await _client.GetActiveSprintAsync(request);

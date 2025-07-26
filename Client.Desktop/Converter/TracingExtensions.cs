@@ -1,6 +1,6 @@
 using System;
-using Newtonsoft.Json;
 using Client.Desktop.DTO;
+using Newtonsoft.Json;
 
 namespace Client.Desktop.Converter;
 
@@ -30,7 +30,7 @@ public static class TracingExtensions
     public static string AsTraceAttributes(this SprintDto? dto)
     {
         if (dto == null) return string.Empty;
-        
+
         return JsonConvert.SerializeObject(new
         {
             sprintId = dto.SprintId.ToString(),
@@ -71,7 +71,7 @@ public static class TracingExtensions
             date = dto.Date.ToString()
         });
     }
-    
+
     public static string AsTraceAttributes(this TimerSettingsDto dto)
     {
         return JsonConvert.SerializeObject(new

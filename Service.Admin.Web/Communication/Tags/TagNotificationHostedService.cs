@@ -1,8 +1,7 @@
-﻿using Service.Admin.Web.Communication.Tickets;
+﻿namespace Service.Admin.Web.Communication.Tags;
 
-namespace Service.Admin.Web.Communication.Tags;
-
-public class TagNotificationHostedService(TagNotificationsReceiver notificationsReceiver,
+public class TagNotificationHostedService(
+    TagNotificationsReceiver notificationsReceiver,
     ILogger<TagNotificationHostedService> logger) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)

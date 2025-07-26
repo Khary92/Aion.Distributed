@@ -1,6 +1,6 @@
 ﻿namespace Service.Admin.Web.Communication.Reports.State;
 
-public class ReportStateService() : IReportStateService
+public class ReportStateService : IReportStateService
 {
     private readonly List<ReportRecord> _reports = new();
 
@@ -19,5 +19,8 @@ public class ReportStateService() : IReportStateService
         NotifyStateChanged();
     }
 
-    private void NotifyStateChanged() => OnStateChanged?.Invoke();
+    private void NotifyStateChanged()
+    {
+        OnStateChanged?.Invoke();
+    }
 }

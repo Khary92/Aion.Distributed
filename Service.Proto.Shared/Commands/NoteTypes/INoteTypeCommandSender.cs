@@ -1,5 +1,4 @@
-﻿
-using Proto.Command.NoteTypes;
+﻿using Proto.Command.NoteTypes;
 
 namespace Service.Proto.Shared.Commands.NoteTypes;
 

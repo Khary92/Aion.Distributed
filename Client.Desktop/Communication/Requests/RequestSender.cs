@@ -65,7 +65,7 @@ public class RequestSender(
         var noteTypeProto = await noteTypeRequestSender.Send(request);
         return noteTypeProto.ToDto();
     }
-    
+
     public async Task<SprintDto?> Send(GetActiveSprintRequestProto request)
     {
         var sprintProto = await sprintRequestSender.Send(request);

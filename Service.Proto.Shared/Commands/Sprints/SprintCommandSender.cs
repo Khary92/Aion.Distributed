@@ -6,13 +6,13 @@ namespace Service.Proto.Shared.Commands.Sprints;
 public class SprintCommandSender : ISprintCommandSender
 {
     private readonly SprintCommandProtoService.SprintCommandProtoServiceClient _client;
-    
+
     public SprintCommandSender(string address)
     {
         var channel = GrpcChannel.ForAddress(address);
-        _client = new(channel);
+        _client = new SprintCommandProtoService.SprintCommandProtoServiceClient(channel);
     }
-    
+
     public async Task<bool> Send(CreateSprintCommandProto command)
     {
         var response = await _client.CreateSprintAsync(command);

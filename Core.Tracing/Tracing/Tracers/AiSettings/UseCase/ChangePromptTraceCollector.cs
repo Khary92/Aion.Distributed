@@ -8,7 +8,7 @@ public class ChangePromptTraceCollector(ITracingDataCommandSender commandSender)
 {
     public async Task StartUseCase(Type originClassType, Guid traceId, (string, string) attributes)
     {
-        var log = ($"Change Prompt requested for {attributes.Item1}:{attributes.Item2}");
+        var log = $"Change Prompt requested for {attributes.Item1}:{attributes.Item2}";
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.AiSettings,
             UseCaseMeta.ChangePrompt,
@@ -22,7 +22,7 @@ public class ChangePromptTraceCollector(ITracingDataCommandSender commandSender)
 
     public async Task CommandSent(Type originClassType, Guid traceId, object command)
     {
-        var log = ($"Sent {command}");
+        var log = $"Sent {command}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.AiSettings,
@@ -36,7 +36,7 @@ public class ChangePromptTraceCollector(ITracingDataCommandSender commandSender)
 
     public async Task PropertyNotChanged(Type originClassType, Guid traceId, (string, string) property)
     {
-        var log = ($"Request aborted {property.Item1}:{property.Item2}");
+        var log = $"Request aborted {property.Item1}:{property.Item2}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.AiSettings,

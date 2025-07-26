@@ -13,7 +13,7 @@ public class SettingsDto(string exportPath) : ReactiveObject
         get => _exportPath;
         set => this.RaiseAndSetIfChanged(ref _exportPath, value);
     }
-    
+
     public DateTimeOffset SelectedDate
     {
         get => _selectedDate;

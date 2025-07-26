@@ -1,6 +1,7 @@
 namespace Service.Admin.Web.Communication.NoteType;
 
-public class NoteTypeNotificationHostedService(NoteTypeNotificationReceiver notifications,
+public class NoteTypeNotificationHostedService(
+    NoteTypeNotificationReceiver notifications,
     ILogger<NoteTypeNotificationHostedService> logger) : BackgroundService
 {
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)

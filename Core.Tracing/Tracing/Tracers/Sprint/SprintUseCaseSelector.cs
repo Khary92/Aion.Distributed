@@ -4,9 +4,9 @@ namespace Core.Server.Tracing.Tracing.Tracers.Sprint;
 
 public class SprintUseCaseSelector(
     ICreateSprintTraceCollector createSprintTraceCollector,
-    IUpdateSprintCollector  updateSprintCollector,
+    IUpdateSprintCollector updateSprintCollector,
     ISprintActiveStatusCollector sprintActiveStatusCollector,
-    ITicketAddedToSprintCollector  ticketAddedToSprintCollector
+    ITicketAddedToSprintCollector ticketAddedToSprintCollector
 ) : ISprintUseCaseSelector
 {
     public ICreateSprintTraceCollector Create => createSprintTraceCollector;

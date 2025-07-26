@@ -7,13 +7,13 @@ namespace Service.Proto.Shared.Requests.TimerSettings;
 public class TimerSettingsRequestSender : ITimerSettingsRequestSender
 {
     private readonly TimerSettingsProtoRequestService.TimerSettingsProtoRequestServiceClient _client;
-    
+
     public TimerSettingsRequestSender(string address)
     {
         var channel = GrpcChannel.ForAddress(address);
-        _client = new(channel);
+        _client = new TimerSettingsProtoRequestService.TimerSettingsProtoRequestServiceClient(channel);
     }
-    
+
     public async Task<TimerSettingsProto> Send(GetTimerSettingsRequestProto request)
     {
         return await _client.GetTimerSettingsAsync(request);

@@ -27,7 +27,7 @@ public class TimerSettingsStateService(ISharedRequestSender requestSender, IShar
             return;
         }
 
-        await commandSender.Send(new CreateTimerSettingsCommandProto()
+        await commandSender.Send(new CreateTimerSettingsCommandProto
         {
             TimerSettingsId = Guid.NewGuid().ToString(),
             DocumentationSaveInterval = 30,
@@ -44,6 +44,9 @@ public class TimerSettingsStateService(ISharedRequestSender requestSender, IShar
     {
         TimerSettings.SnapshotSaveInterval = notification.SnapshotSaveInterval;
     }
-    
-    private void NotifyStateChanged() => OnStateChanged?.Invoke();
+
+    private void NotifyStateChanged()
+    {
+        OnStateChanged?.Invoke();
+    }
 }

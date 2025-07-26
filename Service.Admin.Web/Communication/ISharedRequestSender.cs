@@ -6,7 +6,7 @@ using Service.Proto.Shared.Requests.TimerSettings;
 
 namespace Service.Admin.Web.Communication;
 
-public interface ISharedRequestSender : ITicketRequestSender, ISprintRequestSender, ITagRequestSender, INoteTypeRequestSender, ITimerSettingsRequestSender
+public interface ISharedRequestSender : ITicketRequestSender, ISprintRequestSender, ITagRequestSender,
+    INoteTypeRequestSender, ITimerSettingsRequestSender
 {
-    
 }

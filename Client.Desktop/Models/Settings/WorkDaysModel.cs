@@ -31,17 +31,6 @@ public class WorkDaysModel(
 {
     public ObservableCollection<WorkDayDto> WorkDays { get; } = [];
 
-    public void RegisterMessenger()
-    {
-        messenger.Register<NewWorkDayMessage>(this, async void (_, m) =>
-        {
-            await tracer.WorkDay.Create.AggregateReceived(GetType(), m.WorkDay.WorkDayId,
-                m.WorkDay.AsTraceAttributes());
-            WorkDays.Add(m.WorkDay);
-            await tracer.WorkDay.Create.AggregateAdded(GetType(), m.WorkDay.WorkDayId);
-        });
-    }
-
     public InitializationType Type => InitializationType.Model;
 
     public async Task InitializeAsync()
@@ -58,6 +47,17 @@ public class WorkDaysModel(
 
         WorkDays.Clear();
         WorkDays.AddRange(await requestSender.Send(new GetAllWorkDaysRequestProto()));
+    }
+
+    public void RegisterMessenger()
+    {
+        messenger.Register<NewWorkDayMessage>(this, async void (_, m) =>
+        {
+            await tracer.WorkDay.Create.AggregateReceived(GetType(), m.WorkDay.WorkDayId,
+                m.WorkDay.AsTraceAttributes());
+            WorkDays.Add(m.WorkDay);
+            await tracer.WorkDay.Create.AggregateAdded(GetType(), m.WorkDay.WorkDayId);
+        });
     }
 
     public async Task AddWorkDayAsync(DateTimeOffset date)

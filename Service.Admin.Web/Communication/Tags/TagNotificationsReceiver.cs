@@ -25,14 +25,12 @@ public class TagNotificationsReceiver(ITraceCollector tracer, ITagStateService t
         var client = new TagNotificationService.TagNotificationServiceClient(channel);
 
         while (!stoppingToken.IsCancellationRequested)
-        {
             try
             {
                 using var call =
                     client.SubscribeTagNotifications(new SubscribeRequest(), cancellationToken: stoppingToken);
 
                 await foreach (var notification in call.ResponseStream.ReadAllAsync(stoppingToken))
-                {
                     switch (notification.NotificationCase)
                     {
                         case TagNotification.NotificationOneofCase.TagCreated:
@@ -44,7 +42,6 @@ public class TagNotificationsReceiver(ITraceCollector tracer, ITagStateService t
                             tagStateService.Apply(notification.TagUpdated.ToNotification());
                             break;
                     }
-                }
             }
             catch (RpcException ex) when (ex.StatusCode == StatusCode.Unavailable)
             {
@@ -58,6 +55,5 @@ public class TagNotificationsReceiver(ITraceCollector tracer, ITagStateService t
             {
                 await Task.Delay(5000, stoppingToken);
             }
-        }
     }
 }

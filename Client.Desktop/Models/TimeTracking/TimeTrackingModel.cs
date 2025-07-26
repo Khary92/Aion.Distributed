@@ -69,6 +69,19 @@ public class TimeTrackingModel(
 
     private ObservableCollection<TicketDto> AllTickets { get; } = [];
 
+    public InitializationType Type => InitializationType.Model;
+
+    public async Task InitializeAsync()
+    {
+        var currentSprint = await requestSender.Send(new GetActiveSprintRequestProto());
+
+        if (currentSprint == null) return;
+
+        FilteredTickets.Clear();
+        var tickets = await requestSender.Send(new GetTicketsForCurrentSprintRequestProto());
+        ListEx.AddRange(FilteredTickets, tickets);
+    }
+
     public void RegisterMessenger()
     {
         messenger.Register<NewTicketMessage>(this, async void (_, m) =>
@@ -94,7 +107,8 @@ public class TimeTrackingModel(
 
         //TODO This implementation is bad. Fix that 
         messenger.Register<TicketAddedToSprintNotification>(this, async void (_, _) => { await InitializeAsync(); });
-        messenger.Register<TicketAddedToActiveSprintNotification>(this, async void (_, _) => { await InitializeAsync(); });
+        messenger.Register<TicketAddedToActiveSprintNotification>(this,
+            async void (_, _) => { await InitializeAsync(); });
 
         messenger.Register<TimeSlotControlCreatedNotification>(this, async void (_, m) =>
         {
@@ -189,18 +203,5 @@ public class TimeTrackingModel(
         {
             TicketId = SelectedTicket.TicketId.ToString()
         });
-    }
-
-    public InitializationType Type => InitializationType.Model;
-
-    public async Task InitializeAsync()
-    {
-        var currentSprint = await requestSender.Send(new GetActiveSprintRequestProto());
-
-        if (currentSprint == null) return;
-
-        FilteredTickets.Clear();
-        var tickets = await requestSender.Send(new GetTicketsForCurrentSprintRequestProto());
-        ListEx.AddRange(FilteredTickets, tickets);
     }
 }

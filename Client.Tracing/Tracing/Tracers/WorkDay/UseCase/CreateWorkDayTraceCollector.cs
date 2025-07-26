@@ -22,7 +22,7 @@ public class CreateWorkDayTraceCollector(ITracingDataCommandSender commandSender
 
     public async Task CommandSent(Type originClassType, Guid traceId, object command)
     {
-        var log = ($"Sent {command}");
+        var log = $"Sent {command}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.WorkDay,
@@ -36,7 +36,7 @@ public class CreateWorkDayTraceCollector(ITracingDataCommandSender commandSender
 
     public async Task AggregateReceived(Type originClassType, Guid traceId, string attributes)
     {
-        var log = ($"Received aggregate {attributes}");
+        var log = $"Received aggregate {attributes}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.WorkDay,
@@ -50,7 +50,7 @@ public class CreateWorkDayTraceCollector(ITracingDataCommandSender commandSender
 
     public async Task AggregateAdded(Type originClassType, Guid traceId)
     {
-        var log = ($"Added aggregate with id:{traceId}");
+        var log = $"Added aggregate with id:{traceId}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.WorkDay,

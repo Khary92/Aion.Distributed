@@ -1,5 +1,4 @@
 ﻿using Service.Admin.Web.Communication.NoteType.Notifications;
-using Service.Admin.Web.Communication.Tags.Notifications;
 using Service.Admin.Web.DTO;
 
 namespace Service.Admin.Web.Communication.NoteType.State;

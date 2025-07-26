@@ -25,14 +25,12 @@ public class TicketNotificationsReceiver(ITraceCollector tracer, ITicketStateSer
         var client = new TicketNotificationService.TicketNotificationServiceClient(channel);
 
         while (!stoppingToken.IsCancellationRequested)
-        {
             try
             {
                 using var call =
                     client.SubscribeTicketNotifications(new SubscribeRequest(), cancellationToken: stoppingToken);
 
                 await foreach (var notification in call.ResponseStream.ReadAllAsync(stoppingToken))
-                {
                     switch (notification.NotificationCase)
                     {
                         case TicketNotification.NotificationOneofCase.TicketCreated:
@@ -50,7 +48,6 @@ public class TicketNotificationsReceiver(ITraceCollector tracer, ITicketStateSer
                             ticketStateService.Apply(notification.TicketDocumentationUpdated.ToNotification());
                             break;
                     }
-                }
             }
             catch (RpcException ex) when (ex.StatusCode == StatusCode.Unavailable)
             {
@@ -64,6 +61,5 @@ public class TicketNotificationsReceiver(ITraceCollector tracer, ITicketStateSer
             {
                 await Task.Delay(5000, stoppingToken);
             }
-        }
     }
 }

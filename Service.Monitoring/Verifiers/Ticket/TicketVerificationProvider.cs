@@ -8,19 +8,7 @@ namespace Service.Monitoring.Verifiers.Ticket;
 
 public class TicketVerificationProvider : IVerificationProvider
 {
-    public TraceSinkId TraceSinkId => TraceSinkId.Ticket;
-    
-    public ImmutableList<VerificationStep> GetVerificationSteps(UseCaseMeta useCaseMeta)
-    {
-        if (useCaseMeta == UseCaseMeta.CreateTicket)
-        {
-            return _createTicketSteps;
-        }
-
-        return ImmutableList.Create<VerificationStep>();
-    }
-
-    private readonly ImmutableList<VerificationStep> _createTicketSteps  = ImmutableList.Create(
+    private readonly ImmutableList<VerificationStep> _createTicketSteps = ImmutableList.Create(
         new VerificationStep(LoggingMeta.ActionRequested, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.CommandSent, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.CommandReceived, Invoked.Equals, 1),
@@ -29,4 +17,13 @@ public class TicketVerificationProvider : IVerificationProvider
         new VerificationStep(LoggingMeta.NotificationReceived, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.AggregateReceived, Invoked.AtLeast, 1),
         new VerificationStep(LoggingMeta.AggregateAdded, Invoked.AtLeast, 1));
+
+    public TraceSinkId TraceSinkId => TraceSinkId.Ticket;
+
+    public ImmutableList<VerificationStep> GetVerificationSteps(UseCaseMeta useCaseMeta)
+    {
+        if (useCaseMeta == UseCaseMeta.CreateTicket) return _createTicketSteps;
+
+        return ImmutableList.Create<VerificationStep>();
+    }
 }

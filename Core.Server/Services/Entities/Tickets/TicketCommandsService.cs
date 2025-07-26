@@ -32,7 +32,7 @@ public class TicketCommandsService(
         var ticketNotification = createTicketCommand.ToNotification();
         await tracer.Ticket.Create.NotificationSent(GetType(), Guid.Parse(ticketNotification.TicketCreated.TicketId),
             ticketNotification.TicketCreated);
-        
+
         await ticketNotificationService.SendNotificationAsync(ticketNotification);
     }
 }

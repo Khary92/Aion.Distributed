@@ -15,5 +15,5 @@ public interface IRequestSender :
     IWorkDayRequestSender,
     ITicketReplayRequestSender,
     IUseCaseRequestSender,
-    IAnalysisRequestSender, 
+    IAnalysisRequestSender,
     ISharedRequestSender;

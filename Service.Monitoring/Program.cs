@@ -2,8 +2,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace Service.Monitoring;
 
@@ -28,13 +26,13 @@ public class Program
             options.ListenAnyIP(8080, o => { o.Protocols = HttpProtocols.Http2; });
         });
 
-       // builder.Logging.AddConsole();
-       // builder.Logging.SetMinimumLevel(LogLevel.Debug);
+        // builder.Logging.AddConsole();
+        // builder.Logging.SetMinimumLevel(LogLevel.Debug);
 
         var app = builder.Build();
 
         app.UseRouting();
-        
+
         app.AddEndPoints();
         await app.RunAsync();
     }

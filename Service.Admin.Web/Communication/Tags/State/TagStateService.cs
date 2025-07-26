@@ -8,9 +8,9 @@ public class TagStateService(ISharedRequestSender requestSender) : ITagStateServ
 {
     private List<TagDto> _tags = new();
     public IReadOnlyList<TagDto> Tickets => _tags.AsReadOnly();
-    
+
     public event Action? OnStateChanged;
-    
+
     public Task AddTicket(TagDto tag)
     {
         _tags.Add(tag);
@@ -21,11 +21,8 @@ public class TagStateService(ISharedRequestSender requestSender) : ITagStateServ
     {
         var tag = _tags.FirstOrDefault(x => x.TagId == notification.TagId);
 
-        if (tag == null)
-        {
-            return;
-        }
-        
+        if (tag == null) return;
+
         tag.Apply(notification);
         NotifyStateChanged();
     }
@@ -36,6 +33,9 @@ public class TagStateService(ISharedRequestSender requestSender) : ITagStateServ
         _tags = tagListProto.ToDtoList();
         NotifyStateChanged();
     }
-    
-    private void NotifyStateChanged() => OnStateChanged?.Invoke();
+
+    private void NotifyStateChanged()
+    {
+        OnStateChanged?.Invoke();
+    }
 }

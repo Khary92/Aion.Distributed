@@ -7,13 +7,13 @@ namespace Service.Proto.Shared.Requests.Tickets;
 public class TicketRequestSender : ITicketRequestSender
 {
     private readonly TicketProtoRequestService.TicketProtoRequestServiceClient _client;
-    
+
     public TicketRequestSender(string address)
     {
         var channel = GrpcChannel.ForAddress(address);
-        _client = new(channel);
+        _client = new TicketProtoRequestService.TicketProtoRequestServiceClient(channel);
     }
-    
+
     public async Task<TicketListProto> Send(GetAllTicketsRequestProto request)
     {
         return await _client.GetAllTicketsAsync(request);

@@ -15,7 +15,7 @@
         <ChildContent>
             @if (_isLoading || !ReportState.Reports.Any())
             {
-                <LoadingSpinner />
+                <LoadingSpinner/>
             }
             else
             {
@@ -90,12 +90,12 @@
     private IEnumerable<TraceInfo> GetFilteredTraces()
     {
         var report = ReportState.Reports.FirstOrDefault(r => r.ReportId == _selectedReportId);
-        
+
         if (report == null)
         {
             return [];
         }
-        
+
         return report.Traces.Select(trace =>
         {
             var data = trace.Split('|');
@@ -119,4 +119,5 @@
         public string Result { get; init; } = string.Empty;
         public string LogInfo { get; init; } = string.Empty;
     }
+
 }

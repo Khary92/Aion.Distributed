@@ -21,7 +21,8 @@ public static class TracingServices
 
     private static void AddACommonTracingServices(this IServiceCollection services)
     {
-        services.AddSingleton<ITracingDataCommandSender>(sp => new TracingDataCommandSender("http://monitoring-service:8080"));
+        services.AddSingleton<ITracingDataCommandSender>(sp =>
+            new TracingDataCommandSender("http://monitoring-service:8080"));
         services.AddSingleton<ITraceCollector, TraceCollector>();
     }
 
@@ -32,19 +33,19 @@ public static class TracingServices
         services.AddSingleton<IUpdateTicketTraceCollector, UpdateTicketTraceCollector>();
 
         services.AddSingleton<ITicketUseCaseSelector, TicketUseCaseSelector>();
-        
+
         services.AddSingleton<ICreateSprintTraceCollector, CreateSprintTraceCollector>();
         services.AddSingleton<ISprintActiveStatusCollector, SprintActiveStatusCollector>();
         services.AddSingleton<ITicketAddedToSprintCollector, TicketAddedToSprintCollector>();
         services.AddSingleton<IUpdateSprintCollector, UpdateSprintCollector>();
-        
+
         services.AddSingleton<ISprintUseCaseSelector, SprintUseCaseSelector>();
-        
+
         services.AddSingleton<ICreateTagTraceCollector, CreateTagTraceCollector>();
         services.AddSingleton<IUpdateTagTraceCollector, UpdateTagTraceCollector>();
 
         services.AddSingleton<ITagUseCaseSelector, TagUseCaseSelector>();
-        
+
         services.AddSingleton<ICreateNoteTypeTraceCollector, CreateNoteTypeTraceCollector>();
         services.AddSingleton<IChangeNoteTypeColorTraceCollector, ChangeNoteTypeColorTraceCollector>();
         services.AddSingleton<IChangeNoteTypeNameTraceCollector, ChangeNoteTypeNameTraceCollector>();

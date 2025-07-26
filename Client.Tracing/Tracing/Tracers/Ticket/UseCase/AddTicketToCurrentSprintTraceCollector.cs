@@ -22,7 +22,7 @@ public class AddTicketToCurrentSprintTraceCollector(ITracingDataCommandSender co
 
     public async Task CommandSent(Type originClassType, Guid traceId, object command)
     {
-        var log = ($"Sent {command}");
+        var log = $"Sent {command}";
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
             UseCaseMeta.AddTicketToCurrentSprint,

@@ -52,13 +52,13 @@ public static class AdminServiceExtension
 
         services.AddSingleton<TagNotificationsReceiver>();
         services.AddHostedService<TagNotificationHostedService>();
-        
+
         services.AddSingleton<SprintNotificationsReceiver>();
         services.AddHostedService<SprintNotificationHostedService>();
-        
+
         services.AddSingleton<NoteTypeNotificationReceiver>();
         services.AddHostedService<NoteTypeNotificationHostedService>();
-        
+
         services.AddSingleton<TimerSettingsNotificationsReceiver>();
         services.AddHostedService<TimerSettingsNotificationHostedService>();
 
@@ -84,7 +84,7 @@ public static class AdminServiceExtension
 
         services.AddSingleton<INoteTypeCommandSender>(sp => new NoteTypeCommandSender(ServerAddress));
         services.AddSingleton<INoteTypeRequestSender>(sp => new NoteTypeRequestSender(ServerAddress));
-        
+
         services.AddSingleton<ITimerSettingsCommandSender>(sp => new TimerSettingsCommandSender(ServerAddress));
         services.AddSingleton<ITimerSettingsRequestSender>(sp => new TimerSettingsRequestSender(ServerAddress));
     }

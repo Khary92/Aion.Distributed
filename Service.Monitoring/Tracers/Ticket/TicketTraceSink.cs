@@ -9,9 +9,8 @@ namespace Service.Monitoring.Tracers.Ticket;
 
 public class TicketTraceSink(IReportSender reportSender, IVerifierFactory verifierFactory) : ITraceSink
 {
-    public TraceSinkId TraceSinkId => TraceSinkId.Ticket;
-
     private readonly Dictionary<Guid, IVerifier> _ticketVerifiers = new();
+    public TraceSinkId TraceSinkId => TraceSinkId.Ticket;
 
     public void AddTrace(TraceData traceData)
     {

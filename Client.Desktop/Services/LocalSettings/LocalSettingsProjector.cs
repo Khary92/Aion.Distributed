@@ -1,6 +1,5 @@
 using System;
 using System.Threading.Tasks;
-using Client.Desktop.DTO;
 using Client.Desktop.DTO.Local;
 using Client.Desktop.FileSystem;
 using Client.Desktop.Services.Initializer;
@@ -20,48 +19,28 @@ public class LocalSettingsProjector(
 
     private SettingsDto? ProjectionReferenceInstance { get; set; }
 
-    private async Task PrepareProjection()
-    {
-        var settings = fileSystemWrapper.IsFileExisting(SettingsFileName) ?
-            (await fileSystemReader.GetObject<SettingsJto>(SettingsFileName)).ToDto() :
-            new SettingsDto("not set");
-        
-        messenger.Send(settings);
-    }
-
-    private async Task SaveSettings()
-    {
-        if (ProjectionReferenceInstance == null)
-        {
-            throw new NullReferenceException();
-        }
-
-        var jsonString = JsonConvert.SerializeObject(ProjectionReferenceInstance.ToJto());
-        await fileSystemWriter.Write(jsonString, SettingsFileName);
-    }
-
     public InitializationType Type => InitializationType.Service;
 
     public async Task InitializeAsync()
     {
         messenger.Register<SettingsDto>(this, async void (_, m) =>
         {
-            ProjectionReferenceInstance = m; 
+            ProjectionReferenceInstance = m;
             await SaveSettings();
         });
-        
+
         messenger.Register<ExportPathSetNotification>(this, async void (_, m) =>
         {
             ProjectionReferenceInstance!.ExportPath = m.ExportPath;
             await SaveSettings();
         });
-        
+
         messenger.Register<WorkDaySelectedNotification>(this, async void (_, m) =>
         {
             ProjectionReferenceInstance!.SelectedDate = m.Date;
             await SaveSettings();
         });
-        
+
         await PrepareProjection();
     }
 
@@ -71,9 +50,26 @@ public class LocalSettingsProjector(
     }
 
     public DateTimeOffset SelectedDate => ProjectionReferenceInstance!.SelectedDate;
-    
+
     public bool IsSelectedDateCurrentDate()
     {
         return SelectedDate.Date == DateTimeOffset.Now.Date;
+    }
+
+    private async Task PrepareProjection()
+    {
+        var settings = fileSystemWrapper.IsFileExisting(SettingsFileName)
+            ? (await fileSystemReader.GetObject<SettingsJto>(SettingsFileName)).ToDto()
+            : new SettingsDto("not set");
+
+        messenger.Send(settings);
+    }
+
+    private async Task SaveSettings()
+    {
+        if (ProjectionReferenceInstance == null) throw new NullReferenceException();
+
+        var jsonString = JsonConvert.SerializeObject(ProjectionReferenceInstance.ToJto());
+        await fileSystemWriter.Write(jsonString, SettingsFileName);
     }
 }

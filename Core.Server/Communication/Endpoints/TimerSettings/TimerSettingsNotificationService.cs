@@ -3,7 +3,8 @@ using Proto.Notifications.TimerSettings;
 
 namespace Core.Server.Communication.Endpoints.TimerSettings;
 
-public class TimerSettingsNotificationService : Proto.Notifications.TimerSettings.TimerSettingsNotificationService.TimerSettingsNotificationServiceBase
+public class TimerSettingsNotificationService : Proto.Notifications.TimerSettings.TimerSettingsNotificationService.
+    TimerSettingsNotificationServiceBase
 {
     private readonly Dictionary<Guid, (IServerStreamWriter<TimerSettingsNotification> Stream, CancellationToken Token)>
         _clients
@@ -64,14 +65,9 @@ public class TimerSettingsNotificationService : Proto.Notifications.TimerSetting
         }
 
         if (clientsToRemove.Count > 0)
-        {
             lock (_lock)
             {
-                foreach (var clientId in clientsToRemove)
-                {
-                    _clients.Remove(clientId);
-                }
+                foreach (var clientId in clientsToRemove) _clients.Remove(clientId);
             }
-        }
     }
 }

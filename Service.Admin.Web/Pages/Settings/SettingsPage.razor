@@ -1,9 +1,9 @@
 @page "/timerSettings"
 @using global::Proto.Command.TimerSettings
-@rendermode InteractiveServer
 @using Service.Admin.Tracing
 @using Service.Admin.Web.Communication
 @using Service.Admin.Web.Communication.TimerSettings.State
+@rendermode InteractiveServer
 @inject ISharedCommandSender CommandSender
 @inject ITraceCollector Tracer
 @inject ITimerSettingsStateService TimerSettingsStateService
@@ -41,7 +41,7 @@
     {
         if (_previousSnapshotSaveInterval != TimerSettingsStateService.TimerSettings.SnapshotSaveInterval)
         {
-            await CommandSender.Send(new ChangeSnapshotSaveIntervalCommandProto()
+            await CommandSender.Send(new ChangeSnapshotSaveIntervalCommandProto
             {
                 TimerSettingsId = TimerSettingsStateService.TimerSettings.TimerSettingsId.ToString(),
                 SnapshotSaveInterval = TimerSettingsStateService.TimerSettings.SnapshotSaveInterval
@@ -52,7 +52,7 @@
 
         if (_previousDocumentationSaveInterval != TimerSettingsStateService.TimerSettings.DocumentationSaveInterval)
         {
-            await CommandSender.Send(new ChangeDocuTimerSaveIntervalCommandProto()
+            await CommandSender.Send(new ChangeDocuTimerSaveIntervalCommandProto
             {
                 TimerSettingsId = TimerSettingsStateService.TimerSettings.TimerSettingsId.ToString(),
                 DocuTimerSaveInterval = TimerSettingsStateService.TimerSettings.DocumentationSaveInterval

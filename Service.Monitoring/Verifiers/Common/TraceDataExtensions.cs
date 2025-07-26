@@ -9,9 +9,7 @@ public static class TraceDataExtensions
         var result = new List<string>();
 
         foreach (var trace in traceData)
-        {
             result.Add(trace.TimeStamp + " | " + trace.OriginClassType + " | " + trace.Log);
-        }
 
         return result;
     }
