@@ -75,6 +75,10 @@ public static class AdminServiceExtension
     private static void AddControllers(this IServiceCollection services)
     {
         services.AddSingleton<INoteTypeController, NoteTypeController>();
+        services.AddSingleton<ISprintController, SprintController>();
+        services.AddSingleton<ITagController, TagController>();
+        services.AddSingleton<ITicketController, TicketController>();
+        services.AddSingleton<ITimerSettingsController, TimerSettingsController>();
     }
     
     private static void AddSharedDataServices(this IServiceCollection services)

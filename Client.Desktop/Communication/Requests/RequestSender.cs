@@ -68,8 +68,9 @@ public class RequestSender(
 
     public async Task<SprintClientModel?> Send(GetActiveSprintRequestProto request)
     {
+        // TODO make this nullable!
         var sprintProto = await sprintRequestSender.Send(request);
-        return sprintProto.ToModel();
+        return sprintProto?.ToModel();
     }
 
     public async Task<List<SprintClientModel?>> Send(GetAllSprintsRequestProto request)

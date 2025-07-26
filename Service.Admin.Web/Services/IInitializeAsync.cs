@@ -2,6 +2,6 @@
 
 public interface IInitializeAsync
 {
-   InitializationType Type { get; }
-   Task InitializeComponents();
+   public InitializationType Type { get; }
+   public Task InitializeComponents();
 }

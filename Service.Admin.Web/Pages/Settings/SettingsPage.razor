@@ -1,12 +1,9 @@
 @page "/timerSettings"
-@using global::Proto.Command.TimerSettings
-@using Service.Admin.Tracing
-@using Service.Admin.Web.Communication
+@using Service.Admin.Web.Communication.TimerSettings
 @using Service.Admin.Web.Communication.TimerSettings.State
 @rendermode InteractiveServer
-@inject ISharedCommandSender CommandSender
-@inject ITraceCollector Tracer
 @inject ITimerSettingsStateService TimerSettingsStateService
+@inject ITimerSettingsController TimerSettingsController
 
 <h3>Timer Settings</h3>
 
@@ -22,44 +19,15 @@
            @bind="@TimerSettingsStateService.TimerSettings.SnapshotSaveInterval"/>
 </div>
 
-<button class="btn btn-primary" @onclick="SaveSettingsAsync">Save</button>
+<button class="btn btn-primary" @onclick="@(async () => await TimerSettingsController.SaveSettingsAsync())">Save
+</button>
 
 @code {
 
-    private int _previousSnapshotSaveInterval;
-    private int _previousDocumentationSaveInterval;
-
-    protected override async Task OnInitializedAsync()
+    protected override Task OnInitializedAsync()
     {
         TimerSettingsStateService.OnStateChanged += async () => await InvokeAsync(StateHasChanged);
-        await TimerSettingsStateService.LoadSettings();
-        _previousSnapshotSaveInterval = TimerSettingsStateService.TimerSettings.SnapshotSaveInterval;
-        _previousDocumentationSaveInterval = TimerSettingsStateService.TimerSettings.DocumentationSaveInterval;
-    }
-
-    private async Task SaveSettingsAsync()
-    {
-        if (_previousSnapshotSaveInterval != TimerSettingsStateService.TimerSettings.SnapshotSaveInterval)
-        {
-            await CommandSender.Send(new ChangeSnapshotSaveIntervalCommandProto
-            {
-                TimerSettingsId = TimerSettingsStateService.TimerSettings.TimerSettingsId.ToString(),
-                SnapshotSaveInterval = TimerSettingsStateService.TimerSettings.SnapshotSaveInterval
-            });
-
-            _previousSnapshotSaveInterval = TimerSettingsStateService.TimerSettings.SnapshotSaveInterval;
-        }
-
-        if (_previousDocumentationSaveInterval != TimerSettingsStateService.TimerSettings.DocumentationSaveInterval)
-        {
-            await CommandSender.Send(new ChangeDocuTimerSaveIntervalCommandProto
-            {
-                TimerSettingsId = TimerSettingsStateService.TimerSettings.TimerSettingsId.ToString(),
-                DocuTimerSaveInterval = TimerSettingsStateService.TimerSettings.DocumentationSaveInterval
-            });
-
-            _previousDocumentationSaveInterval = TimerSettingsStateService.TimerSettings.DocumentationSaveInterval;
-        }
+        return Task.CompletedTask;
     }
 
 }

@@ -14,6 +14,7 @@ public class TagStateService(ISharedRequestSender requestSender) : ITagStateServ
     public Task AddTicket(TagWebModel tag)
     {
         _tags.Add(tag);
+        NotifyStateChanged();
         return Task.CompletedTask;
     }
 

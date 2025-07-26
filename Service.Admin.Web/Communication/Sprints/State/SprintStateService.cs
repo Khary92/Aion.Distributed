@@ -14,6 +14,7 @@ public class SprintStateService(ISharedRequestSender requestSender) : ISprintSta
     public Task AddSprint(SprintWebModel sprint)
     {
         _sprints.Add(sprint);
+        NotifyStateChanged();
         return Task.CompletedTask;
     }
 
@@ -67,6 +68,7 @@ public class SprintStateService(ISharedRequestSender requestSender) : ISprintSta
     {
         var sprintListProto = await requestSender.Send(new GetAllSprintsRequestProto());
         _sprints = sprintListProto.ToDtoList();
+        NotifyStateChanged();
     }
 
     private void NotifyStateChanged()

@@ -15,6 +15,7 @@ public class NoteTypeStateService(ISharedRequestSender requestSender) : INoteTyp
     public Task AddNoteType(NoteTypeWebModel noteType)
     {
         _noteTypes.Add(noteType);
+        NotifyStateChanged();
         return Task.CompletedTask;
     }
 
@@ -49,4 +50,5 @@ public class NoteTypeStateService(ISharedRequestSender requestSender) : INoteTyp
         var noteTypeList = await requestSender.Send(new GetAllNoteTypesRequestProto());
         _noteTypes = noteTypeList.ToDtoList();
     }
+    
 }
