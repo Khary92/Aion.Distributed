@@ -1,6 +1,6 @@
-﻿namespace Service.Admin.Web.Services;
+namespace Service.Admin.Web.Services;
 
-public class IComponentInitializer
+public interface IComponentInitializer
 {
-    
+    Task InitializeServicesAsync();
 }

@@ -11,6 +11,7 @@ using Service.Admin.Web.Communication.Tickets;
 using Service.Admin.Web.Communication.Tickets.State;
 using Service.Admin.Web.Communication.TimerSettings;
 using Service.Admin.Web.Communication.TimerSettings.State;
+using Service.Admin.Web.Services;
 using Service.Proto.Shared.Commands.NoteTypes;
 using Service.Proto.Shared.Commands.Sprints;
 using Service.Proto.Shared.Commands.Tags;
@@ -30,10 +31,16 @@ public static class AdminServiceExtension
 
     public static void AddWebServices(this IServiceCollection services)
     {
+        services.AddSingleton<IComponentInitializer, ComponentInitializer>();
+        
         services.AddSingleton<IReportStateService, ReportStateService>();
         services.AddSingleton<ITicketStateService, TicketStateService>();
         services.AddSingleton<ITagStateService, TagStateService>();
-        services.AddSingleton<INoteTypeStateService, NoteTypeStateService>();
+
+        services.AddSingleton<NoteTypeStateService>();
+        services.AddSingleton<INoteTypeStateService>(sp => sp.GetRequiredService<NoteTypeStateService>());
+        services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<NoteTypeStateService>());
+        
         services.AddSingleton<ISprintStateService, SprintStateService>();
         services.AddSingleton<ITimerSettingsStateService, TimerSettingsStateService>();
 
@@ -78,7 +85,10 @@ public static class AdminServiceExtension
         services.AddSingleton<ISprintController, SprintController>();
         services.AddSingleton<ITagController, TagController>();
         services.AddSingleton<ITicketController, TicketController>();
-        services.AddSingleton<ITimerSettingsController, TimerSettingsController>();
+
+        services.AddSingleton<TimerSettingsController>();
+        services.AddSingleton<ITimerSettingsController>(sp => sp.GetRequiredService<TimerSettingsController>());
+        services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<TimerSettingsController>());
     }
     
     private static void AddSharedDataServices(this IServiceCollection services)

@@ -5,6 +5,7 @@ using Service.Admin.Web;
 using Service.Admin.Web.Communication.Reports;
 using Service.Admin.Web.Communication.Tickets;
 using Service.Admin.Web.Pages;
+using Service.Admin.Web.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -49,5 +50,8 @@ app.MapGrpcService<ReportReceiver>();
 app.MapStaticAssets();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
+
+var componentInitializer = app.Services.GetRequiredService<IComponentInitializer>();
+await componentInitializer.InitializeServicesAsync(); 
 
 app.Run();

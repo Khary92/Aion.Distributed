@@ -2,15 +2,13 @@
 using Proto.Requests.TimerSettings;
 using Service.Admin.Web.Communication.TimerSettings.Notifications;
 using Service.Admin.Web.Models;
-using Service.Admin.Web.Services;
 
 namespace Service.Admin.Web.Communication.TimerSettings.State;
 
 public class TimerSettingsStateService(ISharedRequestSender requestSender, ISharedCommandSender commandSender)
     : ITimerSettingsStateService
 {
-
-    public TimerSettingsWebModel TimerSettings { get; internal set; } = new(Guid.Empty, 0, 0);
+    public TimerSettingsWebModel TimerSettings { get; private set; } = new(Guid.Empty, 0, 0);
 
     public event Action? OnStateChanged;
 
@@ -49,7 +47,7 @@ public class TimerSettingsStateService(ISharedRequestSender requestSender, IShar
         TimerSettings.SnapshotSaveInterval = notification.SnapshotSaveInterval;
         NotifyStateChanged();
     }
-    
+
     private void NotifyStateChanged()
     {
         OnStateChanged?.Invoke();
