@@ -1,0 +1,28 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:tag="clr-namespace:Client.Desktop.Presentation.Models.TimeTracking.DynamicControls"
+             x:DataType="tag:TagCheckBoxViewModel"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Client.Desktop.Presentation.Views.Tracking.DynamicControl.TagCheckBoxControl">
+
+    <Border CornerRadius="{StaticResource CornerRadius}"
+            Margin="{StaticResource GeneralControlMargin}">
+
+        <Grid ColumnDefinitions="Auto, Auto" Margin="{StaticResource GeneralControlMargin}">
+            <ToggleButton Grid.Column="0" IsChecked="{Binding IsChecked, Mode=TwoWay}"
+                          Width="20" Height="20"
+                          Background="Transparent"
+                          BorderBrush="{StaticResource BorderBrush}"
+                          BorderThickness="2"
+                          Content="" />
+            <TextBlock Grid.Column="1"
+                       VerticalAlignment="Center"
+                       Foreground="{StaticResource ForegroundBrush}"
+                       Background="Transparent"
+                       FontSize="{StaticResource FontSizeNormal}"
+                       Text="{Binding Tag.Name}" />
+        </Grid>
+    </Border>
+</UserControl>

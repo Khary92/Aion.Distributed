@@ -7,9 +7,9 @@ using Client.Desktop.Communication.Requests.StatisticsData;
 using Client.Desktop.Communication.Requests.TimeSlots;
 using Client.Desktop.Communication.Requests.UseCase;
 using Client.Desktop.Communication.Requests.WorkDays;
-using Client.Desktop.Decorators;
-using Client.Desktop.DTO;
-using Client.Desktop.Replays;
+using Client.Desktop.DataModels;
+using Client.Desktop.DataModels.Decorators;
+using Client.Desktop.DataModels.Decorators.Replays;
 using Proto.Requests.AnalysisData;
 using Proto.Requests.Notes;
 using Proto.Requests.NoteTypes;
@@ -44,119 +44,108 @@ public class RequestSender(
     IUseCaseRequestSender useCaseRequestSender,
     IAnalysisRequestSender analysisRequestSender) : IRequestSender
 {
-    public async Task<List<NoteDto>> Send(GetNotesByTicketIdRequestProto request)
+    public async Task<List<NoteClientModel>> Send(GetNotesByTicketIdRequestProto request)
     {
         return await notesRequestSender.Send(request);
     }
 
-    public async Task<List<NoteDto>> Send(GetNotesByTimeSlotIdRequestProto request)
+    public async Task<List<NoteClientModel>> Send(GetNotesByTimeSlotIdRequestProto request)
     {
         return await notesRequestSender.Send(request);
     }
 
-    public async Task<List<NoteTypeDto>> Send(GetAllNoteTypesRequestProto request)
+    public async Task<List<NoteTypeClientModel>> Send(GetAllNoteTypesRequestProto request)
     {
         var getAllNoteTypesResponseProto = await noteTypeRequestSender.Send(request);
-        return getAllNoteTypesResponseProto.ToDtoList();
+        return getAllNoteTypesResponseProto.ToModelList();
     }
 
-    public async Task<NoteTypeDto> Send(GetNoteTypeByIdRequestProto request)
+    public async Task<NoteTypeClientModel> Send(GetNoteTypeByIdRequestProto request)
     {
         var noteTypeProto = await noteTypeRequestSender.Send(request);
-        return noteTypeProto.ToDto();
+        return noteTypeProto.ToModel();
     }
 
-    public async Task<SprintDto?> Send(GetActiveSprintRequestProto request)
+    public async Task<SprintClientModel?> Send(GetActiveSprintRequestProto request)
     {
         var sprintProto = await sprintRequestSender.Send(request);
-        return sprintProto.ToDto();
+        return sprintProto.ToModel();
     }
 
-    public async Task<List<SprintDto?>> Send(GetAllSprintsRequestProto request)
+    public async Task<List<SprintClientModel?>> Send(GetAllSprintsRequestProto request)
     {
         var sprintListProto = await sprintRequestSender.Send(request);
-        return sprintListProto.ToDtoList();
+        return sprintListProto.ToModelList();
     }
 
-    public async Task<StatisticsDataDto> Send(GetStatisticsDataByTimeSlotIdRequestProto request)
+    public async Task<StatisticsDataClientModel> Send(GetStatisticsDataByTimeSlotIdRequestProto request)
     {
         return await statisticsDataRequestSender.Send(request);
     }
 
-    public async Task<List<TagDto>> Send(GetAllTagsRequestProto request)
+    public async Task<List<TagClientModel>> Send(GetAllTagsRequestProto request)
     {
         var tagDtos = await tagRequestSender.Send(request);
-        return tagDtos.ToDtoList();
+        return tagDtos.ToModelList();
     }
 
-    public async Task<TagDto> Send(GetTagByIdRequestProto request)
+    public async Task<TagClientModel> Send(GetTagByIdRequestProto request)
     {
         var tagProto = await tagRequestSender.Send(request);
-        return tagProto.ToDto();
+        return tagProto.ToModel();
     }
 
-    public async Task<List<TagDto>> Send(GetTagsByIdsRequestProto request)
+    public async Task<List<TagClientModel>> Send(GetTagsByIdsRequestProto request)
     {
         var tagListProto = await tagRequestSender.Send(request);
-        return tagListProto.ToDtoList();
+        return tagListProto.ToModelList();
     }
 
-    public async Task<List<TicketDto>> Send(GetAllTicketsRequestProto request)
+    public async Task<List<TicketClientModel>> Send(GetAllTicketsRequestProto request)
     {
         var ticketListProto = await ticketRequestSender.Send(request);
-        return ticketListProto.ToDtoList();
+        return ticketListProto.ToModelList();
     }
 
-    public async Task<List<TicketDto>> Send(GetTicketsForCurrentSprintRequestProto request)
+    public async Task<List<TicketClientModel>> Send(GetTicketsForCurrentSprintRequestProto request)
     {
         var ticketListProto = await ticketRequestSender.Send(request);
-        return ticketListProto.ToDtoList();
+        return ticketListProto.ToModelList();
     }
 
-    public async Task<List<TicketDto>> Send(GetTicketsWithShowAllSwitchRequestProto request)
+    public async Task<List<TicketClientModel>> Send(GetTicketsWithShowAllSwitchRequestProto request)
     {
         var ticketListProto = await ticketRequestSender.Send(request);
-        return ticketListProto.ToDtoList();
+        return ticketListProto.ToModelList();
     }
 
-    public async Task<TicketDto> Send(GetTicketByIdRequestProto request)
+    public async Task<TicketClientModel> Send(GetTicketByIdRequestProto request)
     {
         var ticketProto = await ticketRequestSender.Send(request);
-        return ticketProto.ToDto();
-    }
-
-    public async Task<TimerSettingsDto> Send(GetTimerSettingsRequestProto request)
-    {
-        var timerSettingsProto = await timerSettingsRequestSender.Send(request);
-        return timerSettingsProto.ToDto();
-    }
-
-    public async Task<bool> Send(IsTimerSettingExistingRequestProto request)
-    {
-        return await timerSettingsRequestSender.Send(request);
-    }
-
-    public async Task<List<TimeSlotDto>> Send(GetTimeSlotsForWorkDayIdRequestProto request)
+        return ticketProto.ToModel();
+    } 
+    
+    public async Task<List<TimeSlotClientModel>> Send(GetTimeSlotsForWorkDayIdRequestProto request)
     {
         return await timeSlotRequestSender.Send(request);
     }
 
-    public async Task<TimeSlotDto> Send(GetTimeSlotByIdRequestProto request)
+    public async Task<TimeSlotClientModel> Send(GetTimeSlotByIdRequestProto request)
     {
         return await timeSlotRequestSender.Send(request);
     }
 
-    public async Task<List<WorkDayDto>> Send(GetAllWorkDaysRequestProto request)
+    public async Task<List<WorkDayClientModel>> Send(GetAllWorkDaysRequestProto request)
     {
         return await workDayRequestSender.Send(request);
     }
 
-    public async Task<WorkDayDto> Send(GetSelectedWorkDayRequestProto request)
+    public async Task<WorkDayClientModel> Send(GetSelectedWorkDayRequestProto request)
     {
         return await workDayRequestSender.Send(request);
     }
 
-    public async Task<WorkDayDto> Send(GetWorkDayByDateRequestProto request)
+    public async Task<WorkDayClientModel> Send(GetWorkDayByDateRequestProto request)
     {
         return await workDayRequestSender.Send(request);
     }
@@ -166,7 +155,7 @@ public class RequestSender(
         return await workDayRequestSender.Send(request);
     }
 
-    public async Task<List<DocumentationReplayDto>> Send(GetTicketReplaysByIdRequestProto request)
+    public async Task<List<DocumentationReplay>> Send(GetTicketReplaysByIdRequestProto request)
     {
         return await ticketReplayRequestSender.Send(request);
     }

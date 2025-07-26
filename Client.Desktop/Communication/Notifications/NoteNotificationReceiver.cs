@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using Client.Desktop.Communication.Notifications.NotificationWrappers;
-using Client.Desktop.DTO;
+using Client.Desktop.DataModels;
 using CommunityToolkit.Mvvm.Messaging;
 using Grpc.Core;
 using Proto.Notifications.Note;
@@ -27,7 +27,7 @@ public class NoteNotificationReceiver(
                     case NoteNotification.NotificationOneofCase.NoteCreated:
                     {
                         var noteCreated = notification.NoteCreated;
-                        var noteDto = new NoteDto(
+                        var noteDto = new NoteClientModel(
                             Guid.Parse(noteCreated.NoteId),
                             noteCreated.Text,
                             Guid.Parse(noteCreated.NoteTypeId),

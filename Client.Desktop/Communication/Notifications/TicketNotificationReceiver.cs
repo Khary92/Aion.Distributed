@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using Client.Desktop.Communication.Notifications.NotificationWrappers;
-using Client.Desktop.DTO;
+using Client.Desktop.DataModels;
 using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using Grpc.Core;
@@ -41,7 +41,7 @@ public class TicketNotificationReceiver(
 
                         Dispatcher.UIThread.Post(() =>
                         {
-                            messenger.Send(new NewTicketMessage(new TicketDto(
+                            messenger.Send(new NewTicketMessage(new TicketClientModel(
                                 Guid.Parse(created.TicketId),
                                 created.Name,
                                 created.BookingNumber,

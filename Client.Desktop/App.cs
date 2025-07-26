@@ -39,7 +39,7 @@ public static class App
 
     private static AppBuilder BuildAvaloniaApp(IServiceProvider serviceProvider)
     {
-        return AppBuilder.Configure(() => new Views.Main.App(serviceProvider))
+        return AppBuilder.Configure(() => new Presentation.Views.Main.App(serviceProvider))
             .UsePlatformDetect()
             .WithInterFont()
             .LogToTrace()

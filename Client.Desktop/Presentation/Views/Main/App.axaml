@@ -1,0 +1,41 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:converter="clr-namespace:Client.Desktop.Presentation.Converter"
+             x:Class="Client.Desktop.Presentation.Views.Main.App"
+             RequestedThemeVariant="Dark">
+
+    <Application.Styles>
+        <StyleInclude Source="avares://Avalonia.Themes.Fluent/FluentTheme.xaml" />
+        <StyleInclude Source="avares://Avalonia.Controls.DataGrid/Themes/Fluent.xaml" />
+        <StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
+        <StyleInclude Source="avares://Client.Desktop/Presentation/Themes/CustomDarkTheme.axaml" />
+    </Application.Styles>
+
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="avares://Client.Desktop/Presentation/Themes/CustomResources.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <converter:DateTimeOffsetConverter x:Key="DateTimeOffsetConverter" />
+            <converter:TimeSpanToDateTimeOffsetConverter x:Key="TimeSpanConverter" />
+            <converter:NullToBoolConverter x:Key="NullToBoolConverter" />
+            <converter:HexColorToAvaloniaColorConverter x:Key="HexColorToAvaloniaColorConverter" />
+
+        </ResourceDictionary>
+    </Application.Resources>
+
+    <TrayIcon.Icons>
+        <TrayIcons>
+            <TrayIcon Icon="avares://Client.Desktop/Presentation/Assets/app-icon.ico"
+                      ToolTipText="I am a tooltip. Cool, eh?">
+                <TrayIcon.Menu>
+                    <NativeMenu>
+                        <NativeMenuItem Header="Show" Click="TrayIconMaximize_OnClick" />
+                        <NativeMenuItem Header="Close" Click="TrayIconClose_OnClick" />
+                    </NativeMenu>
+                </TrayIcon.Menu>
+            </TrayIcon>
+        </TrayIcons>
+    </TrayIcon.Icons>
+</Application>

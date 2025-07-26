@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Client.Desktop.DTO;
+using Client.Desktop.DataModels;
 using Proto.Requests.NoteTypes;
 using Proto.Requests.Sprints;
 using Proto.Requests.Tags;
@@ -12,25 +12,21 @@ namespace Client.Desktop.Communication.Requests;
 public interface ISharedRequestSender
 {
     //Ticket
-    Task<List<TicketDto>> Send(GetAllTicketsRequestProto request);
-    Task<List<TicketDto>> Send(GetTicketsForCurrentSprintRequestProto request);
-    Task<List<TicketDto>> Send(GetTicketsWithShowAllSwitchRequestProto request);
-    Task<TicketDto> Send(GetTicketByIdRequestProto request);
+    Task<List<TicketClientModel>> Send(GetAllTicketsRequestProto request);
+    Task<List<TicketClientModel>> Send(GetTicketsForCurrentSprintRequestProto request);
+    Task<List<TicketClientModel>> Send(GetTicketsWithShowAllSwitchRequestProto request);
+    Task<TicketClientModel> Send(GetTicketByIdRequestProto request);
 
     //Sprint
-    Task<SprintDto?> Send(GetActiveSprintRequestProto request);
-    Task<List<SprintDto?>> Send(GetAllSprintsRequestProto request);
+    Task<SprintClientModel?> Send(GetActiveSprintRequestProto request);
+    Task<List<SprintClientModel?>> Send(GetAllSprintsRequestProto request);
 
     //Tags
-    Task<List<TagDto>> Send(GetAllTagsRequestProto request);
-    Task<TagDto> Send(GetTagByIdRequestProto request);
-    Task<List<TagDto>> Send(GetTagsByIdsRequestProto request);
+    Task<List<TagClientModel>> Send(GetAllTagsRequestProto request);
+    Task<TagClientModel> Send(GetTagByIdRequestProto request);
+    Task<List<TagClientModel>> Send(GetTagsByIdsRequestProto request);
 
     //NoteTypes
-    Task<List<NoteTypeDto>> Send(GetAllNoteTypesRequestProto request);
-    Task<NoteTypeDto> Send(GetNoteTypeByIdRequestProto request);
-
-    //TimerSettings
-    Task<TimerSettingsDto> Send(GetTimerSettingsRequestProto request);
-    Task<bool> Send(IsTimerSettingExistingRequestProto request);
+    Task<List<NoteTypeClientModel>> Send(GetAllNoteTypesRequestProto request);
+    Task<NoteTypeClientModel> Send(GetNoteTypeByIdRequestProto request);
 }

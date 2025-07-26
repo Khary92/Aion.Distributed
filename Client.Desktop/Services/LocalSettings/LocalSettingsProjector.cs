@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using Client.Desktop.DTO.Local;
+using Client.Desktop.DataModels.Local;
 using Client.Desktop.FileSystem;
 using Client.Desktop.Services.Initializer;
 using Client.Desktop.Services.LocalSettings.Commands;
@@ -17,13 +17,13 @@ public class LocalSettingsProjector(
 {
     private const string SettingsFileName = "settings.json";
 
-    private SettingsDto? ProjectionReferenceInstance { get; set; }
+    private SettingsClientModel? ProjectionReferenceInstance { get; set; }
 
     public InitializationType Type => InitializationType.Service;
 
     public async Task InitializeAsync()
     {
-        messenger.Register<SettingsDto>(this, async void (_, m) =>
+        messenger.Register<SettingsClientModel>(this, async void (_, m) =>
         {
             ProjectionReferenceInstance = m;
             await SaveSettings();
@@ -59,8 +59,8 @@ public class LocalSettingsProjector(
     private async Task PrepareProjection()
     {
         var settings = fileSystemWrapper.IsFileExisting(SettingsFileName)
-            ? (await fileSystemReader.GetObject<SettingsJto>(SettingsFileName)).ToDto()
-            : new SettingsDto("not set");
+            ? (await fileSystemReader.GetObject<SettingsDto>(SettingsFileName)).ToClientModel()
+            : new SettingsClientModel("not set");
 
         messenger.Send(settings);
     }
@@ -69,7 +69,7 @@ public class LocalSettingsProjector(
     {
         if (ProjectionReferenceInstance == null) throw new NullReferenceException();
 
-        var jsonString = JsonConvert.SerializeObject(ProjectionReferenceInstance.ToJto());
+        var jsonString = JsonConvert.SerializeObject(ProjectionReferenceInstance.ToDto());
         await fileSystemWriter.Write(jsonString, SettingsFileName);
     }
 }

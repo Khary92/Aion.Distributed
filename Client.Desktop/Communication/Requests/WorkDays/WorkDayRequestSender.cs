@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Client.Desktop.DTO;
+using Client.Desktop.DataModels;
 using Client.Proto;
 using Grpc.Net.Client;
 using Proto.DTO.TimerSettings;
@@ -15,19 +15,19 @@ public class WorkDayRequestSender : IWorkDayRequestSender
     private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly WorkDayRequestService.WorkDayRequestServiceClient _client = new(Channel);
 
-    public async Task<List<WorkDayDto>> Send(GetAllWorkDaysRequestProto request)
+    public async Task<List<WorkDayClientModel>> Send(GetAllWorkDaysRequestProto request)
     {
         var response = await _client.GetAllWorkDaysAsync(request);
         return response.WorkDays.Select(ToDto).ToList();
     }
 
-    public async Task<WorkDayDto> Send(GetSelectedWorkDayRequestProto request)
+    public async Task<WorkDayClientModel> Send(GetSelectedWorkDayRequestProto request)
     {
         var response = await _client.GetSelectedWorkDayAsync(request);
         return ToDto(response);
     }
 
-    public async Task<WorkDayDto> Send(GetWorkDayByDateRequestProto request)
+    public async Task<WorkDayClientModel> Send(GetWorkDayByDateRequestProto request)
     {
         var response = await _client.GetWorkDayByDateAsync(request);
         return ToDto(response);
@@ -39,8 +39,8 @@ public class WorkDayRequestSender : IWorkDayRequestSender
         return response.Exists;
     }
 
-    private static WorkDayDto ToDto(WorkDayProto proto)
+    private static WorkDayClientModel ToDto(WorkDayProto proto)
     {
-        return new WorkDayDto(Guid.Parse(proto.WorkDayId), proto.Date.ToDateTimeOffset());
+        return new WorkDayClientModel(Guid.Parse(proto.WorkDayId), proto.Date.ToDateTimeOffset());
     }
 }

@@ -1,0 +1,27 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:settings1="clr-namespace:Client.Desktop.Presentation.Models.Settings"
+             xmlns:setting="clr-namespace:Client.Desktop.Presentation.Views.Setting"
+             x:DataType="settings1:SettingsCompositeViewModel"
+             x:Class="Client.Desktop.Presentation.Views.Setting.SettingsCompositeControl"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450">
+
+    <TabControl>
+        <TabItem Header="Settings">
+            <StackPanel Margin="10">
+                <StackPanel>
+                    <TextBlock Text="General settings"
+                               FontWeight="Bold" FontSize="16" Margin="10" HorizontalAlignment="Center" />
+                    <setting:SettingsControl DataContext="{Binding SettingsViewModel}" />
+                </StackPanel>
+                <StackPanel>
+                    <TextBlock Text="Work days"
+                               FontWeight="Bold" FontSize="16" Margin="10" HorizontalAlignment="Center" />
+                    <setting:WorkDaysControl DataContext="{Binding WorkDaysViewModel}" />
+                </StackPanel>
+            </StackPanel>
+        </TabItem>
+    </TabControl>
+</UserControl>

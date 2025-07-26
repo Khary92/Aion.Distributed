@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using Client.Desktop.Communication.Notifications.NotificationWrappers;
-using Client.Desktop.DTO;
+using Client.Desktop.DataModels;
 using CommunityToolkit.Mvvm.Messaging;
 using Grpc.Core;
 using Proto.Notifications.NoteType;
@@ -36,7 +36,7 @@ public class NoteTypeNotificationReceiver(
 
                         Dispatcher.UIThread.Post(() =>
                         {
-                            messenger.Send(new NewNoteTypeMessage(new NoteTypeDto(
+                            messenger.Send(new NewNoteTypeMessage(new NoteTypeClientModel(
                                 Guid.Parse(created.NoteTypeId),
                                 created.Name,
                                 created.Color

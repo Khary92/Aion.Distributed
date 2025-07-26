@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Client.Desktop.Decorators;
+using Client.Desktop.DataModels.Decorators;
 using Proto.Requests.AnalysisData;
 
 namespace Client.Desktop.Communication.Requests.Analysis;

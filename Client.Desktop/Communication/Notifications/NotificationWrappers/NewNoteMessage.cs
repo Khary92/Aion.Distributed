@@ -1,5 +1,5 @@
-using Client.Desktop.DTO;
+using Client.Desktop.DataModels;
 
 namespace Client.Desktop.Communication.Notifications.NotificationWrappers;
 
-public record NewNoteMessage(NoteDto Note);
+public record NewNoteMessage(NoteClientModel Note);

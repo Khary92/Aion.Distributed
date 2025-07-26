@@ -9,7 +9,6 @@ public class NotificationReceiverStarter(
     SprintNotificationReceiver sprintNotificationReceiver,
     TagNotificationReceiver tagNotificationReceiver,
     TicketNotificationReceiver ticketNotificationReceiver,
-    TimerSettingsNotificationReceiver timerSettingsNotificationReceiver,
     UseCaseNotificationReceiver useCaseNotificationReceiver,
     WorkDayNotificationReceiver workDayNotificationReceiver) : INotificationReceiverStarter
 {
@@ -22,7 +21,6 @@ public class NotificationReceiverStarter(
             sprintNotificationReceiver.StartListeningAsync(CancellationToken.None),
             tagNotificationReceiver.StartListeningAsync(CancellationToken.None),
             ticketNotificationReceiver.StartListeningAsync(CancellationToken.None),
-            timerSettingsNotificationReceiver.StartListeningAsync(CancellationToken.None),
             useCaseNotificationReceiver.StartListeningAsync(CancellationToken.None),
             workDayNotificationReceiver.StartListeningAsync(CancellationToken.None)
         };

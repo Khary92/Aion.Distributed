@@ -1,0 +1,34 @@
+using Client.Desktop.DataModels.Local;
+using Client.Desktop.Services.Initializer;
+using Client.Desktop.Services.LocalSettings;
+using Client.Desktop.Services.LocalSettings.Commands;
+using CommunityToolkit.Mvvm.Messaging;
+using ReactiveUI;
+
+namespace Client.Desktop.Presentation.Models.Settings;
+
+public class SettingsModel(IMessenger messenger, ILocalSettingsCommandSender localSettingsCommandService)
+    : ReactiveObject, IRegisterMessenger
+{
+    private SettingsClientModel? _settingsDto;
+
+    public SettingsClientModel? Settings
+    {
+        get => _settingsDto;
+        private set => this.RaiseAndSetIfChanged(ref _settingsDto, value);
+    }
+
+    public void RegisterMessenger()
+    {
+        messenger.Register<ExportPathSetNotification>(this,
+            async void (_, m) => { Settings!.ExportPath = m.ExportPath; });
+
+        messenger.Register<SettingsClientModel>(this, async void (_, m) => { Settings = m; });
+    }
+
+    public void SetExportPath()
+    {
+        localSettingsCommandService.Send(new SetExportPathCommand(Settings!.ExportPath));
+        ;
+    }
+}

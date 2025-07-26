@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using Client.Desktop.Communication.Notifications.NotificationWrappers;
-using Client.Desktop.DTO;
+using Client.Desktop.DataModels;
 using CommunityToolkit.Mvvm.Messaging;
 using Grpc.Core;
 using Proto.Notifications.Sprint;
@@ -41,7 +41,7 @@ public class SprintNotificationReceiver(
                         Dispatcher.UIThread.Post(() =>
                         {
                             messenger.Send(
-                                new NewSprintMessage(new SprintDto(Guid.Parse(created.SprintId),
+                                new NewSprintMessage(new SprintClientModel(Guid.Parse(created.SprintId),
                                     created.Name, created.IsActive, created.StartTime.ToDateTimeOffset(),
                                     created.EndTime.ToDateTimeOffset(), ticketGuids)));
                         });

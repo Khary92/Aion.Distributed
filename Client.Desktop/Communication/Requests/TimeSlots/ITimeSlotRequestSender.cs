@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Client.Desktop.DTO;
+using Client.Desktop.DataModels;
 using Proto.Requests.TimeSlots;
 
 namespace Client.Desktop.Communication.Requests.TimeSlots;
 
 public interface ITimeSlotRequestSender
 {
-    Task<TimeSlotDto> Send(GetTimeSlotByIdRequestProto request);
-    Task<List<TimeSlotDto>> Send(GetTimeSlotsForWorkDayIdRequestProto request);
+    Task<TimeSlotClientModel> Send(GetTimeSlotByIdRequestProto request);
+    Task<List<TimeSlotClientModel>> Send(GetTimeSlotsForWorkDayIdRequestProto request);
 }

@@ -1,5 +1,5 @@
-using Client.Desktop.DTO;
+using Client.Desktop.DataModels;
 
 namespace Client.Desktop.Communication.Notifications.NotificationWrappers;
 
-public record NewTicketMessage(TicketDto Ticket);
+public record NewTicketMessage(TicketClientModel Ticket);

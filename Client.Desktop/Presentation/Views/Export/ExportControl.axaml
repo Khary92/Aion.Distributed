@@ -1,0 +1,64 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:mdxaml="https://github.com/whistyun/Markdown.Avalonia.Tight"
+             xmlns:export="clr-namespace:Client.Desktop.Presentation.Models.Export"
+             x:DataType="export:ExportViewModel"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Client.Desktop.Presentation.Views.Export.ExportControl"
+             HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+
+    <Grid ColumnDefinitions="Auto,*" RowDefinitions="*">
+
+        <Border Grid.Column="0" Margin="10"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid RowDefinitions="Auto,*" Margin="10,0,10,0">
+                <TextBlock Grid.Row="0" Text="Select dates"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,10" />
+
+                <ListBox Grid.Row="1" Name="ListBoxItems"
+                         ItemsSource="{Binding Model.WorkDays}"
+                         SelectedItems="{Binding Model.SelectedWorkDays, Mode=TwoWay}"
+                         SelectionMode="Multiple"
+                         Width="200"
+                         VerticalAlignment="Stretch">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Date, StringFormat=yyyy-MM-dd}" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </Border>
+
+        <Border Grid.Column="1" Margin="10"
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Grid RowDefinitions="Auto,*,Auto" Margin="10,0,10,0">
+                <TextBlock Grid.Row="0"
+                           Text="Markdown Preview"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,10" />
+
+                <ScrollViewer Grid.Row="1"
+                              Margin="{StaticResource GeneralControlMargin}"
+                              HorizontalScrollBarVisibility="Auto"
+                              VerticalScrollBarVisibility="Auto"
+                              VerticalAlignment="Stretch"
+                              HorizontalAlignment="Stretch">
+                    <mdxaml:MarkdownScrollViewer Markdown="{Binding Model.MarkdownText}"
+                                                 VerticalAlignment="Stretch"
+                                                 HorizontalAlignment="Stretch" />
+                </ScrollViewer>
+
+                <Button Grid.Row="2" Content="Export"
+                        HorizontalAlignment="Right"
+                        Margin="0,10,10,10"
+                        Command="{Binding ExportCommand}" />
+            </Grid>
+        </Border>
+
+    </Grid>
+
+</UserControl>

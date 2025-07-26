@@ -1,5 +1,5 @@
-using Client.Desktop.DTO;
+using Client.Desktop.DataModels;
 
 namespace Client.Desktop.Communication.Notifications.NotificationWrappers;
 
-public record NewSprintMessage(SprintDto Sprint);
+public record NewSprintMessage(SprintClientModel Sprint);

@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using Client.Desktop.Communication.Notifications.NotificationWrappers;
-using Client.Desktop.DTO;
+using Client.Desktop.DataModels;
 using CommunityToolkit.Mvvm.Messaging;
 using Grpc.Core;
 using Proto.Notifications.Tag;
@@ -30,7 +30,7 @@ public class TagNotificationReceiver(
 
                         Dispatcher.UIThread.Post(() =>
                         {
-                            messenger.Send(new NewTagMessage(new TagDto(Guid.Parse(created.TagId), created.Name,
+                            messenger.Send(new NewTagMessage(new TagClientModel(Guid.Parse(created.TagId), created.Name,
                                 false)));
                         });
                         break;

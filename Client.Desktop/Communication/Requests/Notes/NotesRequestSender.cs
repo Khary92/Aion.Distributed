@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Client.Desktop.DTO;
+using Client.Desktop.DataModels;
 using Client.Proto;
 using Grpc.Net.Client;
 using Proto.Requests.Notes;
@@ -14,19 +14,19 @@ public class NotesRequestSender : INotesRequestSender
     private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly NotesRequestService.NotesRequestServiceClient _client = new(Channel);
 
-    public async Task<List<NoteDto>> Send(GetNotesByTicketIdRequestProto request)
+    public async Task<List<NoteClientModel>> Send(GetNotesByTicketIdRequestProto request)
     {
         var response = await _client.GetNotesByTicketIdAsync(request);
 
-        return response.Notes.Select(note => new NoteDto(Guid.Parse(note.NoteId), note.Text,
+        return response.Notes.Select(note => new NoteClientModel(Guid.Parse(note.NoteId), note.Text,
             Guid.Parse(note.NoteTypeId), Guid.Parse(note.TimeSlotId), note.TimeStamp.ToDateTimeOffset())).ToList();
     }
 
-    public async Task<List<NoteDto>> Send(GetNotesByTimeSlotIdRequestProto request)
+    public async Task<List<NoteClientModel>> Send(GetNotesByTimeSlotIdRequestProto request)
     {
         var response = await _client.GetNotesByTimeSlotIdAsync(request);
 
-        return response.Notes.Select(note => new NoteDto(Guid.Parse(note.NoteId), note.Text,
+        return response.Notes.Select(note => new NoteClientModel(Guid.Parse(note.NoteId), note.Text,
             Guid.Parse(note.NoteTypeId), Guid.Parse(note.TimeSlotId), note.TimeStamp.ToDateTimeOffset())).ToList();
     }
 }

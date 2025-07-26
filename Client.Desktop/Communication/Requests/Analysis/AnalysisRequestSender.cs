@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Client.Desktop.Decorators;
-using Client.Desktop.Decorators.Entities;
-using Client.Desktop.DTO;
+using Client.Desktop.DataModels;
+using Client.Desktop.DataModels.Decorators;
+using Client.Desktop.DataModels.Decorators.Entities;
 using Client.Proto;
 using Google.Protobuf.Collections;
 using Grpc.Net.Client;
@@ -66,25 +66,25 @@ public class AnalysisRequestSender(ITagRequestSender requestSender) : IAnalysisR
         return new AnalysisByTagDecorator(analysisByTag);
     }
 
-    private static List<TimeSlotDto> GetTimeSlots(RepeatedField<TimeSlotProto> timeSlotProtos)
+    private static List<TimeSlotClientModel> GetTimeSlots(RepeatedField<TimeSlotProto> timeSlotProtos)
     {
-        return timeSlotProtos.Select(timeSlot => new TimeSlotDto(Guid.Parse(timeSlot.TimeSlotId),
+        return timeSlotProtos.Select(timeSlot => new TimeSlotClientModel(Guid.Parse(timeSlot.TimeSlotId),
             Guid.Parse(timeSlot.WorkDayId), Guid.Parse(timeSlot.SelectedTicketId),
             timeSlot.StartTime.ToDateTimeOffset(), timeSlot.EndTime.ToDateTimeOffset(),
             GetParsedGuids(timeSlot.NoteIds), timeSlot.IsTimerRunning)).ToList();
     }
 
-    private static List<StatisticsDataDto> GetStatisticsData(RepeatedField<StatisticsDataProto> statisticsDataProtos)
+    private static List<StatisticsDataClientModel> GetStatisticsData(RepeatedField<StatisticsDataProto> statisticsDataProtos)
     {
-        return statisticsDataProtos.Select(statisticsDataProto => new StatisticsDataDto(
+        return statisticsDataProtos.Select(statisticsDataProto => new StatisticsDataClientModel(
             Guid.Parse(statisticsDataProto.StatisticsId), Guid.Parse(statisticsDataProto.TimeSlotId),
             GetParsedGuids(statisticsDataProto.TagIds), statisticsDataProto.IsProductive, statisticsDataProto.IsNeutral,
             statisticsDataProto.IsUnproductive)).ToList();
     }
 
-    private static List<TicketDto> GetTickets(RepeatedField<TicketProto> ticketProtos)
+    private static List<TicketClientModel> GetTickets(RepeatedField<TicketProto> ticketProtos)
     {
-        return ticketProtos.Select(ticketProto => new TicketDto(Guid.Parse(ticketProto.TicketId), ticketProto.Name,
+        return ticketProtos.Select(ticketProto => new TicketClientModel(Guid.Parse(ticketProto.TicketId), ticketProto.Name,
             ticketProto.BookingNumber, ticketProto.Documentation, GetParsedGuids(ticketProto.SprintIds))).ToList();
     }
 

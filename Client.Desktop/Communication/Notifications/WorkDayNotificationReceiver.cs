@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using Client.Desktop.Communication.Notifications.NotificationWrappers;
-using Client.Desktop.DTO;
+using Client.Desktop.DataModels;
 using CommunityToolkit.Mvvm.Messaging;
 using Grpc.Core;
 using Proto.Notifications.WorkDay;
@@ -25,7 +25,7 @@ public class WorkDayNotificationReceiver(
                 case WorkDayNotification.NotificationOneofCase.WorkDayCreated:
                     Dispatcher.UIThread.Post(() =>
                     {
-                        messenger.Send(new NewWorkDayMessage(new WorkDayDto(
+                        messenger.Send(new NewWorkDayMessage(new WorkDayClientModel(
                             Guid.Parse(notification.WorkDayCreated.WorkDayId),
                             notification.WorkDayCreated.Date.ToDateTimeOffset())));
                     });

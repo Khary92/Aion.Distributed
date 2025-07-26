@@ -6,8 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests;
-using Client.Desktop.DTO;
-using Client.Desktop.DTO.Local;
+using Client.Desktop.DataModels;
+using Client.Desktop.DataModels.Local;
 using Client.Desktop.FileSystem;
 using Client.Desktop.Services.Initializer;
 using Client.Desktop.Services.LocalSettings.Commands;
@@ -23,9 +23,9 @@ public class ExportService(
     IMessenger messenger)
     : IExportService, IRegisterMessenger
 {
-    private SettingsDto? LocalSettings { get; set; }
+    private SettingsClientModel? LocalSettings { get; set; }
 
-    public async Task<bool> ExportToFile(Collection<WorkDayDto> workDayDtos)
+    public async Task<bool> ExportToFile(Collection<WorkDayClientModel> workDayDtos)
     {
         if (workDayDtos.Count == 0) return false;
 
@@ -44,7 +44,7 @@ public class ExportService(
         return true;
     }
 
-    public async Task<string> GetMarkdownString(Collection<WorkDayDto> workDayDtos)
+    public async Task<string> GetMarkdownString(Collection<WorkDayClientModel> workDayDtos)
     {
         var exportDataHolders = await GetDataForSelectedWorkDays(workDayDtos);
         var builder = new StringBuilder();
@@ -67,7 +67,7 @@ public class ExportService(
     {
         messenger.Register<ExportPathSetNotification>(this, (_, m) => { LocalSettings!.ExportPath = m.ExportPath; });
 
-        messenger.Register<SettingsDto>(this, (_, m) => { LocalSettings = m; });
+        messenger.Register<SettingsClientModel>(this, (_, m) => { LocalSettings = m; });
     }
 
     private static string BuildFilePath(DateTime date, string exportPath)
@@ -76,7 +76,7 @@ public class ExportService(
     }
 
     private async Task<Dictionary<DateTimeOffset, List<TicketDataHolder>>> GetDataForSelectedWorkDays(
-        Collection<WorkDayDto> workDayDtos)
+        Collection<WorkDayClientModel> workDayDtos)
     {
         var result = new Dictionary<DateTimeOffset, List<TicketDataHolder>>();
 
@@ -85,7 +85,7 @@ public class ExportService(
         return result;
     }
 
-    private async Task FillDictionaryForWorkday(WorkDayDto workDay,
+    private async Task FillDictionaryForWorkday(WorkDayClientModel workDay,
         Dictionary<DateTimeOffset, List<TicketDataHolder>> result)
     {
         var timeSlots = await requestSender.Send(new GetTimeSlotsForWorkDayIdRequestProto

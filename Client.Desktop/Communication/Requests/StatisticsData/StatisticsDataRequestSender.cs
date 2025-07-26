@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Client.Desktop.DTO;
+using Client.Desktop.DataModels;
 using Client.Proto;
 using Grpc.Net.Client;
 using Proto.Requests.StatisticsData;
@@ -13,7 +13,7 @@ public class StatisticsDataRequestSender : IStatisticsDataRequestSender
     private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly StatisticsDataRequestService.StatisticsDataRequestServiceClient _client = new(Channel);
 
-    public async Task<StatisticsDataDto> Send(GetStatisticsDataByTimeSlotIdRequestProto request)
+    public async Task<StatisticsDataClientModel> Send(GetStatisticsDataByTimeSlotIdRequestProto request)
     {
         var response = await _client.GetStatisticsDataByTimeSlotIdAsync(request);
 
@@ -22,7 +22,7 @@ public class StatisticsDataRequestSender : IStatisticsDataRequestSender
             .Where(guid => guid != Guid.Empty)
             .ToList();
 
-        return new StatisticsDataDto(Guid.Parse(response.StatisticsId), Guid.Parse(response.TimeSlotId), tagIds,
+        return new StatisticsDataClientModel(Guid.Parse(response.StatisticsId), Guid.Parse(response.TimeSlotId), tagIds,
             response.IsProductive, response.IsNeutral, response.IsUnproductive);
     }
 }

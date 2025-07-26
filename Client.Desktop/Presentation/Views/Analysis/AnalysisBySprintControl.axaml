@@ -1,0 +1,76 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:avalonia="clr-namespace:LiveChartsCore.SkiaSharpView.Avalonia;assembly=LiveChartsCore.SkiaSharpView.Avalonia"
+             xmlns:mdxaml="https://github.com/whistyun/Markdown.Avalonia"
+             xmlns:analysis="clr-namespace:Client.Desktop.Presentation.Models.Analysis"
+             mc:Ignorable="d"
+             d:DesignWidth="800"
+             d:DesignHeight="450"
+             x:Class="Client.Desktop.Presentation.Views.Analysis.AnalysisBySprintControl"
+             x:DataType="analysis:AnalysisBySprintViewModel">
+
+    <Grid ColumnDefinitions="200,*"
+          RowDefinitions="*">
+
+        <Border Grid.Row="0" Grid.Column="0" Margin="0,0,5,5">
+            <Grid RowDefinitions="Auto,*">
+                <TextBlock Grid.Row="0"
+                           Text="Select a sprint"
+                           HorizontalAlignment="Center" />
+
+                <ListBox Grid.Row="1"
+                         Margin="10,0,10,0"
+                         Name="ListBoxItems"
+                         ItemsSource="{Binding Model.Sprints}"
+                         SelectedItem="{Binding SelectedSprint, Mode=TwoWay}"
+                         SelectionMode="Single"
+                         VerticalAlignment="Stretch">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}"
+                                       VerticalAlignment="Center" />
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="0" Grid.Column="1" Margin="5,0,0,5">
+            <Grid ColumnDefinitions="*,*"
+                  RowDefinitions="Auto,*"
+                  Margin="0,0,10,0"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch">
+
+                <mdxaml:MarkdownScrollViewer Grid.Row="0"
+                                             Grid.Column="0"
+                                             Grid.ColumnSpan="2"
+                                             HorizontalAlignment="Stretch"
+                                             VerticalAlignment="Stretch"
+                                             Markdown="{Binding DisplayText, Mode=TwoWay}" />
+
+                <Grid Grid.Row="1"
+                      Grid.Column="0"
+                      Grid.ColumnSpan="2"
+                      ColumnDefinitions="*,*">
+                    <avalonia:PieChart Grid.Column="0"
+                                       Background="Transparent"
+                                       HorizontalAlignment="Stretch"
+                                       VerticalAlignment="Stretch"
+                                       Series="{Binding TimeSpentByTicketPieChart, Mode=OneWay}" />
+
+                    <avalonia:PieChart Grid.Column="1"
+                                       Background="Transparent"
+                                       HorizontalAlignment="Stretch"
+                                       VerticalAlignment="Stretch"
+                                       Series="{Binding ProductivityByTimeSpentPieChart, Mode=OneWay}" />
+                </Grid>
+
+            </Grid>
+        </Border>
+
+    </Grid>
+
+</UserControl>
