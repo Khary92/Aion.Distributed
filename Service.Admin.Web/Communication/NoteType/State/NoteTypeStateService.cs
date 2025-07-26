@@ -1,10 +1,11 @@
 ﻿using Proto.Requests.NoteTypes;
 using Service.Admin.Web.Communication.NoteType.Notifications;
 using Service.Admin.Web.DTO;
+using Service.Admin.Web.Services;
 
 namespace Service.Admin.Web.Communication.NoteType.State;
 
-public class NoteTypeStateService(ISharedRequestSender requestSender) : INoteTypeStateService
+public class NoteTypeStateService(ISharedRequestSender requestSender) : INoteTypeStateService, IInitializeAsync
 {
     private List<NoteTypeDto> _noteTypes = new();
     public IReadOnlyList<NoteTypeDto> NoteTypes => _noteTypes.AsReadOnly();
@@ -37,14 +38,15 @@ public class NoteTypeStateService(ISharedRequestSender requestSender) : INoteTyp
         NotifyStateChanged();
     }
 
-    public async Task LoadNoteTypes()
-    {
-        var getAllNoteTypesResponseProto = await requestSender.Send(new GetAllNoteTypesRequestProto());
-        _noteTypes = getAllNoteTypesResponseProto.ToDtoList();
-    }
-
     private void NotifyStateChanged()
     {
         OnStateChanged?.Invoke();
+    }
+
+    public InitializationType Type => InitializationType.StateService;
+    public async Task InitializeComponents()
+    {
+        var noteTypeList = await requestSender.Send(new GetAllNoteTypesRequestProto());
+        _noteTypes = noteTypeList.ToDtoList();
     }
 }

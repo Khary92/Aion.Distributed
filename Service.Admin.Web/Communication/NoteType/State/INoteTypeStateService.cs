@@ -10,5 +10,4 @@ public interface INoteTypeStateService
     Task AddNoteType(NoteTypeDto noteType);
     void Apply(WebNoteTypeColorChangedNotification notification);
     void Apply(WebNoteTypeNameChangedNotification notification);
-    Task LoadNoteTypes();
 }

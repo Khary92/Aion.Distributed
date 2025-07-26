@@ -63,7 +63,8 @@ public static class AdminServiceExtension
         services.AddHostedService<TimerSettingsNotificationHostedService>();
 
         AddSharedDataServices(services);
-
+        AddControllers(services);
+        
         services.AddSingleton<ReportReceiver>();
         services.AddSingleton<IReportReceiver>(sp => sp.GetRequiredService<ReportReceiver>());
 
@@ -71,6 +72,11 @@ public static class AdminServiceExtension
         services.AddSingleton<ISharedRequestSender, SharedRequestSender>();
     }
 
+    private static void AddControllers(this IServiceCollection services)
+    {
+        services.AddSingleton<INoteTypeController, NoteTypeController>();
+    }
+    
     private static void AddSharedDataServices(this IServiceCollection services)
     {
         services.AddSingleton<ITicketCommandSender>(sp => new TicketCommandSender(ServerAddress));
