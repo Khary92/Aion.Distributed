@@ -5,22 +5,25 @@
 @inject ITimerSettingsStateService TimerSettingsStateService
 @inject ITimerSettingsController TimerSettingsController
 
-<h3>Timer Settings</h3>
+<div class="full-page">
+    <div class="sub-component">
+        <h3>Timer Settings</h3>
+        <div class="mb-3">
+            <label for="documentationInterval" class="form-label">Documentation Save Interval</label>
+            <input type="number" min="1" id="documentationInterval" class="form-control"
+                   @bind="@TimerSettingsStateService.TimerSettings.DocumentationSaveInterval"/>
+        </div>
 
-<div class="mb-3">
-    <label for="documentationInterval" class="form-label">Documentation Save Interval</label>
-    <input type="number" min="1" id="documentationInterval" class="form-control"
-           @bind="@TimerSettingsStateService.TimerSettings.DocumentationSaveInterval"/>
+        <div class="mb-3">
+            <label for="snapshotInterval" class="form-label">Snapshot Save Interval</label>
+            <input type="number" min="1" id="snapshotInterval" class="form-control"
+                   @bind="@TimerSettingsStateService.TimerSettings.SnapshotSaveInterval"/>
+        </div>
+
+        <button class="btn btn-primary" @onclick="@(async () => await TimerSettingsController.SaveSettingsAsync())">Save
+        </button>
+    </div>
 </div>
-
-<div class="mb-3">
-    <label for="snapshotInterval" class="form-label">Snapshot Save Interval</label>
-    <input type="number" min="1" id="snapshotInterval" class="form-control"
-           @bind="@TimerSettingsStateService.TimerSettings.SnapshotSaveInterval"/>
-</div>
-
-<button class="btn btn-primary" @onclick="@(async () => await TimerSettingsController.SaveSettingsAsync())">Save
-</button>
 
 @code {
 

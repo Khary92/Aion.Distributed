@@ -8,60 +8,60 @@
 
 <PageTitle>Tracing Results</PageTitle>
 
-<div class="container">
-    <h1>Use Cases</h1>
+<div class="full-page">
+    <div class="sub-component">
+        <ErrorBoundary>
+            <ChildContent>
+                @if (_isLoading || !ReportState.Reports.Any())
+                {
+                    <LoadingSpinner/>
+                }
+                else
+                {
+                    <div class="mb-3">
+                        <label for="reportSelect" class="form-label">Report auswählen:</label>
+                        <select id="reportSelect" class="form-select" @bind="_selectedReportId">
+                            <option value="">Alle Reports</option>
+                            @foreach (var report in ReportState.Reports)
+                            {
+                                <option value="@report.ReportId">@report.TimeStamp - @report.State</option>
+                            }
+                        </select>
+                    </div>
 
-    <ErrorBoundary>
-        <ChildContent>
-            @if (_isLoading || !ReportState.Reports.Any())
-            {
-                <LoadingSpinner/>
-            }
-            else
-            {
-                <div class="mb-3">
-                    <label for="reportSelect" class="form-label">Report auswählen:</label>
-                    <select id="reportSelect" class="form-select" @bind="_selectedReportId">
-                        <option value="">Alle Reports</option>
-                        @foreach (var report in ReportState.Reports)
-                        {
-                            <option value="@report.ReportId">@report.TimeStamp - @report.State</option>
-                        }
-                    </select>
+                    <ReportTable Items="@ReportState.Reports" T="ReportRecord">
+                        <HeaderTemplate>
+                            <th>Datum</th>
+                            <th>Status</th>
+                        </HeaderTemplate>
+                        <RowTemplate>
+                            <td>@context.TimeStamp</td>
+                            <td>@context.State</td>
+                        </RowTemplate>
+                    </ReportTable>
+
+                    <h2>Traces</h2>
+                    <ReportTable Items="@GetFilteredTraces()" T="TraceInfo">
+                        <HeaderTemplate>
+                            <th>Zeitstempel</th>
+                            <th>Ergebnis</th>
+                            <th>Log Info</th>
+                        </HeaderTemplate>
+                        <RowTemplate>
+                            <td>@context.TimeStamp</td>
+                            <td>@context.Result</td>
+                            <td>@context.LogInfo</td>
+                        </RowTemplate>
+                    </ReportTable>
+                }
+            </ChildContent>
+            <ErrorContent Context="ex">
+                <div class="alert alert-danger">
+                    @ex.Message
                 </div>
-
-                <ReportTable Items="@ReportState.Reports" T="ReportRecord">
-                    <HeaderTemplate>
-                        <th>Datum</th>
-                        <th>Status</th>
-                    </HeaderTemplate>
-                    <RowTemplate>
-                        <td>@context.TimeStamp</td>
-                        <td>@context.State</td>
-                    </RowTemplate>
-                </ReportTable>
-
-                <h2>Traces</h2>
-                <ReportTable Items="@GetFilteredTraces()" T="TraceInfo">
-                    <HeaderTemplate>
-                        <th>Zeitstempel</th>
-                        <th>Ergebnis</th>
-                        <th>Log Info</th>
-                    </HeaderTemplate>
-                    <RowTemplate>
-                        <td>@context.TimeStamp</td>
-                        <td>@context.Result</td>
-                        <td>@context.LogInfo</td>
-                    </RowTemplate>
-                </ReportTable>
-            }
-        </ChildContent>
-        <ErrorContent Context="ex">
-            <div class="alert alert-danger">
-                @ex.Message
-            </div>
-        </ErrorContent>
-    </ErrorBoundary>
+            </ErrorContent>
+        </ErrorBoundary>
+    </div>
 </div>
 
 @code {
