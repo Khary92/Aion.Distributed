@@ -107,14 +107,15 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--foreground-color);
     font-size: var(--font-size-normal);
     margin: var(--general-control-margin);
+    border: 1px solid var(--border-color);
 }
 
 .custom-table thead th {
     background-color: var(--background-color);
     padding: 12px;
-    text-align: left;
     font-family: var(--font-family-bold);
     border-bottom: var(--border-thickness) solid var(--border-color);
+    text-align: center;
 }
 
 .custom-table tbody tr {
@@ -127,6 +128,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .custom-table td {
     padding: 12px;
+    border: 1px solid var(--border-color);
 }
 
 .custom-table tbody tr:hover {
