@@ -9,13 +9,13 @@ using Client.Desktop.Communication.Requests;
 using Client.Desktop.DataModels;
 using Client.Desktop.DataModels.Local;
 using Client.Desktop.FileSystem;
-using Client.Desktop.Services.Initializer;
+using Client.Desktop.Lifecycle.Startup.Register;
 using Client.Desktop.Services.LocalSettings.Commands;
 using CommunityToolkit.Mvvm.Messaging;
 using Proto.Requests.Tickets;
 using Proto.Requests.TimeSlots;
 
-namespace Client.Desktop.Services;
+namespace Client.Desktop.Services.Export;
 
 public class ExportService(
     IRequestSender requestSender,

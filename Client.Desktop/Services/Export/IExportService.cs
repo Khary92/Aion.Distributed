@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Client.Desktop.DataModels;
 
-namespace Client.Desktop.Services;
+namespace Client.Desktop.Services.Export;
 
 public interface IExportService
 {

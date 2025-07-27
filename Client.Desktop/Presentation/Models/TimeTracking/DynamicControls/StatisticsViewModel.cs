@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.Commands.StatisticsData.Records;
-using Client.Desktop.Communication.Notifications.NotificationWrappers;
+using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.DataModels;
 using Client.Desktop.Presentation.Factories;

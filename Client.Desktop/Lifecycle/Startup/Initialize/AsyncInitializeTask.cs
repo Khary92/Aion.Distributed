@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Client.Desktop.Lifecycle.Startup.Scheduler;
 
-namespace Client.Desktop.Services.Initializer;
+namespace Client.Desktop.Lifecycle.Startup.Initialize;
 
-public class ServiceInitializer(
-    IEnumerable<IInitializeAsync> initializeComponents,
-    IEnumerable<IRegisterMessenger> messengerComponents) : IServiceInitializer
+public class AsyncInitializeTask(IEnumerable<IInitializeAsync> initializeComponents) : IStartupTask
 {
     private readonly List<InitializationType> _order =
     [
@@ -25,11 +24,12 @@ public class ServiceInitializer(
                 group => group.ToList()
             );
 
-    public async Task InitializeServicesAsync()
+    public StartupTask StartupTask => StartupTask.AsyncInitialize;
+
+    public async Task Execute()
     {
         try
         {
-            RegisterMessengers();
             ValidateInitializationComponents();
 
             foreach (var type in _order) await InitializeComponentsOfType(type);
@@ -39,20 +39,7 @@ public class ServiceInitializer(
             throw new InitializationException("Failed to initialize services", ex);
         }
     }
-
-    private void RegisterMessengers()
-    {
-        foreach (var component in messengerComponents)
-            try
-            {
-                component.RegisterMessenger();
-            }
-            catch (Exception ex)
-            {
-                throw new InitializationException($"Failed to register messenger for {component.GetType().Name}", ex);
-            }
-    }
-
+    
     private void ValidateInitializationComponents()
     {
         var missingTypes = _order.Except(LoadingStrategy.Keys).ToList();

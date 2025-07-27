@@ -1,3 +1,4 @@
+using System.Threading;
 using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.Commands.Notes;
 using Client.Desktop.Communication.Commands.StatisticsData;
@@ -6,6 +7,7 @@ using Client.Desktop.Communication.Commands.TimeSlots.Records;
 using Client.Desktop.Communication.Commands.UseCases;
 using Client.Desktop.Communication.Commands.WorkDays;
 using Client.Desktop.Communication.Notifications;
+using Client.Desktop.Communication.Notifications.Note;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.Communication.Requests.Analysis;
 using Client.Desktop.Communication.Requests.Notes;
@@ -17,6 +19,11 @@ using Client.Desktop.Communication.Requests.WorkDays;
 using Client.Desktop.DataModels.Decorators.Replays;
 using Client.Desktop.FileSystem;
 using Client.Desktop.FileSystem.Serializer;
+using Client.Desktop.Lifecycle.Startup.Initialize;
+using Client.Desktop.Lifecycle.Startup.Register;
+using Client.Desktop.Lifecycle.Startup.Scheduler;
+using Client.Desktop.Lifecycle.Startup.Streams;
+using Client.Desktop.Lifecycle.Startup.UnsentCommands;
 using Client.Desktop.Presentation.Factories;
 using Client.Desktop.Presentation.Models.Analysis;
 using Client.Desktop.Presentation.Models.Documentation;
@@ -32,15 +39,13 @@ using Client.Desktop.Presentation.Views.Export;
 using Client.Desktop.Presentation.Views.Main;
 using Client.Desktop.Presentation.Views.Setting;
 using Client.Desktop.Presentation.Views.Tracking;
-using Client.Desktop.Services;
 using Client.Desktop.Services.Cache;
-using Client.Desktop.Services.Initializer;
+using Client.Desktop.Services.Export;
 using Client.Desktop.Services.LocalSettings;
 using Client.Proto;
 using CommunityToolkit.Mvvm.Messaging;
 using Grpc.Net.Client;
 using Microsoft.Extensions.DependencyInjection;
-using Proto.Command.TimeSlots;
 using Proto.Notifications.Note;
 using Proto.Notifications.NoteType;
 using Proto.Notifications.Sprint;
@@ -66,6 +71,7 @@ public static class ClientServiceExtensions
 {
     public static void AddPresentationServices(this IServiceCollection services)
     {
+        AddSchedulerServices(services);
         AddLocalServices(services);
         AddSharedDataServices(services);
         AddSynchronizationServices(services);
@@ -78,13 +84,27 @@ public static class ClientServiceExtensions
         AddFileSystemServices(services);
     }
 
+    private static void AddSchedulerServices(this IServiceCollection services)
+    {
+        services.AddSingleton<CancellationTokenSource>();
+        services.AddSingleton<IStartupScheduler, StartupScheduler>();
+        
+        services.AddSingleton<IStartupTask, AsyncInitializeTask>();
+        services.AddSingleton<IStartupTask, RegisterMessengerTask>();
+        services.AddSingleton<IStartupTask, SendUnsentCommandsTask>();
+
+        //TODO The app does not start because of this:
+        services.AddSingleton<StreamLifeCycleHandler>();
+        services.AddSingleton<IStreamLifeCycleHandler>(sp => sp.GetRequiredService<StreamLifeCycleHandler>());
+        services.AddSingleton<IStartupTask>(sp => sp.GetRequiredService<StreamLifeCycleHandler>());
+    }
+
     private static void AddLocalServices(this IServiceCollection services)
     {
         services.AddSingleton<LocalSettingsProjector>();
         services.AddSingleton<ILocalSettingsService>(sp => sp.GetRequiredService<LocalSettingsProjector>());
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<LocalSettingsProjector>());
 
-        services.AddSingleton<IServiceInitializer, ServiceInitializer>();
         services.AddSingleton<ILocalSettingsCommandSender, LocalSettingsCommandSender>();
 
         services.AddSingleton<ExportService>();
@@ -213,10 +233,10 @@ public static class ClientServiceExtensions
     {
         services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
 
-        services.AddSingleton<NotificationReceiverStarter>();
+        services.AddSingleton<StreamLifeCycleHandler>();
 
         services.AddSingleton<TicketNotificationReceiver>();
-        services.AddSingleton<NoteNotificationReceiver>();
+        services.AddSingleton<IStreamClient, NoteNotificationStream>();
         services.AddSingleton<NoteTypeNotificationReceiver>();
         services.AddSingleton<SprintNotificationReceiver>();
         services.AddSingleton<TagNotificationReceiver>();

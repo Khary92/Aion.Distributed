@@ -43,6 +43,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="Communication\Notifications\NoteType\" />
       <Folder Include="Presentation\Views\" />
     </ItemGroup>
 

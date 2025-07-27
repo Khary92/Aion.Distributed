@@ -2,13 +2,10 @@
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.ReactiveUI;
-using Client.Desktop.Communication.Commands.TimeSlots.Records;
-using Client.Desktop.Services.Cache;
-using Client.Desktop.Services.Initializer;
+using Client.Desktop.Lifecycle.Startup.Scheduler;
 using Client.Tracing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Proto.Command.TimeSlots;
 
 namespace Client.Desktop;
 
@@ -28,8 +25,7 @@ public static class App
         await host.StartAsync();
 
         var serviceProvider = host.Services;
-
-        await StartupPreparation(serviceProvider);
+        await serviceProvider.GetRequiredService<IStartupScheduler>().Execute();
 
         BuildAvaloniaApp(serviceProvider)
             .StartWithClassicDesktopLifetime(args);
@@ -45,22 +41,5 @@ public static class App
             .WithInterFont()
             .LogToTrace()
             .UseReactiveUI();
-    }
-
-    private static async Task StartupPreparation(IServiceProvider serviceProvider)
-    {
-        AppDomain.CurrentDomain.ProcessExit += (_, _) => { PersistCaches(serviceProvider).GetAwaiter().GetResult(); };
-
-        await serviceProvider.GetRequiredService<IServiceInitializer>().InitializeServicesAsync();
-        await PersistCaches(serviceProvider);
-    }
-
-    private static async Task PersistCaches(IServiceProvider serviceProvider)
-    {
-        var startTimeCache = serviceProvider.GetRequiredService<IPersistentCache<ClientSetStartTimeCommand>>();
-        await startTimeCache.Persist();
-
-        var endTimeCache = serviceProvider.GetRequiredService<IPersistentCache<ClientSetEndTimeCommand>>();
-        await endTimeCache.Persist();
     }
 }

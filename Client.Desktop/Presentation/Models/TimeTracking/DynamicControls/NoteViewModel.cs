@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.Commands.Notes.Records;
-using Client.Desktop.Communication.Notifications.NotificationWrappers;
+using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.DataModels;
 using CommunityToolkit.Mvvm.Messaging;

@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Client.Desktop.Communication.Notifications;
+using Client.Desktop.Lifecycle.Startup.Streams;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Client.Desktop.Presentation.Views.Main;
@@ -30,7 +31,7 @@ public class App : Application
             contentWrapper.WindowState = WindowState.Maximized;
             contentWrapper.Show();
 
-            var notifiationService = _serviceProvider.GetRequiredService<NotificationReceiverStarter>();
+            var notifiationService = _serviceProvider.GetRequiredService<StreamLifeCycleHandler>();
             _ = notifiationService.Start();
         }
 
