@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.ReactiveUI;
+using Client.Desktop.Communication.Commands.TimeSlots.Records;
 using Client.Desktop.Services.Cache;
 using Client.Desktop.Services.Initializer;
 using Client.Tracing;
@@ -56,10 +57,10 @@ public static class App
 
     private static async Task PersistCaches(IServiceProvider serviceProvider)
     {
-        var startTimeCache = serviceProvider.GetRequiredService<IPersistentCache<SetStartTimeCommandProto>>();
+        var startTimeCache = serviceProvider.GetRequiredService<IPersistentCache<ClientSetStartTimeCommand>>();
         await startTimeCache.Persist();
 
-        var endTimeCache = serviceProvider.GetRequiredService<IPersistentCache<SetEndTimeCommandProto>>();
+        var endTimeCache = serviceProvider.GetRequiredService<IPersistentCache<ClientSetEndTimeCommand>>();
         await endTimeCache.Persist();
     }
 }

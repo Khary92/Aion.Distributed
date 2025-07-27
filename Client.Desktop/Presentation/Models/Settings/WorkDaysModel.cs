@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
+using Client.Desktop.Communication.Commands.WorkDays.Records;
 using Client.Desktop.Communication.Notifications.NotificationWrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.DataModels;
@@ -16,7 +17,6 @@ using Google.Protobuf.WellKnownTypes;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Dto;
 using MsBox.Avalonia.Enums;
-using Proto.Command.WorkDays;
 using Proto.Requests.WorkDays;
 using ReactiveUI;
 
@@ -39,11 +39,7 @@ public class WorkDaysModel(
             {
                 Date = DateTimeOffset.Now.ToTimestamp()
             }))
-            await commandSender.Send(new CreateWorkDayCommandProto
-            {
-                WorkDayId = Guid.NewGuid().ToString(),
-                Date = DateTimeOffset.Now.ToTimestamp()
-            });
+            await commandSender.Send(new ClientCreateWorkDayCommand(Guid.NewGuid(), DateTimeOffset.Now));
 
         WorkDays.Clear();
         WorkDays.AddRange(await requestSender.Send(new GetAllWorkDaysRequestProto()));
@@ -75,11 +71,7 @@ public class WorkDaysModel(
         }
 
         var newGuid = Guid.NewGuid();
-        var createWorkDayCommand = new CreateWorkDayCommandProto
-        {
-            WorkDayId = newGuid.ToString(),
-            Date = Timestamp.FromDateTimeOffset(date)
-        };
+        var createWorkDayCommand = new ClientCreateWorkDayCommand(newGuid, date);
         await commandSender.Send(createWorkDayCommand);
 
         await tracer.WorkDay.Create.CommandSent(GetType(), newGuid, createWorkDayCommand);

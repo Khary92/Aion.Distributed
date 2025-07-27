@@ -3,12 +3,12 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
+using Client.Desktop.Communication.Commands.Notes.Records;
 using Client.Desktop.Communication.Notifications.NotificationWrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.DataModels;
 using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
-using Proto.Command.Notes;
 using Proto.Notifications.Note;
 using Proto.Notifications.NoteType;
 using Proto.Requests.NoteTypes;
@@ -80,13 +80,12 @@ public class NoteViewModel : ReactiveObject
 
     private async Task Update()
     {
-        await _commandSender.Send(new UpdateNoteCommandProto
-        {
-            NoteId = Note.NoteId.ToString(),
-            Text = Note.Text,
-            NoteTypeId = Note.NoteType == null ? Guid.Empty.ToString() : Note.NoteType.NoteTypeId.ToString(),
-            TimeSlotId = Note.TimeSlotId.ToString()
-        });
+        await _commandSender.Send(new ClientUpdateNoteCommand
+        (
+            Note.NoteId,
+            Note.Text,
+            Note.NoteType?.NoteTypeId ?? Guid.Empty, Note.TimeSlotId
+        ));
     }
 
     private void SetNextType()

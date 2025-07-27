@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
+using Client.Desktop.Communication.Commands.UseCases.Records;
 using Client.Desktop.Communication.Notifications.NotificationWrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.DataModels;
@@ -11,7 +12,6 @@ using Client.Desktop.Services.Initializer;
 using Client.Desktop.Services.LocalSettings;
 using CommunityToolkit.Mvvm.Messaging;
 using Google.Protobuf.WellKnownTypes;
-using Proto.Command.UseCases;
 using Proto.Notifications.Sprint;
 using Proto.Notifications.Ticket;
 using Proto.Notifications.UseCase;
@@ -199,9 +199,6 @@ public class TimeTrackingModel(
     {
         if (SelectedTicket == null) return;
 
-        await commandSender.Send(new CreateTimeSlotControlCommandProto
-        {
-            TicketId = SelectedTicket.TicketId.ToString()
-        });
+        await commandSender.Send(new ClientCreateTimeSlotControlCommand(SelectedTicket.TicketId));
     }
 }

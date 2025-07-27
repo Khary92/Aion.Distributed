@@ -1,12 +1,11 @@
 using System;
 using System.Threading.Tasks;
+using Client.Desktop.Communication.Commands.TimeSlots.Records;
 using Client.Desktop.DataModels;
 using Client.Desktop.DataModels.Decorators.Replays;
 using Client.Desktop.Presentation.Models.Synchronization;
 using Client.Desktop.Services.Cache;
 using CommunityToolkit.Mvvm.Messaging;
-using Google.Protobuf.WellKnownTypes;
-using Proto.Command.TimeSlots;
 using Proto.Notifications.Ticket;
 using Proto.Notifications.UseCase;
 using ReactiveUI;
@@ -16,8 +15,8 @@ namespace Client.Desktop.Presentation.Models.TimeTracking;
 public class TimeSlotModel(
     IMessenger messenger,
     IStateSynchronizer<TicketReplayDecorator, string> ticketDocumentStateSynchronizer,
-    IPersistentCache<SetStartTimeCommandProto> startTimeCache,
-    IPersistentCache<SetEndTimeCommandProto> endTimeCache) : ReactiveObject
+    IPersistentCache<ClientSetStartTimeCommand> startTimeCache,
+    IPersistentCache<ClientSetEndTimeCommand> endTimeCache) : ReactiveObject
 {
     private TicketReplayDecorator _selectedTicketReplayDecorator = null!;
     private TimeSlotClientModel _timeSlot = null!;
@@ -70,21 +69,13 @@ public class TimeSlotModel(
         {
             if (TimeSlot.IsEndTimeChanged())
             {
-                var setEndTimeCommand = new SetEndTimeCommandProto
-                {
-                    TimeSlotId = TimeSlot.TimeSlotId.ToString(),
-                    Time = Timestamp.FromDateTimeOffset(TimeSlot.EndTime)
-                };
+                var setEndTimeCommand = new ClientSetEndTimeCommand(TimeSlot.TimeSlotId, TimeSlot.EndTime);
                 endTimeCache.Store(setEndTimeCommand);
             }
 
             if (TimeSlot.IsStartTimeChanged())
             {
-                var setStartTimeCommand = new SetStartTimeCommandProto
-                {
-                    TimeSlotId = TimeSlot.TimeSlotId.ToString(),
-                    Time = Timestamp.FromDateTimeOffset(TimeSlot.StartTime)
-                };
+                var setStartTimeCommand = new ClientSetStartTimeCommand(TimeSlot.TimeSlotId, TimeSlot.StartTime);
 
                 startTimeCache.Store(setStartTimeCommand);
             }

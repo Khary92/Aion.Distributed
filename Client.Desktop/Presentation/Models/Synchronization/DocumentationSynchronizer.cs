@@ -2,6 +2,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
+using Client.Desktop.Communication.Commands.Ticket;
 using Client.Desktop.DataModels.Decorators.Replays;
 using Proto.Command.Tickets;
 
@@ -39,11 +40,7 @@ public class DocumentationSynchronizer(ICommandSender commandSender) : IStateSyn
                 decorator.DisplayedDocumentation = documentation;
             }
 
-            await commandSender.Send(new UpdateTicketDocumentationCommandProto
-            {
-                TicketId = ticketId.ToString(),
-                Documentation = documentation
-            });
+            await commandSender.Send(new ClientUpdateTicketDocumentationCommand(ticketId, documentation));
         }
     }
 }

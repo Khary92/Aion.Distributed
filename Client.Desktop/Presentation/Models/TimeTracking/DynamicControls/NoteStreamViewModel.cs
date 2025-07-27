@@ -3,14 +3,13 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
+using Client.Desktop.Communication.Commands.Notes.Records;
 using Client.Desktop.Communication.Notifications.NotificationWrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.DataModels;
 using Client.Desktop.Presentation.Factories;
 using Client.Desktop.Services.LocalSettings;
 using CommunityToolkit.Mvvm.Messaging;
-using Google.Protobuf.WellKnownTypes;
-using Proto.Command.Notes;
 using Proto.Notifications.Note;
 using Proto.Requests.Notes;
 using ReactiveUI;
@@ -39,14 +38,8 @@ public class NoteStreamViewModel(
         if (!localSettingsService.IsSelectedDateCurrentDate()) return;
 
         var noteId = Guid.NewGuid();
-        await commandSender.Send(new CreateNoteCommandProto
-        {
-            NoteId = noteId.ToString(),
-            NoteTypeId = Guid.NewGuid().ToString(),
-            Text = string.Empty,
-            TimeSlotId = _timeSlotId.ToString(),
-            TimeStamp = Timestamp.FromDateTimeOffset(DateTimeOffset.Now)
-        });
+        await commandSender.Send(new ClientCreateNoteCommand(noteId, Guid.NewGuid(), string.Empty, TimeSlotId,
+            DateTimeOffset.Now));
     }
 
     public void RegisterMessenger()
@@ -75,7 +68,8 @@ public class NoteStreamViewModel(
 
     private async Task InsertNoteViewModel(NoteClientModel noteClientModel)
     {
-        var noteViewModel = await noteViewFactory.Create(new NoteClientModel(noteClientModel.NoteId, noteClientModel.Text, noteClientModel.NoteTypeId,
+        var noteViewModel = await noteViewFactory.Create(new NoteClientModel(noteClientModel.NoteId,
+            noteClientModel.Text, noteClientModel.NoteTypeId,
             noteClientModel.TimeSlotId, noteClientModel.TimeStamp));
 
         Notes.Insert(0, noteViewModel);

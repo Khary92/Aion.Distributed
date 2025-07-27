@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Client.Desktop.Communication.Commands.StatisticsData.Records;
 using Client.Proto;
 using Grpc.Net.Client;
 using Proto.Command.StatisticsData;
@@ -10,21 +11,19 @@ public class StatisticsDataCommandSender : IStatisticsDataCommandSender
     private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly StatisticsDataCommandProtoService.StatisticsDataCommandProtoServiceClient _client = new(Channel);
 
-    public async Task<bool> Send(CreateStatisticsDataCommandProto command)
+    public async Task<bool> Send(ClientCreateStatisticsDataCommand command)
     {
-        var response = await _client.CreateStatisticsDataAsync(command);
+        var response = await _client.CreateStatisticsDataAsync(command.ToProto());
         return response.Success;
     }
 
-    public async Task<bool> Send(ChangeTagSelectionCommandProto command)
+    public async Task<bool> Send(ClientChangeTagSelectionCommand command)
     {
-        var response = await _client.ChangeTagSelectionAsync(command);
-        return response.Success;
-    }
+        var response = await _client.ChangeTagSelectionAsync(command.ToProto());
+        return response.Success;}
 
-    public async Task<bool> Send(ChangeProductivityCommandProto command)
+    public async Task<bool> Send(ClientChangeProductivityCommand command)
     {
-        var response = await _client.ChangeProductivityAsync(command);
-        return response.Success;
-    }
+        var response = await _client.ChangeProductivityAsync(command.ToProto());
+        return response.Success;}
 }

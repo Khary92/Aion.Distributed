@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
+using Client.Desktop.Communication.Commands.StatisticsData.Records;
 using Client.Desktop.Communication.Notifications.NotificationWrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.DataModels;
@@ -73,26 +74,21 @@ public class StatisticsViewModel(
 
         if (StatisticsData.IsProductivityChanged())
         {
-            var changeProductivityCommand = new ChangeProductivityCommandProto
-            {
-                StatisticsDataId = id.ToString(),
-                IsProductive = StatisticsData.IsProductive,
-                IsNeutral = StatisticsData.IsNeutral,
-                IsUnproductive = StatisticsData.IsUnproductive
-            };
+            var changeProductivityCommand = new ClientChangeProductivityCommand
+            (
+                id,
+                StatisticsData.IsProductive,
+                StatisticsData.IsNeutral,
+                StatisticsData.IsUnproductive
+            );
             commandSender.Send(changeProductivityCommand);
         }
-
-
+        
+        
         if (StatisticsData.IsTagsSelectionChanged())
         {
-            var cmd = new ChangeTagSelectionCommandProto
-            {
-                StatisticsDataId = id.ToString()
-            };
-            cmd.SelectedTagIds.AddRange(StatisticsData.TagIds.Select(t => t.ToString()));
-
-            commandSender.Send(cmd);
+            var tagSelectionCommand = new ClientChangeTagSelectionCommand(id, StatisticsData.TagIds);
+            commandSender.Send(tagSelectionCommand);
         }
     }
 }

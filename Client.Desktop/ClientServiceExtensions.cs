@@ -2,6 +2,7 @@ using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.Commands.Notes;
 using Client.Desktop.Communication.Commands.StatisticsData;
 using Client.Desktop.Communication.Commands.TimeSlots;
+using Client.Desktop.Communication.Commands.TimeSlots.Records;
 using Client.Desktop.Communication.Commands.UseCases;
 using Client.Desktop.Communication.Commands.WorkDays;
 using Client.Desktop.Communication.Notifications;
@@ -120,8 +121,8 @@ public static class ClientServiceExtensions
     private static void AddSynchronizationServices(this IServiceCollection services)
     {
         services.AddSingleton<IStateSynchronizer<TicketReplayDecorator, string>, DocumentationSynchronizer>();
-        services.AddSingleton<IPersistentCache<SetStartTimeCommandProto>, StartTimeChangedCache>();
-        services.AddSingleton<IPersistentCache<SetEndTimeCommandProto>, EndTimeChangedCache>();
+        services.AddSingleton<IPersistentCache<ClientSetStartTimeCommand>, StartTimeChangedCache>();
+        services.AddSingleton<IPersistentCache<ClientSetEndTimeCommand>, EndTimeChangedCache>();
     }
 
     private static void AddViews(this IServiceCollection services)
