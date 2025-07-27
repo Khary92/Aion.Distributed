@@ -1,5 +1,47 @@
 ﻿@page "/"
 
-<PageTitle>Home</PageTitle>
+<PageTitle>Welcome to Aion</PageTitle>
 
-<h1>Hello, world! I guess</h1>
+<style>
+    .welcome-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        min-height: 80vh;
+        text-align: center;
+        padding: 20px;
+        width: 100%;
+    }
+
+    .welcome-image {
+        width: clamp(300px, 40vw, 800px);
+        height: auto;
+        border-radius: var(--corner-radius);
+        margin-bottom: 30px;
+    }
+
+    .welcome-text {
+        width: clamp(300px, 60%, 1000px);
+        margin: 0 auto;
+    }
+
+    .welcome-text h1 {
+        margin-bottom: 20px;
+        font-size: var(--font-size-title);
+    }
+
+    .welcome-text p {
+        font-size: var(--font-size-normal);
+        line-height: 1.6;
+        color: var(--foreground-color);
+    }
+</style>
+
+<div class="welcome-container">
+    <div class="welcome-text">
+        <h1>Welcome to Aion web</h1>
+        <img src="logo_big_glow.png" alt="Aion Logo" class="welcome-image" />
+        <p>This interface provides tracing and observability results as well as global data and settings.</p>
+    </div>
+</div>
