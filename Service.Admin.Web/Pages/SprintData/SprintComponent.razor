@@ -63,10 +63,10 @@
 
 @code {
 
-    protected override async Task OnInitializedAsync()
+    protected override Task OnInitializedAsync()
     {
         SprintStateService.OnStateChanged += async () => await InvokeAsync(StateHasChanged);
-        await SprintStateService.LoadSprints();
+        return Task.CompletedTask;
     }
 
 }

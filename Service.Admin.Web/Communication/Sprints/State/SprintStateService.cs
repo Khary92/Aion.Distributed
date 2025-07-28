@@ -1,10 +1,11 @@
 ﻿using Proto.Requests.Sprints;
 using Service.Admin.Web.Communication.Sprints.Notifications;
 using Service.Admin.Web.Models;
+using Service.Admin.Web.Services;
 
 namespace Service.Admin.Web.Communication.Sprints.State;
 
-public class SprintStateService(ISharedRequestSender requestSender) : ISprintStateService
+public class SprintStateService(ISharedRequestSender requestSender) : ISprintStateService, IInitializeAsync
 {
     private List<SprintWebModel> _sprints = new();
     public IReadOnlyList<SprintWebModel> Sprints => _sprints.AsReadOnly();
@@ -63,16 +64,18 @@ public class SprintStateService(ISharedRequestSender requestSender) : ISprintSta
         sprint.Apply(notification);
         NotifyStateChanged();
     }
+    
+    private void NotifyStateChanged()
+    {
+        OnStateChanged?.Invoke();
+    }
 
-    public async Task LoadSprints()
+    public InitializationType Type => InitializationType.StateService;
+
+    public async Task InitializeComponents()
     {
         var sprintListProto = await requestSender.Send(new GetAllSprintsRequestProto());
         _sprints = sprintListProto.ToDtoList();
         NotifyStateChanged();
-    }
-
-    private void NotifyStateChanged()
-    {
-        OnStateChanged?.Invoke();
     }
 }

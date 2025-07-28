@@ -2,10 +2,12 @@ using Proto.Requests.Tickets;
 using Service.Admin.Tracing;
 using Service.Admin.Web.Communication.Tickets.Notifications;
 using Service.Admin.Web.Models;
+using Service.Admin.Web.Services;
 
 namespace Service.Admin.Web.Communication.Tickets.State;
 
-public class TicketStateService(ISharedRequestSender requestSender, ITraceCollector tracer) : ITicketStateService
+public class TicketStateService(ISharedRequestSender requestSender, ITraceCollector tracer)
+    : ITicketStateService, IInitializeAsync
 {
     private List<TicketWebModel> _tickets = new();
 
@@ -39,16 +41,18 @@ public class TicketStateService(ISharedRequestSender requestSender, ITraceCollec
         ticket.Apply(ticketDocumentationUpdatedNotification);
         NotifyStateChanged();
     }
+    
+    private void NotifyStateChanged()
+    {
+        OnStateChanged?.Invoke();
+    }
 
-    public async Task LoadTickets()
+    public InitializationType Type => InitializationType.StateService;
+
+    public async Task InitializeComponents()
     {
         var ticketListProto = await requestSender.Send(new GetAllTicketsRequestProto());
         _tickets = ticketListProto.ToDtoList();
         NotifyStateChanged();
-    }
-
-    private void NotifyStateChanged()
-    {
-        OnStateChanged?.Invoke();
     }
 }

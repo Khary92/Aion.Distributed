@@ -8,6 +8,7 @@ using Proto.Requests.Sprints;
 using Proto.Requests.Tags;
 using Proto.Requests.Tickets;
 using Proto.Requests.TimerSettings;
+using Service.Admin.Web.Communication.Policies;
 using Service.Proto.Shared.Requests.NoteTypes;
 using Service.Proto.Shared.Requests.Sprints;
 using Service.Proto.Shared.Requests.Tags;
@@ -21,27 +22,32 @@ public class SharedRequestSender(
     ISprintRequestSender sprintRequestSender,
     ITagRequestSender tagRequestSender,
     INoteTypeRequestSender noteTypeRequestSender,
-    ITimerSettingsRequestSender timerSettingsRequestSender)
+    ITimerSettingsRequestSender timerSettingsRequestSender,
+    RetryPolicy retryPolicy)
     : ISharedRequestSender
 {
     public async Task<TicketListProto> Send(GetAllTicketsRequestProto request)
     {
-        return await ticketRequestSender.Send(request);
+        return await retryPolicy.Policy.ExecuteAsync(() =>
+            ticketRequestSender.Send(request));
     }
 
     public async Task<TicketListProto> Send(GetTicketsForCurrentSprintRequestProto request)
     {
-        return await ticketRequestSender.Send(request);
+        return await retryPolicy.Policy.ExecuteAsync(() =>
+            ticketRequestSender.Send(request));
     }
 
     public async Task<TicketListProto> Send(GetTicketsWithShowAllSwitchRequestProto request)
     {
-        return await ticketRequestSender.Send(request);
+        return await retryPolicy.Policy.ExecuteAsync(() =>
+            ticketRequestSender.Send(request));
     }
 
     public async Task<TicketProto> Send(GetTicketByIdRequestProto request)
     {
-        return await ticketRequestSender.Send(request);
+        return await retryPolicy.Policy.ExecuteAsync(() =>
+            ticketRequestSender.Send(request));
     }
 
     public async Task<SprintProto?> Send(GetActiveSprintRequestProto request)

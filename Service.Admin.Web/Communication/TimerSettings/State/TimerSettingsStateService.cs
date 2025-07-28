@@ -2,11 +2,12 @@
 using Proto.Requests.TimerSettings;
 using Service.Admin.Web.Communication.TimerSettings.Notifications;
 using Service.Admin.Web.Models;
+using Service.Admin.Web.Services;
 
 namespace Service.Admin.Web.Communication.TimerSettings.State;
 
 public class TimerSettingsStateService(ISharedRequestSender requestSender, ISharedCommandSender commandSender)
-    : ITimerSettingsStateService
+    : ITimerSettingsStateService, IInitializeAsync
 {
     public TimerSettingsWebModel TimerSettings { get; private set; } = new(Guid.Empty, 0, 0);
 
@@ -16,24 +17,6 @@ public class TimerSettingsStateService(ISharedRequestSender requestSender, IShar
     {
         TimerSettings = timerSettings;
         return Task.CompletedTask;
-    }
-
-    public async Task LoadSettings()
-    {
-        if (await requestSender.Send(new IsTimerSettingExistingRequestProto()))
-        {
-            var timerSettingsProto = await requestSender.Send(new GetTimerSettingsRequestProto());
-            TimerSettings = timerSettingsProto.ToDto();
-            NotifyStateChanged();
-            return;
-        }
-
-        await commandSender.Send(new CreateTimerSettingsCommandProto
-        {
-            TimerSettingsId = Guid.NewGuid().ToString(),
-            DocumentationSaveInterval = 30,
-            SnapshotSaveInterval = 30
-        });
     }
 
     public void Apply(WebDocuIntervalChangedNotification notification)
@@ -51,5 +34,24 @@ public class TimerSettingsStateService(ISharedRequestSender requestSender, IShar
     private void NotifyStateChanged()
     {
         OnStateChanged?.Invoke();
+    }
+
+    public InitializationType Type => InitializationType.StateService;
+    public async Task InitializeComponents()
+    {
+        if (await requestSender.Send(new IsTimerSettingExistingRequestProto()))
+        {
+            var timerSettingsProto = await requestSender.Send(new GetTimerSettingsRequestProto());
+            TimerSettings = timerSettingsProto.ToDto();
+            NotifyStateChanged();
+            return;
+        }
+
+        await commandSender.Send(new CreateTimerSettingsCommandProto
+        {
+            TimerSettingsId = Guid.NewGuid().ToString(),
+            DocumentationSaveInterval = 30,
+            SnapshotSaveInterval = 30
+        });
     }
 }

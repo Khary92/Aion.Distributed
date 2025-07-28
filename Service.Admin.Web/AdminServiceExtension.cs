@@ -1,6 +1,8 @@
-﻿using Service.Admin.Web.Communication;
+﻿using Polly;
+using Service.Admin.Web.Communication;
 using Service.Admin.Web.Communication.NoteType;
 using Service.Admin.Web.Communication.NoteType.State;
+using Service.Admin.Web.Communication.Policies;
 using Service.Admin.Web.Communication.Reports;
 using Service.Admin.Web.Communication.Reports.State;
 using Service.Admin.Web.Communication.Sprints;
@@ -31,29 +33,41 @@ public static class AdminServiceExtension
 
     public static void AddWebServices(this IServiceCollection services)
     {
-        services.AddSingleton<IComponentInitializer, ComponentInitializer>();
+        RegisterStateServices(services);
+        AddSharedDataServices(services);
+        AddControllers(services);
+        AddSettingsServices(services);
+        AddReceiverServices(services);
+        AddPolicyServices(services);
+    }
+
+    private static void AddPolicyServices(IServiceCollection services)
+    {
+        services.AddSingleton(
+            new RetryPolicy(Policy
+                .Handle<Exception>()
+                .WaitAndRetryAsync(3, retryAttempt =>
+                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)))
+                .WrapAsync(Policy
+                    .Handle<Exception>()
+                    .CircuitBreakerAsync(2, TimeSpan.FromSeconds(30))))
+        );
+
+        services.AddSingleton(
+            new CircuitBreakerPolicy(Policy
+                .Handle<Exception>()
+                .CircuitBreakerAsync(2, TimeSpan.FromSeconds(30)))
+        );
         
-        services.AddSingleton<IReportStateService, ReportStateService>();
-        services.AddSingleton<ITicketStateService, TicketStateService>();
-        services.AddSingleton<ITagStateService, TagStateService>();
+        services.AddSingleton<ISharedCommandSender, SharedCommandSender>();
+        services.AddSingleton<ISharedRequestSender, SharedRequestSender>();
+    }
 
-        services.AddSingleton<NoteTypeStateService>();
-        services.AddSingleton<INoteTypeStateService>(sp => sp.GetRequiredService<NoteTypeStateService>());
-        services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<NoteTypeStateService>());
+    private static void AddReceiverServices(IServiceCollection services)
+    {
+        services.AddSingleton<ReportReceiver>();
+        services.AddSingleton<IReportReceiver>(sp => sp.GetRequiredService<ReportReceiver>());
         
-        services.AddSingleton<ISprintStateService, SprintStateService>();
-        services.AddSingleton<ITimerSettingsStateService, TimerSettingsStateService>();
-
-        services.AddRazorComponents()
-            .AddInteractiveServerComponents();
-
-        services.AddGrpc(options =>
-        {
-            options.EnableDetailedErrors = true;
-            options.MaxReceiveMessageSize = 2 * 1024 * 1024;
-            options.MaxSendMessageSize = 2 * 1024 * 1024;
-        });
-
         services.AddSingleton<TicketNotificationsReceiver>();
         services.AddHostedService<TicketNotificationHostedService>();
 
@@ -68,15 +82,47 @@ public static class AdminServiceExtension
 
         services.AddSingleton<TimerSettingsNotificationsReceiver>();
         services.AddHostedService<TimerSettingsNotificationHostedService>();
+    }
 
-        AddSharedDataServices(services);
-        AddControllers(services);
+    private static void AddSettingsServices(IServiceCollection services)
+    {
+        services.AddRazorComponents()
+            .AddInteractiveServerComponents();
+
+        services.AddGrpc(options =>
+        {
+            options.EnableDetailedErrors = true;
+            options.MaxReceiveMessageSize = 2 * 1024 * 1024;
+            options.MaxSendMessageSize = 2 * 1024 * 1024;
+        });
+    }
+
+    private static void RegisterStateServices(IServiceCollection services)
+    {
+        services.AddSingleton<IComponentInitializer, ComponentInitializer>();
+
+        services.AddSingleton<ReportStateService>();
+        services.AddSingleton<IReportStateService>(sp => sp.GetRequiredService<ReportStateService>());
         
-        services.AddSingleton<ReportReceiver>();
-        services.AddSingleton<IReportReceiver>(sp => sp.GetRequiredService<ReportReceiver>());
+        services.AddSingleton<TicketStateService>();
+        services.AddSingleton<ITicketStateService>(sp => sp.GetRequiredService<TicketStateService>());
+        services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<TicketStateService>());
+        
+        services.AddSingleton<TagStateService>();
+        services.AddSingleton<ITagStateService>(sp => sp.GetRequiredService<TagStateService>());
+        services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<TagStateService>());
+        
+        services.AddSingleton<NoteTypeStateService>();
+        services.AddSingleton<INoteTypeStateService>(sp => sp.GetRequiredService<NoteTypeStateService>());
+        services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<NoteTypeStateService>());
 
-        services.AddSingleton<ISharedCommandSender, SharedCommandSender>();
-        services.AddSingleton<ISharedRequestSender, SharedRequestSender>();
+        services.AddSingleton<SprintStateService>();
+        services.AddSingleton<ISprintStateService>(sp => sp.GetRequiredService<SprintStateService>());
+        services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<SprintStateService>());
+        
+        services.AddSingleton<TimerSettingsStateService>();
+        services.AddSingleton<ITimerSettingsStateService>(sp => sp.GetRequiredService<TimerSettingsStateService>());
+        services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<TimerSettingsStateService>());
     }
 
     private static void AddControllers(this IServiceCollection services)
@@ -90,7 +136,7 @@ public static class AdminServiceExtension
         services.AddSingleton<ITimerSettingsController>(sp => sp.GetRequiredService<TimerSettingsController>());
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<TimerSettingsController>());
     }
-    
+
     private static void AddSharedDataServices(this IServiceCollection services)
     {
         services.AddSingleton<ITicketCommandSender>(sp => new TicketCommandSender(ServerAddress));

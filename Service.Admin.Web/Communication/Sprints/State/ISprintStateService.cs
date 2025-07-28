@@ -12,5 +12,4 @@ public interface ISprintStateService
     void Apply(WebAddTicketToSprintNotification notification);
     void Apply(WebSetSprintActiveStatusNotification notification);
     void Apply(WebSprintDataUpdatedNotification notification);
-    Task LoadSprints();
 }

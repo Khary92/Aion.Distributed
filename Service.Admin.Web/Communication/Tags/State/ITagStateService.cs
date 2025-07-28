@@ -9,5 +9,4 @@ public interface ITagStateService
     event Action? OnStateChanged;
     Task AddTicket(TagWebModel tag);
     void Apply(WebTagUpdatedNotification notification);
-    Task LoadTags();
 }

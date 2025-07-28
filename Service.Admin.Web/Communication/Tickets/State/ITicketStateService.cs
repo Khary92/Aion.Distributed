@@ -10,5 +10,4 @@ public interface ITicketStateService
     Task AddTicket(TicketWebModel ticket);
     void Apply(WebTicketDataUpdatedNotification ticketDataUpdatedNotification);
     void Apply(WebTicketDocumentationUpdatedNotification ticketDocumentationUpdatedNotification);
-    Task LoadTickets();
 }

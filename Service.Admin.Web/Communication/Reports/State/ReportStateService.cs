@@ -1,4 +1,6 @@
-﻿namespace Service.Admin.Web.Communication.Reports.State;
+﻿using Service.Admin.Web.Services;
+
+namespace Service.Admin.Web.Communication.Reports.State;
 
 public class ReportStateService : IReportStateService
 {

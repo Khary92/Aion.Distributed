@@ -1,10 +1,11 @@
 using Proto.Requests.Tags;
 using Service.Admin.Web.Communication.Tags.Notifications;
 using Service.Admin.Web.Models;
+using Service.Admin.Web.Services;
 
 namespace Service.Admin.Web.Communication.Tags.State;
 
-public class TagStateService(ISharedRequestSender requestSender) : ITagStateService
+public class TagStateService(ISharedRequestSender requestSender) : ITagStateService, IInitializeAsync
 {
     private List<TagWebModel> _tags = new();
     public IReadOnlyList<TagWebModel> Tickets => _tags.AsReadOnly();
@@ -27,16 +28,17 @@ public class TagStateService(ISharedRequestSender requestSender) : ITagStateServ
         tag.Apply(notification);
         NotifyStateChanged();
     }
+    
+    private void NotifyStateChanged()
+    {
+        OnStateChanged?.Invoke();
+    }
 
-    public async Task LoadTags()
+    public InitializationType Type => InitializationType.StateService;
+    public async Task InitializeComponents()
     {
         var tagListProto = await requestSender.Send(new GetAllTagsRequestProto());
         _tags = tagListProto.ToDtoList();
         NotifyStateChanged();
-    }
-
-    private void NotifyStateChanged()
-    {
-        OnStateChanged?.Invoke();
     }
 }
