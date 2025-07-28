@@ -15,7 +15,7 @@ using Service.Proto.Shared.Requests.Tags;
 
 namespace Client.Desktop.Communication.Requests.Analysis;
 
-public class AnalysisMapper(ITagRequestSender requestSender) : IAnalysisMapper
+public class AnalysisMapper() : IAnalysisMapper
 {
     public AnalysisBySprintDecorator Create(AnalysisBySprintProto proto)
     {
@@ -39,10 +39,13 @@ public class AnalysisMapper(ITagRequestSender requestSender) : IAnalysisMapper
         {
             TicketName = proto.TicketName,
             TimeSlots = GetTimeSlots(proto.TimeSlots),
-            StatisticData = GetStatisticsData(proto.StatisticData)
+            StatisticData = GetStatisticsData(proto.StatisticData),
+            ProductiveTags = proto.ProductiveTags.ToDictionary(),
+            NeutralTags = proto.NeutralTags.ToDictionary(),
+            UnproductiveTags = proto.UnproductiveTags.ToDictionary()
         };
 
-        return new AnalysisByTicketDecorator(analysisByTicket, requestSender);
+        return new AnalysisByTicketDecorator(analysisByTicket);
     }
 
     public AnalysisByTagDecorator Create(AnalysisByTagProto proto)

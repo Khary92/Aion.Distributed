@@ -4,14 +4,14 @@ using System.Threading.Tasks;
 using Client.Desktop.Communication.Notifications.Tag.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.Communication.Requests;
+using Client.Desktop.Communication.Requests.Analysis.Records;
+using Client.Desktop.Communication.Requests.Tag;
 using Client.Desktop.DataModels;
 using Client.Desktop.DataModels.Decorators;
 using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Register;
 using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
-using Proto.Requests.AnalysisData;
-using Proto.Requests.Tags;
 using ReactiveUI;
 
 namespace Client.Desktop.Presentation.Models.Analysis;
@@ -34,7 +34,7 @@ public class AnalysisByTagModel(IRequestSender requestSender, IMessenger messeng
     public async Task InitializeAsync()
     {
         Tags.Clear();
-        Tags.AddRange(await requestSender.Send(new GetAllTagsRequestProto()));
+        Tags.AddRange(await requestSender.Send(new ClientGetAllTagsRequest()));
     }
 
     public void RegisterMessenger()
@@ -53,9 +53,6 @@ public class AnalysisByTagModel(IRequestSender requestSender, IMessenger messeng
 
     public async Task SetAnalysisForTag(TagClientModel selectedTag)
     {
-        AnalysisByTag = await requestSender.Send(new GetTagAnalysisById
-        {
-            TagId = selectedTag.TagId.ToString()
-        });
+        AnalysisByTag = await requestSender.Send(new ClientGetTagAnalysisById(selectedTag.TagId));
     }
 }

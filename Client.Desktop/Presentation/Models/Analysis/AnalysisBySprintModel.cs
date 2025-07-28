@@ -6,6 +6,8 @@ using AvaloniaEdit.Utils;
 using Client.Desktop.Communication.Notifications.Sprint.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.Communication.Requests;
+using Client.Desktop.Communication.Requests.Analysis.Records;
+using Client.Desktop.Communication.Requests.Sprint;
 using Client.Desktop.DataModels;
 using Client.Desktop.DataModels.Decorators;
 using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
@@ -37,7 +39,7 @@ public class AnalysisBySprintModel(IMessenger messenger, IRequestSender requestS
     public async Task InitializeAsync()
     {
         Sprints.Clear();
-        Sprints!.AddRange(await requestSender.Send(new GetAllSprintsRequestProto()));
+        Sprints!.AddRange(await requestSender.Send(new ClientGetAllSprintsRequest()));
     }
 
     public void RegisterMessenger()
@@ -152,9 +154,6 @@ public class AnalysisBySprintModel(IMessenger messenger, IRequestSender requestS
 
     public async Task SetAnalysisForSprint(SprintClientModel selectedSprint)
     {
-        AnalysisBySprint = await requestSender.Send(new GetSprintAnalysisById
-        {
-            SprintId = selectedSprint.SprintId.ToString()
-        });
+        AnalysisBySprint = await requestSender.Send(new ClientGetSprintAnalysisById(selectedSprint.SprintId));
     }
 }

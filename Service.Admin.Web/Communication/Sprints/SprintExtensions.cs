@@ -6,7 +6,7 @@ namespace Service.Admin.Web.Communication.Sprints;
 
 public static class SprintExtensions
 {
-    public static SprintWebModel ToDto(this SprintCreatedNotification notification)
+    public static SprintWebModel ToWebModel(this SprintCreatedNotification notification)
     {
         return new SprintWebModel(Guid.Parse(notification.SprintId), notification.Name, notification.IsActive,
             notification.StartTime.ToDateTimeOffset(), notification.EndTime.ToDateTimeOffset(),

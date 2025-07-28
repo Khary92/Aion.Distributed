@@ -78,7 +78,7 @@ public class AnalysisByTicketViewModel(AnalysisByTicketModel analysisByTicketMod
 
         UpdateProductivityByTimeSpentPieChart();
         UpdateProductivityByTimeSpentBarChart();
-        await UpdateMostRelevantTagsByProductivityText();
+        UpdateMostRelevantTagsByProductivityText();
     }
 
     private void UpdateProductivityByTimeSpentPieChart()
@@ -163,42 +163,10 @@ public class AnalysisByTicketViewModel(AnalysisByTicketModel analysisByTicketMod
         });
     }
 
-    private async Task UpdateMostRelevantTagsByProductivityText()
+    private void UpdateMostRelevantTagsByProductivityText()
     {
         if (Model.AnalysisByTicket == null) return;
-
-        var tagData = await Model.AnalysisByTicket.GetMostRepresentedTagIdsByProductivity();
-        var builder = new StringBuilder();
-
-        builder.AppendLine(
-            $"### Total time spent with ticket -{Model.AnalysisByTicket.TicketName}- is {TimeSpan.FromMinutes(Model.AnalysisByTicket.TotalTimeSpent):hh\\:mm}h");
-        builder.AppendLine();
-
-
-        foreach (var keyValue in tagData)
-        {
-            builder.AppendLine($"#### Top 3 most associated tags for {keyValue.Key}");
-            builder.AppendLine();
-            builder.AppendLine("| Tag Name | Count |");
-            builder.AppendLine("|----------|--------|");
-
-            if (keyValue.Value.Count == 0)
-            {
-                builder.AppendLine("| None | Not available |");
-                builder.AppendLine();
-                continue;
-            }
-
-            foreach (var tagId in keyValue.Value)
-            {
-                var tag = await Model.GetTagById(tagId);
-                var count = Model.AnalysisByTicket.CountTagByProductivity(keyValue.Key, tagId);
-                builder.AppendLine($"| {tag.Name} | {count} |");
-            }
-
-            builder.AppendLine();
-        }
-
-        MostRelevantTagsByProductivityText = builder.ToString();
+        
+        MostRelevantTagsByProductivityText = Model.GetMarkdownString();
     }
 }

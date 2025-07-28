@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Client.Desktop.Communication.Requests.Analysis.Records;
 using Client.Desktop.DataModels.Decorators;
 using Client.Proto;
 using Grpc.Net.Client;
@@ -13,27 +14,27 @@ public class AnalysisRequestSender(IAnalysisMapper analysisMapper)
     private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly AnalysisRequestService.AnalysisRequestServiceClient _client = new(Channel);
 
-    public async Task<AnalysisBySprintDecorator> Send(GetSprintAnalysisById request)
+    public async Task<AnalysisBySprintDecorator> Send(ClientGetSprintAnalysisById request)
     {
-        var response = await _client.GetSprintAnalysisAsync(request);
+        var response = await _client.GetSprintAnalysisAsync(request.ToProto());
 
         if (response == null) throw new ArgumentNullException("Create a default implementation!");
 
         return analysisMapper.Create(response);
     }
 
-    public async Task<AnalysisByTicketDecorator> Send(GetTicketAnalysisById request)
+    public async Task<AnalysisByTicketDecorator> Send(ClientGetTicketAnalysisById request)
     {
-        var response = await _client.GetTicketAnalysisAsync(request);
+        var response = await _client.GetTicketAnalysisAsync(request.ToProto());
 
         if (response == null) throw new ArgumentNullException("Create a default implementation!");
 
         return analysisMapper.Create(response);
     }
 
-    public async Task<AnalysisByTagDecorator> Send(GetTagAnalysisById request)
+    public async Task<AnalysisByTagDecorator> Send(ClientGetTagAnalysisById request)
     {
-        var response = await _client.GetTagAnalysisAsync(request);
+        var response = await _client.GetTagAnalysisAsync(request.ToProto());
 
         if (response == null) throw new ArgumentNullException("Create a default implementation!");
 

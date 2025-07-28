@@ -6,14 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests;
+using Client.Desktop.Communication.Requests.Ticket;
+using Client.Desktop.Communication.Requests.TimeSlots.Records;
 using Client.Desktop.DataModels;
 using Client.Desktop.DataModels.Local;
 using Client.Desktop.FileSystem;
 using Client.Desktop.Lifecycle.Startup.Tasks.Register;
 using Client.Desktop.Services.LocalSettings.Commands;
 using CommunityToolkit.Mvvm.Messaging;
-using Proto.Requests.Tickets;
-using Proto.Requests.TimeSlots;
 
 namespace Client.Desktop.Services.Export;
 
@@ -89,19 +89,13 @@ public class ExportService(
     private async Task FillDictionaryForWorkday(WorkDayClientModel workDay,
         Dictionary<DateTimeOffset, List<TicketDataHolder>> result)
     {
-        var timeSlots = await requestSender.Send(new GetTimeSlotsForWorkDayIdRequestProto
-        {
-            WorkDayId = workDay.WorkDayId.ToString()
-        });
+        var timeSlots = await requestSender.Send(new ClientGetTimeSlotsForWorkDayIdRequest(workDay.WorkDayId));
 
         if (timeSlots.Count == 0) return;
 
         foreach (var timeSlot in timeSlots)
         {
-            var ticket = await requestSender.Send(new GetTicketByIdRequestProto
-            {
-                TicketId = timeSlot.SelectedTicketId.ToString()
-            });
+            var ticket = await requestSender.Send(new ClientGetTicketByIdRequest(timeSlot.SelectedTicketId));
 
             var elapsedSeconds = (int)(timeSlot.EndTime - timeSlot.StartTime).TotalSeconds;
 
@@ -111,7 +105,7 @@ public class ExportService(
                 result.Add(workDay.Date, ticketDataList);
             }
 
-            var existingData = ticketDataList.FirstOrDefault(t => t.TicketId == ticket!.TicketId);
+            var existingData = ticketDataList.FirstOrDefault(t => t.TicketId == ticket.TicketId);
             if (existingData != null)
             {
                 existingData.ElapsedSeconds += elapsedSeconds;

@@ -9,4 +9,7 @@ message AnalysisByTicketProto {
   string ticket_name = 1;
   repeated TimeSlotProto time_slots = 2;
   repeated StatisticsDataProto statistic_data = 3;
+  map<string, int32> productive_tags = 4;
+  map<string, int32> neutral_tags = 5;
+  map<string, int32> unproductive_tags = 6;
 }

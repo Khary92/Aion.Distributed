@@ -34,7 +34,7 @@ public class NoteTypeNotificationReceiver(INoteTypeStateService noteTypeStateSer
                     {
                         case NoteTypeNotification.NotificationOneofCase.NoteTypeCreated:
                         {
-                            await noteTypeStateService.AddNoteType(notification.NoteTypeCreated.ToDto());
+                            await noteTypeStateService.AddNoteType(notification.NoteTypeCreated.ToWebModel());
                             break;
                         }
                         case NoteTypeNotification.NotificationOneofCase.NoteTypeColorChanged:

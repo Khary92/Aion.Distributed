@@ -9,8 +9,8 @@ public static class UseCaseExtensions
         this TimeSlotControlCreatedNotification notification)
     {
         return new ClientTimeSlotControlCreatedNotification(
-            notification.TimeSlotControlData.StatisticsDataProto.ToModel(),
-            notification.TimeSlotControlData.TicketProto.ToModel(),
-            notification.TimeSlotControlData.TimeSlotProto.ToModel());
+            notification.TimeSlotControlData.StatisticsDataProto.ToClientModel(),
+            notification.TimeSlotControlData.TicketProto.ToClientModel(),
+            notification.TimeSlotControlData.TimeSlotProto.ToClientModel());
     }
 }

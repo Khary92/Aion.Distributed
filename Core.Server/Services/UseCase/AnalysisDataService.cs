@@ -48,12 +48,18 @@ public class AnalysisDataService(
         foreach (var timeSlot in timeSlots)
             statisticsData.Add(
                 await statisticsDataRequestsService.GetStatisticsDataByTimeSlotId(timeSlot.TimeSlotId));
-
+        var tags = await tagRequestsService.GetAll();
+        
+        var (productiveTags, neutralTags, unproductiveTags) = GetTagCounts(statisticsData, tags);
+        
         return new AnalysisByTicketProto
         {
             TicketName = ticket.Name,
             TimeSlots = { ConvertToRepeatedField(timeSlots) },
-            StatisticData = { ConvertToRepeatedField(statisticsData) }
+            StatisticData = { ConvertToRepeatedField(statisticsData) },
+            ProductiveTags = { new MapField<string, int> { productiveTags } },
+            NeutralTags = { new MapField<string, int> { neutralTags } },
+            UnproductiveTags = { new MapField<string, int> { unproductiveTags } }
         };
     }
 

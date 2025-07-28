@@ -35,7 +35,7 @@ public class TagNotificationsReceiver(ITraceCollector tracer, ITagStateService t
                     {
                         case TagNotification.NotificationOneofCase.TagCreated:
                             var notificationTagCreated = notification.TagCreated;
-                            await tagStateService.AddTicket(notificationTagCreated.ToDto());
+                            await tagStateService.AddTicket(notificationTagCreated.ToWebModel());
                             break;
 
                         case TagNotification.NotificationOneofCase.TagUpdated:

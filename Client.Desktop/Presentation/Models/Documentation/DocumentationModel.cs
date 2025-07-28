@@ -7,6 +7,9 @@ using Client.Desktop.Communication.Notifications.NoteType.Records;
 using Client.Desktop.Communication.Notifications.Ticket.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.Communication.Requests;
+using Client.Desktop.Communication.Requests.Notes.Records;
+using Client.Desktop.Communication.Requests.NoteType;
+using Client.Desktop.Communication.Requests.Ticket;
 using Client.Desktop.DataModels;
 using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Register;
@@ -72,7 +75,7 @@ public class DocumentationModel(
 
     public async Task InitializeAsync()
     {
-        var noteTypeDtos = await requestSender.Send(new GetAllNoteTypesRequestProto());
+        var noteTypeDtos = await requestSender.Send(new ClientGetAllNoteTypesRequest());
 
         Options.Clear();
 
@@ -87,7 +90,7 @@ public class DocumentationModel(
         }
 
         AllTickets.Clear();
-        AllTickets.AddRange(await requestSender.Send(new GetAllTicketsRequestProto()));
+        AllTickets.AddRange(await requestSender.Send(new ClientGetAllTicketsRequest()));
 
         if (AllTickets.Any()) SelectedTicket = AllTickets[0];
     }
@@ -103,10 +106,7 @@ public class DocumentationModel(
     {
         if (SelectedTicket == null) return;
 
-        var noteDtos = await requestSender.Send(new GetNotesByTicketIdRequestProto
-        {
-            TicketId = SelectedTicket.TicketId.ToString()
-        });
+        var noteDtos = await requestSender.Send(new ClientGetNotesByTicketIdRequest(SelectedTicket.TicketId));
 
         var noteViewModels = await Task.WhenAll(noteDtos.Select(noteViewFactory.Create));
 
@@ -162,10 +162,7 @@ public class DocumentationModel(
                     return;
                 }
 
-                var noteType = await requestSender.Send(new GetNoteTypeByIdRequestProto
-                {
-                    NoteTypeId = notification.NoteTypeId.ToString()
-                });
+                var noteType = await requestSender.Send(new ClientGetNoteTypeByIdRequest(notification.NoteTypeId));
 
                 noteViewModel.Note.NoteType = noteType;
                 noteViewModel.Note.Apply(notification);

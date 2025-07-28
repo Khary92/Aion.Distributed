@@ -8,6 +8,7 @@ using Client.Desktop.Communication.Notifications.Note.Records;
 using Client.Desktop.Communication.Notifications.NoteType.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.Communication.Requests;
+using Client.Desktop.Communication.Requests.NoteType;
 using Client.Desktop.DataModels;
 using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
@@ -75,7 +76,7 @@ public class NoteViewModel : ReactiveObject
     public async Task Initialize()
     {
         NoteTypes.Clear();
-        var noteTypeDtos = await _requestSender.Send(new GetAllNoteTypesRequestProto());
+        var noteTypeDtos = await _requestSender.Send(new ClientGetAllNoteTypesRequest());
         NoteTypes.AddRange(noteTypeDtos);
 
         if (Note.NoteTypeId == Guid.Empty || !NoteTypes.Any()) return;

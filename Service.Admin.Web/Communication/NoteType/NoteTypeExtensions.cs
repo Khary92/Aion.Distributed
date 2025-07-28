@@ -6,7 +6,7 @@ namespace Service.Admin.Web.Communication.NoteType;
 
 public static class NoteTypeExtensions
 {
-    public static NoteTypeWebModel ToDto(this NoteTypeCreatedNotification notification)
+    public static NoteTypeWebModel ToWebModel(this NoteTypeCreatedNotification notification)
     {
         return new NoteTypeWebModel(Guid.Parse(notification.NoteTypeId), notification.Name, notification.Color);
     }

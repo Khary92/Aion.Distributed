@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Client.Desktop.Communication.Requests.Replays.Records;
 using Client.Desktop.DataModels.Decorators.Replays;
 using Client.Proto;
 using Grpc.Net.Client;
@@ -13,11 +13,9 @@ public class TicketReplayRequestSender : ITicketReplayRequestSender
     private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly TicketReplayRequestService.TicketReplayRequestServiceClient _client = new(Channel);
 
-    public async Task<List<DocumentationReplay>> Send(GetTicketReplaysByIdRequestProto request)
+    public async Task<List<DocumentationReplay>> Send(ClientGetTicketReplaysByIdRequest request)
     {
-        var response = await _client.GetReplayDataAsync(request);
-
-        return response.TicketReplays.Select(item => new DocumentationReplay(item.DocumentationEntry))
-            .ToList();
+        var response = await _client.GetReplayDataAsync(request.ToProto());
+        return response.ToReplayList();
     }
 }

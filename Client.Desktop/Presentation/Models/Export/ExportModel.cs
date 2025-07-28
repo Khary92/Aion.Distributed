@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.Communication.Requests;
+using Client.Desktop.Communication.Requests.WorkDays.Records;
 using Client.Desktop.DataModels;
 using Client.Desktop.DataModels.Local;
 using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
@@ -47,7 +48,7 @@ public class ExportModel(
         SelectedWorkDays.CollectionChanged += RefreshMarkdownViewerHandler;
 
         WorkDays.Clear();
-        WorkDays.AddRange(await requestSender.Send(new GetAllWorkDaysRequestProto()));
+        WorkDays.AddRange(await requestSender.Send(new ClientGetAllWorkDaysRequest()));
     }
 
     public void RegisterMessenger()

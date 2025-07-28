@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Client.Desktop.Communication.Requests.WorkDays.Records;
 using Client.Desktop.DataModels;
 using Client.Proto;
 using Grpc.Net.Client;
-using Proto.DTO.TimerSettings;
 using Proto.Requests.WorkDays;
 
 namespace Client.Desktop.Communication.Requests.WorkDays;
@@ -15,32 +14,36 @@ public class WorkDayRequestSender : IWorkDayRequestSender
     private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly WorkDayRequestService.WorkDayRequestServiceClient _client = new(Channel);
 
-    public async Task<List<WorkDayClientModel>> Send(GetAllWorkDaysRequestProto request)
+    public async Task<List<WorkDayClientModel>> Send(ClientGetAllWorkDaysRequest request)
     {
-        var response = await _client.GetAllWorkDaysAsync(request);
-        return response.WorkDays.Select(ToDto).ToList();
+        var response = await _client.GetAllWorkDaysAsync(request.ToProto());
+
+        if (response == null) throw new ArgumentNullException();
+
+        return response.ToClientModelList();
     }
 
-    public async Task<WorkDayClientModel> Send(GetSelectedWorkDayRequestProto request)
+    public async Task<WorkDayClientModel> Send(ClientGetSelectedWorkDayRequest request)
     {
-        var response = await _client.GetSelectedWorkDayAsync(request);
-        return ToDto(response);
+        var response = await _client.GetSelectedWorkDayAsync(request.ToProto());
+
+        if (response == null) throw new ArgumentNullException();
+
+        return response.ToClientModel();
     }
 
-    public async Task<WorkDayClientModel> Send(GetWorkDayByDateRequestProto request)
+    public async Task<WorkDayClientModel> Send(ClientGetWorkDayByDateRequest request)
     {
-        var response = await _client.GetWorkDayByDateAsync(request);
-        return ToDto(response);
+        var response = await _client.GetWorkDayByDateAsync(request.ToProto());
+
+        if (response == null) throw new ArgumentNullException();
+
+        return response.ToClientModel();
     }
 
-    public async Task<bool> Send(IsWorkDayExistingRequestProto request)
+    public async Task<bool> Send(ClientIsWorkDayExistingRequest request)
     {
-        var response = await _client.IsWorkDayExistingAsync(request);
+        var response = await _client.IsWorkDayExistingAsync(request.ToProto());
         return response.Exists;
-    }
-
-    private static WorkDayClientModel ToDto(WorkDayProto proto)
-    {
-        return new WorkDayClientModel(Guid.Parse(proto.WorkDayId), proto.Date.ToDateTimeOffset());
     }
 }

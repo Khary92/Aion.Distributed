@@ -37,7 +37,7 @@ public class TicketNotificationsReceiver(ITraceCollector tracer, ITicketStateSer
                             var notificationTicketCreated = notification.TicketCreated;
                             await tracer.Ticket.Create.NotificationReceived(GetType(),
                                 Guid.Parse(notificationTicketCreated.TicketId), notificationTicketCreated);
-                            await ticketStateService.AddTicket(notificationTicketCreated.ToDto());
+                            await ticketStateService.AddTicket(notificationTicketCreated.ToWebModel());
                             break;
 
                         case TicketNotification.NotificationOneofCase.TicketDataUpdated:

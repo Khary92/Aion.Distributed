@@ -18,40 +18,40 @@ namespace Client.Desktop.Communication.Notifications;
 
 public static class DtoExtensions
 {
-    public static List<NoteTypeClientModel> ToModelList(this GetAllNoteTypesResponseProto? noteTypeListProto)
+    public static List<NoteTypeClientModel> ToClientModelList(this GetAllNoteTypesResponseProto? noteTypeListProto)
     {
-        return noteTypeListProto == null ? [] : noteTypeListProto.NoteTypes.Select(ToModel).ToList();
+        return noteTypeListProto == null ? [] : noteTypeListProto.NoteTypes.Select(ToClientModel).ToList();
     }
 
-    public static NoteTypeClientModel ToModel(this NoteTypeProto noteType)
+    public static NoteTypeClientModel ToClientModel(this NoteTypeProto noteType)
     {
         return new NoteTypeClientModel(Guid.Parse(noteType.NoteTypeId), noteType.Name, noteType.Color);
     }
 
-    public static List<TagClientModel> ToModelList(this TagListProto? tagListProto)
+    public static List<TagClientModel> ToClientModelList(this TagListProto? tagListProto)
     {
         if (tagListProto == null) return [];
 
         return tagListProto.Tags
-            .Select(ToModel)
+            .Select(ToClientModel)
             .ToList();
     }
 
-    public static TagClientModel ToModel(this TagProto tag)
+    public static TagClientModel ToClientModel(this TagProto tag)
     {
         return new TagClientModel(Guid.Parse(tag.TagId), tag.Name, tag.IsSelected);
     }
 
-    public static List<TicketClientModel> ToModelList(this TicketListProto? ticketListProto)
+    public static List<TicketClientModel> ToClientModelList(this TicketListProto? ticketListProto)
     {
         if (ticketListProto == null) return [];
 
         return ticketListProto.Tickets
-            .Select(ToModel)
+            .Select(ToClientModel)
             .ToList();
     }
 
-    public static TicketClientModel ToModel(this TicketProto ticket)
+    public static TicketClientModel ToClientModel(this TicketProto ticket)
     {
         var sprintIds = ticket.SprintIds
             .Select(idStr => Guid.TryParse(idStr, out var guid) ? guid : Guid.Empty)
@@ -67,16 +67,16 @@ public static class DtoExtensions
         );
     }
 
-    public static List<SprintClientModel?> ToModelList(this SprintListProto? sprintListProto)
+    public static List<SprintClientModel?> ToClientModelList(this SprintListProto? sprintListProto)
     {
         if (sprintListProto == null) return [];
 
         return sprintListProto.Sprints
-            .Select(ToModel)
+            .Select(ToClientModel)
             .ToList();
     }
 
-    public static SprintClientModel? ToModel(this SprintProto? sprint)
+    public static SprintClientModel? ToClientModel(this SprintProto? sprint)
     {
         if (sprint == null) return null;
         var ticketIds = sprint.TicketIds
@@ -94,13 +94,13 @@ public static class DtoExtensions
         );
     }
 
-    public static StatisticsDataClientModel ToModel(this StatisticsDataProto proto)
+    public static StatisticsDataClientModel ToClientModel(this StatisticsDataProto proto)
     {
         return new StatisticsDataClientModel(Guid.Parse(proto.StatisticsId), Guid.Parse(proto.TimeSlotId),
             proto.TagIds.ToGuidList(), proto.IsProductive, proto.IsNeutral, proto.IsUnproductive);
     }
 
-    public static TimeSlotClientModel ToModel(this TimeSlotProto proto)
+    public static TimeSlotClientModel ToClientModel(this TimeSlotProto proto)
     {
         return new TimeSlotClientModel(Guid.Parse(proto.TimeSlotId), Guid.Parse(proto.WorkDayId),
             Guid.Parse(proto.SelectedTicketId), proto.StartTime.ToDateTimeOffset(), proto.EndTime.ToDateTimeOffset(),

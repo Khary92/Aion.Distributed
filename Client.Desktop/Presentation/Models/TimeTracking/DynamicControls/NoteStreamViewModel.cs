@@ -7,6 +7,7 @@ using Client.Desktop.Communication.Commands.Notes.Records;
 using Client.Desktop.Communication.Notifications.Note.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.Communication.Requests;
+using Client.Desktop.Communication.Requests.Notes.Records;
 using Client.Desktop.DataModels;
 using Client.Desktop.Presentation.Factories;
 using Client.Desktop.Services.LocalSettings;
@@ -59,11 +60,7 @@ public class NoteStreamViewModel(
 
     public async Task InitializeAsync()
     {
-        var noteDtos = await requestSender.Send(new GetNotesByTimeSlotIdRequestProto
-        {
-            TimeSlotId = TimeSlotId.ToString()
-        });
-
+        var noteDtos = await requestSender.Send(new ClientGetNotesByTimeSlotIdRequest(TimeSlotId));
         foreach (var note in noteDtos) await InsertNoteViewModel(note);
     }
 

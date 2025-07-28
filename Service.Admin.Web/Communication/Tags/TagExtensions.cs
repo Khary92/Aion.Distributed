@@ -6,7 +6,7 @@ namespace Service.Admin.Web.Communication.Tags;
 
 public static class TagExtensions
 {
-    public static TagWebModel ToDto(this TagCreatedNotification notification)
+    public static TagWebModel ToWebModel(this TagCreatedNotification notification)
     {
         return new TagWebModel(Guid.Parse(notification.TagId), notification.Name, false);
     }

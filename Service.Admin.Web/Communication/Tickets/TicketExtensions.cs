@@ -6,7 +6,7 @@ namespace Service.Admin.Web.Communication.Tickets;
 
 public static class TicketExtensions
 {
-    public static TicketWebModel ToDto(this TicketCreatedNotification notification)
+    public static TicketWebModel ToWebModel(this TicketCreatedNotification notification)
     {
         return new TicketWebModel(Guid.Parse(notification.TicketId), notification.Name, notification.BookingNumber,
             string.Empty, notification.SprintIds.ToGuidList());

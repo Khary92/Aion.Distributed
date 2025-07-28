@@ -4,22 +4,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.Commands.UseCases.Records;
-using Client.Desktop.Communication.Notifications;
 using Client.Desktop.Communication.Notifications.Sprint.Records;
 using Client.Desktop.Communication.Notifications.Ticket.Records;
 using Client.Desktop.Communication.Notifications.UseCase.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.Communication.Requests;
+using Client.Desktop.Communication.Requests.Sprint;
+using Client.Desktop.Communication.Requests.Ticket;
+using Client.Desktop.Communication.Requests.UseCase.Records;
 using Client.Desktop.DataModels;
 using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Register;
 using Client.Desktop.Presentation.Factories;
 using Client.Desktop.Services.LocalSettings;
 using CommunityToolkit.Mvvm.Messaging;
-using Google.Protobuf.WellKnownTypes;
-using Proto.Requests.Sprints;
-using Proto.Requests.Tickets;
-using Proto.Requests.UseCase;
 using ReactiveUI;
 using ListEx = DynamicData.ListEx;
 
@@ -75,12 +73,12 @@ public class TimeTrackingModel(
 
     public async Task InitializeAsync()
     {
-        var currentSprint = await requestSender.Send(new GetActiveSprintRequestProto());
+        var currentSprint = await requestSender.Send(new ClientGetActiveSprintRequest());
 
         if (currentSprint == null) return;
 
         FilteredTickets.Clear();
-        var tickets = await requestSender.Send(new GetTicketsForCurrentSprintRequestProto());
+        var tickets = await requestSender.Send(new ClientGetTicketsForCurrentSprintRequest());
         ListEx.AddRange(FilteredTickets, tickets);
     }
 
@@ -90,7 +88,7 @@ public class TimeTrackingModel(
         {
             AllTickets.Add(message.Ticket);
 
-            var currentSprint = await requestSender.Send(new GetActiveSprintRequestProto());
+            var currentSprint = await requestSender.Send(new ClientGetActiveSprintRequest());
 
             if (currentSprint == null) return;
 
@@ -127,11 +125,11 @@ public class TimeTrackingModel(
         {
             FilteredTickets.Clear();
 
-            var currentSprint = await requestSender.Send(new GetActiveSprintRequestProto());
+            var currentSprint = await requestSender.Send(new ClientGetActiveSprintRequest());
 
             if (currentSprint == null) throw new InvalidOperationException("No active sprint");
 
-            var ticketDtos = await requestSender.Send(new GetAllTicketsRequestProto());
+            var ticketDtos = await requestSender.Send(new ClientGetAllTicketsRequest());
             foreach (var modelTicket in ticketDtos.Where(modelTicket =>
                          modelTicket.SprintIds.Contains(currentSprint.SprintId)))
                 FilteredTickets.Add(modelTicket);
@@ -141,11 +139,11 @@ public class TimeTrackingModel(
         {
             FilteredTickets.Clear();
 
-            var currentSprint = await requestSender.Send(new GetActiveSprintRequestProto());
+            var currentSprint = await requestSender.Send(new ClientGetActiveSprintRequest());
 
             if (currentSprint == null) throw new InvalidOperationException("No active sprint");
 
-            var ticketDtos = await requestSender.Send(new GetAllTicketsRequestProto());
+            var ticketDtos = await requestSender.Send(new ClientGetAllTicketsRequest());
 
             foreach (var ticket in ticketDtos.Where(modelTicket =>
                          modelTicket.SprintIds.Contains(currentSprint.SprintId)))
@@ -178,15 +176,13 @@ public class TimeTrackingModel(
     {
         TimeSlotViewModels.Clear();
 
-        var controlDataList = await requestSender.Send(new GetTimeSlotControlDataRequestProto
-        {
-            Date = Timestamp.FromDateTimeOffset(localSettingsService.SelectedDate)
-        });
+        var controlDataList =
+            await requestSender.Send(new ClientGetTimeSlotControlDataRequest(localSettingsService.SelectedDate));
 
-        foreach (var controlData in controlDataList.TimeSlotControlData)
+        foreach (var controlData in controlDataList)
         {
-            var timeSlotViewModel = await timeSlotViewModelFactory.Create(controlData.TicketProto.ToModel(),
-                controlData.StatisticsDataProto.ToModel(), controlData.TimeSlotProto.ToModel());
+            var timeSlotViewModel = await timeSlotViewModelFactory.Create(controlData.Ticket,
+                controlData.StatisticsData, controlData.TimeSlot);
             TimeSlotViewModels.Add(timeSlotViewModel);
         }
 

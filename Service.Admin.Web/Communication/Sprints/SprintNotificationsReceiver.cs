@@ -34,7 +34,7 @@ public class SprintNotificationsReceiver(ISprintStateService sprintStateService)
                     switch (notification.NotificationCase)
                     {
                         case SprintNotification.NotificationOneofCase.SprintCreated:
-                            await sprintStateService.AddSprint(notification.SprintCreated.ToDto());
+                            await sprintStateService.AddSprint(notification.SprintCreated.ToWebModel());
                             break;
 
                         case SprintNotification.NotificationOneofCase.SprintDataUpdated:
