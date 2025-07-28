@@ -73,7 +73,7 @@ using Service.Proto.Shared.Requests.TimerSettings;
 
 namespace Client.Desktop;
 
-public static class ClientServiceExtensions
+public static class ServiceExtensions
 {
     public static void AddPresentationServices(this IServiceCollection services)
     {
