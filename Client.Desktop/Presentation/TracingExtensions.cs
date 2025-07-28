@@ -1,7 +1,7 @@
 using Client.Desktop.DataModels;
 using Newtonsoft.Json;
 
-namespace Client.Desktop.Services;
+namespace Client.Desktop.Presentation;
 
 public static class TracingExtensions
 {

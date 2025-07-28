@@ -274,11 +274,13 @@ public static class ClientServiceExtensions
         services.AddScoped<IRequestSender, RequestSender>();
 
         services.AddScoped<INotesRequestSender, NotesRequestSender>();
-        services.AddScoped<IStatisticsDataRequestSender, StatisticsDataRequestSender>();
         services.AddScoped<ITimeSlotRequestSender, TimeSlotRequestSender>();
         services.AddScoped<IWorkDayRequestSender, WorkDayRequestSender>();
         services.AddScoped<ITicketReplayRequestSender, TicketReplayRequestSender>();
         services.AddScoped<IUseCaseRequestSender, UseCaseRequestSender>();
+        services.AddScoped<IStatisticsDataRequestSender, StatisticsDataRequestSender>();
+
         services.AddScoped<IAnalysisRequestSender, AnalysisRequestSender>();
+        services.AddScoped<IAnalysisMapper, AnalysisMapper>();
     }
 }
