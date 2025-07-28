@@ -6,8 +6,13 @@ using Client.Desktop.Communication.Commands.TimeSlots;
 using Client.Desktop.Communication.Commands.TimeSlots.Records;
 using Client.Desktop.Communication.Commands.UseCases;
 using Client.Desktop.Communication.Commands.WorkDays;
-using Client.Desktop.Communication.Notifications;
 using Client.Desktop.Communication.Notifications.Note;
+using Client.Desktop.Communication.Notifications.NoteType;
+using Client.Desktop.Communication.Notifications.Sprint;
+using Client.Desktop.Communication.Notifications.Tag;
+using Client.Desktop.Communication.Notifications.Ticket;
+using Client.Desktop.Communication.Notifications.UseCase;
+using Client.Desktop.Communication.Notifications.WorkDay;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.Communication.Requests.Analysis;
 using Client.Desktop.Communication.Requests.Notes;
@@ -88,7 +93,7 @@ public static class ClientServiceExtensions
     {
         services.AddSingleton<CancellationTokenSource>();
         services.AddSingleton<IStartupScheduler, StartupScheduler>();
-        
+
         services.AddSingleton<IStartupTask, AsyncInitializeTask>();
         services.AddSingleton<IStartupTask, RegisterMessengerTask>();
         services.AddSingleton<IStartupTask, SendUnsentCommandsTask>();

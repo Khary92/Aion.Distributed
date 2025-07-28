@@ -1,7 +1,7 @@
-using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Client.Desktop.Communication.Notifications.Tag.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.DataModels;
@@ -10,7 +10,6 @@ using Client.Desktop.Lifecycle.Startup.Initialize;
 using Client.Desktop.Lifecycle.Startup.Register;
 using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
-using Proto.Command.Tags;
 using Proto.Requests.AnalysisData;
 using Proto.Requests.Tags;
 using ReactiveUI;
@@ -40,15 +39,15 @@ public class AnalysisByTagModel(IRequestSender requestSender, IMessenger messeng
 
     public void RegisterMessenger()
     {
-        messenger.Register<NewTagMessage>(this, (_, m) => { Tags.Add(m.Tag); });
+        messenger.Register<NewTagMessage>(this, (_, message) => { Tags.Add(message.Tag); });
 
-        messenger.Register<UpdateTagCommandProto>(this, (_, m) =>
+        messenger.Register<ClientTagUpdatedNotification>(this, (_, notification) =>
         {
-            var tag = Tags.FirstOrDefault(t => t.TagId == Guid.Parse(m.TagId));
+            var tag = Tags.FirstOrDefault(t => t.TagId == notification.TagId);
 
             if (tag == null) return;
 
-            tag.Name = m.Name;
+            tag.Name = notification.Name;
         });
     }
 

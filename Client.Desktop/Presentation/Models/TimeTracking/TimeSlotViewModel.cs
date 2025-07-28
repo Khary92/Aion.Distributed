@@ -46,8 +46,6 @@ public class TimeSlotViewModel : ReactiveObject
         NextStateCommand = ReactiveCommand.Create(NextState);
         AddNoteCommand = ReactiveCommand.CreateFromTask(AddNoteHotkeyFired);
 
-        Model.RegisterMessenger();
-
         SwitchToDocumentationView();
     }
 

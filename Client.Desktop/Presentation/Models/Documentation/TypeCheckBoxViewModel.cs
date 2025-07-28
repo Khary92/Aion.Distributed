@@ -5,7 +5,8 @@ using ReactiveUI;
 
 namespace Client.Desktop.Presentation.Models.Documentation;
 
-public class TypeCheckBoxViewModel(IRequestSender requestSender, NoteTypeClientModel noteTypeClientModel) : ReactiveObject
+public class TypeCheckBoxViewModel(IRequestSender requestSender, NoteTypeClientModel noteTypeClientModel)
+    : ReactiveObject
 {
     private readonly NoteTypeClientModel _noteType = noteTypeClientModel;
     private readonly Guid _noteTypeId = noteTypeClientModel.NoteTypeId;

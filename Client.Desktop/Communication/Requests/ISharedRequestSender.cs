@@ -5,7 +5,6 @@ using Proto.Requests.NoteTypes;
 using Proto.Requests.Sprints;
 using Proto.Requests.Tags;
 using Proto.Requests.Tickets;
-using Proto.Requests.TimerSettings;
 
 namespace Client.Desktop.Communication.Requests;
 

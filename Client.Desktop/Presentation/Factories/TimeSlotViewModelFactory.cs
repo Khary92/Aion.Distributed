@@ -35,6 +35,8 @@ public class TimeSlotViewModelFactory(IServiceProvider serviceProvider, IRequest
         timeSlotViewModel.NoteStreamViewModel.RegisterMessenger();
 
         timeSlotViewModel.InitializeViewTimer(new ViewTimer());
+        timeSlotViewModel.Model.RegisterMessenger();
+
         return timeSlotViewModel;
     }
 }

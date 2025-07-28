@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands.Notes.Records;
-using Proto.Command.Notes;
 
 namespace Client.Desktop.Communication.Commands.Notes;
 

@@ -1,13 +1,12 @@
-using System;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands.TimeSlots.Records;
+using Client.Desktop.Communication.Notifications.Ticket.Records;
+using Client.Desktop.Communication.Notifications.UseCase.Records;
 using Client.Desktop.DataModels;
 using Client.Desktop.DataModels.Decorators.Replays;
 using Client.Desktop.Presentation.Models.Synchronization;
 using Client.Desktop.Services.Cache;
 using CommunityToolkit.Mvvm.Messaging;
-using Proto.Notifications.Ticket;
-using Proto.Notifications.UseCase;
 using ReactiveUI;
 
 namespace Client.Desktop.Presentation.Models.TimeTracking;
@@ -41,21 +40,21 @@ public class TimeSlotModel(
 
     public void RegisterMessenger()
     {
-        messenger.Register<TicketDocumentationUpdatedNotification>(this, (_, m) =>
+        messenger.Register<ClientTicketDocumentationUpdatedNotification>(this, (_, notification) =>
         {
-            if (TicketReplayDecorator.Ticket.TicketId == Guid.Parse(m.TicketId)) return;
+            if (TicketReplayDecorator.Ticket.TicketId == notification.TicketId) return;
 
-            TicketReplayDecorator.Ticket.Apply(m);
+            TicketReplayDecorator.Ticket.Apply(notification);
         });
 
-        messenger.Register<TicketDataUpdatedNotification>(this, (_, m) =>
+        messenger.Register<ClientTicketDataUpdatedNotification>(this, (_, notification) =>
         {
-            if (TicketReplayDecorator.Ticket.TicketId == Guid.Parse(m.TicketId)) return;
+            if (TicketReplayDecorator.Ticket.TicketId == notification.TicketId) return;
 
-            TicketReplayDecorator.Ticket.Apply(m);
+            TicketReplayDecorator.Ticket.Apply(notification);
         });
 
-        messenger.Register<SaveDocumentationNotification>(this, async void (_, _) =>
+        messenger.Register<ClientSaveDocumentationNotification>(this, async void (_, _) =>
         {
             if (!TicketReplayDecorator.Ticket.IsDocumentationChanged()) return;
 
@@ -65,7 +64,7 @@ public class TimeSlotModel(
             await ticketDocumentStateSynchronizer.FireCommand();
         });
 
-        messenger.Register<CreateSnapshotNotification>(this, (_, _) =>
+        messenger.Register<ClientCreateSnapshotNotification>(this, (_, _) =>
         {
             if (TimeSlot.IsEndTimeChanged())
             {

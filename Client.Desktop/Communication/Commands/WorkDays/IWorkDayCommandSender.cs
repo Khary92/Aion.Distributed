@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands.WorkDays.Records;
-using Proto.Command.WorkDays;
 
 namespace Client.Desktop.Communication.Commands.WorkDays;
 

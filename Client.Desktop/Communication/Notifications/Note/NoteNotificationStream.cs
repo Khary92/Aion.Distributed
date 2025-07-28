@@ -16,7 +16,6 @@ public class NoteNotificationStream(
     public async Task StartListening(CancellationToken cancellationToken)
     {
         while (!cancellationToken.IsCancellationRequested)
-        {
             try
             {
                 using var call =
@@ -45,11 +44,10 @@ public class NoteNotificationStream(
             }
             catch (Exception ex)
             {
-                if (cancellationToken.IsCancellationRequested) 
+                if (cancellationToken.IsCancellationRequested)
                     return;
-                
+
                 await Task.Delay(TimeSpan.FromSeconds(5), cancellationToken);
             }
-        }
     }
 }

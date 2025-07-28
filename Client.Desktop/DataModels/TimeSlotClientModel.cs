@@ -16,7 +16,8 @@ public class TimeSlotClientModel : ReactiveObject
 
     private DateTimeOffset _startTime;
 
-    public TimeSlotClientModel(Guid timeSlotId, Guid workDayId, Guid ticketId, DateTimeOffset startTime, DateTimeOffset endTime,
+    public TimeSlotClientModel(Guid timeSlotId, Guid workDayId, Guid ticketId, DateTimeOffset startTime,
+        DateTimeOffset endTime,
         List<Guid> noteIds, bool isTimerRunning)
     {
         TimeSlotId = timeSlotId;

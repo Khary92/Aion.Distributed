@@ -5,8 +5,11 @@ namespace Client.Desktop.Communication.Commands.UseCases;
 
 public static class UseCaseExtensions
 {
-    public static CreateTimeSlotControlCommandProto ToProto(this ClientCreateTimeSlotControlCommand command) => new()
+    public static CreateTimeSlotControlCommandProto ToProto(this ClientCreateTimeSlotControlCommand command)
     {
-        TicketId = command.TicketId.ToString(),
-    };
+        return new CreateTimeSlotControlCommandProto
+        {
+            TicketId = command.TicketId.ToString()
+        };
+    }
 }

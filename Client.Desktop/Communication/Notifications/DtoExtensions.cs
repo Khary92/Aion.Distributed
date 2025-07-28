@@ -8,14 +8,13 @@ using Proto.DTO.Sprint;
 using Proto.DTO.StatisticsData;
 using Proto.DTO.Tag;
 using Proto.DTO.Ticket;
-using Proto.DTO.TimerSettings;
 using Proto.DTO.TimeSlots;
 using Proto.Requests.NoteTypes;
 using Proto.Requests.Sprints;
 using Proto.Requests.Tags;
 using Proto.Requests.Tickets;
 
-namespace Client.Desktop.Communication.Requests;
+namespace Client.Desktop.Communication.Notifications;
 
 public static class DtoExtensions
 {

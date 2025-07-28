@@ -10,6 +10,13 @@ public class StreamLifeCycleHandler(
     IEnumerable<IStreamClient> receiverClients,
     CancellationTokenSource cancellationTokenSource) : IStreamLifeCycleHandler, IStartupTask
 {
+    public StartupTask StartupTask => StartupTask.RegisterStreams;
+
+    public async Task Execute()
+    {
+        await Start();
+    }
+
     public Task Start()
     {
         return Task.Run(() =>
@@ -18,17 +25,10 @@ public class StreamLifeCycleHandler(
                 task.StartListening(cancellationTokenSource.Token)
             ));
         });
-
     }
 
     public void Stop()
     {
         cancellationTokenSource.Cancel();
-    }
-
-    public StartupTask StartupTask => StartupTask.RegisterStreams;
-    public async Task Execute()
-    {
-        await Start();
     }
 }

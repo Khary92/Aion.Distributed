@@ -4,13 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.Commands.Notes.Records;
+using Client.Desktop.Communication.Notifications.Note.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.DataModels;
 using Client.Desktop.Presentation.Factories;
 using Client.Desktop.Services.LocalSettings;
 using CommunityToolkit.Mvvm.Messaging;
-using Proto.Notifications.Note;
 using Proto.Requests.Notes;
 using ReactiveUI;
 
@@ -44,15 +44,16 @@ public class NoteStreamViewModel(
 
     public void RegisterMessenger()
     {
-        messenger.Register<NewNoteMessage>(this, async void (_, m) => { await InsertNoteViewModel(m.Note); });
+        messenger.Register<NewNoteMessage>(this,
+            async void (_, message) => { await InsertNoteViewModel(message.Note); });
 
-        messenger.Register<NoteUpdatedNotification>(this, (_, m) =>
+        messenger.Register<ClientNoteUpdatedNotification>(this, (_, notification) =>
         {
-            var viewModel = Notes.FirstOrDefault(n => n.Note.NoteId == Guid.Parse(m.NoteId));
+            var viewModel = Notes.FirstOrDefault(n => n.Note.NoteId == notification.NoteId);
 
             if (viewModel == null) return;
 
-            viewModel.Note.Apply(m);
+            viewModel.Note.Apply(notification);
         });
     }
 

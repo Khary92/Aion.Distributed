@@ -21,7 +21,7 @@ public class RegisterMessengerTask(IEnumerable<IRegisterMessenger> messengerComp
             {
                 throw new InitializationException($"Failed to register messenger for {component.GetType().Name}", ex);
             }
-        
+
         return Task.CompletedTask;
     }
 }

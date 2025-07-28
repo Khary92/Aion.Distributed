@@ -65,9 +65,10 @@ public class ExportService(
 
     public void RegisterMessenger()
     {
-        messenger.Register<ExportPathSetNotification>(this, (_, m) => { LocalSettings!.ExportPath = m.ExportPath; });
+        messenger.Register<ExportPathSetNotification>(this,
+            (_, message) => { LocalSettings!.ExportPath = message.ExportPath; });
 
-        messenger.Register<SettingsClientModel>(this, (_, m) => { LocalSettings = m; });
+        messenger.Register<SettingsClientModel>(this, (_, message) => { LocalSettings = message; });
     }
 
     private static string BuildFilePath(DateTime date, string exportPath)

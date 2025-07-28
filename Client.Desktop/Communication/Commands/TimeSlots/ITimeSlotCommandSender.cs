@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands.TimeSlots.Records;
-using Proto.Command.TimeSlots;
 
 namespace Client.Desktop.Communication.Commands.TimeSlots;
 

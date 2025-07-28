@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Client.Desktop.Communication.Notifications;
 using Client.Desktop.Communication.Requests.Analysis;
 using Client.Desktop.Communication.Requests.Notes;
 using Client.Desktop.Communication.Requests.Replays;
@@ -18,7 +19,6 @@ using Proto.Requests.StatisticsData;
 using Proto.Requests.Tags;
 using Proto.Requests.TicketReplay;
 using Proto.Requests.Tickets;
-using Proto.Requests.TimerSettings;
 using Proto.Requests.TimeSlots;
 using Proto.Requests.UseCase;
 using Proto.Requests.WorkDays;
@@ -124,8 +124,8 @@ public class RequestSender(
     {
         var ticketProto = await ticketRequestSender.Send(request);
         return ticketProto.ToModel();
-    } 
-    
+    }
+
     public async Task<List<TimeSlotClientModel>> Send(GetTimeSlotsForWorkDayIdRequestProto request)
     {
         return await timeSlotRequestSender.Send(request);

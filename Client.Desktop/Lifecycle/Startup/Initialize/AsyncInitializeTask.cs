@@ -39,7 +39,7 @@ public class AsyncInitializeTask(IEnumerable<IInitializeAsync> initializeCompone
             throw new InitializationException("Failed to initialize services", ex);
         }
     }
-    
+
     private void ValidateInitializationComponents()
     {
         var missingTypes = _order.Except(LoadingStrategy.Keys).ToList();

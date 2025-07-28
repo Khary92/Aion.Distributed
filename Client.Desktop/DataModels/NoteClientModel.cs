@@ -1,5 +1,5 @@
 using System;
-using Proto.Notifications.Note;
+using Client.Desktop.Communication.Notifications.Note.Records;
 using ReactiveUI;
 
 namespace Client.Desktop.DataModels;
@@ -58,11 +58,11 @@ public class NoteClientModel : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref _noteType, value);
     }
 
-    public void Apply(NoteUpdatedNotification notification)
+    public void Apply(ClientNoteUpdatedNotification notification)
     {
-        NoteId = Guid.Parse(notification.NoteId);
+        NoteId = notification.NoteId;
         Text = notification.Text;
-        NoteTypeId = Guid.Parse(notification.NoteTypeId);
-        TimeSlotId = Guid.Parse(notification.TimeSlotId);
+        NoteTypeId = notification.NoteTypeId;
+        TimeSlotId = notification.TimeSlotId;
     }
 }

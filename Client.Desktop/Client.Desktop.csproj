@@ -43,42 +43,41 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Communication\Notifications\NoteType\" />
-      <Folder Include="Presentation\Views\" />
+        <Folder Include="Presentation\Views\"/>
     </ItemGroup>
 
     <ItemGroup>
-      <AdditionalFiles Include="Presentation\Themes\CustomDarkTheme.axaml" />
-      <AdditionalFiles Include="Presentation\Themes\CustomResources.axaml" />
-      <AdditionalFiles Include="Presentation\Views\Analysis\AnalysisBySprintControl.axaml" />
-      <AdditionalFiles Include="Presentation\Views\Analysis\AnalysisByTagControl.axaml" />
-      <AdditionalFiles Include="Presentation\Views\Analysis\AnalysisByTicketControl.axaml" />
-      <AdditionalFiles Include="Presentation\Views\Analysis\AnalysisControlWrapper.axaml" />
-      <AdditionalFiles Include="Presentation\Views\Documentation\DocumentationControl.axaml" />
-      <AdditionalFiles Include="Presentation\Views\Documentation\TypeCheckBoxControl.axaml" />
-      <AdditionalFiles Include="Presentation\Views\Export\ExportControl.axaml" />
-      <AdditionalFiles Include="Presentation\Views\Main\App.axaml" />
-      <AdditionalFiles Include="Presentation\Views\Main\ContentWrapper.axaml" />
-      <AdditionalFiles Include="Presentation\Views\Setting\SettingsCompositeControl.axaml" />
-      <AdditionalFiles Include="Presentation\Views\Setting\SettingsControl.axaml" />
-      <AdditionalFiles Include="Presentation\Views\Setting\WorkDaysControl.axaml" />
-      <AdditionalFiles Include="Presentation\Views\Tracking\DynamicControl\NoteControl.axaml" />
-      <AdditionalFiles Include="Presentation\Views\Tracking\DynamicControl\NotesStreamControl.axaml" />
-      <AdditionalFiles Include="Presentation\Views\Tracking\DynamicControl\StatisticsControl.axaml" />
-      <AdditionalFiles Include="Presentation\Views\Tracking\DynamicControl\TagCheckBoxControl.axaml" />
-      <AdditionalFiles Include="Presentation\Views\Tracking\TimeSlotControl.axaml" />
-      <AdditionalFiles Include="Presentation\Views\Tracking\TimeTrackingControl.axaml" />
+        <AdditionalFiles Include="Presentation\Themes\CustomDarkTheme.axaml"/>
+        <AdditionalFiles Include="Presentation\Themes\CustomResources.axaml"/>
+        <AdditionalFiles Include="Presentation\Views\Analysis\AnalysisBySprintControl.axaml"/>
+        <AdditionalFiles Include="Presentation\Views\Analysis\AnalysisByTagControl.axaml"/>
+        <AdditionalFiles Include="Presentation\Views\Analysis\AnalysisByTicketControl.axaml"/>
+        <AdditionalFiles Include="Presentation\Views\Analysis\AnalysisControlWrapper.axaml"/>
+        <AdditionalFiles Include="Presentation\Views\Documentation\DocumentationControl.axaml"/>
+        <AdditionalFiles Include="Presentation\Views\Documentation\TypeCheckBoxControl.axaml"/>
+        <AdditionalFiles Include="Presentation\Views\Export\ExportControl.axaml"/>
+        <AdditionalFiles Include="Presentation\Views\Main\App.axaml"/>
+        <AdditionalFiles Include="Presentation\Views\Main\ContentWrapper.axaml"/>
+        <AdditionalFiles Include="Presentation\Views\Setting\SettingsCompositeControl.axaml"/>
+        <AdditionalFiles Include="Presentation\Views\Setting\SettingsControl.axaml"/>
+        <AdditionalFiles Include="Presentation\Views\Setting\WorkDaysControl.axaml"/>
+        <AdditionalFiles Include="Presentation\Views\Tracking\DynamicControl\NoteControl.axaml"/>
+        <AdditionalFiles Include="Presentation\Views\Tracking\DynamicControl\NotesStreamControl.axaml"/>
+        <AdditionalFiles Include="Presentation\Views\Tracking\DynamicControl\StatisticsControl.axaml"/>
+        <AdditionalFiles Include="Presentation\Views\Tracking\DynamicControl\TagCheckBoxControl.axaml"/>
+        <AdditionalFiles Include="Presentation\Views\Tracking\TimeSlotControl.axaml"/>
+        <AdditionalFiles Include="Presentation\Views\Tracking\TimeTrackingControl.axaml"/>
     </ItemGroup>
 
     <ItemGroup>
-      <AvaloniaResource Include="Presentation\Assets\app-icon.ico" />
+        <AvaloniaResource Include="Presentation\Assets\app-icon.ico"/>
     </ItemGroup>
 
     <ItemGroup>
-      <EmbeddedResource Include="Presentation\Themes\Fonts\PtSans\PTSans-Bold.ttf" />
-      <EmbeddedResource Include="Presentation\Themes\Fonts\PtSans\PTSans-BoldItalic.ttf" />
-      <EmbeddedResource Include="Presentation\Themes\Fonts\PtSans\PTSans-Italic.ttf" />
-      <EmbeddedResource Include="Presentation\Themes\Fonts\PtSans\PTSans-Regular.ttf" />
+        <EmbeddedResource Include="Presentation\Themes\Fonts\PtSans\PTSans-Bold.ttf"/>
+        <EmbeddedResource Include="Presentation\Themes\Fonts\PtSans\PTSans-BoldItalic.ttf"/>
+        <EmbeddedResource Include="Presentation\Themes\Fonts\PtSans\PTSans-Italic.ttf"/>
+        <EmbeddedResource Include="Presentation\Themes\Fonts\PtSans\PTSans-Regular.ttf"/>
     </ItemGroup>
 
 </Project>

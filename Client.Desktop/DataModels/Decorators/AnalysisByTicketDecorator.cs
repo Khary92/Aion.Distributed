@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Client.Desktop.Communication.Requests;
+using Client.Desktop.Communication.Notifications;
 using Client.Desktop.DataModels.Decorators.Entities;
 using Client.Proto;
 using Google.Protobuf.Collections;

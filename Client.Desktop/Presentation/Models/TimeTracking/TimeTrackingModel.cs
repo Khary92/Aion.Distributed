@@ -4,6 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.Commands.UseCases.Records;
+using Client.Desktop.Communication.Notifications;
+using Client.Desktop.Communication.Notifications.Sprint.Records;
+using Client.Desktop.Communication.Notifications.Ticket.Records;
+using Client.Desktop.Communication.Notifications.UseCase.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.DataModels;
@@ -13,9 +17,6 @@ using Client.Desktop.Presentation.Factories;
 using Client.Desktop.Services.LocalSettings;
 using CommunityToolkit.Mvvm.Messaging;
 using Google.Protobuf.WellKnownTypes;
-using Proto.Notifications.Sprint;
-using Proto.Notifications.Ticket;
-using Proto.Notifications.UseCase;
 using Proto.Requests.Sprints;
 using Proto.Requests.Tickets;
 using Proto.Requests.UseCase;
@@ -85,44 +86,44 @@ public class TimeTrackingModel(
 
     public void RegisterMessenger()
     {
-        messenger.Register<NewTicketMessage>(this, async void (_, m) =>
+        messenger.Register<NewTicketMessage>(this, async void (_, message) =>
         {
-            AllTickets.Add(m.Ticket);
+            AllTickets.Add(message.Ticket);
 
             var currentSprint = await requestSender.Send(new GetActiveSprintRequestProto());
 
             if (currentSprint == null) return;
 
-            if (currentSprint.TicketIds.Contains(m.Ticket.TicketId))
-                FilteredTickets.Add(m.Ticket);
+            if (currentSprint.TicketIds.Contains(message.Ticket.TicketId))
+                FilteredTickets.Add(message.Ticket);
         });
 
-        messenger.Register<TicketDataUpdatedNotification>(this, (_, m) =>
+        messenger.Register<ClientTicketDataUpdatedNotification>(this, (_, notification) =>
         {
-            var ticketDto = AllTickets.FirstOrDefault(tsv => tsv.TicketId == Guid.Parse(m.TicketId));
+            var ticketDto = AllTickets.FirstOrDefault(tsv => tsv.TicketId == notification.TicketId);
 
             if (ticketDto == null) return;
 
-            ticketDto.Apply(m);
+            ticketDto.Apply(notification);
         });
 
         //TODO This implementation is bad. Fix that 
-        messenger.Register<TicketAddedToSprintNotification>(this, async void (_, _) => { await InitializeAsync(); });
-        messenger.Register<TicketAddedToActiveSprintNotification>(this,
+        messenger.Register<ClientTicketAddedToSprintNotification>(this,
+            async void (_, _) => { await InitializeAsync(); });
+        messenger.Register<ClientTicketAddedToActiveSprintNotification>(this,
             async void (_, _) => { await InitializeAsync(); });
 
-        messenger.Register<TimeSlotControlCreatedNotification>(this, async void (_, m) =>
+        messenger.Register<ClientTimeSlotControlCreatedNotification>(this, async void (_, notification) =>
         {
             TimeSlotViewModels.Add(await
-                timeSlotViewModelFactory.Create(m.TimeSlotControlData.TicketProto.ToModel(),
-                    m.TimeSlotControlData.StatisticsDataProto.ToModel(),
-                    m.TimeSlotControlData.TimeSlotProto.ToModel()));
+                timeSlotViewModelFactory.Create(notification.Ticket, notification.StatisticsData,
+                    notification.TimeSlot));
 
             CurrentViewModelIndex = TimeSlotViewModels.Count - 1;
             SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.TicketReplayDecorator.Ticket.Name;
         });
 
-        messenger.Register<SprintSelectionChangedNotification>(this, async void (_, _) =>
+        messenger.Register<ClientSprintSelectionChangedNotification>(this, async void (_, _) =>
         {
             FilteredTickets.Clear();
 
@@ -136,7 +137,7 @@ public class TimeTrackingModel(
                 FilteredTickets.Add(modelTicket);
         });
 
-        messenger.Register<WorkDaySelectionChangedNotification>(this, async void (_, _) =>
+        messenger.Register<ClientWorkDaySelectionChangedNotification>(this, async void (_, _) =>
         {
             FilteredTickets.Clear();
 

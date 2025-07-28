@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.Commands.Ticket;
 using Client.Desktop.DataModels.Decorators.Replays;
-using Proto.Command.Tickets;
 
 namespace Client.Desktop.Presentation.Models.Synchronization;
 

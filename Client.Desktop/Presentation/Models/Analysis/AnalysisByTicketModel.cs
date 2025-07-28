@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Client.Desktop.Communication.Notifications.Ticket.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.DataModels;
@@ -10,7 +11,6 @@ using Client.Desktop.Lifecycle.Startup.Initialize;
 using Client.Desktop.Lifecycle.Startup.Register;
 using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
-using Proto.Command.Tickets;
 using Proto.Requests.AnalysisData;
 using Proto.Requests.Tags;
 using Proto.Requests.Tickets;
@@ -41,15 +41,15 @@ public class AnalysisByTicketModel(IMessenger messenger, IRequestSender requestS
 
     public void RegisterMessenger()
     {
-        messenger.Register<NewTicketMessage>(this, (_, m) => { Tickets.Add(m.Ticket); });
+        messenger.Register<NewTicketMessage>(this, (_, message) => { Tickets.Add(message.Ticket); });
 
-        messenger.Register<UpdateTicketDataCommandProto>(this, (_, m) =>
+        messenger.Register<ClientTicketDataUpdatedNotification>(this, (_, notification) =>
         {
-            var ticket = Tickets.FirstOrDefault(t => t.TicketId == Guid.Parse(m.TicketId));
+            var ticket = Tickets.FirstOrDefault(t => t.TicketId == notification.TicketId);
 
             if (ticket == null) return;
 
-            ticket.Apply(m);
+            ticket.Apply(notification);
         });
     }
 

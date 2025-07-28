@@ -3,7 +3,6 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using Client.Desktop.Communication.Notifications;
 using Client.Desktop.Lifecycle.Startup.Streams;
 using Microsoft.Extensions.DependencyInjection;
 

@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands.UseCases.Records;
-using Proto.Command.UseCases;
 
 namespace Client.Desktop.Communication.Commands.UseCases;
 

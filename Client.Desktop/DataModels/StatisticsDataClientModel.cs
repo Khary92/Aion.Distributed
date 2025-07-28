@@ -17,7 +17,8 @@ public sealed class StatisticsDataClientModel : ReactiveObject
     private PreviousTagsState _previousTagsState;
     private List<Guid> _tagIds = [];
 
-    public StatisticsDataClientModel(Guid statisticsId, Guid timeSlotId, List<Guid> tagIds, bool isProductive, bool isNeutral,
+    public StatisticsDataClientModel(Guid statisticsId, Guid timeSlotId, List<Guid> tagIds, bool isProductive,
+        bool isNeutral,
         bool isUnproductive)
     {
         StatisticsId = statisticsId;

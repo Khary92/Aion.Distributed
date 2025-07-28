@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Client.Desktop.Communication.Notifications.Sprint.Records;
 using Proto.Command.Sprints;
 using Proto.Notifications.Sprint;
 using ReactiveUI;
@@ -15,7 +16,8 @@ public class SprintClientModel : ReactiveObject
     private string _name = string.Empty;
     private DateTimeOffset _startTime;
 
-    public SprintClientModel(Guid sprintId, string name, bool isActive, DateTimeOffset startTime, DateTimeOffset endTime,
+    public SprintClientModel(Guid sprintId, string name, bool isActive, DateTimeOffset startTime,
+        DateTimeOffset endTime,
         List<Guid> ticketIds)
     {
         SprintId = sprintId;
@@ -75,10 +77,10 @@ public class SprintClientModel : ReactiveObject
         init => this.RaiseAndSetIfChanged(ref _ticketIds, value);
     }
 
-    public void Apply(SprintDataUpdatedNotification notification)
+    public void Apply(ClientSprintDataUpdatedNotification notification)
     {
-        EndTime = notification.EndTime.ToDateTimeOffset();
-        StartTime = notification.StartTime.ToDateTimeOffset();
+        EndTime = notification.EndTime;
+        StartTime = notification.StartTime;
         Name = notification.Name;
     }
 

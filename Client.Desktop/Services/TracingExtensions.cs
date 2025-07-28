@@ -1,4 +1,3 @@
-using System;
 using Client.Desktop.DataModels;
 using Newtonsoft.Json;
 

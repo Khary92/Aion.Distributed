@@ -74,7 +74,8 @@ public class AnalysisRequestSender(ITagRequestSender requestSender) : IAnalysisR
             GetParsedGuids(timeSlot.NoteIds), timeSlot.IsTimerRunning)).ToList();
     }
 
-    private static List<StatisticsDataClientModel> GetStatisticsData(RepeatedField<StatisticsDataProto> statisticsDataProtos)
+    private static List<StatisticsDataClientModel> GetStatisticsData(
+        RepeatedField<StatisticsDataProto> statisticsDataProtos)
     {
         return statisticsDataProtos.Select(statisticsDataProto => new StatisticsDataClientModel(
             Guid.Parse(statisticsDataProto.StatisticsId), Guid.Parse(statisticsDataProto.TimeSlotId),
@@ -84,7 +85,8 @@ public class AnalysisRequestSender(ITagRequestSender requestSender) : IAnalysisR
 
     private static List<TicketClientModel> GetTickets(RepeatedField<TicketProto> ticketProtos)
     {
-        return ticketProtos.Select(ticketProto => new TicketClientModel(Guid.Parse(ticketProto.TicketId), ticketProto.Name,
+        return ticketProtos.Select(ticketProto => new TicketClientModel(Guid.Parse(ticketProto.TicketId),
+            ticketProto.Name,
             ticketProto.BookingNumber, ticketProto.Documentation, GetParsedGuids(ticketProto.SprintIds))).ToList();
     }
 

@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.Commands.TimeSlots.Records;
 using Client.Desktop.FileSystem;
-using Proto.Command.TimeSlots;
 
 namespace Client.Desktop.Services.Cache;
 

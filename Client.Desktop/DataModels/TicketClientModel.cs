@@ -1,8 +1,6 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Proto.Command.Tickets;
-using Proto.Notifications.Ticket;
+using Client.Desktop.Communication.Notifications.Ticket.Records;
 using ReactiveUI;
 
 namespace Client.Desktop.DataModels;
@@ -15,7 +13,8 @@ public class TicketClientModel : ReactiveObject
     private string _name = string.Empty;
     private List<Guid> _sprintIds = [];
 
-    public TicketClientModel(Guid ticketId, string name, string bookingNumber, string documentation, List<Guid> sprintIds)
+    public TicketClientModel(Guid ticketId, string name, string bookingNumber, string documentation,
+        List<Guid> sprintIds)
     {
         TicketId = ticketId;
         Name = name;
@@ -57,19 +56,14 @@ public class TicketClientModel : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref _documentation, value);
     }
 
-    public void Apply(TicketDataUpdatedNotification notification)
+    public void Apply(ClientTicketDataUpdatedNotification notification)
     {
         BookingNumber = notification.BookingNumber;
         Name = notification.Name;
-
-        var guidList = notification.SprintIds
-            .Select(Guid.Parse)
-            .ToList();
-
-        SprintIds = new List<Guid>(guidList);
+        SprintIds = notification.SprintIds;
     }
 
-    public void Apply(TicketDocumentationUpdatedNotification notification)
+    public void Apply(ClientTicketDocumentationUpdatedNotification notification)
     {
         Documentation = notification.Documentation;
     }
@@ -85,11 +79,5 @@ public class TicketClientModel : ReactiveObject
         var result = !PreviousDocumentation.Equals(Documentation);
         PreviousDocumentation = Documentation;
         return result;
-    }
-
-    public void Apply(UpdateTicketDataCommandProto notification)
-    {
-        Name = notification.Name;
-        BookingNumber = notification.BookingNumber;
     }
 }

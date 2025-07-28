@@ -10,7 +10,7 @@ public class NoteCommandSender : INoteCommandSender
 {
     private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly NoteCommandProtoService.NoteCommandProtoServiceClient _client = new(Channel);
-    
+
     public async Task<bool> Send(ClientCreateNoteCommand command)
     {
         var response = await _client.CreateNoteAsync(command.ToProto());

@@ -6,21 +6,27 @@ namespace Client.Desktop.Communication.Commands.Notes;
 
 public static class NoteExtensions
 {
-    public static CreateNoteCommandProto ToProto(this ClientCreateNoteCommand command) => new()
+    public static CreateNoteCommandProto ToProto(this ClientCreateNoteCommand command)
     {
-        NoteId = command.NoteId.ToString(),
-        NoteTypeId = command.NoteTypeId.ToString(),
-        Text = command.Text,
-        TimeSlotId = command.TimeSlotId.ToString(),
-        TimeStamp = Timestamp.FromDateTimeOffset(command.TimeStamp)
-    };
+        return new CreateNoteCommandProto
+        {
+            NoteId = command.NoteId.ToString(),
+            NoteTypeId = command.NoteTypeId.ToString(),
+            Text = command.Text,
+            TimeSlotId = command.TimeSlotId.ToString(),
+            TimeStamp = Timestamp.FromDateTimeOffset(command.TimeStamp)
+        };
+    }
 
 
-    public static UpdateNoteCommandProto ToProto(this ClientUpdateNoteCommand command) => new()
+    public static UpdateNoteCommandProto ToProto(this ClientUpdateNoteCommand command)
     {
-        NoteId = command.NoteId.ToString(),
-        Text = command.Text,
-        NoteTypeId = command.NoteTypeId.ToString(),
-        TimeSlotId = command.TimeSlotId.ToString()
-    };
+        return new UpdateNoteCommandProto
+        {
+            NoteId = command.NoteId.ToString(),
+            Text = command.Text,
+            NoteTypeId = command.NoteTypeId.ToString(),
+            TimeSlotId = command.TimeSlotId.ToString()
+        };
+    }
 }

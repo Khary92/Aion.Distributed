@@ -6,31 +6,43 @@ namespace Client.Desktop.Communication.Commands.TimeSlots;
 
 public static class TimeSlotExtensions
 {
-    public static AddNoteCommandProto ToProto(this ClientAddNoteCommand command) => new()
+    public static AddNoteCommandProto ToProto(this ClientAddNoteCommand command)
     {
-        NoteId = command.NoteId.ToString(),
-        TimeSlotId = command.TimeSlotId.ToString()
-    };
+        return new AddNoteCommandProto
+        {
+            NoteId = command.NoteId.ToString(),
+            TimeSlotId = command.TimeSlotId.ToString()
+        };
+    }
 
-    public static CreateTimeSlotCommandProto ToProto(this ClientCreateTimeSlotCommand command) => new()
+    public static CreateTimeSlotCommandProto ToProto(this ClientCreateTimeSlotCommand command)
     {
-        TimeSlotId = command.TimeSlotId.ToString(),
-        WorkDayId = command.WorkDayId.ToString(),
-        SelectedTicketId = command.SelectedTicketId.ToString(),
-        StartTime = Timestamp.FromDateTimeOffset(command.StartTime),
-        EndTime = Timestamp.FromDateTimeOffset(command.EndTime),
-        IsTimerRunning = command.IsTimerRunning
-    };
+        return new CreateTimeSlotCommandProto
+        {
+            TimeSlotId = command.TimeSlotId.ToString(),
+            WorkDayId = command.WorkDayId.ToString(),
+            SelectedTicketId = command.SelectedTicketId.ToString(),
+            StartTime = Timestamp.FromDateTimeOffset(command.StartTime),
+            EndTime = Timestamp.FromDateTimeOffset(command.EndTime),
+            IsTimerRunning = command.IsTimerRunning
+        };
+    }
 
-    public static SetStartTimeCommandProto ToProto(this ClientSetStartTimeCommand command) => new()
+    public static SetStartTimeCommandProto ToProto(this ClientSetStartTimeCommand command)
     {
-        TimeSlotId = command.TimeSlotId.ToString(),
-        Time = Timestamp.FromDateTimeOffset(command.Time)
-    };
-    
-    public static SetEndTimeCommandProto ToProto(this ClientSetEndTimeCommand command) => new()
+        return new SetStartTimeCommandProto
+        {
+            TimeSlotId = command.TimeSlotId.ToString(),
+            Time = Timestamp.FromDateTimeOffset(command.Time)
+        };
+    }
+
+    public static SetEndTimeCommandProto ToProto(this ClientSetEndTimeCommand command)
     {
-        TimeSlotId = command.TimeSlotId.ToString(),
-        Time = Timestamp.FromDateTimeOffset(command.Time)
-    };
+        return new SetEndTimeCommandProto
+        {
+            TimeSlotId = command.TimeSlotId.ToString(),
+            Time = Timestamp.FromDateTimeOffset(command.Time)
+        };
+    }
 }

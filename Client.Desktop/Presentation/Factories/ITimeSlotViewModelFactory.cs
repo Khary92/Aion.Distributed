@@ -6,5 +6,6 @@ namespace Client.Desktop.Presentation.Factories;
 
 public interface ITimeSlotViewModelFactory
 {
-    Task<TimeSlotViewModel> Create(TicketClientModel ticket, StatisticsDataClientModel statisticsData, TimeSlotClientModel timeSlot);
+    Task<TimeSlotViewModel> Create(TicketClientModel ticket, StatisticsDataClientModel statisticsData,
+        TimeSlotClientModel timeSlot);
 }

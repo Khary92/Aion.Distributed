@@ -1,9 +1,9 @@
-using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AvaloniaEdit.Utils;
+using Client.Desktop.Communication.Notifications.Sprint.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.DataModels;
@@ -11,7 +11,6 @@ using Client.Desktop.DataModels.Decorators;
 using Client.Desktop.Lifecycle.Startup.Initialize;
 using Client.Desktop.Lifecycle.Startup.Register;
 using CommunityToolkit.Mvvm.Messaging;
-using Proto.Command.Sprints;
 using Proto.Requests.AnalysisData;
 using Proto.Requests.Sprints;
 using ReactiveUI;
@@ -43,15 +42,15 @@ public class AnalysisBySprintModel(IMessenger messenger, IRequestSender requestS
 
     public void RegisterMessenger()
     {
-        messenger.Register<NewSprintMessage>(this, (_, m) => { Sprints.Add(m.Sprint); });
+        messenger.Register<NewSprintMessage>(this, (_, message) => { Sprints.Add(message.Sprint); });
 
-        messenger.Register<UpdateSprintDataCommandProto>(this, (_, m) =>
+        messenger.Register<ClientSprintDataUpdatedNotification>(this, (_, notification) =>
         {
-            var sprint = Sprints.FirstOrDefault(s => s.SprintId == Guid.Parse(m.SprintId));
+            var sprint = Sprints.FirstOrDefault(s => s.SprintId == notification.SprintId);
 
             if (sprint == null) return;
 
-            sprint.Apply(m);
+            sprint.Apply(notification);
         });
     }
 

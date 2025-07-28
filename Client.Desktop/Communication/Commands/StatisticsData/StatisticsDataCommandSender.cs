@@ -20,10 +20,12 @@ public class StatisticsDataCommandSender : IStatisticsDataCommandSender
     public async Task<bool> Send(ClientChangeTagSelectionCommand command)
     {
         var response = await _client.ChangeTagSelectionAsync(command.ToProto());
-        return response.Success;}
+        return response.Success;
+    }
 
     public async Task<bool> Send(ClientChangeProductivityCommand command)
     {
         var response = await _client.ChangeProductivityAsync(command.ToProto());
-        return response.Success;}
+        return response.Success;
+    }
 }

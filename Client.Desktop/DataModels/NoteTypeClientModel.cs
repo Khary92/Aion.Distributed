@@ -1,5 +1,5 @@
 using System;
-using Proto.Notifications.NoteType;
+using Client.Desktop.Communication.Notifications.NoteType.Records;
 using ReactiveUI;
 
 namespace Client.Desktop.DataModels;
@@ -42,12 +42,12 @@ public class NoteTypeClientModel : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref _color, value);
     }
 
-    public void Apply(NoteTypeColorChangedNotification notification)
+    public void Apply(ClientNoteTypeColorChangedNotification notification)
     {
         Color = notification.Color;
     }
 
-    public void Apply(NoteTypeNameChangedNotification notification)
+    public void Apply(ClientNoteTypeNameChangedNotification notification)
     {
         Name = notification.Name;
     }

@@ -8,11 +8,17 @@ namespace Client.Desktop.Communication.Notifications.Note;
 
 public static class NoteExtensions
 {
-    public static NewNoteMessage ToNewEntityMessage(this NoteCreatedNotification notification) => new(new NoteClientModel(
-        Guid.Parse(notification.NoteId), notification.Text, Guid.Parse(notification.NoteTypeId),
-        Guid.Parse(notification.TimeSlotId), notification.TimeStamp.ToDateTimeOffset()));
+    public static NewNoteMessage ToNewEntityMessage(this NoteCreatedNotification notification)
+    {
+        return new NewNoteMessage(new NoteClientModel(
+            Guid.Parse(notification.NoteId), notification.Text, Guid.Parse(notification.NoteTypeId),
+            Guid.Parse(notification.TimeSlotId), notification.TimeStamp.ToDateTimeOffset()));
+    }
 
-    public static ClientNoteUpdatedNotification ToClientNotification(this NoteUpdatedNotification notification) => new(
-        Guid.Parse(notification.NoteId), notification.Text, Guid.Parse(notification.NoteTypeId),
-        Guid.Parse(notification.TimeSlotId));
+    public static ClientNoteUpdatedNotification ToClientNotification(this NoteUpdatedNotification notification)
+    {
+        return new ClientNoteUpdatedNotification(
+            Guid.Parse(notification.NoteId), notification.Text, Guid.Parse(notification.NoteTypeId),
+            Guid.Parse(notification.TimeSlotId));
+    }
 }

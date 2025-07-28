@@ -1,5 +1,4 @@
 using System;
-using Avalonia.Controls.Notifications;
 
 namespace Client.Desktop.Communication.Notifications.Note.Records;
 

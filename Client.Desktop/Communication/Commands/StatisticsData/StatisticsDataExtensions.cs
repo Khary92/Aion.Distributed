@@ -6,24 +6,33 @@ namespace Client.Desktop.Communication.Commands.StatisticsData;
 
 public static class StatisticsDataExtensions
 {
-    public static CreateStatisticsDataCommandProto ToProto(this ClientCreateStatisticsDataCommand command) => new()
+    public static CreateStatisticsDataCommandProto ToProto(this ClientCreateStatisticsDataCommand command)
     {
-        StatisticsDataId = command.StatisticsDataId.ToString(),
-        IsProductive = command.IsProductive,
-        TagIds = { command.TagIds.ToRepeatedField() }
-    };
+        return new CreateStatisticsDataCommandProto
+        {
+            StatisticsDataId = command.StatisticsDataId.ToString(),
+            IsProductive = command.IsProductive,
+            TagIds = { command.TagIds.ToRepeatedField() }
+        };
+    }
 
-    public static ChangeTagSelectionCommandProto ToProto(this ClientChangeTagSelectionCommand command) => new()
+    public static ChangeTagSelectionCommandProto ToProto(this ClientChangeTagSelectionCommand command)
     {
-        StatisticsDataId = command.StatisticsDataId.ToString(),
-        SelectedTagIds= { command.SelectedTagIds.ToRepeatedField() }
-    };
-    
-    public static ChangeProductivityCommandProto ToProto(this ClientChangeProductivityCommand command) => new()
+        return new ChangeTagSelectionCommandProto
+        {
+            StatisticsDataId = command.StatisticsDataId.ToString(),
+            SelectedTagIds = { command.SelectedTagIds.ToRepeatedField() }
+        };
+    }
+
+    public static ChangeProductivityCommandProto ToProto(this ClientChangeProductivityCommand command)
     {
-        StatisticsDataId = command.StatisticsDataId.ToString(),
-        IsProductive = command.IsProductive,
-        IsNeutral = command.IsNeutral,
-        IsUnproductive = command.IsUnproductive,
-    };
+        return new ChangeProductivityCommandProto
+        {
+            StatisticsDataId = command.StatisticsDataId.ToString(),
+            IsProductive = command.IsProductive,
+            IsNeutral = command.IsNeutral,
+            IsUnproductive = command.IsUnproductive
+        };
+    }
 }

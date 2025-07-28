@@ -9,7 +9,6 @@ using Client.Desktop.Communication.Requests;
 using Client.Desktop.DataModels;
 using Client.Desktop.Presentation.Factories;
 using CommunityToolkit.Mvvm.Messaging;
-using Proto.Command.StatisticsData;
 using Proto.Requests.Tags;
 using ReactiveUI;
 
@@ -83,8 +82,8 @@ public class StatisticsViewModel(
             );
             commandSender.Send(changeProductivityCommand);
         }
-        
-        
+
+
         if (StatisticsData.IsTagsSelectionChanged())
         {
             var tagSelectionCommand = new ClientChangeTagSelectionCommand(id, StatisticsData.TagIds);
