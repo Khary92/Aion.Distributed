@@ -10,7 +10,7 @@ public class TimerSettingsNotificationService : Proto.Notifications.TimerSetting
         _clients
             = new();
 
-    private readonly object _lock = new();
+    private readonly Lock _lock = new();
 
     public override async Task SubscribeTimerSettingsNotifications(
         SubscribeRequest request,
@@ -30,7 +30,6 @@ public class TimerSettingsNotificationService : Proto.Notifications.TimerSetting
         }
         catch (OperationCanceledException)
         {
-            // Verbindung des Clients wurde abgebrochen
         }
         finally
         {

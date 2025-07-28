@@ -34,7 +34,7 @@ services:
     ports:
       - "5000:8080"
     environment:
-      - ASPNETCORE_URLS=http://+:8080    # Anführungszeichen entfernt
+      - ASPNETCORE_URLS=http://+:8080
     depends_on:
       - monitoring-service
       - core-service

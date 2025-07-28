@@ -7,16 +7,23 @@ public class
     TimeSlotNotificationService : Proto.Notifications.TimeSlots.TimeSlotNotificationService.
     TimeSlotNotificationServiceBase
 {
-    private CancellationToken _cancellationToken;
-    private IServerStreamWriter<TimeSlotNotification>? _responseStream;
+    private readonly Dictionary<Guid, (IServerStreamWriter<TimeSlotNotification> Stream, CancellationToken Token)>
+        _clients
+            = new();
+
+    private readonly Lock _lock = new();
 
     public override async Task SubscribeTimeSlotNotifications(
         SubscribeRequest request,
         IServerStreamWriter<TimeSlotNotification> responseStream,
         ServerCallContext context)
     {
-        _responseStream = responseStream;
-        _cancellationToken = context.CancellationToken;
+        var clientId = Guid.NewGuid();
+
+        lock (_lock)
+        {
+            _clients.Add(clientId, (responseStream, context.CancellationToken));
+        }
 
         try
         {
@@ -24,25 +31,43 @@ public class
         }
         catch (OperationCanceledException)
         {
-            // Verbindung wurde getrennt
         }
         finally
         {
-            _responseStream = null;
+            lock (_lock)
+            {
+                _clients.Remove(clientId);
+            }
         }
     }
 
     public async Task SendNotificationAsync(TimeSlotNotification notification)
     {
-        if (_responseStream is not null && !_cancellationToken.IsCancellationRequested)
+        List<Guid> clientsToRemove = new();
+
+        foreach (var (clientId, (stream, token)) in _clients)
+        {
+            if (token.IsCancellationRequested)
+            {
+                clientsToRemove.Add(clientId);
+                continue;
+            }
+
             try
             {
-                await _responseStream.WriteAsync(notification, _cancellationToken);
+                await stream.WriteAsync(notification, token);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Fehler beim Senden der TimeSlotNotification: {ex.Message}");
-                _responseStream = null;
+                Console.WriteLine($"Fehler beim Senden an Client {clientId}: {ex.Message}");
+                clientsToRemove.Add(clientId);
+            }
+        }
+
+        if (clientsToRemove.Count > 0)
+            lock (_lock)
+            {
+                foreach (var clientId in clientsToRemove) _clients.Remove(clientId);
             }
     }
 }

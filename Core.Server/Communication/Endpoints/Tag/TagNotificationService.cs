@@ -5,10 +5,11 @@ namespace Core.Server.Communication.Endpoints.Tag;
 
 public class TagNotificationService : Proto.Notifications.Tag.TagNotificationService.TagNotificationServiceBase
 {
-    private readonly Dictionary<Guid, (IServerStreamWriter<TagNotification> Stream, CancellationToken Token)> _clients
-        = new();
+    private readonly Dictionary<Guid, (IServerStreamWriter<TagNotification> Stream, CancellationToken Token)>
+        _clients
+            = new();
 
-    private readonly object _lock = new();
+    private readonly Lock _lock = new();
 
     public override async Task SubscribeTagNotifications(
         SubscribeRequest request,
@@ -56,6 +57,7 @@ public class TagNotificationService : Proto.Notifications.Tag.TagNotificationSer
             }
             catch (Exception ex)
             {
+                Console.WriteLine($"Fehler beim Senden an Client {clientId}: {ex.Message}");
                 clientsToRemove.Add(clientId);
             }
         }

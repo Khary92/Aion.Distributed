@@ -10,7 +10,7 @@ public class
         _clients
             = new();
 
-    private readonly object _lock = new();
+    private readonly Lock _lock = new();
 
     public override async Task SubscribeTicketNotifications(
         SubscribeRequest request,
