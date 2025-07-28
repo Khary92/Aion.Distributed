@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
+using Client.Desktop.Lifecycle.Startup.Streams;
 using CommunityToolkit.Mvvm.Messaging;
 using Grpc.Core;
 using Proto.Notifications.Sprint;
@@ -10,9 +11,9 @@ namespace Client.Desktop.Communication.Notifications.Sprint;
 
 public class SprintNotificationReceiver(
     SprintNotificationService.SprintNotificationServiceClient client,
-    IMessenger messenger)
+    IMessenger messenger) : IStreamClient
 {
-    public async Task StartListeningAsync(CancellationToken cancellationToken)
+    public async Task StartListening(CancellationToken cancellationToken)
     {
         using var call =
             client.SubscribeSprintNotifications(new SubscribeRequest(), cancellationToken: cancellationToken);

@@ -5,5 +5,4 @@ public enum StartupTask
     RegisterMessenger,
     CheckUnsentCommands,
     AsyncInitialize,
-    RegisterStreams
 }

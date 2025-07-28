@@ -98,10 +98,8 @@ public static class ClientServiceExtensions
         services.AddSingleton<IStartupTask, RegisterMessengerTask>();
         services.AddSingleton<IStartupTask, SendUnsentCommandsTask>();
 
-        //TODO The app does not start because of this:
         services.AddSingleton<StreamLifeCycleHandler>();
         services.AddSingleton<IStreamLifeCycleHandler>(sp => sp.GetRequiredService<StreamLifeCycleHandler>());
-        services.AddSingleton<IStartupTask>(sp => sp.GetRequiredService<StreamLifeCycleHandler>());
     }
 
     private static void AddLocalServices(this IServiceCollection services)
@@ -238,15 +236,13 @@ public static class ClientServiceExtensions
     {
         services.AddSingleton<IMessenger>(WeakReferenceMessenger.Default);
 
-        services.AddSingleton<StreamLifeCycleHandler>();
-
-        services.AddSingleton<TicketNotificationReceiver>();
+        services.AddSingleton<IStreamClient, TicketNotificationReceiver>();
         services.AddSingleton<IStreamClient, NoteNotificationStream>();
-        services.AddSingleton<NoteTypeNotificationReceiver>();
-        services.AddSingleton<SprintNotificationReceiver>();
-        services.AddSingleton<TagNotificationReceiver>();
-        services.AddSingleton<UseCaseNotificationReceiver>();
-        services.AddSingleton<WorkDayNotificationReceiver>();
+        services.AddSingleton<IStreamClient, NoteTypeNotificationReceiver>();
+        services.AddSingleton<IStreamClient, SprintNotificationReceiver>();
+        services.AddSingleton<IStreamClient, TagNotificationReceiver>();
+        services.AddSingleton<IStreamClient, UseCaseNotificationReceiver>();
+        services.AddSingleton<IStreamClient, WorkDayNotificationReceiver>();
 
         var channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
         services.AddSingleton(new TicketNotificationService.TicketNotificationServiceClient(channel));

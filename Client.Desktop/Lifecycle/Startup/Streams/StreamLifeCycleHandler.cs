@@ -8,15 +8,8 @@ namespace Client.Desktop.Lifecycle.Startup.Streams;
 
 public class StreamLifeCycleHandler(
     IEnumerable<IStreamClient> receiverClients,
-    CancellationTokenSource cancellationTokenSource) : IStreamLifeCycleHandler, IStartupTask
+    CancellationTokenSource cancellationTokenSource) : IStreamLifeCycleHandler
 {
-    public StartupTask StartupTask => StartupTask.RegisterStreams;
-
-    public async Task Execute()
-    {
-        await Start();
-    }
-
     public Task Start()
     {
         return Task.Run(() =>

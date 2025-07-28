@@ -25,6 +25,7 @@ public static class App
         await host.StartAsync();
 
         var serviceProvider = host.Services;
+        
         await serviceProvider.GetRequiredService<IStartupScheduler>().Execute();
 
         BuildAvaloniaApp(serviceProvider)

@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using Client.Desktop.Communication.Notifications.UseCase.Records;
+using Client.Desktop.Lifecycle.Startup.Streams;
 using CommunityToolkit.Mvvm.Messaging;
 using Grpc.Core;
 using Proto.Notifications.UseCase;
@@ -11,9 +12,9 @@ namespace Client.Desktop.Communication.Notifications.UseCase;
 
 public class UseCaseNotificationReceiver(
     UseCaseNotificationService.UseCaseNotificationServiceClient client,
-    IMessenger messenger)
+    IMessenger messenger) : IStreamClient
 {
-    public async Task StartListeningAsync(CancellationToken cancellationToken)
+    public async Task StartListening(CancellationToken cancellationToken)
     {
         using var call =
             client.SubscribeUseCaseNotifications(new SubscribeRequest(), cancellationToken: cancellationToken);
