@@ -4,6 +4,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Platform;
+using Client.Desktop.Lifecycle.Shutdown;
 using Client.Desktop.Presentation.Models.Main;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Dto;
@@ -13,8 +14,11 @@ namespace Client.Desktop.Presentation.Views.Main;
 
 public partial class ContentWrapper : Window
 {
-    public ContentWrapper(ContentWrapperViewModel viewModel)
+    private readonly IShutDownHandler _shutDownHandler;
+
+    public ContentWrapper(ContentWrapperViewModel viewModel, IShutDownHandler shutDownHandler)
     {
+        _shutDownHandler = shutDownHandler;
         InitializeComponent();
         DataContext = viewModel;
 
@@ -22,6 +26,7 @@ public partial class ContentWrapper : Window
         [
             WindowTransparencyLevel.AcrylicBlur, WindowTransparencyLevel.Blur, WindowTransparencyLevel.Transparent
         ];
+
         ExtendClientAreaToDecorationsHint = true;
         ExtendClientAreaChromeHints = ExtendClientAreaChromeHints.NoChrome;
         ExtendClientAreaTitleBarHeightHint = -1;
@@ -47,7 +52,7 @@ public partial class ContentWrapper : Window
 
         if (result == ButtonResult.Yes &&
             Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopApp)
-            desktopApp.Shutdown();
+            await _shutDownHandler.Exit(desktopApp);
     }
 
     private void MinimizeApp(object? sender, RoutedEventArgs e)

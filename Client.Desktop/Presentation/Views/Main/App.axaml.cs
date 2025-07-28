@@ -3,49 +3,39 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
-using Client.Desktop.Lifecycle.Startup.Streams;
+using Client.Desktop.Lifecycle.Shutdown;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Client.Desktop.Presentation.Views.Main;
 
-public class App : Application
+public class App(IServiceProvider serviceProvider) : Application
 {
-    private readonly IServiceProvider _serviceProvider;
-
-    public App(IServiceProvider serviceProvider)
+    public override void OnFrameworkInitializationCompleted()
     {
-        _serviceProvider = serviceProvider;
+        var contentWrapper = serviceProvider.GetRequiredService<ContentWrapper>();
+        contentWrapper.WindowState = WindowState.Maximized;
+        contentWrapper.Show();
+        
+        base.OnFrameworkInitializationCompleted();
     }
-
+    
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);
     }
 
-    public override void OnFrameworkInitializationCompleted()
-    {
-        if (!Design.IsDesignMode)
-        {
-            var contentWrapper = _serviceProvider.GetRequiredService<ContentWrapper>();
-            contentWrapper.WindowState = WindowState.Maximized;
-            contentWrapper.Show();
-
-            var notifiationService = _serviceProvider.GetRequiredService<StreamLifeCycleHandler>();
-            _ = notifiationService.Start();
-        }
-
-        base.OnFrameworkInitializationCompleted();
-    }
-
     private void TrayIconMaximize_OnClick(object? sender, EventArgs e)
     {
-        var contentWrapper = _serviceProvider.GetRequiredService<ContentWrapper>();
+        var contentWrapper = serviceProvider.GetRequiredService<ContentWrapper>();
         contentWrapper.Show();
         contentWrapper.WindowState = WindowState.Maximized;
     }
 
     private void TrayIconClose_OnClick(object? sender, EventArgs e)
     {
-        if (Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopApp) desktopApp.Shutdown();
+        if (Current?.ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktopApp) return;
+
+        var shutdownHandler = serviceProvider.GetRequiredService<IShutDownHandler>();
+        shutdownHandler.Exit(desktopApp);
     }
 }

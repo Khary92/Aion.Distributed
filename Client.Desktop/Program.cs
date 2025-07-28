@@ -3,13 +3,14 @@ using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.ReactiveUI;
 using Client.Desktop.Lifecycle.Startup.Scheduler;
+using Client.Desktop.Presentation.Views.Main;
 using Client.Tracing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace Client.Desktop;
 
-public static class App
+public static class Program
 {
     [STAThread]
     public static async Task Main(string[] args)
@@ -33,11 +34,10 @@ public static class App
 
         await host.StopAsync();
     }
-
-
+    
     private static AppBuilder BuildAvaloniaApp(IServiceProvider serviceProvider)
     {
-        return AppBuilder.Configure(() => new Presentation.Views.Main.App(serviceProvider))
+        return AppBuilder.Configure(() => new App(serviceProvider))
             .UsePlatformDetect()
             .WithInterFont()
             .LogToTrace()

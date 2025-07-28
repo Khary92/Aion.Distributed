@@ -24,6 +24,7 @@ using Client.Desktop.Communication.Requests.WorkDays;
 using Client.Desktop.DataModels.Decorators.Replays;
 using Client.Desktop.FileSystem;
 using Client.Desktop.FileSystem.Serializer;
+using Client.Desktop.Lifecycle.Shutdown;
 using Client.Desktop.Lifecycle.Startup.Initialize;
 using Client.Desktop.Lifecycle.Startup.Register;
 using Client.Desktop.Lifecycle.Startup.Scheduler;
@@ -100,6 +101,8 @@ public static class ClientServiceExtensions
 
         services.AddSingleton<StreamLifeCycleHandler>();
         services.AddSingleton<IStreamLifeCycleHandler>(sp => sp.GetRequiredService<StreamLifeCycleHandler>());
+
+        services.AddSingleton<IShutDownHandler, ShutdownHandler>();
     }
 
     private static void AddLocalServices(this IServiceCollection services)
