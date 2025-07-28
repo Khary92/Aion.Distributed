@@ -2,7 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
-using Client.Desktop.Lifecycle.Startup.Streams;
+using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
 using CommunityToolkit.Mvvm.Messaging;
 using Grpc.Core;
 using Proto.Notifications.Ticket;

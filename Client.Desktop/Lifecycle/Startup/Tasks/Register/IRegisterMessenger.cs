@@ -1,4 +1,4 @@
-namespace Client.Desktop.Lifecycle.Startup.Register;
+namespace Client.Desktop.Lifecycle.Startup.Tasks.Register;
 
 public interface IRegisterMessenger
 {

@@ -1,4 +1,4 @@
-namespace Client.Desktop.Lifecycle.Startup.Initialize;
+namespace Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 
 public enum InitializationType
 {

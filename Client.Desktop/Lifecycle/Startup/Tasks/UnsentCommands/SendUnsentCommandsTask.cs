@@ -3,7 +3,7 @@ using Client.Desktop.Communication.Commands.TimeSlots.Records;
 using Client.Desktop.Lifecycle.Startup.Scheduler;
 using Client.Desktop.Services.Cache;
 
-namespace Client.Desktop.Lifecycle.Startup.UnsentCommands;
+namespace Client.Desktop.Lifecycle.Startup.Tasks.UnsentCommands;
 
 public class SendUnsentCommandsTask(
     IPersistentCache<ClientSetStartTimeCommand> startTimeCache,

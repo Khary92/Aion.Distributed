@@ -2,9 +2,8 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Client.Desktop.Lifecycle.Startup.Scheduler;
 
-namespace Client.Desktop.Lifecycle.Startup.Streams;
+namespace Client.Desktop.Lifecycle.Startup.Tasks.Streams;
 
 public class StreamLifeCycleHandler(
     IEnumerable<IStreamClient> receiverClients,

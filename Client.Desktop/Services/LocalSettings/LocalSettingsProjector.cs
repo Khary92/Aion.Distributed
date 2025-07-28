@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Client.Desktop.DataModels.Local;
 using Client.Desktop.FileSystem;
-using Client.Desktop.Lifecycle.Startup.Initialize;
+using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Services.LocalSettings.Commands;
 using CommunityToolkit.Mvvm.Messaging;
 using Newtonsoft.Json;

@@ -1,5 +1,5 @@
 using Client.Desktop.DataModels.Local;
-using Client.Desktop.Lifecycle.Startup.Register;
+using Client.Desktop.Lifecycle.Startup.Tasks.Register;
 using Client.Desktop.Services.LocalSettings;
 using Client.Desktop.Services.LocalSettings.Commands;
 using CommunityToolkit.Mvvm.Messaging;

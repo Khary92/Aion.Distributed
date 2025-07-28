@@ -5,7 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Client.Desktop.Lifecycle.Startup.Scheduler;
 
-namespace Client.Desktop.Lifecycle.Startup.Initialize;
+namespace Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 
 public class AsyncInitializeTask(IEnumerable<IInitializeAsync> initializeComponents) : IStartupTask
 {

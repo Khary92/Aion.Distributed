@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Client.Desktop.Lifecycle.Startup.Streams;
+namespace Client.Desktop.Lifecycle.Startup.Tasks.Streams;
 
 public interface IStreamClient
 {

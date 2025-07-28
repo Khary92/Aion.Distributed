@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using Avalonia.Controls.ApplicationLifetimes;
 using Client.Desktop.Communication.Commands.TimeSlots.Records;
-using Client.Desktop.Lifecycle.Startup.Streams;
+using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
 using Client.Desktop.Services.Cache;
 
 namespace Client.Desktop.Lifecycle.Shutdown;

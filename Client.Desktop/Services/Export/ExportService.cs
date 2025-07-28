@@ -9,7 +9,7 @@ using Client.Desktop.Communication.Requests;
 using Client.Desktop.DataModels;
 using Client.Desktop.DataModels.Local;
 using Client.Desktop.FileSystem;
-using Client.Desktop.Lifecycle.Startup.Register;
+using Client.Desktop.Lifecycle.Startup.Tasks.Register;
 using Client.Desktop.Services.LocalSettings.Commands;
 using CommunityToolkit.Mvvm.Messaging;
 using Proto.Requests.Tickets;

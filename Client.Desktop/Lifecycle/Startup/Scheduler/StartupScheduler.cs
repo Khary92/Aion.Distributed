@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Client.Desktop.Lifecycle.Startup.Streams;
+using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
 
 namespace Client.Desktop.Lifecycle.Startup.Scheduler;
 

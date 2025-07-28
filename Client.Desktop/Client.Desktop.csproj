@@ -43,6 +43,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Folder Include="Lifecycle\Startup\Tasks\" />
         <Folder Include="Presentation\Views\"/>
     </ItemGroup>
 

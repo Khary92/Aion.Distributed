@@ -1,7 +1,7 @@
 using System;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Client.Desktop.Lifecycle.Startup.Initialize;
+using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using ReactiveUI;
 
 namespace Client.Desktop.Presentation.Models.Documentation;
