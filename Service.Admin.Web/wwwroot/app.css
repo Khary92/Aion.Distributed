@@ -7,9 +7,17 @@
     --hover-color: #2A2A2A;
     --disabled-color: #555555;
 
-    --exit-button-color: #1A0000;
-    --maximize-button-color: #2A2A00;
-    --minimize-button-color: #001900;
+    --cancel-button-color: #1A0000;
+    --edit-button-color: #2A2A00;
+    --save-button-color: #001900;
+
+    --cancel-button-hover-color: #330000;
+    --edit-button-hover-color: #3F3F00;
+    --save-button-hover-color: #003300;
+
+    --cancel-button-hover-border-color: #660000;
+    --edit-button-hover-border-color: #6F6F00;    
+    --save-button-hover-border-color: #006600;
 
     --font-family-regular: 'PT Sans', Arial, sans-serif;
     --font-family-bold: 'PT Sans', Arial, sans-serif;
@@ -46,27 +54,108 @@ body {
     color: var(--foreground-color);
 }
 
-button {
-    font-family: var(--font-family-bold);
-    background: var(--surface-color);
+.form-control:focus {
+    background-color: var(--background-color);
     color: var(--foreground-color);
-    border: var(--border-thickness) solid var(--border-color);
-    margin: var(--general-control-margin);
-    padding: var(--general-control-padding);
-    border-radius: var(--corner-radius);
-    cursor: pointer;
-    text-align: center;
+    outline: none;
 }
 
-button:hover {
-    background: var(--hover-color);
+.btn {
+    display: inline-block;
+    font-weight: 400;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: middle;
+    user-select: none;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    border: 1px solid transparent;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+    cursor: pointer;
+}
+
+.btn-success {
+    background-color: var(--save-button-color);
+    color: var(--foreground-color);
+}
+
+.btn-success:hover {
+    background-color: var(--save-button-hover-color);
+    border-color: var(--save-button-hover-border-color);
+    color: var(--foreground-color);
+}
+
+.btn-warning {
+    background-color: var(--edit-button-color);
+    color: var(--foreground-color);
+}
+
+.btn-warning:hover {
+    background-color: var(--edit-button-hover-color);
+    border-color: var(--edit-button-hover-border-color);
+    color: var(--foreground-color);
+}
+
+.btn-primary {
+    background-color: var(--cancel-button-color);
+    color: var(--foreground-color);
+}
+
+.btn-primary:hover {
+    background-color: var(--cancel-button-hover-color);
+    border-color: var(--cancel-button-hover-border-color);
+    color: var(--foreground-color);
+}
+
+.btn-warning:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+    background-color: var(--background-color) !important;
+    border-color: var(--border-color) !important;
+    color: var(--foreground-color) !important;
+}
+
+.btn-success:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+    background-color: var(--background-color);
     border-color: var(--border-color);
 }
 
-button:disabled {
-    background: var(--disabled-color);
-    color: var(--foreground-color);
-    border-color: var(--disabled-color);
+.btn-primary:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+    background-color: var(--background-color);
+    border-color: var(--border-color);
+}
+
+input[type="checkbox"] {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--border-color, #2C2C2C);
+    background-color: var(--background-color, #121212);
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+input[type="checkbox"]:checked {
+    background-color: var(--primary-color, #3B82F6);
+    border-color: var(--primary-color, #3B82F6);
+}
+
+input[type="checkbox"]:hover {
+    border-color: var(--hover-color, #2A2A2A);
+}
+
+input[type="checkbox"]:disabled {
+    background-color: var(--disabled-color, #555555);
+    border-color: var(--border-color, #2C2C2C);
+    cursor: not-allowed;
+    opacity: 0.5;
 }
 
 label {
@@ -100,6 +189,11 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--foreground-color);
 }
 
+.table-active{
+    background-color: var(--edit-button-color);
+    color: var(--foreground-color);
+}
+
 .custom-table {
     width: 100%;
     border-collapse: collapse;
@@ -122,8 +216,9 @@ h1, h2, h3, h4, h5, h6 {
     border-bottom: var(--border-thickness) solid var(--border-color);
 }
 
-.custom-table tbody tr:last-child {
-    border-bottom: none;
+.custom-table tr.selected {
+    background-color: var(--edit-button-color);
+    color: var(--foreground-color);
 }
 
 .custom-table td {
@@ -139,10 +234,6 @@ h1, h2, h3, h4, h5, h6 {
 .custom-table th.sortable {
     cursor: pointer;
     user-select: none;
-}
-
-.custom-table tr.selected {
-    background-color: var(--primary-color);
 }
 
 .navbar {

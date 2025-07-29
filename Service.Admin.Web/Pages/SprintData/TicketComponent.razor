@@ -6,6 +6,11 @@
 
 @code {
 
+    private bool CanSave => !string.IsNullOrWhiteSpace(@TicketController.NewTicketName)
+                            && !string.IsNullOrWhiteSpace(@TicketController.NewTicketBookingNumber);
+
+    private string EditButtonText => @TicketController.IsEditMode ? "Cancel Edit" : "Edit";
+    
     protected override Task OnInitializedAsync()
     {
         TicketStateService.OnStateChanged += async () => await InvokeAsync(StateHasChanged);
@@ -62,11 +67,3 @@
         </table>
     </div>
 </div>
-
-@code {
-
-    private bool CanSave => !string.IsNullOrWhiteSpace(@TicketController.NewTicketName)
-                            && !string.IsNullOrWhiteSpace(@TicketController.NewTicketBookingNumber);
-
-    private string EditButtonText => @TicketController.IsEditMode ? "Cancel Edit" : "Edit";
-}
