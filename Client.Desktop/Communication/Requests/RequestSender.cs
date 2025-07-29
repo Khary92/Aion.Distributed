@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Notifications;
+using Client.Desktop.Communication.Policies;
 using Client.Desktop.Communication.Requests.Analysis;
 using Client.Desktop.Communication.Requests.Analysis.Records;
 using Client.Desktop.Communication.Requests.Notes;
@@ -40,142 +41,179 @@ public class RequestSender(
     IWorkDayRequestSender workDayRequestSender,
     ITicketReplayRequestSender ticketReplayRequestSender,
     IUseCaseRequestSender useCaseRequestSender,
-    IAnalysisRequestSender analysisRequestSender) : IRequestSender
+    IAnalysisRequestSender analysisRequestSender,
+    RequestRetryPolicy requestSender) : IRequestSender
 {
     public async Task<List<NoteClientModel>> Send(ClientGetNotesByTicketIdRequest request)
     {
-        return await notesRequestSender.Send(request);
+        return await requestSender.Policy.ExecuteAsync(() =>
+            notesRequestSender.Send(request));
     }
 
     public async Task<List<NoteClientModel>> Send(ClientGetNotesByTimeSlotIdRequest request)
     {
-        return await notesRequestSender.Send(request);
+        return await requestSender.Policy.ExecuteAsync(() =>
+            notesRequestSender.Send(request));
     }
 
     public async Task<List<NoteTypeClientModel>> Send(ClientGetAllNoteTypesRequest request)
     {
-        var getAllNoteTypesResponse = await noteTypeRequestSender.Send(request.ToProto());
+        var getAllNoteTypesResponse = await requestSender.Policy.ExecuteAsync(() =>
+            noteTypeRequestSender.Send(request.ToProto()));
+        
         return getAllNoteTypesResponse.ToClientModelList();
     }
 
     public async Task<NoteTypeClientModel> Send(ClientGetNoteTypeByIdRequest request)
     {
-        var noteType = await noteTypeRequestSender.Send(request.ToProto());
+        var noteType = await requestSender.Policy.ExecuteAsync(() =>
+            noteTypeRequestSender.Send(request.ToProto()));
+       
         return noteType.ToClientModel();
     }
 
     public async Task<SprintClientModel?> Send(ClientGetActiveSprintRequest request)
     {
         // TODO make this nullable!
-        var sprint = await sprintRequestSender.Send(request.ToProto());
+        var sprint = await requestSender.Policy.ExecuteAsync(() => 
+            sprintRequestSender.Send(request.ToProto()));
+        
         return sprint?.ToClientModel();
     }
 
     public async Task<List<SprintClientModel?>> Send(ClientGetAllSprintsRequest request)
     {
-        var sprintList = await sprintRequestSender.Send(request.ToProto());
+        var sprintList = await requestSender.Policy.ExecuteAsync(() =>
+            sprintRequestSender.Send(request.ToProto()));
+        
         return sprintList.ToClientModelList();
     }
 
     public async Task<StatisticsDataClientModel> Send(ClientGetStatisticsDataByTimeSlotIdRequest request)
     {
-        return await statisticsDataRequestSender.Send(request);
+        return await requestSender.Policy.ExecuteAsync(() =>
+            statisticsDataRequestSender.Send(request));
     }
 
     public async Task<List<TagClientModel>> Send(ClientGetAllTagsRequest request)
     {
-        var tagDtos = await tagRequestSender.Send(request.ToProto());
+        var tagDtos = await requestSender.Policy.ExecuteAsync(() =>
+            tagRequestSender.Send(request.ToProto()));
+        
         return tagDtos.ToClientModelList();
     }
 
     public async Task<TagClientModel> Send(ClientGetTagByIdRequest request)
     {
-        var tag = await tagRequestSender.Send(request.ToProto());
+        var tag = await requestSender.Policy.ExecuteAsync(() =>
+            tagRequestSender.Send(request.ToProto()));
+        
         return tag.ToClientModel();
     }
 
     public async Task<List<TagClientModel>> Send(ClientGetTagsByIdsRequest request)
     {
-        var tagList = await tagRequestSender.Send(request.ToProto());
+        var tagList = await requestSender.Policy.ExecuteAsync(() =>
+            tagRequestSender.Send(request.ToProto()));
+        
         return tagList.ToClientModelList();
     }
 
     public async Task<List<TicketClientModel>> Send(ClientGetAllTicketsRequest request)
     {
-        var ticketList = await ticketRequestSender.Send(request.ToProto());
+        var ticketList = await requestSender.Policy.ExecuteAsync(() =>
+            ticketRequestSender.Send(request.ToProto()));
+        
         return ticketList.ToClientModelList();
     }
 
     public async Task<List<TicketClientModel>> Send(ClientGetTicketsForCurrentSprintRequest request)
     {
-        var ticketList = await ticketRequestSender.Send(request.ToProto());
+        var ticketList = await requestSender.Policy.ExecuteAsync(() =>
+            ticketRequestSender.Send(request.ToProto()));
+        
         return ticketList.ToClientModelList();
     }
 
     public async Task<List<TicketClientModel>> Send(ClientGetTicketsWithShowAllSwitchRequest request)
     {
-        var ticketList = await ticketRequestSender.Send(request.ToProto());
+        var ticketList = await requestSender.Policy.ExecuteAsync(() =>
+            ticketRequestSender.Send(request.ToProto()));
+        
         return ticketList.ToClientModelList();
     }
 
     public async Task<TicketClientModel> Send(ClientGetTicketByIdRequest request)
     {
-        var ticket = await ticketRequestSender.Send(request.ToProto());
+        var ticket = await requestSender.Policy.ExecuteAsync(() =>
+            ticketRequestSender.Send(request.ToProto()));
+        
         return ticket.ToClientModel();
     }
 
     public async Task<List<TimeSlotClientModel>> Send(ClientGetTimeSlotsForWorkDayIdRequest request)
     {
-        return await timeSlotRequestSender.Send(request);
+        return await requestSender.Policy.ExecuteAsync(() =>
+            timeSlotRequestSender.Send(request));
     }
 
     public async Task<TimeSlotClientModel> Send(ClientGetTimeSlotByIdRequest request)
     {
-        return await timeSlotRequestSender.Send(request);
+        return await requestSender.Policy.ExecuteAsync(() =>
+            timeSlotRequestSender.Send(request));
     }
 
     public async Task<List<WorkDayClientModel>> Send(ClientGetAllWorkDaysRequest request)
     {
-        return await workDayRequestSender.Send(request);
+        return await requestSender.Policy.ExecuteAsync(() =>
+            workDayRequestSender.Send(request));
     }
 
     public async Task<WorkDayClientModel> Send(ClientGetSelectedWorkDayRequest request)
     {
-        return await workDayRequestSender.Send(request);
+        return await requestSender.Policy.ExecuteAsync(() =>
+            workDayRequestSender.Send(request));
     }
 
     public async Task<WorkDayClientModel> Send(ClientGetWorkDayByDateRequest request)
     {
-        return await workDayRequestSender.Send(request);
+        return await requestSender.Policy.ExecuteAsync(() =>
+            workDayRequestSender.Send(request));
     }
 
     public async Task<bool> Send(ClientIsWorkDayExistingRequest request)
     {
-        return await workDayRequestSender.Send(request);
+        return await requestSender.Policy.ExecuteAsync(() =>
+            workDayRequestSender.Send(request));
     }
 
     public async Task<List<DocumentationReplay>> Send(ClientGetTicketReplaysByIdRequest request)
     {
-        return await ticketReplayRequestSender.Send(request);
+        return await requestSender.Policy.ExecuteAsync(() =>
+            ticketReplayRequestSender.Send(request));
     }
 
     public async Task<List<ClientGetTimeSlotControlResponse>> Send(ClientGetTimeSlotControlDataRequest request)
     {
-        return await useCaseRequestSender.Send(request);
+        return await requestSender.Policy.ExecuteAsync(() =>
+            useCaseRequestSender.Send(request));
     }
 
     public async Task<AnalysisBySprintDecorator> Send(ClientGetSprintAnalysisById request)
     {
-        return await analysisRequestSender.Send(request);
+        return await requestSender.Policy.ExecuteAsync(() =>
+            analysisRequestSender.Send(request));
     }
 
     public async Task<AnalysisByTicketDecorator> Send(ClientGetTicketAnalysisById request)
     {
-        return await analysisRequestSender.Send(request);
+        return await requestSender.Policy.ExecuteAsync(() =>
+            analysisRequestSender.Send(request));
     }
 
     public async Task<AnalysisByTagDecorator> Send(ClientGetTagAnalysisById request)
     {
-        return await analysisRequestSender.Send(request);
+        return await requestSender.Policy.ExecuteAsync(() =>
+            analysisRequestSender.Send(request));
     }
 }

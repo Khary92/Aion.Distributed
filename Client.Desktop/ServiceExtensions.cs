@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.Commands.Notes;
@@ -13,6 +14,7 @@ using Client.Desktop.Communication.Notifications.Tag;
 using Client.Desktop.Communication.Notifications.Ticket;
 using Client.Desktop.Communication.Notifications.UseCase;
 using Client.Desktop.Communication.Notifications.WorkDay;
+using Client.Desktop.Communication.Policies;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.Communication.Requests.Analysis;
 using Client.Desktop.Communication.Requests.Notes;
@@ -52,6 +54,7 @@ using Client.Proto;
 using CommunityToolkit.Mvvm.Messaging;
 using Grpc.Net.Client;
 using Microsoft.Extensions.DependencyInjection;
+using Polly;
 using Proto.Notifications.Note;
 using Proto.Notifications.NoteType;
 using Proto.Notifications.Sprint;
@@ -77,6 +80,7 @@ public static class ServiceExtensions
 {
     public static void AddPresentationServices(this IServiceCollection services)
     {
+        AddPolicyServices(services);
         AddSchedulerServices(services);
         AddLocalServices(services);
         AddSharedDataServices(services);
@@ -89,7 +93,29 @@ public static class ServiceExtensions
         AddCommandSenders(services);
         AddFileSystemServices(services);
     }
-
+    
+    private static void AddPolicyServices(IServiceCollection services)
+    {
+        services.AddSingleton(
+            new CommandRetryPolicy(Policy
+                .Handle<Exception>()
+                .WaitAndRetryAsync(3, retryAttempt =>
+                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)))
+                .WrapAsync(Policy
+                    .Handle<Exception>()
+                    .CircuitBreakerAsync(2, TimeSpan.FromSeconds(30))))
+        );
+        
+        services.AddSingleton(
+            new RequestRetryPolicy(Policy
+                .Handle<Exception>()
+                .WaitAndRetryAsync(3, retryAttempt =>
+                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)))
+                .WrapAsync(Policy
+                    .Handle<Exception>()
+                    .CircuitBreakerAsync(2, TimeSpan.FromSeconds(30))))
+        );
+    }
     private static void AddSchedulerServices(this IServiceCollection services)
     {
         services.AddSingleton<CancellationTokenSource>();
