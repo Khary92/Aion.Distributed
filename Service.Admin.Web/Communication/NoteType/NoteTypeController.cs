@@ -1,4 +1,5 @@
 ﻿using Proto.Command.NoteTypes;
+using Proto.DTO.TraceData;
 using Service.Admin.Tracing;
 using Service.Admin.Web.Models;
 
@@ -48,7 +49,11 @@ public class NoteTypeController(ISharedCommandSender commandSender, ITraceCollec
                 var nameCommand = new ChangeNoteTypeNameCommandProto
                 {
                     NoteTypeId = SelectedNoteType.NoteTypeId.ToString(),
-                    Name = InputName
+                    Name = InputName,
+                    TraceData = new TraceDataProto()
+                    {
+                        TraceId = Guid.NewGuid().ToString()
+                    }
                 };
 
                 await commandSender.Send(nameCommand);
@@ -63,7 +68,11 @@ public class NoteTypeController(ISharedCommandSender commandSender, ITraceCollec
                 var colorCommand = new ChangeNoteTypeColorCommandProto
                 {
                     NoteTypeId = SelectedNoteType.NoteTypeId.ToString(),
-                    Color = InputColor
+                    Color = InputColor,
+                    TraceData = new TraceDataProto()
+                    {
+                        TraceId = Guid.NewGuid().ToString()
+                    }
                 };
 
                 await commandSender.Send(colorCommand);
@@ -81,7 +90,11 @@ public class NoteTypeController(ISharedCommandSender commandSender, ITraceCollec
         {
             NoteTypeId = noteTypeId.ToString(),
             Name = InputName,
-            Color = InputColor
+            Color = InputColor,
+            TraceData = new TraceDataProto()
+            {
+                TraceId = Guid.NewGuid().ToString()
+            }
         };
 
         await tracer.NoteType.Create.StartUseCase(GetType(), noteTypeId, createCommand.ToString());

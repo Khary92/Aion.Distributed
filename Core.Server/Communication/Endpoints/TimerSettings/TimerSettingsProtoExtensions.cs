@@ -71,7 +71,7 @@ public static class TimerSettingsProtoExtensions
         {
             TimerSettingsId = timerSettings.TimerSettingsId.ToString(),
             DocumentationSaveInterval = timerSettings.DocumentationSaveInterval,
-            SnapshotSaveInterval = timerSettings.SnapshotSaveInterval
+            SnapshotSaveInterval = timerSettings.SnapshotSaveInterval,
         };
     }
 }

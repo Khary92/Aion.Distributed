@@ -1,4 +1,5 @@
 using Proto.Command.Tags;
+using Proto.DTO.TraceData;
 using Service.Admin.Tracing;
 using Service.Admin.Web.Models;
 using Service.Admin.Web.Pages;
@@ -22,7 +23,11 @@ public class TagController(ITraceCollector tracer, ISharedCommandSender commandS
         var updateTagCommand = new UpdateTagCommandProto
         {
             TagId = SelectedTag.TagId.ToString(),
-            Name = InputTagName
+            Name = InputTagName,
+            TraceData = new TraceDataProto()
+            {
+                TraceId = Guid.NewGuid().ToString()
+            }
         };
 
         await commandSender.Send(updateTagCommand);
@@ -38,7 +43,11 @@ public class TagController(ITraceCollector tracer, ISharedCommandSender commandS
         var createTagCommand = new CreateTagCommandProto
         {
             TagId = createTagDto.TagId.ToString(),
-            Name = InputTagName
+            Name = InputTagName,
+            TraceData = new TraceDataProto()
+            {
+                TraceId = Guid.NewGuid().ToString()
+            }
         };
 
         await commandSender.Send(createTagCommand);

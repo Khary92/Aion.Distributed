@@ -8,9 +8,9 @@ public class VerifierFactory(
     private readonly Dictionary<TraceSinkId, IVerificationProvider> _verificationProviders =
         verificationProviders.ToDictionary(ts => ts.TraceSinkId);
 
-    public IVerifier Create(TraceSinkId traceSinkId, UseCaseMeta useCaseMeta)
+    public IVerifier Create(TraceSinkId traceSinkId, UseCaseMeta useCaseMeta, Guid traceId)
     {
         var verificationSteps = _verificationProviders[traceSinkId].GetVerificationSteps(useCaseMeta);
-        return new Verifier(new UseCaseStateEvaluator(verificationSteps));
+        return new Verifier(new UseCaseStateEvaluator(verificationSteps), traceId);
     }
 }

@@ -1,5 +1,6 @@
 using Google.Protobuf.WellKnownTypes;
 using Proto.Command.Sprints;
+using Proto.DTO.TraceData;
 using Service.Admin.Tracing;
 using Service.Admin.Web.Models;
 using Service.Admin.Web.Pages;
@@ -50,7 +51,11 @@ public class SprintController(ISharedCommandSender commandSender, ITraceCollecto
         var command = new SetSprintActiveStatusCommandProto
         {
             SprintId = SelectedSprint.SprintId.ToString(),
-            IsActive = true
+            IsActive = true,
+            TraceData = new TraceDataProto()
+            {
+                TraceId = Guid.NewGuid().ToString()
+            }
         };
 
         await commandSender.Send(command);
@@ -72,7 +77,11 @@ public class SprintController(ISharedCommandSender commandSender, ITraceCollecto
                 SprintId = updateSprintDto.SprintId.ToString(),
                 Name = updateSprintDto.Name,
                 StartTime = Timestamp.FromDateTime(updateSprintDto.StartTime.UtcDateTime),
-                EndTime = Timestamp.FromDateTime(updateSprintDto.EndTime.UtcDateTime)
+                EndTime = Timestamp.FromDateTime(updateSprintDto.EndTime.UtcDateTime),
+                TraceData = new TraceDataProto()
+                {
+                    TraceId = Guid.NewGuid().ToString()
+                }
             };
 
             await commandSender.Send(command);
@@ -94,7 +103,11 @@ public class SprintController(ISharedCommandSender commandSender, ITraceCollecto
             Name = createSprintDto.Name,
             StartTime = Timestamp.FromDateTime(createSprintDto.StartTime.UtcDateTime),
             EndTime = Timestamp.FromDateTime(createSprintDto.EndTime.UtcDateTime),
-            IsActive = createSprintDto.IsActive
+            IsActive = createSprintDto.IsActive,
+            TraceData = new TraceDataProto()
+            {
+                TraceId = Guid.NewGuid().ToString()
+            }
         };
 
         await commandSender.Send(createCommand);

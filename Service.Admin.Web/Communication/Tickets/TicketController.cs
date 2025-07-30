@@ -1,5 +1,6 @@
 using Proto.Command.Sprints;
 using Proto.Command.Tickets;
+using Proto.DTO.TraceData;
 using Service.Admin.Tracing;
 using Service.Admin.Web.Models;
 
@@ -25,7 +26,11 @@ public class TicketController(ITraceCollector tracer, ISharedCommandSender comma
             TicketId = SelectedTicket.TicketId.ToString(),
             Name = NewTicketName,
             BookingNumber = NewTicketBookingNumber,
-            SprintIds = { SelectedTicket.SprintIds.ToRepeatedField() }
+            SprintIds = { SelectedTicket.SprintIds.ToRepeatedField() }, 
+            TraceData = new TraceDataProto()
+            {
+                TraceId = Guid.NewGuid().ToString()
+            }
         });
     }
 
@@ -87,7 +92,11 @@ public class TicketController(ITraceCollector tracer, ISharedCommandSender comma
 
         await commandSender.Send(new AddTicketToActiveSprintCommandProto
         {
-            TicketId = SelectedTicket.TicketId.ToString()
+            TicketId = SelectedTicket.TicketId.ToString(),
+            TraceData = new TraceDataProto()
+            {
+                TraceId = Guid.NewGuid().ToString()
+            }
         });
     }
 }

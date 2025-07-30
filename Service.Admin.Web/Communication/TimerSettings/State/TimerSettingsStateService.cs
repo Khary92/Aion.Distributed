@@ -1,4 +1,5 @@
 ﻿using Proto.Command.TimerSettings;
+using Proto.DTO.TraceData;
 using Proto.Requests.TimerSettings;
 using Service.Admin.Web.Communication.TimerSettings.Notifications;
 using Service.Admin.Web.Models;
@@ -51,7 +52,11 @@ public class TimerSettingsStateService(ISharedRequestSender requestSender, IShar
         {
             TimerSettingsId = Guid.NewGuid().ToString(),
             DocumentationSaveInterval = 30,
-            SnapshotSaveInterval = 30
+            SnapshotSaveInterval = 30,
+            TraceData = new TraceDataProto()
+            {
+                TraceId = Guid.NewGuid().ToString()
+            }
         });
     }
 }

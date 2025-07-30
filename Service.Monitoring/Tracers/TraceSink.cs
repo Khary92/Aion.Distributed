@@ -1,3 +1,4 @@
+using System.Collections.Concurrent;
 using Service.Monitoring.Communication;
 using Service.Monitoring.Shared;
 using Service.Monitoring.Shared.Enums;
@@ -5,26 +6,22 @@ using Service.Monitoring.Verifiers.Common;
 using Service.Monitoring.Verifiers.Common.Factories;
 using Service.Monitoring.Verifiers.Common.Records;
 
-namespace Service.Monitoring.Tracers.Ticket;
+namespace Service.Monitoring.Tracers;
 
-public class TicketTraceSink(IReportSender reportSender, IVerifierFactory verifierFactory) : ITraceSink
+public class TraceSink(IReportSender reportSender, IVerifierFactory verifierFactory) : ITraceSink
 {
-    private readonly Dictionary<Guid, IVerifier> _ticketVerifiers = new();
+    private readonly ConcurrentDictionary<Guid, IVerifier> _ticketVerifiers = new();
     public TraceSinkId TraceSinkId => TraceSinkId.Ticket;
 
     public void AddTrace(TraceData traceData)
     {
-        if (!_ticketVerifiers.TryGetValue(traceData.TraceId, out var verifier))
+        var verifier = _ticketVerifiers.GetOrAdd(traceData.TraceId, _ =>
         {
-            var newVerifier = verifierFactory.Create(traceData.TraceSinkId, traceData.UseCaseMeta);
-            _ticketVerifiers.Add(traceData.TraceId, newVerifier);
-            newVerifier.Add(traceData);
-
+            var newVerifier = verifierFactory.Create(traceData.TraceSinkId, traceData.UseCaseMeta, traceData.TraceId);
             newVerifier.VerificationCompleted += SaveReport;
-
-            return;
-        }
-
+            return newVerifier;
+        });
+    
         verifier.Add(traceData);
     }
 
@@ -33,10 +30,12 @@ public class TicketTraceSink(IReportSender reportSender, IVerifierFactory verifi
         try
         {
             await reportSender.Send(e);
+            _ticketVerifiers.TryRemove(e.TraceId, out _);
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex);
         }
+
     }
 }

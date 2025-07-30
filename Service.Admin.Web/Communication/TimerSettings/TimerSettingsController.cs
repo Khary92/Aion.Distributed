@@ -1,4 +1,5 @@
 using Proto.Command.TimerSettings;
+using Proto.DTO.TraceData;
 using Service.Admin.Web.Communication.TimerSettings.State;
 using Service.Admin.Web.Services;
 
@@ -18,7 +19,11 @@ public class TimerSettingsController(
             await commandSender.Send(new ChangeSnapshotSaveIntervalCommandProto
             {
                 TimerSettingsId = timerSettingsStateService.TimerSettings.TimerSettingsId.ToString(),
-                SnapshotSaveInterval = timerSettingsStateService.TimerSettings.SnapshotSaveInterval
+                SnapshotSaveInterval = timerSettingsStateService.TimerSettings.SnapshotSaveInterval,
+                TraceData = new TraceDataProto()
+                {
+                    TraceId = Guid.NewGuid().ToString()
+                }
             });
 
             _previousSnapshotSaveInterval = timerSettingsStateService.TimerSettings.SnapshotSaveInterval;
@@ -29,7 +34,11 @@ public class TimerSettingsController(
             await commandSender.Send(new ChangeDocuTimerSaveIntervalCommandProto
             {
                 TimerSettingsId = timerSettingsStateService.TimerSettings.TimerSettingsId.ToString(),
-                DocuTimerSaveInterval = timerSettingsStateService.TimerSettings.DocumentationSaveInterval
+                DocuTimerSaveInterval = timerSettingsStateService.TimerSettings.DocumentationSaveInterval,
+                TraceData = new TraceDataProto()
+                {
+                    TraceId = Guid.NewGuid().ToString()
+                }
             });
 
             _previousDocumentationSaveInterval = timerSettingsStateService.TimerSettings.DocumentationSaveInterval;

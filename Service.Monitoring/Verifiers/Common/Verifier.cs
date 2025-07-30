@@ -10,10 +10,12 @@ public class Verifier : IVerifier
     private readonly Timer _timer = new(10000);
     private readonly List<TraceData> _traceData = new();
     private readonly UseCaseStateEvaluator _useCaseStateEvaluator;
+    private readonly Guid _traceId;
 
-    public Verifier(UseCaseStateEvaluator useCaseStateEvaluator)
+    public Verifier(UseCaseStateEvaluator useCaseStateEvaluator, Guid traceId)
     {
         _useCaseStateEvaluator = useCaseStateEvaluator;
+        _traceId = traceId;
         _timer.Elapsed += Elapsed;
         _timer.AutoReset = false;
     }
@@ -31,7 +33,7 @@ public class Verifier : IVerifier
     {
         var report = new Report(_traceData.First().TimeStamp,
             _useCaseStateEvaluator.GetResultState(_traceData),
-            _traceData.GetClassTrace());
+            _traceData.GetClassTrace(), _traceId);
 
         VerificationCompleted?.Invoke(this, report);
     }
