@@ -1,4 +1,5 @@
-﻿using Polly;
+﻿using Grpc.Core;
+using Polly;
 using Service.Admin.Web.Communication;
 using Service.Admin.Web.Communication.NoteType;
 using Service.Admin.Web.Communication.NoteType.State;
@@ -44,19 +45,23 @@ public static class AdminServiceExtension
     private static void AddPolicyServices(IServiceCollection services)
     {
         services.AddSingleton(
-            new RetryPolicy(Policy
-                .Handle<Exception>()
-                .WaitAndRetryAsync(3, retryAttempt =>
-                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)))
-                .WrapAsync(Policy
-                    .Handle<Exception>()
-                    .CircuitBreakerAsync(2, TimeSpan.FromSeconds(30))))
+            new CommandSenderPolicy(Policy
+                .Handle<RpcException>()
+                .WaitAndRetryAsync(
+                    retryCount: 5,
+                    sleepDurationProvider: retryAttempt => 
+                        TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))
+                ))
         );
-
+        
         services.AddSingleton(
-            new CircuitBreakerPolicy(Policy
-                .Handle<Exception>()
-                .CircuitBreakerAsync(2, TimeSpan.FromSeconds(30)))
+            new RequestSenderPolicy(Policy
+                .Handle<RpcException>()
+                .WaitAndRetryAsync(
+                    retryCount: 5,
+                    sleepDurationProvider: retryAttempt => 
+                        TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))
+                ))
         );
         
         services.AddSingleton<ISharedCommandSender, SharedCommandSender>();

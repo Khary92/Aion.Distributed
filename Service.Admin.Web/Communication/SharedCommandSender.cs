@@ -18,102 +18,102 @@ public class SharedCommandSender(
     ITagCommandSender tagCommandSender,
     INoteTypeCommandSender noteTypeCommandSender,
     ITimerSettingsCommandSender timerSettingsCommandSender,
-    CircuitBreakerPolicy circuitBreakerPolicy)
+    CommandSenderPolicy commandSenderPolicy)
     : ISharedCommandSender
 {
     public async Task<bool> Send(CreateTicketCommandProto command)
     {
-        return await circuitBreakerPolicy.Policy.ExecuteAsync(() =>
+        return await commandSenderPolicy.Policy.ExecuteAsync(() =>
             ticketCommandSender.Send(command));
     }
 
     public async Task<bool> Send(UpdateTicketDataCommandProto command)
     {
-        return await circuitBreakerPolicy.Policy.ExecuteAsync(() =>
+        return await commandSenderPolicy.Policy.ExecuteAsync(() =>
             ticketCommandSender.Send(command));
     }
 
     public async Task<bool> Send(UpdateTicketDocumentationCommandProto command)
     {
-        return await circuitBreakerPolicy.Policy.ExecuteAsync(() =>
+        return await commandSenderPolicy.Policy.ExecuteAsync(() =>
             ticketCommandSender.Send(command));
     }
 
     public async Task<bool> Send(CreateSprintCommandProto command)
     {
-        return await circuitBreakerPolicy.Policy.ExecuteAsync(() =>
+        return await commandSenderPolicy.Policy.ExecuteAsync(() =>
             sprintCommandSender.Send(command));
     }
 
     public async Task<bool> Send(AddTicketToActiveSprintCommandProto command)
     {
-        return await circuitBreakerPolicy.Policy.ExecuteAsync(() =>
+        return await commandSenderPolicy.Policy.ExecuteAsync(() =>
             sprintCommandSender.Send(command));
     }
 
     public async Task<bool> Send(AddTicketToSprintCommandProto command)
     {
-        return await circuitBreakerPolicy.Policy.ExecuteAsync(() =>
+        return await commandSenderPolicy.Policy.ExecuteAsync(() =>
             sprintCommandSender.Send(command));
     }
 
     public async Task<bool> Send(SetSprintActiveStatusCommandProto command)
     {
-        return await circuitBreakerPolicy.Policy.ExecuteAsync(() =>
+        return await commandSenderPolicy.Policy.ExecuteAsync(() =>
             sprintCommandSender.Send(command));
     }
 
     public async Task<bool> Send(UpdateSprintDataCommandProto command)
     {
-        return await circuitBreakerPolicy.Policy.ExecuteAsync(() =>
+        return await commandSenderPolicy.Policy.ExecuteAsync(() =>
             sprintCommandSender.Send(command));
     }
 
     public async Task<bool> Send(CreateTagCommandProto command)
     {
-        return await circuitBreakerPolicy.Policy.ExecuteAsync(() =>
+        return await commandSenderPolicy.Policy.ExecuteAsync(() =>
             tagCommandSender.Send(command));
     }
 
     public async Task<bool> Send(UpdateTagCommandProto command)
     {
-        return await circuitBreakerPolicy.Policy.ExecuteAsync(() =>
+        return await commandSenderPolicy.Policy.ExecuteAsync(() =>
             tagCommandSender.Send(command));
     }
 
     public async Task<bool> Send(CreateNoteTypeCommandProto command)
     {
-        return await circuitBreakerPolicy.Policy.ExecuteAsync(() =>
+        return await commandSenderPolicy.Policy.ExecuteAsync(() =>
             noteTypeCommandSender.Send(command));
     }
 
     public async Task<bool> Send(ChangeNoteTypeNameCommandProto command)
     {
-        return await circuitBreakerPolicy.Policy.ExecuteAsync(() =>
+        return await commandSenderPolicy.Policy.ExecuteAsync(() =>
             noteTypeCommandSender.Send(command));
     }
 
     public async Task<bool> Send(ChangeNoteTypeColorCommandProto command)
     {
-        return await circuitBreakerPolicy.Policy.ExecuteAsync(() =>
+        return await commandSenderPolicy.Policy.ExecuteAsync(() =>
             noteTypeCommandSender.Send(command));
     }
 
     public async Task<bool> Send(CreateTimerSettingsCommandProto command)
     {
-        return await circuitBreakerPolicy.Policy.ExecuteAsync(() =>
+        return await commandSenderPolicy.Policy.ExecuteAsync(() =>
             timerSettingsCommandSender.Send(command));
     }
 
     public async Task<bool> Send(ChangeSnapshotSaveIntervalCommandProto command)
     {
-        return await circuitBreakerPolicy.Policy.ExecuteAsync(() =>
+        return await commandSenderPolicy.Policy.ExecuteAsync(() =>
             timerSettingsCommandSender.Send(command));
     }
 
     public async Task<bool> Send(ChangeDocuTimerSaveIntervalCommandProto command)
     {
-        return await circuitBreakerPolicy.Policy.ExecuteAsync(() =>
+        return await commandSenderPolicy.Policy.ExecuteAsync(() =>
             timerSettingsCommandSender.Send(command));
     }
 }
