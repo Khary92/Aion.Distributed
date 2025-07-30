@@ -10,7 +10,8 @@ public static class NoteTypeProtoExtensions
 {
     public static CreateNoteTypeCommand ToCommand(this CreateNoteTypeCommandProto proto)
     {
-        return new CreateNoteTypeCommand(Guid.Parse(proto.NoteTypeId), proto.Name, proto.Color);
+        return new CreateNoteTypeCommand(Guid.Parse(proto.NoteTypeId), proto.Name, proto.Color,
+            Guid.Parse(proto.TraceData.TraceId));
     }
 
     public static NoteTypeNotification ToNotification(this CreateNoteTypeCommand proto)
@@ -28,7 +29,8 @@ public static class NoteTypeProtoExtensions
 
     public static ChangeNoteTypeNameCommand ToCommand(this ChangeNoteTypeNameCommandProto proto)
     {
-        return new ChangeNoteTypeNameCommand(Guid.Parse(proto.NoteTypeId), proto.Name);
+        return new ChangeNoteTypeNameCommand(Guid.Parse(proto.NoteTypeId), proto.Name,
+            Guid.Parse(proto.TraceData.TraceId));
     }
 
     public static NoteTypeNotification ToNotification(this ChangeNoteTypeNameCommand proto)
@@ -45,7 +47,8 @@ public static class NoteTypeProtoExtensions
 
     public static ChangeNoteTypeColorCommand ToCommand(this ChangeNoteTypeColorCommandProto proto)
     {
-        return new ChangeNoteTypeColorCommand(Guid.Parse(proto.NoteTypeId), proto.Color);
+        return new ChangeNoteTypeColorCommand(Guid.Parse(proto.NoteTypeId), proto.Color,
+            Guid.Parse(proto.TraceData.TraceId));
     }
 
     public static NoteTypeNotification ToNotification(this ChangeNoteTypeColorCommand proto)

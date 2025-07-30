@@ -3,6 +3,7 @@ syntax = "proto3";
 option csharp_namespace = "Proto.Command.WorkDays";
 
 import "google/protobuf/timestamp.proto";
+import "DTO/trace_data.proto";
 
 service WorkDayCommandProtoService {
   rpc CreateWorkDay (CreateWorkDayCommandProto) returns (CommandResponse);
@@ -11,6 +12,7 @@ service WorkDayCommandProtoService {
 message CreateWorkDayCommandProto {
   string workDayId = 1;
   google.protobuf.Timestamp date = 2;
+  TraceDataProto traceData = 3;
 }
 
 message CommandResponse {

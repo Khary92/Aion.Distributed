@@ -39,7 +39,8 @@ public class WorkDaysModel(
 
         if (!await requestSender.Send(new ClientIsWorkDayExistingRequest(DateTimeOffset.Now)))
         {
-            await commandSender.Send(new ClientCreateWorkDayCommand(Guid.NewGuid(), DateTimeOffset.Now));
+            await commandSender.Send(new ClientCreateWorkDayCommand(Guid.NewGuid(), DateTimeOffset.Now,
+                Guid.NewGuid()));
         }
     }
 
@@ -66,7 +67,7 @@ public class WorkDaysModel(
         }
 
         var newGuid = Guid.NewGuid();
-        var createWorkDayCommand = new ClientCreateWorkDayCommand(newGuid, date);
+        var createWorkDayCommand = new ClientCreateWorkDayCommand(newGuid, date, Guid.NewGuid());
         await commandSender.Send(createWorkDayCommand);
 
         await tracer.WorkDay.Create.CommandSent(GetType(), newGuid, createWorkDayCommand);

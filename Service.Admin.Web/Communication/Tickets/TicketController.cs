@@ -35,7 +35,11 @@ public class TicketController(ITraceCollector tracer, ISharedCommandSender comma
         {
             TicketId = Guid.NewGuid().ToString(),
             Name = NewTicketName,
-            BookingNumber = NewTicketBookingNumber
+            BookingNumber = NewTicketBookingNumber,
+            TraceData = new()
+            {
+                TraceId = Guid.NewGuid().ToString()
+            }
         };
 
         // TODO well there is no more ViewModel

@@ -1,3 +1,3 @@
 namespace Core.Server.Communication.Records.Commands.Entities.Tags;
 
-public record UpdateTagCommand(Guid TagId, string Name);
+public record UpdateTagCommand(Guid TagId, string Name, Guid TraceId);

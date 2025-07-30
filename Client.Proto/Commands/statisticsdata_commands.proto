@@ -2,6 +2,7 @@ syntax = "proto3";
 
 option csharp_namespace = "Proto.Command.StatisticsData";
 
+import "DTO/trace_data.proto";
 
 service StatisticsDataCommandProtoService {
   rpc ChangeProductivity (ChangeProductivityCommandProto) returns (CommandResponse);
@@ -14,11 +15,13 @@ message ChangeProductivityCommandProto {
   bool isProductive = 2;
   bool isNeutral = 3;
   bool isUnproductive = 4;
+  TraceDataProto traceData = 5;
 }
 
 message ChangeTagSelectionCommandProto {
   string statisticsDataId = 1;
   repeated string selectedTagIds = 2;
+  TraceDataProto traceData = 3;
 }
 
 message CreateStatisticsDataCommandProto {
@@ -28,6 +31,7 @@ message CreateStatisticsDataCommandProto {
   bool isUnproductive = 4;
   repeated string tagIds = 5;
   string timeSlotId = 6;
+  TraceDataProto traceData = 7;
 }
 
 message CommandResponse {

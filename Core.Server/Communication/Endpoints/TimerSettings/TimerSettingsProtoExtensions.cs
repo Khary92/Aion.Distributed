@@ -10,7 +10,8 @@ public static class TimerSettingsProtoExtensions
     public static ChangeDocuTimerSaveIntervalCommand ToCommand(
         this ChangeDocuTimerSaveIntervalCommandProto proto)
     {
-        return new ChangeDocuTimerSaveIntervalCommand(Guid.Parse(proto.TimerSettingsId), proto.DocuTimerSaveInterval);
+        return new ChangeDocuTimerSaveIntervalCommand(Guid.Parse(proto.TimerSettingsId), proto.DocuTimerSaveInterval,
+            Guid.Parse(proto.TraceData.TraceId));
     }
 
     public static TimerSettingsNotification ToNotification(this ChangeDocuTimerSaveIntervalCommand proto)
@@ -28,7 +29,8 @@ public static class TimerSettingsProtoExtensions
     public static ChangeSnapshotSaveIntervalCommand ToCommand(
         this ChangeSnapshotSaveIntervalCommandProto proto)
     {
-        return new ChangeSnapshotSaveIntervalCommand(Guid.Parse(proto.TimerSettingsId), proto.SnapshotSaveInterval);
+        return new ChangeSnapshotSaveIntervalCommand(Guid.Parse(proto.TimerSettingsId), proto.SnapshotSaveInterval,
+            Guid.Parse(proto.TraceData.TraceId));
     }
 
     public static TimerSettingsNotification ToNotification(this ChangeSnapshotSaveIntervalCommand proto)
@@ -47,7 +49,7 @@ public static class TimerSettingsProtoExtensions
         this CreateTimerSettingsCommandProto proto)
     {
         return new CreateTimerSettingsCommand(Guid.Parse(proto.TimerSettingsId), proto.DocumentationSaveInterval,
-            proto.SnapshotSaveInterval);
+            proto.SnapshotSaveInterval, Guid.Parse(proto.TraceData.TraceId));
     }
 
     public static TimerSettingsNotification ToNotification(this CreateTimerSettingsCommand proto)

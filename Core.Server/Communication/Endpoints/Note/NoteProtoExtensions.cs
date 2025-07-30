@@ -13,7 +13,7 @@ public static class NoteProtoExtensions
     {
         return new CreateNoteCommand(Guid.Parse(proto.NoteId), proto.Text, Guid.Parse(proto.NoteTypeId),
             Guid.Parse(proto.TimeSlotId),
-            proto.TimeStamp.ToDateTimeOffset());
+            proto.TimeStamp.ToDateTimeOffset(), Guid.Parse(proto.TraceData.TraceId));
     }
 
     public static NoteNotification ToNotification(this CreateNoteCommand proto)
@@ -34,7 +34,7 @@ public static class NoteProtoExtensions
     public static UpdateNoteCommand ToCommand(this UpdateNoteCommandProto proto)
     {
         return new UpdateNoteCommand(Guid.Parse(proto.NoteId), proto.Text, Guid.Parse(proto.NoteTypeId),
-            Guid.Parse(proto.TimeSlotId));
+            Guid.Parse(proto.TimeSlotId), Guid.Parse(proto.TraceData.TraceId));
     }
 
     public static NoteNotification ToNotification(this UpdateNoteCommand proto)

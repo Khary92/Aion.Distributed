@@ -3,6 +3,7 @@ syntax = "proto3";
 option csharp_namespace = "Proto.Command.TimeSlots";
 
 import "google/protobuf/timestamp.proto";
+import "DTO/trace_data.proto";
 
 service TimeSlotCommandProtoService {
   rpc CreateTimeSlot(CreateTimeSlotCommandProto) returns (CommandResponse);
@@ -14,6 +15,7 @@ service TimeSlotCommandProtoService {
 message AddNoteCommandProto {
   string time_slot_id = 1;
   string note_id = 2;
+  TraceDataProto traceData = 3;
 }
 
 message CreateTimeSlotCommandProto {
@@ -23,16 +25,19 @@ message CreateTimeSlotCommandProto {
   google.protobuf.Timestamp start_time = 4;
   google.protobuf.Timestamp end_time = 5;
   bool is_timer_running = 6;
+  TraceDataProto traceData = 7;
 }
 
 message SetEndTimeCommandProto {
   string time_slot_id = 1;
   google.protobuf.Timestamp time = 2;
+  TraceDataProto traceData = 3;
 }
 
 message SetStartTimeCommandProto {
   string time_slot_id = 1;
   google.protobuf.Timestamp time = 2;
+  TraceDataProto traceData = 3;
 }
 
 message CommandResponse {

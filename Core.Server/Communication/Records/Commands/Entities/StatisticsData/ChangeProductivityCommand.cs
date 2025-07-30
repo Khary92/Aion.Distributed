@@ -4,4 +4,5 @@ public record ChangeProductivityCommand(
     Guid StatisticsDataId,
     bool IsProductive,
     bool IsNeutral,
-    bool IsUnproductive);
+    bool IsUnproductive,
+    Guid TraceId);

@@ -2,12 +2,15 @@ syntax = "proto3";
 
 option csharp_namespace = "Proto.Command.UseCases";
 
+import "DTO/trace_data.proto";
+
 service UseCaseCommandProtoService {
   rpc CreateTimeSlotControl (CreateTimeSlotControlCommandProto) returns (CommandResponse);
 }
 
 message CreateTimeSlotControlCommandProto {
   string ticketId = 1;
+  TraceDataProto traceData = 2;
 }
 
 message CommandResponse {

@@ -1,3 +1,3 @@
 namespace Core.Server.Communication.Records.Commands.Entities.Sprints;
 
-public record SetSprintActiveStatusCommand(Guid SprintId, bool IsActive);
+public record SetSprintActiveStatusCommand(Guid SprintId, bool IsActive, Guid TraceId);

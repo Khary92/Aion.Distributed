@@ -12,7 +12,8 @@ public static class WorkDayProtoExtensions
     public static CreateWorkDayCommand ToCommand(
         this CreateWorkDayCommandProto proto)
     {
-        return new CreateWorkDayCommand(Guid.Parse(proto.WorkDayId), proto.Date.ToDateTimeOffset());
+        return new CreateWorkDayCommand(Guid.Parse(proto.WorkDayId), proto.Date.ToDateTimeOffset(),
+            Guid.Parse(proto.TraceData.TraceId));
     }
 
     public static WorkDayNotification ToNotification(this CreateWorkDayCommand proto)

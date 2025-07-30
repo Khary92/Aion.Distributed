@@ -2,7 +2,6 @@ syntax = "proto3";
 
 option csharp_namespace = "Proto.Command.TraceReports";
 
-
 service TraceReportCommandService {
   rpc SendTraceReport (SendTraceReportCommandProto) returns (CommandResponse);
 }

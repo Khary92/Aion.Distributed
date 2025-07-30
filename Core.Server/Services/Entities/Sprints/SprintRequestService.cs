@@ -38,6 +38,6 @@ public class SprintRequestService(
 
         if (activeSprint == null) return;
 
-        await sprintCommandsService.AddTicketToSprint(new AddTicketToSprintCommand(sprintId, ticketId));
+        await sprintCommandsService.AddTicketToSprint(new AddTicketToSprintCommand(sprintId, ticketId, Guid.NewGuid()));
     }
 }

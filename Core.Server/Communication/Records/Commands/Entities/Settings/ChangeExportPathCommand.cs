@@ -2,4 +2,5 @@
 
 public record ChangeExportPathCommand(
     Guid SettingsId,
-    string ExportPath);
+    string ExportPath,
+    Guid TraceId);

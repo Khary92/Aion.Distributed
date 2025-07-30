@@ -197,6 +197,6 @@ public class TimeTrackingModel(
     {
         if (SelectedTicket == null) return;
 
-        await commandSender.Send(new ClientCreateTimeSlotControlCommand(SelectedTicket.TicketId));
+        await commandSender.Send(new ClientCreateTimeSlotControlCommand(SelectedTicket.TicketId, Guid.NewGuid()));
     }
 }

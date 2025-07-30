@@ -1,0 +1,7 @@
+﻿syntax = "proto3";
+
+option csharp_namespace = "Proto.DTO.TraceData";
+
+message TraceDataProto {
+  string trace_id = 1;
+}

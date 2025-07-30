@@ -4,4 +4,5 @@ public record UpdateTicketDataCommand(
     Guid TicketId,
     string Name,
     string BookingNumber,
-    List<Guid> SprintIds);
+    List<Guid> SprintIds, 
+    Guid TraceId);

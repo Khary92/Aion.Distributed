@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands.TimeSlots.Records;
 using Client.Desktop.Communication.Notifications.Ticket.Records;
@@ -68,13 +69,13 @@ public class TimeSlotModel(
         {
             if (TimeSlot.IsEndTimeChanged())
             {
-                var setEndTimeCommand = new ClientSetEndTimeCommand(TimeSlot.TimeSlotId, TimeSlot.EndTime);
+                var setEndTimeCommand = new ClientSetEndTimeCommand(TimeSlot.TimeSlotId, TimeSlot.EndTime, Guid.NewGuid());
                 endTimeCache.Store(setEndTimeCommand);
             }
 
             if (TimeSlot.IsStartTimeChanged())
             {
-                var setStartTimeCommand = new ClientSetStartTimeCommand(TimeSlot.TimeSlotId, TimeSlot.StartTime);
+                var setStartTimeCommand = new ClientSetStartTimeCommand(TimeSlot.TimeSlotId, TimeSlot.StartTime, Guid.NewGuid());
 
                 startTimeCache.Store(setStartTimeCommand);
             }

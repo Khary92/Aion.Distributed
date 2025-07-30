@@ -40,7 +40,7 @@ public class NoteStreamViewModel(
 
         var noteId = Guid.NewGuid();
         await commandSender.Send(new ClientCreateNoteCommand(noteId, Guid.NewGuid(), string.Empty, TimeSlotId,
-            DateTimeOffset.Now));
+            DateTimeOffset.Now, Guid.NewGuid()));
     }
 
     public void RegisterMessenger()

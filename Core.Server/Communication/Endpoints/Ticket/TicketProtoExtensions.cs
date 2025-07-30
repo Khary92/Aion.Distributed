@@ -13,7 +13,7 @@ public static class TicketProtoExtensions
         this UpdateTicketDataCommandProto proto)
     {
         return new UpdateTicketDataCommand(Guid.Parse(proto.TicketId), proto.Name, proto.BookingNumber,
-            proto.SprintIds.ToGuidList());
+            proto.SprintIds.ToGuidList(), Guid.Parse(proto.TraceData.TraceId));
     }
 
     public static TicketNotification ToNotification(this UpdateTicketDataCommand proto)
@@ -33,7 +33,8 @@ public static class TicketProtoExtensions
     public static UpdateTicketDocumentationCommand ToCommand(
         this UpdateTicketDocumentationCommandProto proto)
     {
-        return new UpdateTicketDocumentationCommand(Guid.Parse(proto.TicketId), proto.Documentation);
+        return new UpdateTicketDocumentationCommand(Guid.Parse(proto.TicketId), proto.Documentation,
+            Guid.Parse(proto.TraceData.TraceId));
     }
 
     public static TicketNotification ToNotification(this UpdateTicketDocumentationCommand proto)
@@ -52,7 +53,7 @@ public static class TicketProtoExtensions
         this CreateTicketCommandProto proto)
     {
         return new CreateTicketCommand(Guid.Parse(proto.TicketId), proto.Name, proto.BookingNumber,
-            proto.SprintIds.ToGuidList());
+            proto.SprintIds.ToGuidList(), Guid.Parse(proto.TraceData.TraceId));
     }
 
     public static TicketNotification ToNotification(this CreateTicketCommand proto)

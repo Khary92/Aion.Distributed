@@ -11,7 +11,8 @@ public static class TagProtoExtensions
     public static CreateTagCommand ToCommand(
         this CreateTagCommandProto proto)
     {
-        return new CreateTagCommand(Guid.Parse(proto.TagId), proto.Name);
+        return new CreateTagCommand(Guid.Parse(proto.TagId), proto.Name,
+            Guid.Parse(proto.TraceData.TraceId));
     }
 
     public static TagNotification ToNotification(this CreateTagCommand proto)
@@ -29,7 +30,8 @@ public static class TagProtoExtensions
     public static UpdateTagCommand ToCommand(
         this UpdateTagCommandProto proto)
     {
-        return new UpdateTagCommand(Guid.Parse(proto.TagId), proto.Name);
+        return new UpdateTagCommand(Guid.Parse(proto.TagId), proto.Name,
+            Guid.Parse(proto.TraceData.TraceId));
     }
 
     public static TagNotification ToNotification(this UpdateTagCommand proto)

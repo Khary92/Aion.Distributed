@@ -23,9 +23,9 @@ public class AddTicketToActiveSprintCommandHandler(
 
         ticketDto.SprintIds.Add(activeSprint.SprintId);
         await ticketCommandsService.UpdateData(new UpdateTicketDataCommand(ticketDto.TicketId, ticketDto.Name,
-            ticketDto.BookingNumber, ticketDto.SprintIds));
+            ticketDto.BookingNumber, ticketDto.SprintIds, command.TraceId));
 
         await sprintCommandsService.AddTicketToSprint(new AddTicketToSprintCommand(activeSprint.SprintId,
-            command.TicketId));
+            command.TicketId, command.TraceId));
     }
 }

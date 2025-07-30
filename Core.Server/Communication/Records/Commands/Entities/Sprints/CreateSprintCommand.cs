@@ -6,4 +6,5 @@ public record CreateSprintCommand(
     DateTimeOffset StartTime,
     DateTimeOffset EndTime,
     bool IsActive,
-    List<Guid> TicketIds);
+    List<Guid> TicketIds,
+    Guid TraceId);

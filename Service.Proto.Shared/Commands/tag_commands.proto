@@ -2,6 +2,8 @@ syntax = "proto3";
 
 option csharp_namespace = "Proto.Command.Tags";
 
+import "DTO/trace_data.proto";
+
 service TagCommandProtoService {
   rpc CreateTag (CreateTagCommandProto) returns (CommandResponse);
   rpc UpdateTag (UpdateTagCommandProto) returns (CommandResponse);
@@ -10,11 +12,13 @@ service TagCommandProtoService {
 message CreateTagCommandProto {
   string tagId = 1;
   string name = 2;
+  TraceDataProto traceData = 3;
 }
 
 message UpdateTagCommandProto {
   string tagId = 1;
   string name = 2;
+  TraceDataProto traceData = 3;
 }
 
 message CommandResponse {

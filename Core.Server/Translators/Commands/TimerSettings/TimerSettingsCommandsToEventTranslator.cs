@@ -24,7 +24,7 @@ public class TimerSettingsCommandsToEventTranslator : ITimerSettingsCommandsToEv
 
     public TimerSettingsEvent ToEvent(CreateTimerSettingsCommand command)
     {
-        var domainEvent = new CreateTimerSettingsCommand(command.TimerSettingsId, command.DocumentationSaveInterval,
+        var domainEvent = new TimerSettingsCreatedEvent(command.TimerSettingsId, command.DocumentationSaveInterval,
             command.SnapshotSaveInterval);
 
         return CreateDatabaseEvent(nameof(TimerSettingsCreatedEvent), command.TimerSettingsId,

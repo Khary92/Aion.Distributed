@@ -12,7 +12,8 @@ public static class TimeSlotProtoExtensions
     public static AddNoteCommand ToCommand(
         this AddNoteCommandProto proto)
     {
-        return new AddNoteCommand(Guid.Parse(proto.TimeSlotId), Guid.Parse(proto.NoteId));
+        return new AddNoteCommand(Guid.Parse(proto.TimeSlotId), Guid.Parse(proto.NoteId),
+            Guid.Parse(proto.TraceData.TraceId));
     }
 
     public static TimeSlotNotification ToNotification(this AddNoteCommand proto)
@@ -30,7 +31,8 @@ public static class TimeSlotProtoExtensions
     public static SetEndTimeCommand ToCommand(
         this SetEndTimeCommandProto proto)
     {
-        return new SetEndTimeCommand(Guid.Parse(proto.TimeSlotId), proto.Time.ToDateTimeOffset());
+        return new SetEndTimeCommand(Guid.Parse(proto.TimeSlotId), proto.Time.ToDateTimeOffset(),
+            Guid.Parse(proto.TraceData.TraceId));
     }
 
     public static TimeSlotNotification ToNotification(this SetEndTimeCommand proto)
@@ -48,7 +50,8 @@ public static class TimeSlotProtoExtensions
     public static SetStartTimeCommand ToCommand(
         this SetStartTimeCommandProto proto)
     {
-        return new SetStartTimeCommand(Guid.Parse(proto.TimeSlotId), proto.Time.ToDateTimeOffset());
+        return new SetStartTimeCommand(Guid.Parse(proto.TimeSlotId), proto.Time.ToDateTimeOffset(),
+            Guid.Parse(proto.TraceData.TraceId));
     }
 
     public static TimeSlotNotification ToNotification(this SetStartTimeCommand proto)
@@ -67,8 +70,8 @@ public static class TimeSlotProtoExtensions
         this CreateTimeSlotCommandProto proto)
     {
         return new CreateTimeSlotCommand(Guid.Parse(proto.TimeSlotId), Guid.Parse(proto.SelectedTicketId),
-            Guid.Parse(proto.WorkDayId),
-            proto.StartTime.ToDateTimeOffset(), proto.EndTime.ToDateTimeOffset(), proto.IsTimerRunning);
+            Guid.Parse(proto.WorkDayId), proto.StartTime.ToDateTimeOffset(), proto.EndTime.ToDateTimeOffset(), proto.IsTimerRunning,
+            Guid.Parse(proto.TraceData.TraceId));
     }
 
     public static TimeSlotNotification ToNotification(this CreateTimeSlotCommand proto)

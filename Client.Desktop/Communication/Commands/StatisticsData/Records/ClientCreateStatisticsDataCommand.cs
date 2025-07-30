@@ -9,4 +9,5 @@ public record ClientCreateStatisticsDataCommand(
     bool IsNeutral,
     bool IsUnproductive,
     List<Guid> TagIds,
-    Guid TimeSlotId);
+    Guid TimeSlotId,
+    Guid TraceId);

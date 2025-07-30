@@ -13,7 +13,8 @@ public static class SprintProtoExtensions
     public static AddTicketToActiveSprintCommand ToCommand(
         this AddTicketToActiveSprintCommandProto proto)
     {
-        return new AddTicketToActiveSprintCommand(Guid.Parse(proto.TicketId));
+        return new AddTicketToActiveSprintCommand(Guid.Parse(proto.TicketId),
+            Guid.Parse(proto.TraceData.TraceId));
     }
 
     public static SprintNotification ToNotification(this AddTicketToActiveSprintCommand command)
@@ -30,7 +31,8 @@ public static class SprintProtoExtensions
     public static AddTicketToSprintCommand ToCommand(
         this AddTicketToSprintCommandProto proto)
     {
-        return new AddTicketToSprintCommand(Guid.Parse(proto.SprintId), Guid.Parse(proto.TicketId));
+        return new AddTicketToSprintCommand(Guid.Parse(proto.SprintId), Guid.Parse(proto.TicketId),
+            Guid.Parse(proto.TraceData.TraceId));
     }
 
     public static SprintNotification ToNotification(this AddTicketToSprintCommand command)
@@ -49,7 +51,8 @@ public static class SprintProtoExtensions
         this CreateSprintCommandProto proto)
     {
         return new CreateSprintCommand(Guid.Parse(proto.SprintId), proto.Name, proto.StartTime.ToDateTimeOffset(),
-            proto.EndTime.ToDateTimeOffset(), proto.IsActive, proto.TicketIds.ToGuidList());
+            proto.EndTime.ToDateTimeOffset(), proto.IsActive, proto.TicketIds.ToGuidList(),
+            Guid.Parse(proto.TraceData.TraceId));
     }
 
     public static SprintNotification ToNotification(this CreateSprintCommand command)
@@ -71,7 +74,8 @@ public static class SprintProtoExtensions
     public static SetSprintActiveStatusCommand ToCommand(
         this SetSprintActiveStatusCommandProto proto)
     {
-        return new SetSprintActiveStatusCommand(Guid.Parse(proto.SprintId), proto.IsActive);
+        return new SetSprintActiveStatusCommand(Guid.Parse(proto.SprintId), proto.IsActive,
+            Guid.Parse(proto.TraceData.TraceId));
     }
 
 
@@ -91,7 +95,8 @@ public static class SprintProtoExtensions
         this UpdateSprintDataCommandProto proto)
     {
         return new UpdateSprintDataCommand(Guid.Parse(proto.SprintId), proto.Name, proto.StartTime.ToDateTimeOffset(),
-            proto.EndTime.ToDateTimeOffset());
+            proto.EndTime.ToDateTimeOffset(),
+            Guid.Parse(proto.TraceData.TraceId));
     }
 
 

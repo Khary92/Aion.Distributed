@@ -2,6 +2,8 @@ syntax = "proto3";
 
 option csharp_namespace = "Proto.Command.Tickets";
 
+import "DTO/trace_data.proto";
+
 service TicketCommandProtoService {
   rpc CreateTicket (CreateTicketCommandProto) returns (CommandResponse);
   rpc UpdateTicketData (UpdateTicketDataCommandProto) returns (CommandResponse);
@@ -13,6 +15,7 @@ message CreateTicketCommandProto {
   string name = 2;
   string bookingNumber = 3;
   repeated string sprintIds = 4;
+  TraceDataProto traceData = 5;
 }
 
 message UpdateTicketDataCommandProto {
@@ -20,11 +23,13 @@ message UpdateTicketDataCommandProto {
   string name = 2;
   string bookingNumber = 3;
   repeated string sprintIds = 4;
+  TraceDataProto traceData = 5;
 }
 
 message UpdateTicketDocumentationCommandProto {
   string ticketId = 1;
   string documentation = 2;
+  TraceDataProto traceData = 3;
 }
 
 message CommandResponse {

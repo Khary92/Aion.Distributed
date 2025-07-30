@@ -41,8 +41,8 @@ public class TimeSlotControlService(
         };
 
         await timeSlotCommandsService.Create(new CreateTimeSlotCommand(newTimeSlot.TimeSlotId,
-            newTimeSlot.SelectedTicketId,
-            newTimeSlot.WorkDayId, newTimeSlot.StartTime, newTimeSlot.EndTime, newTimeSlot.IsTimerRunning));
+            newTimeSlot.SelectedTicketId, newTimeSlot.WorkDayId, newTimeSlot.StartTime, newTimeSlot.EndTime,
+            newTimeSlot.IsTimerRunning, Guid.NewGuid()));
 
         var newStatisticsData = new StatisticsData
         {
@@ -55,7 +55,7 @@ public class TimeSlotControlService(
 
         await statisticsDataCommandsService.Create(new CreateStatisticsDataCommand(newStatisticsData.StatisticsId,
             newStatisticsData.IsProductive, newStatisticsData.IsNeutral, newStatisticsData.IsUnproductive,
-            newStatisticsData.TagIds, newTimeSlot.TimeSlotId));
+            newStatisticsData.TagIds, newTimeSlot.TimeSlotId, Guid.NewGuid()));
 
         await useCaseNotificationService.SendNotificationAsync(
             UseCaseProtoExtensions.ToNotification(newTimeSlot, newStatisticsData, existingTicket));

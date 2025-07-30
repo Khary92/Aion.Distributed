@@ -10,7 +10,6 @@ using Client.Desktop.Communication.Requests.Tag;
 using Client.Desktop.DataModels;
 using Client.Desktop.Presentation.Factories;
 using CommunityToolkit.Mvvm.Messaging;
-using Proto.Requests.Tags;
 using ReactiveUI;
 
 namespace Client.Desktop.Presentation.Models.TimeTracking.DynamicControls;
@@ -79,7 +78,8 @@ public class StatisticsViewModel(
                 id,
                 StatisticsData.IsProductive,
                 StatisticsData.IsNeutral,
-                StatisticsData.IsUnproductive
+                StatisticsData.IsUnproductive,
+                Guid.NewGuid()
             );
             commandSender.Send(changeProductivityCommand);
         }
@@ -87,7 +87,7 @@ public class StatisticsViewModel(
 
         if (StatisticsData.IsTagsSelectionChanged())
         {
-            var tagSelectionCommand = new ClientChangeTagSelectionCommand(id, StatisticsData.TagIds);
+            var tagSelectionCommand = new ClientChangeTagSelectionCommand(id, StatisticsData.TagIds, Guid.NewGuid());
             commandSender.Send(tagSelectionCommand);
         }
     }

@@ -6,4 +6,5 @@ public record ClientChangeProductivityCommand(
     Guid StatisticsDataId,
     bool IsProductive,
     bool IsNeutral,
-    bool IsUnproductive);
+    bool IsUnproductive,
+    Guid TraceId);

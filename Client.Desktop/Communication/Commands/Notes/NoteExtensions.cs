@@ -1,6 +1,7 @@
 using Client.Desktop.Communication.Commands.Notes.Records;
 using Google.Protobuf.WellKnownTypes;
 using Proto.Command.Notes;
+using Proto.DTO.TraceData;
 
 namespace Client.Desktop.Communication.Commands.Notes;
 
@@ -14,11 +15,14 @@ public static class NoteExtensions
             NoteTypeId = command.NoteTypeId.ToString(),
             Text = command.Text,
             TimeSlotId = command.TimeSlotId.ToString(),
-            TimeStamp = Timestamp.FromDateTimeOffset(command.TimeStamp)
+            TimeStamp = Timestamp.FromDateTimeOffset(command.TimeStamp),
+            TraceData = new TraceDataProto()
+            {
+                
+            }
         };
     }
-
-
+    
     public static UpdateNoteCommandProto ToProto(this ClientUpdateNoteCommand command)
     {
         return new UpdateNoteCommandProto

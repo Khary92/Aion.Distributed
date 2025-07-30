@@ -3,6 +3,7 @@ syntax = "proto3";
 option csharp_namespace = "Proto.Command.Sprints";
 
 import "google/protobuf/timestamp.proto";
+import "DTO/trace_data.proto";
 
 service SprintCommandProtoService {
   rpc AddTicketToActiveSprint (AddTicketToActiveSprintCommandProto) returns (CommandResponse);
@@ -14,11 +15,13 @@ service SprintCommandProtoService {
 
 message AddTicketToActiveSprintCommandProto {
   string ticketId = 1;
+  TraceDataProto traceData = 2;
 }
 
 message AddTicketToSprintCommandProto {
   string sprintId = 1;
   string ticketId = 2;
+  TraceDataProto traceData = 3;
 }
 
 message CreateSprintCommandProto {
@@ -28,11 +31,13 @@ message CreateSprintCommandProto {
   google.protobuf.Timestamp endTime = 4;
   bool isActive = 5;
   repeated string ticketIds = 6;
+  TraceDataProto traceData = 7;
 }
 
 message SetSprintActiveStatusCommandProto {
   string sprintId = 1;
   bool isActive = 2;
+  TraceDataProto traceData = 3;
 }
 
 message UpdateSprintDataCommandProto {
@@ -40,6 +45,7 @@ message UpdateSprintDataCommandProto {
   string name = 2;
   google.protobuf.Timestamp startTime = 3;
   google.protobuf.Timestamp endTime = 4;
+  TraceDataProto traceData = 5;
 }
 
 message CommandResponse {

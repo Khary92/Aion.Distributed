@@ -12,7 +12,7 @@ public static class StatisticsDataProtoExtensions
         this ChangeProductivityCommandProto proto)
     {
         return new ChangeProductivityCommand(Guid.Parse(proto.StatisticsDataId), proto.IsProductive, proto.IsNeutral,
-            proto.IsUnproductive);
+            proto.IsUnproductive, Guid.Parse(proto.TraceData.TraceId));
     }
 
 
@@ -33,7 +33,8 @@ public static class StatisticsDataProtoExtensions
     public static ChangeTagSelectionCommand ToCommand(
         this ChangeTagSelectionCommandProto proto)
     {
-        return new ChangeTagSelectionCommand(Guid.Parse(proto.StatisticsDataId), proto.SelectedTagIds.ToGuidList());
+        return new ChangeTagSelectionCommand(Guid.Parse(proto.StatisticsDataId), proto.SelectedTagIds.ToGuidList(),
+            Guid.Parse(proto.TraceData.TraceId));
     }
 
 
@@ -53,8 +54,8 @@ public static class StatisticsDataProtoExtensions
         this CreateStatisticsDataCommandProto proto)
     {
         return new CreateStatisticsDataCommand(Guid.Parse(proto.StatisticsDataId), proto.IsProductive, proto.IsNeutral,
-            proto.IsUnproductive,
-            proto.TagIds.ToGuidList(), Guid.Parse(proto.TimeSlotId));
+            proto.IsUnproductive, proto.TagIds.ToGuidList(), Guid.Parse(proto.TimeSlotId),
+            Guid.Parse(proto.TraceData.TraceId));
     }
 
 

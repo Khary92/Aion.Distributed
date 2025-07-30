@@ -90,7 +90,8 @@ public class NoteViewModel : ReactiveObject
         (
             Note.NoteId,
             Note.Text,
-            Note.NoteType?.NoteTypeId ?? Guid.Empty, Note.TimeSlotId
+            Note.NoteType?.NoteTypeId ?? Guid.Empty, Note.TimeSlotId,
+            Guid.NewGuid()
         ));
     }
 

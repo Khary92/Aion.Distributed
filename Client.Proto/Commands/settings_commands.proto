@@ -2,6 +2,8 @@ syntax = "proto3";
 
 option csharp_namespace = "Proto.Command.Settings";
 
+import "DTO/trace_data.proto";
+
 package Proto.Command.Settings;
 
 service SettingsCommandProtoService {
@@ -14,16 +16,19 @@ message CreateSettingsCommandProto {
   string settingsId = 1;
   string exportPath = 2;
   bool isAddNewTicketsToCurrentSprintActive = 3;
+  TraceDataProto traceData = 4;
 }
 
 message ChangeExportPathCommandProto {
   string settingsId = 1;
   string exportPath = 2;
+  TraceDataProto traceData = 3;
 }
 
 message ChangeAutomaticTicketAddingToSprintCommandProto {
   string settingsId = 1;
   bool isAddNewTicketsToCurrentSprintActive = 2;
+  TraceDataProto traceData = 3;
 }
 
 message CommandResponse {

@@ -2,6 +2,7 @@ syntax = "proto3";
 
 option csharp_namespace = "Proto.Command.Notes";
 
+import "DTO/trace_data.proto";
 
 import "google/protobuf/timestamp.proto";
 
@@ -16,6 +17,7 @@ message CreateNoteCommandProto {
   string noteTypeId = 3;
   string timeSlotId = 4;
   google.protobuf.Timestamp timeStamp = 5;
+  TraceDataProto traceData = 6;
 }
 
 message UpdateNoteCommandProto {
@@ -23,6 +25,7 @@ message UpdateNoteCommandProto {
   string text = 2;
   string noteTypeId = 3;
   string timeSlotId = 4;
+  TraceDataProto traceData = 5;
 }
 
 message CommandResponse {
