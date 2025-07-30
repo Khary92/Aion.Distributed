@@ -34,10 +34,12 @@ public class TicketNotificationsReceiver(ITraceCollector tracer, ITicketStateSer
                     switch (notification.NotificationCase)
                     {
                         case TicketNotification.NotificationOneofCase.TicketCreated:
-                            var notificationTicketCreated = notification.TicketCreated;
-                            await tracer.Ticket.Create.NotificationReceived(GetType(),
-                                Guid.Parse(notificationTicketCreated.TicketId), notificationTicketCreated);
-                            await ticketStateService.AddTicket(notificationTicketCreated.ToWebModel());
+                            var createdNotification = notification.TicketCreated.ToNotification();
+
+                            await tracer.Ticket.Create.NotificationReceived(GetType(), createdNotification.TicketId,
+                                createdNotification);
+                            
+                            await ticketStateService.AddTicket(createdNotification);
                             break;
 
                         case TicketNotification.NotificationOneofCase.TicketDataUpdated:

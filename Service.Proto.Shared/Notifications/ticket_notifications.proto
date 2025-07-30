@@ -2,6 +2,8 @@ syntax = "proto3";
 
 option csharp_namespace = "Proto.Notifications.Ticket";
 
+import "DTO/trace_data.proto";
+
 service NotificationService {
   rpc SendTicketCreated(TicketCreatedNotification) returns (NotificationResponse);
   rpc SendTicketDataUpdated(TicketDataUpdatedNotification) returns (NotificationResponse);
@@ -25,6 +27,7 @@ message TicketCreatedNotification {
   string name = 2;
   string bookingNumber = 3;
   repeated string sprintIds = 4;
+  TraceDataProto traceData = 5;
 }
 
 message TicketDataUpdatedNotification {
@@ -32,11 +35,13 @@ message TicketDataUpdatedNotification {
   string name = 2;
   string bookingNumber = 3;
   repeated string sprintIds = 4;
+  TraceDataProto traceData = 5;
 }
 
 message TicketDocumentationUpdatedNotification {
   string ticketId = 1;
   string documentation = 2;
+  TraceDataProto traceData = 3;
 }
 
 message NotificationResponse {
