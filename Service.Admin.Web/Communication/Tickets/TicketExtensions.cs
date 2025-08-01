@@ -1,27 +1,41 @@
-﻿using Proto.Notifications.Ticket;
+﻿using Proto.Command.Tickets;
+using Proto.Notifications.Ticket;
 using Service.Admin.Web.Communication.Tickets.Notifications;
+using Service.Admin.Web.Communication.Tickets.Records;
 using Service.Admin.Web.Models;
 
 namespace Service.Admin.Web.Communication.Tickets;
 
 public static class TicketExtensions
 {
-    public static TicketWebModel ToWebModel(this TicketCreatedNotification notification)
+    public static CreateTicketCommandProto ToProto(this WebCreateTicketCommand command) => new()
     {
-        return new TicketWebModel(Guid.Parse(notification.TicketId), notification.Name, notification.BookingNumber,
-            string.Empty, notification.SprintIds.ToGuidList());
-    }
+        TicketId = command.TicketId.ToString(),
+        BookingNumber = command.BookingNumber,
+        Name = command.Name,
+        SprintIds =
+        {
+            command.SprintIds.ToRepeatedField(),
+        },
+        TraceData = new()
+        {
+            TraceId = command.TraceId.ToString()
+        }
+    };
 
-    public static WebTicketDataUpdatedNotification ToNotification(this TicketDataUpdatedNotification notification)
-    {
-        return new WebTicketDataUpdatedNotification(Guid.Parse(notification.TicketId), notification.Name,
+    public static TicketWebModel ToWebModel(this WebTicketCreatedNotification notification) => new(
+        notification.TicketId, notification.Name, notification.BookingNumber,
+        string.Empty, notification.SprintIds);
+
+    public static WebTicketCreatedNotification ToNotification(this TicketCreatedNotification notification) => new(
+        Guid.Parse(notification.TicketId), notification.Name, notification.BookingNumber,
+        string.Empty, notification.SprintIds.ToGuidList(), Guid.Parse(notification.TraceData.TraceId));
+
+    public static WebTicketDataUpdatedNotification ToNotification(this TicketDataUpdatedNotification notification) =>
+        new(Guid.Parse(notification.TicketId), notification.Name,
             notification.BookingNumber, notification.SprintIds.ToGuidList());
-    }
 
-    public static WebTicketDocumentationUpdatedNotification ToNotification(
-        this TicketDocumentationUpdatedNotification notification)
-    {
-        return new WebTicketDocumentationUpdatedNotification(Guid.Parse(notification.TicketId),
-            notification.Documentation);
-    }
+    public static WebTicketDocumentationUpdatedNotification
+        ToNotification(this TicketDocumentationUpdatedNotification notification) =>
+        new(Guid.Parse(notification.TicketId), notification.Documentation);
 }

@@ -7,7 +7,7 @@ public interface ITicketStateService
 {
     IReadOnlyList<TicketWebModel> Tickets { get; }
     event Action? OnStateChanged;
-    Task AddTicket(TicketWebModel ticket);
-    void Apply(WebTicketDataUpdatedNotification ticketDataUpdatedNotification);
-    void Apply(WebTicketDocumentationUpdatedNotification ticketDocumentationUpdatedNotification);
+    Task AddTicket(WebTicketCreatedNotification notification);
+    void Apply(WebTicketDataUpdatedNotification notification);
+    void Apply(WebTicketDocumentationUpdatedNotification notification);
 }

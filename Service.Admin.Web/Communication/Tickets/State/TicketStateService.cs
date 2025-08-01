@@ -14,11 +14,17 @@ public class TicketStateService(ISharedRequestSender requestSender, ITraceCollec
     public IReadOnlyList<TicketWebModel> Tickets => _tickets.AsReadOnly();
     public event Action? OnStateChanged;
 
-    public async Task AddTicket(TicketWebModel ticket)
+    public async Task AddTicket(WebTicketCreatedNotification notification)
     {
-        await tracer.Ticket.Create.AggregateReceived(GetType(), ticket.TicketId, ticket.AsTraceAttributes());
+        var ticket = notification.ToWebModel();
+        
+        await tracer.Ticket.Create.AggregateReceived(GetType(), notification.TraceId,
+            ticket.AsTraceAttributes());
+        
         _tickets.Add(ticket);
-        await tracer.Ticket.Create.AggregateAdded(GetType(), ticket.TicketId);
+        
+        await tracer.Ticket.Create.AggregateAdded(GetType(), notification.TraceId);
+        
         NotifyStateChanged();
     }
 
@@ -41,7 +47,7 @@ public class TicketStateService(ISharedRequestSender requestSender, ITraceCollec
         ticket.Apply(ticketDocumentationUpdatedNotification);
         NotifyStateChanged();
     }
-    
+
     private void NotifyStateChanged()
     {
         OnStateChanged?.Invoke();
