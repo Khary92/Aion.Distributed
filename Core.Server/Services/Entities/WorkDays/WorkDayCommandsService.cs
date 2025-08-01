@@ -13,13 +13,13 @@ public class WorkDayCommandsService(
     IWorkDayRequestsService workDayRequestsService)
     : IWorkDayCommandsService
 {
-    public async Task Create(CreateWorkDayCommand createWorkDayCommand)
+    public async Task Create(CreateWorkDayCommand command)
     {
         var workDays = await workDayRequestsService.GetAll();
 
-        if (workDays.Any(wd => wd.Date.Date == createWorkDayCommand.Date.Date)) return;
+        if (workDays.Any(wd => wd.Date.Date == command.Date.Date)) return;
 
-        await workDayEventStore.StoreEventAsync(eventTranslator.ToEvent(createWorkDayCommand));
-        await workDayNotificationService.SendNotificationAsync(createWorkDayCommand.ToNotification());
+        await workDayEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await workDayNotificationService.SendNotificationAsync(command.ToNotification());
     }
 }

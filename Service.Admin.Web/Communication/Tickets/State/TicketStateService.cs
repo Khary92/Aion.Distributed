@@ -1,6 +1,7 @@
 using Proto.Requests.Tickets;
 using Service.Admin.Tracing;
 using Service.Admin.Web.Communication.Tickets.Notifications;
+using Service.Admin.Web.Communication.Wrappers;
 using Service.Admin.Web.Models;
 using Service.Admin.Web.Services;
 
@@ -14,31 +15,34 @@ public class TicketStateService(ISharedRequestSender requestSender, ITraceCollec
     public IReadOnlyList<TicketWebModel> Tickets => _tickets.AsReadOnly();
     public event Action? OnStateChanged;
 
-    public async Task AddTicket(WebTicketCreatedNotification notification)
+    public async Task AddTicket(NewTicketMessage ticketMessage)
     {
-        var ticket = notification.ToWebModel();
-        
-        await tracer.Ticket.Create.AggregateReceived(GetType(), notification.TraceId,
-            ticket.AsTraceAttributes());
-        
-        _tickets.Add(ticket);
-        
-        await tracer.Ticket.Create.AggregateAdded(GetType(), notification.TraceId);
-        
+        await tracer.Ticket.Create.AggregateReceived(GetType(), ticketMessage.TraceId,
+            ticketMessage);
+
+        _tickets.Add(ticketMessage.Ticket);
+
+        await tracer.Ticket.Create.AggregateAdded(GetType(), ticketMessage.TraceId);
+
         NotifyStateChanged();
     }
 
-    public void Apply(WebTicketDataUpdatedNotification ticketDataUpdatedNotification)
+    public async Task Apply(WebTicketDataUpdatedNotification notification)
     {
-        var ticket = _tickets.FirstOrDefault(x => x.TicketId == ticketDataUpdatedNotification.TicketId);
+        var ticket = _tickets.FirstOrDefault(x => x.TicketId == notification.TicketId);
 
-        if (ticket == null) return;
+        if (ticket == null)
+        {
+            await tracer.Ticket.Update.NoAggregateFound(GetType(), notification.TraceId);
+            return;
+        }
 
-        ticket.Apply(ticketDataUpdatedNotification);
+        ticket.Apply(notification);
+        await tracer.Ticket.Update.ChangesApplied(GetType(), notification.TraceId);
         NotifyStateChanged();
     }
 
-    public void Apply(WebTicketDocumentationUpdatedNotification ticketDocumentationUpdatedNotification)
+    public async Task Apply(WebTicketDocumentationUpdatedNotification ticketDocumentationUpdatedNotification)
     {
         var ticket = _tickets.FirstOrDefault(x => x.TicketId == ticketDocumentationUpdatedNotification.TicketId);
 

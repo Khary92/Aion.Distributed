@@ -12,27 +12,27 @@ public class SprintCommandsService(
     ISprintCommandsToEventTranslator eventTranslator)
     : ISprintCommandsService
 {
-    public async Task Create(CreateSprintCommand createSprintCommand)
+    public async Task Create(CreateSprintCommand command)
     {
-        await sprintEventStore.StoreEventAsync(eventTranslator.ToEvent(createSprintCommand));
-        await sprintsNotificationService.SendNotificationAsync(createSprintCommand.ToNotification());
+        await sprintEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await sprintsNotificationService.SendNotificationAsync(command.ToNotification());
     }
 
-    public async Task UpdateSprintData(UpdateSprintDataCommand updateSprintDataCommand)
+    public async Task UpdateSprintData(UpdateSprintDataCommand command)
     {
-        await sprintEventStore.StoreEventAsync(eventTranslator.ToEvent(updateSprintDataCommand));
-        await sprintsNotificationService.SendNotificationAsync(updateSprintDataCommand.ToNotification());
+        await sprintEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await sprintsNotificationService.SendNotificationAsync(command.ToNotification());
     }
 
-    public async Task SetSprintActiveStatus(SetSprintActiveStatusCommand setSprintActiveStatusCommand)
+    public async Task SetSprintActiveStatus(SetSprintActiveStatusCommand command)
     {
-        await sprintEventStore.StoreEventAsync(eventTranslator.ToEvent(setSprintActiveStatusCommand));
-        await sprintsNotificationService.SendNotificationAsync(setSprintActiveStatusCommand.ToNotification());
+        await sprintEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await sprintsNotificationService.SendNotificationAsync(command.ToNotification());
     }
 
-    public async Task AddTicketToSprint(AddTicketToSprintCommand addTicketToSprintCommand)
+    public async Task AddTicketToSprint(AddTicketToSprintCommand command)
     {
-        await sprintEventStore.StoreEventAsync(eventTranslator.ToEvent(addTicketToSprintCommand));
-        await sprintsNotificationService.SendNotificationAsync(addTicketToSprintCommand.ToNotification());
+        await sprintEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await sprintsNotificationService.SendNotificationAsync(command.ToNotification());
     }
 }

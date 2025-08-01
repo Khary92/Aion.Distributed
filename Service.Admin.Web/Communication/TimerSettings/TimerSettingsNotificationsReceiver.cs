@@ -35,7 +35,8 @@ public class TimerSettingsNotificationsReceiver(ITimerSettingsStateService timer
                     switch (notification.NotificationCase)
                     {
                         case TimerSettingsNotification.NotificationOneofCase.TimerSettingsCreated:
-                            await timerSettingsStateService.SetTimerSettings(notification.TimerSettingsCreated.ToDto());
+                            await timerSettingsStateService.SetTimerSettings(notification.TimerSettingsCreated
+                                .ToNewEntityMessage());
                             break;
 
                         case TimerSettingsNotification.NotificationOneofCase.DocuTimerSaveIntervalChanged:

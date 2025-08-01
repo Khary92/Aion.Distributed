@@ -2,9 +2,7 @@ namespace Core.Server.Tracing.Tracing.Tracers.Ticket.UseCase;
 
 public interface IUpdateTicketTraceCollector
 {
-    Task StartUseCase(Type originClassType, Guid traceId, Dictionary<string, string> attributes);
-    Task CommandSent(Type originClassType, Guid traceId, object command);
-    Task NotificationReceived(Type originClassType, Guid traceId, object command);
-    Task NoAggregateFound(Type originClassType, Guid traceId);
-    Task ChangesApplied(Type originClassType, Guid traceId);
+    Task CommandReceived(Type getType, Guid parse, object command);
+    Task EventPersisted(Type originClassType, Guid traceId, object @event);
+    Task NotificationSent(Type originClassType, Guid traceId, object notification);
 }

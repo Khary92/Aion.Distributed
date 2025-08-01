@@ -1,5 +1,6 @@
 ﻿using Proto.Requests.NoteTypes;
 using Service.Admin.Web.Communication.NoteType.Notifications;
+using Service.Admin.Web.Communication.Wrappers;
 using Service.Admin.Web.Models;
 using Service.Admin.Web.Services;
 
@@ -12,9 +13,9 @@ public class NoteTypeStateService(ISharedRequestSender requestSender) : INoteTyp
 
     public event Action? OnStateChanged;
 
-    public Task AddNoteType(NoteTypeWebModel noteType)
+    public Task AddNoteType(NewNoteTypeMessage noteTypeMessage)
     {
-        _noteTypes.Add(noteType);
+        _noteTypes.Add(noteTypeMessage.NoteType);
         NotifyStateChanged();
         return Task.CompletedTask;
     }

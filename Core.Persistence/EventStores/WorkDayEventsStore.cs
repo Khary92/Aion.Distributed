@@ -7,7 +7,7 @@ namespace Core.Persistence.EventStores;
 
 public class WorkDayEventsStore(IDbContextFactory<AppDbContext> appDbContextFactory) : IEventStore<WorkDayEvent>
 {
-    public async Task StoreEventAsync(WorkDayEvent @event)
+    public async Task StoreEventAsync(WorkDayEvent @event, Guid traceId)
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
 

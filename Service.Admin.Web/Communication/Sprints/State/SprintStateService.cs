@@ -1,5 +1,6 @@
 ﻿using Proto.Requests.Sprints;
 using Service.Admin.Web.Communication.Sprints.Notifications;
+using Service.Admin.Web.Communication.Wrappers;
 using Service.Admin.Web.Models;
 using Service.Admin.Web.Services;
 
@@ -12,9 +13,9 @@ public class SprintStateService(ISharedRequestSender requestSender) : ISprintSta
 
     public event Action? OnStateChanged;
 
-    public Task AddSprint(SprintWebModel sprint)
+    public Task AddSprint(NewSprintMessage sprintMessage)
     {
-        _sprints.Add(sprint);
+        _sprints.Add(sprintMessage.Sprint);
         NotifyStateChanged();
         return Task.CompletedTask;
     }

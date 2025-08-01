@@ -7,7 +7,7 @@ namespace Core.Persistence.EventStores;
 
 public class SprintEventsStore(IDbContextFactory<AppDbContext> appDbContextFactory) : IEventStore<SprintEvent>
 {
-    public async Task StoreEventAsync(SprintEvent @event)
+    public async Task StoreEventAsync(SprintEvent @event, Guid traceId)
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
 

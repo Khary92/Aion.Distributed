@@ -11,21 +11,21 @@ public class TimerSettingsCommandsService(
     IEventStore<TimerSettingsEvent> timerSettingsEventStore,
     ITimerSettingsCommandsToEventTranslator eventTranslator) : ITimerSettingsCommandsService
 {
-    public async Task ChangeSnapshotInterval(ChangeSnapshotSaveIntervalCommand changeSnapshotSaveIntervalCommand)
+    public async Task ChangeSnapshotInterval(ChangeSnapshotSaveIntervalCommand command)
     {
-        await timerSettingsEventStore.StoreEventAsync(eventTranslator.ToEvent(changeSnapshotSaveIntervalCommand));
-        await notificationService.SendNotificationAsync(changeSnapshotSaveIntervalCommand.ToNotification());
+        await timerSettingsEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await notificationService.SendNotificationAsync(command.ToNotification());
     }
 
-    public async Task ChangeDocumentationInterval(ChangeDocuTimerSaveIntervalCommand changeDocuTimerSaveIntervalCommand)
+    public async Task ChangeDocumentationInterval(ChangeDocuTimerSaveIntervalCommand command)
     {
-        await timerSettingsEventStore.StoreEventAsync(eventTranslator.ToEvent(changeDocuTimerSaveIntervalCommand));
-        await notificationService.SendNotificationAsync(changeDocuTimerSaveIntervalCommand.ToNotification());
+        await timerSettingsEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await notificationService.SendNotificationAsync(command.ToNotification());
     }
 
-    public async Task Create(CreateTimerSettingsCommand createSettingsCommand)
+    public async Task Create(CreateTimerSettingsCommand command)
     {
-        await timerSettingsEventStore.StoreEventAsync(eventTranslator.ToEvent(createSettingsCommand));
-        await notificationService.SendNotificationAsync(createSettingsCommand.ToNotification());
+        await timerSettingsEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await notificationService.SendNotificationAsync(command.ToNotification());
     }
 }

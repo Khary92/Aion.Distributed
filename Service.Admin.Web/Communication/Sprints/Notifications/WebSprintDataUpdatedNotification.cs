@@ -4,4 +4,5 @@ public record WebSprintDataUpdatedNotification(
     Guid SprintId,
     string Name,
     DateTimeOffset StartTime,
-    DateTimeOffset EndTime);
+    DateTimeOffset EndTime,
+    Guid TraceId);

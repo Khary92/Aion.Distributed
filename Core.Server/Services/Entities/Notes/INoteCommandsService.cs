@@ -4,6 +4,6 @@ namespace Core.Server.Services.Entities.Notes;
 
 public interface INoteCommandsService
 {
-    Task Update(UpdateNoteCommand updateNoteCommand);
-    Task Create(CreateNoteCommand createNoteCommand);
+    Task Update(UpdateNoteCommand command);
+    Task Create(CreateNoteCommand command);
 }

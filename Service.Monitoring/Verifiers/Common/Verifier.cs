@@ -32,6 +32,7 @@ public class Verifier : IVerifier
     private void Elapsed(object? sender, ElapsedEventArgs e)
     {
         var report = new Report(_traceData.First().TimeStamp,
+            _traceData.First().UseCaseMeta,
             _useCaseStateEvaluator.GetResultState(_traceData),
             _traceData.GetClassTrace(), _traceId);
 

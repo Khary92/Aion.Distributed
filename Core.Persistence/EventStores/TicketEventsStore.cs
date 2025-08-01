@@ -7,17 +7,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Core.Persistence.EventStores;
 
-public class TicketEventsStore(IDbContextFactory<AppDbContext> appDbContextFactory, ITraceCollector tracer)
+public class TicketEventsStore(IDbContextFactory<AppDbContext> appDbContextFactory)
     : ITicketEventsStore
 {
-    public async Task StoreEventAsync(TicketEvent @event)
+    public async Task StoreEventAsync(TicketEvent @event, Guid traceId)
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
 
         await appDbContext.TicketEvents.AddAsync(@event);
         await appDbContext.SaveChangesAsync();
-
-        await tracer.Ticket.Create.EventPersisted(GetType(), @event.EntityId, @event);
     }
 
     public async Task<List<TicketEvent>> GetEventsForAggregateAsync(Guid entityId)

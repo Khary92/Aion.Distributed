@@ -13,26 +13,31 @@ public class TicketCommandsService(
     ITraceCollector tracer)
     : ITicketCommandsService
 {
-    public async Task UpdateData(UpdateTicketDataCommand updateTicketDataCommand)
+    public async Task UpdateData(UpdateTicketDataCommand command)
     {
-        await ticketEventStore.StoreEventAsync(eventTranslator.ToEvent(updateTicketDataCommand));
-        await ticketNotificationService.SendNotificationAsync(updateTicketDataCommand.ToNotification());
+        var ticketNotification = command.ToNotification();
+        
+        await ticketEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await tracer.Ticket.Update.EventPersisted(GetType(), command.TraceId, ticketNotification.TicketDataUpdated);
+
+        await tracer.Ticket.Update.NotificationSent(GetType(), command.TraceId, ticketNotification.TicketDataUpdated);
+        await ticketNotificationService.SendNotificationAsync(ticketNotification);
     }
 
-    public async Task UpdateDocumentation(UpdateTicketDocumentationCommand updateTicketDocumentationCommand)
+    public async Task UpdateDocumentation(UpdateTicketDocumentationCommand command)
     {
-        await ticketEventStore.StoreEventAsync(eventTranslator.ToEvent(updateTicketDocumentationCommand));
-        await ticketNotificationService.SendNotificationAsync(updateTicketDocumentationCommand.ToNotification());
+        await ticketEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await ticketNotificationService.SendNotificationAsync(command.ToNotification());
     }
 
-    public async Task Create(CreateTicketCommand createTicketCommand)
+    public async Task Create(CreateTicketCommand command)
     {
-        await ticketEventStore.StoreEventAsync(eventTranslator.ToEvent(createTicketCommand));
+        var ticketNotification = command.ToNotification();
+        
+        await ticketEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await tracer.Ticket.Update.EventPersisted(GetType(), command.TraceId, ticketNotification.TicketCreated);
 
-        var ticketNotification = createTicketCommand.ToNotification();
-        await tracer.Ticket.Create.NotificationSent(GetType(), Guid.Parse(ticketNotification.TicketCreated.TicketId),
-            ticketNotification.TicketCreated);
-
+        await tracer.Ticket.Create.NotificationSent(GetType(), command.TraceId, ticketNotification.TicketCreated);
         await ticketNotificationService.SendNotificationAsync(ticketNotification);
     }
 }

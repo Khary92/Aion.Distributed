@@ -11,21 +11,21 @@ public class NoteTypeCommandsService(
     IEventStore<NoteTypeEvent> noteTypeEventStore,
     INoteTypeCommandsToEventTranslator eventTranslator) : INoteTypeCommandsService
 {
-    public async Task Create(CreateNoteTypeCommand createNoteTypeCommand)
+    public async Task Create(CreateNoteTypeCommand command)
     {
-        await noteTypeEventStore.StoreEventAsync(eventTranslator.ToEvent(createNoteTypeCommand));
-        await noteNotificationService.SendNotificationAsync(createNoteTypeCommand.ToNotification());
+        await noteTypeEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await noteNotificationService.SendNotificationAsync(command.ToNotification());
     }
 
-    public async Task ChangeName(ChangeNoteTypeNameCommand changeNoteTypeNameCommand)
+    public async Task ChangeName(ChangeNoteTypeNameCommand command)
     {
-        await noteTypeEventStore.StoreEventAsync(eventTranslator.ToEvent(changeNoteTypeNameCommand));
-        await noteNotificationService.SendNotificationAsync(changeNoteTypeNameCommand.ToNotification());
+        await noteTypeEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await noteNotificationService.SendNotificationAsync(command.ToNotification());
     }
 
-    public async Task ChangeColor(ChangeNoteTypeColorCommand changeNoteTypeColorCommand)
+    public async Task ChangeColor(ChangeNoteTypeColorCommand command)
     {
-        await noteTypeEventStore.StoreEventAsync(eventTranslator.ToEvent(changeNoteTypeColorCommand));
-        await noteNotificationService.SendNotificationAsync(changeNoteTypeColorCommand.ToNotification());
+        await noteTypeEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await noteNotificationService.SendNotificationAsync(command.ToNotification());
     }
 }

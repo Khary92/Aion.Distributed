@@ -7,7 +7,7 @@ namespace Core.Persistence.EventStores;
 
 public class TimeSlotEventsStore(IDbContextFactory<AppDbContext> appDbContextFactory) : IEventStore<TimeSlotEvent>
 {
-    public async Task StoreEventAsync(TimeSlotEvent @event)
+    public async Task StoreEventAsync(TimeSlotEvent @event, Guid traceId)
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
 

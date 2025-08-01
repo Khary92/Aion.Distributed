@@ -2,6 +2,7 @@
 using Proto.DTO.TraceData;
 using Proto.Requests.TimerSettings;
 using Service.Admin.Web.Communication.TimerSettings.Notifications;
+using Service.Admin.Web.Communication.Wrappers;
 using Service.Admin.Web.Models;
 using Service.Admin.Web.Services;
 
@@ -14,9 +15,9 @@ public class TimerSettingsStateService(ISharedRequestSender requestSender, IShar
 
     public event Action? OnStateChanged;
 
-    public Task SetTimerSettings(TimerSettingsWebModel timerSettings)
+    public Task SetTimerSettings(NewTimerSettingsMessage timerSettingsMessage)
     {
-        TimerSettings = timerSettings;
+        TimerSettings = timerSettingsMessage.TimerSettings;
         return Task.CompletedTask;
     }
 

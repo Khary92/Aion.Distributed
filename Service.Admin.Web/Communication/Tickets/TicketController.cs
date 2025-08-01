@@ -22,17 +22,15 @@ public class TicketController(ITraceCollector tracer, ISharedCommandSender comma
 
         SelectedTicket.Name = NewTicketName;
         SelectedTicket.BookingNumber = NewTicketBookingNumber;
-        await commandSender.Send(new UpdateTicketDataCommandProto
-        {
-            TicketId = SelectedTicket.TicketId.ToString(),
-            Name = NewTicketName,
-            BookingNumber = NewTicketBookingNumber,
-            SprintIds = { SelectedTicket.SprintIds.ToRepeatedField() },
-            TraceData = new TraceDataProto()
-            {
-                TraceId = Guid.NewGuid().ToString()
-            }
-        });
+
+        var updateTicketCommand =
+            new WebUpdateTicketCommand(SelectedTicket.TicketId, NewTicketName, NewTicketBookingNumber, SelectedTicket.SprintIds, Guid.NewGuid());
+        
+        // TODO well there is no more ViewModel
+        await tracer.Ticket.Update.StartUseCase(GetType(), updateTicketCommand.TraceId, updateTicketCommand);
+        await tracer.Ticket.Update.CommandSent(GetType(), updateTicketCommand.TraceId, updateTicketCommand);
+        
+        await commandSender.Send(updateTicketCommand.ToProto());
     }
 
     private async Task CreateTicket()

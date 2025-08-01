@@ -11,15 +11,15 @@ public class NoteCommandsService(
     IEventStore<NoteEvent> noteEventsStore,
     INoteCommandsToEventTranslator eventTranslator) : INoteCommandsService
 {
-    public async Task Update(UpdateNoteCommand updateNoteCommand)
+    public async Task Update(UpdateNoteCommand command)
     {
-        await noteEventsStore.StoreEventAsync(eventTranslator.ToEvent(updateNoteCommand));
-        await noteNotificationService.SendNotificationAsync(updateNoteCommand.ToNotification());
+        await noteEventsStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await noteNotificationService.SendNotificationAsync(command.ToNotification());
     }
 
-    public async Task Create(CreateNoteCommand createNoteCommand)
+    public async Task Create(CreateNoteCommand command)
     {
-        await noteEventsStore.StoreEventAsync(eventTranslator.ToEvent(createNoteCommand));
-        await noteNotificationService.SendNotificationAsync(createNoteCommand.ToNotification());
+        await noteEventsStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await noteNotificationService.SendNotificationAsync(command.ToNotification());
     }
 }

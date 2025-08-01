@@ -12,21 +12,21 @@ public class StatisticsDataCommandsService(
     IStatisticsDataCommandsToEventTranslator eventTranslator)
     : IStatisticsDataCommandsService
 {
-    public async Task ChangeTagSelection(ChangeTagSelectionCommand changeTagSelectionCommand)
+    public async Task ChangeTagSelection(ChangeTagSelectionCommand command)
     {
-        await statisticsDataEventStore.StoreEventAsync(eventTranslator.ToEvent(changeTagSelectionCommand));
-        await statisticsDataNotificationService.SendNotificationAsync(changeTagSelectionCommand.ToNotification());
+        await statisticsDataEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await statisticsDataNotificationService.SendNotificationAsync(command.ToNotification());
     }
 
-    public async Task ChangeProductivity(ChangeProductivityCommand changeProductivityCommand)
+    public async Task ChangeProductivity(ChangeProductivityCommand command)
     {
-        await statisticsDataEventStore.StoreEventAsync(eventTranslator.ToEvent(changeProductivityCommand));
-        await statisticsDataNotificationService.SendNotificationAsync(changeProductivityCommand.ToNotification());
+        await statisticsDataEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await statisticsDataNotificationService.SendNotificationAsync(command.ToNotification());
     }
 
-    public async Task Create(CreateStatisticsDataCommand createStatisticsDataCommand)
+    public async Task Create(CreateStatisticsDataCommand command)
     {
-        await statisticsDataEventStore.StoreEventAsync(eventTranslator.ToEvent(createStatisticsDataCommand));
-        await statisticsDataNotificationService.SendNotificationAsync(createStatisticsDataCommand.ToNotification());
+        await statisticsDataEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await statisticsDataNotificationService.SendNotificationAsync(command.ToNotification());
     }
 }

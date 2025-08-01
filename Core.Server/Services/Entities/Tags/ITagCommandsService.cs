@@ -4,6 +4,6 @@ namespace Core.Server.Services.Entities.Tags;
 
 public interface ITagCommandsService
 {
-    Task Update(UpdateTagCommand updateTagCommand);
-    Task Create(CreateTagCommand createTagCommand);
+    Task Update(UpdateTagCommand command);
+    Task Create(CreateTagCommand command);
 }

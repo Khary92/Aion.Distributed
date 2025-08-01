@@ -48,9 +48,9 @@ public class CreateTicketTraceCollector(ITracingDataCommandSender commandSender)
             DateTimeOffset.Now));
     }
 
-    public async Task AggregateReceived(Type originClassType, Guid traceId, string attributes)
+    public async Task AggregateReceived(Type originClassType, Guid traceId, object command)
     {
-        var log = $"Received aggregate {attributes}";
+        var log = $"Received aggregate {command}";
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
             UseCaseMeta.CreateTicket,

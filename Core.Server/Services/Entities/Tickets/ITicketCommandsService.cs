@@ -4,7 +4,7 @@ namespace Core.Server.Services.Entities.Tickets;
 
 public interface ITicketCommandsService
 {
-    Task UpdateData(UpdateTicketDataCommand updateTicketDataCommand);
-    Task UpdateDocumentation(UpdateTicketDocumentationCommand updateTicketDocumentationCommand);
-    Task Create(CreateTicketCommand createTicketCommand);
+    Task UpdateData(UpdateTicketDataCommand command);
+    Task UpdateDocumentation(UpdateTicketDocumentationCommand command);
+    Task Create(CreateTicketCommand command);
 }

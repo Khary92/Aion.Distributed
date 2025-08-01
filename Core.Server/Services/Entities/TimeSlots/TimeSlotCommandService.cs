@@ -11,27 +11,27 @@ public class TimeSlotCommandService(
     IEventStore<TimeSlotEvent> timeSlotEventStore,
     ITimeSlotCommandsToEventTranslator eventTranslator) : ITimeSlotCommandsService
 {
-    public async Task SetEndTime(SetEndTimeCommand setEndTimeCommand)
+    public async Task SetEndTime(SetEndTimeCommand command)
     {
-        await timeSlotEventStore.StoreEventAsync(eventTranslator.ToEvent(setEndTimeCommand));
-        await timeSlotNotificationService.SendNotificationAsync(setEndTimeCommand.ToNotification());
+        await timeSlotEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await timeSlotNotificationService.SendNotificationAsync(command.ToNotification());
     }
 
-    public async Task SetStartTime(SetStartTimeCommand setStartTimeCommand)
+    public async Task SetStartTime(SetStartTimeCommand command)
     {
-        await timeSlotEventStore.StoreEventAsync(eventTranslator.ToEvent(setStartTimeCommand));
-        await timeSlotNotificationService.SendNotificationAsync(setStartTimeCommand.ToNotification());
+        await timeSlotEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await timeSlotNotificationService.SendNotificationAsync(command.ToNotification());
     }
 
-    public async Task AddNote(AddNoteCommand addNoteCommand)
+    public async Task AddNote(AddNoteCommand command)
     {
-        await timeSlotEventStore.StoreEventAsync(eventTranslator.ToEvent(addNoteCommand));
-        await timeSlotNotificationService.SendNotificationAsync(addNoteCommand.ToNotification());
+        await timeSlotEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await timeSlotNotificationService.SendNotificationAsync(command.ToNotification());
     }
 
-    public async Task Create(CreateTimeSlotCommand createTimeSlotCommand)
+    public async Task Create(CreateTimeSlotCommand command)
     {
-        await timeSlotEventStore.StoreEventAsync(eventTranslator.ToEvent(createTimeSlotCommand));
-        await timeSlotNotificationService.SendNotificationAsync(createTimeSlotCommand.ToNotification());
+        await timeSlotEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await timeSlotNotificationService.SendNotificationAsync(command.ToNotification());
     }
 }

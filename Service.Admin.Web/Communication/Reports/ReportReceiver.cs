@@ -11,7 +11,8 @@ public class ReportReceiver(IReportStateService reportState, ILogger<ReportRecei
     {
         logger.LogInformation("Received report with state: {State}", request.State);
 
-        var report = new ReportRecord(Guid.NewGuid(), DateTimeOffset.Now, request.State, request.Traces.ToList());
+        var report = new ReportRecord(Guid.NewGuid(), DateTimeOffset.Now, request.UseCase, request.State,
+            request.Traces.ToList());
         reportState.AddReport(report);
 
         return Task.FromResult(new ResponseProto { Success = true });

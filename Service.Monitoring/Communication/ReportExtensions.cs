@@ -11,6 +11,7 @@ public static class ReportExtensions
         return new ReportProto
         {
             TimeStamp = Timestamp.FromDateTimeOffset(report.TimeStamp),
+            UseCase = report.useCase.ToString(),
             State = report.Result.ToString(),
             Traces = { report.Traces }
         };

@@ -11,15 +11,15 @@ public class TagCommandsService(
     TagNotificationService tagNotificationService,
     ITagCommandsToEventTranslator eventTranslator) : ITagCommandsService
 {
-    public async Task Update(UpdateTagCommand updateTagCommand)
+    public async Task Update(UpdateTagCommand command)
     {
-        await tagEventStore.StoreEventAsync(eventTranslator.ToEvent(updateTagCommand));
-        await tagNotificationService.SendNotificationAsync(updateTagCommand.ToNotification());
+        await tagEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await tagNotificationService.SendNotificationAsync(command.ToNotification());
     }
 
-    public async Task Create(CreateTagCommand createTagCommand)
+    public async Task Create(CreateTagCommand command)
     {
-        await tagEventStore.StoreEventAsync(eventTranslator.ToEvent(createTagCommand));
-        await tagNotificationService.SendNotificationAsync(createTagCommand.ToNotification());
+        await tagEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await tagNotificationService.SendNotificationAsync(command.ToNotification());
     }
 }

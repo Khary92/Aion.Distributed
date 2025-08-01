@@ -4,7 +4,7 @@ namespace Core.Server.Services.Entities.TimerSettings;
 
 public interface ITimerSettingsCommandsService
 {
-    Task ChangeSnapshotInterval(ChangeSnapshotSaveIntervalCommand changeSnapshotSaveIntervalCommand);
-    Task ChangeDocumentationInterval(ChangeDocuTimerSaveIntervalCommand changeDocuTimerSaveIntervalCommand);
-    Task Create(CreateTimerSettingsCommand createSettingsCommand);
+    Task ChangeSnapshotInterval(ChangeSnapshotSaveIntervalCommand command);
+    Task ChangeDocumentationInterval(ChangeDocuTimerSaveIntervalCommand command);
+    Task Create(CreateTimerSettingsCommand command);
 }

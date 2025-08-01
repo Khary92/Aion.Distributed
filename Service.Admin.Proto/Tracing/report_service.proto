@@ -8,8 +8,9 @@ service ReportProtoService {
 
 message ReportProto {
   google.protobuf.Timestamp time_stamp = 1;
-  string state = 2;
-  repeated string traces = 3;
+  string useCase = 2;
+  string state = 3;
+  repeated string traces = 4;
 }
 
 message ResponseProto {

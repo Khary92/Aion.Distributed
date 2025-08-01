@@ -6,70 +6,52 @@ namespace Core.Server.Tracing.Tracing.Tracers.Ticket.UseCase;
 
 public class UpdateTicketTraceCollector(ITracingDataCommandSender commandSender) : IUpdateTicketTraceCollector
 {
-    public async Task StartUseCase(Type originClassType, Guid traceId, Dictionary<string, string> attributes)
+    
+    public async Task CommandReceived(Type originClassType, Guid traceId, object protoCommand)
     {
-        var log = $"Update ticket requested for {attributes}";
+        var log = $"Command received {GetName(protoCommand)}:{protoCommand}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
             UseCaseMeta.UpdateTicket,
-            LoggingMeta.ActionRequested,
+            LoggingMeta.CommandReceived,
             originClassType,
             traceId,
             log,
             DateTimeOffset.Now));
     }
 
-    public async Task CommandSent(Type originClassType, Guid traceId, object command)
+    public async Task EventPersisted(Type originClassType, Guid traceId, object @event)
     {
-        var log = $"Sent {command}";
+        var log = $"Event persisted {@event}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
             UseCaseMeta.UpdateTicket,
-            LoggingMeta.CommandSent,
+            LoggingMeta.EventPersisted,
             originClassType,
             traceId,
             log,
             DateTimeOffset.Now));
     }
 
-    public async Task NotificationReceived(Type originClassType, Guid traceId, object notification)
+    public async Task NotificationSent(Type originClassType, Guid traceId, object notification)
     {
-        var log = $"Received {notification}";
+        var log = $"Notification sent {GetName(notification)}:{notification}";
+
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
             UseCaseMeta.UpdateTicket,
-            LoggingMeta.NotificationReceived,
+            LoggingMeta.NotificationSent,
             originClassType,
             traceId,
             log,
             DateTimeOffset.Now));
     }
 
-    public async Task NoAggregateFound(Type originClassType, Guid traceId)
+    private static string GetName(object @object)
     {
-        var log = $"Aggregate not found id:{traceId}";
-        await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Ticket,
-            UseCaseMeta.UpdateTicket,
-            LoggingMeta.AggregateNotFound,
-            originClassType,
-            traceId,
-            log,
-            DateTimeOffset.Now));
-    }
-
-    public async Task ChangesApplied(Type originClassType, Guid traceId)
-    {
-        var log = $"Changed applied id:{traceId}";
-        await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Ticket,
-            UseCaseMeta.UpdateTicket,
-            LoggingMeta.PropertyChanged,
-            originClassType,
-            traceId,
-            log,
-            DateTimeOffset.Now));
+        var commandType = @object.GetType();
+        return commandType.Name;
     }
 }

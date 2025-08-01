@@ -1,5 +1,6 @@
 using Proto.Requests.Tags;
 using Service.Admin.Web.Communication.Tags.Notifications;
+using Service.Admin.Web.Communication.Wrappers;
 using Service.Admin.Web.Models;
 using Service.Admin.Web.Services;
 
@@ -12,9 +13,9 @@ public class TagStateService(ISharedRequestSender requestSender) : ITagStateServ
 
     public event Action? OnStateChanged;
 
-    public Task AddTicket(TagWebModel tag)
+    public Task AddTicket(NewTagMessage tagMessage)
     {
-        _tags.Add(tag);
+        _tags.Add(tagMessage.Tag);
         NotifyStateChanged();
         return Task.CompletedTask;
     }

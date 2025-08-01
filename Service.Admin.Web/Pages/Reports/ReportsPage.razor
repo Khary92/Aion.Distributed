@@ -24,7 +24,7 @@
                             <option value="">Alle Reports</option>
                             @foreach (var report in ReportState.Reports)
                             {
-                                <option value="@report.ReportId">@report.TimeStamp - @report.State</option>
+                                <option value="@report.ReportId">@report.TimeStamp - @report.useCase - @report.State</option>
                             }
                         </select>
                     </div>

@@ -5,7 +5,7 @@ namespace Core.Server.Services.Entities.Sprints;
 public interface ISprintCommandsService
 {
     Task Create(CreateSprintCommand command);
-    Task UpdateSprintData(UpdateSprintDataCommand updateSprintDataCommand);
-    Task SetSprintActiveStatus(SetSprintActiveStatusCommand setSprintActiveStatusCommand);
-    Task AddTicketToSprint(AddTicketToSprintCommand addTicketToSprintCommand);
+    Task UpdateSprintData(UpdateSprintDataCommand command);
+    Task SetSprintActiveStatus(SetSprintActiveStatusCommand command);
+    Task AddTicketToSprint(AddTicketToSprintCommand command);
 }

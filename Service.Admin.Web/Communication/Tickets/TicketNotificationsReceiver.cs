@@ -34,20 +34,25 @@ public class TicketNotificationsReceiver(ITraceCollector tracer, ITicketStateSer
                     switch (notification.NotificationCase)
                     {
                         case TicketNotification.NotificationOneofCase.TicketCreated:
-                            var createdNotification = notification.TicketCreated.ToNotification();
+                            var newTicketMessage = notification.TicketCreated.ToNewEntityMessage();
 
-                            await tracer.Ticket.Create.NotificationReceived(GetType(), createdNotification.TicketId,
-                                createdNotification);
+                            await tracer.Ticket.Create.NotificationReceived(GetType(), newTicketMessage.TraceId,
+                                newTicketMessage);
                             
-                            await ticketStateService.AddTicket(createdNotification);
+                            await ticketStateService.AddTicket(newTicketMessage);
                             break;
 
                         case TicketNotification.NotificationOneofCase.TicketDataUpdated:
-                            ticketStateService.Apply(notification.TicketDataUpdated.ToNotification());
+                            var updateNotification = notification.TicketDataUpdated.ToNotification();
+                            
+                            await tracer.Ticket.Update.NotificationReceived(GetType(), updateNotification.TraceId,
+                                updateNotification);
+                            
+                            await ticketStateService.Apply(notification.TicketDataUpdated.ToNotification());
                             break;
 
                         case TicketNotification.NotificationOneofCase.TicketDocumentationUpdated:
-                            ticketStateService.Apply(notification.TicketDocumentationUpdated.ToNotification());
+                            await ticketStateService.Apply(notification.TicketDocumentationUpdated.ToNotification());
                             break;
                     }
             }

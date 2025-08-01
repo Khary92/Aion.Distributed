@@ -16,19 +16,21 @@ public static class TicketProtoExtensions
             proto.SprintIds.ToGuidList(), Guid.Parse(proto.TraceData.TraceId));
     }
 
-    public static TicketNotification ToNotification(this UpdateTicketDataCommand proto)
+    public static TicketNotification ToNotification(this UpdateTicketDataCommand proto) => new()
     {
-        return new TicketNotification
+        TicketDataUpdated = new TicketDataUpdatedNotification
         {
-            TicketDataUpdated = new TicketDataUpdatedNotification
+            TicketId = proto.TicketId.ToString(),
+            Name = proto.Name,
+            BookingNumber = proto.BookingNumber,
+            SprintIds = { proto.SprintIds.ToRepeatedField() },
+            TraceData = new()
             {
-                TicketId = proto.TicketId.ToString(),
-                Name = proto.Name,
-                BookingNumber = proto.BookingNumber,
-                SprintIds = { proto.SprintIds.ToRepeatedField() }
+                TraceId = proto.TraceId.ToString()
             }
-        };
-    }
+        }
+    };
+
 
     public static UpdateTicketDocumentationCommand ToCommand(
         this UpdateTicketDocumentationCommandProto proto)
@@ -56,19 +58,20 @@ public static class TicketProtoExtensions
             proto.SprintIds.ToGuidList(), Guid.Parse(proto.TraceData.TraceId));
     }
 
-    public static TicketNotification ToNotification(this CreateTicketCommand proto)
+    public static TicketNotification ToNotification(this CreateTicketCommand proto) => new()
     {
-        return new TicketNotification
+        TicketCreated = new TicketCreatedNotification
         {
-            TicketCreated = new TicketCreatedNotification
+            TicketId = proto.TicketId.ToString(),
+            Name = proto.Name,
+            BookingNumber = proto.BookingNumber,
+            SprintIds = { proto.SprintIds.ToRepeatedField() },
+            TraceData = new()
             {
-                TicketId = proto.TicketId.ToString(),
-                Name = proto.Name,
-                BookingNumber = proto.BookingNumber,
-                SprintIds = { proto.SprintIds.ToRepeatedField() }
+                TraceId = proto.TraceId.ToString()
             }
-        };
-    }
+        }
+    };
 
     public static TicketProto ToProto(this Domain.Entities.Ticket ticket)
     {
