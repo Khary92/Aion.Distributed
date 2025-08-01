@@ -20,7 +20,7 @@ public class TimeSlotControlService(
     ITicketRequestsService ticketRequestsService,
     UseCaseNotificationService useCaseNotificationService) : ITimeSlotControlService
 {
-    public async Task Create(Guid ticketId)
+    public async Task Create(Guid ticketId, Guid traceId)
     {
         // TODO RuntimeSettings are meant for client only. Not for the server side.
         var workDays = await workDayRequestsService.GetAll();
@@ -58,10 +58,10 @@ public class TimeSlotControlService(
             newStatisticsData.TagIds, newTimeSlot.TimeSlotId, Guid.NewGuid()));
 
         await useCaseNotificationService.SendNotificationAsync(
-            UseCaseProtoExtensions.ToNotification(newTimeSlot, newStatisticsData, existingTicket));
+            UseCaseProtoExtensions.ToNotification(newTimeSlot, newStatisticsData, existingTicket, traceId));
     }
 
-    public async Task Load(Guid timeSlotId)
+    public async Task Load(Guid timeSlotId, Guid traceId)
     {
         var timeSlot = await timeSlotRequestsService.GetById(timeSlotId);
         if (timeSlot is null) throw new Exception("TimeSlot is null. Something went horribly wrong.");
@@ -73,6 +73,6 @@ public class TimeSlotControlService(
         if (statisticsData is null) throw new Exception("StatisticsData is null. Something went horribly wrong.");
 
         await useCaseNotificationService.SendNotificationAsync(
-            UseCaseProtoExtensions.ToNotification(timeSlot, statisticsData, ticket));
+            UseCaseProtoExtensions.ToNotification(timeSlot, statisticsData, ticket, traceId));
     }
 }

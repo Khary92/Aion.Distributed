@@ -9,99 +9,85 @@ namespace Core.Server.Communication.Endpoints.TimeSlot;
 
 public static class TimeSlotProtoExtensions
 {
-    public static AddNoteCommand ToCommand(
-        this AddNoteCommandProto proto)
-    {
-        return new AddNoteCommand(Guid.Parse(proto.TimeSlotId), Guid.Parse(proto.NoteId),
-            Guid.Parse(proto.TraceData.TraceId));
-    }
+    public static AddNoteCommand ToCommand(this AddNoteCommandProto proto) => new(Guid.Parse(proto.TimeSlotId),
+        Guid.Parse(proto.NoteId), Guid.Parse(proto.TraceData.TraceId));
 
-    public static TimeSlotNotification ToNotification(this AddNoteCommand proto)
+    public static TimeSlotNotification ToNotification(this AddNoteCommand proto) => new()
     {
-        return new TimeSlotNotification
+        NoteAddedToTimeSlot = new NoteAddedToTimeSlotNotification
         {
-            NoteAddedToTimeSlot = new NoteAddedToTimeSlotNotification
+            TimeSlotId = proto.TimeSlotId.ToString(),
+            NoteId = proto.NoteId.ToString(),
+            TraceData = new()
             {
-                TimeSlotId = proto.TimeSlotId.ToString(),
-                NoteId = proto.NoteId.ToString()
+                TraceId = proto.TraceId.ToString()
             }
-        };
-    }
+        }
+    };
 
-    public static SetEndTimeCommand ToCommand(
-        this SetEndTimeCommandProto proto)
-    {
-        return new SetEndTimeCommand(Guid.Parse(proto.TimeSlotId), proto.Time.ToDateTimeOffset(),
-            Guid.Parse(proto.TraceData.TraceId));
-    }
+    public static SetEndTimeCommand ToCommand(this SetEndTimeCommandProto proto) => new(Guid.Parse(proto.TimeSlotId),
+        proto.Time.ToDateTimeOffset(), Guid.Parse(proto.TraceData.TraceId));
 
-    public static TimeSlotNotification ToNotification(this SetEndTimeCommand proto)
+    public static TimeSlotNotification ToNotification(this SetEndTimeCommand proto) => new()
     {
-        return new TimeSlotNotification
+        EndTimeSet = new EndTimeSetNotification
         {
-            EndTimeSet = new EndTimeSetNotification
+            TimeSlotId = proto.TimeSlotId.ToString(),
+            Time = Timestamp.FromDateTimeOffset(proto.Time),
+            TraceData = new()
             {
-                TimeSlotId = proto.TimeSlotId.ToString(),
-                Time = Timestamp.FromDateTimeOffset(proto.Time)
+                TraceId = proto.TraceId.ToString()
             }
-        };
-    }
+        }
+    };
 
-    public static SetStartTimeCommand ToCommand(
-        this SetStartTimeCommandProto proto)
-    {
-        return new SetStartTimeCommand(Guid.Parse(proto.TimeSlotId), proto.Time.ToDateTimeOffset(),
-            Guid.Parse(proto.TraceData.TraceId));
-    }
+    public static SetStartTimeCommand ToCommand(this SetStartTimeCommandProto proto) => new SetStartTimeCommand(
+        Guid.Parse(proto.TimeSlotId), proto.Time.ToDateTimeOffset(), Guid.Parse(proto.TraceData.TraceId));
 
-    public static TimeSlotNotification ToNotification(this SetStartTimeCommand proto)
+    public static TimeSlotNotification ToNotification(this SetStartTimeCommand proto) => new()
     {
-        return new TimeSlotNotification
+        StartTimeSet = new StartTimeSetNotification
         {
-            StartTimeSet = new StartTimeSetNotification
+            TimeSlotId = proto.TimeSlotId.ToString(),
+            Time = Timestamp.FromDateTimeOffset(proto.Time),
+            TraceData = new()
             {
-                TimeSlotId = proto.TimeSlotId.ToString(),
-                Time = Timestamp.FromDateTimeOffset(proto.Time)
+                TraceId = proto.TraceId.ToString()
             }
-        };
-    }
+        }
+    };
 
-    public static CreateTimeSlotCommand ToCommand(
-        this CreateTimeSlotCommandProto proto)
-    {
-        return new CreateTimeSlotCommand(Guid.Parse(proto.TimeSlotId), Guid.Parse(proto.SelectedTicketId),
-            Guid.Parse(proto.WorkDayId), proto.StartTime.ToDateTimeOffset(), proto.EndTime.ToDateTimeOffset(), proto.IsTimerRunning,
-            Guid.Parse(proto.TraceData.TraceId));
-    }
+    public static CreateTimeSlotCommand ToCommand(this CreateTimeSlotCommandProto proto) => new(
+        Guid.Parse(proto.TimeSlotId), Guid.Parse(proto.SelectedTicketId),
+        Guid.Parse(proto.WorkDayId), proto.StartTime.ToDateTimeOffset(), proto.EndTime.ToDateTimeOffset(),
+        proto.IsTimerRunning, Guid.Parse(proto.TraceData.TraceId));
 
-    public static TimeSlotNotification ToNotification(this CreateTimeSlotCommand proto)
+    public static TimeSlotNotification ToNotification(this CreateTimeSlotCommand proto) => new()
     {
-        return new TimeSlotNotification
+        TimeSlotCreated = new TimeSlotCreatedNotification
         {
-            TimeSlotCreated = new TimeSlotCreatedNotification
+            TimeSlotId = proto.TimeSlotId.ToString(),
+            SelectedTicketId = proto.SelectedTicketId.ToString(),
+            WorkDayId = proto.WorkDayId.ToString(),
+            StartTime = proto.StartTime.ToTimestamp(),
+            EndTime = proto.EndTime.ToTimestamp(),
+            IsTimerRunning = proto.IsTimerRunning,
+            TraceData = new()
             {
-                TimeSlotId = proto.TimeSlotId.ToString(),
-                SelectedTicketId = proto.SelectedTicketId.ToString(),
-                WorkDayId = proto.WorkDayId.ToString(),
-                StartTime = proto.StartTime.ToTimestamp(),
-                EndTime = proto.EndTime.ToTimestamp(),
-                IsTimerRunning = proto.IsTimerRunning
+                TraceId = proto.TraceId.ToString()
             }
-        };
-    }
+        }
+    };
 
-    public static TimeSlotProto ToProto(this Domain.Entities.TimeSlot timeSlot)
+    public static TimeSlotProto ToProto(this Domain.Entities.TimeSlot timeSlot) => new()
     {
-        return new TimeSlotProto
-        {
-            TimeSlotId = timeSlot.TimeSlotId.ToString(),
-            SelectedTicketId = timeSlot.SelectedTicketId.ToString(),
-            WorkDayId = timeSlot.WorkDayId.ToString(),
-            StartTime = timeSlot.StartTime.ToTimestamp(),
-            EndTime = timeSlot.EndTime.ToTimestamp(),
-            IsTimerRunning = timeSlot.IsTimerRunning
-        };
-    }
+        TimeSlotId = timeSlot.TimeSlotId.ToString(),
+        SelectedTicketId = timeSlot.SelectedTicketId.ToString(),
+        WorkDayId = timeSlot.WorkDayId.ToString(),
+        StartTime = timeSlot.StartTime.ToTimestamp(),
+        EndTime = timeSlot.EndTime.ToTimestamp(),
+        IsTimerRunning = timeSlot.IsTimerRunning
+    };
 
     public static TimeSlotListProto ToProtoList(this List<Domain.Entities.TimeSlot> timeSlots)
     {

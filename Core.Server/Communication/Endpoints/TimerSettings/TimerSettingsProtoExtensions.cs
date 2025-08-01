@@ -8,70 +8,63 @@ namespace Core.Server.Communication.Endpoints.TimerSettings;
 public static class TimerSettingsProtoExtensions
 {
     public static ChangeDocuTimerSaveIntervalCommand ToCommand(
-        this ChangeDocuTimerSaveIntervalCommandProto proto)
-    {
-        return new ChangeDocuTimerSaveIntervalCommand(Guid.Parse(proto.TimerSettingsId), proto.DocuTimerSaveInterval,
-            Guid.Parse(proto.TraceData.TraceId));
-    }
+        this ChangeDocuTimerSaveIntervalCommandProto proto) => new(Guid.Parse(proto.TimerSettingsId),
+        proto.DocuTimerSaveInterval, Guid.Parse(proto.TraceData.TraceId));
 
-    public static TimerSettingsNotification ToNotification(this ChangeDocuTimerSaveIntervalCommand proto)
+    public static TimerSettingsNotification ToNotification(this ChangeDocuTimerSaveIntervalCommand proto) => new()
     {
-        return new TimerSettingsNotification
+        DocuTimerSaveIntervalChanged = new DocuTimerSaveIntervalChangedNotification
         {
-            DocuTimerSaveIntervalChanged = new DocuTimerSaveIntervalChangedNotification
+            TimerSettingsId = proto.TimerSettingsId.ToString(),
+            DocuTimerSaveInterval = proto.DocuTimerSaveInterval,
+            TraceData = new()
             {
-                TimerSettingsId = proto.TimerSettingsId.ToString(),
-                DocuTimerSaveInterval = proto.DocuTimerSaveInterval
+                TraceId = proto.TraceId.ToString()
             }
-        };
-    }
+        }
+    };
 
-    public static ChangeSnapshotSaveIntervalCommand ToCommand(
-        this ChangeSnapshotSaveIntervalCommandProto proto)
-    {
-        return new ChangeSnapshotSaveIntervalCommand(Guid.Parse(proto.TimerSettingsId), proto.SnapshotSaveInterval,
-            Guid.Parse(proto.TraceData.TraceId));
-    }
+    public static ChangeSnapshotSaveIntervalCommand ToCommand(this ChangeSnapshotSaveIntervalCommandProto proto) => new(
+        Guid.Parse(proto.TimerSettingsId), proto.SnapshotSaveInterval,
+        Guid.Parse(proto.TraceData.TraceId));
 
-    public static TimerSettingsNotification ToNotification(this ChangeSnapshotSaveIntervalCommand proto)
+
+    public static TimerSettingsNotification ToNotification(this ChangeSnapshotSaveIntervalCommand proto) => new()
     {
-        return new TimerSettingsNotification
+        SnapshotSaveIntervalChanged = new SnapshotSaveIntervalChangedNotification
         {
-            SnapshotSaveIntervalChanged = new SnapshotSaveIntervalChangedNotification
+            TimerSettingsId = proto.TimerSettingsId.ToString(),
+            SnapshotSaveInterval = proto.SnapshotSaveInterval,
+            TraceData = new()
             {
-                TimerSettingsId = proto.TimerSettingsId.ToString(),
-                SnapshotSaveInterval = proto.SnapshotSaveInterval
+                TraceId = proto.TraceId.ToString()
             }
-        };
-    }
+        }
+    };
 
-    public static CreateTimerSettingsCommand ToCommand(
-        this CreateTimerSettingsCommandProto proto)
-    {
-        return new CreateTimerSettingsCommand(Guid.Parse(proto.TimerSettingsId), proto.DocumentationSaveInterval,
-            proto.SnapshotSaveInterval, Guid.Parse(proto.TraceData.TraceId));
-    }
+    public static CreateTimerSettingsCommand ToCommand(this CreateTimerSettingsCommandProto proto) => new(
+        Guid.Parse(proto.TimerSettingsId), proto.DocumentationSaveInterval,
+        proto.SnapshotSaveInterval, Guid.Parse(proto.TraceData.TraceId));
 
-    public static TimerSettingsNotification ToNotification(this CreateTimerSettingsCommand proto)
+
+    public static TimerSettingsNotification ToNotification(this CreateTimerSettingsCommand proto) => new()
     {
-        return new TimerSettingsNotification
+        TimerSettingsCreated = new TimerSettingsCreatedNotification
         {
-            TimerSettingsCreated = new TimerSettingsCreatedNotification
+            TimerSettingsId = proto.TimerSettingsId.ToString(),
+            DocumentationSaveInterval = proto.DocumentationSaveInterval,
+            SnapshotSaveInterval = proto.SnapshotSaveInterval,
+            TraceData = new()
             {
-                TimerSettingsId = proto.TimerSettingsId.ToString(),
-                DocumentationSaveInterval = proto.DocumentationSaveInterval,
-                SnapshotSaveInterval = proto.SnapshotSaveInterval
+                TraceId = proto.TraceId.ToString()
             }
-        };
-    }
+        }
+    };
 
-    public static TimerSettingsProto ToProto(this Domain.Entities.TimerSettings timerSettings)
+    public static TimerSettingsProto ToProto(this Domain.Entities.TimerSettings timerSettings) => new()
     {
-        return new TimerSettingsProto
-        {
-            TimerSettingsId = timerSettings.TimerSettingsId.ToString(),
-            DocumentationSaveInterval = timerSettings.DocumentationSaveInterval,
-            SnapshotSaveInterval = timerSettings.SnapshotSaveInterval,
-        };
-    }
+        TimerSettingsId = timerSettings.TimerSettingsId.ToString(),
+        DocumentationSaveInterval = timerSettings.DocumentationSaveInterval,
+        SnapshotSaveInterval = timerSettings.SnapshotSaveInterval
+    };
 }

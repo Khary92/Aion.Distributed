@@ -8,52 +8,43 @@ namespace Core.Server.Communication.Endpoints.Tag;
 
 public static class TagProtoExtensions
 {
-    public static CreateTagCommand ToCommand(
-        this CreateTagCommandProto proto)
-    {
-        return new CreateTagCommand(Guid.Parse(proto.TagId), proto.Name,
-            Guid.Parse(proto.TraceData.TraceId));
-    }
+    public static CreateTagCommand ToCommand(this CreateTagCommandProto proto) => new(Guid.Parse(proto.TagId),
+        proto.Name, Guid.Parse(proto.TraceData.TraceId));
 
-    public static TagNotification ToNotification(this CreateTagCommand proto)
+    public static TagNotification ToNotification(this CreateTagCommand proto) => new()
     {
-        return new TagNotification
+        TagCreated = new TagCreatedNotification
         {
-            TagCreated = new TagCreatedNotification
+            TagId = proto.TagId.ToString(),
+            Name = proto.Name,
+            TraceData = new()
             {
-                TagId = proto.TagId.ToString(),
-                Name = proto.Name
+                TraceId = proto.TraceId.ToString()
             }
-        };
-    }
+        }
+    };
 
-    public static UpdateTagCommand ToCommand(
-        this UpdateTagCommandProto proto)
-    {
-        return new UpdateTagCommand(Guid.Parse(proto.TagId), proto.Name,
-            Guid.Parse(proto.TraceData.TraceId));
-    }
+    public static UpdateTagCommand ToCommand(this UpdateTagCommandProto proto) => new(Guid.Parse(proto.TagId),
+        proto.Name, Guid.Parse(proto.TraceData.TraceId));
 
-    public static TagNotification ToNotification(this UpdateTagCommand proto)
+    public static TagNotification ToNotification(this UpdateTagCommand proto) => new()
     {
-        return new TagNotification
+        TagUpdated = new TagUpdatedNotification
         {
-            TagUpdated = new TagUpdatedNotification
+            TagId = proto.TagId.ToString(),
+            Name = proto.Name,
+            TraceData = new()
             {
-                TagId = proto.TagId.ToString(),
-                Name = proto.Name
+                TraceId = proto.TraceId.ToString()
             }
-        };
-    }
+        }
+    };
 
-    public static TagProto ToProto(this Domain.Entities.Tag tag)
+    public static TagProto ToProto(this Domain.Entities.Tag tag) => new()
     {
-        return new TagProto
-        {
-            TagId = tag.TagId.ToString(),
-            Name = tag.Name
-        };
-    }
+        TagId = tag.TagId.ToString(),
+        Name = tag.Name
+    };
 
     public static TagListProto ToProtoList(this List<Domain.Entities.Tag> tags)
     {

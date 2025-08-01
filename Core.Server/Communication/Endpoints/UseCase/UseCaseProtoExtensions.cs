@@ -10,25 +10,23 @@ namespace Core.Server.Communication.Endpoints.UseCase;
 public static class UseCaseProtoExtensions
 {
     public static UseCaseNotification ToNotification(Domain.Entities.TimeSlot timeSlot,
-        Domain.Entities.StatisticsData statisticsData, Domain.Entities.Ticket ticket)
+        Domain.Entities.StatisticsData statisticsData, Domain.Entities.Ticket ticket, Guid traceId) => new()
     {
-        return new UseCaseNotification
+        TimeSlotControlCreated = new TimeSlotControlCreatedNotification
         {
-            TimeSlotControlCreated = new TimeSlotControlCreatedNotification
+            TimeSlotControlData = new TimeSlotControlDataProto
             {
-                TimeSlotControlData = new TimeSlotControlDataProto
-                {
-                    TicketProto = ticket.ToProto(),
-                    StatisticsDataProto = statisticsData.ToProto(),
-                    TimeSlotProto = timeSlot.ToProto()
-                }
+                TicketProto = ticket.ToProto(),
+                StatisticsDataProto = statisticsData.ToProto(),
+                TimeSlotProto = timeSlot.ToProto(),
+            },
+            TraceData = new()
+            {
+                TraceId = traceId.ToString()
             }
-        };
-    }
+        }
+    };
 
-    public static GetTimeSlotControlDataForDateRequest ToRequest(
-        this GetTimeSlotControlDataRequestProto proto)
-    {
-        return new GetTimeSlotControlDataForDateRequest(proto.Date.ToDateTimeOffset());
-    }
+    public static GetTimeSlotControlDataForDateRequest ToRequest(this GetTimeSlotControlDataRequestProto proto) =>
+        new(proto.Date.ToDateTimeOffset());
 }

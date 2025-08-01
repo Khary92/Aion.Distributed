@@ -9,33 +9,27 @@ namespace Core.Server.Communication.Endpoints.WorkDay;
 
 public static class WorkDayProtoExtensions
 {
-    public static CreateWorkDayCommand ToCommand(
-        this CreateWorkDayCommandProto proto)
-    {
-        return new CreateWorkDayCommand(Guid.Parse(proto.WorkDayId), proto.Date.ToDateTimeOffset(),
-            Guid.Parse(proto.TraceData.TraceId));
-    }
+    public static CreateWorkDayCommand ToCommand(this CreateWorkDayCommandProto proto) => new(
+        Guid.Parse(proto.WorkDayId), proto.Date.ToDateTimeOffset(), Guid.Parse(proto.TraceData.TraceId));
 
-    public static WorkDayNotification ToNotification(this CreateWorkDayCommand proto)
+    public static WorkDayNotification ToNotification(this CreateWorkDayCommand proto) => new()
     {
-        return new WorkDayNotification
+        WorkDayCreated = new WorkDayCreatedNotification
         {
-            WorkDayCreated = new WorkDayCreatedNotification
+            WorkDayId = proto.WorkDayId.ToString(),
+            Date = proto.Date.ToTimestamp(),
+            TraceData = new()
             {
-                WorkDayId = proto.WorkDayId.ToString(),
-                Date = proto.Date.ToTimestamp()
+                TraceId = proto.TraceId.ToString()
             }
-        };
-    }
+        }
+    };
 
-    public static WorkDayProto ToProto(this Domain.Entities.WorkDay workDay)
+    public static WorkDayProto ToProto(this Domain.Entities.WorkDay workDay) => new()
     {
-        return new WorkDayProto
-        {
-            WorkDayId = workDay.WorkDayId.ToString(),
-            Date = workDay.Date.ToTimestamp()
-        };
-    }
+        WorkDayId = workDay.WorkDayId.ToString(),
+        Date = workDay.Date.ToTimestamp()
+    };
 
     public static WorkDayListProto ToProtoList(this List<Domain.Entities.WorkDay> workDays)
     {

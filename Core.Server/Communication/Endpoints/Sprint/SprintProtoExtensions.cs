@@ -11,121 +11,108 @@ namespace Core.Server.Communication.Endpoints.Sprint;
 public static class SprintProtoExtensions
 {
     public static AddTicketToActiveSprintCommand ToCommand(
-        this AddTicketToActiveSprintCommandProto proto)
-    {
-        return new AddTicketToActiveSprintCommand(Guid.Parse(proto.TicketId),
-            Guid.Parse(proto.TraceData.TraceId));
-    }
+        this AddTicketToActiveSprintCommandProto proto) => new(Guid.Parse(proto.TicketId),
+        Guid.Parse(proto.TraceData.TraceId));
 
-    public static SprintNotification ToNotification(this AddTicketToActiveSprintCommand command)
+    public static SprintNotification ToNotification(this AddTicketToActiveSprintCommand proto) => new()
     {
-        return new SprintNotification
+        TicketAddedToActiveSprint = new TicketAddedToActiveSprintNotification
         {
-            TicketAddedToActiveSprint = new TicketAddedToActiveSprintNotification
+            TicketId = proto.TicketId.ToString(),
+            TraceData = new()
             {
-                TicketId = command.TicketId.ToString()
+                TraceId = proto.TraceId.ToString()
             }
-        };
-    }
+        }
+    };
 
     public static AddTicketToSprintCommand ToCommand(
-        this AddTicketToSprintCommandProto proto)
-    {
-        return new AddTicketToSprintCommand(Guid.Parse(proto.SprintId), Guid.Parse(proto.TicketId),
-            Guid.Parse(proto.TraceData.TraceId));
-    }
+        this AddTicketToSprintCommandProto proto) => new(Guid.Parse(proto.SprintId), Guid.Parse(proto.TicketId),
+        Guid.Parse(proto.TraceData.TraceId));
 
-    public static SprintNotification ToNotification(this AddTicketToSprintCommand command)
+    public static SprintNotification ToNotification(this AddTicketToSprintCommand command) => new()
     {
-        return new SprintNotification
+        TicketAddedToSprint = new TicketAddedToSprintNotification
         {
-            TicketAddedToSprint = new TicketAddedToSprintNotification
+            TicketId = command.TicketId.ToString(),
+            SprintId = command.SprintId.ToString(),
+            TraceData = new()
             {
-                TicketId = command.TicketId.ToString(),
-                SprintId = command.SprintId.ToString()
+                TraceId = command.TraceId.ToString()
             }
-        };
-    }
+        }
+    };
 
     public static CreateSprintCommand ToCommand(
-        this CreateSprintCommandProto proto)
-    {
-        return new CreateSprintCommand(Guid.Parse(proto.SprintId), proto.Name, proto.StartTime.ToDateTimeOffset(),
-            proto.EndTime.ToDateTimeOffset(), proto.IsActive, proto.TicketIds.ToGuidList(),
-            Guid.Parse(proto.TraceData.TraceId));
-    }
+        this CreateSprintCommandProto proto) => new CreateSprintCommand(Guid.Parse(proto.SprintId), proto.Name,
+        proto.StartTime.ToDateTimeOffset(), proto.EndTime.ToDateTimeOffset(), proto.IsActive,
+        proto.TicketIds.ToGuidList(),
+        Guid.Parse(proto.TraceData.TraceId));
 
-    public static SprintNotification ToNotification(this CreateSprintCommand command)
+    public static SprintNotification ToNotification(this CreateSprintCommand command) => new()
     {
-        return new SprintNotification
+        SprintCreated = new SprintCreatedNotification
         {
-            SprintCreated = new SprintCreatedNotification
+            SprintId = command.SprintId.ToString(),
+            Name = command.Name,
+            StartTime = Timestamp.FromDateTimeOffset(command.StartTime),
+            EndTime = Timestamp.FromDateTimeOffset(command.EndTime),
+            IsActive = command.IsActive,
+            TicketIds = { command.TicketIds.ToRepeatedField() },
+            TraceData = new()
             {
-                SprintId = command.SprintId.ToString(),
-                Name = command.Name,
-                StartTime = Timestamp.FromDateTimeOffset(command.StartTime),
-                EndTime = Timestamp.FromDateTimeOffset(command.EndTime),
-                IsActive = command.IsActive,
-                TicketIds = { command.TicketIds.ToRepeatedField() }
+                TraceId = command.TraceId.ToString()
             }
-        };
-    }
+        }
+    };
 
     public static SetSprintActiveStatusCommand ToCommand(
-        this SetSprintActiveStatusCommandProto proto)
-    {
-        return new SetSprintActiveStatusCommand(Guid.Parse(proto.SprintId), proto.IsActive,
-            Guid.Parse(proto.TraceData.TraceId));
-    }
+        this SetSprintActiveStatusCommandProto proto) => new(Guid.Parse(proto.SprintId), proto.IsActive,
+        Guid.Parse(proto.TraceData.TraceId));
 
 
-    public static SprintNotification ToNotification(this SetSprintActiveStatusCommand command)
+    public static SprintNotification ToNotification(this SetSprintActiveStatusCommand command) => new SprintNotification
     {
-        return new SprintNotification
+        SprintActiveStatusSet = new SprintActiveStatusSetNotification
         {
-            SprintActiveStatusSet = new SprintActiveStatusSetNotification
+            SprintId = command.SprintId.ToString(),
+            IsActive = command.IsActive,
+            TraceData = new()
             {
-                SprintId = command.SprintId.ToString(),
-                IsActive = command.IsActive
+                TraceId = command.TraceId.ToString()
             }
-        };
-    }
+        }
+    };
 
     public static UpdateSprintDataCommand ToCommand(
-        this UpdateSprintDataCommandProto proto)
-    {
-        return new UpdateSprintDataCommand(Guid.Parse(proto.SprintId), proto.Name, proto.StartTime.ToDateTimeOffset(),
-            proto.EndTime.ToDateTimeOffset(),
-            Guid.Parse(proto.TraceData.TraceId));
-    }
+        this UpdateSprintDataCommandProto proto) => new(Guid.Parse(proto.SprintId), proto.Name,
+        proto.StartTime.ToDateTimeOffset(), proto.EndTime.ToDateTimeOffset(), Guid.Parse(proto.TraceData.TraceId));
 
 
-    public static SprintNotification ToNotification(this UpdateSprintDataCommand command)
+    public static SprintNotification ToNotification(this UpdateSprintDataCommand command) => new()
     {
-        return new SprintNotification
+        SprintDataUpdated = new SprintDataUpdatedNotification
         {
-            SprintDataUpdated = new SprintDataUpdatedNotification
+            SprintId = command.SprintId.ToString(),
+            Name = command.Name,
+            StartTime = Timestamp.FromDateTimeOffset(command.StartTime),
+            EndTime = Timestamp.FromDateTimeOffset(command.EndTime),
+            TraceData = new()
             {
-                SprintId = command.SprintId.ToString(),
-                Name = command.Name,
-                StartTime = Timestamp.FromDateTimeOffset(command.StartTime),
-                EndTime = Timestamp.FromDateTimeOffset(command.EndTime)
+                TraceId = command.TraceId.ToString()
             }
-        };
-    }
+        }
+    };
 
-    public static SprintProto ToProto(this Domain.Entities.Sprint sprint)
+    public static SprintProto ToProto(this Domain.Entities.Sprint sprint) => new SprintProto
     {
-        return new SprintProto
-        {
-            SprintId = sprint.SprintId.ToString(),
-            Name = sprint.Name,
-            Start = Timestamp.FromDateTimeOffset(sprint.StartDate),
-            End = Timestamp.FromDateTimeOffset(sprint.EndDate),
-            IsActive = sprint.IsActive,
-            TicketIds = { sprint.TicketIds.ToRepeatedField() }
-        };
-    }
+        SprintId = sprint.SprintId.ToString(),
+        Name = sprint.Name,
+        Start = Timestamp.FromDateTimeOffset(sprint.StartDate),
+        End = Timestamp.FromDateTimeOffset(sprint.EndDate),
+        IsActive = sprint.IsActive,
+        TicketIds = { sprint.TicketIds.ToRepeatedField() }
+    };
 
     public static SprintListProto ToProtoList(this List<Domain.Entities.Sprint> sprints)
     {
