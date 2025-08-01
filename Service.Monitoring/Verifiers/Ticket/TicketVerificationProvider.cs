@@ -10,7 +10,7 @@ public class TicketVerificationProvider : IVerificationProvider
 {
     private readonly ImmutableList<VerificationStep> _createTicketSteps = ImmutableList.Create(
         new VerificationStep(LoggingMeta.ActionRequested, Invoked.Equals, 1),
-        new VerificationStep(LoggingMeta.CommandSent, Invoked.Equals, 1),
+        new VerificationStep(LoggingMeta.SendingCommand, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.CommandReceived, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.EventPersisted, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.NotificationSent, Invoked.Equals, 1),

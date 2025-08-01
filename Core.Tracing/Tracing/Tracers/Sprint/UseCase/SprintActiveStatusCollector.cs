@@ -26,7 +26,7 @@ public class SprintActiveStatusCollector(ITracingDataCommandSender commandSender
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Sprint,
             UseCaseMeta.ChangeSprintActiveStatus,
-            LoggingMeta.CommandSent,
+            LoggingMeta.SendingCommand,
             originClassType,
             traceId,
             log,

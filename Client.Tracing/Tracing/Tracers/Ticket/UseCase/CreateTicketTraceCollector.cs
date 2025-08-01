@@ -27,7 +27,7 @@ public class CreateTicketTraceCollector(ITracingDataCommandSender commandSender)
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
             UseCaseMeta.CreateTicket,
-            LoggingMeta.CommandSent,
+            LoggingMeta.SendingCommand,
             originClassType,
             traceId,
             log,

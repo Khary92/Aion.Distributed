@@ -5,7 +5,7 @@ public enum LoggingMeta
     ActionRequested,
     PropertyNotChanged,
     NotificationReceived,
-    CommandSent,
+    SendingCommand,
     InvalidSettings,
     ActionCompleted,
     ExceptionOccured,
@@ -15,5 +15,6 @@ public enum LoggingMeta
     PropertyChanged,
     CommandReceived,
     EventPersisted,
-    NotificationSent
+    NotificationSent,
+    NoEntitySelected
 }

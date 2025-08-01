@@ -25,7 +25,7 @@ public class CreateNoteTypeTraceCollector(ITracingDataCommandSender commandSende
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.NoteType,
             UseCaseMeta.CreateNoteType,
-            LoggingMeta.CommandSent,
+            LoggingMeta.SendingCommand,
             originClassType,
             traceId,
             log,

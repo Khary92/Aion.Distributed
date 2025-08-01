@@ -6,9 +6,9 @@ namespace Service.Admin.Tracing.Tracing.Ticket.UseCase;
 
 public class UpdateTicketTraceCollector(ITracingDataCommandSender commandSender) : IUpdateTicketTraceCollector
 {
-    public async Task StartUseCase(Type originClassType, Guid traceId, object command)
+    public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = $"Update ticket requested for {command}";
+        var log = $"Update ticket requested";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
@@ -19,15 +19,28 @@ public class UpdateTicketTraceCollector(ITracingDataCommandSender commandSender)
             log,
             DateTimeOffset.Now));
     }
+    
+    public async Task NoEntitySelected(Type originClassType, Guid traceId)
+    {
+        var log = $"No ticket entity selected";
+        await commandSender.Send(new ServiceTraceDataCommand(
+            TraceSinkId.Ticket,
+            UseCaseMeta.AddTicketToCurrentSprint,
+            LoggingMeta.NoEntitySelected,
+            originClassType,
+            traceId,
+            log,
+            DateTimeOffset.Now));
+    }
 
-    public async Task CommandSent(Type originClassType, Guid traceId, object command)
+    public async Task SendingCommand(Type originClassType, Guid traceId, object command)
     {
         var log = $"Sent {command}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
             UseCaseMeta.UpdateTicket,
-            LoggingMeta.CommandSent,
+            LoggingMeta.SendingCommand,
             originClassType,
             traceId,
             log,

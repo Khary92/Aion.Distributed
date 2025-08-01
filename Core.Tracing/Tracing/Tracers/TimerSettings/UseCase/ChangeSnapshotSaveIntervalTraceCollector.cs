@@ -28,7 +28,7 @@ public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataCommandSender 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
             UseCaseMeta.ChangeSnapshotSaveInterval,
-            LoggingMeta.CommandSent,
+            LoggingMeta.SendingCommand,
             originClassType,
             traceId,
             log,

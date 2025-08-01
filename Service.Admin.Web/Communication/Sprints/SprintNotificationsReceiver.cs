@@ -1,12 +1,13 @@
 ﻿using Grpc.Core;
 using Grpc.Net.Client;
 using Proto.Notifications.Sprint;
+using Service.Admin.Tracing;
 using Service.Admin.Web.Communication.Sprints.State;
 using SubscribeRequest = Proto.Notifications.Sprint.SubscribeRequest;
 
 namespace Service.Admin.Web.Communication.Sprints;
 
-public class SprintNotificationsReceiver(ISprintStateService sprintStateService)
+public class SprintNotificationsReceiver(ISprintStateService sprintStateService, ITraceCollector tracer)
 {
     public async Task SubscribeToNotifications(CancellationToken stoppingToken = default)
     {
@@ -31,6 +32,7 @@ public class SprintNotificationsReceiver(ISprintStateService sprintStateService)
                     client.SubscribeSprintNotifications(new SubscribeRequest(), cancellationToken: stoppingToken);
 
                 await foreach (var notification in call.ResponseStream.ReadAllAsync(stoppingToken))
+                {
                     switch (notification.NotificationCase)
                     {
                         case SprintNotification.NotificationOneofCase.SprintCreated:
@@ -38,7 +40,8 @@ public class SprintNotificationsReceiver(ISprintStateService sprintStateService)
                             break;
 
                         case SprintNotification.NotificationOneofCase.SprintDataUpdated:
-                            sprintStateService.Apply(notification.SprintDataUpdated.ToNotification());
+                            var webSprintDataUpdatedNotification = notification.SprintDataUpdated.ToNotification();
+                            sprintStateService.Apply(webSprintDataUpdatedNotification);
                             break;
 
                         case SprintNotification.NotificationOneofCase.SprintActiveStatusSet:
@@ -50,9 +53,15 @@ public class SprintNotificationsReceiver(ISprintStateService sprintStateService)
                             break;
 
                         case SprintNotification.NotificationOneofCase.TicketAddedToSprint:
-                            sprintStateService.Apply(notification.SprintDataUpdated.ToNotification());
+                            var ticketAddedToSprintNotification = notification.TicketAddedToActiveSprint.ToNotification();
+                            
+                            await tracer.Sprint.AddTicketToSprint.NotificationReceived(GetType(),
+                                ticketAddedToSprintNotification.TraceId, ticketAddedToSprintNotification);
+                            
+                            sprintStateService.Apply(ticketAddedToSprintNotification);
                             break;
                     }
+                }
             }
             catch (RpcException ex) when (ex.StatusCode == StatusCode.Unavailable)
             {

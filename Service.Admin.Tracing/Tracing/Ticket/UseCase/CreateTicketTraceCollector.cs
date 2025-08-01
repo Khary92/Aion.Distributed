@@ -20,14 +20,14 @@ public class CreateTicketTraceCollector(ITracingDataCommandSender commandSender)
             DateTimeOffset.Now));
     }
 
-    public async Task CommandSent(Type originClassType, Guid traceId, object command)
+    public async Task SendingCommand(Type originClassType, Guid traceId, object command)
     {
         var log = $"Sent {GetName(command)}:{command}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
             UseCaseMeta.CreateTicket,
-            LoggingMeta.CommandSent,
+            LoggingMeta.SendingCommand,
             originClassType,
             traceId,
             log,

@@ -6,9 +6,9 @@ namespace Service.Admin.Tracing.Tracing.Sprint.UseCase;
 
 public class TicketAddedToSprintCollector(ITracingDataCommandSender commandSender) : ITicketAddedToSprintCollector
 {
-    public async Task StartUseCase(Type originClassType, Guid traceId, Dictionary<string, string> attributes)
+    public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = $"Add ticket to sprint requested for {attributes}";
+        var log = $"Add ticket to sprint requested";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Sprint,
@@ -20,13 +20,13 @@ public class TicketAddedToSprintCollector(ITracingDataCommandSender commandSende
             DateTimeOffset.Now));
     }
 
-    public async Task CommandSent(Type originClassType, Guid traceId, object command)
+    public async Task SendingCommand(Type originClassType, Guid traceId, object command)
     {
         var log = $"Sent {command}";
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Sprint,
             UseCaseMeta.TicketAddedToSprint,
-            LoggingMeta.CommandSent,
+            LoggingMeta.SendingCommand,
             originClassType,
             traceId,
             log,
@@ -66,6 +66,19 @@ public class TicketAddedToSprintCollector(ITracingDataCommandSender commandSende
             TraceSinkId.Sprint,
             UseCaseMeta.TicketAddedToSprint,
             LoggingMeta.PropertyChanged,
+            originClassType,
+            traceId,
+            log,
+            DateTimeOffset.Now));
+    }
+
+    public async Task NoEntitySelected(Type originClassType, Guid traceId)
+    {
+        var log = $"No ticket entity selected";
+        await commandSender.Send(new ServiceTraceDataCommand(
+            TraceSinkId.Sprint,
+            UseCaseMeta.AddTicketToCurrentSprint,
+            LoggingMeta.NoEntitySelected,
             originClassType,
             traceId,
             log,

@@ -1,4 +1,5 @@
-﻿using Proto.Command.Tickets;
+﻿using Proto.Command.Sprints;
+using Proto.Command.Tickets;
 using Proto.DTO.TraceData;
 using Proto.Notifications.Ticket;
 using Service.Admin.Web.Communication.Tickets.Notifications;
@@ -10,6 +11,15 @@ namespace Service.Admin.Web.Communication.Tickets;
 
 public static class TicketExtensions
 {
+
+    public static AddTicketToActiveSprintCommandProto ToProto(this WebAddTicketToSprintCommand command) => new()
+    {
+        TicketId = command.TicketId.ToString(),
+        TraceData = new TraceDataProto()
+        {
+            TraceId = command.TraceId.ToString()
+        }
+    };
 
     public static UpdateTicketDataCommandProto ToProto(this WebUpdateTicketCommand command) => new()
     {

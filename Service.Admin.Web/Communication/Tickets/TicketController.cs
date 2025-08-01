@@ -1,5 +1,4 @@
 using Proto.Command.Sprints;
-using Proto.Command.Tickets;
 using Proto.DTO.TraceData;
 using Service.Admin.Tracing;
 using Service.Admin.Web.Communication.Tickets.Records;
@@ -18,18 +17,26 @@ public class TicketController(ITraceCollector tracer, ISharedCommandSender comma
 
     private async Task UpdateTicket()
     {
-        if (SelectedTicket == null) return;
+        var traceId = Guid.NewGuid();
+        
+        await tracer.Ticket.Update.StartUseCase(GetType(), traceId);
+        
+        if (SelectedTicket == null)
+        {
+            await tracer.Ticket.Update.StartUseCase(GetType(), traceId);
+            return;
+        }
 
         SelectedTicket.Name = NewTicketName;
         SelectedTicket.BookingNumber = NewTicketBookingNumber;
 
         var updateTicketCommand =
-            new WebUpdateTicketCommand(SelectedTicket.TicketId, NewTicketName, NewTicketBookingNumber, SelectedTicket.SprintIds, Guid.NewGuid());
-        
+            new WebUpdateTicketCommand(SelectedTicket.TicketId, NewTicketName, NewTicketBookingNumber,
+                SelectedTicket.SprintIds, Guid.NewGuid());
+
         // TODO well there is no more ViewModel
-        await tracer.Ticket.Update.StartUseCase(GetType(), updateTicketCommand.TraceId, updateTicketCommand);
-        await tracer.Ticket.Update.CommandSent(GetType(), updateTicketCommand.TraceId, updateTicketCommand);
         
+        await tracer.Ticket.Update.SendingCommand(GetType(), updateTicketCommand.TraceId, updateTicketCommand);
         await commandSender.Send(updateTicketCommand.ToProto());
     }
 
@@ -40,8 +47,8 @@ public class TicketController(ITraceCollector tracer, ISharedCommandSender comma
 
         // TODO well there is no more ViewModel
         await tracer.Ticket.Create.StartUseCase(GetType(), createTicketCommand.TraceId, createTicketCommand);
-        await tracer.Ticket.Create.CommandSent(GetType(), createTicketCommand.TraceId, createTicketCommand);
         
+        await tracer.Ticket.Create.SendingCommand(GetType(), createTicketCommand.TraceId, createTicketCommand);
         await commandSender.Send(createTicketCommand.ToProto());
 
         NewTicketName = NewTicketBookingNumber = string.Empty;
@@ -75,18 +82,18 @@ public class TicketController(ITraceCollector tracer, ISharedCommandSender comma
 
     public async Task AddTicketToCurrentSprint()
     {
+        var traceId = Guid.NewGuid();
+
+        await tracer.Sprint.AddTicketToSprint.StartUseCase(GetType(), traceId);
         if (SelectedTicket == null)
         {
+            await tracer.Sprint.AddTicketToSprint.NoEntitySelected(GetType(), traceId);
             return;
         }
 
-        await commandSender.Send(new AddTicketToActiveSprintCommandProto
-        {
-            TicketId = SelectedTicket.TicketId.ToString(),
-            TraceData = new TraceDataProto()
-            {
-                TraceId = Guid.NewGuid().ToString()
-            }
-        });
+        var addTicketCommand = new WebAddTicketToSprintCommand(SelectedTicket.TicketId, traceId);
+        
+        await tracer.Sprint.AddTicketToSprint.SendingCommand(GetType(), traceId, addTicketCommand);
+        await commandSender.Send(addTicketCommand.ToProto());
     }
 }

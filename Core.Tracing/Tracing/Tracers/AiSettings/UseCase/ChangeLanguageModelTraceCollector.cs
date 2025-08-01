@@ -28,7 +28,7 @@ public class ChangeLanguageModelTraceCollector(ITracingDataCommandSender command
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.AiSettings,
             UseCaseMeta.ChangeLanguageModel,
-            LoggingMeta.CommandSent,
+            LoggingMeta.SendingCommand,
             originClassType,
             traceId,
             log,

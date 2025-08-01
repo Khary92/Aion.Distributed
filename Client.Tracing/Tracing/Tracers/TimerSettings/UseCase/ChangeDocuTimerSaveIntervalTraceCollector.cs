@@ -28,7 +28,7 @@ public class ChangeDocuTimerSaveIntervalTraceCollector(ITracingDataCommandSender
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
             UseCaseMeta.ChangeDocuTimerSaveInterval,
-            LoggingMeta.CommandSent,
+            LoggingMeta.SendingCommand,
             originClassType,
             traceId,
             log,

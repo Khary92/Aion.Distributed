@@ -29,7 +29,6 @@ public static class TracingServices
     private static void AddTicketTracingServices(this IServiceCollection services)
     {
         services.AddSingleton<ICreateTicketTraceCollector, CreateTicketTraceCollector>();
-        services.AddSingleton<IAddTicketToCurrentSprintTraceCollector, AddTicketToCurrentSprintTraceCollector>();
         services.AddSingleton<IUpdateTicketTraceCollector, UpdateTicketTraceCollector>();
 
         services.AddSingleton<ITicketUseCaseSelector, TicketUseCaseSelector>();

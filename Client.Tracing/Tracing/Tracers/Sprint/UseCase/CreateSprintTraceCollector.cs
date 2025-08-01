@@ -26,7 +26,7 @@ public class CreateSprintTraceCollector(ITracingDataCommandSender commandSender)
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Sprint,
             UseCaseMeta.CreateSprint,
-            LoggingMeta.CommandSent,
+            LoggingMeta.SendingCommand,
             originClassType,
             traceId,
             log,

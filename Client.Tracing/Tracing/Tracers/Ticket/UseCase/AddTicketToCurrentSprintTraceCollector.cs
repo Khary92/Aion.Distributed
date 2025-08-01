@@ -26,7 +26,7 @@ public class AddTicketToCurrentSprintTraceCollector(ITracingDataCommandSender co
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
             UseCaseMeta.AddTicketToCurrentSprint,
-            LoggingMeta.CommandSent,
+            LoggingMeta.SendingCommand,
             originClassType,
             traceId,
             log,

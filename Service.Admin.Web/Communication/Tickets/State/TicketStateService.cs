@@ -42,13 +42,18 @@ public class TicketStateService(ISharedRequestSender requestSender, ITraceCollec
         NotifyStateChanged();
     }
 
-    public async Task Apply(WebTicketDocumentationUpdatedNotification ticketDocumentationUpdatedNotification)
+    public async Task Apply(WebTicketDocumentationUpdatedNotification notification)
     {
-        var ticket = _tickets.FirstOrDefault(x => x.TicketId == ticketDocumentationUpdatedNotification.TicketId);
+        var ticket = _tickets.FirstOrDefault(x => x.TicketId == notification.TicketId);
 
-        if (ticket == null) return;
+        if (ticket == null)
+        {
+            await tracer.Sprint.AddTicketToSprint.NoAggregateFound(GetType(), notification.TraceId);
+            return;
+        }
 
-        ticket.Apply(ticketDocumentationUpdatedNotification);
+        ticket.Apply(notification);
+        await tracer.Sprint.AddTicketToSprint.ChangesApplied(GetType(), notification.TraceId);
         NotifyStateChanged();
     }
 

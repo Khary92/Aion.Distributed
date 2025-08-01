@@ -26,7 +26,7 @@ public class ChangeNoteTypeNameTraceCollector(ITracingDataCommandSender commandS
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.NoteType,
             UseCaseMeta.ChangeNoteTypeName,
-            LoggingMeta.CommandSent,
+            LoggingMeta.SendingCommand,
             originClassType,
             traceId,
             log,

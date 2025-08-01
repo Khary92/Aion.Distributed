@@ -25,7 +25,7 @@ public class UpdateNoteTraceCollector(ITracingDataCommandSender commandSender) :
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Note,
             UseCaseMeta.UpdateNote,
-            LoggingMeta.CommandSent,
+            LoggingMeta.SendingCommand,
             originClassType,
             traceId,
             log,

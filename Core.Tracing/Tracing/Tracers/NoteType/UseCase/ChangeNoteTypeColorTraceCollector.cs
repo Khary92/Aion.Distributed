@@ -26,7 +26,7 @@ public class ChangeNoteTypeColorTraceCollector(ITracingDataCommandSender command
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.NoteType,
             UseCaseMeta.ChangeNoteTypeColor,
-            LoggingMeta.CommandSent,
+            LoggingMeta.SendingCommand,
             originClassType,
             traceId,
             log,

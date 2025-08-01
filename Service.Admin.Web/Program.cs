@@ -13,7 +13,7 @@ builder.Services.AddWebServices();
 builder.Services.AddTracingServices();
 
 builder.Services.AddDataProtection()
-    .PersistKeysToFileSystem(new DirectoryInfo("/app/.aspnet/DataProtection-Keys"));
+    .PersistKeysToFileSystem(new DirectoryInfo("/app/DataProtection-Keys"));
 
 builder.Services.AddAntiforgery(options =>
 {

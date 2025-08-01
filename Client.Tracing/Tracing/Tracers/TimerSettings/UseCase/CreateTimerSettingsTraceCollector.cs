@@ -28,7 +28,7 @@ public class CreateTimerSettingsTraceCollector(ITracingDataCommandSender command
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
             UseCaseMeta.CreateTimerSettings,
-            LoggingMeta.CommandSent,
+            LoggingMeta.SendingCommand,
             originClassType,
             traceId,
             log,

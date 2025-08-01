@@ -27,7 +27,7 @@ public class UpdateSprintCollector(ITracingDataCommandSender commandSender) : IU
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Sprint,
             UseCaseMeta.UpdateSprint,
-            LoggingMeta.CommandSent,
+            LoggingMeta.SendingCommand,
             originClassType,
             traceId,
             log,

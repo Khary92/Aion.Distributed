@@ -26,7 +26,7 @@ public class TicketAddedToSprintCollector(ITracingDataCommandSender commandSende
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Sprint,
             UseCaseMeta.TicketAddedToSprint,
-            LoggingMeta.CommandSent,
+            LoggingMeta.SendingCommand,
             originClassType,
             traceId,
             log,

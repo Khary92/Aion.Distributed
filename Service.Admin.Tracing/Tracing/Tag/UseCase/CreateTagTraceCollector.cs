@@ -25,7 +25,7 @@ public class CreateTagTraceCollector(ITracingDataCommandSender commandSender) : 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Tag,
             UseCaseMeta.CreateTag,
-            LoggingMeta.CommandSent,
+            LoggingMeta.SendingCommand,
             originClassType,
             traceId,
             log,
