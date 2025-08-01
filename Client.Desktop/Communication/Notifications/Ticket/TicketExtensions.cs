@@ -13,20 +13,21 @@ public static class TicketExtensions
     {
         return new NewTicketMessage(
             new TicketClientModel(Guid.Parse(notification.TicketId), notification.Name, notification.BookingNumber,
-                string.Empty, notification.SprintIds.ToGuidList()));
+                string.Empty, notification.SprintIds.ToGuidList()), Guid.Parse(notification.TraceData.TraceId));
     }
 
     public static ClientTicketDataUpdatedNotification
         ToClientNotification(this TicketDataUpdatedNotification notification)
     {
         return new ClientTicketDataUpdatedNotification(Guid.Parse(notification.TicketId),
-            notification.Name, notification.BookingNumber, notification.SprintIds.ToGuidList());
+            notification.Name, notification.BookingNumber, notification.SprintIds.ToGuidList(),
+            Guid.Parse(notification.TraceData.TraceId));
     }
 
     public static ClientTicketDocumentationUpdatedNotification ToClientNotification(
         this TicketDocumentationUpdatedNotification notification)
     {
         return new ClientTicketDocumentationUpdatedNotification(Guid.Parse(notification.TicketId),
-            notification.Documentation);
+            notification.Documentation, Guid.Parse(notification.TraceData.TraceId));
     }
 }

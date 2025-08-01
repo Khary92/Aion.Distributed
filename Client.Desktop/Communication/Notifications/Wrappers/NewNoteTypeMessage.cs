@@ -1,5 +1,6 @@
+using System;
 using Client.Desktop.DataModels;
 
 namespace Client.Desktop.Communication.Notifications.Wrappers;
 
-public record NewNoteTypeMessage(NoteTypeClientModel NoteType);
+public record NewNoteTypeMessage(NoteTypeClientModel NoteType, Guid TraceId);

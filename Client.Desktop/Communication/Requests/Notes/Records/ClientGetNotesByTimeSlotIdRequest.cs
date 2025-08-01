@@ -2,4 +2,4 @@
 
 namespace Client.Desktop.Communication.Requests.Notes.Records;
 
-public record ClientGetNotesByTimeSlotIdRequest(Guid TimeSlotId);
+public record ClientGetNotesByTimeSlotIdRequest(Guid TimeSlotId, Guid TraceId);

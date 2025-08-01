@@ -11,14 +11,15 @@ public static class NoteExtensions
     public static NewNoteMessage ToNewEntityMessage(this NoteCreatedNotification notification)
     {
         return new NewNoteMessage(new NoteClientModel(
-            Guid.Parse(notification.NoteId), notification.Text, Guid.Parse(notification.NoteTypeId),
-            Guid.Parse(notification.TimeSlotId), notification.TimeStamp.ToDateTimeOffset()));
+                Guid.Parse(notification.NoteId), notification.Text, Guid.Parse(notification.NoteTypeId),
+                Guid.Parse(notification.TimeSlotId), notification.TimeStamp.ToDateTimeOffset()),
+            Guid.Parse(notification.TraceData.TraceId));
     }
 
     public static ClientNoteUpdatedNotification ToClientNotification(this NoteUpdatedNotification notification)
     {
         return new ClientNoteUpdatedNotification(
             Guid.Parse(notification.NoteId), notification.Text, Guid.Parse(notification.NoteTypeId),
-            Guid.Parse(notification.TimeSlotId));
+            Guid.Parse(notification.TimeSlotId), Guid.Parse(notification.TraceData.TraceId));
     }
 }

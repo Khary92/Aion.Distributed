@@ -2,11 +2,13 @@ syntax = "proto3";
 
 import "DTO/time_slot_control_data.proto";
 import "google/protobuf/timestamp.proto";
+import "DTO/trace_data.proto";
 
 option csharp_namespace = "Proto.Requests.UseCase";
 
 message GetTimeSlotControlDataRequestProto {
   google.protobuf.Timestamp date = 1;
+  TraceDataProto traceData = 2;
 }
 
 message TimeSlotControlDataListProto {

@@ -2,4 +2,4 @@
 
 namespace Client.Desktop.Communication.Requests.WorkDays.Records;
 
-public record ClientGetSelectedWorkDayRequest(Guid WorkDayId);
+public record ClientGetSelectedWorkDayRequest(Guid WorkDayId, Guid TraceId);

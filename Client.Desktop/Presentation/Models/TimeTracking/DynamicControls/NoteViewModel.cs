@@ -12,7 +12,6 @@ using Client.Desktop.Communication.Requests.NoteType;
 using Client.Desktop.DataModels;
 using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
-using Proto.Requests.NoteTypes;
 using ReactiveUI;
 using Unit = System.Reactive.Unit;
 
@@ -76,7 +75,7 @@ public class NoteViewModel : ReactiveObject
     public async Task Initialize()
     {
         NoteTypes.Clear();
-        var noteTypeDtos = await _requestSender.Send(new ClientGetAllNoteTypesRequest());
+        var noteTypeDtos = await _requestSender.Send(new ClientGetAllNoteTypesRequest(Guid.NewGuid()));
         NoteTypes.AddRange(noteTypeDtos);
 
         if (Note.NoteTypeId == Guid.Empty || !NoteTypes.Any()) return;

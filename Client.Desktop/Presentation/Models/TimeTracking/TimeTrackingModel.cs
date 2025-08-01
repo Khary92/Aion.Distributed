@@ -73,12 +73,12 @@ public class TimeTrackingModel(
 
     public async Task InitializeAsync()
     {
-        var currentSprint = await requestSender.Send(new ClientGetActiveSprintRequest());
+        var currentSprint = await requestSender.Send(new ClientGetActiveSprintRequest(Guid.NewGuid()));
 
         if (currentSprint == null) return;
 
         FilteredTickets.Clear();
-        var tickets = await requestSender.Send(new ClientGetTicketsForCurrentSprintRequest());
+        var tickets = await requestSender.Send(new ClientGetTicketsForCurrentSprintRequest(Guid.NewGuid()));
         ListEx.AddRange(FilteredTickets, tickets);
     }
 
@@ -88,7 +88,7 @@ public class TimeTrackingModel(
         {
             AllTickets.Add(message.Ticket);
 
-            var currentSprint = await requestSender.Send(new ClientGetActiveSprintRequest());
+            var currentSprint = await requestSender.Send(new ClientGetActiveSprintRequest(Guid.NewGuid()));
 
             if (currentSprint == null) return;
 
@@ -125,11 +125,11 @@ public class TimeTrackingModel(
         {
             FilteredTickets.Clear();
 
-            var currentSprint = await requestSender.Send(new ClientGetActiveSprintRequest());
+            var currentSprint = await requestSender.Send(new ClientGetActiveSprintRequest(Guid.NewGuid()));
 
             if (currentSprint == null) throw new InvalidOperationException("No active sprint");
 
-            var ticketDtos = await requestSender.Send(new ClientGetAllTicketsRequest());
+            var ticketDtos = await requestSender.Send(new ClientGetAllTicketsRequest(Guid.NewGuid()));
             foreach (var modelTicket in ticketDtos.Where(modelTicket =>
                          modelTicket.SprintIds.Contains(currentSprint.SprintId)))
                 FilteredTickets.Add(modelTicket);
@@ -139,11 +139,11 @@ public class TimeTrackingModel(
         {
             FilteredTickets.Clear();
 
-            var currentSprint = await requestSender.Send(new ClientGetActiveSprintRequest());
+            var currentSprint = await requestSender.Send(new ClientGetActiveSprintRequest(Guid.NewGuid()));
 
             if (currentSprint == null) throw new InvalidOperationException("No active sprint");
 
-            var ticketDtos = await requestSender.Send(new ClientGetAllTicketsRequest());
+            var ticketDtos = await requestSender.Send(new ClientGetAllTicketsRequest(Guid.NewGuid()));
 
             foreach (var ticket in ticketDtos.Where(modelTicket =>
                          modelTicket.SprintIds.Contains(currentSprint.SprintId)))
@@ -177,7 +177,8 @@ public class TimeTrackingModel(
         TimeSlotViewModels.Clear();
 
         var controlDataList =
-            await requestSender.Send(new ClientGetTimeSlotControlDataRequest(localSettingsService.SelectedDate));
+            await requestSender.Send(
+                new ClientGetTimeSlotControlDataRequest(localSettingsService.SelectedDate, Guid.NewGuid()));
 
         foreach (var controlData in controlDataList)
         {

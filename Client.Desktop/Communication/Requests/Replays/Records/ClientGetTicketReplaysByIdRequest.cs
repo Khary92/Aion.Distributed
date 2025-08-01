@@ -2,4 +2,4 @@
 
 namespace Client.Desktop.Communication.Requests.Replays.Records;
 
-public record ClientGetTicketReplaysByIdRequest(Guid TicketId);
+public record ClientGetTicketReplaysByIdRequest(Guid TicketId, Guid TraceId);

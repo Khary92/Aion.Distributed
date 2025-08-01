@@ -2,4 +2,4 @@
 
 namespace Client.Desktop.Communication.Requests.StatisticsData.Records;
 
-public record ClientGetStatisticsDataByTimeSlotIdRequest(Guid TimeSlotId);
+public record ClientGetStatisticsDataByTimeSlotIdRequest(Guid TimeSlotId, Guid TraceId);

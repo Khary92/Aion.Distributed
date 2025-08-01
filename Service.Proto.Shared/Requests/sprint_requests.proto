@@ -1,11 +1,16 @@
 syntax = "proto3";
 import "DTO/sprint.proto";
+import "DTO/trace_data.proto";
 
 option csharp_namespace = "Proto.Requests.Sprints";
 
-message GetActiveSprintRequestProto {}
+message GetActiveSprintRequestProto {
+  TraceDataProto traceData = 1;
+}
 
-message GetAllSprintsRequestProto {}
+message GetAllSprintsRequestProto {
+  TraceDataProto traceData = 1;
+}
 
 message SprintListProto {
   repeated SprintProto sprints = 1;

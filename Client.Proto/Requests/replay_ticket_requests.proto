@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 import "DTO/replay_ticket.proto";
+import "DTO/trace_data.proto";
 
 option csharp_namespace = "Proto.Requests.TicketReplay";
 
@@ -11,6 +12,7 @@ message GetReplayResponseProto {
 
 message GetTicketReplaysByIdRequestProto {
   string note_type_id = 1;
+  TraceDataProto traceData = 2;
 }
 
 service TicketReplayRequestService {

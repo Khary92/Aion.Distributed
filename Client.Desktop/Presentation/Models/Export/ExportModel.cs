@@ -9,14 +9,12 @@ using Client.Desktop.DataModels;
 using Client.Desktop.DataModels.Local;
 using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Register;
-using Client.Desktop.Services;
 using Client.Desktop.Services.Export;
 using Client.Desktop.Services.LocalSettings;
 using Client.Desktop.Services.LocalSettings.Commands;
 using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
-using Proto.Requests.WorkDays;
 using ReactiveUI;
 
 namespace Client.Desktop.Presentation.Models.Export;
@@ -48,13 +46,12 @@ public class ExportModel(
         SelectedWorkDays.CollectionChanged += RefreshMarkdownViewerHandler;
 
         WorkDays.Clear();
-        WorkDays.AddRange(await requestSender.Send(new ClientGetAllWorkDaysRequest()));
+        WorkDays.AddRange(await requestSender.Send(new ClientGetAllWorkDaysRequest(Guid.NewGuid())));
     }
 
     public void RegisterMessenger()
     {
-        messenger.Register<ExportPathSetNotification>(this,
-            async void (_, m) => { Settings!.ExportPath = m.ExportPath; });
+        messenger.Register<ExportPathSetNotification>(this, void (_, m) => { Settings!.ExportPath = m.ExportPath; });
 
         messenger.Register<SettingsClientModel>(this, (_, m) => { Settings = m; });
 

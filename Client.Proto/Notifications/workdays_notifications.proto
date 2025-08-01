@@ -3,6 +3,7 @@ syntax = "proto3";
 option csharp_namespace = "Proto.Notifications.WorkDay";
 
 import "google/protobuf/timestamp.proto";
+import "DTO/trace_data.proto";
 
 service NotificationService {
   rpc SendWorkDayCreated(WorkDayCreatedNotification) returns (NotificationResponse);
@@ -21,10 +22,12 @@ message WorkDayNotification {
 message WorkDayCreatedNotification {
   string workDayId = 1;
   google.protobuf.Timestamp date = 2;
+  TraceDataProto traceData = 3;
 }
 
 message NotificationResponse {
   bool success = 1;
+  TraceDataProto traceData = 2;
 }
 
 message SubscribeRequest {}

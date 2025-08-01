@@ -1,3 +1,5 @@
-﻿namespace Client.Desktop.Communication.Notifications.UseCase.Records;
+﻿using System;
 
-public record ClientSaveDocumentationNotification;
+namespace Client.Desktop.Communication.Notifications.UseCase.Records;
+
+public record ClientSaveDocumentationNotification(Guid TraceId);

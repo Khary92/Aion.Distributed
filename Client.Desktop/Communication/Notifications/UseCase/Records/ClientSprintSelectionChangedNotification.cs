@@ -1,3 +1,5 @@
-﻿namespace Client.Desktop.Communication.Notifications.UseCase.Records;
+﻿using System;
 
-public record ClientSprintSelectionChangedNotification;
+namespace Client.Desktop.Communication.Notifications.UseCase.Records;
+
+public record ClientSprintSelectionChangedNotification(Guid TraceId);

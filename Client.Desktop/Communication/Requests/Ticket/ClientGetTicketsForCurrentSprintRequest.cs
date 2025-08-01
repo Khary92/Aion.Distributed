@@ -1,3 +1,5 @@
-﻿namespace Client.Desktop.Communication.Requests.Ticket;
+﻿using System;
 
-public record ClientGetTicketsForCurrentSprintRequest();
+namespace Client.Desktop.Communication.Requests.Ticket;
+
+public record ClientGetTicketsForCurrentSprintRequest(Guid TraceId);

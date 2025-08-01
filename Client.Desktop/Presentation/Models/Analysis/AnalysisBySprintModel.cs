@@ -1,3 +1,4 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
@@ -13,8 +14,6 @@ using Client.Desktop.DataModels.Decorators;
 using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Register;
 using CommunityToolkit.Mvvm.Messaging;
-using Proto.Requests.AnalysisData;
-using Proto.Requests.Sprints;
 using ReactiveUI;
 
 namespace Client.Desktop.Presentation.Models.Analysis;
@@ -39,7 +38,7 @@ public class AnalysisBySprintModel(IMessenger messenger, IRequestSender requestS
     public async Task InitializeAsync()
     {
         Sprints.Clear();
-        Sprints!.AddRange(await requestSender.Send(new ClientGetAllSprintsRequest()));
+        Sprints!.AddRange(await requestSender.Send(new ClientGetAllSprintsRequest(Guid.NewGuid())));
     }
 
     public void RegisterMessenger()
@@ -154,6 +153,6 @@ public class AnalysisBySprintModel(IMessenger messenger, IRequestSender requestS
 
     public async Task SetAnalysisForSprint(SprintClientModel selectedSprint)
     {
-        AnalysisBySprint = await requestSender.Send(new ClientGetSprintAnalysisById(selectedSprint.SprintId));
+        AnalysisBySprint = await requestSender.Send(new ClientGetSprintAnalysisById(selectedSprint.SprintId, Guid.NewGuid()));
     }
 }

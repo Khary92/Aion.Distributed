@@ -47,7 +47,7 @@ public class StatisticsViewModel(
     {
         AvailableTags.Clear();
 
-        var tagDtos = await requestSender.Send(new ClientGetAllTagsRequest());
+        var tagDtos = await requestSender.Send(new ClientGetAllTagsRequest(Guid.NewGuid()));
 
         foreach (var tagDto in tagDtos) AvailableTags.Add(tagCheckBoxViewFactory.Create(tagDto));
 

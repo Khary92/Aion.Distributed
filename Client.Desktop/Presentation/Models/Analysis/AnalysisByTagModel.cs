@@ -1,3 +1,4 @@
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -34,7 +35,7 @@ public class AnalysisByTagModel(IRequestSender requestSender, IMessenger messeng
     public async Task InitializeAsync()
     {
         Tags.Clear();
-        Tags.AddRange(await requestSender.Send(new ClientGetAllTagsRequest()));
+        Tags.AddRange(await requestSender.Send(new ClientGetAllTagsRequest(Guid.NewGuid())));
     }
 
     public void RegisterMessenger()
@@ -53,6 +54,6 @@ public class AnalysisByTagModel(IRequestSender requestSender, IMessenger messeng
 
     public async Task SetAnalysisForTag(TagClientModel selectedTag)
     {
-        AnalysisByTag = await requestSender.Send(new ClientGetTagAnalysisById(selectedTag.TagId));
+        AnalysisByTag = await requestSender.Send(new ClientGetTagAnalysisById(selectedTag.TagId, Guid.NewGuid()));
     }
 }

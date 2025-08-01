@@ -35,9 +35,9 @@ public class WorkDaysModel(
     public async Task InitializeAsync()
     {
         WorkDays.Clear();
-        WorkDays.AddRange(await requestSender.Send(new ClientGetAllWorkDaysRequest()));
+        WorkDays.AddRange(await requestSender.Send(new ClientGetAllWorkDaysRequest(Guid.NewGuid())));
 
-        if (!await requestSender.Send(new ClientIsWorkDayExistingRequest(DateTimeOffset.Now)))
+        if (!await requestSender.Send(new ClientIsWorkDayExistingRequest(DateTimeOffset.Now, Guid.NewGuid())))
         {
             await commandSender.Send(new ClientCreateWorkDayCommand(Guid.NewGuid(), DateTimeOffset.Now,
                 Guid.NewGuid()));
@@ -57,7 +57,7 @@ public class WorkDaysModel(
 
     public async Task AddWorkDayAsync(DateTimeOffset date)
     {
-        var existingWorkDay = await requestSender.Send(new ClientGetWorkDayByDateRequest(DateTimeOffset.Now));
+        var existingWorkDay = await requestSender.Send(new ClientGetWorkDayByDateRequest(DateTimeOffset.Now, Guid.NewGuid()));
 
         //TODO There is something wrong
         if (existingWorkDay != null)

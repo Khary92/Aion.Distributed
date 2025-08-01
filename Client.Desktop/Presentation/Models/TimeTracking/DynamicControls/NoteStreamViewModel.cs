@@ -12,7 +12,6 @@ using Client.Desktop.DataModels;
 using Client.Desktop.Presentation.Factories;
 using Client.Desktop.Services.LocalSettings;
 using CommunityToolkit.Mvvm.Messaging;
-using Proto.Requests.Notes;
 using ReactiveUI;
 
 namespace Client.Desktop.Presentation.Models.TimeTracking.DynamicControls;
@@ -60,7 +59,7 @@ public class NoteStreamViewModel(
 
     public async Task InitializeAsync()
     {
-        var noteDtos = await requestSender.Send(new ClientGetNotesByTimeSlotIdRequest(TimeSlotId));
+        var noteDtos = await requestSender.Send(new ClientGetNotesByTimeSlotIdRequest(TimeSlotId, Guid.NewGuid()));
         foreach (var note in noteDtos) await InsertNoteViewModel(note);
     }
 

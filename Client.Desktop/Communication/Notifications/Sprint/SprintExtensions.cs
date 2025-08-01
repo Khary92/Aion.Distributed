@@ -14,32 +14,35 @@ public static class SprintExtensions
         return new NewSprintMessage(
             new SprintClientModel(Guid.Parse(notification.SprintId), notification.Name, notification.IsActive,
                 notification.StartTime.ToDateTimeOffset(), notification.EndTime.ToDateTimeOffset(),
-                notification.TicketIds.ToGuidList()));
+                notification.TicketIds.ToGuidList()), Guid.Parse(notification.TraceData.TraceId));
     }
 
     public static ClientSprintActiveStatusSetNotification
         ToClientNotification(this SprintActiveStatusSetNotification notification)
     {
-        return new ClientSprintActiveStatusSetNotification(Guid.Parse(notification.SprintId), notification.IsActive);
+        return new ClientSprintActiveStatusSetNotification(Guid.Parse(notification.SprintId), notification.IsActive,
+            Guid.Parse(notification.TraceData.TraceId));
     }
 
     public static ClientSprintDataUpdatedNotification
         ToClientNotification(this SprintDataUpdatedNotification notification)
     {
         return new ClientSprintDataUpdatedNotification(Guid.Parse(notification.SprintId),
-            notification.Name, notification.StartTime.ToDateTimeOffset(), notification.EndTime.ToDateTimeOffset());
+            notification.Name, notification.StartTime.ToDateTimeOffset(), notification.EndTime.ToDateTimeOffset(),
+            Guid.Parse(notification.TraceData.TraceId));
     }
 
     public static ClientTicketAddedToActiveSprintNotification ToClientNotification(
         this TicketAddedToActiveSprintNotification notification)
     {
-        return new ClientTicketAddedToActiveSprintNotification(Guid.Parse(notification.TicketId));
+        return new ClientTicketAddedToActiveSprintNotification(Guid.Parse(notification.TicketId),
+            Guid.Parse(notification.TraceData.TraceId));
     }
 
     public static ClientTicketAddedToSprintNotification
         ToClientNotification(this TicketAddedToSprintNotification notification)
     {
         return new ClientTicketAddedToSprintNotification(Guid.Parse(notification.SprintId),
-            Guid.Parse(notification.TicketId));
+            Guid.Parse(notification.TicketId), Guid.Parse(notification.TraceData.TraceId));
     }
 }

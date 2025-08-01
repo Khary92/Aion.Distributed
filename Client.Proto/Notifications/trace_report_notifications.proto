@@ -2,8 +2,6 @@
 
 option csharp_namespace = "Proto.Notifications.TraceReports";
 
-package Proto.Notifications.TraceReports;
-
 service NotificationService {
   rpc SendTraceReportSent(TraceReportSentNotification) returns (NotificationResponse);
 }

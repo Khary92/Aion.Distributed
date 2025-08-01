@@ -1,3 +1,5 @@
-﻿namespace Client.Desktop.Communication.Notifications.UseCase.Records;
+﻿using System;
 
-public record ClientCreateSnapshotNotification;
+namespace Client.Desktop.Communication.Notifications.UseCase.Records;
+
+public record ClientCreateSnapshotNotification(Guid TraceId);

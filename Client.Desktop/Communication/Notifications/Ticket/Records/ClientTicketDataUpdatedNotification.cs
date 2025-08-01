@@ -7,4 +7,5 @@ public record ClientTicketDataUpdatedNotification(
     Guid TicketId,
     string Name,
     string BookingNumber,
-    List<Guid> SprintIds);
+    List<Guid> SprintIds,
+    Guid TraceId);

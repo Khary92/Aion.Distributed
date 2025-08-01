@@ -1,11 +1,14 @@
 syntax = "proto3";
 
 import "DTO/note_type.proto";
+import "DTO/trace_data.proto";
 
 option csharp_namespace = "Proto.Requests.NoteTypes";
 
 
-message GetAllNoteTypesRequestProto {}
+message GetAllNoteTypesRequestProto {
+  TraceDataProto traceData = 1;
+}
 
 message GetAllNoteTypesResponseProto {
   repeated NoteTypeProto note_types = 1;
@@ -13,6 +16,7 @@ message GetAllNoteTypesResponseProto {
 
 message GetNoteTypeByIdRequestProto {
   string note_type_id = 1;
+  TraceDataProto traceData = 2;
 }
 
 service NoteTypeProtoRequestService {

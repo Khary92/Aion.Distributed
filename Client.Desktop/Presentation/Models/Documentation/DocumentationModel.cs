@@ -75,7 +75,7 @@ public class DocumentationModel(
 
     public async Task InitializeAsync()
     {
-        var noteTypeDtos = await requestSender.Send(new ClientGetAllNoteTypesRequest());
+        var noteTypeDtos = await requestSender.Send(new ClientGetAllNoteTypesRequest(Guid.NewGuid()));
 
         Options.Clear();
 
@@ -90,7 +90,7 @@ public class DocumentationModel(
         }
 
         AllTickets.Clear();
-        AllTickets.AddRange(await requestSender.Send(new ClientGetAllTicketsRequest()));
+        AllTickets.AddRange(await requestSender.Send(new ClientGetAllTicketsRequest(Guid.NewGuid())));
 
         if (AllTickets.Any()) SelectedTicket = AllTickets[0];
     }
@@ -106,7 +106,7 @@ public class DocumentationModel(
     {
         if (SelectedTicket == null) return;
 
-        var noteDtos = await requestSender.Send(new ClientGetNotesByTicketIdRequest(SelectedTicket.TicketId));
+        var noteDtos = await requestSender.Send(new ClientGetNotesByTicketIdRequest(SelectedTicket.TicketId, Guid.NewGuid()));
 
         var noteViewModels = await Task.WhenAll(noteDtos.Select(noteViewFactory.Create));
 
@@ -162,7 +162,7 @@ public class DocumentationModel(
                     return;
                 }
 
-                var noteType = await requestSender.Send(new ClientGetNoteTypeByIdRequest(notification.NoteTypeId));
+                var noteType = await requestSender.Send(new ClientGetNoteTypeByIdRequest(notification.NoteTypeId, Guid.NewGuid()));
 
                 noteViewModel.Note.NoteType = noteType;
                 noteViewModel.Note.Apply(notification);
@@ -203,7 +203,7 @@ public class DocumentationModel(
                 return;
             }
 
-            typeCheckBoxViewModel.NoteType!.Apply(notification);
+            typeCheckBoxViewModel.NoteType.Apply(notification);
         });
 
         messenger.Register<ClientNoteTypeColorChangedNotification>(this, (_, notification) =>

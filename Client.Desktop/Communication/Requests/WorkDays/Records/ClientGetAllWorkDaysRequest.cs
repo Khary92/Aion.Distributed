@@ -1,3 +1,5 @@
-﻿namespace Client.Desktop.Communication.Requests.WorkDays.Records;
+﻿using System;
 
-public record ClientGetAllWorkDaysRequest();
+namespace Client.Desktop.Communication.Requests.WorkDays.Records;
+
+public record ClientGetAllWorkDaysRequest(Guid TraceId);

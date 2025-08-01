@@ -1,6 +1,7 @@
 syntax = "proto3";
 
 import "DTO/time_slot_control_data.proto";
+import "DTO/trace_data.proto";
 
 option csharp_namespace = "Proto.Notifications.UseCase";
 
@@ -28,21 +29,30 @@ message UseCaseNotification {
   }
 }
 
-message CreateSnapshotNotification {}
+message CreateSnapshotNotification {
+  TraceDataProto traceData = 1;
+}
 
-message SaveDocumentationNotification {}
+message SaveDocumentationNotification {
+  TraceDataProto traceData = 1;
+}
 
-message SprintSelectionChangedNotification {}
+message SprintSelectionChangedNotification {
+  TraceDataProto traceData = 1;
+}
 
 message TimeSlotControlCreatedNotification {
   TimeSlotControlDataProto time_slot_control_data = 1;
+  TraceDataProto traceData = 2;
 }
 
 message TraceReportSentNotification {
   string traceReportDto = 1;
 }
 
-message WorkDaySelectionChangedNotification {}
+message WorkDaySelectionChangedNotification {
+  TraceDataProto traceData = 1;
+}
 
 message NotificationResponse {
   bool success = 1;

@@ -2,4 +2,4 @@
 
 namespace Client.Desktop.Communication.Requests.TimeSlots.Records;
 
-public record ClientGetTimeSlotsForWorkDayIdRequest(Guid WorkDayId);
+public record ClientGetTimeSlotsForWorkDayIdRequest(Guid WorkDayId, Guid TraceId);

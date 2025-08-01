@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Client.Desktop.Communication.Notifications;
 using Client.Desktop.Communication.Requests.UseCase.Records;
@@ -19,5 +20,5 @@ public static class UseCaseRequestExtensions
 
     private static ClientGetTimeSlotControlResponse ToResponseData(this TimeSlotControlDataProto proto) => new(
         proto.StatisticsDataProto.ToClientModel(), proto.TicketProto.ToClientModel(),
-        proto.TimeSlotProto.ToClientModel());
+        proto.TimeSlotProto.ToClientModel(), Guid.Parse(proto.TraceData.TraceId));
 }

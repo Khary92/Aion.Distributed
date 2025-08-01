@@ -2,7 +2,7 @@
 
 option csharp_namespace = "Proto.Notifications.StatisticsData";
 
-package Proto.Notifications.StatisticsData;
+import "DTO/trace_data.proto";
 
 service NotificationService {
   rpc SendChangeProductivity(ChangeProductivityNotification) returns (NotificationResponse);
@@ -29,11 +29,13 @@ message ChangeProductivityNotification {
   bool isProductive = 2;
   bool isNeutral = 3;
   bool isUnproductive = 4;
+  TraceDataProto traceData = 5;
 }
 
 message ChangeTagSelectionNotification {
   string statisticsDataId = 1;
   repeated string selectedTagIds = 2;
+  TraceDataProto traceData = 3;
 }
 
 message StatisticsDataCreatedNotification {
@@ -43,6 +45,7 @@ message StatisticsDataCreatedNotification {
   bool isUnproductive = 4;
   repeated string tagIds = 5;
   string timeSlotId = 6;
+  TraceDataProto traceData = 7;
 }
 
 message NotificationResponse {

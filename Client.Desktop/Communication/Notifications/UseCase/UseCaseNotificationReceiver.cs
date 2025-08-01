@@ -2,7 +2,6 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
-using Client.Desktop.Communication.Notifications.UseCase.Records;
 using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
 using CommunityToolkit.Mvvm.Messaging;
 using Grpc.Core;
@@ -35,14 +34,17 @@ public class UseCaseNotificationReceiver(
                         }
                         case UseCaseNotification.NotificationOneofCase.CreateSnapshot:
                         {
-                            Dispatcher.UIThread.Post(() => { messenger.Send(new ClientCreateSnapshotNotification()); });
+                            Dispatcher.UIThread.Post(() =>
+                            {
+                                messenger.Send(notification.CreateSnapshot.ToClientNotification());
+                            });
                             break;
                         }
                         case UseCaseNotification.NotificationOneofCase.SaveDocumentation:
                         {
                             Dispatcher.UIThread.Post(() =>
                             {
-                                messenger.Send(new ClientSaveDocumentationNotification());
+                                messenger.Send(notification.SaveDocumentation.ToClientNotification());
                             });
                             break;
                         }
@@ -50,7 +52,7 @@ public class UseCaseNotificationReceiver(
                         {
                             Dispatcher.UIThread.Post(() =>
                             {
-                                messenger.Send(new ClientSprintSelectionChangedNotification());
+                                messenger.Send(notification.SprintSelectionChanged.ToClientNotification());
                             });
                             break;
                         }
@@ -58,7 +60,7 @@ public class UseCaseNotificationReceiver(
                         {
                             Dispatcher.UIThread.Post(() =>
                             {
-                                messenger.Send(new ClientWorkDaySelectionChangedNotification());
+                                messenger.Send(notification.WorkDaySelectionChanged.ToClientNotification());
                             });
                             break;
                         }

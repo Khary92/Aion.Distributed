@@ -2,4 +2,4 @@
 
 namespace Client.Desktop.Communication.Requests.UseCase.Records;
 
-public record ClientGetTimeSlotControlDataRequest(DateTimeOffset Date);
+public record ClientGetTimeSlotControlDataRequest(DateTimeOffset Date, Guid TraceId);

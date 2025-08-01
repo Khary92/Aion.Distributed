@@ -2,4 +2,4 @@
 
 namespace Client.Desktop.Communication.Requests.TimeSlots.Records;
 
-public record ClientGetTimeSlotByIdRequest(Guid TimeSlotId);
+public record ClientGetTimeSlotByIdRequest(Guid TimeSlotId, Guid TraceId);

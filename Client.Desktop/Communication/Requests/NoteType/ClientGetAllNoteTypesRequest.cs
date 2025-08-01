@@ -1,3 +1,5 @@
-﻿namespace Client.Desktop.Communication.Requests.NoteType;
+﻿using System;
 
-public record ClientGetAllNoteTypesRequest();
+namespace Client.Desktop.Communication.Requests.NoteType;
+
+public record ClientGetAllNoteTypesRequest(Guid TraceId);

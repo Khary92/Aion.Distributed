@@ -10,11 +10,13 @@ public static class TagExtensions
 {
     public static NewTagMessage ToNewEntityMessage(this TagCreatedNotification notification)
     {
-        return new NewTagMessage(new TagClientModel(Guid.Parse(notification.TagId), notification.Name, false));
+        return new NewTagMessage(new TagClientModel(Guid.Parse(notification.TagId), notification.Name, false),
+            Guid.Parse(notification.TraceData.TraceId));
     }
 
     public static ClientTagUpdatedNotification ToClientNotification(this TagUpdatedNotification notification)
     {
-        return new ClientTagUpdatedNotification(Guid.Parse(notification.TagId), notification.Name);
+        return new ClientTagUpdatedNotification(Guid.Parse(notification.TagId), notification.Name,
+            Guid.Parse(notification.TraceData.TraceId));
     }
 }

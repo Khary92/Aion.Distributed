@@ -2,4 +2,4 @@
 
 namespace Client.Desktop.Communication.Notifications.Sprint.Records;
 
-public record ClientTicketAddedToActiveSprintNotification(Guid TicketId);
+public record ClientTicketAddedToActiveSprintNotification(Guid TicketId, Guid TraceId);

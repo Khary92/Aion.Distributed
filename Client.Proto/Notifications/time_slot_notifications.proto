@@ -3,6 +3,7 @@
 option csharp_namespace = "Proto.Notifications.TimeSlots";
 
 import "google/protobuf/timestamp.proto";
+import "DTO/trace_data.proto";
 
 service NotificationService {
   rpc SendTimeSlotCreated(TimeSlotCreatedNotification) returns (NotificationResponse);
@@ -33,21 +34,25 @@ message TimeSlotCreatedNotification {
   google.protobuf.Timestamp startTime = 4;
   google.protobuf.Timestamp endTime = 5;
   bool isTimerRunning = 6;
+  TraceDataProto traceData = 7;
 }
 
 message NoteAddedToTimeSlotNotification {
   string timeSlotId = 1;
   string noteId = 2;
+  TraceDataProto traceData = 3;
 }
 
 message StartTimeSetNotification {
   string timeSlotId = 1;
   google.protobuf.Timestamp time = 2;
+  TraceDataProto traceData = 3;
 }
 
 message EndTimeSetNotification {
   string timeSlotId = 1;
   google.protobuf.Timestamp time = 2;
+  TraceDataProto traceData = 3;
 }
 
 message NotificationResponse {

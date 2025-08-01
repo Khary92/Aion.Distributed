@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+import "DTO/trace_data.proto";
+
 option csharp_namespace = "Proto.Notifications.NoteType";
 
 service NotificationService {
@@ -26,17 +28,20 @@ message SubscribeRequest {
 message NoteTypeColorChangedNotification {
   string noteTypeId = 1;
   string color = 2;
+  TraceDataProto traceData = 3;
 }
 
 message NoteTypeCreatedNotification {
   string noteTypeId = 1;
   string name = 2;
   string color = 3;
+  TraceDataProto traceData = 4;
 }
 
 message NoteTypeNameChangedNotification {
   string noteTypeId = 1;
   string name = 2;
+  TraceDataProto traceData = 3;
 }
 
 message NotificationResponse {

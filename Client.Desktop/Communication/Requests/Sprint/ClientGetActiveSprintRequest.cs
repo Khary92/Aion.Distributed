@@ -1,3 +1,5 @@
-﻿namespace Client.Desktop.Communication.Requests.Sprint;
+﻿using System;
 
-public record ClientGetActiveSprintRequest();
+namespace Client.Desktop.Communication.Requests.Sprint;
+
+public record ClientGetActiveSprintRequest(Guid TraceId);

@@ -1,13 +1,17 @@
 syntax = "proto3";
+
 import "DTO/timer_settings.proto";
+import "DTO/trace_data.proto";
 
 option csharp_namespace = "Proto.Requests.TimerSettings";
 
-package contract.requests;
+message GetTimerSettingsRequestProto {
+  TraceDataProto traceData = 1;
+}
 
-message GetTimerSettingsRequestProto {}
-
-message IsTimerSettingExistingRequestProto {}
+message IsTimerSettingExistingRequestProto {
+  TraceDataProto traceData = 1;
+}
 
 message TimerSettingExistsProto {
   bool exists = 1;

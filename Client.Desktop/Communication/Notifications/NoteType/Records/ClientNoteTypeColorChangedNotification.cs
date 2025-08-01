@@ -2,4 +2,4 @@
 
 namespace Client.Desktop.Communication.Notifications.NoteType.Records;
 
-public record ClientNoteTypeColorChangedNotification(Guid NoteTypeId, string Color);
+public record ClientNoteTypeColorChangedNotification(Guid NoteTypeId, string Color, Guid TraceId);
