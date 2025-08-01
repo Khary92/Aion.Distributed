@@ -1,9 +1,6 @@
-using Google.Protobuf.WellKnownTypes;
-using Proto.Command.Sprints;
-using Proto.DTO.TraceData;
 using Service.Admin.Tracing;
+using Service.Admin.Web.Communication.Sprints.Records;
 using Service.Admin.Web.Models;
-using Service.Admin.Web.Pages;
 
 namespace Service.Admin.Web.Communication.Sprints;
 
@@ -42,76 +39,64 @@ public class SprintController(ISharedCommandSender commandSender, ITraceCollecto
 
     public async Task SetSelectedSprintActive()
     {
+        var traceId = Guid.NewGuid();
+        await tracer.Sprint.ActiveStatus.StartUseCase(GetType(), traceId);
+
         if (SelectedSprint == null)
-            return;
-
-        await tracer.Sprint.ActiveStatus.StartUseCase(GetType(), SelectedSprint.SprintId,
-            SelectedSprint.AsTraceAttributes());
-
-        var command = new SetSprintActiveStatusCommandProto
         {
-            SprintId = SelectedSprint.SprintId.ToString(),
-            IsActive = true,
-            TraceData = new TraceDataProto()
-            {
-                TraceId = Guid.NewGuid().ToString()
-            }
-        };
-
-        await commandSender.Send(command);
-        await tracer.Sprint.ActiveStatus.CommandSent(GetType(), SelectedSprint.SprintId, command);
-    }
-
-    public async Task PersistSprint()
-    {
-        if (IsEditMode && SelectedSprint != null)
-        {
-            var updateSprintDto = new SprintWebModel(SelectedSprint.SprintId, NewSprintName,
-                SelectedSprint.IsActive, StartTime, EndTime, SelectedSprint.TicketIds);
-
-            await tracer.Sprint.Update.StartUseCase(GetType(), updateSprintDto.SprintId,
-                updateSprintDto.AsTraceAttributes());
-
-            var command = new UpdateSprintDataCommandProto
-            {
-                SprintId = updateSprintDto.SprintId.ToString(),
-                Name = updateSprintDto.Name,
-                StartTime = Timestamp.FromDateTime(updateSprintDto.StartTime.UtcDateTime),
-                EndTime = Timestamp.FromDateTime(updateSprintDto.EndTime.UtcDateTime),
-                TraceData = new TraceDataProto()
-                {
-                    TraceId = Guid.NewGuid().ToString()
-                }
-            };
-
-            await commandSender.Send(command);
-            await tracer.Sprint.ActiveStatus.CommandSent(GetType(), updateSprintDto.SprintId, command);
-
-            IsEditMode = false;
-            ResetData();
+            await tracer.Sprint.ActiveStatus.NoEntitySelected(GetType(), traceId);
             return;
         }
 
-        var createSprintDto = new SprintWebModel(Guid.NewGuid(), NewSprintName, false, StartTime, EndTime, []);
+        var command = new WebSetSprintActiveStatusCommand(SelectedSprint.SprintId, true, Guid.NewGuid());
 
-        await tracer.Sprint.Create.StartUseCase(GetType(), createSprintDto.SprintId,
-            createSprintDto.AsTraceAttributes());
+        await tracer.Sprint.ActiveStatus.SendingCommand(GetType(), SelectedSprint.SprintId, command);
+        await commandSender.Send(command.ToProto());
+    }
 
-        var createCommand = new CreateSprintCommandProto
+    public Task CreateOrUpdateSprint()
+    {
+        return IsUpdateRequired() ? UpdateSprint() : CreateSprint();
+    }
+
+    private bool IsUpdateRequired()
+    {
+        return IsEditMode && SelectedSprint != null;
+    }
+
+    private async Task UpdateSprint()
+    {
+        var traceId = Guid.NewGuid();
+        await tracer.Sprint.Update.StartUseCase(GetType(), traceId);
+
+        if (SelectedSprint == null)
         {
-            SprintId = createSprintDto.SprintId.ToString(),
-            Name = createSprintDto.Name,
-            StartTime = Timestamp.FromDateTime(createSprintDto.StartTime.UtcDateTime),
-            EndTime = Timestamp.FromDateTime(createSprintDto.EndTime.UtcDateTime),
-            IsActive = createSprintDto.IsActive,
-            TraceData = new TraceDataProto()
-            {
-                TraceId = Guid.NewGuid().ToString()
-            }
-        };
+            await tracer.Sprint.Update.NoEntitySelected(GetType(), traceId);
+            return;
+        }
 
-        await commandSender.Send(createCommand);
-        await tracer.Sprint.Create.CommandSent(GetType(), createSprintDto.SprintId, createCommand);
+        var updateSprintDto = new SprintWebModel(SelectedSprint.SprintId, NewSprintName,
+            SelectedSprint.IsActive, StartTime, EndTime, SelectedSprint.TicketIds);
+
+        var command =
+            new WebUpdateSprintDataCommand(SelectedSprint.SprintId, NewSprintName, StartTime, EndTime, traceId);
+        await tracer.Sprint.ActiveStatus.SendingCommand(GetType(), updateSprintDto.SprintId, command);
+        await commandSender.Send(command.ToProto());
+
+        IsEditMode = false;
+        ResetData();
+    }
+
+    private async Task CreateSprint()
+    {
+        var traceId = Guid.NewGuid();
+        await tracer.Sprint.Create.StartUseCase(GetType(), traceId);
+
+        var createCommand =
+            new WebCreateSprintCommand(Guid.NewGuid(), NewSprintName, StartTime, EndTime, true, [], Guid.NewGuid());
+
+        await tracer.Sprint.Create.CommandSent(GetType(), traceId, createCommand);
+        await commandSender.Send(createCommand.ToProto());
 
         ResetData();
     }

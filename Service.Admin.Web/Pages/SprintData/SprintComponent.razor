@@ -22,7 +22,7 @@
         <div class="mb-2">
             <button class="btn btn-success me-2"
                     disabled="@(!@SprintController.CanSave)"
-                    @onclick="@(async () => await SprintController.PersistSprint())">Save
+                    @onclick="@(async () => await SprintController.CreateOrUpdateSprint())">Save
             </button>
             <button class="btn btn-warning me-2"
                     disabled="@(@SprintController.SelectedSprint is null)"

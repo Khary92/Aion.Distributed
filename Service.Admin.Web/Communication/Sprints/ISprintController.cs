@@ -12,5 +12,5 @@ public interface ISprintController
     string EditButtonText { get; }
     void ToggleEditMode();
     Task SetSelectedSprintActive();
-    Task PersistSprint();
+    Task CreateOrUpdateSprint();
 }

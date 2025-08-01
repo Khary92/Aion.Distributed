@@ -6,9 +6,9 @@ namespace Service.Admin.Tracing.Tracing.Sprint.UseCase;
 
 public class CreateSprintTraceCollector(ITracingDataCommandSender commandSender) : ICreateSprintTraceCollector
 {
-    public async Task StartUseCase(Type originClassType, Guid traceId, string attributes)
+    public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = $"Create Sprint requested for {attributes}";
+        var log = $"Create Sprint requested";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Sprint,

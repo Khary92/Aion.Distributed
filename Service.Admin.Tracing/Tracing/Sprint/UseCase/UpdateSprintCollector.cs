@@ -6,9 +6,9 @@ namespace Service.Admin.Tracing.Tracing.Sprint.UseCase;
 
 public class UpdateSprintCollector(ITracingDataCommandSender commandSender) : IUpdateSprintCollector
 {
-    public async Task StartUseCase(Type originClassType, Guid traceId, string attributes)
+    public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = $"Change sprint data requested for {attributes}";
+        var log = $"Change sprint data requested";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Sprint,
@@ -70,6 +70,19 @@ public class UpdateSprintCollector(ITracingDataCommandSender commandSender) : IU
             TraceSinkId.Sprint,
             UseCaseMeta.UpdateSprint,
             LoggingMeta.PropertyChanged,
+            originClassType,
+            traceId,
+            log,
+            DateTimeOffset.Now));
+    }
+    
+    public async Task NoEntitySelected(Type originClassType, Guid traceId)
+    {
+        var log = $"No ticket entity selected";
+        await commandSender.Send(new ServiceTraceDataCommand(
+            TraceSinkId.Sprint,
+            UseCaseMeta.UpdateSprint,
+            LoggingMeta.NoEntitySelected,
             originClassType,
             traceId,
             log,
