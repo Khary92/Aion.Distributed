@@ -68,7 +68,6 @@ public class ExportModel(
     {
         if (localSettingsService.IsExportPathValid()) return await exportService.ExportToFile(WorkDays);
 
-        await tracer.Export.ToFile.PathSettingsInvalid(GetType(), Settings!.ExportPath);
         return false;
     }
 
@@ -80,7 +79,6 @@ public class ExportModel(
         }
         catch (Exception exception)
         {
-            await tracer.Export.ToFile.ExceptionOccured(GetType(), exception);
         }
     }
 

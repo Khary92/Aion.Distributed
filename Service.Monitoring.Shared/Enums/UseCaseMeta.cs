@@ -28,5 +28,9 @@ public enum UseCaseMeta
     CommandSent,
     CreateStatisticsData,
     ChangeProductivity,
-    ChangeTagSelection
+    ChangeTagSelection,
+    AddNoteToTimeSlot,
+    CreateTimeSlot,
+    SetEndTime,
+    SetStartTime
 }

@@ -13,6 +13,8 @@ using Core.Server.Tracing.Tracing.Tracers.Ticket;
 using Core.Server.Tracing.Tracing.Tracers.Ticket.UseCase;
 using Core.Server.Tracing.Tracing.Tracers.TimerSettings;
 using Core.Server.Tracing.Tracing.Tracers.TimerSettings.UseCase;
+using Core.Server.Tracing.Tracing.Tracers.TimeSlot;
+using Core.Server.Tracing.Tracing.Tracers.TimeSlot.UseCase;
 using Core.Server.Tracing.Tracing.Tracers.WorkDay;
 using Core.Server.Tracing.Tracing.Tracers.WorkDay.UseCase;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,6 +34,7 @@ public static class TracingServices
         AddTagTracingServices(services);
         AddTicketTracingServices(services);
         AddTimerSettingsTracingServices(services);
+        AddTimeSlotTracingServices(services);
         AddWorkdayTracingServices(services);
     }
 
@@ -101,6 +104,16 @@ public static class TracingServices
         services.AddSingleton<IChangeSnapshotSaveIntervalTraceCollector, ChangeSnapshotSaveIntervalTraceCollector>();
 
         services.AddSingleton<ITimerSettingsUseCaseSelector, TimerSettingsUseCaseSelector>();
+    }
+    
+    private static void AddTimeSlotTracingServices(this IServiceCollection services)
+    {
+        services.AddSingleton<ICreateTimeSlotTraceCollector, CreateTimeSlotTraceCollector>();
+        services.AddSingleton<IAddNoteTraceCollector, AddNoteTraceCollector>();
+        services.AddSingleton<ISetStartTimeTraceCollector, SetStartTimeTraceCollector>();
+        services.AddSingleton<ISetEndTimeTraceCollector, SetEndTimeTraceCollector>();
+        
+        services.AddSingleton<ITimeSlotUseCaseSelector, TimeSlotUseCaseSelector>();
     }
 
     private static void AddWorkdayTracingServices(this IServiceCollection services)
