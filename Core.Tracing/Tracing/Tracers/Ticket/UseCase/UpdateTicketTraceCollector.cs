@@ -6,7 +6,6 @@ namespace Core.Server.Tracing.Tracing.Tracers.Ticket.UseCase;
 
 public class UpdateTicketTraceCollector(ITracingDataCommandSender commandSender) : IUpdateTicketTraceCollector
 {
-    
     public async Task CommandReceived(Type originClassType, Guid traceId, object protoCommand)
     {
         var log = $"Command received {GetName(protoCommand)}:{protoCommand}";
@@ -42,7 +41,7 @@ public class UpdateTicketTraceCollector(ITracingDataCommandSender commandSender)
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
             UseCaseMeta.UpdateTicket,
-            LoggingMeta.NotificationSent,
+            LoggingMeta.SendingNotification,
             originClassType,
             traceId,
             log,

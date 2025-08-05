@@ -7,88 +7,51 @@ namespace Core.Server.Tracing.Tracing.Tracers.TimerSettings.UseCase;
 public class ChangeDocuTimerSaveIntervalTraceCollector(ITracingDataCommandSender commandSender)
     : IChangeDocuTimerSaveIntervalTraceCollector
 {
-    public async Task StartUseCase(Type originClassType, Guid traceId, Dictionary<string, string> attributes)
+    public async Task CommandReceived(Type originClassType, Guid traceId, object protoCommand)
     {
-        var log = $"Change documentation timer save interval requested for {attributes}";
+        var log = $"Command received {GetName(protoCommand)}:{protoCommand}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
             UseCaseMeta.ChangeDocuTimerSaveInterval,
-            LoggingMeta.ActionRequested,
+            LoggingMeta.CommandReceived,
             originClassType,
             traceId,
             log,
             DateTimeOffset.Now));
     }
 
-    public async Task CommandSent(Type originClassType, Guid traceId, object command)
+    public async Task EventPersisted(Type originClassType, Guid traceId, object @event)
     {
-        var log = $"Sent {command}";
+        var log = $"Event persisted {@event}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
             UseCaseMeta.ChangeDocuTimerSaveInterval,
-            LoggingMeta.SendingCommand,
+            LoggingMeta.EventPersisted,
             originClassType,
             traceId,
             log,
             DateTimeOffset.Now));
     }
 
-    public async Task NotificationReceived(Type originClassType, Guid traceId, object notification)
+    public async Task SendingNotification(Type originClassType, Guid traceId, object notification)
     {
-        var log = $"Received {notification}";
+        var log = $"Notification sent {GetName(notification)}:{notification}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
             UseCaseMeta.ChangeDocuTimerSaveInterval,
-            LoggingMeta.NotificationReceived,
+            LoggingMeta.SendingNotification,
             originClassType,
             traceId,
             log,
             DateTimeOffset.Now));
     }
 
-    public async Task NoAggregateFound(Type originClassType, Guid traceId)
+    private static string GetName(object @object)
     {
-        var log = $"Aggregate not found id:{traceId}";
-
-        await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimerSettings,
-            UseCaseMeta.ChangeDocuTimerSaveInterval,
-            LoggingMeta.AggregateNotFound,
-            originClassType,
-            traceId,
-            log,
-            DateTimeOffset.Now));
-    }
-
-    public async Task ChangesApplied(Type originClassType, Guid traceId)
-    {
-        var log = $"Changed applied id:{traceId}";
-
-        await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimerSettings,
-            UseCaseMeta.ChangeDocuTimerSaveInterval,
-            LoggingMeta.PropertyChanged,
-            originClassType,
-            traceId,
-            log,
-            DateTimeOffset.Now));
-    }
-
-    public async Task PropertyNotChanged(Type originClassType, Guid traceId,
-        Dictionary<string, string> asTraceAttributes)
-    {
-        var log = $"Request aborted {asTraceAttributes}";
-
-        await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimerSettings,
-            UseCaseMeta.ChangeDocuTimerSaveInterval,
-            LoggingMeta.PropertyNotChanged,
-            originClassType,
-            traceId,
-            log,
-            DateTimeOffset.Now));
+        var commandType = @object.GetType();
+        return commandType.Name;
     }
 }

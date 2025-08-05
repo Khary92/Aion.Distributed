@@ -2,9 +2,7 @@ namespace Core.Server.Tracing.Tracing.Tracers.Sprint.UseCase;
 
 public interface ISprintActiveStatusCollector
 {
-    Task StartUseCase(Type originClassType, Guid traceId, Dictionary<string, string> attributes);
-    Task CommandSent(Type originClassType, Guid traceId, object command);
-    Task NotificationReceived(Type originClassType, Guid traceId, object notification);
-    Task NoAggregateFound(Type originClassType, Guid traceId);
-    Task ChangesApplied(Type originClassType, Guid traceId);
+    Task CommandReceived(Type originClassType, Guid traceId, object protoCommand);
+    Task EventPersisted(Type originClassType, Guid traceId, object @event);
+    Task SendingNotification(Type originClassType, Guid traceId, object notification);
 }

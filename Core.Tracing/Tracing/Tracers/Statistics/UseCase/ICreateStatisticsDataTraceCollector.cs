@@ -1,6 +1,6 @@
-namespace Core.Server.Tracing.Tracing.Tracers.TimerSettings.UseCase;
+namespace Core.Server.Tracing.Tracing.Tracers.Statistics.UseCase;
 
-public interface IChangeDocuTimerSaveIntervalTraceCollector
+public interface ICreateStatisticsDataTraceCollector
 {
     Task CommandReceived(Type originClassType, Guid traceId, object protoCommand);
     Task EventPersisted(Type originClassType, Guid traceId, object @event);

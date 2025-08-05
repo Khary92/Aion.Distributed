@@ -1,8 +1,7 @@
-using Core.Server.Tracing.Tracing.Tracers.AiSettings;
-using Core.Server.Tracing.Tracing.Tracers.Export;
 using Core.Server.Tracing.Tracing.Tracers.Note;
 using Core.Server.Tracing.Tracing.Tracers.NoteType;
 using Core.Server.Tracing.Tracing.Tracers.Sprint;
+using Core.Server.Tracing.Tracing.Tracers.Statistics;
 using Core.Server.Tracing.Tracing.Tracers.Tag;
 using Core.Server.Tracing.Tracing.Tracers.Ticket;
 using Core.Server.Tracing.Tracing.Tracers.TimerSettings;
@@ -16,18 +15,16 @@ public class TraceCollector(
     ISprintUseCaseSelector sprintUseCaseSelector,
     ITagUseCaseSelector tagUseCaseSelector,
     INoteUseCaseSelector noteUseCaseSelector,
-    IExportUseCaseSelector exportUseCaseSelector,
     IWorkDayUseCaseSelector workDayUseCaseSelector,
-    IAiSettingsUseCaseSelector aiSettingsUseCaseSelector,
-    ITimerSettingsUseCaseSelector timerSettingsUseCaseSelector) : ITraceCollector
+    ITimerSettingsUseCaseSelector timerSettingsUseCaseSelector,
+    IStatisticsDataUseCaseSelector statisticsDataUseCaseSelector) : ITraceCollector
 {
     public ITicketUseCaseSelector Ticket => ticketUseCaseSelector;
     public INoteTypeUseCaseSelector NoteType => noteTypeUseCaseSelector;
     public ISprintUseCaseSelector Sprint => sprintUseCaseSelector;
+    public IStatisticsDataUseCaseSelector Statistics => statisticsDataUseCaseSelector;
     public ITagUseCaseSelector Tag => tagUseCaseSelector;
     public INoteUseCaseSelector Note => noteUseCaseSelector;
-    public IExportUseCaseSelector Export => exportUseCaseSelector;
     public IWorkDayUseCaseSelector WorkDay => workDayUseCaseSelector;
-    public IAiSettingsUseCaseSelector AiSettings => aiSettingsUseCaseSelector;
     public ITimerSettingsUseCaseSelector TimerSettings => timerSettingsUseCaseSelector;
 }

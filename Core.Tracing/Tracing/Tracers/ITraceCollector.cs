@@ -1,8 +1,7 @@
-using Core.Server.Tracing.Tracing.Tracers.AiSettings;
-using Core.Server.Tracing.Tracing.Tracers.Export;
 using Core.Server.Tracing.Tracing.Tracers.Note;
 using Core.Server.Tracing.Tracing.Tracers.NoteType;
 using Core.Server.Tracing.Tracing.Tracers.Sprint;
+using Core.Server.Tracing.Tracing.Tracers.Statistics;
 using Core.Server.Tracing.Tracing.Tracers.Tag;
 using Core.Server.Tracing.Tracing.Tracers.Ticket;
 using Core.Server.Tracing.Tracing.Tracers.TimerSettings;
@@ -15,10 +14,9 @@ public interface ITraceCollector
     ITicketUseCaseSelector Ticket { get; }
     INoteTypeUseCaseSelector NoteType { get; }
     ISprintUseCaseSelector Sprint { get; }
+    IStatisticsDataUseCaseSelector Statistics { get; }
     ITagUseCaseSelector Tag { get; }
     INoteUseCaseSelector Note { get; }
-    IExportUseCaseSelector Export { get; }
     IWorkDayUseCaseSelector WorkDay { get; }
-    IAiSettingsUseCaseSelector AiSettings { get; }
     ITimerSettingsUseCaseSelector TimerSettings { get; }
 }

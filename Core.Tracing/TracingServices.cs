@@ -1,14 +1,12 @@
 using Core.Server.Tracing.Tracing.Tracers;
-using Core.Server.Tracing.Tracing.Tracers.AiSettings;
-using Core.Server.Tracing.Tracing.Tracers.AiSettings.UseCase;
-using Core.Server.Tracing.Tracing.Tracers.Export;
-using Core.Server.Tracing.Tracing.Tracers.Export.UseCase;
 using Core.Server.Tracing.Tracing.Tracers.Note;
 using Core.Server.Tracing.Tracing.Tracers.Note.UseCase;
 using Core.Server.Tracing.Tracing.Tracers.NoteType;
 using Core.Server.Tracing.Tracing.Tracers.NoteType.UseCase;
 using Core.Server.Tracing.Tracing.Tracers.Sprint;
 using Core.Server.Tracing.Tracing.Tracers.Sprint.UseCase;
+using Core.Server.Tracing.Tracing.Tracers.Statistics;
+using Core.Server.Tracing.Tracing.Tracers.Statistics.UseCase;
 using Core.Server.Tracing.Tracing.Tracers.Tag;
 using Core.Server.Tracing.Tracing.Tracers.Tag.UseCase;
 using Core.Server.Tracing.Tracing.Tracers.Ticket;
@@ -27,11 +25,10 @@ public static class TracingServices
     public static void AddTracingServices(this IServiceCollection services)
     {
         AddACommonTracingServices(services);
-        AddAiSettingsTracingServices(services);
-        AddExportTracingServices(services);
         AddNoteTracingServices(services);
         AddNoteTypeTracingServices(services);
         AddSprintTracingServices(services);
+        AddStatisticsDataTracingServices(services);
         AddTagTracingServices(services);
         AddTicketTracingServices(services);
         AddTimerSettingsTracingServices(services);
@@ -43,21 +40,6 @@ public static class TracingServices
         services.AddSingleton<ITracingDataCommandSender>(sp =>
             new TracingDataCommandSender("http://monitoring-service:8080"));
         services.AddSingleton<ITraceCollector, TraceCollector>();
-    }
-
-    private static void AddAiSettingsTracingServices(this IServiceCollection services)
-    {
-        services.AddSingleton<IChangeLanguageModelTraceCollector, ChangeLanguageModelTraceCollector>();
-        services.AddSingleton<IChangePromptTraceCollector, ChangePromptTraceCollector>();
-
-        services.AddSingleton<IAiSettingsUseCaseSelector, AiSettingsUseCaseSelector>();
-    }
-
-    private static void AddExportTracingServices(this IServiceCollection services)
-    {
-        services.AddSingleton<IExportTraceCollector, ExportTraceCollector>();
-
-        services.AddSingleton<IExportUseCaseSelector, ExportUseCaseSelector>();
     }
 
     private static void AddNoteTracingServices(this IServiceCollection services)
@@ -86,6 +68,15 @@ public static class TracingServices
 
         services.AddSingleton<ISprintUseCaseSelector, SprintUseCaseSelector>();
     }
+    
+    private static void AddStatisticsDataTracingServices(this IServiceCollection services)
+    {
+        services.AddSingleton<IChangeProductivityTraceCollector, ChangeProductivityTraceCollector>();
+        services.AddSingleton<IChangeTagSelectionTraceCollector, ChangeTagSelectionTraceCollector>();
+        services.AddSingleton<ICreateStatisticsDataTraceCollector, CreateStatisticsDataTraceCollector>();
+
+        services.AddSingleton<IStatisticsDataUseCaseSelector, StatisticsDataUseCaseSelector>();
+    }
 
     private static void AddTagTracingServices(this IServiceCollection services)
     {
@@ -98,7 +89,6 @@ public static class TracingServices
     private static void AddTicketTracingServices(this IServiceCollection services)
     {
         services.AddSingleton<ICreateTicketTraceCollector, CreateTicketTraceCollector>();
-        services.AddSingleton<IAddTicketToCurrentSprintTraceCollector, AddTicketToCurrentSprintTraceCollector>();
         services.AddSingleton<IUpdateTicketTraceCollector, UpdateTicketTraceCollector>();
 
         services.AddSingleton<ITicketUseCaseSelector, TicketUseCaseSelector>();

@@ -6,68 +6,51 @@ namespace Core.Server.Tracing.Tracing.Tracers.Note.UseCase;
 
 public class CreateNoteTraceCollector(ITracingDataCommandSender commandSender) : ICreateNoteTraceCollector
 {
-    public async Task StartUseCase(Type originClassType, Guid traceId, Dictionary<string, string> attributes)
+    public async Task CommandReceived(Type originClassType, Guid traceId, object protoCommand)
     {
-        var log = $"Note creation requested {attributes}";
+        var log = $"Command received {GetName(protoCommand)}:{protoCommand}";
+
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Note,
             UseCaseMeta.CreateNote,
-            LoggingMeta.ActionRequested,
+            LoggingMeta.CommandReceived,
             originClassType,
             traceId,
             log,
             DateTimeOffset.Now));
     }
 
-    public async Task CommandSent(Type originClassType, Guid traceId, object command)
+    public async Task EventPersisted(Type originClassType, Guid traceId, object @event)
     {
-        var log = $"Sent {command}";
+        var log = $"Event persisted {@event}";
+
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Note,
             UseCaseMeta.CreateNote,
-            LoggingMeta.SendingCommand,
+            LoggingMeta.EventPersisted,
             originClassType,
             traceId,
             log,
             DateTimeOffset.Now));
     }
 
-    public async Task AggregateReceived(Type originClassType, Guid traceId, Dictionary<string, string> attributes)
+    public async Task SendingNotification(Type originClassType, Guid traceId, object notification)
     {
-        var log = $"Received aggregate {attributes}";
+        var log = $"Notification sent {GetName(notification)}:{notification}";
+
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Note,
             UseCaseMeta.CreateNote,
-            LoggingMeta.AggregateReceived,
+            LoggingMeta.SendingNotification,
             originClassType,
             traceId,
             log,
             DateTimeOffset.Now));
     }
 
-    public async Task AggregateAdded(Type originClassType, Guid traceId)
+    private static string GetName(object @object)
     {
-        var log = $"Added aggregate with id:{traceId}";
-        await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Note,
-            UseCaseMeta.CreateNote,
-            LoggingMeta.AggregateAdded,
-            originClassType,
-            traceId,
-            log,
-            DateTimeOffset.Now));
-    }
-
-    public async Task ExceptionOccured(Type originClassType, Guid traceId, Exception exception)
-    {
-        var log = $"Exception occured {exception}";
-        await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Note,
-            UseCaseMeta.CreateNote,
-            LoggingMeta.ExceptionOccured,
-            originClassType,
-            traceId,
-            log,
-            DateTimeOffset.Now));
+        var commandType = @object.GetType();
+        return commandType.Name;
     }
 }

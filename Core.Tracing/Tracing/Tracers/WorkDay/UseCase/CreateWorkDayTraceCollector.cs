@@ -6,59 +6,51 @@ namespace Core.Server.Tracing.Tracing.Tracers.WorkDay.UseCase;
 
 public class CreateWorkDayTraceCollector(ITracingDataCommandSender commandSender) : ICreateWorkDayTraceCollector
 {
-    public async Task StartUseCase(Type originClassType, Guid traceId, Dictionary<string, string> attributes)
+    public async Task CommandReceived(Type originClassType, Guid traceId, object protoCommand)
     {
-        var log = $"Create WorkDay requested for {attributes}";
+        var log = $"Command received {GetName(protoCommand)}:{protoCommand}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.WorkDay,
             UseCaseMeta.CreateWorkDay,
-            LoggingMeta.ActionRequested,
+            LoggingMeta.CommandReceived,
             originClassType,
             traceId,
             log,
             DateTimeOffset.Now));
     }
 
-    public async Task CommandSent(Type originClassType, Guid traceId, object command)
+    public async Task EventPersisted(Type originClassType, Guid traceId, object @event)
     {
-        var log = $"Sent {command}";
+        var log = $"Event persisted {@event}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.WorkDay,
-            UseCaseMeta.CommandSent,
-            LoggingMeta.ActionRequested,
+            UseCaseMeta.CreateWorkDay,
+            LoggingMeta.EventPersisted,
             originClassType,
             traceId,
             log,
             DateTimeOffset.Now));
     }
 
-    public async Task AggregateReceived(Type originClassType, Guid traceId, Dictionary<string, string> attributes)
+    public async Task SendingNotification(Type originClassType, Guid traceId, object notification)
     {
-        var log = $"Received aggregate {attributes}";
+        var log = $"Notification sent {GetName(notification)}:{notification}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.WorkDay,
             UseCaseMeta.CreateWorkDay,
-            LoggingMeta.AggregateReceived,
+            LoggingMeta.SendingNotification,
             originClassType,
             traceId,
             log,
             DateTimeOffset.Now));
     }
 
-    public async Task AggregateAdded(Type originClassType, Guid traceId)
+    private static string GetName(object @object)
     {
-        var log = $"Added aggregate with id:{traceId}";
-
-        await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.WorkDay,
-            UseCaseMeta.CreateWorkDay,
-            LoggingMeta.AggregateAdded,
-            originClassType,
-            traceId,
-            log,
-            DateTimeOffset.Now));
+        var commandType = @object.GetType();
+        return commandType.Name;
     }
 }

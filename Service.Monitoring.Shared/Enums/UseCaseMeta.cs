@@ -7,9 +7,7 @@ public enum UseCaseMeta
     UpdateTicket,
     UpdateTicketDocumentation,
 
-    //AI Settings
-    ChangeLanguageModel,
-    ChangePrompt,
+    
     ExportData,
     CreateNote,
     UpdateNote,
@@ -27,5 +25,8 @@ public enum UseCaseMeta
     ChangeSnapshotSaveInterval,
     CreateTimerSettings,
     CreateWorkDay,
-    CommandSent
+    CommandSent,
+    CreateStatisticsData,
+    ChangeProductivity,
+    ChangeTagSelection
 }

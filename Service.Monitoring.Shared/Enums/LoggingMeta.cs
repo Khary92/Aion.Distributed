@@ -15,6 +15,6 @@ public enum LoggingMeta
     PropertyChanged,
     CommandReceived,
     EventPersisted,
-    NotificationSent,
+    SendingNotification,
     NoEntitySelected
 }

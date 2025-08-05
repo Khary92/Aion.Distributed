@@ -1,18 +1,18 @@
-using Service.Monitoring.Shared;
+﻿using Service.Monitoring.Shared;
 using Service.Monitoring.Shared.Enums;
 using Service.Monitoring.Shared.Tracing;
 
-namespace Core.Server.Tracing.Tracing.Tracers.Note.UseCase;
+namespace Core.Server.Tracing.Tracing.Tracers.Statistics.UseCase;
 
-public class UpdateNoteTraceCollector(ITracingDataCommandSender commandSender) : IUpdateNoteTraceCollector
+public class ChangeProductivityTraceCollector(ITracingDataCommandSender commandSender) : IChangeProductivityTraceCollector
 {
     public async Task CommandReceived(Type originClassType, Guid traceId, object protoCommand)
     {
         var log = $"Command received {GetName(protoCommand)}:{protoCommand}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Note,
-            UseCaseMeta.UpdateNote,
+            TraceSinkId.StatisticsData,
+            UseCaseMeta.ChangeProductivity,
             LoggingMeta.CommandReceived,
             originClassType,
             traceId,
@@ -25,8 +25,8 @@ public class UpdateNoteTraceCollector(ITracingDataCommandSender commandSender) :
         var log = $"Event persisted {@event}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Note,
-            UseCaseMeta.UpdateNote,
+            TraceSinkId.StatisticsData,
+            UseCaseMeta.ChangeProductivity,
             LoggingMeta.EventPersisted,
             originClassType,
             traceId,
@@ -39,8 +39,8 @@ public class UpdateNoteTraceCollector(ITracingDataCommandSender commandSender) :
         var log = $"Notification sent {GetName(notification)}:{notification}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Note,
-            UseCaseMeta.UpdateNote,
+            TraceSinkId.StatisticsData,
+            UseCaseMeta.ChangeProductivity,
             LoggingMeta.SendingNotification,
             originClassType,
             traceId,

@@ -1,10 +1,12 @@
 ﻿using Core.Server.Services.Entities.Notes;
+using Core.Server.Tracing.Tracing.Tracers;
 using Grpc.Core;
 using Proto.Requests.Notes;
 
 namespace Core.Server.Communication.Endpoints.Note;
 
-public class NoteRequestReceiver(INoteRequestsService noteRequestsService) : NotesRequestService.NotesRequestServiceBase
+public class NoteRequestReceiver(INoteRequestsService noteRequestsService, ITraceCollector tracer)
+    : NotesRequestService.NotesRequestServiceBase
 {
     public override async Task<GetNotesResponseProto> GetNotesByTicketId(GetNotesByTicketIdRequestProto request,
         ServerCallContext context)
