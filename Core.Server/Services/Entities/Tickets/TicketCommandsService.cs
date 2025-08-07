@@ -15,7 +15,7 @@ public class TicketCommandsService(
 {
     public async Task UpdateData(UpdateTicketDataCommand command)
     {
-        await ticketEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await ticketEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
         var ticketNotification = command.ToNotification();
         await tracer.Ticket.Update.EventPersisted(GetType(), command.TraceId, ticketNotification.TicketDataUpdated);
 
@@ -25,14 +25,14 @@ public class TicketCommandsService(
 
     public async Task UpdateDocumentation(UpdateTicketDocumentationCommand command)
     {
-        await ticketEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await ticketEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
         
         await ticketNotificationService.SendNotificationAsync(command.ToNotification());
     }
 
     public async Task Create(CreateTicketCommand command)
     {
-        await ticketEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await ticketEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
         var ticketNotification = command.ToNotification();
         await tracer.Ticket.Create.EventPersisted(GetType(), command.TraceId, ticketNotification.TicketCreated);
 

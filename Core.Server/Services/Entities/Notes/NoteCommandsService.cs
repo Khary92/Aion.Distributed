@@ -15,7 +15,7 @@ public class NoteCommandsService(
 {
     public async Task Update(UpdateNoteCommand command)
     {
-        await noteEventsStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await noteEventsStore.StoreEventAsync(eventTranslator.ToEvent(command));
         var noteNotification = command.ToNotification();
         await tracer.Note.Update.EventPersisted(GetType(), command.TraceId, noteNotification.NoteUpdated);
 
@@ -25,7 +25,7 @@ public class NoteCommandsService(
 
     public async Task Create(CreateNoteCommand command)
     {
-        await noteEventsStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await noteEventsStore.StoreEventAsync(eventTranslator.ToEvent(command));
         var noteNotification = command.ToNotification();
         await tracer.Note.Create.EventPersisted(GetType(), command.TraceId, noteNotification.NoteCreated);
 

@@ -8,7 +8,7 @@ namespace Core.Persistence.EventStores;
 public class StatisticsDataEventsStore(IDbContextFactory<AppDbContext> appDbContextFactory)
     : IEventStore<StatisticsDataEvent>
 {
-    public async Task StoreEventAsync(StatisticsDataEvent @event, Guid traceId)
+    public async Task StoreEventAsync(StatisticsDataEvent @event)
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
 

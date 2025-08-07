@@ -8,7 +8,7 @@ namespace Core.Persistence.EventStores;
 public class TimerSettingsEventsStore(IDbContextFactory<AppDbContext> appDbContextFactory)
     : IEventStore<TimerSettingsEvent>
 {
-    public async Task StoreEventAsync(TimerSettingsEvent @event, Guid traceId)
+    public async Task StoreEventAsync(TimerSettingsEvent @event)
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
 

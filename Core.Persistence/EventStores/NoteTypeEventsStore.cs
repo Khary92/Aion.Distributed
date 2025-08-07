@@ -7,7 +7,7 @@ namespace Core.Persistence.EventStores;
 
 public class NoteTypeEventsStore(IDbContextFactory<AppDbContext> appDbContextFactory) : IEventStore<NoteTypeEvent>
 {
-    public async Task StoreEventAsync(NoteTypeEvent @event, Guid traceId)
+    public async Task StoreEventAsync(NoteTypeEvent @event)
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
 

@@ -16,7 +16,7 @@ public class StatisticsDataCommandsService(
 {
     public async Task ChangeTagSelection(ChangeTagSelectionCommand command)
     {
-        await statisticsDataEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await statisticsDataEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
         var statistics = command.ToNotification();
         await tracer.Statistics.ChangeTagSelection.EventPersisted(GetType(), command.TraceId,
             statistics.ChangeTagSelection);
@@ -28,7 +28,7 @@ public class StatisticsDataCommandsService(
 
     public async Task ChangeProductivity(ChangeProductivityCommand command)
     {
-        await statisticsDataEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await statisticsDataEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
         var statistics = command.ToNotification();
         await tracer.Statistics.ChangeProductivity.EventPersisted(GetType(), command.TraceId,
             statistics.ChangeProductivity);
@@ -40,7 +40,7 @@ public class StatisticsDataCommandsService(
 
     public async Task Create(CreateStatisticsDataCommand command)
     {
-        await statisticsDataEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await statisticsDataEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
         var statistics = command.ToNotification();
         await tracer.Statistics.Create.EventPersisted(GetType(), command.TraceId,
             statistics.StatisticsDataCreated);

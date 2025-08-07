@@ -15,7 +15,7 @@ public class NoteTypeCommandsService(
 {
     public async Task Create(CreateNoteTypeCommand command)
     {
-        await noteTypeEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await noteTypeEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
         var noteTypeNotification = command.ToNotification();
         await tracer.NoteType.Create.EventPersisted(GetType(), command.TraceId, noteTypeNotification.NoteTypeCreated);
 
@@ -25,7 +25,7 @@ public class NoteTypeCommandsService(
 
     public async Task ChangeName(ChangeNoteTypeNameCommand command)
     {
-        await noteTypeEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await noteTypeEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
         var noteTypeNotification = command.ToNotification();
         await tracer.NoteType.ChangeName.EventPersisted(GetType(), command.TraceId,
             noteTypeNotification.NoteTypeNameChanged);
@@ -37,7 +37,7 @@ public class NoteTypeCommandsService(
 
     public async Task ChangeColor(ChangeNoteTypeColorCommand command)
     {
-        await noteTypeEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await noteTypeEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
         var noteTypeNotification = command.ToNotification();
         await tracer.NoteType.ChangeColor.EventPersisted(GetType(), command.TraceId,
             noteTypeNotification.NoteTypeColorChanged);

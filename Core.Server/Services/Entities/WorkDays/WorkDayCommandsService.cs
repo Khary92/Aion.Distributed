@@ -19,7 +19,7 @@ public class WorkDayCommandsService(
 
         if (workDays.Any(wd => wd.Date.Date == command.Date.Date)) return;
 
-        await workDayEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await workDayEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
         await workDayNotificationService.SendNotificationAsync(command.ToNotification());
     }
 }

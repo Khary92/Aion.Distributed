@@ -13,25 +13,25 @@ public class TimeSlotCommandService(
 {
     public async Task SetEndTime(SetEndTimeCommand command)
     {
-        await timeSlotEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await timeSlotEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
         await timeSlotNotificationService.SendNotificationAsync(command.ToNotification());
     }
 
     public async Task SetStartTime(SetStartTimeCommand command)
     {
-        await timeSlotEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await timeSlotEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
         await timeSlotNotificationService.SendNotificationAsync(command.ToNotification());
     }
 
     public async Task AddNote(AddNoteCommand command)
     {
-        await timeSlotEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await timeSlotEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
         await timeSlotNotificationService.SendNotificationAsync(command.ToNotification());
     }
 
     public async Task Create(CreateTimeSlotCommand command)
     {
-        await timeSlotEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await timeSlotEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
         await timeSlotNotificationService.SendNotificationAsync(command.ToNotification());
     }
 }

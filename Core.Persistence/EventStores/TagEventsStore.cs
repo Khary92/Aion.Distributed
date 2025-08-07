@@ -7,7 +7,7 @@ namespace Core.Persistence.EventStores;
 
 public class TagEventsStore(IDbContextFactory<AppDbContext> appDbContextFactory) : IEventStore<TagEvent>
 {
-    public async Task StoreEventAsync(TagEvent @event, Guid traceId)
+    public async Task StoreEventAsync(TagEvent @event)
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
 

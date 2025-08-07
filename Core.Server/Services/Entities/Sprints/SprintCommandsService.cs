@@ -16,7 +16,7 @@ public class SprintCommandsService(
 {
     public async Task Create(CreateSprintCommand command)
     {
-        await sprintEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await sprintEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
         var sprintNotification = command.ToNotification();
         await tracer.Sprint.Create.EventPersisted(GetType(), command.TraceId, sprintNotification.SprintCreated);
 
@@ -26,7 +26,7 @@ public class SprintCommandsService(
 
     public async Task UpdateSprintData(UpdateSprintDataCommand command)
     {
-        await sprintEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await sprintEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
         var sprintNotification = command.ToNotification();
         await tracer.Sprint.Update.EventPersisted(GetType(), command.TraceId, sprintNotification.SprintDataUpdated);
 
@@ -37,7 +37,7 @@ public class SprintCommandsService(
 
     public async Task SetSprintActiveStatus(SetSprintActiveStatusCommand command)
     {
-        await sprintEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await sprintEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
         var sprintNotification = command.ToNotification();
         await tracer.Sprint.ActiveStatus.EventPersisted(GetType(), command.TraceId,
             sprintNotification.SprintActiveStatusSet);
@@ -49,7 +49,7 @@ public class SprintCommandsService(
 
     public async Task AddTicketToSprint(AddTicketToSprintCommand command)
     {
-        await sprintEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await sprintEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
         var sprintNotification = command.ToNotification();
         await tracer.Sprint.AddTicketToSprint.EventPersisted(GetType(), command.TraceId,
             sprintNotification.TicketAddedToActiveSprint);

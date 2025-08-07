@@ -10,7 +10,7 @@ namespace Core.Persistence.EventStores;
 public class TicketEventsStore(IDbContextFactory<AppDbContext> appDbContextFactory)
     : ITicketEventsStore
 {
-    public async Task StoreEventAsync(TicketEvent @event, Guid traceId)
+    public async Task StoreEventAsync(TicketEvent @event)
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
 

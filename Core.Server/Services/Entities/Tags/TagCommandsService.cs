@@ -16,7 +16,7 @@ public class TagCommandsService(
 {
     public async Task Update(UpdateTagCommand command)
     {
-        await tagEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await tagEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
         var noteNotification = command.ToNotification();
         await tracer.Tag.Update.EventPersisted(GetType(), command.TraceId, noteNotification.TagUpdated);
         
@@ -26,7 +26,7 @@ public class TagCommandsService(
 
     public async Task Create(CreateTagCommand command)
     {
-        await tagEventStore.StoreEventAsync(eventTranslator.ToEvent(command), command.TraceId);
+        await tagEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
         var noteNotification = command.ToNotification();
         await tracer.Tag.Create.EventPersisted(GetType(), command.TraceId, noteNotification.TagCreated);
 
