@@ -3,7 +3,6 @@ using Client.Tracing.Tracing.Tracers.NoteType;
 using Client.Tracing.Tracing.Tracers.Sprint;
 using Client.Tracing.Tracing.Tracers.Tag;
 using Client.Tracing.Tracing.Tracers.Ticket;
-using Client.Tracing.Tracing.Tracers.TimerSettings;
 using Client.Tracing.Tracing.Tracers.WorkDay;
 
 namespace Client.Tracing.Tracing.Tracers;
@@ -14,8 +13,7 @@ public class TraceCollector(
     ISprintUseCaseSelector sprintUseCaseSelector,
     ITagUseCaseSelector tagUseCaseSelector,
     INoteUseCaseSelector noteUseCaseSelector,
-    IWorkDayUseCaseSelector workDayUseCaseSelector,
-    ITimerSettingsUseCaseSelector timerSettingsUseCaseSelector) : ITraceCollector
+    IWorkDayUseCaseSelector workDayUseCaseSelector) : ITraceCollector
 {
     public ITicketUseCaseSelector Ticket => ticketUseCaseSelector;
     public INoteTypeUseCaseSelector NoteType => noteTypeUseCaseSelector;
@@ -23,5 +21,4 @@ public class TraceCollector(
     public ITagUseCaseSelector Tag => tagUseCaseSelector;
     public INoteUseCaseSelector Note => noteUseCaseSelector;
     public IWorkDayUseCaseSelector WorkDay => workDayUseCaseSelector;
-    public ITimerSettingsUseCaseSelector TimerSettings => timerSettingsUseCaseSelector;
 }

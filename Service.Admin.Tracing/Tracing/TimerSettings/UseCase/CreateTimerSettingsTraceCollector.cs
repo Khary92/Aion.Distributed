@@ -2,7 +2,7 @@ using Service.Monitoring.Shared;
 using Service.Monitoring.Shared.Enums;
 using Service.Monitoring.Shared.Tracing;
 
-namespace Client.Tracing.Tracing.Tracers.TimerSettings.UseCase;
+namespace Service.Admin.Tracing.Tracing.TimerSettings.UseCase;
 
 public class CreateTimerSettingsTraceCollector(ITracingDataCommandSender commandSender)
     : ICreateTimerSettingsTraceCollector

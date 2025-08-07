@@ -2,18 +2,18 @@ using Service.Monitoring.Shared;
 using Service.Monitoring.Shared.Enums;
 using Service.Monitoring.Shared.Tracing;
 
-namespace Client.Tracing.Tracing.Tracers.TimerSettings.UseCase;
+namespace Service.Admin.Tracing.Tracing.TimerSettings.UseCase;
 
-public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataCommandSender commandSender)
-    : IChangeSnapshotSaveIntervalTraceCollector
+public class ChangeDocuTimerSaveIntervalTraceCollector(ITracingDataCommandSender commandSender)
+    : IChangeDocuTimerSaveIntervalTraceCollector
 {
     public async Task StartUseCase(Type originClassType, Guid traceId, string attributes)
     {
-        var log = $"Change active status requested for {attributes}";
+        var log = $"Change documentation timer save interval requested for {attributes}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
-            UseCaseMeta.ChangeSnapshotSaveInterval,
+            UseCaseMeta.ChangeDocuTimerSaveInterval,
             LoggingMeta.ActionRequested,
             originClassType,
             traceId,
@@ -21,13 +21,13 @@ public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataCommandSender 
             DateTimeOffset.Now));
     }
 
-    public async Task CommandSent(Type originClassType, Guid traceId, object command)
+    public async Task SendingCommand(Type originClassType, Guid traceId, object command)
     {
         var log = $"Sent {command}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
-            UseCaseMeta.ChangeSnapshotSaveInterval,
+            UseCaseMeta.ChangeDocuTimerSaveInterval,
             LoggingMeta.SendingCommand,
             originClassType,
             traceId,
@@ -41,7 +41,7 @@ public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataCommandSender 
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
-            UseCaseMeta.ChangeSnapshotSaveInterval,
+            UseCaseMeta.ChangeDocuTimerSaveInterval,
             LoggingMeta.NotificationReceived,
             originClassType,
             traceId,
@@ -55,7 +55,7 @@ public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataCommandSender 
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
-            UseCaseMeta.ChangeSnapshotSaveInterval,
+            UseCaseMeta.ChangeDocuTimerSaveInterval,
             LoggingMeta.AggregateNotFound,
             originClassType,
             traceId,
@@ -69,7 +69,7 @@ public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataCommandSender 
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
-            UseCaseMeta.ChangeSnapshotSaveInterval,
+            UseCaseMeta.ChangeDocuTimerSaveInterval,
             LoggingMeta.PropertyChanged,
             originClassType,
             traceId,
@@ -83,7 +83,7 @@ public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataCommandSender 
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
-            UseCaseMeta.ChangeSnapshotSaveInterval,
+            UseCaseMeta.ChangeDocuTimerSaveInterval,
             LoggingMeta.PropertyNotChanged,
             originClassType,
             traceId,

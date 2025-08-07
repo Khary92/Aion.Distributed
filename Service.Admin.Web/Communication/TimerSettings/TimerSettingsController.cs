@@ -1,5 +1,3 @@
-using Proto.Command.TimerSettings;
-using Proto.DTO.TraceData;
 using Service.Admin.Tracing;
 using Service.Admin.Web.Communication.TimerSettings.Records;
 using Service.Admin.Web.Communication.TimerSettings.State;
@@ -20,11 +18,14 @@ public class TimerSettingsController(
         if (_previousSnapshotSaveInterval != timerSettingsStateService.TimerSettings.SnapshotSaveInterval)
         {
             var traceId = Guid.NewGuid();
+            await tracer.TimerSettings.ChangeSnapshotInterval.StartUseCase(GetType(), traceId);
 
             var changeSnapshotIntervalCommand = new WebChangeSnapshotSaveIntervalCommand(
                 timerSettingsStateService.TimerSettings.TimerSettingsId,
                 timerSettingsStateService.TimerSettings.SnapshotSaveInterval, traceId);
 
+            await tracer.TimerSettings.ChangeSnapshotInterval.SendingCommand(GetType(), traceId,
+                changeSnapshotIntervalCommand);
             await commandSender.Send(changeSnapshotIntervalCommand.ToProto());
 
             _previousSnapshotSaveInterval = timerSettingsStateService.TimerSettings.SnapshotSaveInterval;
@@ -34,10 +35,14 @@ public class TimerSettingsController(
         {
             var traceId = Guid.NewGuid();
 
+            await tracer.TimerSettings.ChangeDocuTimerInterval.StartUseCase(GetType(), traceId);
+
             var changeDocuIntervalCommand = new WebChangeDocuTimerSaveIntervalCommand(
                 timerSettingsStateService.TimerSettings.TimerSettingsId,
                 timerSettingsStateService.TimerSettings.DocumentationSaveInterval, traceId);
 
+            await tracer.TimerSettings.ChangeDocuTimerInterval.SendingCommand(GetType(), traceId,
+                changeDocuIntervalCommand);
             await commandSender.Send(changeDocuIntervalCommand.ToProto());
 
             _previousDocumentationSaveInterval = timerSettingsStateService.TimerSettings.DocumentationSaveInterval;

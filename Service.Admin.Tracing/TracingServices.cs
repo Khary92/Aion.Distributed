@@ -7,6 +7,8 @@ using Service.Admin.Tracing.Tracing.Tag;
 using Service.Admin.Tracing.Tracing.Tag.UseCase;
 using Service.Admin.Tracing.Tracing.Ticket;
 using Service.Admin.Tracing.Tracing.Ticket.UseCase;
+using Service.Admin.Tracing.Tracing.TimerSettings;
+using Service.Admin.Tracing.Tracing.TimerSettings.UseCase;
 using Service.Monitoring.Shared.Tracing;
 
 namespace Service.Admin.Tracing;
@@ -50,5 +52,12 @@ public static class TracingServices
         services.AddSingleton<IChangeNoteTypeNameTraceCollector, ChangeNoteTypeNameTraceCollector>();
 
         services.AddSingleton<INoteTypeUseCaseSelector, NoteTypeUseCaseSelector>();
+        
+        
+        services.AddSingleton<ICreateTimerSettingsTraceCollector, CreateTimerSettingsTraceCollector>();
+        services.AddSingleton<IChangeDocuTimerSaveIntervalTraceCollector, ChangeDocuTimerSaveIntervalTraceCollector>();
+        services.AddSingleton<IChangeSnapshotSaveIntervalTraceCollector, ChangeSnapshotSaveIntervalTraceCollector>();
+
+        services.AddSingleton<ITimerSettingsUseCaseSelector, TimerSettingsUseCaseSelector>();
     }
 }

@@ -1,6 +1,6 @@
-using Client.Tracing.Tracing.Tracers.TimerSettings.UseCase;
+using Service.Admin.Tracing.Tracing.TimerSettings.UseCase;
 
-namespace Client.Tracing.Tracing.Tracers.TimerSettings;
+namespace Service.Admin.Tracing.Tracing.TimerSettings;
 
 public class TimerSettingsUseCaseSelector(
     ICreateTimerSettingsTraceCollector timerSettingsTraceCollector,

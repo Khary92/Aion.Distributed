@@ -9,8 +9,6 @@ using Client.Tracing.Tracing.Tracers.Tag;
 using Client.Tracing.Tracing.Tracers.Tag.UseCase;
 using Client.Tracing.Tracing.Tracers.Ticket;
 using Client.Tracing.Tracing.Tracers.Ticket.UseCase;
-using Client.Tracing.Tracing.Tracers.TimerSettings;
-using Client.Tracing.Tracing.Tracers.TimerSettings.UseCase;
 using Client.Tracing.Tracing.Tracers.WorkDay;
 using Client.Tracing.Tracing.Tracers.WorkDay.UseCase;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,7 +26,6 @@ public static class TracingServices
         AddSprintTracingServices(services);
         AddTagTracingServices(services);
         AddTicketTracingServices(services);
-        AddTimerSettingsTracingServices(services);
         AddWorkdayTracingServices(services);
     }
 
@@ -37,7 +34,7 @@ public static class TracingServices
         services.AddScoped<ITracingDataCommandSender>(sp => new TracingDataCommandSender("http://127.0.0.1:8082"));
         services.AddScoped<ITraceCollector, TraceCollector>();
     }
-    
+
     private static void AddNoteTracingServices(this IServiceCollection services)
     {
         services.AddSingleton<ICreateNoteTraceCollector, CreateNoteTraceCollector>();
@@ -82,14 +79,6 @@ public static class TracingServices
         services.AddSingleton<ITicketUseCaseSelector, TicketUseCaseSelector>();
     }
 
-    private static void AddTimerSettingsTracingServices(this IServiceCollection services)
-    {
-        services.AddSingleton<ICreateTimerSettingsTraceCollector, CreateTimerSettingsTraceCollector>();
-        services.AddSingleton<IChangeDocuTimerSaveIntervalTraceCollector, ChangeDocuTimerSaveIntervalTraceCollector>();
-        services.AddSingleton<IChangeSnapshotSaveIntervalTraceCollector, ChangeSnapshotSaveIntervalTraceCollector>();
-
-        services.AddSingleton<ITimerSettingsUseCaseSelector, TimerSettingsUseCaseSelector>();
-    }
 
     private static void AddWorkdayTracingServices(this IServiceCollection services)
     {

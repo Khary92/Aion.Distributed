@@ -1,4 +1,4 @@
-namespace Client.Tracing.Tracing.Tracers.TimerSettings.UseCase;
+namespace Service.Admin.Tracing.Tracing.TimerSettings.UseCase;
 
 public interface ICreateTimerSettingsTraceCollector
 {
