@@ -11,7 +11,6 @@ namespace Service.Monitoring.Tracers;
 public class TraceSink(IReportSender reportSender, IVerifierFactory verifierFactory) : ITraceSink
 {
     private readonly ConcurrentDictionary<Guid, IVerifier> _ticketVerifiers = new();
-    public TraceSinkId TraceSinkId => TraceSinkId.Ticket;
 
     public void AddTrace(TraceData traceData)
     {

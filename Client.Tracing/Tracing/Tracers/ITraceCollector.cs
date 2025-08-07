@@ -1,4 +1,3 @@
-using Client.Tracing.Tracing.Tracers.Export;
 using Client.Tracing.Tracing.Tracers.Note;
 using Client.Tracing.Tracing.Tracers.NoteType;
 using Client.Tracing.Tracing.Tracers.Sprint;
@@ -16,7 +15,6 @@ public interface ITraceCollector
     ISprintUseCaseSelector Sprint { get; }
     ITagUseCaseSelector Tag { get; }
     INoteUseCaseSelector Note { get; }
-    IExportUseCaseSelector Export { get; }
     IWorkDayUseCaseSelector WorkDay { get; }
     ITimerSettingsUseCaseSelector TimerSettings { get; }
 }

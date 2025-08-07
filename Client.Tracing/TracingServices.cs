@@ -1,6 +1,4 @@
 using Client.Tracing.Tracing.Tracers;
-using Client.Tracing.Tracing.Tracers.Export;
-using Client.Tracing.Tracing.Tracers.Export.UseCase;
 using Client.Tracing.Tracing.Tracers.Note;
 using Client.Tracing.Tracing.Tracers.Note.UseCase;
 using Client.Tracing.Tracing.Tracers.NoteType;
@@ -25,7 +23,6 @@ public static class TracingServices
     public static void AddTracingServices(this IServiceCollection services)
     {
         AddACommonTracingServices(services);
-        AddExportTracingServices(services);
         AddNoteTracingServices(services);
         AddNoteTypeTracingServices(services);
         AddSprintTracingServices(services);
@@ -40,14 +37,7 @@ public static class TracingServices
         services.AddScoped<ITracingDataCommandSender>(sp => new TracingDataCommandSender("http://127.0.0.1:8082"));
         services.AddScoped<ITraceCollector, TraceCollector>();
     }
-
-    private static void AddExportTracingServices(this IServiceCollection services)
-    {
-        services.AddSingleton<IExportTraceCollector, ExportTraceCollector>();
-
-        services.AddSingleton<IExportUseCaseSelector, ExportUseCaseSelector>();
-    }
-
+    
     private static void AddNoteTracingServices(this IServiceCollection services)
     {
         services.AddSingleton<ICreateNoteTraceCollector, CreateNoteTraceCollector>();

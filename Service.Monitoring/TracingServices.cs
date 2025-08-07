@@ -3,6 +3,7 @@ using Service.Monitoring.Communication;
 using Service.Monitoring.Tracers;
 using Service.Monitoring.Verifiers.Common;
 using Service.Monitoring.Verifiers.Common.Factories;
+using Service.Monitoring.Verifiers.Steps;
 using Service.Monitoring.Verifiers.Ticket;
 
 namespace Service.Monitoring;
@@ -26,6 +27,13 @@ public static class TracingServices
     {
         services.AddSingleton<IVerifierFactory, VerifierFactory>();
 
+        services.AddSingleton<IVerificationProvider, NoteTypeVerificationProvider>();
+        services.AddSingleton<IVerificationProvider, NoteVerificationProvider>();
+        services.AddSingleton<IVerificationProvider, SprintVerificationProvider>();
+        services.AddSingleton<IVerificationProvider, StatisticsDataVerificationProvider>();
+        services.AddSingleton<IVerificationProvider, TagVerificationProvider>();
         services.AddSingleton<IVerificationProvider, TicketVerificationProvider>();
+        services.AddSingleton<IVerificationProvider, TimerSettingsVerificationProvider>();
+        services.AddSingleton<IVerificationProvider, WorkDayVerificationProvider>();
     }
 }

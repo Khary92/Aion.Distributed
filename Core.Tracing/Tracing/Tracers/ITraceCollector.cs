@@ -5,6 +5,7 @@ using Core.Server.Tracing.Tracing.Tracers.Statistics;
 using Core.Server.Tracing.Tracing.Tracers.Tag;
 using Core.Server.Tracing.Tracing.Tracers.Ticket;
 using Core.Server.Tracing.Tracing.Tracers.TimerSettings;
+using Core.Server.Tracing.Tracing.Tracers.TimeSlot;
 using Core.Server.Tracing.Tracing.Tracers.WorkDay;
 
 namespace Core.Server.Tracing.Tracing.Tracers;
@@ -19,4 +20,5 @@ public interface ITraceCollector
     INoteUseCaseSelector Note { get; }
     IWorkDayUseCaseSelector WorkDay { get; }
     ITimerSettingsUseCaseSelector TimerSettings { get; }
+    ITimeSlotUseCaseSelector TimeSlot { get; }
 }

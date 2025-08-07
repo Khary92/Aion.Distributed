@@ -10,6 +10,8 @@ public class UseCaseStateEvaluator(ImmutableList<VerificationStep> verificationS
 {
     public Result GetResultState(List<TraceData> traces)
     {
+        if (verificationSteps.Count == 0) return Result.NoValidationAvailable;
+        
         for (var index = 0; index < verificationSteps.Count; index++)
         {
             if (traces.Count <= index)

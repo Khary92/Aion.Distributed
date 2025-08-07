@@ -8,5 +8,6 @@ public enum Result
     NotFound,
     TimedOut,
     WrongOrder,
-    InvalidInvocationCount
+    InvalidInvocationCount,
+    NoValidationAvailable
 }

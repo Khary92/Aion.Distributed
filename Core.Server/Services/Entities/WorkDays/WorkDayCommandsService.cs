@@ -17,6 +17,7 @@ public class WorkDayCommandsService(
     {
         var workDays = await workDayRequestsService.GetAll();
 
+        //TODO trace this
         if (workDays.Any(wd => wd.Date.Date == command.Date.Date)) return;
 
         await workDayEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
