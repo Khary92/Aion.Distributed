@@ -7,9 +7,9 @@ namespace Service.Admin.Tracing.Tracing.TimerSettings.UseCase;
 public class ChangeDocuTimerSaveIntervalTraceCollector(ITracingDataCommandSender commandSender)
     : IChangeDocuTimerSaveIntervalTraceCollector
 {
-    public async Task StartUseCase(Type originClassType, Guid traceId, string attributes)
+    public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = $"Change documentation timer save interval requested for {attributes}";
+        var log = $"Change documentation timer save interval requested";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,

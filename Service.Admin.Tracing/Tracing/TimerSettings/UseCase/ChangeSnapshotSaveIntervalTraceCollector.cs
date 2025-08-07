@@ -7,9 +7,9 @@ namespace Service.Admin.Tracing.Tracing.TimerSettings.UseCase;
 public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataCommandSender commandSender)
     : IChangeSnapshotSaveIntervalTraceCollector
 {
-    public async Task StartUseCase(Type originClassType, Guid traceId, string attributes)
+    public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = $"Change active status requested for {attributes}";
+        var log = $"Change active status requested";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
