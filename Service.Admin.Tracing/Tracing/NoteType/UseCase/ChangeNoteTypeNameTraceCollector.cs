@@ -7,9 +7,9 @@ namespace Service.Admin.Tracing.Tracing.NoteType.UseCase;
 public class ChangeNoteTypeNameTraceCollector(ITracingDataCommandSender commandSender)
     : IChangeNoteTypeNameTraceCollector
 {
-    public async Task StartUseCase(Type originClassType, Guid traceId, object attributes)
+    public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = $"Change Name requested for {attributes}";
+        var log = $"Change Name requested";
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.NoteType,
             UseCaseMeta.ChangeNoteTypeName,

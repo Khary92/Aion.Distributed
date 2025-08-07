@@ -6,9 +6,9 @@ namespace Service.Admin.Tracing.Tracing.Tag.UseCase;
 
 public class UpdateTagTraceCollector(ITracingDataCommandSender commandSender) : IUpdateTagTraceCollector
 {
-    public async Task StartUseCase(Type originClassType, Guid traceId, string attributes)
+    public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = $"Change tag data requested for {attributes}";
+        var log = $"Change tag data requested";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Tag,

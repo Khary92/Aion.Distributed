@@ -7,9 +7,9 @@ namespace Service.Admin.Tracing.Tracing.NoteType.UseCase;
 public class ChangeNoteTypeColorTraceCollector(ITracingDataCommandSender commandSender)
     : IChangeNoteTypeColorTraceCollector
 {
-    public async Task StartUseCase(Type originClassType, Guid traceId, object attributes)
+    public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = $"Change Color requested for {attributes}";
+        var log = $"Change Color requested";
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.NoteType,
             UseCaseMeta.ChangeNoteTypeColor,

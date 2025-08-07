@@ -6,9 +6,9 @@ namespace Service.Admin.Tracing.Tracing.Tag.UseCase;
 
 public class CreateTagTraceCollector(ITracingDataCommandSender commandSender) : ICreateTagTraceCollector
 {
-    public async Task StartUseCase(Type originClassType, Guid traceId, string attributes)
+    public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = $"Create Tag requested for {attributes}";
+        var log = $"Create Tag requested";
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Tag,
             UseCaseMeta.CreateTag,
