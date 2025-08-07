@@ -3,11 +3,11 @@ using Client.Tracing.Tracing.Tracers.Ticket.UseCase;
 namespace Client.Tracing.Tracing.Tracers.Ticket;
 
 public class TicketUseCaseSelector(
-    ICreateTicketTraceCollector createCollector,
-    IUpdateTicketTraceCollector updateCollector,
-    IAddTicketToCurrentSprintTraceCollector addTicketToSprintCollector) : ITicketUseCaseSelector
+    IUpdateTicketDocuTraceCollector updateCollector,
+    ICreateTicketUseCaseCollector createTicketUseCaseCollector,
+    IUpdateTicketTraceCollector updateTicketTraceCollector) : ITicketUseCaseSelector
 {
-    public ICreateTicketTraceCollector Create => createCollector;
-    public IUpdateTicketTraceCollector Update => updateCollector;
-    public IAddTicketToCurrentSprintTraceCollector AddTicketToSprint => addTicketToSprintCollector;
+    public IUpdateTicketDocuTraceCollector Documentation => updateCollector;
+    public ICreateTicketUseCaseCollector Create => createTicketUseCaseCollector;
+    public IUpdateTicketTraceCollector Update => updateTicketTraceCollector;
 }

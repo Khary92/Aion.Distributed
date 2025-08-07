@@ -4,15 +4,15 @@ using Service.Monitoring.Shared.Tracing;
 
 namespace Client.Tracing.Tracing.Tracers.Ticket.UseCase;
 
-public class CreateTicketTraceCollector(ITracingDataCommandSender commandSender) : ICreateTicketTraceCollector
+public class UpdateTicketDocuTraceCollector(ITracingDataCommandSender commandSender) : IUpdateTicketDocuTraceCollector
 {
-    public async Task StartUseCase(Type originClassType, Guid traceId, object command)
+    public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = $"Create Ticket requested for {command}";
+        var log = $"Create Ticket requested";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
-            UseCaseMeta.CreateTicket,
+            UseCaseMeta.UpdateTicketDocumentation,
             LoggingMeta.ActionRequested,
             originClassType,
             traceId,
@@ -26,7 +26,7 @@ public class CreateTicketTraceCollector(ITracingDataCommandSender commandSender)
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
-            UseCaseMeta.CreateTicket,
+            UseCaseMeta.UpdateTicketDocumentation,
             LoggingMeta.SendingCommand,
             originClassType,
             traceId,
@@ -40,7 +40,7 @@ public class CreateTicketTraceCollector(ITracingDataCommandSender commandSender)
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
-            UseCaseMeta.CreateTicket,
+            UseCaseMeta.UpdateTicketDocumentation,
             LoggingMeta.NotificationReceived,
             originClassType,
             traceId,
@@ -53,7 +53,7 @@ public class CreateTicketTraceCollector(ITracingDataCommandSender commandSender)
         var log = $"Received aggregate {attributes}";
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
-            UseCaseMeta.CreateTicket,
+            UseCaseMeta.UpdateTicketDocumentation,
             LoggingMeta.AggregateReceived,
             originClassType,
             traceId,
@@ -66,7 +66,7 @@ public class CreateTicketTraceCollector(ITracingDataCommandSender commandSender)
         var log = $"Added aggregate with id:{traceId}";
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.Ticket,
-            UseCaseMeta.CreateTicket,
+            UseCaseMeta.UpdateTicketDocumentation,
             LoggingMeta.AggregateAdded,
             originClassType,
             traceId,

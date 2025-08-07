@@ -72,13 +72,12 @@ public static class TracingServices
 
     private static void AddTicketTracingServices(this IServiceCollection services)
     {
-        services.AddSingleton<ICreateTicketTraceCollector, CreateTicketTraceCollector>();
-        services.AddSingleton<IAddTicketToCurrentSprintTraceCollector, AddTicketToCurrentSprintTraceCollector>();
+        services.AddSingleton<IUpdateTicketDocuTraceCollector, UpdateTicketDocuTraceCollector>();
+        services.AddSingleton<ICreateTicketUseCaseCollector, CreateTicketUseCaseCollector>();
         services.AddSingleton<IUpdateTicketTraceCollector, UpdateTicketTraceCollector>();
 
         services.AddSingleton<ITicketUseCaseSelector, TicketUseCaseSelector>();
     }
-
 
     private static void AddWorkdayTracingServices(this IServiceCollection services)
     {

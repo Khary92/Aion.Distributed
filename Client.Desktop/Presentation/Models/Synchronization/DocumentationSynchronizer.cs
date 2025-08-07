@@ -4,10 +4,12 @@ using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.Commands.Ticket;
 using Client.Desktop.DataModels.Decorators.Replays;
+using Client.Tracing.Tracing.Tracers;
 
 namespace Client.Desktop.Presentation.Models.Synchronization;
 
-public class DocumentationSynchronizer(ICommandSender commandSender) : IStateSynchronizer<TicketReplayDecorator, string>
+public class DocumentationSynchronizer(ICommandSender commandSender, ITraceCollector tracer)
+    : IStateSynchronizer<TicketReplayDecorator, string>
 {
     private readonly ConcurrentDictionary<Guid, string> _documentationById = new();
     private readonly ConcurrentDictionary<Guid, ConcurrentBag<TicketReplayDecorator>> _ticketDecoratorsById = new();
@@ -23,8 +25,12 @@ public class DocumentationSynchronizer(ICommandSender commandSender) : IStateSyn
         _documentationById.AddOrUpdate(ticketId, documentation, (_, _) => documentation);
     }
 
-    public async Task FireCommand()
+    public async Task FireCommand(Guid traceId)
     {
+        // TODO horrible implementation. Felt cute. Might fix later
+        var commandTicketId = Guid.Empty;
+        var newDocumentation = string.Empty;
+
         foreach (var ticketId in _ticketDecoratorsById.Keys)
         {
             if (!_documentationById.TryGetValue(ticketId, out var documentation))
@@ -39,7 +45,11 @@ public class DocumentationSynchronizer(ICommandSender commandSender) : IStateSyn
                 decorator.DisplayedDocumentation = documentation;
             }
 
-            await commandSender.Send(new ClientUpdateTicketDocumentationCommand(ticketId, documentation, Guid.NewGuid()));
+            commandTicketId = ticketId;
+            newDocumentation = documentation;
         }
+
+        await commandSender.Send(
+            new ClientUpdateTicketDocumentationCommand(commandTicketId, newDocumentation, traceId));
     }
 }

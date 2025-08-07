@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.Commands.TimeSlots.Records;
 using Client.Desktop.FileSystem;
+using Client.Tracing.Tracing.Tracers;
 
 namespace Client.Desktop.Services.Cache;
 
@@ -12,7 +13,8 @@ public class EndTimeChangedCache(
     ICommandSender commandSender,
     IFileSystemWrapper fileSystemWrapper,
     IFileSystemWriter fileSystemWriter,
-    IFileSystemReader fileSystemReader) : IPersistentCache<ClientSetEndTimeCommand>
+    IFileSystemReader fileSystemReader,
+    ITraceCollector tracer) : IPersistentCache<ClientSetEndTimeCommand>
 {
     private const string Path = "EndTimes.json";
 

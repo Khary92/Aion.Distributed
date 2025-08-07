@@ -7,6 +7,7 @@ using Client.Desktop.DataModels;
 using Client.Desktop.DataModels.Decorators.Replays;
 using Client.Desktop.Presentation.Models.Synchronization;
 using Client.Desktop.Services.Cache;
+using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using ReactiveUI;
 
@@ -16,7 +17,8 @@ public class TimeSlotModel(
     IMessenger messenger,
     IStateSynchronizer<TicketReplayDecorator, string> ticketDocumentStateSynchronizer,
     IPersistentCache<ClientSetStartTimeCommand> startTimeCache,
-    IPersistentCache<ClientSetEndTimeCommand> endTimeCache) : ReactiveObject
+    IPersistentCache<ClientSetEndTimeCommand> endTimeCache,
+    ITraceCollector tracer) : ReactiveObject
 {
     private TicketReplayDecorator _selectedTicketReplayDecorator = null!;
     private TimeSlotClientModel _timeSlot = null!;
@@ -59,23 +61,28 @@ public class TimeSlotModel(
         {
             if (!TicketReplayDecorator.Ticket.IsDocumentationChanged()) return;
 
+            var traceId = Guid.NewGuid();
+            await tracer.Ticket.Documentation.StartUseCase(GetType(),traceId);
+            
             ticketDocumentStateSynchronizer.SetSynchronizationValue(TicketReplayDecorator.Ticket.TicketId,
                 TicketReplayDecorator.Ticket.Documentation);
 
-            await ticketDocumentStateSynchronizer.FireCommand();
+            await ticketDocumentStateSynchronizer.FireCommand(traceId);
         });
 
         messenger.Register<ClientCreateSnapshotNotification>(this, (_, _) =>
         {
             if (TimeSlot.IsEndTimeChanged())
             {
-                var setEndTimeCommand = new ClientSetEndTimeCommand(TimeSlot.TimeSlotId, TimeSlot.EndTime, Guid.NewGuid());
+                var setEndTimeCommand =
+                    new ClientSetEndTimeCommand(TimeSlot.TimeSlotId, TimeSlot.EndTime, Guid.NewGuid());
                 endTimeCache.Store(setEndTimeCommand);
             }
 
             if (TimeSlot.IsStartTimeChanged())
             {
-                var setStartTimeCommand = new ClientSetStartTimeCommand(TimeSlot.TimeSlotId, TimeSlot.StartTime, Guid.NewGuid());
+                var setStartTimeCommand =
+                    new ClientSetStartTimeCommand(TimeSlot.TimeSlotId, TimeSlot.StartTime, Guid.NewGuid());
 
                 startTimeCache.Store(setStartTimeCommand);
             }
