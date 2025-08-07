@@ -1,6 +1,7 @@
 using Proto.Command.Tags;
 using Proto.DTO.TraceData;
 using Service.Admin.Tracing;
+using Service.Admin.Web.Communication.Tags.Records;
 using Service.Admin.Web.Models;
 using Service.Admin.Web.Pages;
 
@@ -18,40 +19,27 @@ public class TagController(ITraceCollector tracer, ISharedCommandSender commandS
         
         SelectedTag.Name = InputTagName;
 
-        await tracer.Tag.Update.StartUseCase(GetType(), SelectedTag.TagId, SelectedTag.AsTraceAttributes());
+        var traceId = Guid.NewGuid();
+        await tracer.Tag.Update.StartUseCase(GetType(), traceId);
 
-        var updateTagCommand = new UpdateTagCommandProto
-        {
-            TagId = SelectedTag.TagId.ToString(),
-            Name = InputTagName,
-            TraceData = new TraceDataProto()
-            {
-                TraceId = Guid.NewGuid().ToString()
-            }
-        };
-
-        await commandSender.Send(updateTagCommand);
-        await tracer.Tag.Update.CommandSent(GetType(), SelectedTag.TagId, updateTagCommand);
+        var updateTagCommand = new WebUpdateTagCommand(SelectedTag.TagId, InputTagName, traceId);
+        
+        await tracer.Tag.Update.SendingCommand(GetType(), SelectedTag.TagId, updateTagCommand);
+        await commandSender.Send(updateTagCommand.ToProto());
     }
 
     private async Task CreateTag()
     {
+        var traceId = Guid.NewGuid();
+        
         var createTagDto = new TagWebModel(Guid.NewGuid(), InputTagName, false);
 
-        await tracer.Tag.Create.StartUseCase(GetType(), createTagDto.TagId, createTagDto.AsTraceAttributes());
+        await tracer.Tag.Create.StartUseCase(GetType(), traceId);
 
-        var createTagCommand = new CreateTagCommandProto
-        {
-            TagId = createTagDto.TagId.ToString(),
-            Name = InputTagName,
-            TraceData = new TraceDataProto()
-            {
-                TraceId = Guid.NewGuid().ToString()
-            }
-        };
+        var createTagCommand = new WebCreateTagCommand(Guid.NewGuid(), InputTagName, traceId);
 
-        await commandSender.Send(createTagCommand);
-        await tracer.Tag.Create.CommandSent(GetType(), createTagDto.TagId, createTagCommand);
+        await tracer.Tag.Create.SendingCommand(GetType(), createTagDto.TagId, createTagCommand);
+        await commandSender.Send(createTagCommand.ToProto());
 
         InputTagName = string.Empty;
         IsEditMode = false;

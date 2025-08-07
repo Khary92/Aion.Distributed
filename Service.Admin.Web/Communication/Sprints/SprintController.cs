@@ -74,10 +74,10 @@ public class SprintController(ISharedCommandSender commandSender, ITraceCollecto
             await tracer.Sprint.Update.NoEntitySelected(GetType(), traceId);
             return;
         }
-        
+
         var command = new WebUpdateSprintDataCommand(SelectedSprint.SprintId, NewSprintName, StartTime, EndTime,
-                SelectedSprint.TicketIds, traceId);
-        
+            SelectedSprint.TicketIds, traceId);
+
         await tracer.Sprint.ActiveStatus.SendingCommand(GetType(), traceId, command);
         await commandSender.Send(command.ToProto());
 
