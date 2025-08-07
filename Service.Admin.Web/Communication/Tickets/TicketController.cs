@@ -32,20 +32,19 @@ public class TicketController(ITraceCollector tracer, ISharedCommandSender comma
             new WebUpdateTicketCommand(SelectedTicket.TicketId, NewTicketName, NewTicketBookingNumber,
                 SelectedTicket.SprintIds, traceId);
 
-        // TODO well there is no more ViewModel
-
         await tracer.Ticket.Update.SendingCommand(GetType(), updateTicketCommand.TraceId, updateTicketCommand);
         await commandSender.Send(updateTicketCommand.ToProto());
     }
 
     private async Task CreateTicket()
     {
+        var traceId = Guid.NewGuid();
+
+        await tracer.Ticket.Create.StartUseCase(GetType(), traceId);
+
         var createTicketCommand =
-            new WebCreateTicketCommand(Guid.NewGuid(), NewTicketName, NewTicketBookingNumber, [], Guid.NewGuid());
-
-        // TODO well there is no more ViewModel
-        await tracer.Ticket.Create.StartUseCase(GetType(), createTicketCommand.TraceId, createTicketCommand);
-
+            new WebCreateTicketCommand(Guid.NewGuid(), NewTicketName, NewTicketBookingNumber, [], traceId);
+        
         await tracer.Ticket.Create.SendingCommand(GetType(), createTicketCommand.TraceId, createTicketCommand);
         await commandSender.Send(createTicketCommand.ToProto());
 
@@ -82,7 +81,7 @@ public class TicketController(ITraceCollector tracer, ISharedCommandSender comma
     {
         var traceId = Guid.NewGuid();
         await tracer.Sprint.AddTicketToSprint.StartUseCase(GetType(), traceId);
-        
+
         if (SelectedTicket == null)
         {
             await tracer.Sprint.AddTicketToSprint.NoEntitySelected(GetType(), traceId);

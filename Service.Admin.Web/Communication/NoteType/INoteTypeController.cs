@@ -11,5 +11,5 @@ public interface INoteTypeController
     bool CanSave { get; }
     string EditButtonText { get; }
     void ToggleEditMode();
-    Task PersistNoteType();
+    Task CreateOrUpdate();
 }

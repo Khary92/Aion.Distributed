@@ -19,7 +19,7 @@ public class CreateNoteTypeTraceCollector(ITracingDataCommandSender commandSende
             DateTimeOffset.Now));
     }
 
-    public async Task CommandSent(Type originClassType, Guid traceId, object command)
+    public async Task SendingCommand(Type originClassType, Guid traceId, object command)
     {
         var log = $"Sent {command}";
         await commandSender.Send(new ServiceTraceDataCommand(

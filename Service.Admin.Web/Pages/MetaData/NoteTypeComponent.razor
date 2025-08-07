@@ -18,7 +18,7 @@
         <div class="mb-2">
             <button class="btn btn-success me-2"
                     disabled="@(!@NoteTypeController.CanSave)"
-                    @onclick="async () => await NoteTypeController.PersistNoteType()">Save
+                    @onclick="async () => await NoteTypeController.CreateOrUpdate()">Save
             </button>
             <button class="btn btn-warning me-2"
                     disabled="@NoteTypeController.SelectedNoteType is null"
