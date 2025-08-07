@@ -74,13 +74,11 @@ public class SprintController(ISharedCommandSender commandSender, ITraceCollecto
             await tracer.Sprint.Update.NoEntitySelected(GetType(), traceId);
             return;
         }
-
-        var updateSprintDto = new SprintWebModel(SelectedSprint.SprintId, NewSprintName,
-            SelectedSprint.IsActive, StartTime, EndTime, SelectedSprint.TicketIds);
-
-        var command =
-            new WebUpdateSprintDataCommand(SelectedSprint.SprintId, NewSprintName, StartTime, EndTime, traceId);
-        await tracer.Sprint.ActiveStatus.SendingCommand(GetType(), updateSprintDto.SprintId, command);
+        
+        var command = new WebUpdateSprintDataCommand(SelectedSprint.SprintId, NewSprintName, StartTime, EndTime,
+                SelectedSprint.TicketIds, traceId);
+        
+        await tracer.Sprint.ActiveStatus.SendingCommand(GetType(), traceId, command);
         await commandSender.Send(command.ToProto());
 
         IsEditMode = false;
@@ -93,9 +91,9 @@ public class SprintController(ISharedCommandSender commandSender, ITraceCollecto
         await tracer.Sprint.Create.StartUseCase(GetType(), traceId);
 
         var createCommand =
-            new WebCreateSprintCommand(Guid.NewGuid(), NewSprintName, StartTime, EndTime, true, [], Guid.NewGuid());
+            new WebCreateSprintCommand(Guid.NewGuid(), NewSprintName, StartTime, EndTime, true, [], traceId);
 
-        await tracer.Sprint.Create.CommandSent(GetType(), traceId, createCommand);
+        await tracer.Sprint.Create.SendingCommand(GetType(), traceId, createCommand);
         await commandSender.Send(createCommand.ToProto());
 
         ResetData();
