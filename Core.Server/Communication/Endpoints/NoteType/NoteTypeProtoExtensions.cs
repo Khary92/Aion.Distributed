@@ -11,16 +11,16 @@ public static class NoteTypeProtoExtensions
     public static CreateNoteTypeCommand ToCommand(this CreateNoteTypeCommandProto proto) => new(
         Guid.Parse(proto.NoteTypeId), proto.Name, proto.Color, Guid.Parse(proto.TraceData.TraceId));
 
-    public static NoteTypeNotification ToNotification(this CreateNoteTypeCommand proto) => new()
+    public static NoteTypeNotification ToNotification(this CreateNoteTypeCommand command) => new()
     {
         NoteTypeCreated = new NoteTypeCreatedNotification
         {
-            NoteTypeId = proto.NoteTypeId.ToString(),
-            Name = proto.Name,
-            Color = proto.Color,
+            NoteTypeId = command.NoteTypeId.ToString(),
+            Name = command.Name,
+            Color = command.Color,
             TraceData = new()
             {
-                TraceId = proto.TraceId.ToString()
+                TraceId = command.TraceId.ToString()
             }
         }
     };

@@ -21,9 +21,8 @@
                     @onclick="async () => await NoteTypeController.CreateOrUpdate()">Save
             </button>
             <button class="btn btn-warning me-2"
-                    disabled="@NoteTypeController.SelectedNoteType is null"
-                    @onclick="@NoteTypeController.ToggleEditMode">@NoteTypeController.EditButtonText
-            </button>
+                    disabled="@(@NoteTypeController.SelectedNoteType == null)"
+                    @onclick="@NoteTypeController.ToggleEditMode">@NoteTypeController.EditButtonText</button>
         </div>
     </div>
 

@@ -9,6 +9,17 @@ namespace Service.Admin.Web.Communication.NoteType;
 
 public static class NoteTypeExtensions
 {
+    public static CreateNoteTypeCommandProto ToProto(this WebCreateNoteTypeCommand command) => new()
+    {
+        NoteTypeId = command.NoteTypeId.ToString(),
+        Name = command.Name,
+        Color = command.Color,
+        TraceData = new()
+        {
+            TraceId = command.TraceId.ToString()
+        }
+    };
+    
     public static ChangeNoteTypeNameCommandProto ToProto(this WebChangeNoteTypeNameCommand command) => new()
     {
         NoteTypeId = command.NoteTypeId.ToString(),

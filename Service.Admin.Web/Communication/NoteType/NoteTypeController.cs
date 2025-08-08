@@ -67,23 +67,13 @@ public class NoteTypeController(ISharedCommandSender commandSender, ITraceCollec
 
     private async Task CreateNoteType()
     {
-        var traceId = Guid.NewGuid(); 
-        
-        var createCommand = new CreateNoteTypeCommandProto
-        {
-            NoteTypeId = Guid.NewGuid().ToString(),
-            Name = InputName,
-            Color = InputColor,
-            TraceData = new TraceDataProto()
-            {
-                TraceId = Guid.NewGuid().ToString()
-            }
-        };
+        var traceId = Guid.NewGuid();
+        var createCommand = new WebCreateNoteTypeCommand(Guid.NewGuid(), InputName, InputColor, traceId);
         
         await tracer.NoteType.Create.StartUseCase(GetType(), traceId, createCommand.ToString());
 
         await tracer.NoteType.Create.SendingCommand(GetType(), traceId, createCommand);
-        await commandSender.Send(createCommand);
+        await commandSender.Send(createCommand.ToProto());
 
         ResetData();   
     }
