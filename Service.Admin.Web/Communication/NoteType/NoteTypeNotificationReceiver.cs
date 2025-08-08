@@ -1,11 +1,12 @@
 ﻿using Grpc.Core;
 using Grpc.Net.Client;
 using Proto.Notifications.NoteType;
+using Service.Admin.Tracing;
 using Service.Admin.Web.Communication.NoteType.State;
 
 namespace Service.Admin.Web.Communication.NoteType;
 
-public class NoteTypeNotificationReceiver(INoteTypeStateService noteTypeStateService)
+public class NoteTypeNotificationReceiver(INoteTypeStateService noteTypeStateService, ITraceCollector tracer)
 {
     public async Task SubscribeToNotifications(CancellationToken stoppingToken = default)
     {
@@ -34,17 +35,33 @@ public class NoteTypeNotificationReceiver(INoteTypeStateService noteTypeStateSer
                     {
                         case NoteTypeNotification.NotificationOneofCase.NoteTypeCreated:
                         {
-                            await noteTypeStateService.AddNoteType(notification.NoteTypeCreated.ToWebModel());
+                            var newNoteTypeMessage = notification.NoteTypeCreated.ToWebModel();
+
+                            await tracer.NoteType.Create.NotificationReceived(GetType(), newNoteTypeMessage.TraceId,
+                                notification);
+
+                            await noteTypeStateService.AddNoteType(newNoteTypeMessage);
                             break;
                         }
                         case NoteTypeNotification.NotificationOneofCase.NoteTypeColorChanged:
                         {
-                            noteTypeStateService.Apply(notification.NoteTypeColorChanged.ToNotification());
+                            var webNoteTypeColorChangedNotification =
+                                notification.NoteTypeColorChanged.ToNotification();
+
+                            await tracer.NoteType.ChangeColor.NotificationReceived(GetType(),
+                                webNoteTypeColorChangedNotification.TraceId, notification);
+
+                            noteTypeStateService.Apply(webNoteTypeColorChangedNotification);
                             break;
                         }
                         case NoteTypeNotification.NotificationOneofCase.NoteTypeNameChanged:
                         {
-                            noteTypeStateService.Apply(notification.NoteTypeNameChanged.ToNotification());
+                            var webNoteTypeNameChangedNotification = notification.NoteTypeNameChanged.ToNotification();
+
+                            await tracer.NoteType.ChangeName.NotificationReceived(GetType(),
+                                webNoteTypeNameChangedNotification.TraceId, notification);
+
+                            noteTypeStateService.Apply(webNoteTypeNameChangedNotification);
                             break;
                         }
                     }
@@ -53,7 +70,7 @@ public class NoteTypeNotificationReceiver(INoteTypeStateService noteTypeStateSer
             {
                 await Task.Delay(5000, stoppingToken);
             }
-            catch (OperationCanceledException)when (stoppingToken.IsCancellationRequested)
+            catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
             {
                 break;
             }

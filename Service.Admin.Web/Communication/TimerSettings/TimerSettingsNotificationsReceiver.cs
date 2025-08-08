@@ -1,12 +1,15 @@
 ﻿using Grpc.Core;
 using Grpc.Net.Client;
 using Proto.Notifications.TimerSettings;
+using Service.Admin.Tracing;
 using Service.Admin.Web.Communication.TimerSettings.State;
 using SubscribeRequest = Proto.Notifications.TimerSettings.SubscribeRequest;
 
 namespace Service.Admin.Web.Communication.TimerSettings;
 
-public class TimerSettingsNotificationsReceiver(ITimerSettingsStateService timerSettingsStateService)
+public class TimerSettingsNotificationsReceiver(
+    ITimerSettingsStateService timerSettingsStateService,
+    ITraceCollector tracer)
 {
     public async Task SubscribeToNotifications(CancellationToken stoppingToken = default)
     {
@@ -35,16 +38,32 @@ public class TimerSettingsNotificationsReceiver(ITimerSettingsStateService timer
                     switch (notification.NotificationCase)
                     {
                         case TimerSettingsNotification.NotificationOneofCase.TimerSettingsCreated:
-                            await timerSettingsStateService.SetTimerSettings(notification.TimerSettingsCreated
-                                .ToNewEntityMessage());
+                            var newTimerSettingsMessage = notification.TimerSettingsCreated.ToNewEntityMessage();
+
+                            await tracer.TimerSettings.Create.NotificationReceived(GetType(),
+                                newTimerSettingsMessage.TraceId, notification.TimerSettingsCreated);
+
+                            await timerSettingsStateService.SetTimerSettings(newTimerSettingsMessage);
                             break;
 
                         case TimerSettingsNotification.NotificationOneofCase.DocuTimerSaveIntervalChanged:
-                            timerSettingsStateService.Apply(notification.DocuTimerSaveIntervalChanged.ToNotification());
+                            var webDocuIntervalChangedNotification =
+                                notification.DocuTimerSaveIntervalChanged.ToNotification();
+
+                            await tracer.TimerSettings.ChangeDocuTimerInterval.NotificationReceived(GetType(),
+                                webDocuIntervalChangedNotification.TraceId, notification.TimerSettingsCreated);
+
+                            timerSettingsStateService.Apply(webDocuIntervalChangedNotification);
                             break;
 
                         case TimerSettingsNotification.NotificationOneofCase.SnapshotSaveIntervalChanged:
-                            timerSettingsStateService.Apply(notification.SnapshotSaveIntervalChanged.ToNotification());
+                            var webSnapshotIntervalChangedNotification =
+                                notification.SnapshotSaveIntervalChanged.ToNotification();
+
+                            await tracer.TimerSettings.ChangeDocuTimerInterval.NotificationReceived(GetType(),
+                                webSnapshotIntervalChangedNotification.TraceId, notification.TimerSettingsCreated);
+
+                            timerSettingsStateService.Apply(webSnapshotIntervalChangedNotification);
                             break;
                     }
             }

@@ -32,6 +32,19 @@ public class CreateTagTraceCollector(ITracingDataCommandSender commandSender) : 
             DateTimeOffset.Now));
     }
 
+    public async Task NotificationReceived(Type originClassType, Guid traceId, object notification)
+    {
+        var log = $"Received {notification}";
+        await commandSender.Send(new ServiceTraceDataCommand(
+            TraceSinkId.Tag,
+            UseCaseMeta.CreateTag,
+            LoggingMeta.NotificationReceived,
+            originClassType,
+            traceId,
+            log,
+            DateTimeOffset.Now));
+    }
+
     public async Task AggregateReceived(Type originClassType, Guid traceId, string attributes)
     {
         var log = $"Received aggregate {attributes}";

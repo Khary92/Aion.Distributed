@@ -8,6 +8,6 @@ public interface ITagStateService
 {
     IReadOnlyList<TagWebModel> Tickets { get; }
     event Action? OnStateChanged;
-    Task AddTicket(NewTagMessage tagMessage);
+    Task AddTag(NewTagMessage tagMessage);
     void Apply(WebTagUpdatedNotification notification);
 }

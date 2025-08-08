@@ -6,7 +6,7 @@ using Service.Admin.Web.Communication.Tags.State;
 
 namespace Service.Admin.Web.Communication.Tags;
 
-public class TagNotificationsReceiver(ITraceCollector tracer, ITagStateService tagStateService)
+public class TagNotificationsReceiver(ITagStateService tagStateService, ITraceCollector tracer)
 {
     public async Task SubscribeToNotifications(CancellationToken stoppingToken = default)
     {
@@ -34,12 +34,21 @@ public class TagNotificationsReceiver(ITraceCollector tracer, ITagStateService t
                     switch (notification.NotificationCase)
                     {
                         case TagNotification.NotificationOneofCase.TagCreated:
-                            var notificationTagCreated = notification.TagCreated;
-                            await tagStateService.AddTicket(notificationTagCreated.ToWebModel());
+                            var newTagMessage = notification.TagCreated.ToWebModel();
+
+                            await tracer.Tag.Create.NotificationReceived(GetType(), newTagMessage.TraceId,
+                                notification.TagCreated);
+
+                            await tagStateService.AddTag(newTagMessage);
                             break;
 
                         case TagNotification.NotificationOneofCase.TagUpdated:
-                            tagStateService.Apply(notification.TagUpdated.ToNotification());
+                            var webTagUpdatedNotification = notification.TagUpdated.ToNotification();
+
+                            await tracer.Tag.Create.NotificationReceived(GetType(), webTagUpdatedNotification.TraceId,
+                                notification.TagCreated);
+
+                            tagStateService.Apply(webTagUpdatedNotification);
                             break;
                     }
             }

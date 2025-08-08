@@ -13,7 +13,7 @@ public class TagStateService(ISharedRequestSender requestSender) : ITagStateServ
 
     public event Action? OnStateChanged;
 
-    public Task AddTicket(NewTagMessage tagMessage)
+    public Task AddTag(NewTagMessage tagMessage)
     {
         _tags.Add(tagMessage.Tag);
         NotifyStateChanged();

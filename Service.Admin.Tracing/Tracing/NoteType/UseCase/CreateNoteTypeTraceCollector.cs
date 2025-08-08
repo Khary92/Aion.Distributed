@@ -32,6 +32,20 @@ public class CreateNoteTypeTraceCollector(ITracingDataCommandSender commandSende
             DateTimeOffset.Now));
     }
 
+    public async Task NotificationReceived(Type originClassType, Guid traceId, object notification)
+    {
+        var log = $"Received {GetName(notification)}:{notification}";
+
+        await commandSender.Send(new ServiceTraceDataCommand(
+            TraceSinkId.NoteType,
+            UseCaseMeta.CreateNoteType,
+            LoggingMeta.NotificationReceived,
+            originClassType,
+            traceId,
+            log,
+            DateTimeOffset.Now));
+    }
+
     public async Task AggregateReceived(Type originClassType, Guid traceId, string attributes)
     {
         var log = $"Received aggregate {attributes}";
@@ -56,5 +70,11 @@ public class CreateNoteTypeTraceCollector(ITracingDataCommandSender commandSende
             traceId,
             log,
             DateTimeOffset.Now));
+    }
+    
+    private static string GetName(object @object)
+    {
+        var commandType = @object.GetType();
+        return commandType.Name;
     }
 }
