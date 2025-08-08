@@ -9,6 +9,7 @@ using Client.Desktop.Communication.Requests;
 using Client.Desktop.Communication.Requests.Tag;
 using Client.Desktop.DataModels;
 using Client.Desktop.Presentation.Factories;
+using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using ReactiveUI;
 
@@ -18,7 +19,8 @@ public class StatisticsViewModel(
     ICommandSender commandSender,
     IRequestSender requestSender,
     IMessenger messenger,
-    ITagCheckBoxViewFactory tagCheckBoxViewFactory) : ReactiveObject
+    ITagCheckBoxViewFactory tagCheckBoxViewFactory,
+    ITraceCollector tracer) : ReactiveObject
 {
     private ObservableCollection<TagCheckBoxViewModel> _availableTags = [];
     private StatisticsDataClientModel? _statisticsData;
@@ -47,9 +49,9 @@ public class StatisticsViewModel(
     {
         AvailableTags.Clear();
 
-        var tagDtos = await requestSender.Send(new ClientGetAllTagsRequest(Guid.NewGuid()));
+        var tagClientModels = await requestSender.Send(new ClientGetAllTagsRequest(Guid.NewGuid()));
 
-        foreach (var tagDto in tagDtos) AvailableTags.Add(tagCheckBoxViewFactory.Create(tagDto));
+        foreach (var tagDto in tagClientModels) AvailableTags.Add(tagCheckBoxViewFactory.Create(tagDto));
 
         AvailableTags
             .Where(tvm => StatisticsData!.TagIds.Contains(tvm.Tag!.TagId))
@@ -62,33 +64,42 @@ public class StatisticsViewModel(
         messenger.Register<NewTagMessage>(this, (_, m) => { AvailableTags.Add(tagCheckBoxViewFactory.Create(m.Tag)); });
     }
 
-    public void Update()
+    public async Task Update()
     {
         StatisticsData!.TagIds = AvailableTags
             .Where(t => t.IsChecked)
             .Select(t => t.Tag!.TagId)
             .ToList();
 
-        var id = StatisticsData.StatisticsId;
-
         if (StatisticsData.IsProductivityChanged())
         {
+            var traceId = Guid.NewGuid();
+            await tracer.Statistics.ChangeProductivity.StartUseCase(GetType(), traceId);
+
             var changeProductivityCommand = new ClientChangeProductivityCommand
             (
-                id,
+                StatisticsData.StatisticsId,
                 StatisticsData.IsProductive,
                 StatisticsData.IsNeutral,
                 StatisticsData.IsUnproductive,
-                Guid.NewGuid()
+                traceId
             );
-            commandSender.Send(changeProductivityCommand);
+
+            await tracer.Statistics.ChangeProductivity.SendingCommand(GetType(), traceId, changeProductivityCommand);
+            await commandSender.Send(changeProductivityCommand);
         }
 
 
         if (StatisticsData.IsTagsSelectionChanged())
         {
-            var tagSelectionCommand = new ClientChangeTagSelectionCommand(id, StatisticsData.TagIds, Guid.NewGuid());
-            commandSender.Send(tagSelectionCommand);
+            var traceId = Guid.NewGuid();
+            await tracer.Statistics.ChangeTagSelection.StartUseCase(GetType(), traceId);
+
+            var tagSelectionCommand =
+                new ClientChangeTagSelectionCommand(StatisticsData.StatisticsId, StatisticsData.TagIds, traceId);
+            
+            await tracer.Statistics.ChangeProductivity.SendingCommand(GetType(), traceId, tagSelectionCommand);
+            await commandSender.Send(tagSelectionCommand);
         }
     }
 }

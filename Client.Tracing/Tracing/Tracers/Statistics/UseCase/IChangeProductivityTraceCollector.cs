@@ -1,8 +1,8 @@
-namespace Client.Tracing.Tracing.Tracers.Tag.UseCase;
+﻿namespace Client.Tracing.Tracing.Tracers.Statistics.UseCase;
 
-public interface IUpdateTagTraceCollector
+public interface IChangeProductivityTraceCollector
 {
-    Task StartUseCase(Type originClassType, Guid traceId, string attributes);
+    Task StartUseCase(Type originClassType, Guid traceId);
     Task SendingCommand(Type originClassType, Guid traceId, object command);
     Task NotificationReceived(Type originClassType, Guid traceId, object notification);
     Task NoAggregateFound(Type originClassType, Guid traceId);

@@ -39,8 +39,14 @@ public class WorkDaysModel(
 
         if (!await requestSender.Send(new ClientIsWorkDayExistingRequest(DateTimeOffset.Now, Guid.NewGuid())))
         {
-            await commandSender.Send(new ClientCreateWorkDayCommand(Guid.NewGuid(), DateTimeOffset.Now,
-                Guid.NewGuid()));
+            var traceId = Guid.NewGuid();
+            await tracer.WorkDay.Create.StartUseCase(GetType(), traceId);
+
+            var clientCreateWorkDayCommand = new ClientCreateWorkDayCommand(Guid.NewGuid(), DateTimeOffset.Now,
+                traceId);
+
+            await tracer.WorkDay.Create.SendingCommand(GetType(), traceId, clientCreateWorkDayCommand);
+            await commandSender.Send(clientCreateWorkDayCommand);
         }
     }
 
@@ -54,36 +60,7 @@ public class WorkDaysModel(
             await tracer.WorkDay.Create.AggregateAdded(GetType(), m.WorkDay.WorkDayId);
         });
     }
-
-    public async Task AddWorkDayAsync(DateTimeOffset date)
-    {
-        var existingWorkDay = await requestSender.Send(new ClientGetWorkDayByDateRequest(DateTimeOffset.Now, Guid.NewGuid()));
-
-        //TODO There is something wrong
-        if (existingWorkDay != null)
-        {
-            await ShowMessageBox("Warning", "This date already exists");
-            return;
-        }
-
-        var newGuid = Guid.NewGuid();
-        var createWorkDayCommand = new ClientCreateWorkDayCommand(newGuid, date, Guid.NewGuid());
-        await commandSender.Send(createWorkDayCommand);
-
-        await tracer.WorkDay.Create.CommandSent(GetType(), newGuid, createWorkDayCommand);
-    }
-
-    private static async Task ShowMessageBox(string title, string message)
-    {
-        await MessageBoxManager.GetMessageBoxStandard(new MessageBoxStandardParams
-        {
-            ContentTitle = title,
-            ContentMessage = message,
-            ButtonDefinitions = ButtonEnum.Ok,
-            Icon = Icon.Info
-        }).ShowAsync();
-    }
-
+    
     public void SetSelectedWorkday(WorkDayClientModel selectedWorkDay)
     {
         localSettingsCommandSender.Send(new SetWorkDaySelectionCommand(selectedWorkDay.Date));

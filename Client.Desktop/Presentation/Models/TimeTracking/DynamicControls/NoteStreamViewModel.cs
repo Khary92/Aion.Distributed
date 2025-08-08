@@ -11,6 +11,7 @@ using Client.Desktop.Communication.Requests.Notes.Records;
 using Client.Desktop.DataModels;
 using Client.Desktop.Presentation.Factories;
 using Client.Desktop.Services.LocalSettings;
+using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using ReactiveUI;
 
@@ -21,7 +22,8 @@ public class NoteStreamViewModel(
     IRequestSender requestSender,
     ILocalSettingsService localSettingsService,
     IMessenger messenger,
-    INoteViewFactory noteViewFactory)
+    INoteViewFactory noteViewFactory,
+    ITraceCollector tracer)
     : ReactiveObject
 {
     private Guid _timeSlotId;
@@ -37,9 +39,15 @@ public class NoteStreamViewModel(
     {
         if (!localSettingsService.IsSelectedDateCurrentDate()) return;
 
-        var noteId = Guid.NewGuid();
-        await commandSender.Send(new ClientCreateNoteCommand(noteId, Guid.NewGuid(), string.Empty, TimeSlotId,
-            DateTimeOffset.Now, Guid.NewGuid()));
+        var tracingId = Guid.NewGuid();
+
+        await tracer.Note.Create.StartUseCase(GetType(), tracingId);
+        
+        var clientCreateNoteCommand = new ClientCreateNoteCommand(Guid.NewGuid(), Guid.Empty, string.Empty, TimeSlotId,
+            DateTimeOffset.Now, tracingId);
+        
+        await tracer.Note.Create.SendingCommand(GetType(), tracingId, clientCreateNoteCommand);
+        await commandSender.Send(clientCreateNoteCommand);
     }
 
     public void RegisterMessenger()

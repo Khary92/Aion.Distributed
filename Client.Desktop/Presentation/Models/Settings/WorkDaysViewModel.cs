@@ -24,13 +24,10 @@ public class WorkDaysViewModel : ReactiveObject
             },
             this.WhenAnyValue(x => x.SelectedWorkDay).Any()
         );
-
-        CreateNewDateCommand = ReactiveCommand.CreateFromTask<DateTimeOffset>(Model.AddWorkDayAsync);
     }
 
     public WorkDaysModel Model { get; }
 
-    public ReactiveCommand<DateTimeOffset, Unit>? CreateNewDateCommand { get; internal set; }
     public ReactiveCommand<Unit, Unit>? LoadSelectedDateCommand { get; internal set; }
 
     public WorkDayClientModel? SelectedWorkDay

@@ -23,11 +23,6 @@
                             Content="Load"
                             Command="{Binding LoadSelectedDateCommand}"
                             IsEnabled="{Binding SelectedWorkDay, Converter={StaticResource NullToBoolConverter}}" />
-
-                    <Button Content="Add Workday"
-                            Command="{Binding CreateNewDateCommand}"
-                            CommandParameter="{Binding SelectedDate, ElementName=DateTimePickerNewDate}"
-                            IsEnabled="{Binding SelectedDate, ElementName=DateTimePickerNewDate, Converter={StaticResource NullToBoolConverter}}" />
                 </StackPanel>
             </Grid>
         </Border>

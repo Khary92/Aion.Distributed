@@ -1,6 +1,7 @@
 using System.Timers;
 using Core.Server.Services.Entities.TimerSettings;
 using Domain.Entities;
+using Proto.DTO.TraceData;
 using Proto.Notifications.UseCase;
 using Timer = System.Timers.Timer;
 using UseCaseNotificationService = Core.Server.Communication.Endpoints.UseCase.UseCaseNotificationService;
@@ -45,21 +46,35 @@ public class TimerService
     {
         _snapshotSeconds++;
         _docuSeconds++;
-
+        
+        //TODO fix this
         if (_snapshotSeconds >= _timerSettings.SnapshotSaveInterval)
         {
             _ = _useCaseNotificationService.SendNotificationAsync(new UseCaseNotification
             {
                 CreateSnapshot = new CreateSnapshotNotification()
+                {
+                    TraceData = new TraceDataProto()
+                    {
+                        TraceId = Guid.NewGuid().ToString()
+                    }
+                }
             });
             _snapshotSeconds = 0;
         }
 
+        //TODO fix this
         if (_docuSeconds >= _timerSettings.DocumentationSaveInterval)
         {
             _ = _useCaseNotificationService.SendNotificationAsync(new UseCaseNotification
             {
                 SaveDocumentation = new SaveDocumentationNotification()
+                {
+                    TraceData = new()
+                    {
+                        TraceId = Guid.NewGuid().ToString()
+                    }
+                }
             });
 
             _docuSeconds = 0;

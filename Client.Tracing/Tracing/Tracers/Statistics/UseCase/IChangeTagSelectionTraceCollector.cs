@@ -1,11 +1,10 @@
-namespace Client.Tracing.Tracing.Tracers.Note.UseCase;
+﻿namespace Client.Tracing.Tracing.Tracers.Statistics.UseCase;
 
-public interface IUpdateNoteTraceCollector
+public interface IChangeTagSelectionTraceCollector
 {
     Task StartUseCase(Type originClassType, Guid traceId);
-    Task SendingCommand(Type originClassType, Guid traceId, object command);
+    Task CommandSent(Type originClassType, Guid traceId, object command);
     Task NotificationReceived(Type originClassType, Guid traceId, object notification);
     Task NoAggregateFound(Type originClassType, Guid traceId);
     Task ChangesApplied(Type originClassType, Guid traceId);
-    Task ExceptionOccured(Type originClassType, Guid traceId, Exception exception);
 }

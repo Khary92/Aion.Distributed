@@ -35,13 +35,7 @@ public class CommandSender(
         return await sender.Policy.ExecuteAsync(() =>
             noteCommandSender.Send(command));
     }
-
-    public async Task<bool> Send(ClientCreateStatisticsDataCommand command)
-    {
-        return await sender.Policy.ExecuteAsync(() =>
-            statisticsDataCommandSender.Send(command));
-    }
-
+    
     public async Task<bool> Send(ClientChangeTagSelectionCommand command)
     {
         return await sender.Policy.ExecuteAsync(() =>
@@ -53,19 +47,7 @@ public class CommandSender(
         return await sender.Policy.ExecuteAsync(() =>
             statisticsDataCommandSender.Send(command));
     }
-
-    public async Task<bool> Send(ClientCreateTimeSlotCommand command)
-    {
-        return await sender.Policy.ExecuteAsync(() =>
-            timeSlotCommandSender.Send(command));
-    }
-
-    public async Task<bool> Send(ClientAddNoteCommand command)
-    {
-        return await sender.Policy.ExecuteAsync(() =>
-            timeSlotCommandSender.Send(command));
-    }
-
+    
     public async Task<bool> Send(ClientSetStartTimeCommand command)
     {
         return await sender.Policy.ExecuteAsync(() =>

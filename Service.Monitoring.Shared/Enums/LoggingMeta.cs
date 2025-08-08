@@ -6,8 +6,6 @@ public enum LoggingMeta
     PropertyNotChanged,
     NotificationReceived,
     SendingCommand,
-    InvalidSettings,
-    ActionCompleted,
     ExceptionOccured,
     AggregateReceived,
     AggregateAdded,
@@ -16,5 +14,6 @@ public enum LoggingMeta
     CommandReceived,
     EventPersisted,
     SendingNotification,
-    NoEntitySelected
+    NoEntitySelected,
+    ActionAborted
 }

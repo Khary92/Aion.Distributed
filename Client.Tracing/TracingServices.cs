@@ -5,10 +5,14 @@ using Client.Tracing.Tracing.Tracers.NoteType;
 using Client.Tracing.Tracing.Tracers.NoteType.UseCase;
 using Client.Tracing.Tracing.Tracers.Sprint;
 using Client.Tracing.Tracing.Tracers.Sprint.UseCase;
+using Client.Tracing.Tracing.Tracers.Statistics;
+using Client.Tracing.Tracing.Tracers.Statistics.UseCase;
 using Client.Tracing.Tracing.Tracers.Tag;
 using Client.Tracing.Tracing.Tracers.Tag.UseCase;
 using Client.Tracing.Tracing.Tracers.Ticket;
 using Client.Tracing.Tracing.Tracers.Ticket.UseCase;
+using Client.Tracing.Tracing.Tracers.TimeSlot;
+using Client.Tracing.Tracing.Tracers.TimeSlot.UseCase;
 using Client.Tracing.Tracing.Tracers.WorkDay;
 using Client.Tracing.Tracing.Tracers.WorkDay.UseCase;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,6 +31,8 @@ public static class TracingServices
         AddTagTracingServices(services);
         AddTicketTracingServices(services);
         AddWorkdayTracingServices(services);
+        AddStatisticsDataTracingServices(services);
+        AddTimeSlotTracingServices(services);
     }
 
     private static void AddACommonTracingServices(this IServiceCollection services)
@@ -83,5 +89,21 @@ public static class TracingServices
     {
         services.AddSingleton<ICreateWorkDayTraceCollector, CreateWorkDayTraceCollector>();
         services.AddSingleton<IWorkDayUseCaseSelector, WorkDayUseCaseSelector>();
+    }
+    
+    private static void AddStatisticsDataTracingServices(this IServiceCollection services)
+    {
+        services.AddSingleton<IChangeProductivityTraceCollector, ChangeProductivityTraceCollector>();
+        services.AddSingleton<IChangeTagSelectionTraceCollector, ChangeTagSelectionTraceCollector>();
+
+        services.AddSingleton<IStatisticsDataUseCaseSelector, StatisticsDataUseCaseSelector>();
+    }
+    
+    private static void AddTimeSlotTracingServices(this IServiceCollection services)
+    {
+        services.AddSingleton<ISetStartTimeTraceCollector, SetStartTimeTraceCollector>();
+        services.AddSingleton<ISetEndTimeTraceCollector, SetEndTimeTraceCollector>();
+        
+        services.AddSingleton<ITimeSlotUseCaseSelector, TimeSlotUseCaseSelector>();
     }
 }

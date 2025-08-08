@@ -16,9 +16,9 @@ public static class NoteExtensions
             Text = command.Text,
             TimeSlotId = command.TimeSlotId.ToString(),
             TimeStamp = Timestamp.FromDateTimeOffset(command.TimeStamp),
-            TraceData = new TraceDataProto()
+            TraceData = new()
             {
-                
+                TraceId = command.TraceId.ToString()
             }
         };
     }
@@ -30,7 +30,11 @@ public static class NoteExtensions
             NoteId = command.NoteId.ToString(),
             Text = command.Text,
             NoteTypeId = command.NoteTypeId.ToString(),
-            TimeSlotId = command.TimeSlotId.ToString()
+            TimeSlotId = command.TimeSlotId.ToString(),
+            TraceData = new()
+            {
+                TraceId = command.TraceId.ToString()
+            }
         };
     }
 }

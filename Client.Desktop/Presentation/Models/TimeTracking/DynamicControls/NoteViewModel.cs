@@ -10,6 +10,7 @@ using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.Communication.Requests.NoteType;
 using Client.Desktop.DataModels;
+using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using ReactiveUI;
@@ -21,14 +22,17 @@ public class NoteViewModel : ReactiveObject
 {
     private readonly ICommandSender _commandSender;
     private readonly IMessenger _messenger;
+    private readonly ITraceCollector _tracer;
     private readonly IRequestSender _requestSender;
     private int _currentNoteTypeIndex;
 
-    public NoteViewModel(ICommandSender commandSender, IRequestSender requestSender, IMessenger messenger)
+    public NoteViewModel(ICommandSender commandSender, IRequestSender requestSender, IMessenger messenger,
+        ITraceCollector tracer)
     {
         _commandSender = commandSender;
         _requestSender = requestSender;
         _messenger = messenger;
+        _tracer = tracer;
 
         SetNextTypeCommand = ReactiveCommand.Create(SetNextType);
         SetPreviousTypeCommand = ReactiveCommand.Create(SetPreviousType);
@@ -85,13 +89,19 @@ public class NoteViewModel : ReactiveObject
 
     private async Task Update()
     {
-        await _commandSender.Send(new ClientUpdateNoteCommand
+        var traceId = Guid.NewGuid();
+        await _tracer.Note.Update.StartUseCase(GetType(), traceId);
+
+        var clientUpdateNoteCommand = new ClientUpdateNoteCommand
         (
             Note.NoteId,
             Note.Text,
             Note.NoteType?.NoteTypeId ?? Guid.Empty, Note.TimeSlotId,
             Guid.NewGuid()
-        ));
+        );
+
+        await _tracer.Note.Update.SendingCommand(GetType(), traceId, clientUpdateNoteCommand);
+        await _commandSender.Send(clientUpdateNoteCommand);
     }
 
     private void SetNextType()

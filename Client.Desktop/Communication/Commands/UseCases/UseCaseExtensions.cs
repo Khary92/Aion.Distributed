@@ -9,7 +9,11 @@ public static class UseCaseExtensions
     {
         return new CreateTimeSlotControlCommandProto
         {
-            TicketId = command.TicketId.ToString()
+            TicketId = command.TicketId.ToString(),
+            TraceData = new()
+            {
+                TraceId = command.TraceId.ToString()
+            }
         };
     }
 }

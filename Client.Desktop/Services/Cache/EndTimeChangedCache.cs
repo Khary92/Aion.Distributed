@@ -22,12 +22,22 @@ public class EndTimeChangedCache(
 
     public async Task Persist()
     {
-        if (!fileSystemWrapper.IsFileExisting(Path)) return;
+        var traceId = Guid.NewGuid();
+        await tracer.TimeSlot.SetEndTime.StartUseCase(GetType(), traceId);
+        
+        if (!fileSystemWrapper.IsFileExisting(Path))
+        {
+            await tracer.TimeSlot.SetEndTime.CacheIsEmpty(GetType(), traceId);
+            return;
+        }
 
         var data = await fileSystemReader.GetObject<Dictionary<Guid, ClientSetEndTimeCommand>>(Path);
 
-        foreach (var command in data.Values) await commandSender.Send(command);
-
+        foreach (var command in data.Values)
+        {
+            await tracer.TimeSlot.SetEndTime.SendingCommand(GetType(), traceId, command);
+            await commandSender.Send(command);
+        }
         CleanUp();
     }
 
