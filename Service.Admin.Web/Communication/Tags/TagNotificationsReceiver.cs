@@ -45,10 +45,10 @@ public class TagNotificationsReceiver(ITagStateService tagStateService, ITraceCo
                         case TagNotification.NotificationOneofCase.TagUpdated:
                             var webTagUpdatedNotification = notification.TagUpdated.ToNotification();
 
-                            await tracer.Tag.Create.NotificationReceived(GetType(), webTagUpdatedNotification.TraceId,
+                            await tracer.Tag.Update.NotificationReceived(GetType(), webTagUpdatedNotification.TraceId,
                                 notification.TagCreated);
 
-                            tagStateService.Apply(webTagUpdatedNotification);
+                            await tagStateService.Apply(webTagUpdatedNotification);
                             break;
                     }
             }

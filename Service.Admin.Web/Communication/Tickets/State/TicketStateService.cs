@@ -17,9 +17,6 @@ public class TicketStateService(ISharedRequestSender requestSender, ITraceCollec
 
     public async Task AddTicket(NewTicketMessage ticketMessage)
     {
-        await tracer.Ticket.Create.AggregateReceived(GetType(), ticketMessage.TraceId,
-            ticketMessage);
-
         _tickets.Add(ticketMessage.Ticket);
 
         await tracer.Ticket.Create.AggregateAdded(GetType(), ticketMessage.TraceId);

@@ -9,8 +9,8 @@ public interface ISprintStateService
     IReadOnlyList<SprintWebModel> Sprints { get; }
     event Action? OnStateChanged;
     Task AddSprint(NewSprintMessage sprintMessage);
-    void Apply(WebAddTicketToActiveSprintNotification notification);
-    void Apply(WebAddTicketToSprintNotification notification);
-    void Apply(WebSetSprintActiveStatusNotification notification);
-    void Apply(WebSprintDataUpdatedNotification notification);
+    Task Apply(WebAddTicketToActiveSprintNotification notification);
+    Task Apply(WebAddTicketToSprintNotification notification);
+    Task Apply(WebSetSprintActiveStatusNotification notification);
+    Task Apply(WebSprintDataUpdatedNotification notification);
 }

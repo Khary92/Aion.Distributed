@@ -9,6 +9,6 @@ public interface INoteTypeStateService
     IReadOnlyList<NoteTypeWebModel> NoteTypes { get; }
     event Action? OnStateChanged;
     Task AddNoteType(NewNoteTypeMessage noteTypeMessage);
-    void Apply(WebNoteTypeColorChangedNotification notification);
-    void Apply(WebNoteTypeNameChangedNotification notification);
+    Task Apply(WebNoteTypeColorChangedNotification notification);
+    Task Apply(WebNoteTypeNameChangedNotification notification);
 }

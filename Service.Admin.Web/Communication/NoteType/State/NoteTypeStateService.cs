@@ -1,4 +1,5 @@
 ﻿using Proto.Requests.NoteTypes;
+using Service.Admin.Tracing;
 using Service.Admin.Web.Communication.NoteType.Notifications;
 using Service.Admin.Web.Communication.Wrappers;
 using Service.Admin.Web.Models;
@@ -6,37 +7,49 @@ using Service.Admin.Web.Services;
 
 namespace Service.Admin.Web.Communication.NoteType.State;
 
-public class NoteTypeStateService(ISharedRequestSender requestSender) : INoteTypeStateService, IInitializeAsync
+public class NoteTypeStateService(ISharedRequestSender requestSender, ITraceCollector tracer)
+    : INoteTypeStateService, IInitializeAsync
 {
     private List<NoteTypeWebModel> _noteTypes = new();
     public IReadOnlyList<NoteTypeWebModel> NoteTypes => _noteTypes.AsReadOnly();
 
     public event Action? OnStateChanged;
 
-    public Task AddNoteType(NewNoteTypeMessage noteTypeMessage)
+    public async Task AddNoteType(NewNoteTypeMessage noteTypeMessage)
     {
         _noteTypes.Add(noteTypeMessage.NoteType);
-        NotifyStateChanged();
-        return Task.CompletedTask;
-    }
-
-    public void Apply(WebNoteTypeColorChangedNotification notification)
-    {
-        var noteType = _noteTypes.FirstOrDefault(nt => nt.NoteTypeId == notification.NoteTypeId);
-
-        if (noteType == null) return;
-
-        noteType.Apply(notification);
+        await tracer.NoteType.Create.AggregateAdded(GetType(), noteTypeMessage.TraceId);
         NotifyStateChanged();
     }
 
-    public void Apply(WebNoteTypeNameChangedNotification notification)
+    public async Task Apply(WebNoteTypeColorChangedNotification notification)
     {
         var noteType = _noteTypes.FirstOrDefault(nt => nt.NoteTypeId == notification.NoteTypeId);
 
-        if (noteType == null) return;
+        if (noteType == null)
+        {
+            await tracer.NoteType.ChangeColor.NoAggregateFound(GetType(), notification.TraceId);
+            return;
+        }
 
         noteType.Apply(notification);
+        await tracer.NoteType.ChangeColor.ChangesApplied(GetType(), notification.TraceId);
+
+        NotifyStateChanged();
+    }
+
+    public async Task Apply(WebNoteTypeNameChangedNotification notification)
+    {
+        var noteType = _noteTypes.FirstOrDefault(nt => nt.NoteTypeId == notification.NoteTypeId);
+
+        if (noteType == null)
+        {
+            await tracer.NoteType.ChangeName.NoAggregateFound(GetType(), notification.TraceId);
+            return;
+        }
+
+        noteType.Apply(notification);
+        await tracer.NoteType.ChangeName.ChangesApplied(GetType(), notification.TraceId);
         NotifyStateChanged();
     }
 
@@ -46,10 +59,10 @@ public class NoteTypeStateService(ISharedRequestSender requestSender) : INoteTyp
     }
 
     public InitializationType Type => InitializationType.StateService;
+
     public async Task InitializeComponents()
     {
         var noteTypeList = await requestSender.Send(new GetAllNoteTypesRequestProto());
         _noteTypes = noteTypeList.ToDtoList();
     }
-    
 }
