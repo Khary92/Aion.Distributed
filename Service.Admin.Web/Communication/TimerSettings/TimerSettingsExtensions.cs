@@ -10,6 +10,17 @@ namespace Service.Admin.Web.Communication.TimerSettings;
 
 public static class TimerSettingsExtensions
 {
+    public static CreateTimerSettingsCommandProto ToProto(this WebCreateTimerSettingsCommand command) => new()
+    {
+        TimerSettingsId = command.TimerSettingsId.ToString(),
+        DocumentationSaveInterval = command.DocumentationSaveInterval,
+        SnapshotSaveInterval = command.SnapshotSaveInterval,
+        TraceData = new()
+        {
+            TraceId = command.TraceId.ToString()
+        }
+    };
+
     public static ChangeDocuTimerSaveIntervalCommandProto ToProto(this WebChangeDocuTimerSaveIntervalCommand command) =>
         new()
         {

@@ -64,7 +64,7 @@ public class TicketStateService(ISharedRequestSender requestSender, ITraceCollec
     public async Task InitializeComponents()
     {
         var ticketListProto = await requestSender.Send(new GetAllTicketsRequestProto());
-        _tickets = ticketListProto.ToDtoList();
+        _tickets = ticketListProto.ToWebModelList();
         NotifyStateChanged();
     }
 }

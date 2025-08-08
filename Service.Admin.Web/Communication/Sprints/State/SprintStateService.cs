@@ -94,7 +94,7 @@ public class SprintStateService(ISharedRequestSender requestSender, ITraceCollec
     public async Task InitializeComponents()
     {
         var sprintListProto = await requestSender.Send(new GetAllSprintsRequestProto());
-        _sprints = sprintListProto.ToDtoList();
+        _sprints = sprintListProto.ToWebModelList();
         NotifyStateChanged();
     }
 }

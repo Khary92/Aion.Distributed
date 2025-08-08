@@ -7,9 +7,9 @@ namespace Service.Admin.Tracing.Tracing.TimerSettings.UseCase;
 public class CreateTimerSettingsTraceCollector(ITracingDataCommandSender commandSender)
     : ICreateTimerSettingsTraceCollector
 {
-    public async Task StartUseCase(Type originClassType, Guid traceId, string attributes)
+    public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = $"Create Sprint requested for {attributes}";
+        var log = $"Create Sprint requested";
 
         await commandSender.Send(new ServiceTraceDataCommand(
             TraceSinkId.TimerSettings,
@@ -21,7 +21,7 @@ public class CreateTimerSettingsTraceCollector(ITracingDataCommandSender command
             DateTimeOffset.Now));
     }
 
-    public async Task CommandSent(Type originClassType, Guid traceId, object command)
+    public async Task SendingCommand(Type originClassType, Guid traceId, object command)
     {
         var log = $"Sent {command}";
 

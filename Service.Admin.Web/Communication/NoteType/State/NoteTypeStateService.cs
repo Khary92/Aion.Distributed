@@ -63,6 +63,6 @@ public class NoteTypeStateService(ISharedRequestSender requestSender, ITraceColl
     public async Task InitializeComponents()
     {
         var noteTypeList = await requestSender.Send(new GetAllNoteTypesRequestProto());
-        _noteTypes = noteTypeList.ToDtoList();
+        _noteTypes = noteTypeList.ToWebModelList();
     }
 }

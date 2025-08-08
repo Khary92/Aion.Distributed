@@ -47,7 +47,7 @@ public class TagStateService(ISharedRequestSender requestSender, ITraceCollector
     public async Task InitializeComponents()
     {
         var tagListProto = await requestSender.Send(new GetAllTagsRequestProto());
-        _tags = tagListProto.ToDtoList();
+        _tags = tagListProto.ToWebModelList();
         NotifyStateChanged();
     }
 }
