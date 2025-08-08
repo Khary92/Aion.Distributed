@@ -9,6 +9,7 @@ services:
     environment:
       - ASPNETCORE_URLS=http://+:8080
       - ConnectionStrings__DefaultConnection=Host=postgres;Database=aion;Username=aionuser;Password=aionpass
+      - TZ=Europe/Berlin
     depends_on:
       - postgres
     restart: unless-stopped
@@ -23,6 +24,7 @@ services:
       - "8082:8080"
     environment:
       - ASPNETCORE_URLS=http://+:8080
+      - TZ=Europe/Berlin
     depends_on:
       - core-service
     restart: unless-stopped
@@ -35,6 +37,7 @@ services:
       - "5000:8080"
     environment:
       - ASPNETCORE_URLS=http://+:8080
+      - TZ=Europe/Berlin
     depends_on:
       - monitoring-service
       - core-service
@@ -49,6 +52,7 @@ services:
       - POSTGRES_DB=aion
       - POSTGRES_USER=aionuser
       - POSTGRES_PASSWORD=aionpass
+      - TZ=Europe/Berlin
     ports:
       - "5432:5432"
     volumes:
@@ -65,6 +69,7 @@ services:
       - PGADMIN_DEFAULT_EMAIL=admin@admin.com
       - PGADMIN_DEFAULT_PASSWORD=admin
       - PGADMIN_CONFIG_SERVER_MODE=False
+      - TZ=Europe/Berlin
     ports:
       - "5050:80"
     depends_on:

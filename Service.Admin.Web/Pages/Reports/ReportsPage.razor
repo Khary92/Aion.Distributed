@@ -2,6 +2,7 @@
 @rendermode InteractiveServer
 @inject ILogger<ReportsPage> Logger
 @inject IReportStateService ReportState
+@using System.Globalization
 @using Service.Admin.Web.Communication.Reports
 @using Service.Admin.Web.Communication.Reports.State
 @implements IDisposable
@@ -12,48 +13,18 @@
     <div class="sub-component">
         <ErrorBoundary>
             <ChildContent>
-                @if (_isLoading || !ReportState.Reports.Any())
-                {
-                    <LoadingSpinner/>
-                }
-                else
-                {
-                    <div class="mb-3">
-                        <label for="reportSelect" class="form-label">Report auswählen:</label>
-                        <select id="reportSelect" class="form-select" @bind="_selectedReportId">
-                            <option value="">Alle Reports</option>
-                            @foreach (var report in ReportState.Reports)
-                            {
-                                <option value="@report.ReportId">@report.TimeStamp - @report.useCase - @report.State</option>
-                            }
-                        </select>
-                    </div>
-
-                    <ReportTable Items="@ReportState.Reports" T="ReportRecord">
-                        <HeaderTemplate>
-                            <th>Datum</th>
-                            <th>Status</th>
-                        </HeaderTemplate>
-                        <RowTemplate>
-                            <td>@context.TimeStamp</td>
-                            <td>@context.State</td>
-                        </RowTemplate>
-                    </ReportTable>
-
-                    <h2>Traces</h2>
-                    <ReportTable Items="@GetFilteredTraces()" T="TraceInfo">
-                        <HeaderTemplate>
-                            <th>Zeitstempel</th>
-                            <th>Ergebnis</th>
-                            <th>Log Info</th>
-                        </HeaderTemplate>
-                        <RowTemplate>
-                            <td>@context.TimeStamp</td>
-                            <td>@context.Result</td>
-                            <td>@context.LogInfo</td>
-                        </RowTemplate>
-                    </ReportTable>
-                }
+                <ReportTable Items="@ReportState.Reports" T="ReportRecord">
+                    <HeaderTemplate>
+                        <th>Date</th>
+                        <th>Use case</th>
+                        <th>Result</th>
+                    </HeaderTemplate>
+                    <RowTemplate>
+                        <td>@context.TimeStamp.ToString("dd.MM.yyyy HH:mm:ss", CultureInfo.GetCultureInfo("de-DE"))</td>
+                        <td>@context.useCase</td>
+                        <td>@context.State</td>
+                    </RowTemplate>
+                </ReportTable>
             </ChildContent>
             <ErrorContent Context="ex">
                 <div class="alert alert-danger">
@@ -65,59 +36,16 @@
 </div>
 
 @code {
-    private bool _isLoading = true;
-    private Guid _selectedReportId = Guid.Empty;
 
     protected override Task OnInitializedAsync()
     {
-        try
-        {
-            ReportState.OnStateChanged += StateHasChanged;
-        }
-        catch (Exception ex)
-        {
-            Logger.LogError(ex, "Fehler beim Initialisieren der Hub-Verbindung");
-            throw;
-        }
-        finally
-        {
-            _isLoading = false;
-        }
-
+        ReportState.OnStateChanged += StateHasChanged;
         return Task.CompletedTask;
-    }
-
-    private IEnumerable<TraceInfo> GetFilteredTraces()
-    {
-        var report = ReportState.Reports.FirstOrDefault(r => r.ReportId == _selectedReportId);
-
-        if (report == null)
-        {
-            return [];
-        }
-
-        return report.Traces.Select(trace =>
-        {
-            var data = trace.Split('|');
-            return new TraceInfo
-            {
-                TimeStamp = data[0],
-                Result = data[1],
-                LogInfo = data[2]
-            };
-        });
     }
 
     public void Dispose()
     {
         ReportState.OnStateChanged -= StateHasChanged;
-    }
-
-    private record TraceInfo
-    {
-        public string TimeStamp { get; init; } = string.Empty;
-        public string Result { get; init; } = string.Empty;
-        public string LogInfo { get; init; } = string.Empty;
     }
 
 }

@@ -1,22 +1,20 @@
 ﻿@typeparam T
 
-<div class="table-responsive">
-    <table class="custom-table">
-        <thead>
+<table class="custom-table">
+    <thead>
+    <tr>
+        @HeaderTemplate
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Items)
+    {
         <tr>
-            @HeaderTemplate
+            @RowTemplate(item)
         </tr>
-        </thead>
-        <tbody>
-        @foreach (var item in Items)
-        {
-            <tr>
-                @RowTemplate(item)
-            </tr>
-        }
-        </tbody>
-    </table>
-</div>
+    }
+    </tbody>
+</table>
 
 @code {
     [Parameter][EditorRequired] public IEnumerable<T> Items { get; set; } = default!;
