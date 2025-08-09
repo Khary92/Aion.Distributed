@@ -12,11 +12,11 @@ public class ReportReceiver(IReportStateServiceFactory reportStateServiceFactory
     {
         var report = new ReportRecord(DateTimeOffset.Now, request.UseCase, request.State,
             request.Traces.ToReportTrace());
-
-        reportStateServiceFactory.Get(SortingType.Overview).AddReport(report);
+        
+        reportStateServiceFactory.Get(SortingType.Overview)!.AddReport(report);
 
         var sortingType = Enum.Parse<SortingType>(request.SortType);
-        reportStateServiceFactory.Get(sortingType).AddReport(report);
+        reportStateServiceFactory.Get(sortingType)!.AddReport(report);
 
         return Task.FromResult(new ResponseProto { Success = true });
     }

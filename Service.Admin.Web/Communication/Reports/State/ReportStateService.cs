@@ -3,7 +3,7 @@ using Service.Monitoring.Shared.Enums;
 
 namespace Service.Admin.Web.Communication.Reports.State;
 
-public class ReportOverviewStateService(SortingType sortingType) : IReportStateService
+public class ReportStateService(SortingType sortingType) : IReportStateService
 {
     private readonly List<ReportRecord> _reports = new();
 

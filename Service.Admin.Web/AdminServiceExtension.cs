@@ -110,7 +110,7 @@ public static class AdminServiceExtension
         services.AddSingleton<IReportStateServiceFactory, ReportStateServiceFactory>();
 
         foreach (SortingType sortingType in Enum.GetValues(typeof(SortingType)))
-            services.AddSingleton<IReportStateService>(sp => new ReportOverviewStateService(sortingType));
+            services.AddSingleton<IReportStateService>(sp => new ReportStateService(sortingType));
 
         services.AddSingleton<TicketStateService>();
         services.AddSingleton<ITicketStateService>(sp => sp.GetRequiredService<TicketStateService>());

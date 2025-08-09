@@ -37,19 +37,23 @@
 </div>
 
 @code {
-
     private IReportStateService? _overViewReportStateService;
 
     protected override Task OnInitializedAsync()
     {
         _overViewReportStateService = ReportStateServiceFactory.Get(SortingType.Overview);
-        _overViewReportStateService!.OnStateChanged += StateHasChanged;
+        _overViewReportStateService!.OnStateChanged += OnServiceStateChanged;
         return Task.CompletedTask;
+    }
+    
+    private void OnServiceStateChanged()
+    {
+        _ = InvokeAsync(StateHasChanged);
     }
 
     public void Dispose()
     {
-        _overViewReportStateService!.OnStateChanged -= StateHasChanged;
+        _overViewReportStateService!.OnStateChanged -= OnServiceStateChanged;
     }
 
 }

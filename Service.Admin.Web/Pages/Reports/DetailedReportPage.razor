@@ -4,6 +4,7 @@
 @using Service.Monitoring.Shared.Enums
 @rendermode InteractiveServer
 @inject IReportStateServiceFactory StateServiceFactory
+@implements IDisposable
 
 <div class="mb-3">
     <label for="sortSelect" class="form-label">Sort by</label>
@@ -92,7 +93,7 @@ else
 
     private void LoadSelectedReportStateService()
     {
-        if (_reportStateService != null)
+        if (_reportStateService is not null)
         {
             _reportStateService.OnStateChanged -= OnServiceStateChanged;
         }
@@ -100,7 +101,7 @@ else
         _reportStateService = StateServiceFactory.Get(SelectedSortingType);
         _reportStateService!.OnStateChanged += OnServiceStateChanged;
 
-        _ = InvokeAsync(StateHasChanged);
+        OnServiceStateChanged();
     }
 
     private void OnServiceStateChanged()
@@ -108,4 +109,11 @@ else
         _ = InvokeAsync(StateHasChanged);
     }
 
+    public void Dispose()
+    {
+        if (_reportStateService is not null)
+        {
+            _reportStateService.OnStateChanged -= OnServiceStateChanged;
+        }
+    }
 }
