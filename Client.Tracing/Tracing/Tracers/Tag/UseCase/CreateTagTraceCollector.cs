@@ -10,7 +10,7 @@ public class CreateTagTraceCollector(ITracingDataCommandSender commandSender) : 
     {
         var log = $"Create Tag requested for {attributes}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Tag,
+            SortingType.Tag,
             UseCaseMeta.CreateTag,
             LoggingMeta.ActionRequested,
             originClassType,
@@ -23,7 +23,7 @@ public class CreateTagTraceCollector(ITracingDataCommandSender commandSender) : 
     {
         var log = $"Sent {command}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Tag,
+            SortingType.Tag,
             UseCaseMeta.CreateTag,
             LoggingMeta.SendingCommand,
             originClassType,
@@ -36,7 +36,7 @@ public class CreateTagTraceCollector(ITracingDataCommandSender commandSender) : 
     {
         var log = $"Received aggregate {attributes}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Tag,
+            SortingType.Tag,
             UseCaseMeta.CreateTag,
             LoggingMeta.AggregateReceived,
             originClassType,
@@ -49,7 +49,7 @@ public class CreateTagTraceCollector(ITracingDataCommandSender commandSender) : 
     {
         var log = $"Added aggregate with id:{traceId}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Tag,
+            SortingType.Tag,
             UseCaseMeta.CreateTag,
             LoggingMeta.AggregateAdded,
             originClassType,

@@ -1,8 +1,9 @@
-﻿using Service.Admin.Web.Services;
+﻿using Service.Admin.Web.Communication.Reports.Records;
+using Service.Monitoring.Shared.Enums;
 
 namespace Service.Admin.Web.Communication.Reports.State;
 
-public class ReportStateService : IReportStateService
+public class ReportOverviewStateService(SortingType sortingType) : IReportStateService
 {
     private readonly List<ReportRecord> _reports = new();
 
@@ -14,6 +15,8 @@ public class ReportStateService : IReportStateService
         _reports.Add(report);
         NotifyStateChanged();
     }
+
+    public SortingType SortingType => sortingType;
 
     public void ClearReports()
     {

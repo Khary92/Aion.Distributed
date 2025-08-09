@@ -8,10 +8,10 @@ public class UpdateTicketTraceCollector(ITracingDataCommandSender commandSender)
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = $"Update ticket requested";
+        var log = "Update ticket requested";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Ticket,
+            SortingType.Ticket,
             UseCaseMeta.UpdateTicket,
             LoggingMeta.ActionRequested,
             originClassType,
@@ -19,12 +19,12 @@ public class UpdateTicketTraceCollector(ITracingDataCommandSender commandSender)
             log,
             DateTimeOffset.Now));
     }
-    
+
     public async Task NoEntitySelected(Type originClassType, Guid traceId)
     {
-        var log = $"No ticket entity selected";
+        var log = "No ticket entity selected";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Ticket,
+            SortingType.Ticket,
             UseCaseMeta.AddTicketToCurrentSprint,
             LoggingMeta.NoEntitySelected,
             originClassType,
@@ -38,7 +38,7 @@ public class UpdateTicketTraceCollector(ITracingDataCommandSender commandSender)
         var log = $"Sent {command}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Ticket,
+            SortingType.Ticket,
             UseCaseMeta.UpdateTicket,
             LoggingMeta.SendingCommand,
             originClassType,
@@ -51,7 +51,7 @@ public class UpdateTicketTraceCollector(ITracingDataCommandSender commandSender)
     {
         var log = $"Received {notification}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Ticket,
+            SortingType.Ticket,
             UseCaseMeta.UpdateTicket,
             LoggingMeta.NotificationReceived,
             originClassType,
@@ -64,7 +64,7 @@ public class UpdateTicketTraceCollector(ITracingDataCommandSender commandSender)
     {
         var log = $"Aggregate not found id:{traceId}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Ticket,
+            SortingType.Ticket,
             UseCaseMeta.UpdateTicket,
             LoggingMeta.AggregateNotFound,
             originClassType,
@@ -77,7 +77,7 @@ public class UpdateTicketTraceCollector(ITracingDataCommandSender commandSender)
     {
         var log = $"Changed applied id:{traceId}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Ticket,
+            SortingType.Ticket,
             UseCaseMeta.UpdateTicket,
             LoggingMeta.PropertyChanged,
             originClassType,

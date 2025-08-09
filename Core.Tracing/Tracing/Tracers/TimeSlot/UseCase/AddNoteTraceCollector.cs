@@ -11,7 +11,7 @@ public class AddNoteTraceCollector(ITracingDataCommandSender commandSender) : IA
         var log = $"Command received {GetName(protoCommand)}:{protoCommand}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimeSlot,
+            SortingType.TimeSlot,
             UseCaseMeta.AddNoteToTimeSlot,
             LoggingMeta.CommandReceived,
             originClassType,
@@ -25,7 +25,7 @@ public class AddNoteTraceCollector(ITracingDataCommandSender commandSender) : IA
         var log = $"Event persisted {@event}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimeSlot,
+            SortingType.TimeSlot,
             UseCaseMeta.AddNoteToTimeSlot,
             LoggingMeta.EventPersisted,
             originClassType,
@@ -39,7 +39,7 @@ public class AddNoteTraceCollector(ITracingDataCommandSender commandSender) : IA
         var log = $"Notification sent {GetName(notification)}:{notification}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimeSlot,
+            SortingType.TimeSlot,
             UseCaseMeta.AddNoteToTimeSlot,
             LoggingMeta.SendingNotification,
             originClassType,

@@ -17,11 +17,11 @@
         </div>
         <div class="mb-2">
             <button class="btn btn-success me-2"
-                    disabled="@(!@NoteTypeController.CanSave)"
+                    disabled="@(!NoteTypeController.CanSave)"
                     @onclick="async () => await NoteTypeController.CreateOrUpdate()">Save
             </button>
             <button class="btn btn-warning me-2"
-                    disabled="@(@NoteTypeController.SelectedNoteType == null)"
+                    disabled="@(NoteTypeController.SelectedNoteType == null)"
                     @onclick="@NoteTypeController.ToggleEditMode">@NoteTypeController.EditButtonText</button>
         </div>
     </div>
@@ -35,9 +35,9 @@
             </tr>
             </thead>
             <tbody>
-            @foreach (var noteType in @NoteTypeStateService.NoteTypes)
+            @foreach (var noteType in NoteTypeStateService.NoteTypes)
             {
-                <tr class="@(@NoteTypeController.SelectedNoteType == noteType ? "table-active" : "")"
+                <tr class="@(NoteTypeController.SelectedNoteType == noteType ? "table-active" : "")"
                     @onclick="() => NoteTypeController.SelectedNoteType = noteType">
                     <td>@noteType.Name</td>
                     <td>
@@ -59,9 +59,11 @@
 </style>
 
 @code {
+
     protected override async Task OnInitializedAsync()
     {
         NoteTypeStateService.OnStateChanged += async () => await InvokeAsync(StateHasChanged);
         await base.OnInitializedAsync();
     }
+
 }

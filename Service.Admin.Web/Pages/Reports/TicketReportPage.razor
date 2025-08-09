@@ -1,0 +1,111 @@
+@page "/reports"
+@using Service.Admin.Web.Communication.Reports
+@using Service.Admin.Web.Communication.Reports.State
+@using Service.Monitoring.Shared.Enums
+@rendermode InteractiveServer
+@inject IReportStateServiceFactory StateServiceFactory
+
+<div class="mb-3">
+    <label for="sortSelect" class="form-label">Sort by</label>
+    <select id="sortSelect" class="form-select" @bind="SelectedSortingType">
+        @foreach (var sorting in Enum.GetValues<SortingType>())
+        {
+            if (sorting == SortingType.Overview) continue;
+            <option value="@sorting">@sorting</option>
+        }
+    </select>
+</div>
+
+@if (_reportStateService?.Reports.Any() != true)
+{
+    <p>No reports available</p>
+}
+else
+{
+    <div @key="SelectedSortingType">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Datum</th>
+                <th>UseCase</th>
+                <th>Status</th>
+                <th>Traces</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var report in _reportStateService.Reports)
+            {
+                <tr>
+                    <td>@report.TimeStamp</td>
+                    <td>@report.UseCase</td>
+                    <td>@report.State</td>
+                    <td>
+                        <table class="table table-bordered">
+                            <thead>
+                            <tr>
+                                <th>Time Stamp</th>
+                                <th>Meta</th>
+                                <th>Origin class</th>
+                                <th>Log</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var trace in report.Traces)
+                            {
+                                <tr>
+                                    <td>@trace.TimeStamp</td>
+                                    <td>@trace.LoggingMeta</td>
+                                    <td>@trace.OriginClass</td>
+                                    <td>@trace.Log</td>
+                                </tr>
+                            }
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    private IReportStateService? _reportStateService;
+
+    private SortingType _selectedSortingType = SortingType.Ticket;
+
+    private SortingType SelectedSortingType
+    {
+        get => _selectedSortingType;
+        set
+        {
+            if (_selectedSortingType == value) return;
+            _selectedSortingType = value;
+            LoadSelectedReportStateService();
+        }
+    }
+
+    protected override void OnInitialized()
+    {
+        LoadSelectedReportStateService();
+    }
+
+    private void LoadSelectedReportStateService()
+    {
+        if (_reportStateService != null)
+        {
+            _reportStateService.OnStateChanged -= OnServiceStateChanged;
+        }
+
+        _reportStateService = StateServiceFactory.Get(SelectedSortingType);
+        _reportStateService!.OnStateChanged += OnServiceStateChanged;
+
+        _ = InvokeAsync(StateHasChanged);
+    }
+
+    private void OnServiceStateChanged()
+    {
+        _ = InvokeAsync(StateHasChanged);
+    }
+
+}

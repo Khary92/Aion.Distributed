@@ -2,6 +2,7 @@
 using Google.Protobuf.WellKnownTypes;
 using Proto.Command.WorkDays;
 using Proto.DTO.TimerSettings;
+using Proto.DTO.TraceData;
 using Proto.Notifications.WorkDay;
 using Proto.Requests.WorkDays;
 
@@ -9,27 +10,36 @@ namespace Core.Server.Communication.Endpoints.WorkDay;
 
 public static class WorkDayProtoExtensions
 {
-    public static CreateWorkDayCommand ToCommand(this CreateWorkDayCommandProto proto) => new(
-        Guid.Parse(proto.WorkDayId), proto.Date.ToDateTimeOffset(), Guid.Parse(proto.TraceData.TraceId));
-
-    public static WorkDayNotification ToNotification(this CreateWorkDayCommand proto) => new()
+    public static CreateWorkDayCommand ToCommand(this CreateWorkDayCommandProto proto)
     {
-        WorkDayCreated = new WorkDayCreatedNotification
+        return new CreateWorkDayCommand(
+            Guid.Parse(proto.WorkDayId), proto.Date.ToDateTimeOffset(), Guid.Parse(proto.TraceData.TraceId));
+    }
+
+    public static WorkDayNotification ToNotification(this CreateWorkDayCommand proto)
+    {
+        return new WorkDayNotification
         {
-            WorkDayId = proto.WorkDayId.ToString(),
-            Date = proto.Date.ToTimestamp(),
-            TraceData = new()
+            WorkDayCreated = new WorkDayCreatedNotification
             {
-                TraceId = proto.TraceId.ToString()
+                WorkDayId = proto.WorkDayId.ToString(),
+                Date = proto.Date.ToTimestamp(),
+                TraceData = new TraceDataProto
+                {
+                    TraceId = proto.TraceId.ToString()
+                }
             }
-        }
-    };
+        };
+    }
 
-    public static WorkDayProto ToProto(this Domain.Entities.WorkDay workDay) => new()
+    public static WorkDayProto ToProto(this Domain.Entities.WorkDay workDay)
     {
-        WorkDayId = workDay.WorkDayId.ToString(),
-        Date = workDay.Date.ToTimestamp()
-    };
+        return new WorkDayProto
+        {
+            WorkDayId = workDay.WorkDayId.ToString(),
+            Date = workDay.Date.ToTimestamp()
+        };
+    }
 
     public static WorkDayListProto ToProtoList(this List<Domain.Entities.WorkDay> workDays)
     {

@@ -10,8 +10,17 @@ public class TimerSettingsController(
     ISharedCommandSender commandSender,
     ITraceCollector tracer) : IInitializeAsync, ITimerSettingsController
 {
-    private int _previousSnapshotSaveInterval;
     private int _previousDocumentationSaveInterval;
+    private int _previousSnapshotSaveInterval;
+
+    public InitializationType Type => InitializationType.Controller;
+
+    public Task InitializeComponents()
+    {
+        _previousSnapshotSaveInterval = timerSettingsStateService.TimerSettings.SnapshotSaveInterval;
+        _previousDocumentationSaveInterval = timerSettingsStateService.TimerSettings.DocumentationSaveInterval;
+        return Task.CompletedTask;
+    }
 
     public async Task SaveSettingsAsync()
     {
@@ -47,14 +56,5 @@ public class TimerSettingsController(
 
             _previousDocumentationSaveInterval = timerSettingsStateService.TimerSettings.DocumentationSaveInterval;
         }
-    }
-
-    public InitializationType Type => InitializationType.Controller;
-
-    public Task InitializeComponents()
-    {
-        _previousSnapshotSaveInterval = timerSettingsStateService.TimerSettings.SnapshotSaveInterval;
-        _previousDocumentationSaveInterval = timerSettingsStateService.TimerSettings.DocumentationSaveInterval;
-        return Task.CompletedTask;
     }
 }

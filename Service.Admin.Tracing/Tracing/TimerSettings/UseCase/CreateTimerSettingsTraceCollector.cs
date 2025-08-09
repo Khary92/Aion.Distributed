@@ -9,10 +9,10 @@ public class CreateTimerSettingsTraceCollector(ITracingDataCommandSender command
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = $"Create Sprint requested";
+        var log = "Create Sprint requested";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimerSettings,
+            SortingType.TimerSettings,
             UseCaseMeta.CreateTimerSettings,
             LoggingMeta.ActionRequested,
             originClassType,
@@ -26,7 +26,7 @@ public class CreateTimerSettingsTraceCollector(ITracingDataCommandSender command
         var log = $"Sent {command}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimerSettings,
+            SortingType.TimerSettings,
             UseCaseMeta.CreateTimerSettings,
             LoggingMeta.SendingCommand,
             originClassType,
@@ -39,7 +39,7 @@ public class CreateTimerSettingsTraceCollector(ITracingDataCommandSender command
     {
         var log = $"Received {notification}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimerSettings,
+            SortingType.TimerSettings,
             UseCaseMeta.CreateTimerSettings,
             LoggingMeta.NotificationReceived,
             originClassType,
@@ -53,7 +53,7 @@ public class CreateTimerSettingsTraceCollector(ITracingDataCommandSender command
         var log = $"Received aggregate {attributes}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimerSettings,
+            SortingType.TimerSettings,
             UseCaseMeta.CreateTimerSettings,
             LoggingMeta.AggregateReceived,
             originClassType,
@@ -67,7 +67,7 @@ public class CreateTimerSettingsTraceCollector(ITracingDataCommandSender command
         var log = $"Added aggregate with id:{traceId}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimerSettings,
+            SortingType.TimerSettings,
             UseCaseMeta.CreateTimerSettings,
             LoggingMeta.AggregateAdded,
             originClassType,

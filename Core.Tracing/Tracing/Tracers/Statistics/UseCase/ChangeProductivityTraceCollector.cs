@@ -4,14 +4,15 @@ using Service.Monitoring.Shared.Tracing;
 
 namespace Core.Server.Tracing.Tracing.Tracers.Statistics.UseCase;
 
-public class ChangeProductivityTraceCollector(ITracingDataCommandSender commandSender) : IChangeProductivityTraceCollector
+public class ChangeProductivityTraceCollector(ITracingDataCommandSender commandSender)
+    : IChangeProductivityTraceCollector
 {
     public async Task CommandReceived(Type originClassType, Guid traceId, object protoCommand)
     {
         var log = $"Command received {GetName(protoCommand)}:{protoCommand}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.StatisticsData,
+            SortingType.StatisticsData,
             UseCaseMeta.ChangeProductivity,
             LoggingMeta.CommandReceived,
             originClassType,
@@ -25,7 +26,7 @@ public class ChangeProductivityTraceCollector(ITracingDataCommandSender commandS
         var log = $"Event persisted {@event}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.StatisticsData,
+            SortingType.StatisticsData,
             UseCaseMeta.ChangeProductivity,
             LoggingMeta.EventPersisted,
             originClassType,
@@ -39,7 +40,7 @@ public class ChangeProductivityTraceCollector(ITracingDataCommandSender commandS
         var log = $"Notification sent {GetName(notification)}:{notification}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.StatisticsData,
+            SortingType.StatisticsData,
             UseCaseMeta.ChangeProductivity,
             LoggingMeta.SendingNotification,
             originClassType,

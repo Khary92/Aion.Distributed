@@ -8,18 +8,27 @@ namespace Client.Desktop.Communication.Requests.Tag;
 
 public static class TagRequestExtensions
 {
-    public static GetAllTagsRequestProto ToProto(this ClientGetAllTagsRequest request) => new();
-
-    public static GetTagByIdRequestProto ToProto(this ClientGetTagByIdRequest request) => new()
+    public static GetAllTagsRequestProto ToProto(this ClientGetAllTagsRequest request)
     {
-        TagId = request.TagId.ToString()
-    };
+        return new GetAllTagsRequestProto();
+    }
 
-    public static GetTagsByIdsRequestProto ToProto(this ClientGetTagsByIdsRequest request) => new()
+    public static GetTagByIdRequestProto ToProto(this ClientGetTagByIdRequest request)
     {
-        TagIds = { request.TagIds.ToRepeatedField() }
-    };
-    
+        return new GetTagByIdRequestProto
+        {
+            TagId = request.TagId.ToString()
+        };
+    }
+
+    public static GetTagsByIdsRequestProto ToProto(this ClientGetTagsByIdsRequest request)
+    {
+        return new GetTagsByIdsRequestProto
+        {
+            TagIds = { request.TagIds.ToRepeatedField() }
+        };
+    }
+
     public static TagClientModel ToWebModel(this TagCreatedNotification notification)
     {
         return new TagClientModel(Guid.Parse(notification.TagId), notification.Name, false);

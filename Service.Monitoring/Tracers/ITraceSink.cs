@@ -1,5 +1,4 @@
 using Service.Monitoring.Shared;
-using Service.Monitoring.Shared.Enums;
 
 namespace Service.Monitoring.Tracers;
 

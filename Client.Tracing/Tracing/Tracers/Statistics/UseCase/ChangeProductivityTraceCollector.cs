@@ -4,14 +4,15 @@ using Service.Monitoring.Shared.Tracing;
 
 namespace Client.Tracing.Tracing.Tracers.Statistics.UseCase;
 
-public class ChangeProductivityTraceCollector(ITracingDataCommandSender commandSender) : IChangeProductivityTraceCollector
+public class ChangeProductivityTraceCollector(ITracingDataCommandSender commandSender)
+    : IChangeProductivityTraceCollector
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = $"Change statics data requested";
+        var log = "Change statics data requested";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.StatisticsData,
+            SortingType.StatisticsData,
             UseCaseMeta.ChangeProductivity,
             LoggingMeta.ActionRequested,
             originClassType,
@@ -25,7 +26,7 @@ public class ChangeProductivityTraceCollector(ITracingDataCommandSender commandS
         var log = $"Sent {command}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.StatisticsData,
+            SortingType.StatisticsData,
             UseCaseMeta.ChangeProductivity,
             LoggingMeta.SendingCommand,
             originClassType,
@@ -39,7 +40,7 @@ public class ChangeProductivityTraceCollector(ITracingDataCommandSender commandS
         var log = $"Received {notification}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.StatisticsData,
+            SortingType.StatisticsData,
             UseCaseMeta.ChangeProductivity,
             LoggingMeta.NotificationReceived,
             originClassType,
@@ -53,7 +54,7 @@ public class ChangeProductivityTraceCollector(ITracingDataCommandSender commandS
         var log = $"Aggregate not found id:{traceId}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.StatisticsData,
+            SortingType.StatisticsData,
             UseCaseMeta.ChangeProductivity,
             LoggingMeta.AggregateNotFound,
             originClassType,
@@ -67,7 +68,7 @@ public class ChangeProductivityTraceCollector(ITracingDataCommandSender commandS
         var log = $"Changed applied id:{traceId}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.StatisticsData,
+            SortingType.StatisticsData,
             UseCaseMeta.ChangeProductivity,
             LoggingMeta.PropertyChanged,
             originClassType,

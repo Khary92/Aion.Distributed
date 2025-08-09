@@ -32,7 +32,6 @@ public class SprintNotificationsReceiver(ISprintStateService sprintStateService,
                     client.SubscribeSprintNotifications(new SubscribeRequest(), cancellationToken: stoppingToken);
 
                 await foreach (var notification in call.ResponseStream.ReadAllAsync(stoppingToken))
-                {
                     switch (notification.NotificationCase)
                     {
                         case SprintNotification.NotificationOneofCase.SprintCreated:
@@ -84,7 +83,6 @@ public class SprintNotificationsReceiver(ISprintStateService sprintStateService,
                             sprintStateService.Apply(ticketAddedToSprintNotification);
                             break;
                     }
-                }
             }
             catch (RpcException ex) when (ex.StatusCode == StatusCode.Unavailable)
             {

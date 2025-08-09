@@ -8,10 +8,10 @@ public class CreateSprintTraceCollector(ITracingDataCommandSender commandSender)
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = $"Create Sprint requested";
+        var log = "Create Sprint requested";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Sprint,
+            SortingType.Sprint,
             UseCaseMeta.CreateSprint,
             LoggingMeta.ActionRequested,
             originClassType,
@@ -24,7 +24,7 @@ public class CreateSprintTraceCollector(ITracingDataCommandSender commandSender)
     {
         var log = $"Sent {command}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Sprint,
+            SortingType.Sprint,
             UseCaseMeta.CreateSprint,
             LoggingMeta.SendingCommand,
             originClassType,
@@ -37,7 +37,7 @@ public class CreateSprintTraceCollector(ITracingDataCommandSender commandSender)
     {
         var log = $"Received {notification}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Sprint,
+            SortingType.Sprint,
             UseCaseMeta.CreateSprint,
             LoggingMeta.NotificationReceived,
             originClassType,
@@ -50,7 +50,7 @@ public class CreateSprintTraceCollector(ITracingDataCommandSender commandSender)
     {
         var log = $"Received aggregate {attributes}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Sprint,
+            SortingType.Sprint,
             UseCaseMeta.CreateSprint,
             LoggingMeta.AggregateReceived,
             originClassType,
@@ -63,7 +63,7 @@ public class CreateSprintTraceCollector(ITracingDataCommandSender commandSender)
     {
         var log = $"Added aggregate with id:{traceId}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Sprint,
+            SortingType.Sprint,
             UseCaseMeta.CreateSprint,
             LoggingMeta.AggregateAdded,
             originClassType,

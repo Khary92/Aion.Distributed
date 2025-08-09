@@ -1,19 +1,22 @@
 using Grpc.Core;
 using Proto.Report;
-using Service.Admin.Web.Communication.Reports.State;
+using Service.Admin.Web.Communication.Reports.Records;
+using Service.Monitoring.Shared.Enums;
 
 namespace Service.Admin.Web.Communication.Reports;
 
-public class ReportReceiver(IReportStateService reportState, ILogger<ReportReceiver> logger)
+public class ReportReceiver(IReportStateServiceFactory reportStateServiceFactory)
     : ReportProtoService.ReportProtoServiceBase, IReportReceiver
 {
     public override Task<ResponseProto> SendReport(ReportProto request, ServerCallContext context)
     {
-        logger.LogInformation("Received report with state: {State}", request.State);
+        var report = new ReportRecord(DateTimeOffset.Now, request.UseCase, request.State,
+            request.Traces.ToReportTrace());
 
-        var report = new ReportRecord(Guid.NewGuid(), DateTimeOffset.Now, request.UseCase, request.State,
-            request.Traces.ToList());
-        reportState.AddReport(report);
+        reportStateServiceFactory.Get(SortingType.Overview).AddReport(report);
+
+        var sortingType = Enum.Parse<SortingType>(request.SortType);
+        reportStateServiceFactory.Get(sortingType).AddReport(report);
 
         return Task.FromResult(new ResponseProto { Success = true });
     }

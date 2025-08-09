@@ -9,10 +9,10 @@ public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataCommandSender 
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = $"Change active status requested";
+        var log = "Change active status requested";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimerSettings,
+            SortingType.TimerSettings,
             UseCaseMeta.ChangeSnapshotSaveInterval,
             LoggingMeta.ActionRequested,
             originClassType,
@@ -26,7 +26,7 @@ public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataCommandSender 
         var log = $"Sent {command}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimerSettings,
+            SortingType.TimerSettings,
             UseCaseMeta.ChangeSnapshotSaveInterval,
             LoggingMeta.SendingCommand,
             originClassType,
@@ -40,7 +40,7 @@ public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataCommandSender 
         var log = $"Received {notification}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimerSettings,
+            SortingType.TimerSettings,
             UseCaseMeta.ChangeSnapshotSaveInterval,
             LoggingMeta.NotificationReceived,
             originClassType,
@@ -54,7 +54,7 @@ public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataCommandSender 
         var log = $"Aggregate not found id:{traceId}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimerSettings,
+            SortingType.TimerSettings,
             UseCaseMeta.ChangeSnapshotSaveInterval,
             LoggingMeta.AggregateNotFound,
             originClassType,
@@ -68,7 +68,7 @@ public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataCommandSender 
         var log = $"Changed applied id:{traceId}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimerSettings,
+            SortingType.TimerSettings,
             UseCaseMeta.ChangeSnapshotSaveInterval,
             LoggingMeta.PropertyChanged,
             originClassType,
@@ -82,7 +82,7 @@ public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataCommandSender 
         var log = $"Request aborted {asTraceAttributes}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimerSettings,
+            SortingType.TimerSettings,
             UseCaseMeta.ChangeSnapshotSaveInterval,
             LoggingMeta.PropertyNotChanged,
             originClassType,

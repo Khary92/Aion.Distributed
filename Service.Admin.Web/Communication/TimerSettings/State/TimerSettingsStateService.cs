@@ -14,6 +14,26 @@ public class TimerSettingsStateService(
     ITraceCollector tracer)
     : ITimerSettingsStateService, IInitializeAsync
 {
+    public InitializationType Type => InitializationType.StateService;
+
+    public async Task InitializeComponents()
+    {
+        if (await requestSender.Send(new IsTimerSettingExistingRequestProto()))
+        {
+            var timerSettingsProto = await requestSender.Send(new GetTimerSettingsRequestProto());
+            TimerSettings = timerSettingsProto.ToWebModel();
+            NotifyStateChanged();
+            return;
+        }
+
+        var traceId = Guid.NewGuid();
+        await tracer.TimerSettings.Create.StartUseCase(GetType(), traceId);
+
+        var webCreateTimerSettingsCommand = new WebCreateTimerSettingsCommand(Guid.NewGuid(), 30, 30, traceId);
+        await tracer.TimerSettings.Create.SendingCommand(GetType(), traceId, webCreateTimerSettingsCommand);
+        await commandSender.Send(webCreateTimerSettingsCommand.ToProto());
+    }
+
     public TimerSettingsWebModel TimerSettings { get; private set; } = new(Guid.Empty, 0, 0);
 
     public event Action? OnStateChanged;
@@ -42,25 +62,5 @@ public class TimerSettingsStateService(
     private void NotifyStateChanged()
     {
         OnStateChanged?.Invoke();
-    }
-
-    public InitializationType Type => InitializationType.StateService;
-
-    public async Task InitializeComponents()
-    {
-        if (await requestSender.Send(new IsTimerSettingExistingRequestProto()))
-        {
-            var timerSettingsProto = await requestSender.Send(new GetTimerSettingsRequestProto());
-            TimerSettings = timerSettingsProto.ToWebModel();
-            NotifyStateChanged();
-            return;
-        }
-
-        var traceId = Guid.NewGuid();
-        await tracer.TimerSettings.Create.StartUseCase(GetType(), traceId);
-
-        var webCreateTimerSettingsCommand = new WebCreateTimerSettingsCommand(Guid.NewGuid(), 30, 30, traceId);
-        await tracer.TimerSettings.Create.SendingCommand(GetType(), traceId, webCreateTimerSettingsCommand);
-        await commandSender.Send(webCreateTimerSettingsCommand.ToProto());
     }
 }

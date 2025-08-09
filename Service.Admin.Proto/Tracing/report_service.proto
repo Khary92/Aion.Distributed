@@ -6,11 +6,19 @@ service ReportProtoService {
   rpc SendReport (ReportProto) returns (ResponseProto);
 }
 
+message ReportTraceProto {
+  google.protobuf.Timestamp time_stamp = 1;
+  string loggingMeta = 2;
+  string originClass = 3;
+  string log = 4;
+}
+
 message ReportProto {
   google.protobuf.Timestamp time_stamp = 1;
-  string useCase = 2;
-  string state = 3;
-  repeated string traces = 4;
+  string sortType =2;
+  string useCase = 3;
+  string state = 4;
+  repeated ReportTraceProto traces = 5;
 }
 
 message ResponseProto {

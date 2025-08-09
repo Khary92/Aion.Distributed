@@ -9,8 +9,8 @@ public class Verifier : IVerifier
 {
     private readonly Timer _timer = new(10000);
     private readonly List<TraceData> _traceData = new();
-    private readonly UseCaseStateEvaluator _useCaseStateEvaluator;
     private readonly Guid _traceId;
+    private readonly UseCaseStateEvaluator _useCaseStateEvaluator;
 
     public Verifier(UseCaseStateEvaluator useCaseStateEvaluator, Guid traceId)
     {
@@ -32,9 +32,11 @@ public class Verifier : IVerifier
     private void Elapsed(object? sender, ElapsedEventArgs e)
     {
         var report = new Report(_traceData.First().TimeStamp,
+            _traceData.First().SortingType,
             _traceData.First().UseCaseMeta,
             _useCaseStateEvaluator.GetResultState(_traceData),
-            _traceData.GetClassTrace(), _traceId);
+            _traceData,
+            _traceId);
 
         VerificationCompleted?.Invoke(this, report);
     }

@@ -5,10 +5,6 @@ using Client.Desktop.Communication.Requests.Sprint;
 using Client.Desktop.Communication.Requests.Tag;
 using Client.Desktop.Communication.Requests.Ticket;
 using Client.Desktop.DataModels;
-using Proto.Requests.NoteTypes;
-using Proto.Requests.Sprints;
-using Proto.Requests.Tags;
-using Proto.Requests.Tickets;
 
 namespace Client.Desktop.Communication.Requests;
 

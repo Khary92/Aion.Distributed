@@ -49,9 +49,9 @@ public class AnalysisDataService(
             statisticsData.Add(
                 await statisticsDataRequestsService.GetStatisticsDataByTimeSlotId(timeSlot.TimeSlotId));
         var tags = await tagRequestsService.GetAll();
-        
+
         var (productiveTags, neutralTags, unproductiveTags) = GetTagCounts(statisticsData, tags);
-        
+
         return new AnalysisByTicketProto
         {
             TicketName = ticket.Name,

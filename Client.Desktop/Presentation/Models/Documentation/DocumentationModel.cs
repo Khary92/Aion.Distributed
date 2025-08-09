@@ -15,13 +15,9 @@ using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Register;
 using Client.Desktop.Presentation.Factories;
 using Client.Desktop.Presentation.Models.TimeTracking.DynamicControls;
-using Client.Desktop.Services;
 using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
-using Proto.Requests.Notes;
-using Proto.Requests.NoteTypes;
-using Proto.Requests.Tickets;
 using ReactiveUI;
 
 namespace Client.Desktop.Presentation.Models.Documentation;
@@ -106,7 +102,8 @@ public class DocumentationModel(
     {
         if (SelectedTicket == null) return;
 
-        var noteDtos = await requestSender.Send(new ClientGetNotesByTicketIdRequest(SelectedTicket.TicketId, Guid.NewGuid()));
+        var noteDtos =
+            await requestSender.Send(new ClientGetNotesByTicketIdRequest(SelectedTicket.TicketId, Guid.NewGuid()));
 
         var noteViewModels = await Task.WhenAll(noteDtos.Select(noteViewFactory.Create));
 
@@ -162,7 +159,8 @@ public class DocumentationModel(
                     return;
                 }
 
-                var noteType = await requestSender.Send(new ClientGetNoteTypeByIdRequest(notification.NoteTypeId, Guid.NewGuid()));
+                var noteType =
+                    await requestSender.Send(new ClientGetNoteTypeByIdRequest(notification.NoteTypeId, Guid.NewGuid()));
 
                 noteViewModel.Note.NoteType = noteType;
                 noteViewModel.Note.Apply(notification);

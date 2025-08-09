@@ -8,10 +8,10 @@ public class SetEndTimeTraceCollector(ITracingDataCommandSender commandSender) :
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = $"Requested pushing end time slot data after failed shutdown";
+        var log = "Requested pushing end time slot data after failed shutdown";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimeSlot,
+            SortingType.TimeSlot,
             UseCaseMeta.SetEndTime,
             LoggingMeta.ActionRequested,
             originClassType,
@@ -25,7 +25,7 @@ public class SetEndTimeTraceCollector(ITracingDataCommandSender commandSender) :
     {
         var log = $"Sent {command}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimeSlot,
+            SortingType.TimeSlot,
             UseCaseMeta.SetEndTime,
             LoggingMeta.SendingCommand,
             originClassType,
@@ -36,9 +36,9 @@ public class SetEndTimeTraceCollector(ITracingDataCommandSender commandSender) :
 
     public async Task CacheIsEmpty(Type originClassType, Guid traceId)
     {
-        var log = $"Aborted because cache is empty";
+        var log = "Aborted because cache is empty";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimeSlot,
+            SortingType.TimeSlot,
             UseCaseMeta.SetEndTime,
             LoggingMeta.ActionAborted,
             originClassType,

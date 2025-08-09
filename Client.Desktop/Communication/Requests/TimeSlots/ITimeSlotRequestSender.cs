@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests.TimeSlots.Records;
 using Client.Desktop.DataModels;
-using Proto.Requests.TimeSlots;
 
 namespace Client.Desktop.Communication.Requests.TimeSlots;
 

@@ -12,7 +12,8 @@ public class SetSprintActiveStatusCommandHandler(
         var sprintDtos = await sprintRequestsService.GetAll();
 
         foreach (var sprint in sprintDtos.Where(sprint => sprint.IsActive))
-            await sprintCommandsService.SetSprintActiveStatus(new SetSprintActiveStatusCommand(sprint.SprintId, false, command.TraceId));
+            await sprintCommandsService.SetSprintActiveStatus(
+                new SetSprintActiveStatusCommand(sprint.SprintId, false, command.TraceId));
 
         await sprintCommandsService.SetSprintActiveStatus(command);
     }

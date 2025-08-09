@@ -11,7 +11,7 @@ public class UpdateSprintCollector(ITracingDataCommandSender commandSender) : IU
         var log = $"Command received {GetName(protoCommand)}:{protoCommand}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Sprint,
+            SortingType.Sprint,
             UseCaseMeta.UpdateSprint,
             LoggingMeta.CommandReceived,
             originClassType,
@@ -25,7 +25,7 @@ public class UpdateSprintCollector(ITracingDataCommandSender commandSender) : IU
         var log = $"Event persisted {@event}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Sprint,
+            SortingType.Sprint,
             UseCaseMeta.UpdateSprint,
             LoggingMeta.EventPersisted,
             originClassType,
@@ -39,7 +39,7 @@ public class UpdateSprintCollector(ITracingDataCommandSender commandSender) : IU
         var log = $"Notification sent {GetName(notification)}:{notification}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Sprint,
+            SortingType.Sprint,
             UseCaseMeta.UpdateSprint,
             LoggingMeta.SendingNotification,
             originClassType,

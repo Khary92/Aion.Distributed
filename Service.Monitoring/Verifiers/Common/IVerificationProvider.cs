@@ -6,6 +6,6 @@ namespace Service.Monitoring.Verifiers.Common;
 
 public interface IVerificationProvider
 {
-    TraceSinkId TraceSinkId { get; }
+    SortingType SortingType { get; }
     ImmutableList<VerificationStep> GetVerificationSteps(UseCaseMeta useCaseMeta);
 }

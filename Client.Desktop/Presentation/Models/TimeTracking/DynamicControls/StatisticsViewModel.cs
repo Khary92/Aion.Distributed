@@ -97,7 +97,7 @@ public class StatisticsViewModel(
 
             var tagSelectionCommand =
                 new ClientChangeTagSelectionCommand(StatisticsData.StatisticsId, StatisticsData.TagIds, traceId);
-            
+
             await tracer.Statistics.ChangeProductivity.SendingCommand(GetType(), traceId, tagSelectionCommand);
             await commandSender.Send(tagSelectionCommand);
         }

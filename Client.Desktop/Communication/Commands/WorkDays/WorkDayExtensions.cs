@@ -14,7 +14,7 @@ public static class WorkDayExtensions
         {
             WorkDayId = command.WorkDayId.ToString(),
             Date = Timestamp.FromDateTimeOffset(command.Date),
-            TraceData = new TraceDataProto()
+            TraceData = new TraceDataProto
             {
                 TraceId = Guid.NewGuid().ToString()
             }

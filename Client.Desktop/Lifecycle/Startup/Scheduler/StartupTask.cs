@@ -4,5 +4,5 @@ public enum StartupTask
 {
     RegisterMessenger,
     CheckUnsentCommands,
-    AsyncInitialize,
+    AsyncInitialize
 }

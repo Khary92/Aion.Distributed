@@ -15,9 +15,9 @@ public class ShutdownHandler(
     {
         await startTimeCache.Persist();
         await endTimeCache.Persist();
-        
+
         streamLifeCycleHandler.Stop();
-        
+
         application.Shutdown();
     }
 }

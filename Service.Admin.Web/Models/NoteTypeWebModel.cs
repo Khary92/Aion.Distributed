@@ -1,4 +1,4 @@
-﻿using Service.Admin.Web.Communication.NoteType.Notifications;
+﻿using Service.Admin.Web.Communication.NoteType.Records.Notifications;
 
 namespace Service.Admin.Web.Models;
 

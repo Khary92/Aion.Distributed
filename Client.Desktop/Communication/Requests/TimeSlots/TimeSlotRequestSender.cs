@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests.TimeSlots.Records;
 using Client.Desktop.DataModels;
 using Client.Proto;
 using Grpc.Net.Client;
-using Proto.DTO.TimeSlots;
 using Proto.Requests.TimeSlots;
 
 namespace Client.Desktop.Communication.Requests.TimeSlots;
@@ -21,7 +19,7 @@ public class TimeSlotRequestSender : ITimeSlotRequestSender
         var response = await _client.GetTimeSlotByIdAsync(request.ToProto());
 
         if (response == null) throw new ArgumentNullException("Add default implementation here!");
-        
+
         return response.ToClientModel();
     }
 

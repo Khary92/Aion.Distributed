@@ -11,6 +11,16 @@ public class SprintStateService(ISharedRequestSender requestSender, ITraceCollec
     : ISprintStateService, IInitializeAsync
 {
     private List<SprintWebModel> _sprints = new();
+
+    public InitializationType Type => InitializationType.StateService;
+
+    public async Task InitializeComponents()
+    {
+        var sprintListProto = await requestSender.Send(new GetAllSprintsRequestProto());
+        _sprints = sprintListProto.ToWebModelList();
+        NotifyStateChanged();
+    }
+
     public IReadOnlyList<SprintWebModel> Sprints => _sprints.AsReadOnly();
 
     public event Action? OnStateChanged;
@@ -87,14 +97,5 @@ public class SprintStateService(ISharedRequestSender requestSender, ITraceCollec
     private void NotifyStateChanged()
     {
         OnStateChanged?.Invoke();
-    }
-
-    public InitializationType Type => InitializationType.StateService;
-
-    public async Task InitializeComponents()
-    {
-        var sprintListProto = await requestSender.Send(new GetAllSprintsRequestProto());
-        _sprints = sprintListProto.ToWebModelList();
-        NotifyStateChanged();
     }
 }

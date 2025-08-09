@@ -8,10 +8,10 @@ public class CreateWorkDayTraceCollector(ITracingDataCommandSender commandSender
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = $"Create WorkDay requested";
+        var log = "Create WorkDay requested";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.WorkDay,
+            SortingType.WorkDay,
             UseCaseMeta.CreateWorkDay,
             LoggingMeta.ActionRequested,
             originClassType,
@@ -25,7 +25,7 @@ public class CreateWorkDayTraceCollector(ITracingDataCommandSender commandSender
         var log = $"Sent {command}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.WorkDay,
+            SortingType.WorkDay,
             UseCaseMeta.CommandSent,
             LoggingMeta.ActionRequested,
             originClassType,
@@ -39,7 +39,7 @@ public class CreateWorkDayTraceCollector(ITracingDataCommandSender commandSender
         var log = $"Received aggregate {attributes}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.WorkDay,
+            SortingType.WorkDay,
             UseCaseMeta.CreateWorkDay,
             LoggingMeta.AggregateReceived,
             originClassType,
@@ -53,7 +53,7 @@ public class CreateWorkDayTraceCollector(ITracingDataCommandSender commandSender
         var log = $"Added aggregate with id:{traceId}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.WorkDay,
+            SortingType.WorkDay,
             UseCaseMeta.CreateWorkDay,
             LoggingMeta.AggregateAdded,
             originClassType,

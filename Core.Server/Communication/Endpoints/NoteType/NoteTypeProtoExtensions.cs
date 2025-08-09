@@ -1,6 +1,7 @@
 ﻿using Core.Server.Communication.Records.Commands.Entities.NoteType;
 using Proto.Command.NoteTypes;
 using Proto.DTO.NoteType;
+using Proto.DTO.TraceData;
 using Proto.Notifications.NoteType;
 using Proto.Requests.NoteTypes;
 
@@ -8,51 +9,69 @@ namespace Core.Server.Communication.Endpoints.NoteType;
 
 public static class NoteTypeProtoExtensions
 {
-    public static CreateNoteTypeCommand ToCommand(this CreateNoteTypeCommandProto proto) => new(
-        Guid.Parse(proto.NoteTypeId), proto.Name, proto.Color, Guid.Parse(proto.TraceData.TraceId));
-
-    public static NoteTypeNotification ToNotification(this CreateNoteTypeCommand command) => new()
+    public static CreateNoteTypeCommand ToCommand(this CreateNoteTypeCommandProto proto)
     {
-        NoteTypeCreated = new NoteTypeCreatedNotification
+        return new CreateNoteTypeCommand(
+            Guid.Parse(proto.NoteTypeId), proto.Name, proto.Color, Guid.Parse(proto.TraceData.TraceId));
+    }
+
+    public static NoteTypeNotification ToNotification(this CreateNoteTypeCommand command)
+    {
+        return new NoteTypeNotification
         {
-            NoteTypeId = command.NoteTypeId.ToString(),
-            Name = command.Name,
-            Color = command.Color,
-            TraceData = new()
+            NoteTypeCreated = new NoteTypeCreatedNotification
             {
-                TraceId = command.TraceId.ToString()
+                NoteTypeId = command.NoteTypeId.ToString(),
+                Name = command.Name,
+                Color = command.Color,
+                TraceData = new TraceDataProto
+                {
+                    TraceId = command.TraceId.ToString()
+                }
             }
-        }
-    };
+        };
+    }
 
-    public static ChangeNoteTypeNameCommand ToCommand(this ChangeNoteTypeNameCommandProto proto) => new(
-        Guid.Parse(proto.NoteTypeId), proto.Name,
-        Guid.Parse(proto.TraceData.TraceId));
-
-    public static NoteTypeNotification ToNotification(this ChangeNoteTypeNameCommand proto) => new()
+    public static ChangeNoteTypeNameCommand ToCommand(this ChangeNoteTypeNameCommandProto proto)
     {
-        NoteTypeNameChanged = new NoteTypeNameChangedNotification
+        return new ChangeNoteTypeNameCommand(
+            Guid.Parse(proto.NoteTypeId), proto.Name,
+            Guid.Parse(proto.TraceData.TraceId));
+    }
+
+    public static NoteTypeNotification ToNotification(this ChangeNoteTypeNameCommand proto)
+    {
+        return new NoteTypeNotification
         {
-            NoteTypeId = proto.NoteTypeId.ToString(),
-            Name = proto.Name,
-            TraceData = new()
+            NoteTypeNameChanged = new NoteTypeNameChangedNotification
             {
-                TraceId = proto.TraceId.ToString()
+                NoteTypeId = proto.NoteTypeId.ToString(),
+                Name = proto.Name,
+                TraceData = new TraceDataProto
+                {
+                    TraceId = proto.TraceId.ToString()
+                }
             }
-        }
-    };
+        };
+    }
 
-    public static ChangeNoteTypeColorCommand ToCommand(this ChangeNoteTypeColorCommandProto proto) => new(
-        Guid.Parse(proto.NoteTypeId), proto.Color, Guid.Parse(proto.TraceData.TraceId));
-
-    public static NoteTypeNotification ToNotification(this ChangeNoteTypeColorCommand proto) => new()
+    public static ChangeNoteTypeColorCommand ToCommand(this ChangeNoteTypeColorCommandProto proto)
     {
-        NoteTypeColorChanged = new NoteTypeColorChangedNotification
+        return new ChangeNoteTypeColorCommand(
+            Guid.Parse(proto.NoteTypeId), proto.Color, Guid.Parse(proto.TraceData.TraceId));
+    }
+
+    public static NoteTypeNotification ToNotification(this ChangeNoteTypeColorCommand proto)
+    {
+        return new NoteTypeNotification
         {
-            NoteTypeId = proto.NoteTypeId.ToString(),
-            Color = proto.Color
-        }
-    };
+            NoteTypeColorChanged = new NoteTypeColorChangedNotification
+            {
+                NoteTypeId = proto.NoteTypeId.ToString(),
+                Color = proto.Color
+            }
+        };
+    }
 
     public static GetAllNoteTypesResponseProto ToProtoList(this List<Domain.Entities.NoteType> noteTypes)
     {
@@ -63,10 +82,13 @@ public static class NoteTypeProtoExtensions
         return noteTypeProtos;
     }
 
-    public static NoteTypeProto ToProto(this Domain.Entities.NoteType noteType) => new()
+    public static NoteTypeProto ToProto(this Domain.Entities.NoteType noteType)
     {
-        NoteTypeId = noteType.NoteTypeId.ToString(),
-        Name = noteType.Name,
-        Color = noteType.Color
-    };
+        return new NoteTypeProto
+        {
+            NoteTypeId = noteType.NoteTypeId.ToString(),
+            Name = noteType.Name,
+            Color = noteType.Color
+        };
+    }
 }

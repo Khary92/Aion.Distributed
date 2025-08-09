@@ -52,6 +52,6 @@ app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
 var componentInitializer = app.Services.GetRequiredService<IComponentInitializer>();
-await componentInitializer.InitializeServicesAsync(); 
+await componentInitializer.InitializeServicesAsync();
 
 app.Run();

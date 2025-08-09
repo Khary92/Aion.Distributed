@@ -12,7 +12,7 @@ public class ChangeNoteTypeColorTraceCollector(ITracingDataCommandSender command
         var log = $"Command received {GetName(protoCommand)}:{protoCommand}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Note,
+            SortingType.Note,
             UseCaseMeta.ChangeNoteTypeColor,
             LoggingMeta.CommandReceived,
             originClassType,
@@ -26,7 +26,7 @@ public class ChangeNoteTypeColorTraceCollector(ITracingDataCommandSender command
         var log = $"Event persisted {@event}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Note,
+            SortingType.Note,
             UseCaseMeta.ChangeNoteTypeColor,
             LoggingMeta.EventPersisted,
             originClassType,
@@ -40,7 +40,7 @@ public class ChangeNoteTypeColorTraceCollector(ITracingDataCommandSender command
         var log = $"Notification sent {GetName(notification)}:{notification}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Note,
+            SortingType.Note,
             UseCaseMeta.ChangeNoteTypeColor,
             LoggingMeta.SendingNotification,
             originClassType,

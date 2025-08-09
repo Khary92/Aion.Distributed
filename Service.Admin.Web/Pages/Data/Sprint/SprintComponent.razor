@@ -21,15 +21,15 @@
         </div>
         <div class="mb-2">
             <button class="btn btn-success me-2"
-                    disabled="@(!@SprintController.CanSave)"
+                    disabled="@(!SprintController.CanSave)"
                     @onclick="@(async () => await SprintController.CreateOrUpdateSprint())">Save
             </button>
             <button class="btn btn-warning me-2"
-                    disabled="@(@SprintController.SelectedSprint is null)"
+                    disabled="@(SprintController.SelectedSprint is null)"
                     @onclick="@SprintController.ToggleEditMode">@SprintController.EditButtonText
             </button>
             <button class="btn btn-primary me-2"
-                    disabled="@(@SprintController.SelectedSprint is null)"
+                    disabled="@(SprintController.SelectedSprint is null)"
                     @onclick="@(async () => await SprintController.SetSelectedSprintActive())">Set active
             </button>
         </div>
@@ -48,7 +48,7 @@
             <tbody>
             @foreach (var sprint in SprintStateService.Sprints)
             {
-                <tr class="@(@SprintController.SelectedSprint == sprint ? "table-active" : "")"
+                <tr class="@(SprintController.SelectedSprint == sprint ? "table-active" : "")"
                     @onclick="() => SprintController.SelectedSprint = sprint">
                     <td>@sprint.Name</td>
                     <td>@sprint.StartTime.ToString("d")</td>

@@ -7,7 +7,8 @@ namespace Service.Monitoring.Verifiers.Steps;
 
 public class NoteTypeVerificationProvider : IVerificationProvider
 {
-    public TraceSinkId TraceSinkId => TraceSinkId.NoteType;
+    public SortingType SortingType => SortingType.NoteType;
+
     public ImmutableList<VerificationStep> GetVerificationSteps(UseCaseMeta useCaseMeta)
     {
         return ImmutableList.Create<VerificationStep>();

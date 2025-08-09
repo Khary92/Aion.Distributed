@@ -23,12 +23,12 @@
         </div>
         <div class="mb-2">
             <button class="btn btn-success me-2"
-                    disabled="@(string.IsNullOrWhiteSpace(@TagController.InputTagName))"
-                    @onclick="@(async () => await @TagController.PersistTag())">Save
+                    disabled="@(string.IsNullOrWhiteSpace(TagController.InputTagName))"
+                    @onclick="@(async () => await TagController.PersistTag())">Save
             </button>
             <button class="btn btn-warning me-2"
-                    disabled="@(@TagController.SelectedTag == null)"
-                    @onclick="TagController.ToggleTagEditMode">@(@TagController.IsEditMode ? "Cancel Edit" : "Edit")</button>
+                    disabled="@(TagController.SelectedTag == null)"
+                    @onclick="TagController.ToggleTagEditMode">@(TagController.IsEditMode ? "Cancel Edit" : "Edit")</button>
         </div>
     </div>
     <div class="col-7">
@@ -41,7 +41,7 @@
             <tbody>
             @foreach (var tag in TagStateService.Tickets)
             {
-                <tr class="@(@TagController.SelectedTag == tag ? "table-active" : "")"
+                <tr class="@(TagController.SelectedTag == tag ? "table-active" : "")"
                     @onclick="() => TagController.SelectedTag = tag">
                     <td>@tag.Name</td>
                 </tr>

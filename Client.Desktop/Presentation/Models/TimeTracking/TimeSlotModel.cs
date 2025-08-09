@@ -62,8 +62,8 @@ public class TimeSlotModel(
             if (!TicketReplayDecorator.Ticket.IsDocumentationChanged()) return;
 
             var traceId = Guid.NewGuid();
-            await tracer.Ticket.Documentation.StartUseCase(GetType(),traceId);
-            
+            await tracer.Ticket.Documentation.StartUseCase(GetType(), traceId);
+
             ticketDocumentStateSynchronizer.SetSynchronizationValue(TicketReplayDecorator.Ticket.TicketId,
                 TicketReplayDecorator.Ticket.Documentation);
 

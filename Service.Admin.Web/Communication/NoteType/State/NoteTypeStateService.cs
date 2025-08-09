@@ -1,6 +1,6 @@
 ﻿using Proto.Requests.NoteTypes;
 using Service.Admin.Tracing;
-using Service.Admin.Web.Communication.NoteType.Notifications;
+using Service.Admin.Web.Communication.NoteType.Records.Notifications;
 using Service.Admin.Web.Communication.Wrappers;
 using Service.Admin.Web.Models;
 using Service.Admin.Web.Services;
@@ -11,6 +11,15 @@ public class NoteTypeStateService(ISharedRequestSender requestSender, ITraceColl
     : INoteTypeStateService, IInitializeAsync
 {
     private List<NoteTypeWebModel> _noteTypes = new();
+
+    public InitializationType Type => InitializationType.StateService;
+
+    public async Task InitializeComponents()
+    {
+        var noteTypeList = await requestSender.Send(new GetAllNoteTypesRequestProto());
+        _noteTypes = noteTypeList.ToWebModelList();
+    }
+
     public IReadOnlyList<NoteTypeWebModel> NoteTypes => _noteTypes.AsReadOnly();
 
     public event Action? OnStateChanged;
@@ -56,13 +65,5 @@ public class NoteTypeStateService(ISharedRequestSender requestSender, ITraceColl
     private void NotifyStateChanged()
     {
         OnStateChanged?.Invoke();
-    }
-
-    public InitializationType Type => InitializationType.StateService;
-
-    public async Task InitializeComponents()
-    {
-        var noteTypeList = await requestSender.Send(new GetAllNoteTypesRequestProto());
-        _noteTypes = noteTypeList.ToWebModelList();
     }
 }

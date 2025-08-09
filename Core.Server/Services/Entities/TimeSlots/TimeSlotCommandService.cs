@@ -18,8 +18,9 @@ public class TimeSlotCommandService(
         await timeSlotEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
         var timeSlotNotification = command.ToNotification();
         await tracer.TimeSlot.SetEndTime.EventPersisted(GetType(), command.TraceId, timeSlotNotification.EndTimeSet);
-        
-        await tracer.TimeSlot.SetEndTime.SendingNotification(GetType(), command.TraceId, timeSlotNotification.EndTimeSet);
+
+        await tracer.TimeSlot.SetEndTime.SendingNotification(GetType(), command.TraceId,
+            timeSlotNotification.EndTimeSet);
         await timeSlotNotificationService.SendNotificationAsync(command.ToNotification());
     }
 
@@ -27,9 +28,11 @@ public class TimeSlotCommandService(
     {
         await timeSlotEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
         var timeSlotNotification = command.ToNotification();
-        await tracer.TimeSlot.SetStartTime.EventPersisted(GetType(), command.TraceId, timeSlotNotification.StartTimeSet);
-        
-        await tracer.TimeSlot.SetStartTime.SendingNotification(GetType(), command.TraceId, timeSlotNotification.StartTimeSet);
+        await tracer.TimeSlot.SetStartTime.EventPersisted(GetType(), command.TraceId,
+            timeSlotNotification.StartTimeSet);
+
+        await tracer.TimeSlot.SetStartTime.SendingNotification(GetType(), command.TraceId,
+            timeSlotNotification.StartTimeSet);
         await timeSlotNotificationService.SendNotificationAsync(command.ToNotification());
     }
 
@@ -37,9 +40,11 @@ public class TimeSlotCommandService(
     {
         await timeSlotEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
         var timeSlotNotification = command.ToNotification();
-        await tracer.TimeSlot.AddNote.EventPersisted(GetType(), command.TraceId, timeSlotNotification.NoteAddedToTimeSlot);
-        
-        await tracer.TimeSlot.AddNote.SendingNotification(GetType(), command.TraceId, timeSlotNotification.NoteAddedToTimeSlot);
+        await tracer.TimeSlot.AddNote.EventPersisted(GetType(), command.TraceId,
+            timeSlotNotification.NoteAddedToTimeSlot);
+
+        await tracer.TimeSlot.AddNote.SendingNotification(GetType(), command.TraceId,
+            timeSlotNotification.NoteAddedToTimeSlot);
         await timeSlotNotificationService.SendNotificationAsync(command.ToNotification());
     }
 
@@ -48,8 +53,9 @@ public class TimeSlotCommandService(
         await timeSlotEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
         var timeSlotNotification = command.ToNotification();
         await tracer.TimeSlot.Create.EventPersisted(GetType(), command.TraceId, timeSlotNotification.TimeSlotCreated);
-        
-        await tracer.TimeSlot.Create.SendingNotification(GetType(), command.TraceId, timeSlotNotification.TimeSlotCreated);
+
+        await tracer.TimeSlot.Create.SendingNotification(GetType(), command.TraceId,
+            timeSlotNotification.TimeSlotCreated);
         await timeSlotNotificationService.SendNotificationAsync(command.ToNotification());
     }
 }

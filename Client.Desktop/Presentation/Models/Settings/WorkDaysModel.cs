@@ -14,9 +14,6 @@ using Client.Desktop.Services.LocalSettings.Commands;
 using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
-using MsBox.Avalonia;
-using MsBox.Avalonia.Dto;
-using MsBox.Avalonia.Enums;
 using ReactiveUI;
 
 namespace Client.Desktop.Presentation.Models.Settings;
@@ -60,7 +57,7 @@ public class WorkDaysModel(
             await tracer.WorkDay.Create.AggregateAdded(GetType(), m.WorkDay.WorkDayId);
         });
     }
-    
+
     public void SetSelectedWorkday(WorkDayClientModel selectedWorkDay)
     {
         localSettingsCommandSender.Send(new SetWorkDaySelectionCommand(selectedWorkDay.Date));

@@ -1,18 +1,18 @@
-using Core.Server.Tracing.Tracing.Tracers.Sprint.UseCase;
 using Service.Monitoring.Shared;
 using Service.Monitoring.Shared.Enums;
 using Service.Monitoring.Shared.Tracing;
 
 namespace Core.Server.Tracing.Tracing.Tracers.Statistics.UseCase;
 
-public class CreateStatisticsDataTraceCollector(ITracingDataCommandSender commandSender) : ICreateStatisticsDataTraceCollector
+public class CreateStatisticsDataTraceCollector(ITracingDataCommandSender commandSender)
+    : ICreateStatisticsDataTraceCollector
 {
     public async Task CommandReceived(Type originClassType, Guid traceId, object protoCommand)
     {
         var log = $"Command received {GetName(protoCommand)}:{protoCommand}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.StatisticsData,
+            SortingType.StatisticsData,
             UseCaseMeta.CreateStatisticsData,
             LoggingMeta.CommandReceived,
             originClassType,
@@ -26,7 +26,7 @@ public class CreateStatisticsDataTraceCollector(ITracingDataCommandSender comman
         var log = $"Event persisted {@event}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.StatisticsData,
+            SortingType.StatisticsData,
             UseCaseMeta.CreateStatisticsData,
             LoggingMeta.EventPersisted,
             originClassType,
@@ -40,7 +40,7 @@ public class CreateStatisticsDataTraceCollector(ITracingDataCommandSender comman
         var log = $"Notification sent {GetName(notification)}:{notification}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.StatisticsData,
+            SortingType.StatisticsData,
             UseCaseMeta.CreateStatisticsData,
             LoggingMeta.SendingNotification,
             originClassType,

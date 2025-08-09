@@ -1,4 +1,3 @@
-
 using Core.Server.Communication.Endpoints.Tag;
 using Core.Server.Communication.Records.Commands.Entities.Tags;
 using Core.Server.Tracing.Tracing.Tracers;
@@ -19,7 +18,7 @@ public class TagCommandsService(
         await tagEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
         var noteNotification = command.ToNotification();
         await tracer.Tag.Update.EventPersisted(GetType(), command.TraceId, noteNotification.TagUpdated);
-        
+
         await tracer.Tag.Update.SendingNotification(GetType(), command.TraceId, noteNotification.TagUpdated);
         await tagNotificationService.SendNotificationAsync(command.ToNotification());
     }

@@ -11,7 +11,7 @@ public class UpdateTicketTraceCollector(ITracingDataCommandSender commandSender)
         var log = $"Update ticket requested for {attributes}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Ticket,
+            SortingType.Ticket,
             UseCaseMeta.UpdateTicket,
             LoggingMeta.ActionRequested,
             originClassType,
@@ -25,7 +25,7 @@ public class UpdateTicketTraceCollector(ITracingDataCommandSender commandSender)
         var log = $"Sent {command}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Ticket,
+            SortingType.Ticket,
             UseCaseMeta.UpdateTicket,
             LoggingMeta.SendingCommand,
             originClassType,
@@ -38,7 +38,7 @@ public class UpdateTicketTraceCollector(ITracingDataCommandSender commandSender)
     {
         var log = $"Received {notification}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Ticket,
+            SortingType.Ticket,
             UseCaseMeta.UpdateTicket,
             LoggingMeta.NotificationReceived,
             originClassType,
@@ -51,7 +51,7 @@ public class UpdateTicketTraceCollector(ITracingDataCommandSender commandSender)
     {
         var log = $"Aggregate not found id:{traceId}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Ticket,
+            SortingType.Ticket,
             UseCaseMeta.UpdateTicket,
             LoggingMeta.AggregateNotFound,
             originClassType,
@@ -64,7 +64,7 @@ public class UpdateTicketTraceCollector(ITracingDataCommandSender commandSender)
     {
         var log = $"Changed applied id:{traceId}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Ticket,
+            SortingType.Ticket,
             UseCaseMeta.UpdateTicket,
             LoggingMeta.PropertyChanged,
             originClassType,

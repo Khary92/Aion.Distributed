@@ -6,11 +6,11 @@ namespace Service.Admin.Web.Communication.Sprints;
 
 public class SprintController(ISharedCommandSender commandSender, ITraceCollector tracer) : ISprintController
 {
+    private bool IsEditMode { get; set; }
     public SprintWebModel? SelectedSprint { get; set; }
     public string NewSprintName { get; set; } = string.Empty;
     public DateTimeOffset StartTime { get; set; } = DateTimeOffset.Now;
     public DateTimeOffset EndTime { get; set; } = DateTimeOffset.Now.AddDays(7);
-    private bool IsEditMode { get; set; }
 
     public bool CanSave => !string.IsNullOrWhiteSpace(NewSprintName) &&
                            StartTime != default &&
@@ -18,13 +18,6 @@ public class SprintController(ISharedCommandSender commandSender, ITraceCollecto
                            StartTime < EndTime;
 
     public string EditButtonText => IsEditMode ? "Cancel Edit" : "Edit";
-
-    private void ResetData()
-    {
-        NewSprintName = string.Empty;
-        StartTime = DateTimeOffset.Now;
-        EndTime = DateTimeOffset.Now.AddDays(7);
-    }
 
     public void ToggleEditMode()
     {
@@ -57,6 +50,13 @@ public class SprintController(ISharedCommandSender commandSender, ITraceCollecto
     public Task CreateOrUpdateSprint()
     {
         return IsUpdateRequired() ? UpdateSprint() : CreateSprint();
+    }
+
+    private void ResetData()
+    {
+        NewSprintName = string.Empty;
+        StartTime = DateTimeOffset.Now;
+        EndTime = DateTimeOffset.Now.AddDays(7);
     }
 
     private bool IsUpdateRequired()

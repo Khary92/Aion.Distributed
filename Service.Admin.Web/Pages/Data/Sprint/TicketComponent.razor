@@ -6,11 +6,11 @@
 
 @code {
 
-    private bool CanSave => !string.IsNullOrWhiteSpace(@TicketController.NewTicketName)
-                            && !string.IsNullOrWhiteSpace(@TicketController.NewTicketBookingNumber);
+    private bool CanSave => !string.IsNullOrWhiteSpace(TicketController.NewTicketName)
+                            && !string.IsNullOrWhiteSpace(TicketController.NewTicketBookingNumber);
 
-    private string EditButtonText => @TicketController.IsEditMode ? "Cancel Edit" : "Edit";
-    
+    private string EditButtonText => TicketController.IsEditMode ? "Cancel Edit" : "Edit";
+
     protected override Task OnInitializedAsync()
     {
         TicketStateService.OnStateChanged += async () => await InvokeAsync(StateHasChanged);
@@ -36,10 +36,10 @@
                     @onclick="@(async () => await TicketController.CreateOrUpdateTicket())">Save
             </button>
             <button class="btn btn-warning me-2"
-                    disabled="@(@TicketController.SelectedTicket == null)"
+                    disabled="@(TicketController.SelectedTicket == null)"
                     @onclick="@TicketController.SetEditMode">@EditButtonText</button>
             <button class="btn btn-primary me-2"
-                    disabled="@(@TicketController.SelectedTicket == null)"
+                    disabled="@(TicketController.SelectedTicket == null)"
                     @onclick="@(async () => await TicketController.AddTicketToCurrentSprint())">Add to sprint
             </button>
             <input type="checkbox" @bind="@TicketController.IsShowAllTicketsActive"/>
@@ -57,7 +57,7 @@
             <tbody>
             @foreach (var ticket in TicketStateService.Tickets)
             {
-                <tr class="@(@TicketController.SelectedTicket == ticket ? "table-active" : "")"
+                <tr class="@(TicketController.SelectedTicket == ticket ? "table-active" : "")"
                     @onclick="() => TicketController.SelectedTicket = ticket">
                     <td>@ticket.Name</td>
                     <td>@ticket.BookingNumber</td>

@@ -15,6 +15,7 @@ using Service.Admin.Web.Communication.Tickets.State;
 using Service.Admin.Web.Communication.TimerSettings;
 using Service.Admin.Web.Communication.TimerSettings.State;
 using Service.Admin.Web.Services;
+using Service.Monitoring.Shared.Enums;
 using Service.Proto.Shared.Commands.NoteTypes;
 using Service.Proto.Shared.Commands.Sprints;
 using Service.Proto.Shared.Commands.Tags;
@@ -48,22 +49,22 @@ public static class AdminServiceExtension
             new CommandSenderPolicy(Policy
                 .Handle<RpcException>()
                 .WaitAndRetryAsync(
-                    retryCount: 5,
-                    sleepDurationProvider: retryAttempt => 
+                    5,
+                    retryAttempt =>
                         TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))
                 ))
         );
-        
+
         services.AddSingleton(
             new RequestSenderPolicy(Policy
                 .Handle<RpcException>()
                 .WaitAndRetryAsync(
-                    retryCount: 5,
-                    sleepDurationProvider: retryAttempt => 
+                    5,
+                    retryAttempt =>
                         TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))
                 ))
         );
-        
+
         services.AddSingleton<ISharedCommandSender, SharedCommandSender>();
         services.AddSingleton<ISharedRequestSender, SharedRequestSender>();
     }
@@ -72,7 +73,7 @@ public static class AdminServiceExtension
     {
         services.AddSingleton<ReportReceiver>();
         services.AddSingleton<IReportReceiver>(sp => sp.GetRequiredService<ReportReceiver>());
-        
+
         services.AddSingleton<TicketNotificationsReceiver>();
         services.AddHostedService<TicketNotificationHostedService>();
 
@@ -106,17 +107,19 @@ public static class AdminServiceExtension
     {
         services.AddSingleton<IComponentInitializer, ComponentInitializer>();
 
-        services.AddSingleton<ReportStateService>();
-        services.AddSingleton<IReportStateService>(sp => sp.GetRequiredService<ReportStateService>());
-        
+        services.AddSingleton<IReportStateServiceFactory, ReportStateServiceFactory>();
+
+        foreach (SortingType sortingType in Enum.GetValues(typeof(SortingType)))
+            services.AddSingleton<IReportStateService>(sp => new ReportOverviewStateService(sortingType));
+
         services.AddSingleton<TicketStateService>();
         services.AddSingleton<ITicketStateService>(sp => sp.GetRequiredService<TicketStateService>());
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<TicketStateService>());
-        
+
         services.AddSingleton<TagStateService>();
         services.AddSingleton<ITagStateService>(sp => sp.GetRequiredService<TagStateService>());
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<TagStateService>());
-        
+
         services.AddSingleton<NoteTypeStateService>();
         services.AddSingleton<INoteTypeStateService>(sp => sp.GetRequiredService<NoteTypeStateService>());
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<NoteTypeStateService>());
@@ -124,7 +127,7 @@ public static class AdminServiceExtension
         services.AddSingleton<SprintStateService>();
         services.AddSingleton<ISprintStateService>(sp => sp.GetRequiredService<SprintStateService>());
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<SprintStateService>());
-        
+
         services.AddSingleton<TimerSettingsStateService>();
         services.AddSingleton<ITimerSettingsStateService>(sp => sp.GetRequiredService<TimerSettingsStateService>());
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<TimerSettingsStateService>());

@@ -9,9 +9,9 @@ public class ChangeNoteTypeColorTraceCollector(ITracingDataCommandSender command
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = $"Change Color requested";
+        var log = "Change Color requested";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.NoteType,
+            SortingType.NoteType,
             UseCaseMeta.ChangeNoteTypeColor,
             LoggingMeta.ActionRequested,
             originClassType,
@@ -24,7 +24,7 @@ public class ChangeNoteTypeColorTraceCollector(ITracingDataCommandSender command
     {
         var log = $"Sent {command}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.NoteType,
+            SortingType.NoteType,
             UseCaseMeta.ChangeNoteTypeColor,
             LoggingMeta.SendingCommand,
             originClassType,
@@ -37,7 +37,7 @@ public class ChangeNoteTypeColorTraceCollector(ITracingDataCommandSender command
     {
         var log = $"Received {notification}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.NoteType,
+            SortingType.NoteType,
             UseCaseMeta.ChangeNoteTypeColor,
             LoggingMeta.NotificationReceived,
             originClassType,
@@ -50,7 +50,7 @@ public class ChangeNoteTypeColorTraceCollector(ITracingDataCommandSender command
     {
         var log = $"Aggregate not found id:{traceId}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.NoteType,
+            SortingType.NoteType,
             UseCaseMeta.ChangeNoteTypeColor,
             LoggingMeta.AggregateNotFound,
             originClassType,
@@ -63,7 +63,7 @@ public class ChangeNoteTypeColorTraceCollector(ITracingDataCommandSender command
     {
         var log = $"Changed applied id:{traceId}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.NoteType,
+            SortingType.NoteType,
             UseCaseMeta.ChangeNoteTypeColor,
             LoggingMeta.PropertyChanged,
             originClassType,

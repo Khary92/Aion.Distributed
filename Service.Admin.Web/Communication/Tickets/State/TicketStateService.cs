@@ -12,6 +12,15 @@ public class TicketStateService(ISharedRequestSender requestSender, ITraceCollec
 {
     private List<TicketWebModel> _tickets = new();
 
+    public InitializationType Type => InitializationType.StateService;
+
+    public async Task InitializeComponents()
+    {
+        var ticketListProto = await requestSender.Send(new GetAllTicketsRequestProto());
+        _tickets = ticketListProto.ToWebModelList();
+        NotifyStateChanged();
+    }
+
     public IReadOnlyList<TicketWebModel> Tickets => _tickets.AsReadOnly();
     public event Action? OnStateChanged;
 
@@ -57,14 +66,5 @@ public class TicketStateService(ISharedRequestSender requestSender, ITraceCollec
     private void NotifyStateChanged()
     {
         OnStateChanged?.Invoke();
-    }
-
-    public InitializationType Type => InitializationType.StateService;
-
-    public async Task InitializeComponents()
-    {
-        var ticketListProto = await requestSender.Send(new GetAllTicketsRequestProto());
-        _tickets = ticketListProto.ToWebModelList();
-        NotifyStateChanged();
     }
 }

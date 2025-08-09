@@ -12,7 +12,7 @@ public class CreateTimerSettingsTraceCollector(ITracingDataCommandSender command
         var log = $"Command received {GetName(protoCommand)}:{protoCommand}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimerSettings,
+            SortingType.TimerSettings,
             UseCaseMeta.CreateTimerSettings,
             LoggingMeta.CommandReceived,
             originClassType,
@@ -26,7 +26,7 @@ public class CreateTimerSettingsTraceCollector(ITracingDataCommandSender command
         var log = $"Event persisted {@event}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimerSettings,
+            SortingType.TimerSettings,
             UseCaseMeta.CreateTimerSettings,
             LoggingMeta.EventPersisted,
             originClassType,
@@ -40,7 +40,7 @@ public class CreateTimerSettingsTraceCollector(ITracingDataCommandSender command
         var log = $"Notification sent {GetName(notification)}:{notification}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimerSettings,
+            SortingType.TimerSettings,
             UseCaseMeta.CreateTimerSettings,
             LoggingMeta.SendingNotification,
             originClassType,

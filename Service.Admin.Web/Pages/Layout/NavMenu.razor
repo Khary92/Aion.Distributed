@@ -1,4 +1,21 @@
-﻿<div class="top-row navbar navbar-dark">
+﻿@rendermode InteractiveServer
+
+@code {
+    private bool _isMonitoringMenuOpen;
+    private void ToggleMonitoringMenu()
+    {
+        _isMonitoringMenuOpen = !_isMonitoringMenuOpen;
+    }
+
+    private bool _isDataMenuOpen;
+    private void ToggleDataMenu()
+    {
+        _isDataMenuOpen = !_isDataMenuOpen;
+    }
+
+}
+
+<div class="top-row navbar navbar-dark">
     <div class="container">
         <a class="navbar-brand" href="">Administration</a>
     </div>
@@ -9,24 +26,38 @@
 <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
     <nav class="nav flex-column">
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="reports">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Reports
-            </NavLink>
+        <div class="nav-item px-3 submenu-parent">
+            <a class="nav-link" role="button" tabindex="0" @onclick="ToggleMonitoringMenu">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Monitoring
+                <span style="font-size: 0.8em;">@(_isMonitoringMenuOpen ? "▲" : "▼")</span>
+            </a>
+            @if (_isMonitoringMenuOpen)
+            {
+                <div class="submenu">
+                    <NavLink class="nav-link" href="reportsOverview">Overview</NavLink>
+                    <NavLink class="nav-link" href="reports">Reports</NavLink>
+                </div>
+            }
         </div>
 
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="sprintData">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> SprintData
-            </NavLink>
+        <div class="nav-item px-3 submenu-parent">
+            <a class="nav-link" role="button" tabindex="0" @onclick="ToggleDataMenu">
+                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Data
+                <span style="font-size: 0.8em;">@(_isDataMenuOpen ? "▲" : "▼")</span>
+            </a>
+            @if (_isDataMenuOpen)
+            {
+                <div class="submenu">
+                    <NavLink class="nav-link" href="sprintData">
+                        <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> SprintData
+                    </NavLink>
+                    <NavLink class="nav-link" href="metaData">
+                        <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Data
+                    </NavLink>
+                </div>
+            }
         </div>
-        
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="metaData">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> MetaData
-            </NavLink>
-        </div>
-        
+
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="timerSettings">
                 <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Settings

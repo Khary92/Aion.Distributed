@@ -10,19 +10,30 @@ namespace Client.Desktop.Communication.Requests.Notes;
 
 public static class NoteRequestExtensions
 {
-    public static GetNotesByTimeSlotIdRequestProto ToProto(this ClientGetNotesByTimeSlotIdRequest request) => new()
+    public static GetNotesByTimeSlotIdRequestProto ToProto(this ClientGetNotesByTimeSlotIdRequest request)
     {
-        TimeSlotId = request.TimeSlotId.ToString()
-    };
+        return new GetNotesByTimeSlotIdRequestProto
+        {
+            TimeSlotId = request.TimeSlotId.ToString()
+        };
+    }
 
-    public static GetNotesByTicketIdRequestProto ToProto(this ClientGetNotesByTicketIdRequest request) => new()
+    public static GetNotesByTicketIdRequestProto ToProto(this ClientGetNotesByTicketIdRequest request)
     {
-        TicketId = request.TicketId.ToString()
-    };
+        return new GetNotesByTicketIdRequestProto
+        {
+            TicketId = request.TicketId.ToString()
+        };
+    }
 
-    public static List<NoteClientModel> ToClientModelList(this GetNotesResponseProto proto) =>
-        proto.Notes.Select(ToClientModel).ToList();
-    
-    private static NoteClientModel ToClientModel(this NoteProto proto) => new(Guid.Parse(proto.NoteId), proto.Text,
-        Guid.Parse(proto.NoteTypeId), Guid.Parse(proto.TimeSlotId), proto.TimeStamp.ToDateTimeOffset());
+    public static List<NoteClientModel> ToClientModelList(this GetNotesResponseProto proto)
+    {
+        return proto.Notes.Select(ToClientModel).ToList();
+    }
+
+    private static NoteClientModel ToClientModel(this NoteProto proto)
+    {
+        return new NoteClientModel(Guid.Parse(proto.NoteId), proto.Text,
+            Guid.Parse(proto.NoteTypeId), Guid.Parse(proto.TimeSlotId), proto.TimeStamp.ToDateTimeOffset());
+    }
 }

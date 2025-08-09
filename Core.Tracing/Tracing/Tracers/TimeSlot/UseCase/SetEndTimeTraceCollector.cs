@@ -11,7 +11,7 @@ public class SetEndTimeTraceCollector(ITracingDataCommandSender commandSender) :
         var log = $"Command received {GetName(protoCommand)}:{protoCommand}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimeSlot,
+            SortingType.TimeSlot,
             UseCaseMeta.SetEndTime,
             LoggingMeta.CommandReceived,
             originClassType,
@@ -25,7 +25,7 @@ public class SetEndTimeTraceCollector(ITracingDataCommandSender commandSender) :
         var log = $"Event persisted {@event}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimeSlot,
+            SortingType.TimeSlot,
             UseCaseMeta.SetEndTime,
             LoggingMeta.EventPersisted,
             originClassType,
@@ -39,7 +39,7 @@ public class SetEndTimeTraceCollector(ITracingDataCommandSender commandSender) :
         var log = $"Notification sent {GetName(notification)}:{notification}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimeSlot,
+            SortingType.TimeSlot,
             UseCaseMeta.SetEndTime,
             LoggingMeta.SendingNotification,
             originClassType,

@@ -1,6 +1,5 @@
 using System.Text.Json;
 using Core.Persistence.DbContext;
-using Core.Server.Tracing.Tracing.Tracers;
 using Domain.Events.Tickets;
 using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;

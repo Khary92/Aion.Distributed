@@ -12,7 +12,7 @@ public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataCommandSender 
         var log = $"Command received {GetName(protoCommand)}:{protoCommand}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimerSettings,
+            SortingType.TimerSettings,
             UseCaseMeta.ChangeSnapshotSaveInterval,
             LoggingMeta.CommandReceived,
             originClassType,
@@ -26,7 +26,7 @@ public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataCommandSender 
         var log = $"Event persisted {@event}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimerSettings,
+            SortingType.TimerSettings,
             UseCaseMeta.ChangeSnapshotSaveInterval,
             LoggingMeta.EventPersisted,
             originClassType,
@@ -40,7 +40,7 @@ public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataCommandSender 
         var log = $"Notification sent {GetName(notification)}:{notification}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimerSettings,
+            SortingType.TimerSettings,
             UseCaseMeta.ChangeSnapshotSaveInterval,
             LoggingMeta.SendingNotification,
             originClassType,

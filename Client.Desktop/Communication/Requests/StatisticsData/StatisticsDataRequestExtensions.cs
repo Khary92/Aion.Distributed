@@ -10,12 +10,18 @@ namespace Client.Desktop.Communication.Requests.StatisticsData;
 public static class StatisticsDataRequestExtensions
 {
     public static GetStatisticsDataByTimeSlotIdRequestProto ToProto(
-        this ClientGetStatisticsDataByTimeSlotIdRequest request) => new()
+        this ClientGetStatisticsDataByTimeSlotIdRequest request)
     {
-        TimeSlotId = request.TimeSlotId.ToString()
-    };
+        return new GetStatisticsDataByTimeSlotIdRequestProto
+        {
+            TimeSlotId = request.TimeSlotId.ToString()
+        };
+    }
 
-    public static StatisticsDataClientModel ToClientModel(this StatisticsDataProto proto) => new(
-        Guid.Parse(proto.StatisticsId), Guid.Parse(proto.TimeSlotId), proto.TagIds.ToGuidList(),
-        proto.IsProductive, proto.IsNeutral, proto.IsUnproductive);
+    public static StatisticsDataClientModel ToClientModel(this StatisticsDataProto proto)
+    {
+        return new StatisticsDataClientModel(
+            Guid.Parse(proto.StatisticsId), Guid.Parse(proto.TimeSlotId), proto.TagIds.ToGuidList(),
+            proto.IsProductive, proto.IsNeutral, proto.IsUnproductive);
+    }
 }

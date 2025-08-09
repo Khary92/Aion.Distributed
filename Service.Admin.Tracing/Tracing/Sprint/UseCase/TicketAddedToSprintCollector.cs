@@ -8,10 +8,10 @@ public class TicketAddedToSprintCollector(ITracingDataCommandSender commandSende
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = $"Add ticket to sprint requested";
+        var log = "Add ticket to sprint requested";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Sprint,
+            SortingType.Sprint,
             UseCaseMeta.TicketAddedToSprint,
             LoggingMeta.ActionRequested,
             originClassType,
@@ -24,7 +24,7 @@ public class TicketAddedToSprintCollector(ITracingDataCommandSender commandSende
     {
         var log = $"Sent {command}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Sprint,
+            SortingType.Sprint,
             UseCaseMeta.TicketAddedToSprint,
             LoggingMeta.SendingCommand,
             originClassType,
@@ -37,7 +37,7 @@ public class TicketAddedToSprintCollector(ITracingDataCommandSender commandSende
     {
         var log = $"Received {notification}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Sprint,
+            SortingType.Sprint,
             UseCaseMeta.TicketAddedToSprint,
             LoggingMeta.NotificationReceived,
             originClassType,
@@ -50,7 +50,7 @@ public class TicketAddedToSprintCollector(ITracingDataCommandSender commandSende
     {
         var log = $"Aggregate not found id:{traceId}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Sprint,
+            SortingType.Sprint,
             UseCaseMeta.TicketAddedToSprint,
             LoggingMeta.AggregateNotFound,
             originClassType,
@@ -63,7 +63,7 @@ public class TicketAddedToSprintCollector(ITracingDataCommandSender commandSende
     {
         var log = $"Changed applied id:{traceId}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Sprint,
+            SortingType.Sprint,
             UseCaseMeta.TicketAddedToSprint,
             LoggingMeta.PropertyChanged,
             originClassType,
@@ -74,9 +74,9 @@ public class TicketAddedToSprintCollector(ITracingDataCommandSender commandSende
 
     public async Task NoEntitySelected(Type originClassType, Guid traceId)
     {
-        var log = $"No ticket entity selected";
+        var log = "No ticket entity selected";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Sprint,
+            SortingType.Sprint,
             UseCaseMeta.AddTicketToCurrentSprint,
             LoggingMeta.NoEntitySelected,
             originClassType,

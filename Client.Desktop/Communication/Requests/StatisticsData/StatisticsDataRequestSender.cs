@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests.StatisticsData.Records;
 using Client.Desktop.DataModels;
 using Client.Proto;

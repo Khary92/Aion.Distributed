@@ -4,14 +4,14 @@ using Service.Monitoring.Shared.Tracing;
 
 namespace Core.Server.Tracing.Tracing.Tracers.TimeSlot.UseCase;
 
-public class SetStartTimeTraceCollector(ITracingDataCommandSender commandSender) :ISetStartTimeTraceCollector
+public class SetStartTimeTraceCollector(ITracingDataCommandSender commandSender) : ISetStartTimeTraceCollector
 {
     public async Task CommandReceived(Type originClassType, Guid traceId, object protoCommand)
     {
         var log = $"Command received {GetName(protoCommand)}:{protoCommand}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimeSlot,
+            SortingType.TimeSlot,
             UseCaseMeta.SetStartTime,
             LoggingMeta.CommandReceived,
             originClassType,
@@ -25,7 +25,7 @@ public class SetStartTimeTraceCollector(ITracingDataCommandSender commandSender)
         var log = $"Event persisted {@event}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimeSlot,
+            SortingType.TimeSlot,
             UseCaseMeta.SetStartTime,
             LoggingMeta.EventPersisted,
             originClassType,
@@ -39,7 +39,7 @@ public class SetStartTimeTraceCollector(ITracingDataCommandSender commandSender)
         var log = $"Notification sent {GetName(notification)}:{notification}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimeSlot,
+            SortingType.TimeSlot,
             UseCaseMeta.SetStartTime,
             LoggingMeta.SendingNotification,
             originClassType,

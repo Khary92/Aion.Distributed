@@ -1,4 +1,4 @@
-﻿using Service.Admin.Web.Communication.NoteType.Notifications;
+﻿using Service.Admin.Web.Communication.NoteType.Records.Notifications;
 using Service.Admin.Web.Communication.Wrappers;
 using Service.Admin.Web.Models;
 

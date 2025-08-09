@@ -1,27 +1,32 @@
 ﻿using System;
-using Client.Desktop.DataModels;
-using Proto.Notifications.NoteType;
+using Proto.DTO.TraceData;
 using Proto.Requests.NoteTypes;
 
 namespace Client.Desktop.Communication.Requests.NoteType;
 
 public static class NoteTypeRequestExtensions
 {
-    public static GetAllNoteTypesRequestProto ToProto(this ClientGetAllNoteTypesRequest request) => new()
+    public static GetAllNoteTypesRequestProto ToProto(this ClientGetAllNoteTypesRequest request)
     {
-        TraceData = new()
+        return new GetAllNoteTypesRequestProto
         {
-            TraceId = Guid.NewGuid().ToString()
-        }
-    };
-    
-
-    public static GetNoteTypeByIdRequestProto ToProto(this ClientGetNoteTypeByIdRequest request) => new()
-    {
-        NoteTypeId = request.NoteTypeId.ToString(),
-        TraceData = new()
-        {
-            TraceId = Guid.NewGuid().ToString()
-        }
-    };
+            TraceData = new TraceDataProto
+            {
+                TraceId = Guid.NewGuid().ToString()
+            }
+        };
     }
+
+
+    public static GetNoteTypeByIdRequestProto ToProto(this ClientGetNoteTypeByIdRequest request)
+    {
+        return new GetNoteTypeByIdRequestProto
+        {
+            NoteTypeId = request.NoteTypeId.ToString(),
+            TraceData = new TraceDataProto
+            {
+                TraceId = Guid.NewGuid().ToString()
+            }
+        };
+    }
+}

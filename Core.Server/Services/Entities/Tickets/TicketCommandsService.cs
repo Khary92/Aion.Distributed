@@ -26,7 +26,7 @@ public class TicketCommandsService(
     public async Task UpdateDocumentation(UpdateTicketDocumentationCommand command)
     {
         await ticketEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
-        
+
         await ticketNotificationService.SendNotificationAsync(command.ToNotification());
     }
 

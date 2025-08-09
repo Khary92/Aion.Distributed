@@ -4,4 +4,5 @@ public record UpdateSprintDataCommand(
     Guid SprintId,
     string Name,
     DateTimeOffset StartTime,
-    DateTimeOffset EndTime, Guid TraceId);
+    DateTimeOffset EndTime,
+    Guid TraceId);

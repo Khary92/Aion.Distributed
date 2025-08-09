@@ -7,7 +7,8 @@ namespace Service.Monitoring.Verifiers.Steps;
 
 public class TagVerificationProvider : IVerificationProvider
 {
-    public TraceSinkId TraceSinkId => TraceSinkId.Tag;
+    public SortingType SortingType => SortingType.Tag;
+
     public ImmutableList<VerificationStep> GetVerificationSteps(UseCaseMeta useCaseMeta)
     {
         return ImmutableList.Create<VerificationStep>();

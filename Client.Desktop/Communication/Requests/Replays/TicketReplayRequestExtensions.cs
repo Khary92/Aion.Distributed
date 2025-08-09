@@ -8,11 +8,16 @@ namespace Client.Desktop.Communication.Requests.Replays;
 
 public static class TicketReplayRequestExtensions
 {
-    public static GetTicketReplaysByIdRequestProto ToProto(this ClientGetTicketReplaysByIdRequest request) => new()
+    public static GetTicketReplaysByIdRequestProto ToProto(this ClientGetTicketReplaysByIdRequest request)
     {
-        NoteTypeId = request.TicketId.ToString()
-    };
+        return new GetTicketReplaysByIdRequestProto
+        {
+            NoteTypeId = request.TicketId.ToString()
+        };
+    }
 
-    public static List<DocumentationReplay> ToReplayList(this GetReplayResponseProto proto) =>
-        proto.TicketReplays.Select(tr => new DocumentationReplay(tr.DocumentationEntry)).ToList();
+    public static List<DocumentationReplay> ToReplayList(this GetReplayResponseProto proto)
+    {
+        return proto.TicketReplays.Select(tr => new DocumentationReplay(tr.DocumentationEntry)).ToList();
+    }
 }

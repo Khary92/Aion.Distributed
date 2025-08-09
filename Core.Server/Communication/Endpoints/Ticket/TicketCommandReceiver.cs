@@ -21,7 +21,7 @@ public class TicketCommandReceiver(ITicketCommandsService ticketCommandsService,
         ServerCallContext context)
     {
         await tracer.Ticket.Update.CommandReceived(GetType(), Guid.Parse(request.TraceData.TraceId), request);
-        
+
         await ticketCommandsService.UpdateData(request.ToCommand());
         return new CommandResponse { Success = true };
     }

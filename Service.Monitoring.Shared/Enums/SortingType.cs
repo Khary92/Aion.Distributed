@@ -1,7 +1,8 @@
 namespace Service.Monitoring.Shared.Enums;
 
-public enum TraceSinkId
+public enum SortingType
 {
+    Overview,
     Ticket,
     Note,
     NoteType,

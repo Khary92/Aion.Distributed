@@ -1,7 +1,6 @@
 using System.Collections.Concurrent;
 using Service.Monitoring.Communication;
 using Service.Monitoring.Shared;
-using Service.Monitoring.Shared.Enums;
 using Service.Monitoring.Verifiers.Common;
 using Service.Monitoring.Verifiers.Common.Factories;
 using Service.Monitoring.Verifiers.Common.Records;
@@ -16,11 +15,11 @@ public class TraceSink(IReportSender reportSender, IVerifierFactory verifierFact
     {
         var verifier = _ticketVerifiers.GetOrAdd(traceData.TraceId, _ =>
         {
-            var newVerifier = verifierFactory.Create(traceData.TraceSinkId, traceData.UseCaseMeta, traceData.TraceId);
+            var newVerifier = verifierFactory.Create(traceData.SortingType, traceData.UseCaseMeta, traceData.TraceId);
             newVerifier.VerificationCompleted += SaveReport;
             return newVerifier;
         });
-    
+
         verifier.Add(traceData);
     }
 
@@ -35,6 +34,5 @@ public class TraceSink(IReportSender reportSender, IVerifierFactory verifierFact
         {
             Console.WriteLine(ex);
         }
-
     }
 }

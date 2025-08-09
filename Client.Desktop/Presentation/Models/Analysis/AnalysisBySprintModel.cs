@@ -153,6 +153,7 @@ public class AnalysisBySprintModel(IMessenger messenger, IRequestSender requestS
 
     public async Task SetAnalysisForSprint(SprintClientModel selectedSprint)
     {
-        AnalysisBySprint = await requestSender.Send(new ClientGetSprintAnalysisById(selectedSprint.SprintId, Guid.NewGuid()));
+        AnalysisBySprint =
+            await requestSender.Send(new ClientGetSprintAnalysisById(selectedSprint.SprintId, Guid.NewGuid()));
     }
 }

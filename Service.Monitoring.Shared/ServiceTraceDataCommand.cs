@@ -3,7 +3,7 @@ using Service.Monitoring.Shared.Enums;
 namespace Service.Monitoring.Shared;
 
 public record ServiceTraceDataCommand(
-    TraceSinkId TraceSinkId,
+    SortingType SortingType,
     UseCaseMeta UseCaseMeta,
     LoggingMeta LoggingMeta,
     Type OriginClassType,

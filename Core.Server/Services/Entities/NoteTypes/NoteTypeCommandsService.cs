@@ -19,7 +19,8 @@ public class NoteTypeCommandsService(
         var noteTypeNotification = command.ToNotification();
         await tracer.NoteType.Create.EventPersisted(GetType(), command.TraceId, noteTypeNotification.NoteTypeCreated);
 
-        await tracer.NoteType.Create.SendingNotification(GetType(), command.TraceId, noteTypeNotification.NoteTypeCreated);
+        await tracer.NoteType.Create.SendingNotification(GetType(), command.TraceId,
+            noteTypeNotification.NoteTypeCreated);
         await noteTypeNotificationService.SendNotificationAsync(command.ToNotification());
     }
 

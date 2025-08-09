@@ -1,4 +1,3 @@
-using System;
 using System.Reactive.Linq;
 using Client.Desktop.DataModels;
 using CommunityToolkit.Mvvm.Messaging;

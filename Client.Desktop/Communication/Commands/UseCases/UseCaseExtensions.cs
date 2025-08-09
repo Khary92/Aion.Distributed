@@ -1,5 +1,6 @@
 using Client.Desktop.Communication.Commands.UseCases.Records;
 using Proto.Command.UseCases;
+using Proto.DTO.TraceData;
 
 namespace Client.Desktop.Communication.Commands.UseCases;
 
@@ -10,7 +11,7 @@ public static class UseCaseExtensions
         return new CreateTimeSlotControlCommandProto
         {
             TicketId = command.TicketId.ToString(),
-            TraceData = new()
+            TraceData = new TraceDataProto
             {
                 TraceId = command.TraceId.ToString()
             }

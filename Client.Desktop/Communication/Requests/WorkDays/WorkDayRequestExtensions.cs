@@ -11,26 +11,42 @@ namespace Client.Desktop.Communication.Requests.WorkDays;
 
 public static class WorkDayRequestExtensions
 {
-    public static GetAllWorkDaysRequestProto ToProto(this ClientGetAllWorkDaysRequest request) => new();
-
-    public static GetSelectedWorkDayRequestProto ToProto(this ClientGetSelectedWorkDayRequest request) => new()
+    public static GetAllWorkDaysRequestProto ToProto(this ClientGetAllWorkDaysRequest request)
     {
-        WorkDayId = request.WorkDayId.ToString()
-    };
+        return new GetAllWorkDaysRequestProto();
+    }
 
-    public static GetWorkDayByDateRequestProto ToProto(this ClientGetWorkDayByDateRequest request) => new()
+    public static GetSelectedWorkDayRequestProto ToProto(this ClientGetSelectedWorkDayRequest request)
     {
-        Date = Timestamp.FromDateTimeOffset(request.Date)
-    };
+        return new GetSelectedWorkDayRequestProto
+        {
+            WorkDayId = request.WorkDayId.ToString()
+        };
+    }
 
-    public static IsWorkDayExistingRequestProto ToProto(this ClientIsWorkDayExistingRequest request) => new()
+    public static GetWorkDayByDateRequestProto ToProto(this ClientGetWorkDayByDateRequest request)
     {
-        Date = Timestamp.FromDateTimeOffset(request.Date)
-    };
+        return new GetWorkDayByDateRequestProto
+        {
+            Date = Timestamp.FromDateTimeOffset(request.Date)
+        };
+    }
 
-    public static WorkDayClientModel ToClientModel(this WorkDayProto proto) =>
-        new(Guid.Parse(proto.WorkDayId), proto.Date.ToDateTimeOffset());
+    public static IsWorkDayExistingRequestProto ToProto(this ClientIsWorkDayExistingRequest request)
+    {
+        return new IsWorkDayExistingRequestProto
+        {
+            Date = Timestamp.FromDateTimeOffset(request.Date)
+        };
+    }
 
-    public static List<WorkDayClientModel> ToClientModelList(this WorkDayListProto proto) =>
-        proto.WorkDays.Select(ToClientModel).ToList();
+    public static WorkDayClientModel ToClientModel(this WorkDayProto proto)
+    {
+        return new WorkDayClientModel(Guid.Parse(proto.WorkDayId), proto.Date.ToDateTimeOffset());
+    }
+
+    public static List<WorkDayClientModel> ToClientModelList(this WorkDayListProto proto)
+    {
+        return proto.WorkDays.Select(ToClientModel).ToList();
+    }
 }

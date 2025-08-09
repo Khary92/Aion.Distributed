@@ -2,6 +2,7 @@
 using Google.Protobuf.WellKnownTypes;
 using Proto.Command.Notes;
 using Proto.DTO.Note;
+using Proto.DTO.TraceData;
 using Proto.Notifications.Note;
 using Proto.Requests.Notes;
 
@@ -16,39 +17,49 @@ public static class NoteProtoExtensions
             proto.TimeStamp.ToDateTimeOffset(), Guid.Parse(proto.TraceData.TraceId));
     }
 
-    public static NoteNotification ToNotification(this CreateNoteCommand proto) => new()
+    public static NoteNotification ToNotification(this CreateNoteCommand proto)
     {
-        NoteCreated = new NoteCreatedNotification
+        return new NoteNotification
         {
-            NoteId = proto.NoteId.ToString(),
-            Text = proto.Text,
-            NoteTypeId = proto.NoteTypeId.ToString(),
-            TimeSlotId = proto.TimeSlotId.ToString(),
-            TimeStamp = proto.TimeStamp.ToTimestamp(),
-            TraceData = new()
+            NoteCreated = new NoteCreatedNotification
             {
-                TraceId = proto.TraceId.ToString()
+                NoteId = proto.NoteId.ToString(),
+                Text = proto.Text,
+                NoteTypeId = proto.NoteTypeId.ToString(),
+                TimeSlotId = proto.TimeSlotId.ToString(),
+                TimeStamp = proto.TimeStamp.ToTimestamp(),
+                TraceData = new TraceDataProto
+                {
+                    TraceId = proto.TraceId.ToString()
+                }
             }
-        }
-    };
+        };
+    }
 
-    public static UpdateNoteCommand ToCommand(this UpdateNoteCommandProto proto) => new(Guid.Parse(proto.NoteId),
-        proto.Text, Guid.Parse(proto.NoteTypeId), Guid.Parse(proto.TimeSlotId), Guid.Parse(proto.TraceData.TraceId));
-
-    public static NoteNotification ToNotification(this UpdateNoteCommand proto) => new()
+    public static UpdateNoteCommand ToCommand(this UpdateNoteCommandProto proto)
     {
-        NoteUpdated = new NoteUpdatedNotification
+        return new UpdateNoteCommand(Guid.Parse(proto.NoteId),
+            proto.Text, Guid.Parse(proto.NoteTypeId), Guid.Parse(proto.TimeSlotId),
+            Guid.Parse(proto.TraceData.TraceId));
+    }
+
+    public static NoteNotification ToNotification(this UpdateNoteCommand proto)
+    {
+        return new NoteNotification
         {
-            NoteId = proto.NoteId.ToString(),
-            Text = proto.Text,
-            NoteTypeId = proto.NoteTypeId.ToString(),
-            TimeSlotId = proto.TimeSlotId.ToString(),
-            TraceData = new()
+            NoteUpdated = new NoteUpdatedNotification
             {
-                TraceId = proto.TraceId.ToString()
+                NoteId = proto.NoteId.ToString(),
+                Text = proto.Text,
+                NoteTypeId = proto.NoteTypeId.ToString(),
+                TimeSlotId = proto.TimeSlotId.ToString(),
+                TraceData = new TraceDataProto
+                {
+                    TraceId = proto.TraceId.ToString()
+                }
             }
-        }
-    };
+        };
+    }
 
     public static GetNotesResponseProto ToProtoList(this List<Domain.Entities.Note> notes)
     {

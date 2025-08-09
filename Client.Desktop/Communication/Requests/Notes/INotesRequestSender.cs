@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests.Notes.Records;
 using Client.Desktop.DataModels;
-using Proto.Requests.Notes;
 
 namespace Client.Desktop.Communication.Requests.Notes;
 

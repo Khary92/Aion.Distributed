@@ -8,10 +8,10 @@ public class UpdateTicketDocuTraceCollector(ITracingDataCommandSender commandSen
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = $"Create Ticket requested";
+        var log = "Create Ticket requested";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Ticket,
+            SortingType.Ticket,
             UseCaseMeta.UpdateTicketDocumentation,
             LoggingMeta.ActionRequested,
             originClassType,
@@ -25,7 +25,7 @@ public class UpdateTicketDocuTraceCollector(ITracingDataCommandSender commandSen
         var log = $"Sent {GetName(command)}:{command}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Ticket,
+            SortingType.Ticket,
             UseCaseMeta.UpdateTicketDocumentation,
             LoggingMeta.SendingCommand,
             originClassType,
@@ -39,7 +39,7 @@ public class UpdateTicketDocuTraceCollector(ITracingDataCommandSender commandSen
         var log = $"Received {GetName(notification)}:{notification}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Ticket,
+            SortingType.Ticket,
             UseCaseMeta.UpdateTicketDocumentation,
             LoggingMeta.NotificationReceived,
             originClassType,
@@ -52,7 +52,7 @@ public class UpdateTicketDocuTraceCollector(ITracingDataCommandSender commandSen
     {
         var log = $"Received aggregate {attributes}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Ticket,
+            SortingType.Ticket,
             UseCaseMeta.UpdateTicketDocumentation,
             LoggingMeta.AggregateReceived,
             originClassType,
@@ -65,7 +65,7 @@ public class UpdateTicketDocuTraceCollector(ITracingDataCommandSender commandSen
     {
         var log = $"Added aggregate with id:{traceId}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Ticket,
+            SortingType.Ticket,
             UseCaseMeta.UpdateTicketDocumentation,
             LoggingMeta.AggregateAdded,
             originClassType,

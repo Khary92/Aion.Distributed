@@ -4,7 +4,6 @@ using Service.Monitoring.Tracers;
 using Service.Monitoring.Verifiers.Common;
 using Service.Monitoring.Verifiers.Common.Factories;
 using Service.Monitoring.Verifiers.Steps;
-using Service.Monitoring.Verifiers.Ticket;
 
 namespace Service.Monitoring;
 

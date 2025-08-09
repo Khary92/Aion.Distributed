@@ -93,7 +93,7 @@ public static class ServiceExtensions
         AddCommandSenders(services);
         AddFileSystemServices(services);
     }
-    
+
     private static void AddPolicyServices(IServiceCollection services)
     {
         services.AddSingleton(
@@ -105,7 +105,7 @@ public static class ServiceExtensions
                     .Handle<Exception>()
                     .CircuitBreakerAsync(2, TimeSpan.FromSeconds(30))))
         );
-        
+
         services.AddSingleton(
             new RequestRetryPolicy(Policy
                 .Handle<Exception>()
@@ -116,6 +116,7 @@ public static class ServiceExtensions
                     .CircuitBreakerAsync(2, TimeSpan.FromSeconds(30))))
         );
     }
+
     private static void AddSchedulerServices(this IServiceCollection services)
     {
         services.AddSingleton<CancellationTokenSource>();

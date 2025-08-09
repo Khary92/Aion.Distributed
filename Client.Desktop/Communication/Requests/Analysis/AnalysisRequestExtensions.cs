@@ -5,18 +5,27 @@ namespace Client.Desktop.Communication.Requests.Analysis;
 
 public static class AnalysisRequestExtensions
 {
-    public static GetSprintAnalysisById ToProto(this ClientGetSprintAnalysisById request) => new()
+    public static GetSprintAnalysisById ToProto(this ClientGetSprintAnalysisById request)
     {
-        SprintId = request.SprintId.ToString()
-    };
+        return new GetSprintAnalysisById
+        {
+            SprintId = request.SprintId.ToString()
+        };
+    }
 
-    public static GetTicketAnalysisById ToProto(this ClientGetTicketAnalysisById request) => new()
+    public static GetTicketAnalysisById ToProto(this ClientGetTicketAnalysisById request)
     {
-        TicketId = request.TicketId.ToString()
-    };
+        return new GetTicketAnalysisById
+        {
+            TicketId = request.TicketId.ToString()
+        };
+    }
 
-    public static GetTagAnalysisById ToProto(this ClientGetTagAnalysisById request) => new()
+    public static GetTagAnalysisById ToProto(this ClientGetTagAnalysisById request)
     {
-        TagId = request.TagId.ToString()
-    };
+        return new GetTagAnalysisById
+        {
+            TagId = request.TagId.ToString()
+        };
+    }
 }

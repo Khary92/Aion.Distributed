@@ -1,6 +1,7 @@
 ﻿using Core.Server.Communication.Records.Commands.Entities.Tags;
 using Proto.Command.Tags;
 using Proto.DTO.Tag;
+using Proto.DTO.TraceData;
 using Proto.Notifications.Tag;
 using Proto.Requests.Tags;
 
@@ -8,43 +9,58 @@ namespace Core.Server.Communication.Endpoints.Tag;
 
 public static class TagProtoExtensions
 {
-    public static CreateTagCommand ToCommand(this CreateTagCommandProto proto) => new(Guid.Parse(proto.TagId),
-        proto.Name, Guid.Parse(proto.TraceData.TraceId));
-
-    public static TagNotification ToNotification(this CreateTagCommand proto) => new()
+    public static CreateTagCommand ToCommand(this CreateTagCommandProto proto)
     {
-        TagCreated = new TagCreatedNotification
+        return new CreateTagCommand(Guid.Parse(proto.TagId),
+            proto.Name, Guid.Parse(proto.TraceData.TraceId));
+    }
+
+    public static TagNotification ToNotification(this CreateTagCommand proto)
+    {
+        return new TagNotification
         {
-            TagId = proto.TagId.ToString(),
-            Name = proto.Name,
-            TraceData = new()
+            TagCreated = new TagCreatedNotification
             {
-                TraceId = proto.TraceId.ToString()
+                TagId = proto.TagId.ToString(),
+                Name = proto.Name,
+                TraceData = new TraceDataProto
+                {
+                    TraceId = proto.TraceId.ToString()
+                }
             }
-        }
-    };
+        };
+    }
 
-    public static UpdateTagCommand ToCommand(this UpdateTagCommandProto proto) => new(Guid.Parse(proto.TagId),
-        proto.Name, Guid.Parse(proto.TraceData.TraceId));
-
-    public static TagNotification ToNotification(this UpdateTagCommand proto) => new()
+    public static UpdateTagCommand ToCommand(this UpdateTagCommandProto proto)
     {
-        TagUpdated = new TagUpdatedNotification
+        return new UpdateTagCommand(Guid.Parse(proto.TagId),
+            proto.Name, Guid.Parse(proto.TraceData.TraceId));
+    }
+
+    public static TagNotification ToNotification(this UpdateTagCommand proto)
+    {
+        return new TagNotification
         {
-            TagId = proto.TagId.ToString(),
-            Name = proto.Name,
-            TraceData = new()
+            TagUpdated = new TagUpdatedNotification
             {
-                TraceId = proto.TraceId.ToString()
+                TagId = proto.TagId.ToString(),
+                Name = proto.Name,
+                TraceData = new TraceDataProto
+                {
+                    TraceId = proto.TraceId.ToString()
+                }
             }
-        }
-    };
+        };
+    }
 
-    public static TagProto ToProto(this Domain.Entities.Tag tag) => new()
+    public static TagProto ToProto(this Domain.Entities.Tag tag)
     {
-        TagId = tag.TagId.ToString(),
-        Name = tag.Name
-    };
+        return new TagProto
+        {
+            TagId = tag.TagId.ToString(),
+            Name = tag.Name
+        };
+    }
 
     public static TagListProto ToProtoList(this List<Domain.Entities.Tag> tags)
     {

@@ -46,15 +46,15 @@ public class TimerService
     {
         _snapshotSeconds++;
         _docuSeconds++;
-        
+
         //TODO fix this
         if (_snapshotSeconds >= _timerSettings.SnapshotSaveInterval)
         {
             _ = _useCaseNotificationService.SendNotificationAsync(new UseCaseNotification
             {
-                CreateSnapshot = new CreateSnapshotNotification()
+                CreateSnapshot = new CreateSnapshotNotification
                 {
-                    TraceData = new TraceDataProto()
+                    TraceData = new TraceDataProto
                     {
                         TraceId = Guid.NewGuid().ToString()
                     }
@@ -68,9 +68,9 @@ public class TimerService
         {
             _ = _useCaseNotificationService.SendNotificationAsync(new UseCaseNotification
             {
-                SaveDocumentation = new SaveDocumentationNotification()
+                SaveDocumentation = new SaveDocumentationNotification
                 {
-                    TraceData = new()
+                    TraceData = new TraceDataProto
                     {
                         TraceId = Guid.NewGuid().ToString()
                     }

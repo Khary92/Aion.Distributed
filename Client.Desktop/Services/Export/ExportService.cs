@@ -89,13 +89,15 @@ public class ExportService(
     private async Task FillDictionaryForWorkday(WorkDayClientModel workDay,
         Dictionary<DateTimeOffset, List<TicketDataHolder>> result)
     {
-        var timeSlots = await requestSender.Send(new ClientGetTimeSlotsForWorkDayIdRequest(workDay.WorkDayId, Guid.NewGuid()));
+        var timeSlots =
+            await requestSender.Send(new ClientGetTimeSlotsForWorkDayIdRequest(workDay.WorkDayId, Guid.NewGuid()));
 
         if (timeSlots.Count == 0) return;
 
         foreach (var timeSlot in timeSlots)
         {
-            var ticket = await requestSender.Send(new ClientGetTicketByIdRequest(timeSlot.SelectedTicketId, Guid.NewGuid()));
+            var ticket =
+                await requestSender.Send(new ClientGetTicketByIdRequest(timeSlot.SelectedTicketId, Guid.NewGuid()));
 
             var elapsedSeconds = (int)(timeSlot.EndTime - timeSlot.StartTime).TotalSeconds;
 

@@ -10,30 +10,41 @@ namespace Service.Admin.Web.Communication.Tags;
 
 public static class TagExtensions
 {
-    public static CreateTagCommandProto ToProto(this WebCreateTagCommand command) => new()
+    public static CreateTagCommandProto ToProto(this WebCreateTagCommand command)
     {
-        TagId = command.TagId.ToString(),
-        Name = command.Name,
-        TraceData = new TraceDataProto()
+        return new CreateTagCommandProto
         {
-            TraceId = command.TraceId.ToString()
-        }
-    };
+            TagId = command.TagId.ToString(),
+            Name = command.Name,
+            TraceData = new TraceDataProto
+            {
+                TraceId = command.TraceId.ToString()
+            }
+        };
+    }
 
-    public static UpdateTagCommandProto ToProto(this WebUpdateTagCommand command) => new()
+    public static UpdateTagCommandProto ToProto(this WebUpdateTagCommand command)
     {
-        TagId = command.TagId.ToString(),
-        Name = command.Name,
-        TraceData = new()
+        return new UpdateTagCommandProto
         {
-            TraceId = command.TraceId.ToString()
-        }
-    };
+            TagId = command.TagId.ToString(),
+            Name = command.Name,
+            TraceData = new TraceDataProto
+            {
+                TraceId = command.TraceId.ToString()
+            }
+        };
+    }
 
-    public static NewTagMessage ToWebModel(this TagCreatedNotification notification) =>
-        new(new TagWebModel(Guid.Parse(notification.TagId), notification.Name, false),
+    public static NewTagMessage ToWebModel(this TagCreatedNotification notification)
+    {
+        return new NewTagMessage(new TagWebModel(Guid.Parse(notification.TagId), notification.Name, false),
             Guid.Parse(notification.TraceData.TraceId));
+    }
 
-    public static WebTagUpdatedNotification ToNotification(this TagUpdatedNotification notification) =>
-        new(Guid.Parse(notification.TagId), notification.Name, Guid.Parse(notification.TraceData.TraceId));
+    public static WebTagUpdatedNotification ToNotification(this TagUpdatedNotification notification)
+    {
+        return new WebTagUpdatedNotification(Guid.Parse(notification.TagId), notification.Name,
+            Guid.Parse(notification.TraceData.TraceId));
+    }
 }

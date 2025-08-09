@@ -11,7 +11,7 @@ public class UpdateTicketTraceCollector(ITracingDataCommandSender commandSender)
         var log = $"Command received {GetName(protoCommand)}:{protoCommand}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Ticket,
+            SortingType.Ticket,
             UseCaseMeta.UpdateTicket,
             LoggingMeta.CommandReceived,
             originClassType,
@@ -25,7 +25,7 @@ public class UpdateTicketTraceCollector(ITracingDataCommandSender commandSender)
         var log = $"Event persisted {@event}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Ticket,
+            SortingType.Ticket,
             UseCaseMeta.UpdateTicket,
             LoggingMeta.EventPersisted,
             originClassType,
@@ -39,7 +39,7 @@ public class UpdateTicketTraceCollector(ITracingDataCommandSender commandSender)
         var log = $"Notification sent {GetName(notification)}:{notification}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Ticket,
+            SortingType.Ticket,
             UseCaseMeta.UpdateTicket,
             LoggingMeta.SendingNotification,
             originClassType,

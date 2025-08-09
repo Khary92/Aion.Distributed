@@ -1,10 +1,11 @@
-﻿@page "/reports"
+﻿@page "/reportsOverview"
 @rendermode InteractiveServer
-@inject ILogger<ReportsPage> Logger
-@inject IReportStateService ReportState
+@inject IReportStateServiceFactory ReportStateServiceFactory
 @using System.Globalization
 @using Service.Admin.Web.Communication.Reports
+@using Service.Admin.Web.Communication.Reports.Records
 @using Service.Admin.Web.Communication.Reports.State
+@using Service.Monitoring.Shared.Enums
 @implements IDisposable
 
 <PageTitle>Tracing Results</PageTitle>
@@ -13,7 +14,7 @@
     <div class="sub-component">
         <ErrorBoundary>
             <ChildContent>
-                <ReportTable Items="@ReportState.Reports" T="ReportRecord">
+                <ReportTable Items="@_overViewReportStateService!.Reports" T="ReportRecord">
                     <HeaderTemplate>
                         <th>Date</th>
                         <th>Use case</th>
@@ -21,7 +22,7 @@
                     </HeaderTemplate>
                     <RowTemplate>
                         <td>@context.TimeStamp.ToString("dd.MM.yyyy HH:mm:ss", CultureInfo.GetCultureInfo("de-DE"))</td>
-                        <td>@context.useCase</td>
+                        <td>@context.UseCase</td>
                         <td>@context.State</td>
                     </RowTemplate>
                 </ReportTable>
@@ -37,15 +38,18 @@
 
 @code {
 
+    private IReportStateService? _overViewReportStateService;
+
     protected override Task OnInitializedAsync()
     {
-        ReportState.OnStateChanged += StateHasChanged;
+        _overViewReportStateService = ReportStateServiceFactory.Get(SortingType.Overview);
+        _overViewReportStateService!.OnStateChanged += StateHasChanged;
         return Task.CompletedTask;
     }
 
     public void Dispose()
     {
-        ReportState.OnStateChanged -= StateHasChanged;
+        _overViewReportStateService!.OnStateChanged -= StateHasChanged;
     }
 
 }

@@ -7,7 +7,7 @@ public enum UseCaseMeta
     UpdateTicket,
     UpdateTicketDocumentation,
 
-    
+
     ExportData,
     CreateNote,
     UpdateNote,

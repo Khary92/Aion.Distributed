@@ -4,7 +4,7 @@ using Service.Monitoring.Verifiers.Common;
 using Service.Monitoring.Verifiers.Common.Enums;
 using Service.Monitoring.Verifiers.Common.Records;
 
-namespace Service.Monitoring.Verifiers.Ticket;
+namespace Service.Monitoring.Verifiers.Steps;
 
 public class TicketVerificationProvider : IVerificationProvider
 {
@@ -18,7 +18,7 @@ public class TicketVerificationProvider : IVerificationProvider
         new VerificationStep(LoggingMeta.AggregateReceived, Invoked.AtLeast, 1),
         new VerificationStep(LoggingMeta.AggregateAdded, Invoked.AtLeast, 1));
 
-    public TraceSinkId TraceSinkId => TraceSinkId.Ticket;
+    public SortingType SortingType => SortingType.Ticket;
 
     public ImmutableList<VerificationStep> GetVerificationSteps(UseCaseMeta useCaseMeta)
     {

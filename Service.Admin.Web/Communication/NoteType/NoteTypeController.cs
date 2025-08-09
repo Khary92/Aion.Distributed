@@ -1,7 +1,5 @@
-﻿using Proto.Command.NoteTypes;
-using Proto.DTO.TraceData;
-using Service.Admin.Tracing;
-using Service.Admin.Web.Communication.NoteType.Records;
+﻿using Service.Admin.Tracing;
+using Service.Admin.Web.Communication.NoteType.Records.Commands;
 using Service.Admin.Web.Models;
 
 namespace Service.Admin.Web.Communication.NoteType;
@@ -19,12 +17,6 @@ public class NoteTypeController(ISharedCommandSender commandSender, ITraceCollec
 
     public string EditButtonText => IsEditMode ? "Cancel Edit" : "Edit";
 
-    private void ResetData()
-    {
-        InputName = string.Empty;
-        InputColor = "#000000";
-    }
-
     public void ToggleEditMode()
     {
         IsEditMode = !IsEditMode;
@@ -35,12 +27,23 @@ public class NoteTypeController(ISharedCommandSender commandSender, ITraceCollec
         InputColor = SelectedNoteType.Color;
     }
 
+    public Task CreateOrUpdate()
+    {
+        return IsUpdateRequired() ? UpdateNoteType() : CreateNoteType();
+    }
+
+    private void ResetData()
+    {
+        InputName = string.Empty;
+        InputColor = "#000000";
+    }
+
     private async Task UpdateNoteType()
     {
         if (InputName != SelectedNoteType!.Name)
         {
             var traceId = Guid.NewGuid();
-            
+
             await tracer.NoteType.ChangeName.StartUseCase(GetType(), traceId);
 
             var nameCommand = new WebChangeNoteTypeNameCommand(SelectedNoteType.NoteTypeId, InputName, traceId);
@@ -52,7 +55,7 @@ public class NoteTypeController(ISharedCommandSender commandSender, ITraceCollec
         if (InputColor != SelectedNoteType.Color)
         {
             var traceId = Guid.NewGuid();
-            
+
             await tracer.NoteType.ChangeColor.StartUseCase(GetType(), traceId);
 
             var colorCommand = new WebChangeNoteTypeColorCommand(SelectedNoteType.NoteTypeId, InputColor, traceId);
@@ -69,18 +72,13 @@ public class NoteTypeController(ISharedCommandSender commandSender, ITraceCollec
     {
         var traceId = Guid.NewGuid();
         var createCommand = new WebCreateNoteTypeCommand(Guid.NewGuid(), InputName, InputColor, traceId);
-        
+
         await tracer.NoteType.Create.StartUseCase(GetType(), traceId, createCommand.ToString());
 
         await tracer.NoteType.Create.SendingCommand(GetType(), traceId, createCommand);
         await commandSender.Send(createCommand.ToProto());
 
-        ResetData();   
-    }
-    
-    public Task CreateOrUpdate()
-    {
-        return IsUpdateRequired() ? UpdateNoteType() : CreateNoteType();
+        ResetData();
     }
 
     private bool IsUpdateRequired()

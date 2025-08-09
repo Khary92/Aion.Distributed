@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Client.Desktop.Communication.Requests.Notes.Records;
 using Client.Desktop.Communication.Requests.TimeSlots.Records;
 using Client.Desktop.DataModels;
 using Client.Proto;
@@ -12,26 +11,36 @@ namespace Client.Desktop.Communication.Requests.TimeSlots;
 
 public static class TimeSlotRequestExtensions
 {
-    public static GetTimeSlotByIdRequestProto ToProto(this ClientGetTimeSlotByIdRequest request) => new()
+    public static GetTimeSlotByIdRequestProto ToProto(this ClientGetTimeSlotByIdRequest request)
     {
-        TimeSlotId = request.TimeSlotId.ToString()
-    };
+        return new GetTimeSlotByIdRequestProto
+        {
+            TimeSlotId = request.TimeSlotId.ToString()
+        };
+    }
 
-    public static GetTimeSlotsForWorkDayIdRequestProto ToProto(this ClientGetTimeSlotsForWorkDayIdRequest request) =>
-        new()
+    public static GetTimeSlotsForWorkDayIdRequestProto ToProto(this ClientGetTimeSlotsForWorkDayIdRequest request)
+    {
+        return new GetTimeSlotsForWorkDayIdRequestProto
         {
             WorkDayId = request.WorkDayId.ToString()
         };
+    }
 
-    public static List<TimeSlotClientModel> ToClientModelList(this TimeSlotListProto proto) =>
-        proto.TimeSlots.Select(ToClientModel).ToList();
+    public static List<TimeSlotClientModel> ToClientModelList(this TimeSlotListProto proto)
+    {
+        return proto.TimeSlots.Select(ToClientModel).ToList();
+    }
 
-    public static TimeSlotClientModel ToClientModel(this TimeSlotProto proto) => new(
-        Guid.Parse(proto.TimeSlotId),
-        Guid.Parse(proto.WorkDayId),
-        Guid.Parse(proto.SelectedTicketId),
-        proto.StartTime.ToDateTimeOffset(),
-        proto.EndTime.ToDateTimeOffset(),
-        proto.NoteIds.ToGuidList(),
-        proto.IsTimerRunning);
+    public static TimeSlotClientModel ToClientModel(this TimeSlotProto proto)
+    {
+        return new TimeSlotClientModel(
+            Guid.Parse(proto.TimeSlotId),
+            Guid.Parse(proto.WorkDayId),
+            Guid.Parse(proto.SelectedTicketId),
+            proto.StartTime.ToDateTimeOffset(),
+            proto.EndTime.ToDateTimeOffset(),
+            proto.NoteIds.ToGuidList(),
+            proto.IsTimerRunning);
+    }
 }

@@ -21,7 +21,7 @@ public class StartupScheduler(IEnumerable<IStartupTask> startupTasks, IStreamLif
     public async Task Execute()
     {
         foreach (var task in _order) await LoadingStrategy[task].Execute();
-        
+
         // This needs to be started in a thread as this will be blocking
         _ = Task.Run(async () => await streamLifeCycleHandler.Start());
     }

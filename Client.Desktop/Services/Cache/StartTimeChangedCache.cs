@@ -24,7 +24,7 @@ public class StartTimeChangedCache(
     {
         var traceId = Guid.NewGuid();
         await tracer.TimeSlot.SetStartTime.StartUseCase(GetType(), traceId);
-        
+
         if (!fileSystemWrapper.IsFileExisting(Path))
         {
             await tracer.TimeSlot.SetStartTime.CacheIsEmpty(GetType(), traceId);
@@ -38,7 +38,7 @@ public class StartTimeChangedCache(
             await tracer.TimeSlot.SetStartTime.SendingCommand(GetType(), traceId, command);
             await commandSender.Send(command);
         }
-        
+
         CleanUp();
     }
 

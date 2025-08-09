@@ -11,7 +11,7 @@ public class UpdateSprintCollector(ITracingDataCommandSender commandSender) : IU
         var log = $"Change sprint data requested for {attributes}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Sprint,
+            SortingType.Sprint,
             UseCaseMeta.UpdateSprint,
             LoggingMeta.ActionRequested,
             originClassType,
@@ -25,7 +25,7 @@ public class UpdateSprintCollector(ITracingDataCommandSender commandSender) : IU
         var log = $"Sent {command}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Sprint,
+            SortingType.Sprint,
             UseCaseMeta.UpdateSprint,
             LoggingMeta.SendingCommand,
             originClassType,
@@ -39,7 +39,7 @@ public class UpdateSprintCollector(ITracingDataCommandSender commandSender) : IU
         var log = $"Received {notification}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Sprint,
+            SortingType.Sprint,
             UseCaseMeta.UpdateSprint,
             LoggingMeta.NotificationReceived,
             originClassType,
@@ -53,7 +53,7 @@ public class UpdateSprintCollector(ITracingDataCommandSender commandSender) : IU
         var log = $"Aggregate not found id:{traceId}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Sprint,
+            SortingType.Sprint,
             UseCaseMeta.UpdateSprint,
             LoggingMeta.AggregateNotFound,
             originClassType,
@@ -67,7 +67,7 @@ public class UpdateSprintCollector(ITracingDataCommandSender commandSender) : IU
         var log = $"Changed applied id:{traceId}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Sprint,
+            SortingType.Sprint,
             UseCaseMeta.UpdateSprint,
             LoggingMeta.PropertyChanged,
             originClassType,

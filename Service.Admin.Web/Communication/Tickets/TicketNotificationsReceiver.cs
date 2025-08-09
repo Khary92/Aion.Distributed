@@ -38,16 +38,16 @@ public class TicketNotificationsReceiver(ITraceCollector tracer, ITicketStateSer
 
                             await tracer.Ticket.Create.NotificationReceived(GetType(), newTicketMessage.TraceId,
                                 newTicketMessage);
-                            
+
                             await ticketStateService.AddTicket(newTicketMessage);
                             break;
 
                         case TicketNotification.NotificationOneofCase.TicketDataUpdated:
                             var updateNotification = notification.TicketDataUpdated.ToNotification();
-                            
+
                             await tracer.Ticket.Update.NotificationReceived(GetType(), updateNotification.TraceId,
                                 updateNotification);
-                            
+
                             await ticketStateService.Apply(notification.TicketDataUpdated.ToNotification());
                             break;
 

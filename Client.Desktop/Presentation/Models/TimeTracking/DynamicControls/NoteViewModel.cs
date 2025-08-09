@@ -22,8 +22,8 @@ public class NoteViewModel : ReactiveObject
 {
     private readonly ICommandSender _commandSender;
     private readonly IMessenger _messenger;
-    private readonly ITraceCollector _tracer;
     private readonly IRequestSender _requestSender;
+    private readonly ITraceCollector _tracer;
     private int _currentNoteTypeIndex;
 
     public NoteViewModel(ICommandSender commandSender, IRequestSender requestSender, IMessenger messenger,

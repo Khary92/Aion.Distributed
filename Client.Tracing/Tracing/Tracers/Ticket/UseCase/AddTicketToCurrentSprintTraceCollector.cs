@@ -11,7 +11,7 @@ public class AddTicketToCurrentSprintTraceCollector(ITracingDataCommandSender co
     {
         var log = $"Add ticket to sprint requested for {attributes}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Ticket,
+            SortingType.Ticket,
             UseCaseMeta.AddTicketToCurrentSprint,
             LoggingMeta.ActionRequested,
             originClassType,
@@ -24,7 +24,7 @@ public class AddTicketToCurrentSprintTraceCollector(ITracingDataCommandSender co
     {
         var log = $"Sent {command}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Ticket,
+            SortingType.Ticket,
             UseCaseMeta.AddTicketToCurrentSprint,
             LoggingMeta.SendingCommand,
             originClassType,

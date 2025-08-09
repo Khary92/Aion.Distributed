@@ -7,7 +7,8 @@ namespace Service.Monitoring.Verifiers.Steps;
 
 public class WorkDayVerificationProvider : IVerificationProvider
 {
-    public TraceSinkId TraceSinkId => TraceSinkId.WorkDay;
+    public SortingType SortingType => SortingType.WorkDay;
+
     public ImmutableList<VerificationStep> GetVerificationSteps(UseCaseMeta useCaseMeta)
     {
         return ImmutableList.Create<VerificationStep>();

@@ -11,6 +11,16 @@ public class TagStateService(ISharedRequestSender requestSender, ITraceCollector
     : ITagStateService, IInitializeAsync
 {
     private List<TagWebModel> _tags = new();
+
+    public InitializationType Type => InitializationType.StateService;
+
+    public async Task InitializeComponents()
+    {
+        var tagListProto = await requestSender.Send(new GetAllTagsRequestProto());
+        _tags = tagListProto.ToWebModelList();
+        NotifyStateChanged();
+    }
+
     public IReadOnlyList<TagWebModel> Tickets => _tags.AsReadOnly();
 
     public event Action? OnStateChanged;
@@ -40,14 +50,5 @@ public class TagStateService(ISharedRequestSender requestSender, ITraceCollector
     private void NotifyStateChanged()
     {
         OnStateChanged?.Invoke();
-    }
-
-    public InitializationType Type => InitializationType.StateService;
-
-    public async Task InitializeComponents()
-    {
-        var tagListProto = await requestSender.Send(new GetAllTagsRequestProto());
-        _tags = tagListProto.ToWebModelList();
-        NotifyStateChanged();
     }
 }

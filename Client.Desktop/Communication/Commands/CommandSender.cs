@@ -35,7 +35,7 @@ public class CommandSender(
         return await sender.Policy.ExecuteAsync(() =>
             noteCommandSender.Send(command));
     }
-    
+
     public async Task<bool> Send(ClientChangeTagSelectionCommand command)
     {
         return await sender.Policy.ExecuteAsync(() =>
@@ -47,7 +47,7 @@ public class CommandSender(
         return await sender.Policy.ExecuteAsync(() =>
             statisticsDataCommandSender.Send(command));
     }
-    
+
     public async Task<bool> Send(ClientSetStartTimeCommand command)
     {
         return await sender.Policy.ExecuteAsync(() =>

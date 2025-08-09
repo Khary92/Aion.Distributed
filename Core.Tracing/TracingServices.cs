@@ -71,7 +71,7 @@ public static class TracingServices
 
         services.AddSingleton<ISprintUseCaseSelector, SprintUseCaseSelector>();
     }
-    
+
     private static void AddStatisticsDataTracingServices(this IServiceCollection services)
     {
         services.AddSingleton<IChangeProductivityTraceCollector, ChangeProductivityTraceCollector>();
@@ -105,14 +105,14 @@ public static class TracingServices
 
         services.AddSingleton<ITimerSettingsUseCaseSelector, TimerSettingsUseCaseSelector>();
     }
-    
+
     private static void AddTimeSlotTracingServices(this IServiceCollection services)
     {
         services.AddSingleton<ICreateTimeSlotTraceCollector, CreateTimeSlotTraceCollector>();
         services.AddSingleton<IAddNoteTraceCollector, AddNoteTraceCollector>();
         services.AddSingleton<ISetStartTimeTraceCollector, SetStartTimeTraceCollector>();
         services.AddSingleton<ISetEndTimeTraceCollector, SetEndTimeTraceCollector>();
-        
+
         services.AddSingleton<ITimeSlotUseCaseSelector, TimeSlotUseCaseSelector>();
     }
 

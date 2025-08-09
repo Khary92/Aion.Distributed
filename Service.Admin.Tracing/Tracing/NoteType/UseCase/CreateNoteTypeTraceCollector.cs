@@ -10,7 +10,7 @@ public class CreateNoteTypeTraceCollector(ITracingDataCommandSender commandSende
     {
         var log = $"Create NoteType requested for {attributes}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.NoteType,
+            SortingType.NoteType,
             UseCaseMeta.CreateNoteType,
             LoggingMeta.ActionRequested,
             originClassType,
@@ -23,7 +23,7 @@ public class CreateNoteTypeTraceCollector(ITracingDataCommandSender commandSende
     {
         var log = $"Sent {command}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.NoteType,
+            SortingType.NoteType,
             UseCaseMeta.CreateNoteType,
             LoggingMeta.SendingCommand,
             originClassType,
@@ -37,7 +37,7 @@ public class CreateNoteTypeTraceCollector(ITracingDataCommandSender commandSende
         var log = $"Received {GetName(notification)}:{notification}";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.NoteType,
+            SortingType.NoteType,
             UseCaseMeta.CreateNoteType,
             LoggingMeta.NotificationReceived,
             originClassType,
@@ -50,7 +50,7 @@ public class CreateNoteTypeTraceCollector(ITracingDataCommandSender commandSende
     {
         var log = $"Received aggregate {attributes}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.NoteType,
+            SortingType.NoteType,
             UseCaseMeta.CreateNoteType,
             LoggingMeta.AggregateReceived,
             originClassType,
@@ -63,7 +63,7 @@ public class CreateNoteTypeTraceCollector(ITracingDataCommandSender commandSende
     {
         var log = $"Added aggregate with id:{traceId}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.NoteType,
+            SortingType.NoteType,
             UseCaseMeta.CreateNoteType,
             LoggingMeta.AggregateAdded,
             originClassType,
@@ -71,7 +71,7 @@ public class CreateNoteTypeTraceCollector(ITracingDataCommandSender commandSende
             log,
             DateTimeOffset.Now));
     }
-    
+
     private static string GetName(object @object)
     {
         var commandType = @object.GetType();

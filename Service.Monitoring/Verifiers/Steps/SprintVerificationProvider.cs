@@ -7,8 +7,8 @@ namespace Service.Monitoring.Verifiers.Steps;
 
 public class SprintVerificationProvider : IVerificationProvider
 {
-    public TraceSinkId TraceSinkId => TraceSinkId.Sprint;
-    
+    public SortingType SortingType => SortingType.Sprint;
+
     public ImmutableList<VerificationStep> GetVerificationSteps(UseCaseMeta useCaseMeta)
     {
         return ImmutableList.Create<VerificationStep>();

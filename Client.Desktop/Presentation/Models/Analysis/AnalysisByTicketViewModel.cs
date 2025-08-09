@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
-using System.Text;
 using System.Threading.Tasks;
 using Client.Desktop.DataModels;
 using Client.Proto;
@@ -166,7 +164,7 @@ public class AnalysisByTicketViewModel(AnalysisByTicketModel analysisByTicketMod
     private void UpdateMostRelevantTagsByProductivityText()
     {
         if (Model.AnalysisByTicket == null) return;
-        
+
         MostRelevantTagsByProductivityText = Model.GetMarkdownString();
     }
 }

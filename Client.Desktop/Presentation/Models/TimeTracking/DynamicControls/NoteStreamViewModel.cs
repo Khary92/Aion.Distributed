@@ -42,10 +42,10 @@ public class NoteStreamViewModel(
         var tracingId = Guid.NewGuid();
 
         await tracer.Note.Create.StartUseCase(GetType(), tracingId);
-        
+
         var clientCreateNoteCommand = new ClientCreateNoteCommand(Guid.NewGuid(), Guid.Empty, string.Empty, TimeSlotId,
             DateTimeOffset.Now, tracingId);
-        
+
         await tracer.Note.Create.SendingCommand(GetType(), tracingId, clientCreateNoteCommand);
         await commandSender.Send(clientCreateNoteCommand);
     }

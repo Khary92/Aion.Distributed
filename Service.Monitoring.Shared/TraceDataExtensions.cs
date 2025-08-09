@@ -11,7 +11,7 @@ public static class TraceDataExtensions
     {
         return new TraceDataCommandProto
         {
-            TraceSinkId = command.TraceSinkId.ToString(),
+            TraceSinkId = command.SortingType.ToString(),
             UseCaseMeta = command.UseCaseMeta.ToString(),
             LoggingMeta = command.LoggingMeta.ToString(),
             OriginClassType = command.OriginClassType.FullName,
@@ -24,7 +24,7 @@ public static class TraceDataExtensions
     public static TraceData ToRecord(this TraceDataCommandProto command)
     {
         return new TraceData(
-            Enum.Parse<TraceSinkId>(command.TraceSinkId),
+            Enum.Parse<SortingType>(command.TraceSinkId),
             Enum.Parse<UseCaseMeta>(command.UseCaseMeta),
             Enum.Parse<LoggingMeta>(command.LoggingMeta),
             command.OriginClassType,

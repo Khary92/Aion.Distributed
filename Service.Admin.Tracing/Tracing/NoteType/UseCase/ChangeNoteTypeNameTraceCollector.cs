@@ -9,9 +9,9 @@ public class ChangeNoteTypeNameTraceCollector(ITracingDataCommandSender commandS
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = $"Change Name requested";
+        var log = "Change Name requested";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.NoteType,
+            SortingType.NoteType,
             UseCaseMeta.ChangeNoteTypeName,
             LoggingMeta.ActionRequested,
             originClassType,
@@ -24,7 +24,7 @@ public class ChangeNoteTypeNameTraceCollector(ITracingDataCommandSender commandS
     {
         var log = $"Sent {command}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.NoteType,
+            SortingType.NoteType,
             UseCaseMeta.ChangeNoteTypeName,
             LoggingMeta.SendingCommand,
             originClassType,
@@ -37,7 +37,7 @@ public class ChangeNoteTypeNameTraceCollector(ITracingDataCommandSender commandS
     {
         var log = $"Received {notification}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.NoteType,
+            SortingType.NoteType,
             UseCaseMeta.ChangeNoteTypeName,
             LoggingMeta.NotificationReceived,
             originClassType,
@@ -50,7 +50,7 @@ public class ChangeNoteTypeNameTraceCollector(ITracingDataCommandSender commandS
     {
         var log = $"Aggregate not found id:{traceId}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.NoteType,
+            SortingType.NoteType,
             UseCaseMeta.ChangeNoteTypeName,
             LoggingMeta.AggregateNotFound,
             originClassType,
@@ -63,7 +63,7 @@ public class ChangeNoteTypeNameTraceCollector(ITracingDataCommandSender commandS
     {
         var log = $"Changed applied id:{traceId}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.NoteType,
+            SortingType.NoteType,
             UseCaseMeta.ChangeNoteTypeName,
             LoggingMeta.PropertyChanged,
             originClassType,

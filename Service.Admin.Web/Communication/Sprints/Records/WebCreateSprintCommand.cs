@@ -1,5 +1,3 @@
-using Service.Monitoring.Shared;
-
 namespace Service.Admin.Web.Communication.Sprints.Records;
 
 public record WebCreateSprintCommand(

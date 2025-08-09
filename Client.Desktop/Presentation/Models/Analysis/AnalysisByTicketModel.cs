@@ -58,7 +58,8 @@ public class AnalysisByTicketModel(IMessenger messenger, IRequestSender requestS
 
     public async Task SetAnalysisByTicket(TicketClientModel selectedTicket)
     {
-        AnalysisByTicket = await requestSender.Send(new ClientGetTicketAnalysisById(selectedTicket.TicketId, Guid.NewGuid()));
+        AnalysisByTicket =
+            await requestSender.Send(new ClientGetTicketAnalysisById(selectedTicket.TicketId, Guid.NewGuid()));
     }
 
     public async Task<TagClientModel> GetTagById(Guid tagId)
@@ -82,7 +83,7 @@ public class AnalysisByTicketModel(IMessenger messenger, IRequestSender requestS
 
         return builder.ToString();
     }
-    
+
     private string GetProductiveTable()
     {
         var builder = new StringBuilder();

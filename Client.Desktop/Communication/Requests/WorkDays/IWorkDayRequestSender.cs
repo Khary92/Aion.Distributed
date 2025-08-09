@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests.WorkDays.Records;
 using Client.Desktop.DataModels;
-using Proto.Requests.WorkDays;
 
 namespace Client.Desktop.Communication.Requests.WorkDays;
 

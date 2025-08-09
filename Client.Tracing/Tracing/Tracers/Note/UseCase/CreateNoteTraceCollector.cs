@@ -8,9 +8,9 @@ public class CreateNoteTraceCollector(ITracingDataCommandSender commandSender) :
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = $"Note creation requested";
+        var log = "Note creation requested";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Note,
+            SortingType.Note,
             UseCaseMeta.CreateNote,
             LoggingMeta.ActionRequested,
             originClassType,
@@ -23,7 +23,7 @@ public class CreateNoteTraceCollector(ITracingDataCommandSender commandSender) :
     {
         var log = $"Sent {command}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Note,
+            SortingType.Note,
             UseCaseMeta.CreateNote,
             LoggingMeta.SendingCommand,
             originClassType,
@@ -36,7 +36,7 @@ public class CreateNoteTraceCollector(ITracingDataCommandSender commandSender) :
     {
         var log = $"Received aggregate {attributes}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Note,
+            SortingType.Note,
             UseCaseMeta.CreateNote,
             LoggingMeta.AggregateReceived,
             originClassType,
@@ -49,7 +49,7 @@ public class CreateNoteTraceCollector(ITracingDataCommandSender commandSender) :
     {
         var log = $"Added aggregate with id:{traceId}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Note,
+            SortingType.Note,
             UseCaseMeta.CreateNote,
             LoggingMeta.AggregateAdded,
             originClassType,
@@ -62,7 +62,7 @@ public class CreateNoteTraceCollector(ITracingDataCommandSender commandSender) :
     {
         var log = $"Exception occured {exception}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.Note,
+            SortingType.Note,
             UseCaseMeta.CreateNote,
             LoggingMeta.ExceptionOccured,
             originClassType,

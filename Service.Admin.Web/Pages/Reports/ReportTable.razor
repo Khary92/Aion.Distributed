@@ -17,9 +17,9 @@
 </table>
 
 @code {
-    [Parameter][EditorRequired] public IEnumerable<T> Items { get; set; } = default!;
+    [Parameter] [EditorRequired] public IEnumerable<T> Items { get; set; } = default!;
 
-    [Parameter][EditorRequired] public RenderFragment HeaderTemplate { get; set; } = default!;
+    [Parameter] [EditorRequired] public RenderFragment HeaderTemplate { get; set; } = default!;
 
-    [Parameter][EditorRequired] public RenderFragment<T> RowTemplate { get; set; } = default!;
+    [Parameter] [EditorRequired] public RenderFragment<T> RowTemplate { get; set; } = default!;
 }

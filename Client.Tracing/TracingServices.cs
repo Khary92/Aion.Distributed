@@ -90,7 +90,7 @@ public static class TracingServices
         services.AddSingleton<ICreateWorkDayTraceCollector, CreateWorkDayTraceCollector>();
         services.AddSingleton<IWorkDayUseCaseSelector, WorkDayUseCaseSelector>();
     }
-    
+
     private static void AddStatisticsDataTracingServices(this IServiceCollection services)
     {
         services.AddSingleton<IChangeProductivityTraceCollector, ChangeProductivityTraceCollector>();
@@ -98,12 +98,12 @@ public static class TracingServices
 
         services.AddSingleton<IStatisticsDataUseCaseSelector, StatisticsDataUseCaseSelector>();
     }
-    
+
     private static void AddTimeSlotTracingServices(this IServiceCollection services)
     {
         services.AddSingleton<ISetStartTimeTraceCollector, SetStartTimeTraceCollector>();
         services.AddSingleton<ISetEndTimeTraceCollector, SetEndTimeTraceCollector>();
-        
+
         services.AddSingleton<ITimeSlotUseCaseSelector, TimeSlotUseCaseSelector>();
     }
 }

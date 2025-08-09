@@ -60,7 +60,7 @@ public class RequestSender(
     {
         var getAllNoteTypesResponse = await requestSender.Policy.ExecuteAsync(() =>
             noteTypeRequestSender.Send(request.ToProto()));
-        
+
         return getAllNoteTypesResponse.ToClientModelList();
     }
 
@@ -68,16 +68,16 @@ public class RequestSender(
     {
         var noteType = await requestSender.Policy.ExecuteAsync(() =>
             noteTypeRequestSender.Send(request.ToProto()));
-       
+
         return noteType.ToClientModel();
     }
 
     public async Task<SprintClientModel?> Send(ClientGetActiveSprintRequest request)
     {
         // TODO make this nullable!
-        var sprint = await requestSender.Policy.ExecuteAsync(() => 
+        var sprint = await requestSender.Policy.ExecuteAsync(() =>
             sprintRequestSender.Send(request.ToProto()));
-        
+
         return sprint?.ToClientModel();
     }
 
@@ -85,7 +85,7 @@ public class RequestSender(
     {
         var sprintList = await requestSender.Policy.ExecuteAsync(() =>
             sprintRequestSender.Send(request.ToProto()));
-        
+
         return sprintList.ToClientModelList();
     }
 
@@ -99,7 +99,7 @@ public class RequestSender(
     {
         var tagDtos = await requestSender.Policy.ExecuteAsync(() =>
             tagRequestSender.Send(request.ToProto()));
-        
+
         return tagDtos.ToClientModelList();
     }
 
@@ -107,7 +107,7 @@ public class RequestSender(
     {
         var tag = await requestSender.Policy.ExecuteAsync(() =>
             tagRequestSender.Send(request.ToProto()));
-        
+
         return tag.ToClientModel();
     }
 
@@ -115,7 +115,7 @@ public class RequestSender(
     {
         var tagList = await requestSender.Policy.ExecuteAsync(() =>
             tagRequestSender.Send(request.ToProto()));
-        
+
         return tagList.ToClientModelList();
     }
 
@@ -123,7 +123,7 @@ public class RequestSender(
     {
         var ticketList = await requestSender.Policy.ExecuteAsync(() =>
             ticketRequestSender.Send(request.ToProto()));
-        
+
         return ticketList.ToClientModelList();
     }
 
@@ -131,7 +131,7 @@ public class RequestSender(
     {
         var ticketList = await requestSender.Policy.ExecuteAsync(() =>
             ticketRequestSender.Send(request.ToProto()));
-        
+
         return ticketList.ToClientModelList();
     }
 
@@ -139,7 +139,7 @@ public class RequestSender(
     {
         var ticketList = await requestSender.Policy.ExecuteAsync(() =>
             ticketRequestSender.Send(request.ToProto()));
-        
+
         return ticketList.ToClientModelList();
     }
 
@@ -147,7 +147,7 @@ public class RequestSender(
     {
         var ticket = await requestSender.Policy.ExecuteAsync(() =>
             ticketRequestSender.Send(request.ToProto()));
-        
+
         return ticket.ToClientModel();
     }
 

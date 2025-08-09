@@ -10,15 +10,23 @@ namespace Client.Desktop.Communication.Requests.UseCase;
 
 public static class UseCaseRequestExtensions
 {
-    public static GetTimeSlotControlDataRequestProto ToProto(this ClientGetTimeSlotControlDataRequest request) => new()
+    public static GetTimeSlotControlDataRequestProto ToProto(this ClientGetTimeSlotControlDataRequest request)
     {
-        Date = Timestamp.FromDateTimeOffset(request.Date)
-    };
+        return new GetTimeSlotControlDataRequestProto
+        {
+            Date = Timestamp.FromDateTimeOffset(request.Date)
+        };
+    }
 
-    public static List<ClientGetTimeSlotControlResponse> ToResponseDataList(this TimeSlotControlDataListProto proto) =>
-        proto.TimeSlotControlData.Select(ToResponseData).ToList();
+    public static List<ClientGetTimeSlotControlResponse> ToResponseDataList(this TimeSlotControlDataListProto proto)
+    {
+        return proto.TimeSlotControlData.Select(ToResponseData).ToList();
+    }
 
-    private static ClientGetTimeSlotControlResponse ToResponseData(this TimeSlotControlDataProto proto) => new(
-        proto.StatisticsDataProto.ToClientModel(), proto.TicketProto.ToClientModel(),
-        proto.TimeSlotProto.ToClientModel(), Guid.Parse(proto.TraceData.TraceId));
+    private static ClientGetTimeSlotControlResponse ToResponseData(this TimeSlotControlDataProto proto)
+    {
+        return new ClientGetTimeSlotControlResponse(
+            proto.StatisticsDataProto.ToClientModel(), proto.TicketProto.ToClientModel(),
+            proto.TimeSlotProto.ToClientModel(), Guid.Parse(proto.TraceData.TraceId));
+    }
 }

@@ -11,7 +11,7 @@ public class NoteCommandReceiver(INoteCommandsService noteCommandsService, ITrac
     public override async Task<CommandResponse> CreateNote(CreateNoteCommandProto request, ServerCallContext context)
     {
         await tracer.Ticket.Create.CommandReceived(GetType(), Guid.Parse(request.TraceData.TraceId), request);
- 
+
         await noteCommandsService.Create(request.ToCommand());
         return new CommandResponse { Success = true };
     }

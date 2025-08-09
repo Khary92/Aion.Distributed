@@ -15,10 +15,10 @@ public class App(IServiceProvider serviceProvider) : Application
         var contentWrapper = serviceProvider.GetRequiredService<ContentWrapper>();
         contentWrapper.WindowState = WindowState.Maximized;
         contentWrapper.Show();
-        
+
         base.OnFrameworkInitializationCompleted();
     }
-    
+
     public override void Initialize()
     {
         AvaloniaXamlLoader.Load(this);

@@ -16,7 +16,7 @@
     --save-button-hover-color: #003300;
 
     --cancel-button-hover-border-color: #660000;
-    --edit-button-hover-border-color: #6F6F00;    
+    --edit-button-hover-border-color: #6F6F00;
     --save-button-hover-border-color: #006600;
 
     --font-family-regular: 'PT Sans', Arial, sans-serif;
@@ -189,7 +189,7 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--foreground-color);
 }
 
-.table-active{
+.table-active {
     background-color: var(--edit-button-color);
     color: var(--foreground-color);
 }

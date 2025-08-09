@@ -11,11 +11,10 @@ using Proto.DTO.AnalysisByTicket;
 using Proto.DTO.StatisticsData;
 using Proto.DTO.Ticket;
 using Proto.DTO.TimeSlots;
-using Service.Proto.Shared.Requests.Tags;
 
 namespace Client.Desktop.Communication.Requests.Analysis;
 
-public class AnalysisMapper() : IAnalysisMapper
+public class AnalysisMapper : IAnalysisMapper
 {
     public AnalysisBySprintDecorator Create(AnalysisBySprintProto proto)
     {
@@ -58,7 +57,7 @@ public class AnalysisMapper() : IAnalysisMapper
 
         return new AnalysisByTagDecorator(analysisByTag);
     }
-    
+
     private static List<TimeSlotClientModel> GetTimeSlots(RepeatedField<TimeSlotProto> timeSlotProtos)
     {
         return timeSlotProtos.Select(timeSlot => new TimeSlotClientModel(Guid.Parse(timeSlot.TimeSlotId),

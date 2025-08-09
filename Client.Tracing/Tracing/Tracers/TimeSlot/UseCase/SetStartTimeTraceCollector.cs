@@ -4,14 +4,14 @@ using Service.Monitoring.Shared.Tracing;
 
 namespace Client.Tracing.Tracing.Tracers.TimeSlot.UseCase;
 
-public class SetStartTimeTraceCollector(ITracingDataCommandSender commandSender) :ISetStartTimeTraceCollector
+public class SetStartTimeTraceCollector(ITracingDataCommandSender commandSender) : ISetStartTimeTraceCollector
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = $"Requested pushing start time slot data after failed shutdown";
+        var log = "Requested pushing start time slot data after failed shutdown";
 
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimeSlot,
+            SortingType.TimeSlot,
             UseCaseMeta.SetStartTime,
             LoggingMeta.ActionRequested,
             originClassType,
@@ -24,7 +24,7 @@ public class SetStartTimeTraceCollector(ITracingDataCommandSender commandSender)
     {
         var log = $"Sent {command}";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimeSlot,
+            SortingType.TimeSlot,
             UseCaseMeta.SetStartTime,
             LoggingMeta.SendingCommand,
             originClassType,
@@ -32,12 +32,12 @@ public class SetStartTimeTraceCollector(ITracingDataCommandSender commandSender)
             log,
             DateTimeOffset.Now));
     }
-    
+
     public async Task CacheIsEmpty(Type originClassType, Guid traceId)
     {
-        var log = $"Aborted because cache is empty";
+        var log = "Aborted because cache is empty";
         await commandSender.Send(new ServiceTraceDataCommand(
-            TraceSinkId.TimeSlot,
+            SortingType.TimeSlot,
             UseCaseMeta.SetStartTime,
             LoggingMeta.ActionAborted,
             originClassType,
@@ -45,6 +45,7 @@ public class SetStartTimeTraceCollector(ITracingDataCommandSender commandSender)
             log,
             DateTimeOffset.Now));
     }
+
     private static string GetName(object @object)
     {
         var commandType = @object.GetType();

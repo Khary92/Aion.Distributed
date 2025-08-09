@@ -10,7 +10,7 @@ public class StatisticsDataCommandSender : IStatisticsDataCommandSender
 {
     private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
     private readonly StatisticsDataCommandProtoService.StatisticsDataCommandProtoServiceClient _client = new(Channel);
-    
+
     public async Task<bool> Send(ClientChangeTagSelectionCommand command)
     {
         var response = await _client.ChangeTagSelectionAsync(command.ToProto());

@@ -16,7 +16,8 @@ public static class DtoExtensions
 {
     public static TimerSettingsWebModel ToWebModel(this TimerSettingsProto timerSettings)
     {
-        return new TimerSettingsWebModel(Guid.Parse(timerSettings.TimerSettingsId), timerSettings.DocumentationSaveInterval,
+        return new TimerSettingsWebModel(Guid.Parse(timerSettings.TimerSettingsId),
+            timerSettings.DocumentationSaveInterval,
             timerSettings.SnapshotSaveInterval);
     }
 

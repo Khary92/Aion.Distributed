@@ -26,7 +26,7 @@ public static class Program
         await host.StartAsync();
 
         var serviceProvider = host.Services;
-        
+
         await serviceProvider.GetRequiredService<IStartupScheduler>().Execute();
 
         BuildAvaloniaApp(serviceProvider)
@@ -34,7 +34,7 @@ public static class Program
 
         await host.StopAsync();
     }
-    
+
     private static AppBuilder BuildAvaloniaApp(IServiceProvider serviceProvider)
     {
         return AppBuilder.Configure(() => new App(serviceProvider))
