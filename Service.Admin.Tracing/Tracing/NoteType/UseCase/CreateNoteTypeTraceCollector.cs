@@ -4,12 +4,12 @@ using Service.Monitoring.Shared.Tracing;
 
 namespace Service.Admin.Tracing.Tracing.NoteType.UseCase;
 
-public class CreateNoteTypeTraceCollector(ITracingDataCommandSender commandSender) : ICreateNoteTypeTraceCollector
+public class CreateNoteTypeTraceCollector(ITracingDataSender sender) : ICreateNoteTypeTraceCollector
 {
     public async Task StartUseCase(Type originClassType, Guid traceId, string attributes)
     {
         var log = $"Create NoteType requested for {attributes}";
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.NoteType,
             UseCaseMeta.CreateNoteType,
             LoggingMeta.ActionRequested,
@@ -22,7 +22,7 @@ public class CreateNoteTypeTraceCollector(ITracingDataCommandSender commandSende
     public async Task SendingCommand(Type originClassType, Guid traceId, object command)
     {
         var log = $"Sent {command}";
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.NoteType,
             UseCaseMeta.CreateNoteType,
             LoggingMeta.SendingCommand,
@@ -36,7 +36,7 @@ public class CreateNoteTypeTraceCollector(ITracingDataCommandSender commandSende
     {
         var log = $"Received {GetName(notification)}:{notification}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.NoteType,
             UseCaseMeta.CreateNoteType,
             LoggingMeta.NotificationReceived,
@@ -49,7 +49,7 @@ public class CreateNoteTypeTraceCollector(ITracingDataCommandSender commandSende
     public async Task AggregateReceived(Type originClassType, Guid traceId, string attributes)
     {
         var log = $"Received aggregate {attributes}";
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.NoteType,
             UseCaseMeta.CreateNoteType,
             LoggingMeta.AggregateReceived,
@@ -62,7 +62,7 @@ public class CreateNoteTypeTraceCollector(ITracingDataCommandSender commandSende
     public async Task AggregateAdded(Type originClassType, Guid traceId)
     {
         var log = $"Added aggregate with id:{traceId}";
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.NoteType,
             UseCaseMeta.CreateNoteType,
             LoggingMeta.AggregateAdded,

@@ -4,13 +4,13 @@ using Service.Monitoring.Shared.Tracing;
 
 namespace Core.Server.Tracing.Tracing.Tracers.TimeSlot.UseCase;
 
-public class AddNoteTraceCollector(ITracingDataCommandSender commandSender) : IAddNoteTraceCollector
+public class AddNoteTraceCollector(ITracingDataSender sender) : IAddNoteTraceCollector
 {
     public async Task CommandReceived(Type originClassType, Guid traceId, object protoCommand)
     {
         var log = $"Command received {GetName(protoCommand)}:{protoCommand}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.TimeSlot,
             UseCaseMeta.AddNoteToTimeSlot,
             LoggingMeta.CommandReceived,
@@ -24,7 +24,7 @@ public class AddNoteTraceCollector(ITracingDataCommandSender commandSender) : IA
     {
         var log = $"Event persisted {@event}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.TimeSlot,
             UseCaseMeta.AddNoteToTimeSlot,
             LoggingMeta.EventPersisted,
@@ -38,7 +38,7 @@ public class AddNoteTraceCollector(ITracingDataCommandSender commandSender) : IA
     {
         var log = $"Notification sent {GetName(notification)}:{notification}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.TimeSlot,
             UseCaseMeta.AddNoteToTimeSlot,
             LoggingMeta.SendingNotification,

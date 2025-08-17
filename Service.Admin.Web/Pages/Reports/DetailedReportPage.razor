@@ -1,5 +1,6 @@
 @page "/reports"
 @using Service.Admin.Web.Communication.Reports
+@using Service.Admin.Web.Communication.Reports.Records
 @using Service.Admin.Web.Communication.Reports.State
 @using Service.Monitoring.Shared.Enums
 @rendermode InteractiveServer
@@ -15,13 +16,20 @@
             <option value="@sorting">@sorting</option>
         }
     </select>
+    <select id="reportSelect" class="form-select" @bind="SelectedReportRecord">
+        @if (_reportStateService?.Reports.Any() != true) return;
+        @foreach (var report in _reportStateService.Reports)
+        {
+            <option value="@report">@report</option>
+        }
+    </select>
 </div>
 
 @if (_reportStateService?.Reports.Any() != true)
 {
     <p>No reports available</p>
 }
-else
+else if (SelectedReportRecord != null)
 {
     <div @key="SelectedSortingType">
         <table class="table table-bordered">
@@ -34,12 +42,11 @@ else
             </tr>
             </thead>
             <tbody>
-            @foreach (var report in _reportStateService.Reports)
-            {
+    
                 <tr>
-                    <td>@report.TimeStamp</td>
-                    <td>@report.UseCase</td>
-                    <td>@report.State</td>
+                    <td>@SelectedReportRecord.TimeStamp</td>
+                    <td>@SelectedReportRecord.UseCase</td>
+                    <td>@SelectedReportRecord.State</td>
                     <td>
                         <table class="table table-bordered">
                             <thead>
@@ -51,7 +58,7 @@ else
                             </tr>
                             </thead>
                             <tbody>
-                            @foreach (var trace in report.Traces)
+                            @foreach (var trace in SelectedReportRecord.Traces)
                             {
                                 <tr>
                                     <td>@trace.TimeStamp</td>
@@ -64,7 +71,6 @@ else
                         </table>
                     </td>
                 </tr>
-            }
             </tbody>
         </table>
     </div>
@@ -74,6 +80,7 @@ else
     private IReportStateService? _reportStateService;
 
     private SortingType _selectedSortingType = SortingType.Ticket;
+    private ReportRecord? _selectedReportRecord;
 
     private SortingType SelectedSortingType
     {
@@ -82,6 +89,17 @@ else
         {
             if (_selectedSortingType == value) return;
             _selectedSortingType = value;
+            LoadSelectedReportStateService();
+        }
+    }
+
+    private ReportRecord? SelectedReportRecord
+    {
+        get => _selectedReportRecord;
+        set
+        {
+            if (_selectedReportRecord == value) return;
+            _selectedReportRecord = value;
             LoadSelectedReportStateService();
         }
     }
@@ -100,6 +118,13 @@ else
 
         _reportStateService = StateServiceFactory.Get(SelectedSortingType);
         _reportStateService!.OnStateChanged += OnServiceStateChanged;
+
+        OnServiceStateChanged();
+    }
+    
+    private void LoadSelectedReport()
+    {
+        
 
         OnServiceStateChanged();
     }

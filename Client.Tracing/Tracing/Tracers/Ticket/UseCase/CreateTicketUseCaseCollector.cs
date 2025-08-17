@@ -4,13 +4,13 @@ using Service.Monitoring.Shared.Tracing;
 
 namespace Client.Tracing.Tracing.Tracers.Ticket.UseCase;
 
-public class CreateTicketUseCaseCollector(ITracingDataCommandSender commandSender) : ICreateTicketUseCaseCollector
+public class CreateTicketUseCaseCollector(ITracingDataSender sender) : ICreateTicketUseCaseCollector
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
         var log = "Create Ticket requested";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Ticket,
             UseCaseMeta.CreateTicket,
             LoggingMeta.ActionRequested,
@@ -24,7 +24,7 @@ public class CreateTicketUseCaseCollector(ITracingDataCommandSender commandSende
     {
         var log = $"Sent {GetName(command)}:{command}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Ticket,
             UseCaseMeta.CreateTicket,
             LoggingMeta.SendingCommand,
@@ -38,7 +38,7 @@ public class CreateTicketUseCaseCollector(ITracingDataCommandSender commandSende
     {
         var log = $"Received {GetName(notification)}:{notification}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Ticket,
             UseCaseMeta.CreateTicket,
             LoggingMeta.NotificationReceived,
@@ -51,7 +51,7 @@ public class CreateTicketUseCaseCollector(ITracingDataCommandSender commandSende
     public async Task AggregateReceived(Type originClassType, Guid traceId, string attributes)
     {
         var log = $"Received aggregate {attributes}";
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Ticket,
             UseCaseMeta.CreateTicket,
             LoggingMeta.AggregateReceived,
@@ -64,7 +64,7 @@ public class CreateTicketUseCaseCollector(ITracingDataCommandSender commandSende
     public async Task AggregateAdded(Type originClassType, Guid traceId)
     {
         var log = $"Added aggregate with id:{traceId}";
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Ticket,
             UseCaseMeta.CreateTicket,
             LoggingMeta.AggregateAdded,

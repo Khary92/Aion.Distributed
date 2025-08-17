@@ -4,13 +4,13 @@ using Service.Monitoring.Shared.Tracing;
 
 namespace Core.Server.Tracing.Tracing.Tracers.TimeSlot.UseCase;
 
-public class SetEndTimeTraceCollector(ITracingDataCommandSender commandSender) : ISetEndTimeTraceCollector
+public class SetEndTimeTraceCollector(ITracingDataSender sender) : ISetEndTimeTraceCollector
 {
     public async Task CommandReceived(Type originClassType, Guid traceId, object protoCommand)
     {
         var log = $"Command received {GetName(protoCommand)}:{protoCommand}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.TimeSlot,
             UseCaseMeta.SetEndTime,
             LoggingMeta.CommandReceived,
@@ -24,7 +24,7 @@ public class SetEndTimeTraceCollector(ITracingDataCommandSender commandSender) :
     {
         var log = $"Event persisted {@event}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.TimeSlot,
             UseCaseMeta.SetEndTime,
             LoggingMeta.EventPersisted,
@@ -38,7 +38,7 @@ public class SetEndTimeTraceCollector(ITracingDataCommandSender commandSender) :
     {
         var log = $"Notification sent {GetName(notification)}:{notification}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.TimeSlot,
             UseCaseMeta.SetEndTime,
             LoggingMeta.SendingNotification,

@@ -40,8 +40,8 @@ public static class TracingServices
 
     private static void AddACommonTracingServices(this IServiceCollection services)
     {
-        services.AddSingleton<ITracingDataCommandSender>(sp =>
-            new TracingDataCommandSender("http://monitoring-service:8080"));
+        services.AddSingleton<ITracingDataSender>(sp =>
+            new TracingDataSender("http://monitoring-service:8080"));
         services.AddSingleton<ITraceCollector, TraceCollector>();
     }
 

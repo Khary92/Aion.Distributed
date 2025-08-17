@@ -4,13 +4,13 @@ using Service.Monitoring.Shared.Tracing;
 
 namespace Core.Server.Tracing.Tracing.Tracers.WorkDay.UseCase;
 
-public class CreateWorkDayTraceCollector(ITracingDataCommandSender commandSender) : ICreateWorkDayTraceCollector
+public class CreateWorkDayTraceCollector(ITracingDataSender sender) : ICreateWorkDayTraceCollector
 {
     public async Task CommandReceived(Type originClassType, Guid traceId, object protoCommand)
     {
         var log = $"Command received {GetName(protoCommand)}:{protoCommand}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.WorkDay,
             UseCaseMeta.CreateWorkDay,
             LoggingMeta.CommandReceived,
@@ -24,7 +24,7 @@ public class CreateWorkDayTraceCollector(ITracingDataCommandSender commandSender
     {
         var log = $"Event persisted {@event}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.WorkDay,
             UseCaseMeta.CreateWorkDay,
             LoggingMeta.EventPersisted,
@@ -38,7 +38,7 @@ public class CreateWorkDayTraceCollector(ITracingDataCommandSender commandSender
     {
         var log = $"Notification sent {GetName(notification)}:{notification}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.WorkDay,
             UseCaseMeta.CreateWorkDay,
             LoggingMeta.SendingNotification,

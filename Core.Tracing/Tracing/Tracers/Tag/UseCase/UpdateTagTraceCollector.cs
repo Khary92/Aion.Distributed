@@ -4,13 +4,13 @@ using Service.Monitoring.Shared.Tracing;
 
 namespace Core.Server.Tracing.Tracing.Tracers.Tag.UseCase;
 
-public class UpdateTagTraceCollector(ITracingDataCommandSender commandSender) : IUpdateTagTraceCollector
+public class UpdateTagTraceCollector(ITracingDataSender sender) : IUpdateTagTraceCollector
 {
     public async Task CommandReceived(Type originClassType, Guid traceId, object protoCommand)
     {
         var log = $"Command received {GetName(protoCommand)}:{protoCommand}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Tag,
             UseCaseMeta.UpdateTag,
             LoggingMeta.CommandReceived,
@@ -24,7 +24,7 @@ public class UpdateTagTraceCollector(ITracingDataCommandSender commandSender) : 
     {
         var log = $"Event persisted {@event}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Tag,
             UseCaseMeta.UpdateTag,
             LoggingMeta.EventPersisted,
@@ -38,7 +38,7 @@ public class UpdateTagTraceCollector(ITracingDataCommandSender commandSender) : 
     {
         var log = $"Notification sent {GetName(notification)}:{notification}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Tag,
             UseCaseMeta.UpdateTag,
             LoggingMeta.SendingNotification,

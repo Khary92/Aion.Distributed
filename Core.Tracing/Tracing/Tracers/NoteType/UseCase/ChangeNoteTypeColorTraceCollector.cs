@@ -4,14 +4,14 @@ using Service.Monitoring.Shared.Tracing;
 
 namespace Core.Server.Tracing.Tracing.Tracers.NoteType.UseCase;
 
-public class ChangeNoteTypeColorTraceCollector(ITracingDataCommandSender commandSender)
+public class ChangeNoteTypeColorTraceCollector(ITracingDataSender sender)
     : IChangeNoteTypeColorTraceCollector
 {
     public async Task CommandReceived(Type originClassType, Guid traceId, object protoCommand)
     {
         var log = $"Command received {GetName(protoCommand)}:{protoCommand}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Note,
             UseCaseMeta.ChangeNoteTypeColor,
             LoggingMeta.CommandReceived,
@@ -25,7 +25,7 @@ public class ChangeNoteTypeColorTraceCollector(ITracingDataCommandSender command
     {
         var log = $"Event persisted {@event}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Note,
             UseCaseMeta.ChangeNoteTypeColor,
             LoggingMeta.EventPersisted,
@@ -39,7 +39,7 @@ public class ChangeNoteTypeColorTraceCollector(ITracingDataCommandSender command
     {
         var log = $"Notification sent {GetName(notification)}:{notification}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Note,
             UseCaseMeta.ChangeNoteTypeColor,
             LoggingMeta.SendingNotification,

@@ -4,14 +4,14 @@ using Service.Monitoring.Shared.Tracing;
 
 namespace Core.Server.Tracing.Tracing.Tracers.TimerSettings.UseCase;
 
-public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataCommandSender commandSender)
+public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataSender sender)
     : IChangeSnapshotSaveIntervalTraceCollector
 {
     public async Task CommandReceived(Type originClassType, Guid traceId, object protoCommand)
     {
         var log = $"Command received {GetName(protoCommand)}:{protoCommand}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.TimerSettings,
             UseCaseMeta.ChangeSnapshotSaveInterval,
             LoggingMeta.CommandReceived,
@@ -25,7 +25,7 @@ public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataCommandSender 
     {
         var log = $"Event persisted {@event}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.TimerSettings,
             UseCaseMeta.ChangeSnapshotSaveInterval,
             LoggingMeta.EventPersisted,
@@ -39,7 +39,7 @@ public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataCommandSender 
     {
         var log = $"Notification sent {GetName(notification)}:{notification}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.TimerSettings,
             UseCaseMeta.ChangeSnapshotSaveInterval,
             LoggingMeta.SendingNotification,

@@ -4,13 +4,13 @@ using Service.Monitoring.Shared.Tracing;
 
 namespace Core.Server.Tracing.Tracing.Tracers.Sprint.UseCase;
 
-public class TicketAddedToSprintCollector(ITracingDataCommandSender commandSender) : ITicketAddedToSprintCollector
+public class TicketAddedToSprintCollector(ITracingDataSender sender) : ITicketAddedToSprintCollector
 {
     public async Task CommandReceived(Type originClassType, Guid traceId, object protoCommand)
     {
         var log = $"Command received {GetName(protoCommand)}:{protoCommand}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Sprint,
             UseCaseMeta.TicketAddedToSprint,
             LoggingMeta.CommandReceived,
@@ -24,7 +24,7 @@ public class TicketAddedToSprintCollector(ITracingDataCommandSender commandSende
     {
         var log = $"Event persisted {@event}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Sprint,
             UseCaseMeta.TicketAddedToSprint,
             LoggingMeta.EventPersisted,
@@ -38,7 +38,7 @@ public class TicketAddedToSprintCollector(ITracingDataCommandSender commandSende
     {
         var log = $"Notification sent {GetName(notification)}:{notification}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Sprint,
             UseCaseMeta.TicketAddedToSprint,
             LoggingMeta.SendingNotification,

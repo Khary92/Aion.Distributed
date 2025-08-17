@@ -4,13 +4,13 @@ using Service.Monitoring.Shared.Tracing;
 
 namespace Client.Tracing.Tracing.Tracers.Ticket.UseCase;
 
-public class AddTicketToCurrentSprintTraceCollector(ITracingDataCommandSender commandSender)
+public class AddTicketToCurrentSprintTraceCollector(ITracingDataSender sender)
     : IAddTicketToCurrentSprintTraceCollector
 {
     public async Task StartUseCase(Type originClassType, Guid traceId, string attributes)
     {
         var log = $"Add ticket to sprint requested for {attributes}";
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Ticket,
             UseCaseMeta.AddTicketToCurrentSprint,
             LoggingMeta.ActionRequested,
@@ -23,7 +23,7 @@ public class AddTicketToCurrentSprintTraceCollector(ITracingDataCommandSender co
     public async Task CommandSent(Type originClassType, Guid traceId, object command)
     {
         var log = $"Sent {command}";
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Ticket,
             UseCaseMeta.AddTicketToCurrentSprint,
             LoggingMeta.SendingCommand,

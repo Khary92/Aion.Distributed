@@ -4,13 +4,13 @@ using Service.Monitoring.Shared.Tracing;
 
 namespace Client.Tracing.Tracing.Tracers.Ticket.UseCase;
 
-public class UpdateTicketTraceCollector(ITracingDataCommandSender commandSender) : IUpdateTicketTraceCollector
+public class UpdateTicketTraceCollector(ITracingDataSender sender) : IUpdateTicketTraceCollector
 {
     public async Task StartUseCase(Type originClassType, Guid traceId, string attributes)
     {
         var log = $"Update ticket requested for {attributes}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Ticket,
             UseCaseMeta.UpdateTicket,
             LoggingMeta.ActionRequested,
@@ -24,7 +24,7 @@ public class UpdateTicketTraceCollector(ITracingDataCommandSender commandSender)
     {
         var log = $"Sent {command}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Ticket,
             UseCaseMeta.UpdateTicket,
             LoggingMeta.SendingCommand,
@@ -37,7 +37,7 @@ public class UpdateTicketTraceCollector(ITracingDataCommandSender commandSender)
     public async Task NotificationReceived(Type originClassType, Guid traceId, object notification)
     {
         var log = $"Received {notification}";
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Ticket,
             UseCaseMeta.UpdateTicket,
             LoggingMeta.NotificationReceived,
@@ -50,7 +50,7 @@ public class UpdateTicketTraceCollector(ITracingDataCommandSender commandSender)
     public async Task NoAggregateFound(Type originClassType, Guid traceId)
     {
         var log = $"Aggregate not found id:{traceId}";
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Ticket,
             UseCaseMeta.UpdateTicket,
             LoggingMeta.AggregateNotFound,
@@ -63,7 +63,7 @@ public class UpdateTicketTraceCollector(ITracingDataCommandSender commandSender)
     public async Task ChangesApplied(Type originClassType, Guid traceId)
     {
         var log = $"Changed applied id:{traceId}";
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Ticket,
             UseCaseMeta.UpdateTicket,
             LoggingMeta.PropertyChanged,

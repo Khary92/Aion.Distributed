@@ -4,14 +4,14 @@ using Service.Monitoring.Shared.Tracing;
 
 namespace Service.Admin.Tracing.Tracing.TimerSettings.UseCase;
 
-public class CreateTimerSettingsTraceCollector(ITracingDataCommandSender commandSender)
+public class CreateTimerSettingsTraceCollector(ITracingDataSender sender)
     : ICreateTimerSettingsTraceCollector
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
         var log = "Create Sprint requested";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.TimerSettings,
             UseCaseMeta.CreateTimerSettings,
             LoggingMeta.ActionRequested,
@@ -25,7 +25,7 @@ public class CreateTimerSettingsTraceCollector(ITracingDataCommandSender command
     {
         var log = $"Sent {command}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.TimerSettings,
             UseCaseMeta.CreateTimerSettings,
             LoggingMeta.SendingCommand,
@@ -38,7 +38,7 @@ public class CreateTimerSettingsTraceCollector(ITracingDataCommandSender command
     public async Task NotificationReceived(Type originClassType, Guid traceId, object notification)
     {
         var log = $"Received {notification}";
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.TimerSettings,
             UseCaseMeta.CreateTimerSettings,
             LoggingMeta.NotificationReceived,
@@ -52,7 +52,7 @@ public class CreateTimerSettingsTraceCollector(ITracingDataCommandSender command
     {
         var log = $"Received aggregate {attributes}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.TimerSettings,
             UseCaseMeta.CreateTimerSettings,
             LoggingMeta.AggregateReceived,
@@ -66,7 +66,7 @@ public class CreateTimerSettingsTraceCollector(ITracingDataCommandSender command
     {
         var log = $"Added aggregate with id:{traceId}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.TimerSettings,
             UseCaseMeta.CreateTimerSettings,
             LoggingMeta.AggregateAdded,

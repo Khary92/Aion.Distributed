@@ -4,13 +4,13 @@ using Service.Monitoring.Shared.Tracing;
 
 namespace Client.Tracing.Tracing.Tracers.Tag.UseCase;
 
-public class UpdateTagTraceCollector(ITracingDataCommandSender commandSender) : IUpdateTagTraceCollector
+public class UpdateTagTraceCollector(ITracingDataSender sender) : IUpdateTagTraceCollector
 {
     public async Task StartUseCase(Type originClassType, Guid traceId, string attributes)
     {
         var log = $"Change tag data requested for {attributes}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Tag,
             UseCaseMeta.UpdateTag,
             LoggingMeta.ActionRequested,
@@ -23,7 +23,7 @@ public class UpdateTagTraceCollector(ITracingDataCommandSender commandSender) : 
     public async Task SendingCommand(Type originClassType, Guid traceId, object command)
     {
         var log = $"Sent {command}";
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Tag,
             UseCaseMeta.UpdateTag,
             LoggingMeta.SendingCommand,
@@ -36,7 +36,7 @@ public class UpdateTagTraceCollector(ITracingDataCommandSender commandSender) : 
     public async Task NotificationReceived(Type originClassType, Guid traceId, object notification)
     {
         var log = $"Received {notification}";
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Tag,
             UseCaseMeta.UpdateTag,
             LoggingMeta.NotificationReceived,
@@ -49,7 +49,7 @@ public class UpdateTagTraceCollector(ITracingDataCommandSender commandSender) : 
     public async Task NoAggregateFound(Type originClassType, Guid traceId)
     {
         var log = $"Aggregate not found id:{traceId}";
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Tag,
             UseCaseMeta.UpdateTag,
             LoggingMeta.AggregateNotFound,
@@ -62,7 +62,7 @@ public class UpdateTagTraceCollector(ITracingDataCommandSender commandSender) : 
     public async Task ChangesApplied(Type originClassType, Guid traceId)
     {
         var log = $"Changed applied id:{traceId}";
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Tag,
             UseCaseMeta.UpdateTag,
             LoggingMeta.PropertyChanged,

@@ -4,13 +4,13 @@ using Service.Monitoring.Shared.Tracing;
 
 namespace Service.Admin.Tracing.Tracing.NoteType.UseCase;
 
-public class ChangeNoteTypeColorTraceCollector(ITracingDataCommandSender commandSender)
+public class ChangeNoteTypeColorTraceCollector(ITracingDataSender sender)
     : IChangeNoteTypeColorTraceCollector
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
         var log = "Change Color requested";
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.NoteType,
             UseCaseMeta.ChangeNoteTypeColor,
             LoggingMeta.ActionRequested,
@@ -23,7 +23,7 @@ public class ChangeNoteTypeColorTraceCollector(ITracingDataCommandSender command
     public async Task SendingCommand(Type originClassType, Guid traceId, object command)
     {
         var log = $"Sent {command}";
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.NoteType,
             UseCaseMeta.ChangeNoteTypeColor,
             LoggingMeta.SendingCommand,
@@ -36,7 +36,7 @@ public class ChangeNoteTypeColorTraceCollector(ITracingDataCommandSender command
     public async Task NotificationReceived(Type originClassType, Guid traceId, object notification)
     {
         var log = $"Received {notification}";
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.NoteType,
             UseCaseMeta.ChangeNoteTypeColor,
             LoggingMeta.NotificationReceived,
@@ -49,7 +49,7 @@ public class ChangeNoteTypeColorTraceCollector(ITracingDataCommandSender command
     public async Task NoAggregateFound(Type originClassType, Guid traceId)
     {
         var log = $"Aggregate not found id:{traceId}";
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.NoteType,
             UseCaseMeta.ChangeNoteTypeColor,
             LoggingMeta.AggregateNotFound,
@@ -62,7 +62,7 @@ public class ChangeNoteTypeColorTraceCollector(ITracingDataCommandSender command
     public async Task ChangesApplied(Type originClassType, Guid traceId)
     {
         var log = $"Changed applied id:{traceId}";
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.NoteType,
             UseCaseMeta.ChangeNoteTypeColor,
             LoggingMeta.PropertyChanged,

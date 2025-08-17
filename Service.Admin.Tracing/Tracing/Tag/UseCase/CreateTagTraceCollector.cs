@@ -4,12 +4,12 @@ using Service.Monitoring.Shared.Tracing;
 
 namespace Service.Admin.Tracing.Tracing.Tag.UseCase;
 
-public class CreateTagTraceCollector(ITracingDataCommandSender commandSender) : ICreateTagTraceCollector
+public class CreateTagTraceCollector(ITracingDataSender sender) : ICreateTagTraceCollector
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
         var log = "Create Tag requested";
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Tag,
             UseCaseMeta.CreateTag,
             LoggingMeta.ActionRequested,
@@ -22,7 +22,7 @@ public class CreateTagTraceCollector(ITracingDataCommandSender commandSender) : 
     public async Task SendingCommand(Type originClassType, Guid traceId, object command)
     {
         var log = $"Sent {command}";
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Tag,
             UseCaseMeta.CreateTag,
             LoggingMeta.SendingCommand,
@@ -35,7 +35,7 @@ public class CreateTagTraceCollector(ITracingDataCommandSender commandSender) : 
     public async Task NotificationReceived(Type originClassType, Guid traceId, object notification)
     {
         var log = $"Received {notification}";
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Tag,
             UseCaseMeta.CreateTag,
             LoggingMeta.NotificationReceived,
@@ -48,7 +48,7 @@ public class CreateTagTraceCollector(ITracingDataCommandSender commandSender) : 
     public async Task AggregateReceived(Type originClassType, Guid traceId, string attributes)
     {
         var log = $"Received aggregate {attributes}";
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Tag,
             UseCaseMeta.CreateTag,
             LoggingMeta.AggregateReceived,
@@ -61,7 +61,7 @@ public class CreateTagTraceCollector(ITracingDataCommandSender commandSender) : 
     public async Task AggregateAdded(Type originClassType, Guid traceId)
     {
         var log = $"Added aggregate with id:{traceId}";
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Tag,
             UseCaseMeta.CreateTag,
             LoggingMeta.AggregateAdded,

@@ -4,14 +4,14 @@ using Service.Monitoring.Shared.Tracing;
 
 namespace Client.Tracing.Tracing.Tracers.Statistics.UseCase;
 
-public class ChangeTagSelectionTraceCollector(ITracingDataCommandSender commandSender)
+public class ChangeTagSelectionTraceCollector(ITracingDataSender sender)
     : IChangeTagSelectionTraceCollector
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
         var log = "Change statistics data requested";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.StatisticsData,
             UseCaseMeta.ChangeTagSelection,
             LoggingMeta.ActionRequested,
@@ -25,7 +25,7 @@ public class ChangeTagSelectionTraceCollector(ITracingDataCommandSender commandS
     {
         var log = $"Sent {command}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.StatisticsData,
             UseCaseMeta.ChangeTagSelection,
             LoggingMeta.SendingCommand,
@@ -39,7 +39,7 @@ public class ChangeTagSelectionTraceCollector(ITracingDataCommandSender commandS
     {
         var log = $"Received {notification}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.StatisticsData,
             UseCaseMeta.ChangeTagSelection,
             LoggingMeta.NotificationReceived,
@@ -53,7 +53,7 @@ public class ChangeTagSelectionTraceCollector(ITracingDataCommandSender commandS
     {
         var log = $"Aggregate not found id:{traceId}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.StatisticsData,
             UseCaseMeta.ChangeTagSelection,
             LoggingMeta.AggregateNotFound,
@@ -67,7 +67,7 @@ public class ChangeTagSelectionTraceCollector(ITracingDataCommandSender commandS
     {
         var log = $"Changed applied id:{traceId}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.StatisticsData,
             UseCaseMeta.ChangeTagSelection,
             LoggingMeta.PropertyChanged,

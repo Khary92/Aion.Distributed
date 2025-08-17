@@ -4,14 +4,14 @@ using Service.Monitoring.Shared.Tracing;
 
 namespace Core.Server.Tracing.Tracing.Tracers.TimerSettings.UseCase;
 
-public class ChangeDocuTimerSaveIntervalTraceCollector(ITracingDataCommandSender commandSender)
+public class ChangeDocuTimerSaveIntervalTraceCollector(ITracingDataSender sender)
     : IChangeDocuTimerSaveIntervalTraceCollector
 {
     public async Task CommandReceived(Type originClassType, Guid traceId, object protoCommand)
     {
         var log = $"Command received {GetName(protoCommand)}:{protoCommand}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.TimerSettings,
             UseCaseMeta.ChangeDocuTimerSaveInterval,
             LoggingMeta.CommandReceived,
@@ -25,7 +25,7 @@ public class ChangeDocuTimerSaveIntervalTraceCollector(ITracingDataCommandSender
     {
         var log = $"Event persisted {@event}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.TimerSettings,
             UseCaseMeta.ChangeDocuTimerSaveInterval,
             LoggingMeta.EventPersisted,
@@ -39,7 +39,7 @@ public class ChangeDocuTimerSaveIntervalTraceCollector(ITracingDataCommandSender
     {
         var log = $"Notification sent {GetName(notification)}:{notification}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.TimerSettings,
             UseCaseMeta.ChangeDocuTimerSaveInterval,
             LoggingMeta.SendingNotification,

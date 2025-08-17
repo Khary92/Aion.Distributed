@@ -3,11 +3,11 @@ using Proto.Command.TraceData;
 
 namespace Service.Monitoring.Shared.Tracing;
 
-public class TracingDataCommandSender : ITracingDataCommandSender
+public class TracingDataSender : ITracingDataSender
 {
     private readonly TraceDataCommandProtoService.TraceDataCommandProtoServiceClient _client;
 
-    public TracingDataCommandSender(string address)
+    public TracingDataSender(string address)
     {
         var channel = GrpcChannel.ForAddress(address);
         _client = new TraceDataCommandProtoService.TraceDataCommandProtoServiceClient(channel);

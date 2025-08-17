@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Polly;
 using Service.Monitoring.Communication;
 using Service.Monitoring.Tracers;
 using Service.Monitoring.Verifiers.Common;
@@ -15,6 +16,19 @@ public static class TracingServices
         AddVerifiers(services);
 
         services.AddSingleton<IReportSender>(sp => new ReportSender("http://admin-web:8081"));
+    }
+    
+    private static void AddPolicyServices(IServiceCollection services)
+    {
+        services.AddSingleton(
+            new TraceDataSendPolicy(Policy
+                .Handle<Exception>()
+                .WaitAndRetryAsync(4, retryAttempt =>
+                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)))
+                .WrapAsync(Policy
+                    .Handle<Exception>()
+                    .CircuitBreakerAsync(4, TimeSpan.FromSeconds(30))))
+        );
     }
 
     private static void AddSinks(this IServiceCollection services)

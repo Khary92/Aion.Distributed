@@ -4,13 +4,13 @@ using Service.Monitoring.Shared.Tracing;
 
 namespace Client.Tracing.Tracing.Tracers.Sprint.UseCase;
 
-public class CreateSprintTraceCollector(ITracingDataCommandSender commandSender) : ICreateSprintTraceCollector
+public class CreateSprintTraceCollector(ITracingDataSender sender) : ICreateSprintTraceCollector
 {
     public async Task StartUseCase(Type originClassType, Guid traceId, string attributes)
     {
         var log = $"Create Sprint requested for {attributes}";
 
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Sprint,
             UseCaseMeta.CreateSprint,
             LoggingMeta.ActionRequested,
@@ -23,7 +23,7 @@ public class CreateSprintTraceCollector(ITracingDataCommandSender commandSender)
     public async Task CommandSent(Type originClassType, Guid traceId, object command)
     {
         var log = $"Sent {command}";
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Sprint,
             UseCaseMeta.CreateSprint,
             LoggingMeta.SendingCommand,
@@ -36,7 +36,7 @@ public class CreateSprintTraceCollector(ITracingDataCommandSender commandSender)
     public async Task AggregateReceived(Type originClassType, Guid traceId, string attributes)
     {
         var log = $"Received aggregate {attributes}";
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Sprint,
             UseCaseMeta.CreateSprint,
             LoggingMeta.AggregateReceived,
@@ -49,7 +49,7 @@ public class CreateSprintTraceCollector(ITracingDataCommandSender commandSender)
     public async Task AggregateAdded(Type originClassType, Guid traceId)
     {
         var log = $"Added aggregate with id:{traceId}";
-        await commandSender.Send(new ServiceTraceDataCommand(
+        await sender.Send(new ServiceTraceDataCommand(
             SortingType.Sprint,
             UseCaseMeta.CreateSprint,
             LoggingMeta.AggregateAdded,
