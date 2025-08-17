@@ -7,7 +7,7 @@ using Service.Monitoring.Verifiers.Common.Records;
 
 namespace Service.Monitoring.Tracers;
 
-public class TraceSink(IReportSender reportSender, IVerifierFactory verifierFactory) : ITraceSink
+public class TraceSink(IReportSender reportSender, IVerifierFactory verifierFactory, TraceDataSendPolicy sendPolicy) : ITraceSink
 {
     private readonly ConcurrentDictionary<Guid, IVerifier> _ticketVerifiers = new();
 
@@ -27,6 +27,7 @@ public class TraceSink(IReportSender reportSender, IVerifierFactory verifierFact
     {
         try
         {
+            sendPolicy.Policy.WithPolicyKey()
             await reportSender.Send(e);
             _ticketVerifiers.TryRemove(e.TraceId, out _);
         }

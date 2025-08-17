@@ -14,6 +14,7 @@ public static class TracingServices
     {
         AddSinks(services);
         AddVerifiers(services);
+        AddPolicyServices(services);
 
         services.AddSingleton<IReportSender>(sp => new ReportSender("http://admin-web:8081"));
     }
