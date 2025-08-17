@@ -27,8 +27,7 @@ public class TraceSink(IReportSender reportSender, IVerifierFactory verifierFact
     {
         try
         {
-            sendPolicy.Policy.WithPolicyKey()
-            await reportSender.Send(e);
+            await sendPolicy.Policy.ExecuteAsync(() => reportSender.Send(e));
             _ticketVerifiers.TryRemove(e.TraceId, out _);
         }
         catch (Exception ex)
