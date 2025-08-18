@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.Commands.StatisticsData.Records;
+using Client.Desktop.Communication.Notifications.Tag.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.Communication.Requests.Tag;
@@ -65,6 +66,20 @@ public class StatisticsViewModel(
         {
             AvailableTags.Add(tagCheckBoxViewFactory.Create(message.Tag));
             await tracer.Tag.Create.AggregateAdded(GetType(), message.TraceId);
+        });
+        
+        messenger.Register<ClientTagUpdatedNotification>(this, async void (_, notification) =>
+        {
+            var tagViewModel = AvailableTags.FirstOrDefault(t => t.Tag!.TagId == notification.TagId);
+
+            if (tagViewModel?.Tag == null)
+            {
+                await tracer.Tag.Update.NoAggregateFound(GetType(), notification.TraceId);
+                return;
+            }
+            
+            tagViewModel.Tag.Apply(notification);
+            await tracer.Tag.Update.ChangesApplied(GetType(), notification.TraceId);
         });
     }
 

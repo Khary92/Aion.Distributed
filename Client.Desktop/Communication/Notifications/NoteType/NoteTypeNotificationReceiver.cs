@@ -31,7 +31,7 @@ public class NoteTypeNotificationReceiver(
                             var notificationNoteTypeColorChanged = notification.NoteTypeColorChanged;
 
                             await tracer.NoteType.ChangeColor.NotificationReceived(GetType(),
-                                Guid.Parse(notificationNoteTypeColorChanged.NoteTypeId),
+                                Guid.Parse(notificationNoteTypeColorChanged.TraceData.TraceId),
                                 notificationNoteTypeColorChanged);
 
                             Dispatcher.UIThread.Post(() =>
@@ -45,7 +45,7 @@ public class NoteTypeNotificationReceiver(
                             var notificationNoteTypeCreated = notification.NoteTypeCreated;
 
                             await tracer.NoteType.Create.NotificationReceived(GetType(),
-                                Guid.Parse(notificationNoteTypeCreated.NoteTypeId),
+                                Guid.Parse(notificationNoteTypeCreated.TraceData.TraceId),
                                 notificationNoteTypeCreated);
 
                             Dispatcher.UIThread.Post(() =>
@@ -59,7 +59,7 @@ public class NoteTypeNotificationReceiver(
                             var notificationNoteTypeNameChanged = notification.NoteTypeNameChanged;
 
                             await tracer.NoteType.ChangeName.NotificationReceived(GetType(),
-                                Guid.Parse(notificationNoteTypeNameChanged.NoteTypeId),
+                                Guid.Parse(notificationNoteTypeNameChanged.TraceData.TraceId),
                                 notificationNoteTypeNameChanged);
 
                             Dispatcher.UIThread.Post(() =>

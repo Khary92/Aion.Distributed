@@ -30,7 +30,7 @@ public class SprintNotificationReceiver(
                         {
                             var notificationSprintCreated = notification.SprintCreated;
                             await tracer.Sprint.Create.NotificationReceived(GetType(),
-                                Guid.Parse(notificationSprintCreated.SprintId), notificationSprintCreated);
+                                Guid.Parse(notificationSprintCreated.TraceData.TraceId), notificationSprintCreated);
 
                             Dispatcher.UIThread.Post(() =>
                             {
@@ -42,7 +42,7 @@ public class SprintNotificationReceiver(
                         {
                             var notificationSprintActiveStatusSet = notification.SprintActiveStatusSet;
                             await tracer.Sprint.ActiveStatus.NotificationReceived(GetType(),
-                                Guid.Parse(notificationSprintActiveStatusSet.SprintId),
+                                Guid.Parse(notificationSprintActiveStatusSet.TraceData.TraceId),
                                 notificationSprintActiveStatusSet);
 
                             Dispatcher.UIThread.Post(() =>
@@ -55,7 +55,7 @@ public class SprintNotificationReceiver(
                         {
                             var notificationSprintDataUpdated = notification.SprintDataUpdated;
                             await tracer.Sprint.Update.NotificationReceived(GetType(),
-                                Guid.Parse(notificationSprintDataUpdated.SprintId),
+                                Guid.Parse(notificationSprintDataUpdated.TraceData.TraceId),
                                 notificationSprintDataUpdated);
 
                             Dispatcher.UIThread.Post(() =>
@@ -69,7 +69,7 @@ public class SprintNotificationReceiver(
                             var notificationTicketAddedToActiveSprint = notification.TicketAddedToActiveSprint;
 
                             await tracer.Sprint.AddTicketToSprint.NotificationReceived(GetType(),
-                                Guid.Parse(notificationTicketAddedToActiveSprint.TicketId),
+                                Guid.Parse(notificationTicketAddedToActiveSprint.TraceData.TraceId),
                                 notificationTicketAddedToActiveSprint);
 
                             Dispatcher.UIThread.Post(() =>

@@ -226,8 +226,6 @@ public class DocumentationModel(
 
         messenger.Register<ClientTicketDataUpdatedNotification>(this, async void (_, notification) =>
         {
-            await tracer.Ticket.Update.NotificationReceived(GetType(), notification.TraceId, notification);
-
             var ticket = AllTickets.FirstOrDefault(t => t.TicketId == notification.TicketId);
 
             if (ticket is null)

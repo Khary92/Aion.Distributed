@@ -1,5 +1,5 @@
 using System;
-using Proto.Notifications.Tag;
+using Client.Desktop.Communication.Notifications.Tag.Records;
 using ReactiveUI;
 
 namespace Client.Desktop.DataModels;
@@ -35,7 +35,7 @@ public class TagClientModel : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref _name, value);
     }
 
-    public void Apply(TagUpdatedNotification notification)
+    public void Apply(ClientTagUpdatedNotification notification)
     {
         Name = notification.Name;
     }
