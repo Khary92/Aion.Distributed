@@ -17,6 +17,7 @@ using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Register;
 using Client.Desktop.Presentation.Factories;
 using Client.Desktop.Services.LocalSettings;
+using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using ReactiveUI;
 using ListEx = DynamicData.ListEx;
@@ -28,7 +29,8 @@ public class TimeTrackingModel(
     IRequestSender requestSender,
     ILocalSettingsService localSettingsService,
     IMessenger messenger,
-    ITimeSlotViewModelFactory timeSlotViewModelFactory) : ReactiveObject, IInitializeAsync, IRegisterMessenger
+    ITimeSlotViewModelFactory timeSlotViewModelFactory,
+    ITraceCollector tracer) : ReactiveObject, IInitializeAsync, IRegisterMessenger
 {
     private int _currentViewModelIndex;
     private ObservableCollection<TicketClientModel> _filteredTickets = [];
@@ -87,6 +89,7 @@ public class TimeTrackingModel(
         messenger.Register<NewTicketMessage>(this, async void (_, message) =>
         {
             AllTickets.Add(message.Ticket);
+            await tracer.Ticket.Create.AggregateAdded(GetType(), message.TraceId);
 
             var currentSprint = await requestSender.Send(new ClientGetActiveSprintRequest(Guid.NewGuid()));
 
@@ -96,13 +99,18 @@ public class TimeTrackingModel(
                 FilteredTickets.Add(message.Ticket);
         });
 
-        messenger.Register<ClientTicketDataUpdatedNotification>(this, (_, notification) =>
+        messenger.Register<ClientTicketDataUpdatedNotification>(this, async void (_, notification) =>
         {
-            var ticketDto = AllTickets.FirstOrDefault(tsv => tsv.TicketId == notification.TicketId);
+            var ticketClientModel = AllTickets.FirstOrDefault(tsv => tsv.TicketId == notification.TicketId);
 
-            if (ticketDto == null) return;
+            if (ticketClientModel == null)
+            {
+                await tracer.Ticket.Update.NoAggregateFound(GetType(), notification.TraceId);
+                return;
+            }
 
-            ticketDto.Apply(notification);
+            ticketClientModel.Apply(notification);
+            await tracer.Ticket.Update.ChangesApplied(GetType(), notification.TraceId);
         });
 
         //TODO This implementation is bad. Fix that 
@@ -116,7 +124,7 @@ public class TimeTrackingModel(
             TimeSlotViewModels.Add(await
                 timeSlotViewModelFactory.Create(notification.Ticket, notification.StatisticsData,
                     notification.TimeSlot));
-
+            
             CurrentViewModelIndex = TimeSlotViewModels.Count - 1;
             SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.TicketReplayDecorator.Ticket.Name;
         });
@@ -127,10 +135,13 @@ public class TimeTrackingModel(
 
             var currentSprint = await requestSender.Send(new ClientGetActiveSprintRequest(Guid.NewGuid()));
 
-            if (currentSprint == null) throw new InvalidOperationException("No active sprint");
+            if (currentSprint == null)
+            {
+                throw new InvalidOperationException("No active sprint");
+            }
 
-            var ticketDtos = await requestSender.Send(new ClientGetAllTicketsRequest(Guid.NewGuid()));
-            foreach (var modelTicket in ticketDtos.Where(modelTicket =>
+            var ticketClientModels = await requestSender.Send(new ClientGetAllTicketsRequest(Guid.NewGuid()));
+            foreach (var modelTicket in ticketClientModels.Where(modelTicket =>
                          modelTicket.SprintIds.Contains(currentSprint.SprintId)))
                 FilteredTickets.Add(modelTicket);
         });

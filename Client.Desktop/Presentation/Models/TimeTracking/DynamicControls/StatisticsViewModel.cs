@@ -61,7 +61,11 @@ public class StatisticsViewModel(
 
     public void RegisterMessenger()
     {
-        messenger.Register<NewTagMessage>(this, (_, m) => { AvailableTags.Add(tagCheckBoxViewFactory.Create(m.Tag)); });
+        messenger.Register<NewTagMessage>(this, async void (_, message) =>
+        {
+            AvailableTags.Add(tagCheckBoxViewFactory.Create(message.Tag));
+            await tracer.Tag.Create.AggregateAdded(GetType(), message.TraceId);
+        });
     }
 
     public async Task Update()

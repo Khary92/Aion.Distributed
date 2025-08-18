@@ -7,19 +7,19 @@ using Client.Desktop.Communication.Notifications.Ticket.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.Communication.Requests.Analysis.Records;
-using Client.Desktop.Communication.Requests.Tag;
 using Client.Desktop.Communication.Requests.Ticket;
 using Client.Desktop.DataModels;
 using Client.Desktop.DataModels.Decorators;
 using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Register;
+using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using ReactiveUI;
 
 namespace Client.Desktop.Presentation.Models.Analysis;
 
-public class AnalysisByTicketModel(IMessenger messenger, IRequestSender requestSender)
+public class AnalysisByTicketModel(IMessenger messenger, IRequestSender requestSender, ITraceCollector tracer)
     : ReactiveObject, IInitializeAsync, IRegisterMessenger
 {
     private const int AmountOfTagsShown = 3;
@@ -44,15 +44,24 @@ public class AnalysisByTicketModel(IMessenger messenger, IRequestSender requestS
 
     public void RegisterMessenger()
     {
-        messenger.Register<NewTicketMessage>(this, (_, message) => { Tickets.Add(message.Ticket); });
+        messenger.Register<NewTicketMessage>(this, async void (_, message) =>
+        {
+            Tickets.Add(message.Ticket);
+            await tracer.Ticket.Create.AggregateAdded(GetType(), message.TraceId);
+        });
 
-        messenger.Register<ClientTicketDataUpdatedNotification>(this, (_, notification) =>
+        messenger.Register<ClientTicketDataUpdatedNotification>(this, async void (_, notification) =>
         {
             var ticket = Tickets.FirstOrDefault(t => t.TicketId == notification.TicketId);
 
-            if (ticket == null) return;
+            if (ticket == null)
+            {
+                await tracer.Ticket.Update.NoAggregateFound(GetType(), notification.TraceId);
+                return;
+            }
 
             ticket.Apply(notification);
+            await tracer.Ticket.Update.ChangesApplied(GetType(), notification.TraceId);
         });
     }
 
@@ -60,11 +69,6 @@ public class AnalysisByTicketModel(IMessenger messenger, IRequestSender requestS
     {
         AnalysisByTicket =
             await requestSender.Send(new ClientGetTicketAnalysisById(selectedTicket.TicketId, Guid.NewGuid()));
-    }
-
-    public async Task<TagClientModel> GetTagById(Guid tagId)
-    {
-        return await requestSender.Send(new ClientGetTagByIdRequest(tagId, Guid.NewGuid()));
     }
 
     public string GetMarkdownString()

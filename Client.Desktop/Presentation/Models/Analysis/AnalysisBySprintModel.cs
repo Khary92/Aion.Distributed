@@ -13,12 +13,13 @@ using Client.Desktop.DataModels;
 using Client.Desktop.DataModels.Decorators;
 using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Register;
+using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using ReactiveUI;
 
 namespace Client.Desktop.Presentation.Models.Analysis;
 
-public class AnalysisBySprintModel(IMessenger messenger, IRequestSender requestSender)
+public class AnalysisBySprintModel(IMessenger messenger, IRequestSender requestSender, ITraceCollector tracer)
     : ReactiveObject, IRegisterMessenger, IInitializeAsync
 {
     private const int AmountOfTagsShown = 3;
@@ -43,15 +44,24 @@ public class AnalysisBySprintModel(IMessenger messenger, IRequestSender requestS
 
     public void RegisterMessenger()
     {
-        messenger.Register<NewSprintMessage>(this, (_, message) => { Sprints.Add(message.Sprint); });
+        messenger.Register<NewSprintMessage>(this, async void (_, message) =>
+        {
+            Sprints.Add(message.Sprint);
+            await tracer.Sprint.Create.AggregateAdded(GetType(), message.TraceId);
+        });
 
-        messenger.Register<ClientSprintDataUpdatedNotification>(this, (_, notification) =>
+        messenger.Register<ClientSprintDataUpdatedNotification>(this, async void (_, notification) =>
         {
             var sprint = Sprints.FirstOrDefault(s => s.SprintId == notification.SprintId);
 
-            if (sprint == null) return;
+            if (sprint == null)
+            {
+                await tracer.Sprint.Update.NoAggregateFound(GetType(), notification.TraceId);
+                return;
+            }
 
             sprint.Apply(notification);
+            await tracer.Sprint.Update.ChangesApplied(GetType(), notification.TraceId);
         });
     }
 

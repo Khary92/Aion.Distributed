@@ -51,9 +51,10 @@ public class ExportModel(
 
     public void RegisterMessenger()
     {
-        messenger.Register<ExportPathSetNotification>(this, void (_, m) => { Settings!.ExportPath = m.ExportPath; });
+        messenger.Register<ExportPathSetNotification>(this,
+            void (_, message) => { Settings!.ExportPath = message.ExportPath; });
 
-        messenger.Register<SettingsClientModel>(this, (_, m) => { Settings = m; });
+        messenger.Register<SettingsClientModel>(this, (_, message) => { Settings = message; });
 
         messenger.Register<NewWorkDayMessage>(this, async void (_, m) =>
         {
