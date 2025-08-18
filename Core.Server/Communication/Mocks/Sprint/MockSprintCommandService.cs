@@ -31,32 +31,7 @@ public class MockSprintCommandService(SprintNotificationService sprintsNotificat
             return new CommandResponse { Success = false };
         }
     }
-
-    public override async Task<CommandResponse> AddTicketToSprint(AddTicketToSprintCommandProto request,
-        ServerCallContext context)
-    {
-        Console.WriteLine($"[AddTicketToSprint] SprintID: {request.SprintId}, TicketID: {request.TicketId}");
-
-        try
-        {
-            await sprintsNotificationService.SendNotificationAsync(new SprintNotification
-            {
-                TicketAddedToSprint = new TicketAddedToSprintNotification
-                {
-                    SprintId = request.SprintId,
-                    TicketId = request.TicketId
-                }
-            });
-
-            return new CommandResponse { Success = true };
-        }
-        catch (Exception ex)
-        {
-            Console.Error.WriteLine($"[Error] AddTicketToSprint failed: {ex.Message}");
-            return new CommandResponse { Success = false };
-        }
-    }
-
+    
     public override async Task<CommandResponse> CreateSprint(CreateSprintCommandProto request,
         ServerCallContext context)
     {

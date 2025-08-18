@@ -16,20 +16,22 @@ public class TagCommandsService(
     public async Task Update(UpdateTagCommand command)
     {
         await tagEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
-        var noteNotification = command.ToNotification();
-        await tracer.Tag.Update.EventPersisted(GetType(), command.TraceId, noteNotification.TagUpdated);
 
-        await tracer.Tag.Update.SendingNotification(GetType(), command.TraceId, noteNotification.TagUpdated);
-        await tagNotificationService.SendNotificationAsync(command.ToNotification());
+        var notification = command.ToNotification();
+        await tracer.Tag.Update.EventPersisted(GetType(), command.TraceId, notification);
+
+        await tracer.Tag.Update.SendingNotification(GetType(), command.TraceId, notification);
+        await tagNotificationService.SendNotificationAsync(notification);
     }
 
     public async Task Create(CreateTagCommand command)
     {
         await tagEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
-        var noteNotification = command.ToNotification();
-        await tracer.Tag.Create.EventPersisted(GetType(), command.TraceId, noteNotification.TagCreated);
+        
+        var notification = command.ToNotification();
+        await tracer.Tag.Create.EventPersisted(GetType(), command.TraceId, notification.TagCreated);
 
-        await tracer.Tag.Create.SendingNotification(GetType(), command.TraceId, noteNotification.TagCreated);
+        await tracer.Tag.Create.SendingNotification(GetType(), command.TraceId, notification.TagCreated);
         await tagNotificationService.SendNotificationAsync(command.ToNotification());
     }
 }

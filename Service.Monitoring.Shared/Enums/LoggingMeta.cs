@@ -15,5 +15,6 @@ public enum LoggingMeta
     EventPersisted,
     SendingNotification,
     NoEntitySelected,
-    ActionAborted
+    ActionAborted,
+    SprintIdAddedToTicket,
 }

@@ -48,6 +48,62 @@ public class TicketAddedToSprintCollector(ITracingDataSender sender) : ITicketAd
             DateTimeOffset.Now));
     }
 
+    public async Task TicketNotFound(Type originClassType, Guid traceId)
+    {
+        var log = $"Ticket with id {traceId} not found";
+
+        await sender.Send(new ServiceTraceDataCommand(
+            SortingType.Sprint,
+            UseCaseMeta.TicketAddedToSprint,
+            LoggingMeta.AggregateNotFound,
+            originClassType,
+            traceId,
+            log,
+            DateTimeOffset.Now));
+    }
+
+    public async Task NoActiveSprint(Type originClassType, Guid traceId)
+    {
+        var log = $"No active sprint found";
+
+        await sender.Send(new ServiceTraceDataCommand(
+            SortingType.Sprint,
+            UseCaseMeta.TicketAddedToSprint,
+            LoggingMeta.AggregateNotFound,
+            originClassType,
+            traceId,
+            log,
+            DateTimeOffset.Now));
+    }
+
+    public async Task AddedSprintIdToTicket(Type originClassType, Guid traceId, Guid activeSprintSprintId)
+    {
+        var log = $"Added sprint id {activeSprintSprintId} to ticket";
+
+        await sender.Send(new ServiceTraceDataCommand(
+            SortingType.Sprint,
+            UseCaseMeta.TicketAddedToSprint,
+            LoggingMeta.SprintIdAddedToTicket,
+            originClassType,
+            traceId,
+            log,
+            DateTimeOffset.Now));
+    }
+
+    public async Task TicketIsAlreadyInSprint(Type originClassType, Guid traceId)
+    {
+        var log = $"Ticket was already added to sprint";
+
+        await sender.Send(new ServiceTraceDataCommand(
+            SortingType.Sprint,
+            UseCaseMeta.TicketAddedToSprint,
+            LoggingMeta.ActionAborted,
+            originClassType,
+            traceId,
+            log,
+            DateTimeOffset.Now));
+    }
+
     private static string GetName(object @object)
     {
         var commandType = @object.GetType();

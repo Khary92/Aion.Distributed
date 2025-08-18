@@ -7,7 +7,6 @@ import "DTO/trace_data.proto";
 
 service SprintCommandProtoService {
   rpc AddTicketToActiveSprint (AddTicketToActiveSprintCommandProto) returns (CommandResponse);
-  rpc AddTicketToSprint (AddTicketToSprintCommandProto) returns (CommandResponse);
   rpc CreateSprint (CreateSprintCommandProto) returns (CommandResponse);
   rpc SetSprintActiveStatus (SetSprintActiveStatusCommandProto) returns (CommandResponse);
   rpc UpdateSprintData (UpdateSprintDataCommandProto) returns (CommandResponse);
@@ -16,12 +15,6 @@ service SprintCommandProtoService {
 message AddTicketToActiveSprintCommandProto {
   string ticketId = 1;
   TraceDataProto traceData = 2;
-}
-
-message AddTicketToSprintCommandProto {
-  string sprintId = 1;
-  string ticketId = 2;
-  TraceDataProto traceData = 3;
 }
 
 message CreateSprintCommandProto {

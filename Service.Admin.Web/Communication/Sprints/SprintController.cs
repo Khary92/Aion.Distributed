@@ -41,9 +41,9 @@ public class SprintController(ISharedCommandSender commandSender, ITraceCollecto
             return;
         }
 
-        var command = new WebSetSprintActiveStatusCommand(SelectedSprint.SprintId, true, Guid.NewGuid());
+        var command = new WebSetSprintActiveStatusCommand(SelectedSprint.SprintId, true, traceId);
 
-        await tracer.Sprint.ActiveStatus.SendingCommand(GetType(), SelectedSprint.SprintId, command);
+        await tracer.Sprint.ActiveStatus.SendingCommand(GetType(), traceId, command);
         await commandSender.Send(command.ToProto());
     }
 

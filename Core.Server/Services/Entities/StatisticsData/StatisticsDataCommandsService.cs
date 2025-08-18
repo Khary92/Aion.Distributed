@@ -17,25 +17,23 @@ public class StatisticsDataCommandsService(
     public async Task ChangeTagSelection(ChangeTagSelectionCommand command)
     {
         await statisticsDataEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
-        var statistics = command.ToNotification();
-        await tracer.Statistics.ChangeTagSelection.EventPersisted(GetType(), command.TraceId,
-            statistics.ChangeTagSelection);
 
-        await tracer.Statistics.ChangeTagSelection.SendingNotification(GetType(), command.TraceId,
-            statistics.ChangeTagSelection);
-        await statisticsDataNotificationService.SendNotificationAsync(command.ToNotification());
+        var notification = command.ToNotification();
+        await tracer.Statistics.ChangeTagSelection.EventPersisted(GetType(), command.TraceId, notification);
+
+        await tracer.Statistics.ChangeTagSelection.SendingNotification(GetType(), command.TraceId, notification);
+        await statisticsDataNotificationService.SendNotificationAsync(notification);
     }
 
     public async Task ChangeProductivity(ChangeProductivityCommand command)
     {
         await statisticsDataEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
-        var statistics = command.ToNotification();
-        await tracer.Statistics.ChangeProductivity.EventPersisted(GetType(), command.TraceId,
-            statistics.ChangeProductivity);
 
-        await tracer.Statistics.ChangeProductivity.SendingNotification(GetType(), command.TraceId,
-            statistics.ChangeProductivity);
-        await statisticsDataNotificationService.SendNotificationAsync(command.ToNotification());
+        var notification = command.ToNotification();
+        await tracer.Statistics.ChangeProductivity.EventPersisted(GetType(), command.TraceId, notification);
+
+        await tracer.Statistics.ChangeProductivity.SendingNotification(GetType(), command.TraceId, notification);
+        await statisticsDataNotificationService.SendNotificationAsync(notification);
     }
 
     public async Task Create(CreateStatisticsDataCommand command)

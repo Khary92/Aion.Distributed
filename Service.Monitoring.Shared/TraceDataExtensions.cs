@@ -17,7 +17,7 @@ public static class TraceDataExtensions
             OriginClassType = command.OriginClassType.FullName,
             TraceId = command.TraceId.ToString(),
             Log = command.Log,
-            TimeStamp = Timestamp.FromDateTimeOffset(command.TimeStamp)
+            TimeStamp = Timestamp.FromDateTimeOffset(command.TimeStamp),
         };
     }
 

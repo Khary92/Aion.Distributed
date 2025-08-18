@@ -25,12 +25,6 @@ public class SprintCommandSender : ISprintCommandSender
         return response.Success;
     }
 
-    public async Task<bool> Send(AddTicketToSprintCommandProto command)
-    {
-        var response = await _client.AddTicketToSprintAsync(command);
-        return response.Success;
-    }
-
     public async Task<bool> Send(SetSprintActiveStatusCommandProto command)
     {
         var response = await _client.SetSprintActiveStatusAsync(command);

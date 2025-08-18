@@ -17,45 +17,44 @@ public class SprintCommandsService(
     public async Task Create(CreateSprintCommand command)
     {
         await sprintEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
-        var sprintNotification = command.ToNotification();
-        await tracer.Sprint.Create.EventPersisted(GetType(), command.TraceId, sprintNotification.SprintCreated);
 
-        await tracer.Sprint.Create.SendingNotification(GetType(), command.TraceId, sprintNotification.SprintCreated);
-        await sprintsNotificationService.SendNotificationAsync(command.ToNotification());
+        var notification = command.ToNotification();
+        await tracer.Sprint.Create.EventPersisted(GetType(), command.TraceId, notification);
+
+        await tracer.Sprint.Create.SendingNotification(GetType(), command.TraceId, notification);
+        await sprintsNotificationService.SendNotificationAsync(notification);
     }
 
     public async Task UpdateSprintData(UpdateSprintDataCommand command)
     {
         await sprintEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
-        var sprintNotification = command.ToNotification();
-        await tracer.Sprint.Update.EventPersisted(GetType(), command.TraceId, sprintNotification.SprintDataUpdated);
 
-        await tracer.Sprint.Update.SendingNotification(GetType(), command.TraceId,
-            sprintNotification.SprintDataUpdated);
-        await sprintsNotificationService.SendNotificationAsync(command.ToNotification());
+        var notification = command.ToNotification();
+        await tracer.Sprint.Update.EventPersisted(GetType(), command.TraceId, notification);
+
+        await tracer.Sprint.Update.SendingNotification(GetType(), command.TraceId, notification);
+        await sprintsNotificationService.SendNotificationAsync(notification);
     }
 
     public async Task SetSprintActiveStatus(SetSprintActiveStatusCommand command)
     {
         await sprintEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
-        var sprintNotification = command.ToNotification();
-        await tracer.Sprint.ActiveStatus.EventPersisted(GetType(), command.TraceId,
-            sprintNotification.SprintActiveStatusSet);
 
-        await tracer.Sprint.ActiveStatus.SendingNotification(GetType(), command.TraceId,
-            sprintNotification.SprintActiveStatusSet);
-        await sprintsNotificationService.SendNotificationAsync(command.ToNotification());
+        var notification = command.ToNotification();
+        await tracer.Sprint.ActiveStatus.EventPersisted(GetType(), command.TraceId, notification);
+
+        await tracer.Sprint.ActiveStatus.SendingNotification(GetType(), command.TraceId, notification);
+        await sprintsNotificationService.SendNotificationAsync(notification);
     }
 
     public async Task AddTicketToSprint(AddTicketToSprintCommand command)
     {
         await sprintEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
-        var sprintNotification = command.ToNotification();
-        await tracer.Sprint.AddTicketToSprint.EventPersisted(GetType(), command.TraceId,
-            sprintNotification.TicketAddedToActiveSprint);
 
-        await tracer.Sprint.AddTicketToSprint.SendingNotification(GetType(), command.TraceId,
-            sprintNotification.TicketAddedToActiveSprint);
-        await sprintsNotificationService.SendNotificationAsync(command.ToNotification());
+        var notification = command.ToNotification();
+        await tracer.Sprint.AddTicketToSprint.EventPersisted(GetType(), command.TraceId, notification);
+
+        await tracer.Sprint.AddTicketToSprint.SendingNotification(GetType(), command.TraceId, notification);
+        await sprintsNotificationService.SendNotificationAsync(notification);
     }
 }

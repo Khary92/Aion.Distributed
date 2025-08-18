@@ -32,14 +32,7 @@ public static class SprintProtoExtensions
             }
         };
     }
-
-    public static AddTicketToSprintCommand ToCommand(
-        this AddTicketToSprintCommandProto proto)
-    {
-        return new AddTicketToSprintCommand(Guid.Parse(proto.SprintId), Guid.Parse(proto.TicketId),
-            Guid.Parse(proto.TraceData.TraceId));
-    }
-
+    
     public static SprintNotification ToNotification(this AddTicketToSprintCommand command)
     {
         return new SprintNotification

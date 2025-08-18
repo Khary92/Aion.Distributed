@@ -1,5 +1,6 @@
 ﻿using Core.Server.Communication.Endpoints.Sprint.Handlers;
 using Core.Server.Services.Entities.Sprints;
+using Core.Server.Tracing.Tracing.Tracers;
 using Grpc.Core;
 using Proto.Command.Sprints;
 
@@ -8,28 +9,20 @@ namespace Core.Server.Communication.Endpoints.Sprint;
 public class SprintCommandReceiver(
     ISprintCommandsService sprintsCommandsService,
     AddTicketToActiveSprintCommandHandler addTicketToActiveSprintCommandHandler,
-    AddTicketToSprintCommandHandler addTicketToSprintCommandHandler,
-    SetSprintActiveStatusCommandHandler setSprintActiveStatusCommandHandler)
+    SetSprintActiveStatusCommandHandler setSprintActiveStatusCommandHandler, 
+    ITraceCollector tracer)
     : SprintCommandProtoService.SprintCommandProtoServiceBase
 {
     public override async Task<CommandResponse> AddTicketToActiveSprint(AddTicketToActiveSprintCommandProto request,
         ServerCallContext context)
     {
-        Console.WriteLine($"[AddTicketToActiveSprint] TicketID: {request.TicketId}");
+        var command = request.ToCommand();
+        await tracer.Sprint.AddTicketToSprint.CommandReceived(GetType(), command.TraceId, command);
 
-        await addTicketToActiveSprintCommandHandler.Handle(request.ToCommand());
+        await addTicketToActiveSprintCommandHandler.Handle(command);
         return new CommandResponse { Success = true };
     }
-
-    public override async Task<CommandResponse> AddTicketToSprint(AddTicketToSprintCommandProto request,
-        ServerCallContext context)
-    {
-        Console.WriteLine($"[AddTicketToSprint] SprintID: {request.SprintId}, TicketID: {request.TicketId}");
-
-        await addTicketToSprintCommandHandler.Handle(request.ToCommand());
-        return new CommandResponse { Success = true };
-    }
-
+    
     public override async Task<CommandResponse> CreateSprint(CreateSprintCommandProto request,
         ServerCallContext context)
     {

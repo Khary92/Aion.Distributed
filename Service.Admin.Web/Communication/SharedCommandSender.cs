@@ -50,13 +50,7 @@ public class SharedCommandSender(
         return await commandSenderPolicy.Policy.ExecuteAsync(() =>
             sprintCommandSender.Send(command));
     }
-
-    public async Task<bool> Send(AddTicketToSprintCommandProto command)
-    {
-        return await commandSenderPolicy.Policy.ExecuteAsync(() =>
-            sprintCommandSender.Send(command));
-    }
-
+    
     public async Task<bool> Send(SetSprintActiveStatusCommandProto command)
     {
         return await commandSenderPolicy.Policy.ExecuteAsync(() =>

@@ -16,36 +16,39 @@ public class TimerSettingsCommandsService(
     public async Task ChangeSnapshotInterval(ChangeSnapshotSaveIntervalCommand command)
     {
         await timerSettingsEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
-        var ticketNotification = command.ToNotification();
+        
+        var notification = command.ToNotification();
         await tracer.TimerSettings.ChangeSnapshotInterval.EventPersisted(GetType(), command.TraceId,
-            ticketNotification.SnapshotSaveIntervalChanged);
+            notification.SnapshotSaveIntervalChanged);
 
         await tracer.TimerSettings.ChangeSnapshotInterval.SendingNotification(GetType(), command.TraceId,
-            ticketNotification.SnapshotSaveIntervalChanged);
+            notification.SnapshotSaveIntervalChanged);
         await notificationService.SendNotificationAsync(command.ToNotification());
     }
 
     public async Task ChangeDocumentationInterval(ChangeDocuTimerSaveIntervalCommand command)
     {
         await timerSettingsEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
-        var ticketNotification = command.ToNotification();
+        
+        var notification = command.ToNotification();
         await tracer.TimerSettings.Create.EventPersisted(GetType(), command.TraceId,
-            ticketNotification.DocuTimerSaveIntervalChanged);
+            notification.DocuTimerSaveIntervalChanged);
 
         await tracer.TimerSettings.Create.SendingNotification(GetType(), command.TraceId,
-            ticketNotification.DocuTimerSaveIntervalChanged);
+            notification.DocuTimerSaveIntervalChanged);
         await notificationService.SendNotificationAsync(command.ToNotification());
     }
 
     public async Task Create(CreateTimerSettingsCommand command)
     {
         await timerSettingsEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
-        var ticketNotification = command.ToNotification();
+        
+        var notification = command.ToNotification();
         await tracer.TimerSettings.Create.EventPersisted(GetType(), command.TraceId,
-            ticketNotification.TimerSettingsCreated);
+            notification.TimerSettingsCreated);
 
         await tracer.TimerSettings.Create.SendingNotification(GetType(), command.TraceId,
-            ticketNotification.TimerSettingsCreated);
+            notification.TimerSettingsCreated);
         await notificationService.SendNotificationAsync(command.ToNotification());
     }
 }
