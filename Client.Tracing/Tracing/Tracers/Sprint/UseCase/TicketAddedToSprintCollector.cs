@@ -6,33 +6,6 @@ namespace Client.Tracing.Tracing.Tracers.Sprint.UseCase;
 
 public class TicketAddedToSprintCollector(ITracingDataSender sender) : ITicketAddedToSprintCollector
 {
-    public async Task StartUseCase(Type originClassType, Guid traceId, Dictionary<string, string> attributes)
-    {
-        var log = $"Add ticket to sprint requested for {attributes}";
-
-        await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Sprint,
-            UseCaseMeta.TicketAddedToSprint,
-            LoggingMeta.ActionRequested,
-            originClassType,
-            traceId,
-            log,
-            DateTimeOffset.Now));
-    }
-
-    public async Task CommandSent(Type originClassType, Guid traceId, object command)
-    {
-        var log = $"Sent {command}";
-        await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Sprint,
-            UseCaseMeta.TicketAddedToSprint,
-            LoggingMeta.SendingCommand,
-            originClassType,
-            traceId,
-            log,
-            DateTimeOffset.Now));
-    }
-
     public async Task NotificationReceived(Type originClassType, Guid traceId, object notification)
     {
         var log = $"Received {notification}";

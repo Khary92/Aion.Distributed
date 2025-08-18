@@ -6,33 +6,6 @@ namespace Client.Tracing.Tracing.Tracers.Tag.UseCase;
 
 public class UpdateTagTraceCollector(ITracingDataSender sender) : IUpdateTagTraceCollector
 {
-    public async Task StartUseCase(Type originClassType, Guid traceId, string attributes)
-    {
-        var log = $"Change tag data requested for {attributes}";
-
-        await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Tag,
-            UseCaseMeta.UpdateTag,
-            LoggingMeta.ActionRequested,
-            originClassType,
-            traceId,
-            log,
-            DateTimeOffset.Now));
-    }
-
-    public async Task SendingCommand(Type originClassType, Guid traceId, object command)
-    {
-        var log = $"Sent {command}";
-        await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Tag,
-            UseCaseMeta.UpdateTag,
-            LoggingMeta.SendingCommand,
-            originClassType,
-            traceId,
-            log,
-            DateTimeOffset.Now));
-    }
-
     public async Task NotificationReceived(Type originClassType, Guid traceId, object notification)
     {
         var log = $"Received {notification}";

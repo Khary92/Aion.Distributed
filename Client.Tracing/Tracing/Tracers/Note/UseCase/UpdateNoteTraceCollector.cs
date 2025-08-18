@@ -6,32 +6,6 @@ namespace Client.Tracing.Tracing.Tracers.Note.UseCase;
 
 public class UpdateNoteTraceCollector(ITracingDataSender sender) : IUpdateNoteTraceCollector
 {
-    public async Task StartUseCase(Type originClassType, Guid traceId)
-    {
-        var log = "Update Note requested";
-        await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Note,
-            UseCaseMeta.UpdateNote,
-            LoggingMeta.ActionRequested,
-            originClassType,
-            traceId,
-            log,
-            DateTimeOffset.Now));
-    }
-
-    public async Task SendingCommand(Type originClassType, Guid traceId, object command)
-    {
-        var log = $"Sent {command}";
-        await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Note,
-            UseCaseMeta.UpdateNote,
-            LoggingMeta.SendingCommand,
-            originClassType,
-            traceId,
-            log,
-            DateTimeOffset.Now));
-    }
-
     public async Task NotificationReceived(Type originClassType, Guid traceId, object notification)
     {
         var log = $"Received {notification}";

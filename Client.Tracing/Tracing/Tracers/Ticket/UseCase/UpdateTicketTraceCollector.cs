@@ -6,34 +6,6 @@ namespace Client.Tracing.Tracing.Tracers.Ticket.UseCase;
 
 public class UpdateTicketTraceCollector(ITracingDataSender sender) : IUpdateTicketTraceCollector
 {
-    public async Task StartUseCase(Type originClassType, Guid traceId, string attributes)
-    {
-        var log = $"Update ticket requested for {attributes}";
-
-        await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Ticket,
-            UseCaseMeta.UpdateTicket,
-            LoggingMeta.ActionRequested,
-            originClassType,
-            traceId,
-            log,
-            DateTimeOffset.Now));
-    }
-
-    public async Task CommandSent(Type originClassType, Guid traceId, object command)
-    {
-        var log = $"Sent {command}";
-
-        await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Ticket,
-            UseCaseMeta.UpdateTicket,
-            LoggingMeta.SendingCommand,
-            originClassType,
-            traceId,
-            log,
-            DateTimeOffset.Now));
-    }
-
     public async Task NotificationReceived(Type originClassType, Guid traceId, object notification)
     {
         var log = $"Received {notification}";

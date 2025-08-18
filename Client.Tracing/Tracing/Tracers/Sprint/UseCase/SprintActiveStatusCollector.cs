@@ -5,34 +5,7 @@ using Service.Monitoring.Shared.Tracing;
 namespace Client.Tracing.Tracing.Tracers.Sprint.UseCase;
 
 public class SprintActiveStatusCollector(ITracingDataSender sender) : ISprintActiveStatusCollector
-{
-    public async Task StartUseCase(Type originClassType, Guid traceId, string attributes)
-    {
-        var log = $"Change active status requested for {attributes}";
-
-        await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Sprint,
-            UseCaseMeta.ChangeSprintActiveStatus,
-            LoggingMeta.ActionRequested,
-            originClassType,
-            traceId,
-            log,
-            DateTimeOffset.Now));
-    }
-
-    public async Task CommandSent(Type originClassType, Guid traceId, object command)
-    {
-        var log = $"Sent {command}";
-        await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Sprint,
-            UseCaseMeta.ChangeSprintActiveStatus,
-            LoggingMeta.SendingCommand,
-            originClassType,
-            traceId,
-            log,
-            DateTimeOffset.Now));
-    }
-
+{ 
     public async Task NotificationReceived(Type originClassType, Guid traceId, object notification)
     {
         var log = $"Received {notification}";

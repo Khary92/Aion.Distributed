@@ -6,40 +6,13 @@ namespace Client.Tracing.Tracing.Tracers.Sprint.UseCase;
 
 public class CreateSprintTraceCollector(ITracingDataSender sender) : ICreateSprintTraceCollector
 {
-    public async Task StartUseCase(Type originClassType, Guid traceId, string attributes)
+    public async Task NotificationReceived(Type originClassType, Guid traceId, object notification)
     {
-        var log = $"Create Sprint requested for {attributes}";
-
+        var log = $"Notification received {notification}";
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.Sprint,
             UseCaseMeta.CreateSprint,
-            LoggingMeta.ActionRequested,
-            originClassType,
-            traceId,
-            log,
-            DateTimeOffset.Now));
-    }
-
-    public async Task CommandSent(Type originClassType, Guid traceId, object command)
-    {
-        var log = $"Sent {command}";
-        await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Sprint,
-            UseCaseMeta.CreateSprint,
-            LoggingMeta.SendingCommand,
-            originClassType,
-            traceId,
-            log,
-            DateTimeOffset.Now));
-    }
-
-    public async Task AggregateReceived(Type originClassType, Guid traceId, string attributes)
-    {
-        var log = $"Received aggregate {attributes}";
-        await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Sprint,
-            UseCaseMeta.CreateSprint,
-            LoggingMeta.AggregateReceived,
+            LoggingMeta.NotificationReceived,
             originClassType,
             traceId,
             log,

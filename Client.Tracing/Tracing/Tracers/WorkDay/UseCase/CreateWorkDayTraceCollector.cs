@@ -34,14 +34,14 @@ public class CreateWorkDayTraceCollector(ITracingDataSender sender) : ICreateWor
             DateTimeOffset.Now));
     }
 
-    public async Task AggregateReceived(Type originClassType, Guid traceId, string attributes)
+    public async Task NotificationReceived(Type originClassType, Guid traceId, object notification)
     {
-        var log = $"Received aggregate {attributes}";
+        var log = $"Received {GetName(notification)}:{notification}";
 
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.WorkDay,
             UseCaseMeta.CreateWorkDay,
-            LoggingMeta.AggregateReceived,
+            LoggingMeta.NotificationReceived,
             originClassType,
             traceId,
             log,
@@ -60,5 +60,11 @@ public class CreateWorkDayTraceCollector(ITracingDataSender sender) : ICreateWor
             traceId,
             log,
             DateTimeOffset.Now));
+    }
+    
+    private static string GetName(object @object)
+    {
+        var commandType = @object.GetType();
+        return commandType.Name;
     }
 }
