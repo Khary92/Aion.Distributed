@@ -51,7 +51,7 @@ public class NoteTypeNotificationReceiver(INoteTypeStateService noteTypeStateSer
                             await tracer.NoteType.ChangeColor.NotificationReceived(GetType(),
                                 webNoteTypeColorChangedNotification.TraceId, notification);
 
-                            noteTypeStateService.Apply(webNoteTypeColorChangedNotification);
+                            await noteTypeStateService.Apply(webNoteTypeColorChangedNotification);
                             break;
                         }
                         case NoteTypeNotification.NotificationOneofCase.NoteTypeNameChanged:
@@ -61,7 +61,7 @@ public class NoteTypeNotificationReceiver(INoteTypeStateService noteTypeStateSer
                             await tracer.NoteType.ChangeName.NotificationReceived(GetType(),
                                 webNoteTypeNameChangedNotification.TraceId, notification);
 
-                            noteTypeStateService.Apply(webNoteTypeNameChangedNotification);
+                            await noteTypeStateService.Apply(webNoteTypeNameChangedNotification);
                             break;
                         }
                     }

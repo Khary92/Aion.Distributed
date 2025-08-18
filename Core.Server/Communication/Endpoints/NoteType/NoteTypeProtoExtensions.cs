@@ -68,7 +68,11 @@ public static class NoteTypeProtoExtensions
             NoteTypeColorChanged = new NoteTypeColorChangedNotification
             {
                 NoteTypeId = proto.NoteTypeId.ToString(),
-                Color = proto.Color
+                Color = proto.Color,
+                TraceData = new TraceDataProto
+                {
+                    TraceId = proto.TraceId.ToString()
+                }
             }
         };
     }

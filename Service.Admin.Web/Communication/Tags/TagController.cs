@@ -34,7 +34,7 @@ public class TagController(ITraceCollector tracer, ISharedCommandSender commandS
 
         var updateTagCommand = new WebUpdateTagCommand(SelectedTag.TagId, InputTagName, traceId);
 
-        await tracer.Tag.Update.SendingCommand(GetType(), SelectedTag.TagId, updateTagCommand);
+        await tracer.Tag.Update.SendingCommand(GetType(), traceId, updateTagCommand);
         await commandSender.Send(updateTagCommand.ToProto());
     }
 

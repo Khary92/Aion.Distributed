@@ -38,12 +38,13 @@ public class NoteTypeCommandsService(
     public async Task ChangeColor(ChangeNoteTypeColorCommand command)
     {
         await noteTypeEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
-        var noteTypeNotification = command.ToNotification();
+        var notification = command.ToNotification();
+        
         await tracer.NoteType.ChangeColor.EventPersisted(GetType(), command.TraceId,
-            noteTypeNotification.NoteTypeColorChanged);
+            notification.NoteTypeColorChanged);
 
         await tracer.NoteType.ChangeColor.SendingNotification(GetType(), command.TraceId,
-            noteTypeNotification.NoteTypeColorChanged);
+            notification.NoteTypeColorChanged);
         await noteTypeNotificationService.SendNotificationAsync(command.ToNotification());
     }
 }
