@@ -6,6 +6,32 @@ namespace Client.Tracing.Tracing.Tracers.Note.UseCase;
 
 public class CreateNoteTraceCollector(ITracingDataSender sender) : ICreateNoteTraceCollector
 {
+    public async Task StartUseCase(Type originClassType, Guid traceId)
+    {
+        var log = $"Create note requested";
+        await sender.Send(new ServiceTraceDataCommand(
+            SortingType.Note,
+            UseCaseMeta.CreateNote,
+            LoggingMeta.ActionRequested,
+            originClassType,
+            traceId,
+            log,
+            DateTimeOffset.Now));
+    }
+
+    public async Task SendingCommand(Type originClassType, Guid traceId, object command)
+    {
+        var log = $"Sending command {command}";
+        await sender.Send(new ServiceTraceDataCommand(
+            SortingType.Note,
+            UseCaseMeta.CreateNote,
+            LoggingMeta.NotificationReceived,
+            originClassType,
+            traceId,
+            log,
+            DateTimeOffset.Now));
+    }
+
     public async Task NotificationReceived(Type originClassType, Guid traceId, object notification)
     {
         var log = $"Received {notification}";

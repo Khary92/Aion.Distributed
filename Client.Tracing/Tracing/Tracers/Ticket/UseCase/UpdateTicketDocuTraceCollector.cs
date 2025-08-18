@@ -6,6 +6,32 @@ namespace Client.Tracing.Tracing.Tracers.Ticket.UseCase;
 
 public class UpdateTicketDocuTraceCollector(ITracingDataSender sender) : IUpdateTicketDocuTraceCollector
 {
+    public async Task StartUseCase(Type originClassType, Guid traceId)
+    {
+        var log = $"Update ticket documentation requested";
+        await sender.Send(new ServiceTraceDataCommand(
+            SortingType.Ticket,
+            UseCaseMeta.UpdateTicketDocumentation,
+            LoggingMeta.ActionRequested,
+            originClassType,
+            traceId,
+            log,
+            DateTimeOffset.Now));
+    }
+
+    public async Task SendingCommand(Type originClassType, Guid traceId, object command)
+    {
+        var log = $"Sending command {command}";
+        await sender.Send(new ServiceTraceDataCommand(
+            SortingType.Ticket,
+            UseCaseMeta.UpdateTicketDocumentation,
+            LoggingMeta.SendingCommand,
+            originClassType,
+            traceId,
+            log,
+            DateTimeOffset.Now));
+    }
+
     public async Task NotificationReceived(Type originClassType, Guid traceId, object notification)
     {
         var log = $"Received {GetName(notification)}:{notification}";
@@ -19,7 +45,7 @@ public class UpdateTicketDocuTraceCollector(ITracingDataSender sender) : IUpdate
             log,
             DateTimeOffset.Now));
     }
-    
+
     public async Task AggregateAdded(Type originClassType, Guid traceId)
     {
         var log = $"Added aggregate with id:{traceId}";

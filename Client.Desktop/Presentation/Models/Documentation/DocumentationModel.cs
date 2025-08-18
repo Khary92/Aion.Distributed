@@ -130,8 +130,6 @@ public class DocumentationModel(
         {
             try
             {
-                await tracer.Note.Create.AggregateReceived(GetType(), m.Note.NoteTypeId, m.Note.AsTraceAttributes());
-
                 var noteViewModel = await noteViewFactory.Create(m.Note);
 
                 AllNotes.Add(noteViewModel);
@@ -179,9 +177,6 @@ public class DocumentationModel(
     {
         messenger.Register<NewNoteTypeMessage>(this, async void (_, message) =>
         {
-            await tracer.NoteType.Create.AggregateReceived(GetType(), message.TraceId,
-                message.NoteType.AsTraceAttributes());
-
             var typeCheckBoxViewModel = typeCheckBoxViewModelFactory.Create(message.NoteType);
 
             Options.Add(typeCheckBoxViewModel);
@@ -225,7 +220,6 @@ public class DocumentationModel(
     {
         messenger.Register<NewTicketMessage>(this, async void (_, message) =>
         {
-            await tracer.Ticket.Create.AggregateReceived(GetType(), message.TraceId, message.Ticket.AsTraceAttributes());
             AllTickets.Add(message.Ticket);
             await tracer.Ticket.Create.AggregateAdded(GetType(), message.TraceId);
         });

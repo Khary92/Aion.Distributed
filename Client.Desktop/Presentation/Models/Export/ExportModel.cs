@@ -57,8 +57,6 @@ public class ExportModel(
 
         messenger.Register<NewWorkDayMessage>(this, async void (_, m) =>
         {
-            await tracer.WorkDay.Create.AggregateReceived(GetType(), m.WorkDay.WorkDayId,
-                m.WorkDay.AsTraceAttributes());
             WorkDays.Add(m.WorkDay);
             await tracer.WorkDay.Create.AggregateAdded(GetType(), m.WorkDay.WorkDayId);
         });
@@ -73,13 +71,7 @@ public class ExportModel(
 
     private async void RefreshMarkdownViewerHandler(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        try
-        {
-            await GetMarkdownTextAsync();
-        }
-        catch (Exception exception)
-        {
-        }
+        await GetMarkdownTextAsync();
     }
 
     public async Task<string> GetMarkdownTextAsync()

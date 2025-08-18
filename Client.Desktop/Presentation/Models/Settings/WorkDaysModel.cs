@@ -51,8 +51,6 @@ public class WorkDaysModel(
     {
         messenger.Register<NewWorkDayMessage>(this, async void (_, m) =>
         {
-            await tracer.WorkDay.Create.AggregateReceived(GetType(), m.WorkDay.WorkDayId,
-                m.WorkDay.AsTraceAttributes());
             WorkDays.Add(m.WorkDay);
             await tracer.WorkDay.Create.AggregateAdded(GetType(), m.WorkDay.WorkDayId);
         });
