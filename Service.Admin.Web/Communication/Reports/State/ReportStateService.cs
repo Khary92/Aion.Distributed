@@ -17,13 +17,7 @@ public class ReportStateService(SortingType sortingType) : IReportStateService
     }
 
     public SortingType SortingType => sortingType;
-
-    public void ClearReports()
-    {
-        _reports.Clear();
-        NotifyStateChanged();
-    }
-
+    
     private void NotifyStateChanged()
     {
         OnStateChanged?.Invoke();

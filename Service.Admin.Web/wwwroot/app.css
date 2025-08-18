@@ -189,6 +189,43 @@ h1, h2, h3, h4, h5, h6 {
     color: var(--foreground-color);
 }
 
+.form-select {
+    font-family: var(--font-family-regular);
+    color: var(--foreground-color) !important;
+    border: var(--border-thickness) solid var(--border-color);
+    background-color: var(--background-color) !important;
+    padding: var(--general-control-padding);
+    border-radius: var(--corner-radius);
+}
+.form-select:disabled {
+    font-family: var(--font-family-regular);
+    color: var(--foreground-color);
+    border: var(--border-thickness) solid var(--border-color);
+    padding: var(--general-control-padding);
+    border-radius: var(--corner-radius);
+}
+
+select.form-select {
+    border: var(--border-thickness) solid var(--border-color);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: none;
+}
+
+.form-select:focus {
+    border-color: var(--border-color);
+    box-shadow: none;
+    outline: none;
+}
+
+.form-select {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: none;
+    padding-right: 2rem;
+}
+
 .table-active {
     background-color: var(--edit-button-color);
     color: var(--foreground-color);

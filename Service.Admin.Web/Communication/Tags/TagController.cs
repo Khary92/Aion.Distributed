@@ -41,14 +41,11 @@ public class TagController(ITraceCollector tracer, ISharedCommandSender commandS
     private async Task CreateTag()
     {
         var traceId = Guid.NewGuid();
-
-        var createTagDto = new TagWebModel(Guid.NewGuid(), InputTagName, false);
-
         await tracer.Tag.Create.StartUseCase(GetType(), traceId);
-
+        
         var createTagCommand = new WebCreateTagCommand(Guid.NewGuid(), InputTagName, traceId);
 
-        await tracer.Tag.Create.SendingCommand(GetType(), createTagDto.TagId, createTagCommand);
+        await tracer.Tag.Create.SendingCommand(GetType(), traceId, createTagCommand);
         await commandSender.Send(createTagCommand.ToProto());
 
         InputTagName = string.Empty;
