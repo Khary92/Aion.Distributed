@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
+using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using Grpc.Core;
 using Proto.Notifications.Note;
@@ -11,7 +12,8 @@ namespace Client.Desktop.Communication.Notifications.Note;
 
 public class NoteNotificationStream(
     NoteNotificationService.NoteNotificationServiceClient client,
-    IMessenger messenger) : IStreamClient
+    IMessenger messenger,
+    ITraceCollector tracer) : IStreamClient
 {
     public async Task StartListening(CancellationToken cancellationToken)
     {
@@ -26,17 +28,27 @@ public class NoteNotificationStream(
                     {
                         case NoteNotification.NotificationOneofCase.NoteCreated:
                         {
+                            var notificationNoteCreated = notification.NoteCreated;
+
+                            await tracer.Note.Create.NotificationReceived(GetType(),
+                                Guid.Parse(notificationNoteCreated.NoteId), notificationNoteCreated);
+
                             Dispatcher.UIThread.Post(() =>
                             {
-                                messenger.Send(notification.NoteCreated.ToNewEntityMessage());
+                                messenger.Send(notificationNoteCreated.ToNewEntityMessage());
                             });
                             break;
                         }
                         case NoteNotification.NotificationOneofCase.NoteUpdated:
                         {
+                            var notificationNoteUpdated = notification.NoteUpdated;
+
+                            await tracer.Note.Create.NotificationReceived(GetType(),
+                                Guid.Parse(notificationNoteUpdated.NoteId), notificationNoteUpdated);
+
                             Dispatcher.UIThread.Post(() =>
                             {
-                                messenger.Send(notification.NoteUpdated.ToClientNotification());
+                                messenger.Send(notificationNoteUpdated.ToClientNotification());
                             });
                             break;
                         }

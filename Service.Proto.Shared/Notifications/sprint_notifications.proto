@@ -10,7 +10,6 @@ service NotificationService {
   rpc SendSprintCreated(SprintCreatedNotification) returns (NotificationResponse);
   rpc SendSprintDataUpdated(SprintDataUpdatedNotification) returns (NotificationResponse);
   rpc SendTicketAddedToActiveSprint(TicketAddedToActiveSprintNotification) returns (NotificationResponse);
-  rpc SendTicketAddedToSprint(TicketAddedToSprintNotification) returns (NotificationResponse);
 }
 
 service SprintNotificationService {
@@ -23,7 +22,6 @@ message SprintNotification {
     SprintCreatedNotification sprintCreated = 2;
     SprintDataUpdatedNotification sprintDataUpdated = 3;
     TicketAddedToActiveSprintNotification ticketAddedToActiveSprint = 4;
-    TicketAddedToSprintNotification ticketAddedToSprint = 5;
   }
 }
 
@@ -57,12 +55,6 @@ message SprintDataUpdatedNotification {
 message TicketAddedToActiveSprintNotification {
   string ticketId = 1;
   TraceDataProto traceData = 2;
-}
-
-message TicketAddedToSprintNotification {
-  string sprintId = 1;
-  string ticketId = 2;
-  TraceDataProto traceData = 3;
 }
 
 message NotificationResponse {

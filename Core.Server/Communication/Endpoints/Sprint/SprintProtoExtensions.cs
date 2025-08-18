@@ -33,22 +33,6 @@ public static class SprintProtoExtensions
         };
     }
     
-    public static SprintNotification ToNotification(this AddTicketToSprintCommand command)
-    {
-        return new SprintNotification
-        {
-            TicketAddedToSprint = new TicketAddedToSprintNotification
-            {
-                TicketId = command.TicketId.ToString(),
-                SprintId = command.SprintId.ToString(),
-                TraceData = new TraceDataProto
-                {
-                    TraceId = command.TraceId.ToString()
-                }
-            }
-        };
-    }
-
     public static CreateSprintCommand ToCommand(
         this CreateSprintCommandProto proto)
     {
@@ -94,6 +78,21 @@ public static class SprintProtoExtensions
             {
                 SprintId = command.SprintId.ToString(),
                 IsActive = command.IsActive,
+                TraceData = new TraceDataProto
+                {
+                    TraceId = command.TraceId.ToString()
+                }
+            }
+        };
+    }
+    
+    public static SprintNotification ToNotification(this AddTicketToSprintCommand command)
+    {
+        return new SprintNotification
+        {
+            TicketAddedToActiveSprint = new TicketAddedToActiveSprintNotification()
+            {
+                TicketId = command.TicketId.ToString(),
                 TraceData = new TraceDataProto
                 {
                     TraceId = command.TraceId.ToString()

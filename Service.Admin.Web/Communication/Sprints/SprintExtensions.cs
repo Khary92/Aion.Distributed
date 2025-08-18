@@ -83,11 +83,4 @@ public static class SprintExtensions
         return new WebAddTicketToActiveSprintNotification(
             Guid.Parse(notification.TicketId), Guid.Parse(notification.TraceData.TraceId));
     }
-
-    public static WebAddTicketToSprintNotification ToNotification(this TicketAddedToSprintNotification notification)
-    {
-        return new WebAddTicketToSprintNotification(Guid.Parse(notification.SprintId),
-            Guid.Parse(notification.TicketId),
-            Guid.Parse(notification.TraceData.TraceId));
-    }
 }

@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
+using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using Grpc.Core;
 using Proto.Notifications.NoteType;
@@ -11,7 +12,8 @@ namespace Client.Desktop.Communication.Notifications.NoteType;
 
 public class NoteTypeNotificationReceiver(
     NoteTypeProtoNotificationService.NoteTypeProtoNotificationServiceClient client,
-    IMessenger messenger) : IStreamClient
+    IMessenger messenger,
+    ITraceCollector tracer) : IStreamClient
 {
     public async Task StartListening(CancellationToken cancellationToken)
     {
@@ -26,25 +28,43 @@ public class NoteTypeNotificationReceiver(
                     {
                         case NoteTypeNotification.NotificationOneofCase.NoteTypeColorChanged:
                         {
+                            var notificationNoteTypeColorChanged = notification.NoteTypeColorChanged;
+
+                            await tracer.NoteType.ChangeColor.NotificationReceived(GetType(),
+                                Guid.Parse(notificationNoteTypeColorChanged.NoteTypeId),
+                                notificationNoteTypeColorChanged);
+
                             Dispatcher.UIThread.Post(() =>
                             {
-                                messenger.Send(notification.NoteTypeColorChanged.ToClientNotification());
+                                messenger.Send(notificationNoteTypeColorChanged.ToClientNotification());
                             });
                             break;
                         }
                         case NoteTypeNotification.NotificationOneofCase.NoteTypeCreated:
                         {
+                            var notificationNoteTypeCreated = notification.NoteTypeCreated;
+
+                            await tracer.NoteType.Create.NotificationReceived(GetType(),
+                                Guid.Parse(notificationNoteTypeCreated.NoteTypeId),
+                                notificationNoteTypeCreated);
+
                             Dispatcher.UIThread.Post(() =>
                             {
-                                messenger.Send(notification.NoteTypeCreated.ToNewEntityMessage());
+                                messenger.Send(notificationNoteTypeCreated.ToNewEntityMessage());
                             });
                             break;
                         }
                         case NoteTypeNotification.NotificationOneofCase.NoteTypeNameChanged:
                         {
+                            var notificationNoteTypeNameChanged = notification.NoteTypeNameChanged;
+
+                            await tracer.NoteType.ChangeName.NotificationReceived(GetType(),
+                                Guid.Parse(notificationNoteTypeNameChanged.NoteTypeId),
+                                notificationNoteTypeNameChanged);
+
                             Dispatcher.UIThread.Post(() =>
                             {
-                                messenger.Send(notification.NoteTypeNameChanged.ToClientNotification());
+                                messenger.Send(notificationNoteTypeNameChanged.ToClientNotification());
                             });
                             break;
                         }

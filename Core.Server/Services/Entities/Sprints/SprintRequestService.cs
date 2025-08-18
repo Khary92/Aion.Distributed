@@ -1,13 +1,10 @@
-using Core.Server.Communication.Records.Commands.Entities.Sprints;
 using Domain.Entities;
 using Domain.Events.Sprints;
 using Domain.Interfaces;
 
 namespace Core.Server.Services.Entities.Sprints;
 
-public class SprintRequestService(
-    IEventStore<SprintEvent> sprintEventsStore,
-    ISprintCommandsService sprintCommandsService) : ISprintRequestsService
+public class SprintRequestService(IEventStore<SprintEvent> sprintEventsStore) : ISprintRequestsService
 {
     public async Task<List<Sprint>> GetAll()
     {
@@ -30,14 +27,5 @@ public class SprintRequestService(
     public async Task<Sprint?> GetActiveSprint()
     {
         return (await GetAll()).FirstOrDefault(s => s.IsActive);
-    }
-
-    public async Task AddToSprint(Guid sprintId, Guid ticketId)
-    {
-        var activeSprint = await GetById(sprintId);
-
-        if (activeSprint == null) return;
-
-        await sprintCommandsService.AddTicketToSprint(new AddTicketToSprintCommand(sprintId, ticketId, Guid.NewGuid()));
     }
 }

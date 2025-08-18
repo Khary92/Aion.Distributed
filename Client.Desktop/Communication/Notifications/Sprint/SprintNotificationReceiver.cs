@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
+using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using Grpc.Core;
 using Proto.Notifications.Sprint;
@@ -11,7 +12,8 @@ namespace Client.Desktop.Communication.Notifications.Sprint;
 
 public class SprintNotificationReceiver(
     SprintNotificationService.SprintNotificationServiceClient client,
-    IMessenger messenger) : IStreamClient
+    IMessenger messenger,
+    ITraceCollector tracer) : IStreamClient
 {
     public async Task StartListening(CancellationToken cancellationToken)
     {
@@ -26,41 +28,53 @@ public class SprintNotificationReceiver(
                     {
                         case SprintNotification.NotificationOneofCase.SprintCreated:
                         {
+                            var notificationSprintCreated = notification.SprintCreated;
+                            await tracer.Sprint.Create.NotificationReceived(GetType(),
+                                Guid.Parse(notificationSprintCreated.SprintId), notificationSprintCreated);
+
                             Dispatcher.UIThread.Post(() =>
                             {
-                                messenger.Send(notification.SprintCreated.ToNewEntityMessage());
+                                messenger.Send(notificationSprintCreated.ToNewEntityMessage());
                             });
                             break;
                         }
                         case SprintNotification.NotificationOneofCase.SprintActiveStatusSet:
                         {
+                            var notificationSprintActiveStatusSet = notification.SprintActiveStatusSet;
+                            await tracer.Sprint.ActiveStatus.NotificationReceived(GetType(),
+                                Guid.Parse(notificationSprintActiveStatusSet.SprintId),
+                                notificationSprintActiveStatusSet);
+
                             Dispatcher.UIThread.Post(() =>
                             {
-                                messenger.Send(notification.SprintActiveStatusSet.ToClientNotification());
+                                messenger.Send(notificationSprintActiveStatusSet.ToClientNotification());
                             });
                             break;
                         }
                         case SprintNotification.NotificationOneofCase.SprintDataUpdated:
                         {
+                            var notificationSprintDataUpdated = notification.SprintDataUpdated;
+                            await tracer.Sprint.Update.NotificationReceived(GetType(),
+                                Guid.Parse(notificationSprintDataUpdated.SprintId),
+                                notificationSprintDataUpdated);
+
                             Dispatcher.UIThread.Post(() =>
                             {
-                                messenger.Send(notification.SprintDataUpdated.ToClientNotification());
+                                messenger.Send(notificationSprintDataUpdated.ToClientNotification());
                             });
                             break;
                         }
                         case SprintNotification.NotificationOneofCase.TicketAddedToActiveSprint:
                         {
+                            var notificationTicketAddedToActiveSprint = notification.TicketAddedToActiveSprint;
+
+                            await tracer.Sprint.AddTicketToSprint.NotificationReceived(GetType(),
+                                Guid.Parse(notificationTicketAddedToActiveSprint.TicketId),
+                                notificationTicketAddedToActiveSprint);
+
                             Dispatcher.UIThread.Post(() =>
                             {
-                                messenger.Send(notification.TicketAddedToActiveSprint.ToClientNotification());
-                            });
-                            break;
-                        }
-                        case SprintNotification.NotificationOneofCase.TicketAddedToSprint:
-                        {
-                            Dispatcher.UIThread.Post(() =>
-                            {
-                                messenger.Send(notification.TicketAddedToSprint.ToClientNotification());
+                                messenger.Send(notificationTicketAddedToActiveSprint.ToClientNotification());
                             });
                             break;
                         }

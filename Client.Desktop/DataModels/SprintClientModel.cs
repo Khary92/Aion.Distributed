@@ -68,13 +68,13 @@ public class SprintClientModel : ReactiveObject
     public bool IsActive
     {
         get => _isActive;
-        set => this.RaiseAndSetIfChanged(ref _isActive, value);
+        private set => this.RaiseAndSetIfChanged(ref _isActive, value);
     }
 
     public List<Guid> TicketIds
     {
         get => _ticketIds;
-        init => this.RaiseAndSetIfChanged(ref _ticketIds, value);
+        private init => this.RaiseAndSetIfChanged(ref _ticketIds, value);
     }
 
     public void Apply(ClientSprintDataUpdatedNotification notification)
@@ -82,14 +82,6 @@ public class SprintClientModel : ReactiveObject
         EndTime = notification.EndTime;
         StartTime = notification.StartTime;
         Name = notification.Name;
-    }
-
-    public void Apply(TicketAddedToSprintNotification notification)
-    {
-        var parsedGuid = Guid.Parse(notification.TicketId);
-
-        if (!TicketIds.Contains(parsedGuid))
-            TicketIds.Add(parsedGuid);
     }
 
     public void Apply(SprintActiveStatusSetNotification notification)

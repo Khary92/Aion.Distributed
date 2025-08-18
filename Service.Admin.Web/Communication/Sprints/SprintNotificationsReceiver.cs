@@ -49,7 +49,7 @@ public class SprintNotificationsReceiver(ISprintStateService sprintStateService,
                             await tracer.Sprint.Update.NotificationReceived(GetType(),
                                 webSprintDataUpdatedNotification.TraceId, notification);
 
-                            sprintStateService.Apply(webSprintDataUpdatedNotification);
+                            await sprintStateService.Apply(webSprintDataUpdatedNotification);
                             break;
 
                         case SprintNotification.NotificationOneofCase.SprintActiveStatusSet:
@@ -59,7 +59,7 @@ public class SprintNotificationsReceiver(ISprintStateService sprintStateService,
                             await tracer.Sprint.ActiveStatus.NotificationReceived(GetType(),
                                 webSetSprintActiveStatusNotification.TraceId, notification);
 
-                            sprintStateService.Apply(webSetSprintActiveStatusNotification);
+                            await sprintStateService.Apply(webSetSprintActiveStatusNotification);
                             break;
 
                         case SprintNotification.NotificationOneofCase.TicketAddedToActiveSprint:
@@ -69,18 +69,7 @@ public class SprintNotificationsReceiver(ISprintStateService sprintStateService,
                             await tracer.Sprint.AddTicketToSprint.NotificationReceived(GetType(),
                                 webTicketAddedToActiveSprintNotification.TraceId, notification);
 
-                            sprintStateService.Apply(notification.TicketAddedToActiveSprint.ToNotification());
-                            break;
-
-                        case SprintNotification.NotificationOneofCase.TicketAddedToSprint:
-                            var ticketAddedToSprintNotification =
-                                notification.TicketAddedToSprint.ToNotification();
-
-                            // Todo There is something wrong here. There should not be the same trace as in the above case!
-                            await tracer.Sprint.AddTicketToSprint.NotificationReceived(GetType(),
-                                ticketAddedToSprintNotification.TraceId, ticketAddedToSprintNotification);
-
-                            sprintStateService.Apply(ticketAddedToSprintNotification);
+                            await sprintStateService.Apply(notification.TicketAddedToActiveSprint.ToNotification());
                             break;
                     }
             }
