@@ -12,6 +12,7 @@ public class ReportFactory(IEnumerable<IVerificationProvider> verificationProvid
     public Report Create(Guid traceId, SortingType sortingType, UseCaseMeta useCaseMeta, List<TraceData> traceData)
     {
         var verificationSteps = _verificationProviders[sortingType].GetVerificationSteps(useCaseMeta);
+        traceData.Sort((a, b) => a.TimeStamp.CompareTo(b.TimeStamp));
         
         return new Report(traceData.First().TimeStamp,
             traceData.First().SortingType,

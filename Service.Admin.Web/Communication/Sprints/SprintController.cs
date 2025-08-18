@@ -91,7 +91,7 @@ public class SprintController(ISharedCommandSender commandSender, ITraceCollecto
         await tracer.Sprint.Create.StartUseCase(GetType(), traceId);
 
         var createCommand =
-            new WebCreateSprintCommand(Guid.NewGuid(), NewSprintName, StartTime, EndTime, true, [], traceId);
+            new WebCreateSprintCommand(Guid.NewGuid(), NewSprintName, StartTime, EndTime, false, [], traceId);
 
         await tracer.Sprint.Create.SendingCommand(GetType(), traceId, createCommand);
         await commandSender.Send(createCommand.ToProto());
