@@ -15,7 +15,7 @@ public class TraceSink(IReportSender reportSender, IVerifierFactory verifierFact
     {
         var verifier = _ticketVerifiers.GetOrAdd(traceData.TraceId, _ =>
         {
-            var newVerifier = verifierFactory.Create(traceData.SortingType, traceData.UseCaseMeta, traceData.TraceId);
+            var newVerifier = verifierFactory.Create(traceData.TraceId, traceData.SortingType, traceData.UseCaseMeta);
             newVerifier.VerificationCompleted += SaveReport;
             return newVerifier;
         });

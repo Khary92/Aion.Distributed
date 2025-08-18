@@ -15,7 +15,6 @@ public class TicketVerificationProvider : IVerificationProvider
         new VerificationStep(LoggingMeta.EventPersisted, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.SendingNotification, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.NotificationReceived, Invoked.Equals, 1),
-        new VerificationStep(LoggingMeta.AggregateReceived, Invoked.AtLeast, 1),
         new VerificationStep(LoggingMeta.AggregateAdded, Invoked.AtLeast, 1));
 
     public SortingType SortingType => SortingType.Ticket;

@@ -10,7 +10,7 @@ public class ReportReceiver(IReportStateServiceFactory reportStateServiceFactory
 {
     public override Task<ResponseProto> SendReport(ReportProto request, ServerCallContext context)
     {
-        var report = new ReportRecord(DateTimeOffset.Now, request.UseCase, request.State,
+        var report = new ReportRecord(DateTimeOffset.Now, request.UseCase, request.State, request.LatencyInMs,
             request.Traces.ToReportTrace());
         
         reportStateServiceFactory.Get(SortingType.Overview)!.AddReport(report);

@@ -2,15 +2,10 @@
 
 namespace Service.Monitoring.Verifiers.Common.Factories;
 
-public class VerifierFactory(
-    IEnumerable<IVerificationProvider> verificationProviders) : IVerifierFactory
+public class VerifierFactory(IReportFactory reportFactory) : IVerifierFactory
 {
-    private readonly Dictionary<SortingType, IVerificationProvider> _verificationProviders =
-        verificationProviders.ToDictionary(ts => ts.SortingType);
-
-    public IVerifier Create(SortingType sortingType, UseCaseMeta useCaseMeta, Guid traceId)
+    public IVerifier Create(Guid traceId, SortingType sortingType, UseCaseMeta useCaseMeta)
     {
-        var verificationSteps = _verificationProviders[sortingType].GetVerificationSteps(useCaseMeta);
-        return new Verifier(new UseCaseStateEvaluator(verificationSteps), traceId);
+        return new Verifier(traceId, sortingType, useCaseMeta, reportFactory);
     }
 }

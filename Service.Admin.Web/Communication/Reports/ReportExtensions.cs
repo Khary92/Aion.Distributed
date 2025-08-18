@@ -8,17 +8,16 @@ namespace Service.Admin.Web.Communication.Reports;
 
 public static class ReportExtensions
 {
-    public static ReportRecord ToReportRecord(this ReportProto report)
-    {
-        return new ReportRecord(
-            report.TimeStamp.ToDateTimeOffset(), report.UseCase, report.State, report.Traces.ToReportTrace());
-    }
+    public static ReportRecord ToReportRecord(this ReportProto report) => new(
+        report.TimeStamp.ToDateTimeOffset(), report.UseCase, report.State, report.LatencyInMs,
+        report.Traces.ToReportTrace());
+
 
     public static List<ReportTrace> ToReportTrace(this RepeatedField<ReportTraceProto> reportTraceProtos)
     {
         return reportTraceProtos
             .Select(reportTraceProto => new ReportTrace(reportTraceProto.TimeStamp.ToDateTimeOffset(),
                 Enum.Parse<LoggingMeta>(reportTraceProto.LoggingMeta), reportTraceProto.OriginClass,
-                reportTraceProto.OriginClass)).ToList();
+                reportTraceProto.Log)).ToList();
     }
 }

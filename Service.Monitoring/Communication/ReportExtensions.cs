@@ -15,6 +15,7 @@ public static class ReportExtensions
             SortType = report.SortingType.ToString(),
             UseCase = report.UseCase.ToString(),
             State = report.Result.ToString(),
+            LatencyInMs = report.LatencyInMs,
             Traces = { report.Traces.ToProto() }
         };
     }

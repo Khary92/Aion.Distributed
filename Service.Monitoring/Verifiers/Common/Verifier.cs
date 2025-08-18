@@ -1,5 +1,7 @@
 using System.Timers;
 using Service.Monitoring.Shared;
+using Service.Monitoring.Shared.Enums;
+using Service.Monitoring.Verifiers.Common.Factories;
 using Service.Monitoring.Verifiers.Common.Records;
 using Timer = System.Timers.Timer;
 
@@ -9,13 +11,18 @@ public class Verifier : IVerifier
 {
     private readonly Timer _timer = new(10000);
     private readonly List<TraceData> _traceData = new();
-    private readonly Guid _traceId;
-    private readonly UseCaseStateEvaluator _useCaseStateEvaluator;
 
-    public Verifier(UseCaseStateEvaluator useCaseStateEvaluator, Guid traceId)
+    private readonly Guid _traceId;
+    private readonly SortingType _sortingType;
+    private readonly UseCaseMeta _useCaseMeta;
+    private readonly IReportFactory _reportFactory;
+
+    public Verifier(Guid traceId, SortingType sortingType, UseCaseMeta useCaseMeta, IReportFactory reportFactory)
     {
-        _useCaseStateEvaluator = useCaseStateEvaluator;
         _traceId = traceId;
+        _sortingType = sortingType;
+        _useCaseMeta = useCaseMeta;
+        _reportFactory = reportFactory;
         _timer.Elapsed += Elapsed;
         _timer.AutoReset = false;
     }
@@ -31,13 +38,6 @@ public class Verifier : IVerifier
 
     private void Elapsed(object? sender, ElapsedEventArgs e)
     {
-        var report = new Report(_traceData.First().TimeStamp,
-            _traceData.First().SortingType,
-            _traceData.First().UseCaseMeta,
-            _useCaseStateEvaluator.GetResultState(_traceData),
-            _traceData,
-            _traceId);
-
-        VerificationCompleted?.Invoke(this, report);
+        VerificationCompleted?.Invoke(this, _reportFactory.Create(_traceId, _sortingType, _useCaseMeta, _traceData));
     }
 }

@@ -9,5 +9,6 @@ public record Report(
     SortingType SortingType,
     UseCaseMeta UseCase,
     Result Result,
+    int LatencyInMs,
     List<TraceData> Traces,
     Guid TraceId);

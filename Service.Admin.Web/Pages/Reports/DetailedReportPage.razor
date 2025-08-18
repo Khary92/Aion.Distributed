@@ -1,4 +1,5 @@
 @page "/reports"
+@using System.Globalization
 @using Service.Admin.Web.Communication.Reports
 @using Service.Admin.Web.Communication.Reports.Records
 @using Service.Admin.Web.Communication.Reports.State
@@ -6,22 +7,28 @@
 @rendermode InteractiveServer
 @inject IReportStateServiceFactory StateServiceFactory
 
-<div class="mb-3">
-    <label for="sortSelect" class="form-label">Sort by</label>
-    <select id="sortSelect" class="form-select" @bind="SelectedSortingType">
+<h1>Select type and specific use case</h1>
+<div class="mb-3" style="display:flex; gap:0.75rem; align-items:end; flex-wrap:wrap;">
+    <label for="sortSelect" class="form-label" style="margin:0;">Sort by</label>
+    <select id="sortSelect" class="form-select" style="flex:1 1 0; min-width:220px;" @bind="SelectedSortingType">
         @foreach (var sorting in Enum.GetValues<SortingType>())
         {
             if (sorting == SortingType.Overview) continue;
             <option value="@sorting">@sorting</option>
         }
     </select>
-    <select id="reportSelect" class="form-select" @bind="SelectedReportIndex"
+    <select id="reportSelect" class="form-select" style="flex:1 1 0; min-width:220px;" @bind="SelectedReportIndex"
             disabled="@(_reportStateService?.Reports?.Any() != true)">
         @if (_reportStateService?.Reports?.Any() == true)
         {
             @foreach (var item in _reportStateService.Reports.Select((r, i) => new { Report = r, Index = i }))
             {
-                <option value="@item.Index">@item.Report.UseCase</option>
+                <option
+                    value="@item.Index">
+                    @item.Report.TimeStamp.ToString("dd.MM.yyyy HH:mm:ss", CultureInfo.GetCultureInfo("de-DE"))
+                    - @item.Report.UseCase
+                    - @item.Report.State
+                </option>
             }
         }
         else
@@ -31,51 +38,51 @@
     </select>
 </div>
 
+
 @if (_reportStateService != null && @SelectedReportRecord != null)
 {
     <div @key="SelectedSortingType">
         <table class="custom-table">
             <thead>
             <tr>
-                <th>Datum</th>
                 <th>UseCase</th>
                 <th>Status</th>
-                <th>Traces</th>
+                <th>Latency</th>
             </tr>
             </thead>
             <tbody>
 
             <tr>
-                <td>@SelectedReportRecord?.TimeStamp</td>
                 <td>@SelectedReportRecord?.UseCase</td>
                 <td>@SelectedReportRecord?.State</td>
-                <td>
-                    <table class="custom-table">
-                        <thead>
-                        <tr>
-                            <th>Time Stamp</th>
-                            <th>Meta</th>
-                            <th>Origin class</th>
-                            <th>Log</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        @if (SelectedReportRecord is not null)
-                        {
-                            foreach (var trace in SelectedReportRecord.Traces)
-                            {
-                                <tr>
-                                    <td>@trace.TimeStamp</td>
-                                    <td>@trace.LoggingMeta</td>
-                                    <td>@trace.OriginClass</td>
-                                    <td>@trace.Log</td>
-                                </tr>
-                            }
-                        }
-                        </tbody>
-                    </table>
-                </td>
+                <td>@SelectedReportRecord?.LatencyInMs ms</td>
             </tr>
+            </tbody>
+        </table>
+
+
+        <table class="custom-table">
+            <thead>
+            <tr>
+                <th>Time Stamp</th>
+                <th>Meta</th>
+                <th>Origin class</th>
+                <th>Log</th>
+            </tr>
+            </thead>
+            <tbody>
+            @if (SelectedReportRecord is not null)
+            {
+                foreach (var trace in SelectedReportRecord.Traces)
+                {
+                    <tr>
+                        <td>@trace.TimeStamp</td>
+                        <td>@trace.LoggingMeta</td>
+                        <td>@trace.OriginClass</td>
+                        <td>@trace.Log</td>
+                    </tr>
+                }
+            }
             </tbody>
         </table>
     </div>

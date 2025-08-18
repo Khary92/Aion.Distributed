@@ -18,7 +18,8 @@ message ReportProto {
   string sortType =2;
   string useCase = 3;
   string state = 4;
-  repeated ReportTraceProto traces = 5;
+  int32 latencyInMs = 5;
+  repeated ReportTraceProto traces = 6;
 }
 
 message ResponseProto {
