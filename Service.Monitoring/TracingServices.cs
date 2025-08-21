@@ -50,5 +50,6 @@ public static class TracingServices
         services.AddSingleton<IVerificationProvider, TicketVerificationProvider>();
         services.AddSingleton<IVerificationProvider, TimerSettingsVerificationProvider>();
         services.AddSingleton<IVerificationProvider, WorkDayVerificationProvider>();
+        services.AddSingleton<IVerificationProvider, TimeSlotVerificationProvider>();
     }
 }

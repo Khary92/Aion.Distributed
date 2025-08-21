@@ -15,4 +15,5 @@ public class UseCaseCommandReceiver(ITimeSlotControlService timeSlotControlServi
         await timeSlotControlService.Create(Guid.Parse(request.TicketId), Guid.Parse(request.TraceData.TraceId));
         return new CommandResponse { Success = true };
     }
+
 }

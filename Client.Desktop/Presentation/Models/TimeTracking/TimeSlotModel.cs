@@ -56,7 +56,7 @@ public class TimeSlotModel(
             if (TicketReplayDecorator.Ticket.TicketId == notification.TicketId) return;
 
             TicketReplayDecorator.Ticket.Apply(notification);
-            await tracer.Ticket.Update.NotificationReceived(GetType(), notification.TraceId, notification);
+            await tracer.Ticket.Update.ChangesApplied(GetType(), notification.TraceId);
         });
 
         messenger.Register<ClientSaveDocumentationNotification>(this, async void (_, _) =>

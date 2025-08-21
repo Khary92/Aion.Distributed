@@ -82,6 +82,30 @@ public class TimeTrackingModel(
         FilteredTickets.Clear();
         var tickets = await requestSender.Send(new ClientGetTicketsForCurrentSprintRequest(Guid.NewGuid()));
         ListEx.AddRange(FilteredTickets, tickets);
+
+        await LoadTimeSlotViewModels();
+    }
+
+    private async Task LoadTimeSlotViewModels()
+    {
+        TimeSlotViewModels.Clear();
+
+        var controlDataList =
+            await requestSender.Send(
+                new ClientGetTimeSlotControlDataRequest(localSettingsService.SelectedDate, Guid.NewGuid()));
+
+        foreach (var controlData in controlDataList)
+        {
+            var timeSlotViewModel = await timeSlotViewModelFactory.Create(controlData.Ticket,
+                controlData.StatisticsData, controlData.TimeSlot);
+            TimeSlotViewModels.Add(timeSlotViewModel);
+        }
+
+        if (TimeSlotViewModels.Any())
+        {
+            CurrentViewModelIndex = TimeSlotViewModels.Count - 1;
+            SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.TicketReplayDecorator.Ticket.Name;
+        }
     }
 
     public void RegisterMessenger()
@@ -182,29 +206,7 @@ public class TimeTrackingModel(
         CurrentViewModelIndex += 1;
         SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.TicketReplayDecorator.Ticket.Name;
     }
-
-    public async Task LoadTimeSlotViewModels()
-    {
-        TimeSlotViewModels.Clear();
-
-        var controlDataList =
-            await requestSender.Send(
-                new ClientGetTimeSlotControlDataRequest(localSettingsService.SelectedDate, Guid.NewGuid()));
-
-        foreach (var controlData in controlDataList)
-        {
-            var timeSlotViewModel = await timeSlotViewModelFactory.Create(controlData.Ticket,
-                controlData.StatisticsData, controlData.TimeSlot);
-            TimeSlotViewModels.Add(timeSlotViewModel);
-        }
-
-        if (TimeSlotViewModels.Any())
-        {
-            CurrentViewModelIndex = TimeSlotViewModels.Count - 1;
-            SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.TicketReplayDecorator.Ticket.Name;
-        }
-    }
-
+    
     public async Task CreateNewTimeSlotViewModel()
     {
         if (SelectedTicket == null) return;

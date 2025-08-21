@@ -72,7 +72,6 @@ public class ContentWrapperViewModel : ReactiveObject
         ToggleSidePanelCommand = ReactiveCommand.Create(ToggleMenu);
 
         _currentControl = timeTrackingControl;
-        timeTrackingViewModel.Model.LoadTimeSlotViewModels().ConfigureAwait(false);
     }
 
     public Control CurrentControl
