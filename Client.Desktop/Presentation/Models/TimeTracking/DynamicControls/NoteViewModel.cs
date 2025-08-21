@@ -53,6 +53,7 @@ public class NoteViewModel : ReactiveObject
             if (Note.NoteId != notification.NoteId) return;
 
             Note.Apply(notification);
+            Note.NoteType = NoteTypes.FirstOrDefault(nt => nt.NoteTypeId == Note.NoteTypeId);
         });
 
         _messenger.Register<NewNoteTypeMessage>(this, (_, message) => { NoteTypes.Add(message.NoteType); });

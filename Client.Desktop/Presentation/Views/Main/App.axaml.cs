@@ -4,6 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Client.Desktop.Lifecycle.Shutdown;
+using Client.Desktop.Lifecycle.Startup.Scheduler;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Client.Desktop.Presentation.Views.Main;
@@ -15,6 +16,8 @@ public class App(IServiceProvider serviceProvider) : Application
         var contentWrapper = serviceProvider.GetRequiredService<ContentWrapper>();
         contentWrapper.WindowState = WindowState.Maximized;
         contentWrapper.Show();
+
+        _ = serviceProvider.GetRequiredService<IStartupScheduler>().Execute();
 
         base.OnFrameworkInitializationCompleted();
     }

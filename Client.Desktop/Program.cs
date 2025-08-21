@@ -26,12 +26,10 @@ public static class Program
         await host.StartAsync();
 
         var serviceProvider = host.Services;
-
-        await serviceProvider.GetRequiredService<IStartupScheduler>().Execute();
-
+        
         BuildAvaloniaApp(serviceProvider)
             .StartWithClassicDesktopLifetime(args);
-
+        
         await host.StopAsync();
     }
 
@@ -40,7 +38,6 @@ public static class Program
         return AppBuilder.Configure(() => new App(serviceProvider))
             .UsePlatformDetect()
             .WithInterFont()
-            .LogToTrace()
             .UseReactiveUI();
     }
 }
