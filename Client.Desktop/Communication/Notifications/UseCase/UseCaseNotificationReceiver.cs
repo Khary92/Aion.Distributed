@@ -32,35 +32,11 @@ public class UseCaseNotificationReceiver(
                             });
                             break;
                         }
-                        case UseCaseNotification.NotificationOneofCase.CreateSnapshot:
-                        {
-                            Dispatcher.UIThread.Post(() =>
-                            {
-                                messenger.Send(notification.CreateSnapshot.ToClientNotification());
-                            });
-                            break;
-                        }
-                        case UseCaseNotification.NotificationOneofCase.SaveDocumentation:
-                        {
-                            Dispatcher.UIThread.Post(() =>
-                            {
-                                messenger.Send(notification.SaveDocumentation.ToClientNotification());
-                            });
-                            break;
-                        }
                         case UseCaseNotification.NotificationOneofCase.SprintSelectionChanged:
                         {
                             Dispatcher.UIThread.Post(() =>
                             {
                                 messenger.Send(notification.SprintSelectionChanged.ToClientNotification());
-                            });
-                            break;
-                        }
-                        case UseCaseNotification.NotificationOneofCase.WorkDaySelectionChanged:
-                        {
-                            Dispatcher.UIThread.Post(() =>
-                            {
-                                messenger.Send(notification.WorkDaySelectionChanged.ToClientNotification());
                             });
                             break;
                         }

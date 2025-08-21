@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Client.Desktop.Communication.Notifications.UseCase.Records;
 using Client.Desktop.Presentation.Factories;
 using Client.Desktop.Presentation.Models.TimeTracking.DynamicControls;
 using Client.Desktop.Presentation.Views.Custom;
@@ -27,11 +28,11 @@ public class TimeSlotViewModel : ReactiveObject
     {
         Model = model;
 
-        messenger.Register<CreateSnapshotNotification>(this, (_, _) =>
+        messenger.Register<ClientCreateSnapshotNotification>(this, async void (_, _) =>
         {
             if (StatisticsViewModel == null) return;
 
-            StatisticsViewModel.Update();
+            await StatisticsViewModel.Update();
         });
 
         ViewId = Guid.NewGuid();

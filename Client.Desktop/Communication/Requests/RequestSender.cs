@@ -14,6 +14,7 @@ using Client.Desktop.Communication.Requests.StatisticsData;
 using Client.Desktop.Communication.Requests.StatisticsData.Records;
 using Client.Desktop.Communication.Requests.Tag;
 using Client.Desktop.Communication.Requests.Ticket;
+using Client.Desktop.Communication.Requests.Timer;
 using Client.Desktop.Communication.Requests.TimeSlots;
 using Client.Desktop.Communication.Requests.TimeSlots.Records;
 using Client.Desktop.Communication.Requests.UseCase;
@@ -23,10 +24,12 @@ using Client.Desktop.Communication.Requests.WorkDays.Records;
 using Client.Desktop.DataModels;
 using Client.Desktop.DataModels.Decorators;
 using Client.Desktop.DataModels.Decorators.Replays;
+using Proto.Requests.TimerSettings;
 using Service.Proto.Shared.Requests.NoteTypes;
 using Service.Proto.Shared.Requests.Sprints;
 using Service.Proto.Shared.Requests.Tags;
 using Service.Proto.Shared.Requests.Tickets;
+using Service.Proto.Shared.Requests.TimerSettings;
 
 namespace Client.Desktop.Communication.Requests;
 
@@ -42,6 +45,7 @@ public class RequestSender(
     ITicketReplayRequestSender ticketReplayRequestSender,
     IUseCaseRequestSender useCaseRequestSender,
     IAnalysisRequestSender analysisRequestSender,
+    ITimerSettingsRequestSender timerSettingsRequestSender,
     RequestRetryPolicy requestSender) : IRequestSender
 {
     public async Task<List<NoteClientModel>> Send(ClientGetNotesByTicketIdRequest request)
@@ -70,6 +74,14 @@ public class RequestSender(
             noteTypeRequestSender.Send(request.ToProto()));
 
         return noteType.ToClientModel();
+    }
+
+    public async Task<TimerSettingsClientModel> Send(ClientGetTimerSettingsRequest request)
+    {
+        var timerSettingsProto = await requestSender.Policy.ExecuteAsync(() =>
+            timerSettingsRequestSender.Send(request.ToProto()));
+
+        return timerSettingsProto.ToClientModel();
     }
 
     public async Task<SprintClientModel?> Send(ClientGetActiveSprintRequest request)

@@ -1,6 +1,8 @@
 ﻿using System;
+using Client.Desktop.Communication.Requests.Timer;
 using Proto.DTO.TraceData;
 using Proto.Requests.NoteTypes;
+using Proto.Requests.TimerSettings;
 
 namespace Client.Desktop.Communication.Requests.NoteType;
 
@@ -17,6 +19,13 @@ public static class NoteTypeRequestExtensions
         };
     }
 
+    public static GetTimerSettingsRequestProto ToProto(this ClientGetTimerSettingsRequest request) => new()
+    {
+        TraceData = new TraceDataProto
+        {
+            TraceId = request.TraceId.ToString()
+        }
+    };
 
     public static GetNoteTypeByIdRequestProto ToProto(this ClientGetNoteTypeByIdRequest request)
     {

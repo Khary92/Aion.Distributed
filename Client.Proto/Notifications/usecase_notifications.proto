@@ -6,12 +6,8 @@ import "DTO/trace_data.proto";
 option csharp_namespace = "Proto.Notifications.UseCase";
 
 service NotificationService {
-  rpc SendCreateSnapshot(CreateSnapshotNotification) returns (NotificationResponse);
-  rpc SendSaveDocumentation(SaveDocumentationNotification) returns (NotificationResponse);
   rpc SendSprintSelectionChanged(SprintSelectionChangedNotification) returns (NotificationResponse);
   rpc SendTimeSlotControlCreated(TimeSlotControlCreatedNotification) returns (NotificationResponse);
-  rpc SendTraceReportSent(TraceReportSentNotification) returns (NotificationResponse);
-  rpc SendWorkDaySelectionChanged(WorkDaySelectionChangedNotification) returns (NotificationResponse);
 }
 
 service UseCaseNotificationService {
@@ -20,21 +16,9 @@ service UseCaseNotificationService {
 
 message UseCaseNotification {
   oneof notification {
-    CreateSnapshotNotification createSnapshot = 1;
-    SaveDocumentationNotification saveDocumentation = 2;
-    SprintSelectionChangedNotification sprintSelectionChanged = 3;
-    TimeSlotControlCreatedNotification timeSlotControlCreated = 4;
-    TraceReportSentNotification traceReportSent = 5;
-    WorkDaySelectionChangedNotification workDaySelectionChanged = 6;
+    SprintSelectionChangedNotification sprintSelectionChanged = 1;
+    TimeSlotControlCreatedNotification timeSlotControlCreated = 2;
   }
-}
-
-message CreateSnapshotNotification {
-  TraceDataProto traceData = 1;
-}
-
-message SaveDocumentationNotification {
-  TraceDataProto traceData = 1;
 }
 
 message SprintSelectionChangedNotification {
@@ -44,14 +28,6 @@ message SprintSelectionChangedNotification {
 message TimeSlotControlCreatedNotification {
   TimeSlotControlDataProto time_slot_control_data = 1;
   TraceDataProto traceData = 2;
-}
-
-message TraceReportSentNotification {
-  string traceReportDto = 1;
-}
-
-message WorkDaySelectionChangedNotification {
-  TraceDataProto traceData = 1;
 }
 
 message NotificationResponse {

@@ -12,6 +12,7 @@ using Client.Desktop.Communication.Notifications.NoteType;
 using Client.Desktop.Communication.Notifications.Sprint;
 using Client.Desktop.Communication.Notifications.Tag;
 using Client.Desktop.Communication.Notifications.Ticket;
+using Client.Desktop.Communication.Notifications.TimerSettings;
 using Client.Desktop.Communication.Notifications.UseCase;
 using Client.Desktop.Communication.Notifications.WorkDay;
 using Client.Desktop.Communication.Policies;
@@ -47,6 +48,7 @@ using Client.Desktop.Presentation.Views.Export;
 using Client.Desktop.Presentation.Views.Main;
 using Client.Desktop.Presentation.Views.Setting;
 using Client.Desktop.Presentation.Views.Tracking;
+using Client.Desktop.Services;
 using Client.Desktop.Services.Cache;
 using Client.Desktop.Services.Export;
 using Client.Desktop.Services.LocalSettings;
@@ -143,6 +145,11 @@ public static class ServiceExtensions
         services.AddSingleton<ExportService>();
         services.AddSingleton<IExportService>(sp => sp.GetRequiredService<ExportService>());
         services.AddSingleton<IRegisterMessenger>(sp => sp.GetRequiredService<ExportService>());
+        
+        services.AddSingleton<TimerService>();
+        services.AddSingleton<ITimerService>(sp => sp.GetRequiredService<TimerService>());
+        services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<TimerService>());
+        services.AddSingleton<IRegisterMessenger>(sp => sp.GetRequiredService<TimerService>());
     }
 
     private static void AddSharedDataServices(this IServiceCollection services)
@@ -160,7 +167,6 @@ public static class ServiceExtensions
         services.AddScoped<INoteTypeCommandSender>(sp => new NoteTypeCommandSender(serverAddress));
         services.AddScoped<INoteTypeRequestSender>(sp => new NoteTypeRequestSender(serverAddress));
 
-        services.AddScoped<ITimerSettingsCommandSender>(sp => new TimerSettingsCommandSender(serverAddress));
         services.AddScoped<ITimerSettingsRequestSender>(sp => new TimerSettingsRequestSender(serverAddress));
     }
 
@@ -273,6 +279,7 @@ public static class ServiceExtensions
         services.AddSingleton<IStreamClient, TagNotificationReceiver>();
         services.AddSingleton<IStreamClient, UseCaseNotificationReceiver>();
         services.AddSingleton<IStreamClient, WorkDayNotificationReceiver>();
+        services.AddSingleton<IStreamClient, TimerSettingsNotificationReceiver>();
 
         var channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
         services.AddSingleton(new TicketNotificationService.TicketNotificationServiceClient(channel));

@@ -8,6 +8,7 @@ using Proto.DTO.Sprint;
 using Proto.DTO.StatisticsData;
 using Proto.DTO.Tag;
 using Proto.DTO.Ticket;
+using Proto.DTO.TimerSettings;
 using Proto.DTO.TimeSlots;
 using Proto.Requests.NoteTypes;
 using Proto.Requests.Sprints;
@@ -22,6 +23,9 @@ public static class DtoExtensions
     {
         return noteTypeListProto == null ? [] : noteTypeListProto.NoteTypes.Select(ToClientModel).ToList();
     }
+
+    public static TimerSettingsClientModel ToClientModel(this TimerSettingsProto proto) =>
+        new(Guid.Parse(proto.TimerSettingsId), proto.DocumentationSaveInterval, proto.SnapshotSaveInterval);
 
     public static NoteTypeClientModel ToClientModel(this NoteTypeProto noteType)
     {

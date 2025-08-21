@@ -4,6 +4,7 @@ using Client.Desktop.Communication.Requests.NoteType;
 using Client.Desktop.Communication.Requests.Sprint;
 using Client.Desktop.Communication.Requests.Tag;
 using Client.Desktop.Communication.Requests.Ticket;
+using Client.Desktop.Communication.Requests.Timer;
 using Client.Desktop.DataModels;
 
 namespace Client.Desktop.Communication.Requests;
@@ -28,4 +29,7 @@ public interface ISharedRequestSender
     //NoteTypes
     Task<List<NoteTypeClientModel>> Send(ClientGetAllNoteTypesRequest request);
     Task<NoteTypeClientModel> Send(ClientGetNoteTypeByIdRequest request);
+
+    //TimerSettings
+    Task<TimerSettingsClientModel> Send(ClientGetTimerSettingsRequest request);
 }

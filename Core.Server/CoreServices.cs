@@ -47,7 +47,6 @@ public static class CoreServices
 
     private static void AddCommonServices(this IServiceCollection services)
     {
-        services.AddScoped<TimerService>();
         services.AddScoped<ITimeSlotControlService, TimeSlotControlService>();
         services.AddScoped<IAnalysisDataService, AnalysisDataService>();
     }

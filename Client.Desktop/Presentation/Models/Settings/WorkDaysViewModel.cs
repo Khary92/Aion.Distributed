@@ -1,4 +1,6 @@
+using System;
 using System.Reactive.Linq;
+using Client.Desktop.Communication.Notifications.UseCase.Records;
 using Client.Desktop.DataModels;
 using CommunityToolkit.Mvvm.Messaging;
 using Proto.Notifications.UseCase;
@@ -19,7 +21,7 @@ public class WorkDaysViewModel : ReactiveObject
             () =>
             {
                 Model.SetSelectedWorkday(SelectedWorkDay!);
-                messenger.Send(new WorkDaySelectionChangedNotification());
+                messenger.Send(new ClientWorkDaySelectionChangedNotification(Guid.NewGuid()));
             },
             this.WhenAnyValue(x => x.SelectedWorkDay).Any()
         );

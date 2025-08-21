@@ -45,9 +45,6 @@ public static class BootStrap
         {
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             await db.Database.MigrateAsync();
-
-            //This is required or else the service won't be started 
-            scope.ServiceProvider.GetRequiredService(typeof(TimerService));
         }
 
         app.AddEndPoints();
