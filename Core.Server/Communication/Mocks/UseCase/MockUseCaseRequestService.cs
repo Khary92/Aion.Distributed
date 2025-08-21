@@ -9,7 +9,7 @@ namespace Core.Server.Communication.Mocks.UseCase;
 
 public class MockUseCaseRequestService : UseCaseRequestService.UseCaseRequestServiceBase
 {
-    public override Task<TimeSlotControlDataListProto> GetTimeSlotControlDataById(
+    public override Task<TimeSlotControlDataListProto> GetTimeSlotControlDataByDate(
         GetTimeSlotControlDataRequestProto request, ServerCallContext context)
     {
         var statisticsDataProto = new StatisticsDataProto

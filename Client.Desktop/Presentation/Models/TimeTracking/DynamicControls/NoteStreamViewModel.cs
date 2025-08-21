@@ -9,8 +9,10 @@ using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.Communication.Requests.Notes.Records;
 using Client.Desktop.DataModels;
+using Client.Desktop.DataModels.Local;
 using Client.Desktop.Presentation.Factories;
 using Client.Desktop.Services.LocalSettings;
+using Client.Desktop.Services.LocalSettings.Commands;
 using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using ReactiveUI;
@@ -20,13 +22,14 @@ namespace Client.Desktop.Presentation.Models.TimeTracking.DynamicControls;
 public class NoteStreamViewModel(
     ICommandSender commandSender,
     IRequestSender requestSender,
-    ILocalSettingsService localSettingsService,
     IMessenger messenger,
     INoteViewFactory noteViewFactory,
+    ILocalSettingsService localSettingsService,
     ITraceCollector tracer)
     : ReactiveObject
 {
     private Guid _timeSlotId;
+    private SettingsClientModel? _settingsClient;
     public ObservableCollection<NoteViewModel> Notes { get; } = [];
 
     public Guid TimeSlotId
@@ -52,6 +55,18 @@ public class NoteStreamViewModel(
 
     public void RegisterMessenger()
     {
+        messenger.Register<SettingsClientModel>(this, async void (_, m) =>
+        {
+            _settingsClient = m;
+            await InitializeAsync();
+        });
+        
+        messenger.Register<WorkDaySelectedNotification>(this, async void (_, m) =>
+        {
+            _settingsClient!.SelectedDate = m.Date;
+            await InitializeAsync();
+        });
+        
         messenger.Register<NewNoteMessage>(this,
             async void (_, message) => { await InsertNoteViewModel(message.Note); });
 

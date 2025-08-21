@@ -34,7 +34,11 @@ public class LoadTimeSlotControlDataHandler(
             {
                 StatisticsDataProto = statisticsData.ToProto(),
                 TicketProto = ticket!.ToProto(),
-                TimeSlotProto = timeSlot.ToProto()
+                TimeSlotProto = timeSlot.ToProto(),
+                TraceData = new()
+                {
+                    TraceId = request.TraceId.ToString()
+                }
             });
         }
 

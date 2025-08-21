@@ -40,7 +40,7 @@ public class LocalSettingsProjector(
             ProjectionReferenceInstance!.SelectedDate = m.Date;
             await SaveSettings();
         });
-
+        
         await PrepareProjection();
     }
 

@@ -11,7 +11,6 @@ using UseCaseNotificationService = Core.Server.Communication.Endpoints.UseCase.U
 namespace Core.Server.Services.UseCase;
 
 public class TimeSlotControlService(
-    IRunTimeSettings runTimeSettings,
     IWorkDayRequestsService workDayRequestsService,
     ITimeSlotCommandsService timeSlotCommandsService,
     IStatisticsDataCommandsService statisticsDataCommandsService,
@@ -20,13 +19,13 @@ public class TimeSlotControlService(
     ITicketRequestsService ticketRequestsService,
     UseCaseNotificationService useCaseNotificationService) : ITimeSlotControlService
 {
-    public async Task Create(Guid ticketId, Guid traceId)
+    public async Task Create(Guid ticketId, DateTimeOffset date, Guid traceId)
     {
         // TODO RuntimeSettings are meant for client only. Not for the server side.
-        var workDays = await workDayRequestsService.GetAll();
-        var currentWorkDayId = workDays
-            .First(wd => wd.Date.Date == runTimeSettings.SelectedDate.Date).WorkDayId;
+        var workDay = await workDayRequestsService.GetWorkDayByDate(date);
 
+        if (workDay is null) throw new Exception("WorkDay is null. Something went horribly wrong.");
+        
         var existingTicket = await ticketRequestsService.GetTicketById(ticketId);
         if (existingTicket is null) throw new Exception("Ticket is null. Something went horribly wrong.");
 
@@ -34,7 +33,7 @@ public class TimeSlotControlService(
         {
             TimeSlotId = Guid.NewGuid(),
             SelectedTicketId = ticketId,
-            WorkDayId = currentWorkDayId,
+            WorkDayId = workDay.WorkDayId,
             StartTime = DateTimeOffset.Now,
             EndTime = DateTimeOffset.Now,
             IsTimerRunning = false

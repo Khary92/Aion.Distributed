@@ -14,7 +14,7 @@ public class UseCaseRequestSender : IUseCaseRequestSender
 
     public async Task<List<ClientGetTimeSlotControlResponse>> Send(ClientGetTimeSlotControlDataRequest request)
     {
-        var timeSlotControlDatalist = await _client.GetTimeSlotControlDataByIdAsync(request.ToProto());
+        var timeSlotControlDatalist = await _client.GetTimeSlotControlDataByDateAsync(request.ToProto());
         return timeSlotControlDatalist.ToResponseDataList();
     }
 }

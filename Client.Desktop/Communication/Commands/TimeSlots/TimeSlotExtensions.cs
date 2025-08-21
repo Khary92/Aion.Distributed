@@ -33,7 +33,11 @@ public static class TimeSlotExtensions
         return new SetStartTimeCommandProto
         {
             TimeSlotId = command.TimeSlotId.ToString(),
-            Time = Timestamp.FromDateTimeOffset(command.Time)
+            Time = Timestamp.FromDateTimeOffset(command.Time),
+            TraceData = new()
+            {
+                TraceId = command.TraceId.ToString()
+            }
         };
     }
 
@@ -42,7 +46,11 @@ public static class TimeSlotExtensions
         return new SetEndTimeCommandProto
         {
             TimeSlotId = command.TimeSlotId.ToString(),
-            Time = Timestamp.FromDateTimeOffset(command.Time)
+            Time = Timestamp.FromDateTimeOffset(command.Time),
+            TraceData = new()
+            {
+                TraceId = command.TraceId.ToString()
+            }
         };
     }
 }

@@ -1,4 +1,5 @@
 using Client.Desktop.Communication.Commands.UseCases.Records;
+using Google.Protobuf.WellKnownTypes;
 using Proto.Command.UseCases;
 using Proto.DTO.TraceData;
 
@@ -11,6 +12,7 @@ public static class UseCaseExtensions
         return new CreateTimeSlotControlCommandProto
         {
             TicketId = command.TicketId.ToString(),
+            Date = Timestamp.FromDateTimeOffset(command.Date),
             TraceData = new TraceDataProto
             {
                 TraceId = command.TraceId.ToString()

@@ -16,5 +16,5 @@ message TimeSlotControlDataListProto {
 }
 
 service UseCaseRequestService {
-  rpc GetTimeSlotControlDataById(GetTimeSlotControlDataRequestProto) returns (TimeSlotControlDataListProto);
+  rpc GetTimeSlotControlDataByDate(GetTimeSlotControlDataRequestProto) returns (TimeSlotControlDataListProto);
 }

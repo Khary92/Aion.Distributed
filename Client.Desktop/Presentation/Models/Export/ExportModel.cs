@@ -24,11 +24,11 @@ public class ExportModel(
     IMessenger messenger,
     IExportService exportService,
     ITraceCollector tracer,
-    ILocalSettingsService localSettingsService)
+    ILocalSettingsService settingsService)
     : ReactiveObject, IInitializeAsync, IRegisterMessenger
 {
     private string _markdownText = null!;
-    private SettingsClientModel? Settings { get; set; }
+    private SettingsClientModel? _settingsClient;
 
     public ObservableCollection<WorkDayClientModel> WorkDays { get; } = [];
     public ObservableCollection<WorkDayClientModel> SelectedWorkDays { get; } = [];
@@ -52,9 +52,9 @@ public class ExportModel(
     public void RegisterMessenger()
     {
         messenger.Register<ExportPathSetNotification>(this,
-            void (_, message) => { Settings!.ExportPath = message.ExportPath; });
+            void (_, message) => { _settingsClient!.ExportPath = message.ExportPath; });
 
-        messenger.Register<SettingsClientModel>(this, (_, message) => { Settings = message; });
+        messenger.Register<SettingsClientModel>(this, (_, message) => { _settingsClient = message; });
 
         messenger.Register<NewWorkDayMessage>(this, async void (_, m) =>
         {
@@ -65,7 +65,7 @@ public class ExportModel(
 
     public async Task<bool> ExportFileAsync()
     {
-        if (localSettingsService.IsExportPathValid()) return await exportService.ExportToFile(WorkDays);
+        if (settingsService.IsExportPathValid()) return await exportService.ExportToFile(WorkDays);
 
         return false;
     }

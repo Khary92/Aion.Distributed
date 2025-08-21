@@ -13,10 +13,12 @@ using Client.Desktop.Communication.Requests.Sprint;
 using Client.Desktop.Communication.Requests.Ticket;
 using Client.Desktop.Communication.Requests.UseCase.Records;
 using Client.Desktop.DataModels;
+using Client.Desktop.DataModels.Local;
 using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Register;
 using Client.Desktop.Presentation.Factories;
 using Client.Desktop.Services.LocalSettings;
+using Client.Desktop.Services.LocalSettings.Commands;
 using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using ReactiveUI;
@@ -27,7 +29,6 @@ namespace Client.Desktop.Presentation.Models.TimeTracking;
 public class TimeTrackingModel(
     ICommandSender commandSender,
     IRequestSender requestSender,
-    ILocalSettingsService localSettingsService,
     IMessenger messenger,
     ITimeSlotViewModelFactory timeSlotViewModelFactory,
     ITraceCollector tracer) : ReactiveObject, IInitializeAsync, IRegisterMessenger
@@ -38,7 +39,8 @@ public class TimeTrackingModel(
     private string _selectedTicketName = string.Empty;
 
     private ObservableCollection<TimeSlotViewModel> _timeSlotViewModels = [];
-
+    private SettingsClientModel? _localSettings;
+    
     public string SelectedTicketName
     {
         get => _selectedTicketName;
@@ -82,8 +84,6 @@ public class TimeTrackingModel(
         FilteredTickets.Clear();
         var tickets = await requestSender.Send(new ClientGetTicketsForCurrentSprintRequest(Guid.NewGuid()));
         ListEx.AddRange(FilteredTickets, tickets);
-
-        await LoadTimeSlotViewModels();
     }
 
     private async Task LoadTimeSlotViewModels()
@@ -92,7 +92,7 @@ public class TimeTrackingModel(
 
         var controlDataList =
             await requestSender.Send(
-                new ClientGetTimeSlotControlDataRequest(localSettingsService.SelectedDate, Guid.NewGuid()));
+                new ClientGetTimeSlotControlDataRequest(_localSettings!.SelectedDate, Guid.NewGuid()));
 
         foreach (var controlData in controlDataList)
         {
@@ -110,6 +110,19 @@ public class TimeTrackingModel(
 
     public void RegisterMessenger()
     {
+        messenger.Register<SettingsClientModel>(this, async void (_, m) =>
+        {
+            _localSettings = m;
+            await InitializeAsync();
+            await LoadTimeSlotViewModels();
+        });
+        
+        messenger.Register<WorkDaySelectedNotification>(this, async void (_, m) =>
+        {
+            _localSettings!.SelectedDate = m.Date;
+            await InitializeAsync();
+        });
+        
         messenger.Register<NewTicketMessage>(this, async void (_, message) =>
         {
             AllTickets.Add(message.Ticket);
@@ -148,7 +161,7 @@ public class TimeTrackingModel(
             TimeSlotViewModels.Add(await
                 timeSlotViewModelFactory.Create(notification.Ticket, notification.StatisticsData,
                     notification.TimeSlot));
-            
+
             CurrentViewModelIndex = TimeSlotViewModels.Count - 1;
             SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.TicketReplayDecorator.Ticket.Name;
         });
@@ -206,11 +219,12 @@ public class TimeTrackingModel(
         CurrentViewModelIndex += 1;
         SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.TicketReplayDecorator.Ticket.Name;
     }
-    
+
     public async Task CreateNewTimeSlotViewModel()
     {
         if (SelectedTicket == null) return;
 
-        await commandSender.Send(new ClientCreateTimeSlotControlCommand(SelectedTicket.TicketId, Guid.NewGuid()));
+        await commandSender.Send(new ClientCreateTimeSlotControlCommand(SelectedTicket.TicketId,
+            _localSettings!.SelectedDate, Guid.NewGuid()));
     }
 }

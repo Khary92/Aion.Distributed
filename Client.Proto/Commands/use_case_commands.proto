@@ -2,6 +2,7 @@ syntax = "proto3";
 
 option csharp_namespace = "Proto.Command.UseCases";
 
+import "google/protobuf/timestamp.proto";
 import "DTO/trace_data.proto";
 
 service UseCaseCommandProtoService {
@@ -10,7 +11,8 @@ service UseCaseCommandProtoService {
 
 message CreateTimeSlotControlCommandProto {
   string ticketId = 1;
-  TraceDataProto traceData = 2;
+  google.protobuf.Timestamp date = 2;
+  TraceDataProto traceData = 3;
 }
 
 message CommandResponse {

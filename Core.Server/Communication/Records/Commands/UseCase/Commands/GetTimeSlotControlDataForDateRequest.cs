@@ -1,3 +1,3 @@
 namespace Core.Server.Communication.Records.Commands.UseCase.Commands;
 
-public record GetTimeSlotControlDataForDateRequest(DateTimeOffset Date);
+public record GetTimeSlotControlDataForDateRequest(DateTimeOffset Date, Guid TraceId);
