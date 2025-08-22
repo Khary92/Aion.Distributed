@@ -12,44 +12,60 @@ public class DocumentationSynchronizer(ICommandSender commandSender, ITraceColle
     : IStateSynchronizer<TicketReplayDecorator, string>
 {
     private readonly ConcurrentDictionary<Guid, string> _documentationById = new();
-    private readonly ConcurrentDictionary<Guid, ConcurrentBag<TicketReplayDecorator>> _ticketDecoratorsById = new();
+
+    private readonly ConcurrentDictionary<Guid, ConcurrentDictionary<TicketReplayDecorator, byte>>
+        _ticketDecoratorsById = new();
+
+    private readonly ConcurrentDictionary<Guid, byte> _dirtyTickets = new();
 
     public void Register(Guid ticketId, TicketReplayDecorator ticket)
     {
-        var decorators = _ticketDecoratorsById.GetOrAdd(ticketId, _ => []);
-        decorators.Add(ticket);
+        var decorators =
+            _ticketDecoratorsById.GetOrAdd(ticketId, _ => new ConcurrentDictionary<TicketReplayDecorator, byte>());
+        decorators.TryAdd(ticket, 0);
     }
+
 
     public void SetSynchronizationValue(Guid ticketId, string documentation)
     {
         _documentationById.AddOrUpdate(ticketId, documentation, (_, _) => documentation);
+
+        _dirtyTickets.TryAdd(ticketId, 0);
+
+        if (!_ticketDecoratorsById.TryGetValue(ticketId, out var decorators)) return;
+
+        foreach (var decorator in decorators.Keys)
+        {
+            if (string.Equals(decorator.DisplayedDocumentation, documentation, StringComparison.Ordinal)) continue;
+
+            decorator.DisplayedDocumentation = documentation;
+        }
     }
 
     public async Task FireCommand(Guid traceId)
     {
-        // TODO horrible implementation. Felt cute. Might fix later
-        var commandTicketId = Guid.Empty;
-        var newDocumentation = string.Empty;
-
-        foreach (var ticketId in _ticketDecoratorsById.Keys)
+        foreach (var ticketId in _dirtyTickets.Keys)
         {
             if (!_documentationById.TryGetValue(ticketId, out var documentation))
                 continue;
 
-            if (!_ticketDecoratorsById.TryGetValue(ticketId, out var decorators))
-                continue;
-
-            foreach (var decorator in decorators)
+            if (_ticketDecoratorsById.TryGetValue(ticketId, out var decorators))
             {
-                decorator.Ticket.SynchronizeDocumentation(documentation);
-                decorator.DisplayedDocumentation = documentation;
+                foreach (var decorator in decorators.Keys)
+                {
+                    if (!string.Equals(decorator.DisplayedDocumentation, documentation, StringComparison.Ordinal))
+                    {
+                        decorator.DisplayedDocumentation = documentation;
+                    }
+
+                    decorator.Ticket.SynchronizeDocumentation(documentation);
+                }
             }
 
-            commandTicketId = ticketId;
-            newDocumentation = documentation;
-        }
+            await commandSender.Send(
+                new ClientUpdateTicketDocumentationCommand(ticketId, documentation, traceId));
 
-        await commandSender.Send(
-            new ClientUpdateTicketDocumentationCommand(commandTicketId, newDocumentation, traceId));
+            _dirtyTickets.TryRemove(ticketId, out _);
+        }
     }
 }
