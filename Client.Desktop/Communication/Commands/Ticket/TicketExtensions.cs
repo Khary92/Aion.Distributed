@@ -1,3 +1,4 @@
+
 using Proto.Command.Tickets;
 
 namespace Client.Desktop.Communication.Commands.Ticket;
@@ -9,7 +10,11 @@ public static class TicketExtensions
         return new UpdateTicketDocumentationCommandProto
         {
             TicketId = command.TicketId.ToString(),
-            Documentation = command.Documentation
+            Documentation = command.Documentation,
+            TraceData = new()
+            {
+                TraceId = command.TraceId.ToString()
+            }
         };
     }
 }

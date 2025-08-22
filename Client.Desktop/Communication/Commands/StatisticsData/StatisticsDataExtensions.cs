@@ -21,7 +21,11 @@ public static class StatisticsDataExtensions
         return new ChangeTagSelectionCommandProto
         {
             StatisticsDataId = command.StatisticsDataId.ToString(),
-            SelectedTagIds = { command.SelectedTagIds.ToRepeatedField() }
+            SelectedTagIds = { command.SelectedTagIds.ToRepeatedField() },
+            TraceData = new()
+            {
+                TraceId = command.TraceId.ToString()
+            }
         };
     }
 
@@ -32,7 +36,11 @@ public static class StatisticsDataExtensions
             StatisticsDataId = command.StatisticsDataId.ToString(),
             IsProductive = command.IsProductive,
             IsNeutral = command.IsNeutral,
-            IsUnproductive = command.IsUnproductive
+            IsUnproductive = command.IsUnproductive,
+            TraceData = new()
+            {
+                TraceId = command.TraceId.ToString()
+            }
         };
     }
 }

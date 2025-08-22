@@ -17,7 +17,6 @@ using Client.Desktop.DataModels.Local;
 using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Register;
 using Client.Desktop.Presentation.Factories;
-using Client.Desktop.Services.LocalSettings;
 using Client.Desktop.Services.LocalSettings.Commands;
 using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
@@ -40,7 +39,7 @@ public class TimeTrackingModel(
 
     private ObservableCollection<TimeSlotViewModel> _timeSlotViewModels = [];
     private SettingsClientModel? _localSettings;
-    
+
     public string SelectedTicketName
     {
         get => _selectedTicketName;
@@ -116,13 +115,13 @@ public class TimeTrackingModel(
             await InitializeAsync();
             await LoadTimeSlotViewModels();
         });
-        
+
         messenger.Register<WorkDaySelectedNotification>(this, async void (_, m) =>
         {
             _localSettings!.SelectedDate = m.Date;
             await InitializeAsync();
         });
-        
+
         messenger.Register<NewTicketMessage>(this, async void (_, message) =>
         {
             AllTickets.Add(message.Ticket);

@@ -28,9 +28,9 @@ public class TimerService(IRequestSender requestSender, IMessenger messenger)
             messenger.Send(new ClientSaveDocumentationNotification());
         }
 
-        if (_timerSettings.IsDocuSaveIntervalReached())
+        if (_timerSettings.IsSnapSveIntervalReached())
         {
-            messenger.Send(new ClientSaveDocumentationNotification());
+            messenger.Send(new ClientCreateSnapshotNotification());
         }
     }
 
