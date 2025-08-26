@@ -22,16 +22,4 @@ public class TimeSlotCommandSender : ITimeSlotCommandSender
         var response = await _client.SetEndTimeAsync(command.ToProto());
         return response.Success;
     }
-
-    public async Task<bool> Send(ClientCreateTimeSlotCommand command)
-    {
-        var response = await _client.CreateTimeSlotAsync(command.ToProto());
-        return response.Success;
-    }
-
-    public async Task<bool> Send(ClientAddNoteCommand command)
-    {
-        var response = await _client.AddNoteAsync(command.ToProto());
-        return response.Success;
-    }
 }
