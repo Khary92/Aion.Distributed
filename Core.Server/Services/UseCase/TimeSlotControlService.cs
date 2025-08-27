@@ -21,7 +21,6 @@ public class TimeSlotControlService(
 {
     public async Task Create(Guid ticketId, DateTimeOffset date, Guid traceId)
     {
-        // TODO RuntimeSettings are meant for client only. Not for the server side.
         var workDay = await workDayRequestsService.GetWorkDayByDate(date);
 
         if (workDay is null) throw new Exception("WorkDay is null. Something went horribly wrong.");
