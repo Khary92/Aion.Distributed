@@ -42,6 +42,7 @@ The goal is not primarily a finished product, but rather a realistic case study 
 
 - **Prototype** – some features are experimental or incomplete
 - Focus on **architecture and learning value**, not production readiness
+- Security features are not fully implemented
 
 ---
 
@@ -51,7 +52,7 @@ The goal is not primarily a finished product, but rather a realistic case study 
 2. Start the database in Docker (`docker-compose up`)
 3. The web interface can be reached via http://localhost:5000
 4. PGAdming can be reached via http://localhost:5050 (Password: aionpass)
-5. The Avalonia Client must be compiled and started via the .exe
+5. The Avalonia Client must be compiled and started via the .exe file
 
 ⚠️ Note: Some parts are still unstable or incomplete.
 
