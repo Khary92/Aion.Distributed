@@ -8,6 +8,7 @@ public class Note
     public Guid NoteId { get; set; }
     public string Text { get; set; } = string.Empty;
     public Guid NoteTypeId { get; set; }
+    public Guid TicketId { get; set; }
     public Guid TimeSlotId { get; set; }
     public DateTimeOffset TimeStamp { get; set; }
 
@@ -28,6 +29,7 @@ public class Note
                 NoteId = created!.NoteId;
                 Text = created.Text;
                 NoteTypeId = created.NoteTypeId;
+                TicketId = created.TicketId;
                 TimeSlotId = created.TimeSlotId;
                 TimeStamp = created.TimeStamp;
                 break;

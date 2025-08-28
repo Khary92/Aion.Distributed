@@ -30,10 +30,8 @@ public class NoteRequestsService(IEventStore<NoteEvent> noteEventsStore)
             .GroupBy(e => e.EntityId)
             .ToList();
 
-        var notesByTimeSlotId = groupedEvents
-            .Select(group => Note.Rehydrate(group.ToList()));
-
-        //TODO: This is bad. I can't filter by ticketId because notes do not have a ticketId. Maybe i need to remodel that...
-        return new List<Note>();
+        return groupedEvents
+            .Select(group => Note.Rehydrate(group.ToList()))
+            .Where(t => t.TicketId == ticketId).ToList();
     }
 }

@@ -11,7 +11,7 @@ public class MockNoteCommandReceiver(NoteNotificationService noteNotificationSer
     public override async Task<CommandResponse> CreateNote(CreateNoteCommandProto request, ServerCallContext context)
     {
         Console.WriteLine(
-            $"[CreateNote] ID: {request.NoteId}, Text: {request.Text}, NoteTypeId: {request.NoteTypeId}, TimeSlotId: {request.TimeSlotId}, TimeStamp: {request.TimeStamp}");
+            $"[CreateNote] ID: {request.NoteId}, Text: {request.Text}, NoteTypeId: {request.NoteTypeId}, TicketId: {request.TimeSlotId}, TimeStamp: {request.TimeStamp}");
 
         try
         {
@@ -39,7 +39,7 @@ public class MockNoteCommandReceiver(NoteNotificationService noteNotificationSer
     public override async Task<CommandResponse> UpdateNote(UpdateNoteCommandProto request, ServerCallContext context)
     {
         Console.WriteLine(
-            $"[UpdateNote] ID: {request.NoteId}, Text: {request.Text}, NoteTypeId: {request.NoteTypeId}, TimeSlotId: {request.TimeSlotId}");
+            $"[UpdateNote] ID: {request.NoteId}, Text: {request.Text}, NoteTypeId: {request.NoteTypeId}, TicketId: {request.TimeSlotId}");
 
         try
         {

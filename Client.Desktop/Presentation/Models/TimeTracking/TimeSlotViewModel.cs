@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Notifications.UseCase.Records;
+using Client.Desktop.DataModels;
 using Client.Desktop.Presentation.Factories;
 using Client.Desktop.Presentation.Models.TimeTracking.DynamicControls;
 using Client.Desktop.Presentation.Views.Custom;
 using CommunityToolkit.Mvvm.Messaging;
-using Proto.Notifications.UseCase;
 using ReactiveUI;
 using Unit = System.Reactive.Unit;
 
@@ -13,8 +13,8 @@ namespace Client.Desktop.Presentation.Models.TimeTracking;
 
 public class TimeSlotViewModel : ReactiveObject
 {
-    private readonly Guid _viewId;
-
+    private readonly IStatisticsViewModelFactory _statisticsViewModelFactory;
+    private readonly INoteStreamViewModelFactory _noteStreamViewModelFactory;
     private object _currentView = null!;
     private string _elapsedTimeRepresentation = null!;
     private string _timerButtonText = null!;
@@ -26,6 +26,8 @@ public class TimeSlotViewModel : ReactiveObject
         INoteStreamViewModelFactory noteStreamViewModelFactory,
         IMessenger messenger)
     {
+        _statisticsViewModelFactory = statisticsViewModelFactory;
+        _noteStreamViewModelFactory = noteStreamViewModelFactory;
         Model = model;
 
         messenger.Register<ClientCreateSnapshotNotification>(this, async void (_, _) =>
@@ -35,23 +37,26 @@ public class TimeSlotViewModel : ReactiveObject
             await StatisticsViewModel.Update();
         });
 
-        ViewId = Guid.NewGuid();
-        NoteStreamViewModel = noteStreamViewModelFactory.Create(ViewId);
-        StatisticsViewModel = statisticsViewModelFactory.Create();
-
         ToggleTimerCommand = ReactiveCommand.Create(UpdateTimerState);
-        SwitchToDocumentationViewCommand = ReactiveCommand.Create(SwitchToDocumentationView);
+        SwitchToDocumentationViewCommand = ReactiveCommand.Create(SwitchToNotestreamView);
         SwitchToStatisticsViewCommand = ReactiveCommand.Create(SwitchToStatisticsView);
         StartReplayCommand = ReactiveCommand.CreateFromTask(StartReplayMode);
         PreviousStateCommand = ReactiveCommand.Create(PreviousState);
         NextStateCommand = ReactiveCommand.Create(NextState);
         AddNoteCommand = ReactiveCommand.CreateFromTask(AddNoteHotkeyFired);
-
-        SwitchToDocumentationView();
     }
 
-    public NoteStreamViewModel NoteStreamViewModel { get; }
-    public StatisticsViewModel StatisticsViewModel { get; }
+    public void CreateSubViewModels(Guid ticketId, Guid timeSlotId, StatisticsDataClientModel statisticsDataClientModel)
+    {
+        NoteStreamViewModel =
+            _noteStreamViewModelFactory.Create(timeSlotId, ticketId);
+        StatisticsViewModel = _statisticsViewModelFactory.Create(statisticsDataClientModel);
+        
+        SwitchToNotestreamView();
+    }
+
+    public NoteStreamViewModel NoteStreamViewModel { get; set; }
+    public StatisticsViewModel StatisticsViewModel { get; set; }
 
     public TimeSlotModel Model { get; }
 
@@ -67,12 +72,6 @@ public class TimeSlotViewModel : ReactiveObject
     {
         get => _currentView;
         set => this.RaiseAndSetIfChanged(ref _currentView, value);
-    }
-
-    private Guid ViewId
-    {
-        get => _viewId;
-        init => this.RaiseAndSetIfChanged(ref _viewId, value);
     }
 
     public string TimerButtonText
@@ -120,7 +119,7 @@ public class TimeSlotViewModel : ReactiveObject
         await documentationViewModel.AddNoteControl();
     }
 
-    private void SwitchToDocumentationView()
+    private void SwitchToNotestreamView()
     {
         CurrentView = NoteStreamViewModel;
     }

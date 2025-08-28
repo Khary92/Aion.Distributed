@@ -14,7 +14,11 @@ public static class NoteRequestExtensions
     {
         return new GetNotesByTimeSlotIdRequestProto
         {
-            TimeSlotId = request.TimeSlotId.ToString()
+            TimeSlotId = request.TimeSlotId.ToString(),
+            TraceData = new()
+            {
+                TraceId = request.TraceId.ToString()
+            }
         };
     }
 
@@ -22,7 +26,11 @@ public static class NoteRequestExtensions
     {
         return new GetNotesByTicketIdRequestProto
         {
-            TicketId = request.TicketId.ToString()
+            TicketId = request.TicketId.ToString(),
+            TraceData = new()
+            {
+                TraceId = request.TraceId.ToString()
+            }
         };
     }
 

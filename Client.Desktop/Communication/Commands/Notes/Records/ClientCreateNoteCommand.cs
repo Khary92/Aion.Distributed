@@ -6,6 +6,7 @@ public record ClientCreateNoteCommand(
     Guid NoteId,
     Guid NoteTypeId,
     string Text,
+    Guid TicketId,
     Guid TimeSlotId,
     DateTimeOffset TimeStamp,
     Guid TraceId);

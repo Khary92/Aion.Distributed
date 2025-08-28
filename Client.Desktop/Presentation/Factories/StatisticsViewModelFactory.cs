@@ -1,4 +1,5 @@
 using System;
+using Client.Desktop.DataModels;
 using Client.Desktop.Presentation.Models.TimeTracking.DynamicControls;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -6,10 +7,12 @@ namespace Client.Desktop.Presentation.Factories;
 
 public class StatisticsViewModelFactory(IServiceProvider serviceProvider) : IStatisticsViewModelFactory
 {
-    public StatisticsViewModel Create()
+    public StatisticsViewModel Create(StatisticsDataClientModel statisticsData)
     {
-        var documentationViewModel =
+        var statisticsViewModel =
             serviceProvider.GetRequiredService<StatisticsViewModel>();
-        return documentationViewModel;
+        
+        statisticsViewModel.StatisticsData = statisticsData;
+        return statisticsViewModel;
     }
 }

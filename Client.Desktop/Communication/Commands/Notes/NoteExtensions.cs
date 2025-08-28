@@ -7,34 +7,29 @@ namespace Client.Desktop.Communication.Commands.Notes;
 
 public static class NoteExtensions
 {
-    public static CreateNoteCommandProto ToProto(this ClientCreateNoteCommand command)
+    public static CreateNoteCommandProto ToProto(this ClientCreateNoteCommand command) => new()
     {
-        return new CreateNoteCommandProto
+        NoteId = command.NoteId.ToString(),
+        NoteTypeId = command.NoteTypeId.ToString(),
+        Text = command.Text,
+        TicketId = command.TicketId.ToString(),
+        TimeSlotId = command.TimeSlotId.ToString(),
+        TimeStamp = Timestamp.FromDateTimeOffset(command.TimeStamp),
+        TraceData = new TraceDataProto
         {
-            NoteId = command.NoteId.ToString(),
-            NoteTypeId = command.NoteTypeId.ToString(),
-            Text = command.Text,
-            TimeSlotId = command.TimeSlotId.ToString(),
-            TimeStamp = Timestamp.FromDateTimeOffset(command.TimeStamp),
-            TraceData = new TraceDataProto
-            {
-                TraceId = command.TraceId.ToString()
-            }
-        };
-    }
+            TraceId = command.TraceId.ToString()
+        }
+    };
 
-    public static UpdateNoteCommandProto ToProto(this ClientUpdateNoteCommand command)
+    public static UpdateNoteCommandProto ToProto(this ClientUpdateNoteCommand command) => new()
     {
-        return new UpdateNoteCommandProto
+        NoteId = command.NoteId.ToString(),
+        Text = command.Text,
+        NoteTypeId = command.NoteTypeId.ToString(),
+        TimeSlotId = command.TimeSlotId.ToString(),
+        TraceData = new TraceDataProto
         {
-            NoteId = command.NoteId.ToString(),
-            Text = command.Text,
-            NoteTypeId = command.NoteTypeId.ToString(),
-            TimeSlotId = command.TimeSlotId.ToString(),
-            TraceData = new TraceDataProto
-            {
-                TraceId = command.TraceId.ToString()
-            }
-        };
-    }
+            TraceId = command.TraceId.ToString()
+        }
+    };
 }

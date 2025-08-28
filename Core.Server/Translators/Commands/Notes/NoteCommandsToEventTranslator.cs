@@ -9,8 +9,8 @@ public class NoteCommandsToEventTranslator : INoteCommandsToEventTranslator
     public NoteEvent ToEvent(CreateNoteCommand createNoteCommand)
     {
         var domainEvent = new NoteCreatedEvent(createNoteCommand.NoteId, createNoteCommand.Text,
-            createNoteCommand.NoteTypeId,
-            createNoteCommand.TimeSlotId, createNoteCommand.TimeStamp);
+            createNoteCommand.TicketId, createNoteCommand.NoteTypeId, createNoteCommand.TimeSlotId,
+            createNoteCommand.TimeStamp);
 
         return CreateDatabaseEvent(nameof(NoteCreatedEvent), createNoteCommand.NoteId,
             JsonSerializer.Serialize(domainEvent));

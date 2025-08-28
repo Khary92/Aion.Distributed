@@ -28,9 +28,16 @@ public class NoteStreamViewModel(
     ITraceCollector tracer)
     : ReactiveObject
 {
+    private Guid _ticketId;
     private Guid _timeSlotId;
     private SettingsClientModel? _settingsClient;
     public ObservableCollection<NoteViewModel> Notes { get; } = [];
+
+    public Guid TicketId
+    {
+        get => _ticketId;
+        set => this.RaiseAndSetIfChanged(ref _ticketId, value);
+    }
 
     public Guid TimeSlotId
     {
@@ -46,8 +53,8 @@ public class NoteStreamViewModel(
 
         await tracer.Note.Create.StartUseCase(GetType(), tracingId);
 
-        var clientCreateNoteCommand = new ClientCreateNoteCommand(Guid.NewGuid(), Guid.Empty, string.Empty, TimeSlotId,
-            DateTimeOffset.Now, tracingId);
+        var clientCreateNoteCommand = new ClientCreateNoteCommand(Guid.NewGuid(), Guid.Empty, string.Empty, TicketId,
+            TimeSlotId, DateTimeOffset.Now, tracingId);
 
         await tracer.Note.Create.SendingCommand(GetType(), tracingId, clientCreateNoteCommand);
         await commandSender.Send(clientCreateNoteCommand);
@@ -60,13 +67,13 @@ public class NoteStreamViewModel(
             _settingsClient = m;
             await InitializeAsync();
         });
-        
+
         messenger.Register<WorkDaySelectedNotification>(this, async void (_, m) =>
         {
             _settingsClient!.SelectedDate = m.Date;
             await InitializeAsync();
         });
-        
+
         messenger.Register<NewNoteMessage>(this,
             async void (_, message) => { await InsertNoteViewModel(message.Note); });
 

@@ -5,5 +5,5 @@ namespace Client.Desktop.Presentation.Factories;
 
 public interface INoteStreamViewModelFactory
 {
-    NoteStreamViewModel Create(Guid timeSLotId);
+    NoteStreamViewModel Create(Guid timeSlotId, Guid ticketId);
 }

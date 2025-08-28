@@ -25,18 +25,18 @@ public class TimeSlotViewModelFactory(IServiceProvider serviceProvider, IRequest
 
         timeSlotViewModel.Model.TicketReplayDecorator = replayDecorator;
         timeSlotViewModel.Model.TimeSlot = timeSlot;
-        timeSlotViewModel.StatisticsViewModel.StatisticsData = statisticsData;
-
+        
+        timeSlotViewModel.CreateSubViewModels(ticket.TicketId, timeSlot.TimeSlotId, statisticsData);
+        
         await timeSlotViewModel.StatisticsViewModel.Initialize();
         timeSlotViewModel.StatisticsViewModel.RegisterMessenger();
 
-        timeSlotViewModel.NoteStreamViewModel.TimeSlotId = timeSlot.TimeSlotId;
         await timeSlotViewModel.NoteStreamViewModel.InitializeAsync();
         timeSlotViewModel.NoteStreamViewModel.RegisterMessenger();
-
-        timeSlotViewModel.InitializeViewTimer(new ViewTimer());
+        
         timeSlotViewModel.Model.RegisterMessenger();
-
+        timeSlotViewModel.InitializeViewTimer(new ViewTimer());
+        
         return timeSlotViewModel;
     }
 }

@@ -15,9 +15,10 @@ message CreateNoteCommandProto {
   string noteId = 1;
   string text = 2;
   string noteTypeId = 3;
-  string timeSlotId = 4;
-  google.protobuf.Timestamp timeStamp = 5;
-  TraceDataProto traceData = 6;
+  string ticketId = 4;
+  string timeSlotId = 5;
+  google.protobuf.Timestamp timeStamp = 6;
+  TraceDataProto traceData = 7;
 }
 
 message UpdateNoteCommandProto {

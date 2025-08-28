@@ -10,14 +10,15 @@ public class NoteTest : NoteTestBase
     private readonly Guid _noteId = Guid.NewGuid();
     private readonly Guid _initialNoteTypeId = Guid.NewGuid();
     private const string InitialText = "Initial text";
+    private readonly Guid _initialTicketId = Guid.NewGuid();
     private readonly Guid _initialTimeSlotId = Guid.NewGuid();
     private readonly DateTimeOffset _initialTimeStamp = DateTimeOffset.Now.AddDays(-3);
 
     [Test]
     public void CreatedEventSetsInitialState()
     {
-        var created = new NoteCreatedEvent(_noteId, InitialText, _initialNoteTypeId, _initialTimeSlotId,
-            _initialTimeStamp);
+        var created = new NoteCreatedEvent(_noteId, InitialText, _initialNoteTypeId, _initialTicketId,
+            _initialTimeSlotId, _initialTimeStamp);
         var events = CreateEventList(created);
 
         var aggregate = Rehydrate(events);
@@ -31,8 +32,8 @@ public class NoteTest : NoteTestBase
         const string newText = "new text";
         var newNoteTypeId = Guid.NewGuid();
 
-        var created = new NoteCreatedEvent(_noteId, InitialText, _initialNoteTypeId, _initialTimeSlotId,
-            _initialTimeStamp);
+        var created = new NoteCreatedEvent(_noteId, InitialText, _initialNoteTypeId, _initialTicketId,
+            _initialTimeSlotId, _initialTimeStamp);
         var updated = new NoteUpdatedEvent(Guid.NewGuid(), newText, newNoteTypeId);
         var events = CreateEventList(created, updated);
 
