@@ -85,6 +85,7 @@ public static class TicketProtoExtensions
             TicketId = ticket.TicketId.ToString(),
             Name = ticket.Name,
             BookingNumber = ticket.BookingNumber,
+            Documentation = ticket.Documentation,
             SprintIds = { ticket.SprintIds.ToRepeatedField() }
         };
     }

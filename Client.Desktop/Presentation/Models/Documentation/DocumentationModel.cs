@@ -88,7 +88,13 @@ public class DocumentationModel(
         AllTickets.Clear();
         AllTickets.AddRange(await requestSender.Send(new ClientGetAllTicketsRequest(Guid.NewGuid())));
 
-        if (AllTickets.Any()) SelectedTicket = AllTickets[0];
+        if (!AllTickets.Any())
+        {
+            return;
+        }
+
+        SelectedTicket = AllTickets[0];
+        await UpdateNotesForSelectedTicket();
     }
 
     public void RegisterMessenger()
