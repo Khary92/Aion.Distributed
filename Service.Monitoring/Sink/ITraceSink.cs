@@ -1,6 +1,6 @@
 using Service.Monitoring.Shared;
 
-namespace Service.Monitoring.Tracers;
+namespace Service.Monitoring.Sink;
 
 public interface ITraceSink
 {

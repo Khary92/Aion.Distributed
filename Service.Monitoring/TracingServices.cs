@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using Service.Monitoring.Communication;
-using Service.Monitoring.Tracers;
+using Service.Monitoring.Sink;
 using Service.Monitoring.Verifiers.Common;
 using Service.Monitoring.Verifiers.Common.Factories;
 using Service.Monitoring.Verifiers.Steps;

@@ -51,4 +51,12 @@ public class TicketRequestService(
 
         return await GetTicketsBySprintId(activeSprint.SprintId);
     }
+
+    public async Task<List<string>> GetDocumentationByTicketId(Guid ticketId)
+    {
+        var ticketDocumentationEventsByTicketId =
+            await ticketEventStore.GetTicketDocumentationEventsByTicketId(ticketId);
+        
+        return ticketDocumentationEventsByTicketId.Select(t => t.Documentation).ToList();
+    }
 }

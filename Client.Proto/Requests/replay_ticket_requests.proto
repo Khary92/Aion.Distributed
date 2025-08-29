@@ -11,7 +11,7 @@ message GetReplayResponseProto {
 }
 
 message GetTicketReplaysByIdRequestProto {
-  string note_type_id = 1;
+  string ticket_id = 1;
   TraceDataProto traceData = 2;
 }
 

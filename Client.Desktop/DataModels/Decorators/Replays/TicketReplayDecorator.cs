@@ -1,6 +1,9 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests;
+using Client.Desktop.Communication.Requests.Replays.Records;
+using Client.Desktop.Communication.Requests.Ticket;
 using ReactiveUI;
 
 namespace Client.Desktop.DataModels.Decorators.Replays;
@@ -10,7 +13,6 @@ public class TicketReplayDecorator : ReactiveObject
     private readonly List<DocumentationReplay> _documentationHistory = [];
 
     private readonly IRequestSender _requestSender;
-    // private readonly IHistoryLoader<DocumentationReplayDto> _documentationHistoryLoader;
 
     private string _displayedDocumentation = string.Empty;
 
@@ -47,17 +49,17 @@ public class TicketReplayDecorator : ReactiveObject
 
     public async Task LoadHistory()
     {
-//        var ticketDocumentationEventsByTicketId =
-//            await _documentationHistoryLoader.Load(Ticket.TicketId);
+        var ticketDocumentationEventsByTicketId =
+            await _requestSender.Send(new ClientGetTicketReplaysByIdRequest(Ticket.TicketId, Guid.NewGuid()));
 
-//        _documentationHistory.Clear();
-//        foreach (var ticketDocumentationEvent in ticketDocumentationEventsByTicketId)
-//            _documentationHistory.Add(new DocumentationReplayDto(ticketDocumentationEvent.Documentation));
+        _documentationHistory.Clear();
+        foreach (var ticketDocumentationEvent in ticketDocumentationEventsByTicketId)
+            _documentationHistory.Add(new DocumentationReplay(ticketDocumentationEvent.Documentation));
 
-//        if (_documentationHistory.Count == 0) return;
+        if (_documentationHistory.Count == 0) return;
 
-//        _index = 0;
-//        DisplayedDocumentation = _documentationHistory[_index].Documentation;
+        _index = 0;
+        DisplayedDocumentation = _documentationHistory[_index].Documentation;
     }
 
     public void ExitReplay()

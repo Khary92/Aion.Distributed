@@ -3,7 +3,7 @@ using Service.Monitoring.Shared.Enums;
 using Service.Monitoring.Verifiers.Common.Enums;
 using Service.Monitoring.Verifiers.Common.Records;
 
-namespace Service.Monitoring.Tracers.Steps;
+namespace Service.Monitoring.Sink.Steps;
 
 public class TicketUseCasesSteps
 {

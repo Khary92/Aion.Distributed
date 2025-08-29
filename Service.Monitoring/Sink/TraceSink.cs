@@ -5,7 +5,7 @@ using Service.Monitoring.Verifiers.Common;
 using Service.Monitoring.Verifiers.Common.Factories;
 using Service.Monitoring.Verifiers.Common.Records;
 
-namespace Service.Monitoring.Tracers;
+namespace Service.Monitoring.Sink;
 
 public class TraceSink(IReportSender reportSender, IVerifierFactory verifierFactory, TraceDataSendPolicy sendPolicy) : ITraceSink
 {

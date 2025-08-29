@@ -1,7 +1,7 @@
 using Grpc.Core;
 using Proto.Command.TraceData;
 using Service.Monitoring.Shared;
-using Service.Monitoring.Tracers;
+using Service.Monitoring.Sink;
 
 namespace Service.Monitoring.Communication;
 

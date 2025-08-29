@@ -5,6 +5,7 @@ using Core.Server.Communication.Endpoints.Sprint;
 using Core.Server.Communication.Endpoints.StatisticsData;
 using Core.Server.Communication.Endpoints.Tag;
 using Core.Server.Communication.Endpoints.Ticket;
+using Core.Server.Communication.Endpoints.TicketReplay;
 using Core.Server.Communication.Endpoints.TimerSettings;
 using Core.Server.Communication.Endpoints.TimeSlot;
 using Core.Server.Communication.Endpoints.UseCase;
@@ -55,6 +56,7 @@ public static class EndpointServices
         app.MapGrpcService<StatisticsDataRequestReceiver>();
         app.MapGrpcService<TagRequestReceiver>();
         app.MapGrpcService<TicketRequestReceiver>();
+        app.MapGrpcService<TicketReplayRequestReceiver>();
         app.MapGrpcService<TimerSettingsRequestReceiver>();
         app.MapGrpcService<TimeSlotRequestReceiver>();
         app.MapGrpcService<WorkDayRequestReceiver>();
