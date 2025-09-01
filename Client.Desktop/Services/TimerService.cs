@@ -14,9 +14,9 @@ using Timer = System.Timers.Timer;
 namespace Client.Desktop.Services;
 
 public class TimerService(IRequestSender requestSender, IMessenger messenger)
-    : IRegisterMessenger, IInitializeAsync, ITimerService
+    : IRegisterMessenger, IInitializeAsync
 {
-    private readonly Timer _timer = new Timer(1000);
+    private readonly Timer _timer = new(1000);
     private TimerSettingsClientModel? _timerSettings;
 
     private void OnTick(object? sender, ElapsedEventArgs e)

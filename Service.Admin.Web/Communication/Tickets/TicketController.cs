@@ -11,7 +11,7 @@ public class TicketController(ITraceCollector tracer, ISharedCommandSender comma
     public string NewTicketName { get; set; } = string.Empty;
     public string NewTicketBookingNumber { get; set; } = string.Empty;
     public bool IsShowAllTicketsActive { get; set; }
-    public bool IsEditMode { get; set; }
+    public bool IsEditMode { get; private set; }
 
     public Task CreateOrUpdateTicket()
     {

@@ -8,7 +8,6 @@ public enum UseCaseMeta
     UpdateTicketDocumentation,
 
 
-    ExportData,
     CreateNote,
     UpdateNote,
     ChangeNoteTypeColor,

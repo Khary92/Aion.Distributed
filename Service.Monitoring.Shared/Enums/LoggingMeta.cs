@@ -3,7 +3,6 @@ namespace Service.Monitoring.Shared.Enums;
 public enum LoggingMeta
 {
     ActionRequested,
-    PropertyNotChanged,
     NotificationReceived,
     SendingCommand,
     ExceptionOccured,
@@ -16,5 +15,5 @@ public enum LoggingMeta
     SendingNotification,
     NoEntitySelected,
     ActionAborted,
-    SprintIdAddedToTicket,
+    SprintIdAddedToTicket
 }

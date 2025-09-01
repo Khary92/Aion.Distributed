@@ -69,7 +69,6 @@ using Service.Proto.Shared.Commands.NoteTypes;
 using Service.Proto.Shared.Commands.Sprints;
 using Service.Proto.Shared.Commands.Tags;
 using Service.Proto.Shared.Commands.Tickets;
-using Service.Proto.Shared.Commands.TimerSettings;
 using Service.Proto.Shared.Requests.NoteTypes;
 using Service.Proto.Shared.Requests.Sprints;
 using Service.Proto.Shared.Requests.Tags;
@@ -145,9 +144,8 @@ public static class ServiceExtensions
         services.AddSingleton<ExportService>();
         services.AddSingleton<IExportService>(sp => sp.GetRequiredService<ExportService>());
         services.AddSingleton<IRegisterMessenger>(sp => sp.GetRequiredService<ExportService>());
-        
+
         services.AddSingleton<TimerService>();
-        services.AddSingleton<ITimerService>(sp => sp.GetRequiredService<TimerService>());
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<TimerService>());
         services.AddSingleton<IRegisterMessenger>(sp => sp.GetRequiredService<TimerService>());
     }

@@ -10,17 +10,16 @@ namespace Service.Admin.Web.Communication.TimerSettings;
 
 public static class TimerSettingsExtensions
 {
-    public static CreateTimerSettingsCommandProto ToProto(this WebCreateTimerSettingsCommand command) =>
-        new CreateTimerSettingsCommandProto
+    public static CreateTimerSettingsCommandProto ToProto(this WebCreateTimerSettingsCommand command) => new()
+    {
+        TimerSettingsId = command.TimerSettingsId.ToString(),
+        DocumentationSaveInterval = command.DocumentationSaveInterval,
+        SnapshotSaveInterval = command.SnapshotSaveInterval,
+        TraceData = new TraceDataProto
         {
-            TimerSettingsId = command.TimerSettingsId.ToString(),
-            DocumentationSaveInterval = command.DocumentationSaveInterval,
-            SnapshotSaveInterval = command.SnapshotSaveInterval,
-            TraceData = new TraceDataProto
-            {
-                TraceId = command.TraceId.ToString()
-            }
-        };
+            TraceId = command.TraceId.ToString()
+        }
+    };
 
     public static ChangeDocuTimerSaveIntervalCommandProto ToProto(this WebChangeDocuTimerSaveIntervalCommand command) =>
         new()
@@ -50,8 +49,8 @@ public static class TimerSettingsExtensions
         Guid.Parse(notification.TraceData.TraceId));
 
     public static WebDocuIntervalChangedNotification ToNotification(
-        this DocuTimerSaveIntervalChangedNotification notification) => new(Guid.Parse(notification.TimerSettingsId),
-        notification.DocuTimerSaveInterval, Guid.Parse(notification.TraceData.TraceId));
+        this DocuTimerSaveIntervalChangedNotification notification) => new(notification.DocuTimerSaveInterval,
+        Guid.Parse(notification.TraceData.TraceId));
 
     public static WebSnapshotIntervalChangedNotification ToNotification(
         this SnapshotSaveIntervalChangedNotification notification) => new(notification.SnapshotSaveInterval,

@@ -8,7 +8,7 @@ public class TagController(ITraceCollector tracer, ISharedCommandSender commandS
 {
     public TagWebModel? SelectedTag { get; set; }
     public string InputTagName { get; set; } = string.Empty;
-    public bool IsEditMode { get; set; }
+    public bool IsEditMode { get; private set; }
 
     public Task PersistTag()
     {

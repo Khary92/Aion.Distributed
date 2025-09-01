@@ -31,10 +31,10 @@ public class TimerSettingsCommandsService(
         await timerSettingsEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
         
         var notification = command.ToNotification();
-        await tracer.TimerSettings.Create.EventPersisted(GetType(), command.TraceId,
+        await tracer.TimerSettings.ChangeDocuTimerInterval.EventPersisted(GetType(), command.TraceId,
             notification.DocuTimerSaveIntervalChanged);
 
-        await tracer.TimerSettings.Create.SendingNotification(GetType(), command.TraceId,
+        await tracer.TimerSettings.ChangeDocuTimerInterval.SendingNotification(GetType(), command.TraceId,
             notification.DocuTimerSaveIntervalChanged);
         await notificationService.SendNotificationAsync(command.ToNotification());
     }

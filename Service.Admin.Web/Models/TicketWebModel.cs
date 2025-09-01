@@ -17,8 +17,6 @@ public class TicketWebModel(
 
     public List<Guid> SprintIds { get; private set; } = sprintIds;
 
-    private string Documentation { get; set; } = documentation;
-
     public void Apply(WebTicketDataUpdatedNotification notification)
     {
         BookingNumber = notification.BookingNumber;
@@ -28,6 +26,5 @@ public class TicketWebModel(
 
     public void Apply(WebTicketDocumentationUpdatedNotification notification)
     {
-        Documentation = notification.Documentation;
     }
 }

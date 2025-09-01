@@ -1,17 +1,17 @@
 ﻿using Core.Server.Services.Entities.TimeSlots;
+using Core.Server.Tracing.Tracing.Tracers;
 using Grpc.Core;
 using Proto.Command.TimeSlots;
 
 namespace Core.Server.Communication.Endpoints.TimeSlot;
 
-public class TimeSlotCommandReceiver(ITimeSlotCommandsService timeSlotCommandsService)
+public class TimeSlotCommandReceiver(ITimeSlotCommandsService timeSlotCommandsService, ITraceCollector tracer)
     : TimeSlotCommandProtoService.TimeSlotCommandProtoServiceBase
 {
     public override async Task<CommandResponse> CreateTimeSlot(CreateTimeSlotCommandProto request,
         ServerCallContext context)
     {
-        Console.WriteLine(
-            $"[CreateTimeSlot] ID: {request.TimeSlotId}, TicketID: {request.SelectedTicketId}, WorkDayID: {request.WorkDayId}, StartTime: {request.StartTime}, EndTime: {request.EndTime}, TimerRunning: {request.IsTimerRunning}");
+        await tracer.TimeSlot.Create.CommandReceived(GetType(), Guid.Parse(request.TraceData.TraceId), request);
 
         await timeSlotCommandsService.Create(request.ToCommand());
         return new CommandResponse { Success = true };
@@ -19,7 +19,7 @@ public class TimeSlotCommandReceiver(ITimeSlotCommandsService timeSlotCommandsSe
 
     public override async Task<CommandResponse> AddNote(AddNoteCommandProto request, ServerCallContext context)
     {
-        Console.WriteLine($"[AddNote] TimeSlotID: {request.TimeSlotId}, NoteID: {request.NoteId}");
+        await tracer.TimeSlot.AddNote.CommandReceived(GetType(), Guid.Parse(request.TraceData.TraceId), request);
 
         await timeSlotCommandsService.AddNote(request.ToCommand());
         return new CommandResponse { Success = true };
@@ -28,7 +28,7 @@ public class TimeSlotCommandReceiver(ITimeSlotCommandsService timeSlotCommandsSe
     public override async Task<CommandResponse> SetStartTime(SetStartTimeCommandProto request,
         ServerCallContext context)
     {
-        Console.WriteLine($"[SetStartTime] TimeSlotID: {request.TimeSlotId}, Time: {request.Time}");
+        await tracer.TimeSlot.SetStartTime.CommandReceived(GetType(), Guid.Parse(request.TraceData.TraceId), request);
 
         await timeSlotCommandsService.SetStartTime(request.ToCommand());
         return new CommandResponse { Success = true };
@@ -36,7 +36,7 @@ public class TimeSlotCommandReceiver(ITimeSlotCommandsService timeSlotCommandsSe
 
     public override async Task<CommandResponse> SetEndTime(SetEndTimeCommandProto request, ServerCallContext context)
     {
-        Console.WriteLine($"[SetEndTime] TimeSlotID: {request.TimeSlotId}, Time: {request.Time}");
+        await tracer.TimeSlot.SetEndTime.CommandReceived(GetType(), Guid.Parse(request.TraceData.TraceId), request);
 
         await timeSlotCommandsService.SetEndTime(request.ToCommand());
         return new CommandResponse { Success = true };

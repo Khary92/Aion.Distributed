@@ -7,6 +7,4 @@ using Service.Proto.Shared.Commands.TimerSettings;
 namespace Service.Admin.Web.Communication;
 
 public interface ISharedCommandSender : ITicketCommandSender, ISprintCommandSender, ITagCommandSender,
-    INoteTypeCommandSender, ITimerSettingsCommandSender
-{
-}
+    INoteTypeCommandSender, ITimerSettingsCommandSender;

@@ -9,7 +9,7 @@ namespace Core.Server.Communication.Endpoints.Sprint;
 public class SprintCommandReceiver(
     ISprintCommandsService sprintsCommandsService,
     AddTicketToActiveSprintCommandHandler addTicketToActiveSprintCommandHandler,
-    SetSprintActiveStatusCommandHandler setSprintActiveStatusCommandHandler, 
+    SetSprintActiveStatusCommandHandler setSprintActiveStatusCommandHandler,
     ITraceCollector tracer)
     : SprintCommandProtoService.SprintCommandProtoServiceBase
 {
@@ -22,12 +22,11 @@ public class SprintCommandReceiver(
         await addTicketToActiveSprintCommandHandler.Handle(command);
         return new CommandResponse { Success = true };
     }
-    
+
     public override async Task<CommandResponse> CreateSprint(CreateSprintCommandProto request,
         ServerCallContext context)
     {
-        Console.WriteLine(
-            $"[CreateSprint] SprintID: {request.SprintId}, Name: {request.Name}, Start: {request.StartTime}, End: {request.EndTime}, IsActive: {request.IsActive}, Tickets: {string.Join(", ", request.TicketIds)}");
+        await tracer.Sprint.Create.CommandReceived(GetType(), Guid.Parse(request.TraceData.TraceId), request);
 
         await sprintsCommandsService.Create(request.ToCommand());
         return new CommandResponse { Success = true };
@@ -36,7 +35,7 @@ public class SprintCommandReceiver(
     public override async Task<CommandResponse> SetSprintActiveStatus(SetSprintActiveStatusCommandProto request,
         ServerCallContext context)
     {
-        Console.WriteLine($"[SetSprintActiveStatus] SprintID: {request.SprintId}, IsActive: {request.IsActive}");
+        await tracer.Sprint.ActiveStatus.CommandReceived(GetType(), Guid.Parse(request.TraceData.TraceId), request);
 
         await setSprintActiveStatusCommandHandler.Handle(request.ToCommand());
         return new CommandResponse { Success = true };
@@ -45,8 +44,7 @@ public class SprintCommandReceiver(
     public override async Task<CommandResponse> UpdateSprintData(UpdateSprintDataCommandProto request,
         ServerCallContext context)
     {
-        Console.WriteLine(
-            $"[UpdateSprintData] SprintID: {request.SprintId}, Name: {request.Name}, Start: {request.StartTime}, End: {request.EndTime}");
+        await tracer.Sprint.Update.CommandReceived(GetType(), Guid.Parse(request.TraceData.TraceId), request);
 
         await sprintsCommandsService.UpdateSprintData(request.ToCommand());
         return new CommandResponse { Success = true };

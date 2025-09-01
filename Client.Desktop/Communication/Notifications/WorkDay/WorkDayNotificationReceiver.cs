@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
+using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using Grpc.Core;
 using Proto.Notifications.WorkDay;
@@ -11,7 +12,8 @@ namespace Client.Desktop.Communication.Notifications.WorkDay;
 
 public class WorkDayNotificationReceiver(
     WorkDayNotificationService.WorkDayNotificationServiceClient client,
-    IMessenger messenger) : IStreamClient
+    IMessenger messenger,
+    ITraceCollector tracer) : IStreamClient
 {
     public async Task StartListening(CancellationToken cancellationToken)
     {
@@ -25,12 +27,19 @@ public class WorkDayNotificationReceiver(
                     switch (notification.NotificationCase)
                     {
                         case WorkDayNotification.NotificationOneofCase.WorkDayCreated:
+                            await tracer.WorkDay.Create.NotificationReceived(GetType(),
+                                Guid.Parse(notification.WorkDayCreated.TraceData.TraceId), notification.WorkDayCreated);
+
                             Dispatcher.UIThread.Post(() =>
                             {
                                 messenger.Send(notification.WorkDayCreated.ToNewEntityMessage());
                             });
 
                             break;
+                        case WorkDayNotification.NotificationOneofCase.None:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
                     }
             }
             catch (Exception ex)

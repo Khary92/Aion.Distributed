@@ -25,7 +25,7 @@ public class SprintWebModel
     
     public bool IsActive { get; set; }
 
-    public List<Guid> TicketIds { get; set; } = [];
+    private List<Guid> TicketIds { get; }
 
     public void Apply(WebAddTicketToActiveSprintNotification notification)
     {
