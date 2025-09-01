@@ -8,7 +8,7 @@ using Client.Tracing.Tracing.Tracers;
 
 namespace Client.Desktop.Presentation.Models.Synchronization;
 
-public class DocumentationSynchronizer(ICommandSender commandSender, ITraceCollector tracer)
+public class DocumentationSynchronizer(ICommandSender commandSender)
     : IStateSynchronizer<TicketReplayDecorator, string>
 {
     private readonly ConcurrentDictionary<Guid, string> _documentationById = new();

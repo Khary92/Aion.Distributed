@@ -2,10 +2,8 @@
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.ReactiveUI;
-using Client.Desktop.Lifecycle.Startup.Scheduler;
 using Client.Desktop.Presentation.Views.Main;
 using Client.Tracing;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace Client.Desktop;

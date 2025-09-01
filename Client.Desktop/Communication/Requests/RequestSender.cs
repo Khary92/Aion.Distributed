@@ -24,7 +24,6 @@ using Client.Desktop.Communication.Requests.WorkDays.Records;
 using Client.Desktop.DataModels;
 using Client.Desktop.DataModels.Decorators;
 using Client.Desktop.DataModels.Decorators.Replays;
-using Proto.Requests.TimerSettings;
 using Service.Proto.Shared.Requests.NoteTypes;
 using Service.Proto.Shared.Requests.Sprints;
 using Service.Proto.Shared.Requests.Tags;

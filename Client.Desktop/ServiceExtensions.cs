@@ -155,19 +155,19 @@ public static class ServiceExtensions
     private static void AddSharedDataServices(this IServiceCollection services)
     {
         var serverAddress = "http://localhost:8081";
-        services.AddScoped<ITicketCommandSender>(sp => new TicketCommandSender(serverAddress));
-        services.AddScoped<ITicketRequestSender>(sp => new TicketRequestSender(serverAddress));
+        services.AddScoped<ITicketCommandSender>(_ => new TicketCommandSender(serverAddress));
+        services.AddScoped<ITicketRequestSender>(_ => new TicketRequestSender(serverAddress));
 
-        services.AddScoped<ISprintCommandSender>(sp => new SprintCommandSender(serverAddress));
-        services.AddScoped<ISprintRequestSender>(sp => new SprintRequestSender(serverAddress));
+        services.AddScoped<ISprintCommandSender>(_ => new SprintCommandSender(serverAddress));
+        services.AddScoped<ISprintRequestSender>(_ => new SprintRequestSender(serverAddress));
 
-        services.AddScoped<ITagCommandSender>(sp => new TagCommandSender(serverAddress));
-        services.AddScoped<ITagRequestSender>(sp => new TagRequestSender(serverAddress));
+        services.AddScoped<ITagCommandSender>(_ => new TagCommandSender(serverAddress));
+        services.AddScoped<ITagRequestSender>(_ => new TagRequestSender(serverAddress));
 
-        services.AddScoped<INoteTypeCommandSender>(sp => new NoteTypeCommandSender(serverAddress));
-        services.AddScoped<INoteTypeRequestSender>(sp => new NoteTypeRequestSender(serverAddress));
+        services.AddScoped<INoteTypeCommandSender>(_ => new NoteTypeCommandSender(serverAddress));
+        services.AddScoped<INoteTypeRequestSender>(_ => new NoteTypeRequestSender(serverAddress));
 
-        services.AddScoped<ITimerSettingsRequestSender>(sp => new TimerSettingsRequestSender(serverAddress));
+        services.AddScoped<ITimerSettingsRequestSender>(_ => new TimerSettingsRequestSender(serverAddress));
     }
 
     private static void AddFileSystemServices(this IServiceCollection services)

@@ -1,6 +1,5 @@
 using System.Threading.Tasks;
 using Avalonia.Controls;
-using Client.Desktop.Presentation.Models.TimeTracking;
 using Client.Desktop.Presentation.Views.Analysis;
 using Client.Desktop.Presentation.Views.Documentation;
 using Client.Desktop.Presentation.Views.Export;
@@ -25,9 +24,8 @@ public class ContentWrapperViewModel : ReactiveObject
     private int _menuWidth;
 
     public ContentWrapperViewModel(SettingsCompositeControl settingsCompositeControl,
-        TimeTrackingControl timeTrackingControl,
-        ExportControl exportControl, AnalysisControlWrapper analysisControlWrapper,
-        TimeTrackingViewModel timeTrackingViewModel, DocumentationControl documentationControl)
+        TimeTrackingControl timeTrackingControl, ExportControl exportControl,
+        AnalysisControlWrapper analysisControlWrapper, DocumentationControl documentationControl)
     {
         OnSettingsClickCommand = ReactiveCommand.CreateFromTask(async () =>
         {

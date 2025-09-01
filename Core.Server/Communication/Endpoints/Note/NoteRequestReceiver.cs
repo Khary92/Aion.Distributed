@@ -1,5 +1,4 @@
 ﻿using Core.Server.Services.Entities.Notes;
-using Core.Server.Tracing.Tracing.Tracers;
 using Grpc.Core;
 using Proto.Requests.Notes;
 

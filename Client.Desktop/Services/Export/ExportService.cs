@@ -36,8 +36,9 @@ public class ExportService(
         {
             await fileSystemWriter.Write(markdownString, filePath);
         }
-        catch (IOException e)
+        catch (IOException ex)
         {
+            Console.WriteLine(GetType() + " caused an exception: " + ex);
             return false;
         }
 
@@ -114,7 +115,7 @@ public class ExportService(
                 continue;
             }
 
-            ticketDataList.Add(new TicketDataHolder(ticket!.TicketId, ticket.Name, ticket.BookingNumber,
+            ticketDataList.Add(new TicketDataHolder(ticket.TicketId, ticket.Name, ticket.BookingNumber,
                 elapsedSeconds));
         }
     }

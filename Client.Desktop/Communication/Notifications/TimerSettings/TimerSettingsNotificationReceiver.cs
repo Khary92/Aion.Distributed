@@ -30,7 +30,6 @@ public class TimerSettingsNotificationReceiver(
                         case TimerSettingsNotification.NotificationOneofCase.DocuTimerSaveIntervalChanged:
                         {
                             var docuTimerSaveIntervalChangedNotification = notification.DocuTimerSaveIntervalChanged;
-                            ;
 
                             //TODO Add tracing
 
@@ -56,6 +55,8 @@ public class TimerSettingsNotificationReceiver(
             }
             catch (Exception ex)
             {
+                Console.WriteLine(GetType() + " caused an exception: " + ex);
+
                 if (cancellationToken.IsCancellationRequested)
                     return;
 

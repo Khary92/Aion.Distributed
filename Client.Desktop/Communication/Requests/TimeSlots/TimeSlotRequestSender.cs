@@ -18,7 +18,7 @@ public class TimeSlotRequestSender : ITimeSlotRequestSender
     {
         var response = await _client.GetTimeSlotByIdAsync(request.ToProto());
 
-        if (response == null) throw new ArgumentNullException("Add default implementation here!");
+        if (response == null) throw new ArgumentNullException();
 
         return response.ToClientModel();
     }

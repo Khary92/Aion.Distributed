@@ -1,7 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using Grpc.Core;
 using Proto.Notifications.UseCase;
-using Proto.Notifications.WorkDay;
 using SubscribeRequest = Proto.Notifications.UseCase.SubscribeRequest;
 
 namespace Core.Server.Communication.Endpoints.UseCase;

@@ -3,7 +3,6 @@ using System.Reactive.Linq;
 using Client.Desktop.Communication.Notifications.UseCase.Records;
 using Client.Desktop.DataModels;
 using CommunityToolkit.Mvvm.Messaging;
-using Proto.Notifications.UseCase;
 using ReactiveUI;
 using Unit = System.Reactive.Unit;
 

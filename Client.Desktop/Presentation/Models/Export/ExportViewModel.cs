@@ -10,11 +10,8 @@ namespace Client.Desktop.Presentation.Models.Export;
 
 public class ExportViewModel : ReactiveObject
 {
-    private readonly ITraceCollector _tracer;
-
-    public ExportViewModel(ITraceCollector tracer, ExportModel exportModel)
+    public ExportViewModel(ExportModel exportModel)
     {
-        _tracer = tracer;
         Model = exportModel;
 
         ExportCommand = ReactiveCommand.CreateFromTask(ExportFile);

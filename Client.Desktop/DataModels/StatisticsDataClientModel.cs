@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Client.Desktop.Communication.Commands.StatisticsData.Records;
 using Client.Desktop.Communication.Notifications.StatisticsData.Records;
 using ReactiveUI;
 

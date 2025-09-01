@@ -55,8 +55,8 @@ public class TimeSlotViewModel : ReactiveObject
         SwitchToNotestreamView();
     }
 
-    public NoteStreamViewModel NoteStreamViewModel { get; set; }
-    public StatisticsViewModel StatisticsViewModel { get; set; }
+    public required NoteStreamViewModel NoteStreamViewModel { get; set; }
+    public required StatisticsViewModel StatisticsViewModel { get; set; }
 
     public TimeSlotModel Model { get; }
 

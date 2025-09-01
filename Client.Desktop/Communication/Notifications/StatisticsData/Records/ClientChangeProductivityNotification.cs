@@ -1,5 +1,4 @@
 using System;
-using Service.Monitoring.Shared;
 
 namespace Client.Desktop.Communication.Notifications.StatisticsData.Records;
 

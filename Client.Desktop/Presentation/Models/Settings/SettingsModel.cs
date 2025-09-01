@@ -22,7 +22,7 @@ public class SettingsModel(IMessenger messenger, ILocalSettingsCommandSender loc
     {
         messenger.Register<ExportPathSetNotification>(this, void (_, m) => { Settings!.ExportPath = m.ExportPath; });
 
-        messenger.Register<SettingsClientModel>(this, async void (_, m) => { Settings = m; });
+        messenger.Register<SettingsClientModel>(this, void (_, m) => { Settings = m; });
     }
 
     public void SetExportPath()

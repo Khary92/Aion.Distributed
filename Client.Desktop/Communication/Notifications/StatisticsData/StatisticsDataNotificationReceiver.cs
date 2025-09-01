@@ -57,6 +57,7 @@ public class StatisticsDataNotificationReceiver(
             }
             catch (Exception ex)
             {
+                Console.WriteLine(GetType() + " caused an exception: " + ex);
                 if (cancellationToken.IsCancellationRequested)
                     return;
 

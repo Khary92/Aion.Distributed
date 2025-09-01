@@ -18,7 +18,7 @@ public class AnalysisRequestSender(IAnalysisMapper analysisMapper)
     {
         var response = await _client.GetSprintAnalysisAsync(request.ToProto());
 
-        if (response == null) throw new ArgumentNullException("Create a default implementation!");
+        if (response == null) throw new ArgumentNullException();
 
         return analysisMapper.Create(response);
     }
@@ -27,7 +27,7 @@ public class AnalysisRequestSender(IAnalysisMapper analysisMapper)
     {
         var response = await _client.GetTicketAnalysisAsync(request.ToProto());
 
-        if (response == null) throw new ArgumentNullException("Create a default implementation!");
+        if (response == null) throw new ArgumentNullException();
 
         return analysisMapper.Create(response);
     }
@@ -36,7 +36,7 @@ public class AnalysisRequestSender(IAnalysisMapper analysisMapper)
     {
         var response = await _client.GetTagAnalysisAsync(request.ToProto());
 
-        if (response == null) throw new ArgumentNullException("Create a default implementation!");
+        if (response == null) throw new ArgumentNullException();
 
         return analysisMapper.Create(response);
     }

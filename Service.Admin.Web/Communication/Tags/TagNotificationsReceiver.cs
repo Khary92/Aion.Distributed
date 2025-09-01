@@ -66,6 +66,7 @@ public class TagNotificationsReceiver(ITagStateService tagStateService, ITraceCo
             }
             catch (Exception ex)
             {
+                Console.WriteLine(GetType() + " caused an error: " + ex);
                 await Task.Delay(5000, stoppingToken);
             }
     }

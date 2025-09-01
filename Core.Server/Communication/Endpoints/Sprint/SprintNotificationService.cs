@@ -1,7 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using Grpc.Core;
 using Proto.Notifications.Sprint;
-using Proto.Notifications.StatisticsData;
 using SubscribeRequest = Proto.Notifications.Sprint.SubscribeRequest;
 
 namespace Core.Server.Communication.Endpoints.Sprint;

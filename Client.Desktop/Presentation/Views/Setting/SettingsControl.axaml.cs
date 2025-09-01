@@ -36,6 +36,6 @@ public partial class SettingsControl : ReactiveUserControl<SettingsViewModel>
 
         if (storageFolder == null) return;
 
-        ViewModel!.Model.Settings.ExportPath = storageFolder.Path.AbsolutePath;
+        ViewModel!.Model.Settings!.ExportPath = storageFolder.Path.AbsolutePath;
     }
 }

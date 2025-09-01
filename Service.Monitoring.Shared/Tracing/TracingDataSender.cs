@@ -12,7 +12,7 @@ public class TracingDataSender : ITracingDataSender
         var channel = GrpcChannel.ForAddress(address);
         _client = new TraceDataCommandProtoService.TraceDataCommandProtoServiceClient(channel);
     }
-    
+
     public async Task<bool> Send(ServiceTraceDataCommand command)
     {
         try
@@ -20,8 +20,9 @@ public class TracingDataSender : ITracingDataSender
             var response = await _client.SendTraceDataAsync(command.ToProto());
             return response.Success;
         }
-        catch (Exception e)
+        catch (Exception ex)
         {
+            Console.WriteLine(GetType() + " caused an error: " + ex);
             return false;
         }
     }

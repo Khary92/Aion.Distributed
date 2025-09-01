@@ -1,7 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using Grpc.Core;
 using Proto.Notifications.TimeSlots;
-using Proto.Notifications.TraceReports;
 using SubscribeRequest = Proto.Notifications.TimeSlots.SubscribeRequest;
 
 namespace Core.Server.Communication.Endpoints.TimeSlot;

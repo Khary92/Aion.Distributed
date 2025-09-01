@@ -70,6 +70,7 @@ public class TicketNotificationsReceiver(ITraceCollector tracer, ITicketStateSer
             }
             catch (Exception ex)
             {
+                Console.WriteLine(GetType() + " caused an error: " + ex);
                 await Task.Delay(5000, stoppingToken);
             }
     }

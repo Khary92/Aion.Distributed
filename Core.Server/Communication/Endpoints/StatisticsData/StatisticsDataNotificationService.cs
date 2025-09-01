@@ -1,7 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using Grpc.Core;
 using Proto.Notifications.StatisticsData;
-using Proto.Notifications.Tag;
 using SubscribeRequest = Proto.Notifications.StatisticsData.SubscribeRequest;
 
 namespace Core.Server.Communication.Endpoints.StatisticsData;

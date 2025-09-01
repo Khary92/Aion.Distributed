@@ -1,7 +1,6 @@
 ﻿using System.Collections.Concurrent;
 using Grpc.Core;
 using Proto.Notifications.Ticket;
-using Proto.Notifications.TimerSettings;
 using SubscribeRequest = Proto.Notifications.Ticket.SubscribeRequest;
 
 namespace Core.Server.Communication.Endpoints.Ticket;

@@ -81,6 +81,7 @@ public class TimerSettingsNotificationsReceiver(
             }
             catch (Exception ex)
             {
+                Console.WriteLine(GetType() + " caused an error: " + ex);
                 await Task.Delay(5000, stoppingToken);
             }
     }
