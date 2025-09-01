@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.Commands.StatisticsData.Records;
+using Client.Desktop.Communication.Notifications.StatisticsData.Records;
 using Client.Desktop.Communication.Notifications.Tag.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.Communication.Requests;
@@ -82,7 +83,7 @@ public class StatisticsViewModel(
             await tracer.Tag.Update.ChangesApplied(GetType(), notification.TraceId);
         });
         
-        messenger.Register<ClientChangeTagSelectionCommand>(this, async void (_, notification) =>
+        messenger.Register<ClientChangeProductivityNotification>(this, async void (_, notification) =>
         {
             if (StatisticsData?.StatisticsId != notification.StatisticsDataId)
             {

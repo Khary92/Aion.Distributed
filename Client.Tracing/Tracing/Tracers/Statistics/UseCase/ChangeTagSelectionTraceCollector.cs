@@ -79,6 +79,15 @@ public class ChangeTagSelectionTraceCollector(ITracingDataSender sender)
 
     public async Task WrongModel(Type originClassType, Guid traceId)
     {
-        throw new NotImplementedException();
+        const string log = $"This model does not match with the target StatisticsDataId";
+
+        await sender.Send(new ServiceTraceDataCommand(
+            SortingType.StatisticsData,
+            UseCaseMeta.ChangeTagSelection,
+            LoggingMeta.DoesNotHandle,
+            originClassType,
+            traceId,
+            log,
+            DateTimeOffset.Now));
     }
 }

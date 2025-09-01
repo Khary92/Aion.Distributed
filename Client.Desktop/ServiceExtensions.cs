@@ -10,6 +10,7 @@ using Client.Desktop.Communication.Commands.WorkDays;
 using Client.Desktop.Communication.Notifications.Note;
 using Client.Desktop.Communication.Notifications.NoteType;
 using Client.Desktop.Communication.Notifications.Sprint;
+using Client.Desktop.Communication.Notifications.StatisticsData;
 using Client.Desktop.Communication.Notifications.Tag;
 using Client.Desktop.Communication.Notifications.Ticket;
 using Client.Desktop.Communication.Notifications.TimerSettings;
@@ -60,6 +61,7 @@ using Polly;
 using Proto.Notifications.Note;
 using Proto.Notifications.NoteType;
 using Proto.Notifications.Sprint;
+using Proto.Notifications.StatisticsData;
 using Proto.Notifications.Tag;
 using Proto.Notifications.Ticket;
 using Proto.Notifications.TimerSettings;
@@ -278,6 +280,7 @@ public static class ServiceExtensions
         services.AddSingleton<IStreamClient, UseCaseNotificationReceiver>();
         services.AddSingleton<IStreamClient, WorkDayNotificationReceiver>();
         services.AddSingleton<IStreamClient, TimerSettingsNotificationReceiver>();
+        services.AddSingleton<IStreamClient, StatisticsDataNotificationReceiver>();
 
         var channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
         services.AddSingleton(new TicketNotificationService.TicketNotificationServiceClient(channel));
@@ -288,6 +291,7 @@ public static class ServiceExtensions
         services.AddSingleton(new UseCaseNotificationService.UseCaseNotificationServiceClient(channel));
         services.AddSingleton(new WorkDayNotificationService.WorkDayNotificationServiceClient(channel));
         services.AddSingleton(new NoteTypeProtoNotificationService.NoteTypeProtoNotificationServiceClient(channel));
+        services.AddSingleton(new StatisticsDataNotificationService.StatisticsDataNotificationServiceClient(channel));
     }
 
     private static void AddCommandSenders(this IServiceCollection services)
