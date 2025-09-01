@@ -38,7 +38,7 @@ public static class TagExtensions
 
     public static NewTagMessage ToWebModel(this TagCreatedNotification notification)
     {
-        return new NewTagMessage(new TagWebModel(Guid.Parse(notification.TagId), notification.Name, false),
+        return new NewTagMessage(new TagWebModel(Guid.Parse(notification.TagId), notification.Name),
             Guid.Parse(notification.TraceData.TraceId));
     }
 

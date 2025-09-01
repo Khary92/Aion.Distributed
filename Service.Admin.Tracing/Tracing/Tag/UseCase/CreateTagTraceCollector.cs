@@ -8,7 +8,7 @@ public class CreateTagTraceCollector(ITracingDataSender sender) : ICreateTagTrac
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = "Create Tag requested";
+        const string log = "Create Tag requested";
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.Tag,
             UseCaseMeta.CreateTag,
@@ -39,19 +39,6 @@ public class CreateTagTraceCollector(ITracingDataSender sender) : ICreateTagTrac
             SortingType.Tag,
             UseCaseMeta.CreateTag,
             LoggingMeta.NotificationReceived,
-            originClassType,
-            traceId,
-            log,
-            DateTimeOffset.Now));
-    }
-
-    public async Task AggregateReceived(Type originClassType, Guid traceId, string attributes)
-    {
-        var log = $"Received aggregate {attributes}";
-        await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Tag,
-            UseCaseMeta.CreateTag,
-            LoggingMeta.AggregateReceived,
             originClassType,
             traceId,
             log,

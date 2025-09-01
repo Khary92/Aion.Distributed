@@ -75,10 +75,10 @@ public class SprintController(ISharedCommandSender commandSender, ITraceCollecto
             return;
         }
 
-        var command = new WebUpdateSprintDataCommand(SelectedSprint.SprintId, NewSprintName, StartTime, EndTime,
-            SelectedSprint.TicketIds, traceId);
+        var command =
+            new WebUpdateSprintDataCommand(SelectedSprint.SprintId, NewSprintName, StartTime, EndTime, traceId);
 
-        await tracer.Sprint.ActiveStatus.SendingCommand(GetType(), traceId, command);
+        await tracer.Sprint.Update.SendingCommand(GetType(), traceId, command);
         await commandSender.Send(command.ToProto());
 
         IsEditMode = false;
@@ -91,7 +91,7 @@ public class SprintController(ISharedCommandSender commandSender, ITraceCollecto
         await tracer.Sprint.Create.StartUseCase(GetType(), traceId);
 
         var createCommand =
-            new WebCreateSprintCommand(Guid.NewGuid(), NewSprintName, StartTime, EndTime, false, [], traceId);
+            new WebCreateSprintCommand(Guid.NewGuid(), NewSprintName, StartTime, EndTime, false, traceId);
 
         await tracer.Sprint.Create.SendingCommand(GetType(), traceId, createCommand);
         await commandSender.Send(createCommand.ToProto());

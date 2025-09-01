@@ -23,7 +23,7 @@ public static class TracingServices
 
     private static void AddACommonTracingServices(this IServiceCollection services)
     {
-        services.AddSingleton<ITracingDataSender>(sp =>
+        services.AddSingleton<ITracingDataSender>(_ =>
             new TracingDataSender("http://monitoring-service:8080"));
         services.AddSingleton<ITraceCollector, TraceCollector>();
     }

@@ -2,7 +2,7 @@ using Service.Admin.Web.Communication.Tags.Notifications;
 
 namespace Service.Admin.Web.Models;
 
-public class TagWebModel(Guid ticketId, string name, bool isSelected)
+public class TagWebModel(Guid ticketId, string name)
 {
     public Guid TagId { get; private set; } = ticketId;
     public string Name { get; set; } = name;

@@ -5,7 +5,7 @@ namespace Service.Admin.Web.Communication.Reports.State;
 
 public class ReportStateService(SortingType sortingType) : IReportStateService
 {
-    private readonly List<ReportRecord> _reports = new();
+    private readonly List<ReportRecord> _reports = [];
 
     public IReadOnlyList<ReportRecord> Reports => _reports.AsReadOnly();
     public event Action? OnStateChanged;

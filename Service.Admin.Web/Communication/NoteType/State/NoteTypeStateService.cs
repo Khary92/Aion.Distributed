@@ -10,7 +10,7 @@ namespace Service.Admin.Web.Communication.NoteType.State;
 public class NoteTypeStateService(ISharedRequestSender requestSender, ITraceCollector tracer)
     : INoteTypeStateService, IInitializeAsync
 {
-    private List<NoteTypeWebModel> _noteTypes = new();
+    private List<NoteTypeWebModel> _noteTypes = [];
 
     public InitializationType Type => InitializationType.StateService;
 

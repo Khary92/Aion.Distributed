@@ -8,7 +8,7 @@ public interface ITicketController
     string NewTicketName { get; set; }
     string NewTicketBookingNumber { get; set; }
     bool IsShowAllTicketsActive { get; set; }
-    bool IsEditMode { get; set; }
+    bool IsEditMode { get; }
     Task CreateOrUpdateTicket();
     void SetEditMode();
     Task AddTicketToCurrentSprint();

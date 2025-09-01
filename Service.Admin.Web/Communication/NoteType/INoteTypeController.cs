@@ -7,7 +7,6 @@ public interface INoteTypeController
     string InputName { get; set; }
     string InputColor { get; set; }
     NoteTypeWebModel? SelectedNoteType { get; set; }
-    bool IsEditMode { get; set; }
     bool CanSave { get; }
     string EditButtonText { get; }
     void ToggleEditMode();

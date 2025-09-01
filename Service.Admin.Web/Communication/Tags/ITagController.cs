@@ -6,7 +6,7 @@ public interface ITagController
 {
     TagWebModel? SelectedTag { get; set; }
     string InputTagName { get; set; }
-    bool IsEditMode { get; set; }
+    bool IsEditMode { get; }
     Task PersistTag();
     void ToggleTagEditMode();
 }

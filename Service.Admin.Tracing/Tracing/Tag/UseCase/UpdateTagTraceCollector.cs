@@ -8,7 +8,7 @@ public class UpdateTagTraceCollector(ITracingDataSender sender) : IUpdateTagTrac
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = "Change tag data requested";
+        const string log = "Change tag data requested";
 
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.Tag,

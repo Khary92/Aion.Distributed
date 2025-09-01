@@ -39,7 +39,7 @@
 </div>
 
 
-@if (_reportStateService != null && @SelectedReportRecord != null)
+@if (_reportStateService != null && SelectedReportRecord != null)
 {
     <div @key="SelectedSortingType">
         <table class="custom-table">
@@ -122,7 +122,7 @@
         get => _selectedReportRecord;
         set
         {
-            if (_selectedReportRecord == value) return;
+            if (_selectedReportRecord != null && _selectedReportRecord == value) return;
             _selectedReportRecord = value;
         }
     }
@@ -139,7 +139,7 @@
             _reportStateService.OnStateChanged -= OnServiceStateChanged;
         }
 
-        _reportStateService = StateServiceFactory.Get(SelectedSortingType);
+        _reportStateService = StateServiceFactory.GetService(SelectedSortingType);
         _reportStateService!.OnStateChanged += OnServiceStateChanged;
 
         _selectedReportIndex = _reportStateService.Reports?.Any() == true ? 0 : -1;

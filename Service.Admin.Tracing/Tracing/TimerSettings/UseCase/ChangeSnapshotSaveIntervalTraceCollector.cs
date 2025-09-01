@@ -9,7 +9,7 @@ public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataSender sender)
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = "Change active status requested";
+        const string log = "Change active status requested";
 
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.TimerSettings,
@@ -48,21 +48,7 @@ public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataSender sender)
             log,
             DateTimeOffset.Now));
     }
-
-    public async Task NoAggregateFound(Type originClassType, Guid traceId)
-    {
-        var log = $"Aggregate not found id:{traceId}";
-
-        await sender.Send(new ServiceTraceDataCommand(
-            SortingType.TimerSettings,
-            UseCaseMeta.ChangeSnapshotSaveInterval,
-            LoggingMeta.AggregateNotFound,
-            originClassType,
-            traceId,
-            log,
-            DateTimeOffset.Now));
-    }
-
+    
     public async Task ChangesApplied(Type originClassType, Guid traceId)
     {
         var log = $"Changed applied id:{traceId}";
@@ -71,20 +57,6 @@ public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataSender sender)
             SortingType.TimerSettings,
             UseCaseMeta.ChangeSnapshotSaveInterval,
             LoggingMeta.PropertyChanged,
-            originClassType,
-            traceId,
-            log,
-            DateTimeOffset.Now));
-    }
-
-    public async Task PropertyNotChanged(Type originClassType, Guid traceId, string asTraceAttributes)
-    {
-        var log = $"Request aborted {asTraceAttributes}";
-
-        await sender.Send(new ServiceTraceDataCommand(
-            SortingType.TimerSettings,
-            UseCaseMeta.ChangeSnapshotSaveInterval,
-            LoggingMeta.PropertyNotChanged,
             originClassType,
             traceId,
             log,

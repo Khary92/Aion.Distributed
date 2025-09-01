@@ -8,7 +8,7 @@ public class TicketAddedToSprintCollector(ITracingDataSender sender) : ITicketAd
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = "Add ticket to sprint requested";
+        const string log = "Add ticket to sprint requested";
 
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.Sprint,
@@ -74,7 +74,7 @@ public class TicketAddedToSprintCollector(ITracingDataSender sender) : ITicketAd
 
     public async Task NoEntitySelected(Type originClassType, Guid traceId)
     {
-        var log = "No ticket entity selected";
+        const string log = "No ticket entity selected";
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.Sprint,
             UseCaseMeta.AddTicketToCurrentSprint,

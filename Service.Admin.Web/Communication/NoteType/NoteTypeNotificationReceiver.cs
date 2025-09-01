@@ -64,6 +64,10 @@ public class NoteTypeNotificationReceiver(INoteTypeStateService noteTypeStateSer
                             await noteTypeStateService.Apply(webNoteTypeNameChangedNotification);
                             break;
                         }
+                        case NoteTypeNotification.NotificationOneofCase.None:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
                     }
             }
             catch (RpcException ex) when (ex.StatusCode == StatusCode.Unavailable)

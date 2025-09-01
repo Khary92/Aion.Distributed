@@ -9,7 +9,7 @@ public class ChangeNoteTypeNameTraceCollector(ITracingDataSender sender)
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = "Change Name requested";
+        const string log = "Change Name requested";
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.NoteType,
             UseCaseMeta.ChangeNoteTypeName,

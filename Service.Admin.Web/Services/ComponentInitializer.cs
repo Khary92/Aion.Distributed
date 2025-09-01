@@ -36,12 +36,12 @@ public class ComponentInitializer(
     private void ValidateInitializationComponents()
     {
         var missingTypes = _order.Except(LoadingStrategy.Keys).ToList();
-        if (missingTypes.Any())
+        if (missingTypes.Count != 0)
             throw new ConstraintException(
                 $"Missing initialization components for types: {string.Join(", ", missingTypes)}");
 
         var unexpectedTypes = LoadingStrategy.Keys.Except(_order).ToList();
-        if (unexpectedTypes.Any())
+        if (unexpectedTypes.Count != 0)
             throw new ConstraintException(
                 $"Unexpected initialization component types found: {string.Join(", ", unexpectedTypes)}");
     }

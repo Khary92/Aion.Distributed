@@ -45,20 +45,7 @@ public class CreateNoteTypeTraceCollector(ITracingDataSender sender) : ICreateNo
             log,
             DateTimeOffset.Now));
     }
-
-    public async Task AggregateReceived(Type originClassType, Guid traceId, string attributes)
-    {
-        var log = $"Received aggregate {attributes}";
-        await sender.Send(new ServiceTraceDataCommand(
-            SortingType.NoteType,
-            UseCaseMeta.CreateNoteType,
-            LoggingMeta.AggregateReceived,
-            originClassType,
-            traceId,
-            log,
-            DateTimeOffset.Now));
-    }
-
+    
     public async Task AggregateAdded(Type originClassType, Guid traceId)
     {
         var log = $"Added aggregate with id:{traceId}";

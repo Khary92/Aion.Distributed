@@ -71,6 +71,10 @@ public class SprintNotificationsReceiver(ISprintStateService sprintStateService,
 
                             await sprintStateService.Apply(notification.TicketAddedToActiveSprint.ToNotification());
                             break;
+                        case SprintNotification.NotificationOneofCase.None:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
                     }
             }
             catch (RpcException ex) when (ex.StatusCode == StatusCode.Unavailable)

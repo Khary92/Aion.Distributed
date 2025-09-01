@@ -5,5 +5,4 @@ public record WebUpdateSprintDataCommand(
     string Name,
     DateTimeOffset StartTime,
     DateTimeOffset EndTime,
-    List<Guid> TicketIds,
     Guid TraceId);

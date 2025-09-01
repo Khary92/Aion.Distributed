@@ -9,7 +9,7 @@ public class ChangeDocuTimerSaveIntervalTraceCollector(ITracingDataSender sender
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = "Change documentation timer save interval requested";
+        const string log = "Change documentation timer save interval requested";
 
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.TimerSettings,
@@ -49,20 +49,6 @@ public class ChangeDocuTimerSaveIntervalTraceCollector(ITracingDataSender sender
             DateTimeOffset.Now));
     }
 
-    public async Task NoAggregateFound(Type originClassType, Guid traceId)
-    {
-        var log = $"Aggregate not found id:{traceId}";
-
-        await sender.Send(new ServiceTraceDataCommand(
-            SortingType.TimerSettings,
-            UseCaseMeta.ChangeDocuTimerSaveInterval,
-            LoggingMeta.AggregateNotFound,
-            originClassType,
-            traceId,
-            log,
-            DateTimeOffset.Now));
-    }
-
     public async Task ChangesApplied(Type originClassType, Guid traceId)
     {
         var log = $"Changed applied id:{traceId}";
@@ -71,20 +57,6 @@ public class ChangeDocuTimerSaveIntervalTraceCollector(ITracingDataSender sender
             SortingType.TimerSettings,
             UseCaseMeta.ChangeDocuTimerSaveInterval,
             LoggingMeta.PropertyChanged,
-            originClassType,
-            traceId,
-            log,
-            DateTimeOffset.Now));
-    }
-
-    public async Task PropertyNotChanged(Type originClassType, Guid traceId, string asTraceAttributes)
-    {
-        var log = $"Request aborted {asTraceAttributes}";
-
-        await sender.Send(new ServiceTraceDataCommand(
-            SortingType.TimerSettings,
-            UseCaseMeta.ChangeDocuTimerSaveInterval,
-            LoggingMeta.PropertyNotChanged,
             originClassType,
             traceId,
             log,

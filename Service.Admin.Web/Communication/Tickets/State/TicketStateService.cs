@@ -10,7 +10,7 @@ namespace Service.Admin.Web.Communication.Tickets.State;
 public class TicketStateService(ISharedRequestSender requestSender, ITraceCollector tracer)
     : ITicketStateService, IInitializeAsync
 {
-    private List<TicketWebModel> _tickets = new();
+    private List<TicketWebModel> _tickets = [];
 
     public InitializationType Type => InitializationType.StateService;
 

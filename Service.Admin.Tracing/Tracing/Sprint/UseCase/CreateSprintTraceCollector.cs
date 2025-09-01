@@ -8,7 +8,7 @@ public class CreateSprintTraceCollector(ITracingDataSender sender) : ICreateSpri
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = "Create Sprint requested";
+        const string log = "Create Sprint requested";
 
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.Sprint,
@@ -45,20 +45,7 @@ public class CreateSprintTraceCollector(ITracingDataSender sender) : ICreateSpri
             log,
             DateTimeOffset.Now));
     }
-
-    public async Task AggregateReceived(Type originClassType, Guid traceId, string attributes)
-    {
-        var log = $"Received aggregate {attributes}";
-        await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Sprint,
-            UseCaseMeta.CreateSprint,
-            LoggingMeta.AggregateReceived,
-            originClassType,
-            traceId,
-            log,
-            DateTimeOffset.Now));
-    }
-
+    
     public async Task AggregateAdded(Type originClassType, Guid traceId)
     {
         var log = $"Added aggregate with id:{traceId}";

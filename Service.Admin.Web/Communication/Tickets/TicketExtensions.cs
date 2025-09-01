@@ -63,13 +63,6 @@ public static class TicketExtensions
             string.Empty, notification.SprintIds.ToGuidList()), Guid.Parse(notification.TraceData.TraceId));
     }
 
-    public static WebTicketCreatedNotification ToNotification(this TicketCreatedNotification notification)
-    {
-        return new WebTicketCreatedNotification(
-            Guid.Parse(notification.TicketId), notification.Name, notification.BookingNumber,
-            string.Empty, notification.SprintIds.ToGuidList(), Guid.Parse(notification.TraceData.TraceId));
-    }
-
     public static WebTicketDataUpdatedNotification ToNotification(this TicketDataUpdatedNotification notification)
     {
         return new WebTicketDataUpdatedNotification(Guid.Parse(notification.TicketId), notification.Name,

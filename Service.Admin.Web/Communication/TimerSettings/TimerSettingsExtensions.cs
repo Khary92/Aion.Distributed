@@ -10,9 +10,8 @@ namespace Service.Admin.Web.Communication.TimerSettings;
 
 public static class TimerSettingsExtensions
 {
-    public static CreateTimerSettingsCommandProto ToProto(this WebCreateTimerSettingsCommand command)
-    {
-        return new CreateTimerSettingsCommandProto
+    public static CreateTimerSettingsCommandProto ToProto(this WebCreateTimerSettingsCommand command) =>
+        new CreateTimerSettingsCommandProto
         {
             TimerSettingsId = command.TimerSettingsId.ToString(),
             DocumentationSaveInterval = command.DocumentationSaveInterval,
@@ -22,11 +21,9 @@ public static class TimerSettingsExtensions
                 TraceId = command.TraceId.ToString()
             }
         };
-    }
 
-    public static ChangeDocuTimerSaveIntervalCommandProto ToProto(this WebChangeDocuTimerSaveIntervalCommand command)
-    {
-        return new ChangeDocuTimerSaveIntervalCommandProto
+    public static ChangeDocuTimerSaveIntervalCommandProto ToProto(this WebChangeDocuTimerSaveIntervalCommand command) =>
+        new()
         {
             TimerSettingsId = command.TimerSettingsId.ToString(),
             DocuTimerSaveInterval = command.DocuTimerSaveInterval,
@@ -35,11 +32,9 @@ public static class TimerSettingsExtensions
                 TraceId = command.TraceId.ToString()
             }
         };
-    }
 
-    public static ChangeSnapshotSaveIntervalCommandProto ToProto(this WebChangeSnapshotSaveIntervalCommand command)
-    {
-        return new ChangeSnapshotSaveIntervalCommandProto
+    public static ChangeSnapshotSaveIntervalCommandProto ToProto(this WebChangeSnapshotSaveIntervalCommand command) =>
+        new()
         {
             TimerSettingsId = command.TimerSettingsId.ToString(),
             SnapshotSaveInterval = command.SnapshotSaveInterval,
@@ -48,27 +43,17 @@ public static class TimerSettingsExtensions
                 TraceId = command.TraceId.ToString()
             }
         };
-    }
 
-    public static NewTimerSettingsMessage ToNewEntityMessage(this TimerSettingsCreatedNotification notification)
-    {
-        return new NewTimerSettingsMessage(new TimerSettingsWebModel(Guid.Parse(notification.TimerSettingsId),
-            notification.DocumentationSaveInterval,
-            notification.SnapshotSaveInterval), Guid.Parse(notification.TraceData.TraceId));
-    }
+    public static NewTimerSettingsMessage ToNewEntityMessage(this TimerSettingsCreatedNotification notification) => new(
+        new TimerSettingsWebModel(Guid.Parse(notification.TimerSettingsId),
+            notification.DocumentationSaveInterval, notification.SnapshotSaveInterval),
+        Guid.Parse(notification.TraceData.TraceId));
 
     public static WebDocuIntervalChangedNotification ToNotification(
-        this DocuTimerSaveIntervalChangedNotification notification)
-    {
-        return new WebDocuIntervalChangedNotification(
-            Guid.Parse(notification.TimerSettingsId), notification.DocuTimerSaveInterval,
-            Guid.Parse(notification.TraceData.TraceId));
-    }
+        this DocuTimerSaveIntervalChangedNotification notification) => new(Guid.Parse(notification.TimerSettingsId),
+        notification.DocuTimerSaveInterval, Guid.Parse(notification.TraceData.TraceId));
 
     public static WebSnapshotIntervalChangedNotification ToNotification(
-        this SnapshotSaveIntervalChangedNotification notification)
-    {
-        return new WebSnapshotIntervalChangedNotification(Guid.Parse(notification.TimerSettingsId),
-            notification.SnapshotSaveInterval, Guid.Parse(notification.TraceData.TraceId));
-    }
+        this SnapshotSaveIntervalChangedNotification notification) => new(notification.SnapshotSaveInterval,
+        Guid.Parse(notification.TraceData.TraceId));
 }

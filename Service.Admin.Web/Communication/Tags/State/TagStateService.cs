@@ -10,7 +10,7 @@ namespace Service.Admin.Web.Communication.Tags.State;
 public class TagStateService(ISharedRequestSender requestSender, ITraceCollector tracer)
     : ITagStateService, IInitializeAsync
 {
-    private List<TagWebModel> _tags = new();
+    private List<TagWebModel> _tags = [];
 
     public InitializationType Type => InitializationType.StateService;
 

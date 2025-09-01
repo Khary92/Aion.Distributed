@@ -8,7 +8,7 @@ public class UpdateTicketTraceCollector(ITracingDataSender sender) : IUpdateTick
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = "Update ticket requested";
+        const string log = "Update ticket requested";
 
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.Ticket,
@@ -22,7 +22,7 @@ public class UpdateTicketTraceCollector(ITracingDataSender sender) : IUpdateTick
 
     public async Task NoEntitySelected(Type originClassType, Guid traceId)
     {
-        var log = "No ticket entity selected";
+        const string log = "No ticket entity selected";
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.Ticket,
             UseCaseMeta.AddTicketToCurrentSprint,

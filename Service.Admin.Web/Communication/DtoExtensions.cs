@@ -46,7 +46,7 @@ public static class DtoExtensions
 
     private static TagWebModel ToWebModel(this TagProto tag)
     {
-        return new TagWebModel(Guid.Parse(tag.TagId), tag.Name, tag.IsSelected);
+        return new TagWebModel(Guid.Parse(tag.TagId), tag.Name);
     }
 
     public static List<TicketWebModel> ToWebModelList(this TicketListProto? ticketListProto)
@@ -74,7 +74,7 @@ public static class DtoExtensions
         );
     }
 
-    public static SprintWebModel ToWebModel(this SprintProto sprint)
+    private static SprintWebModel ToWebModel(this SprintProto sprint)
     {
         return new SprintWebModel(
             Guid.Parse(sprint.SprintId),
@@ -102,22 +102,6 @@ public static class DtoExtensions
         foreach (var id in guids) repeatedField.Add(id.ToString());
 
         return repeatedField;
-    }
-
-    private static SprintWebModel ToWebModel(SprintProto proto, bool isActive)
-    {
-        var ticketIds = proto.TicketIds
-            .Select(idStr => Guid.TryParse(idStr, out var guid) ? guid : Guid.Empty)
-            .Where(guid => guid != Guid.Empty)
-            .ToList();
-
-        return new SprintWebModel(
-            Guid.Parse(proto.SprintId),
-            proto.Name,
-            isActive,
-            proto.Start.ToDateTimeOffset(),
-            proto.End.ToDateTimeOffset(),
-            ticketIds);
     }
 
     public static List<SprintWebModel> ToWebModelList(this SprintListProto? sprintListProto)

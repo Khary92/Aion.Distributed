@@ -6,5 +6,4 @@ public record WebCreateSprintCommand(
     DateTimeOffset StartTime,
     DateTimeOffset EndTime,
     bool IsActive,
-    List<Guid> TicketIds,
     Guid TraceId);

@@ -41,7 +41,7 @@
 
     protected override Task OnInitializedAsync()
     {
-        _overViewReportStateService = ReportStateServiceFactory.Get(SortingType.Overview);
+        _overViewReportStateService = ReportStateServiceFactory.GetService(SortingType.Overview);
         _overViewReportStateService!.OnStateChanged += OnServiceStateChanged;
         return Task.CompletedTask;
     }

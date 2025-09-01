@@ -10,7 +10,6 @@ public interface ISprintStateService
     event Action? OnStateChanged;
     Task AddSprint(NewSprintMessage sprintMessage);
     Task Apply(WebAddTicketToActiveSprintNotification notification);
-    Task Apply(WebAddTicketToSprintNotification notification);
     Task Apply(WebSetSprintActiveStatusNotification notification);
     Task Apply(WebSprintDataUpdatedNotification notification);
 }

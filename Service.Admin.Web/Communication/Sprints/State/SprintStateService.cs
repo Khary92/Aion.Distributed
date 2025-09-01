@@ -10,7 +10,7 @@ namespace Service.Admin.Web.Communication.Sprints.State;
 public class SprintStateService(ISharedRequestSender requestSender, ITraceCollector tracer)
     : ISprintStateService, IInitializeAsync
 {
-    private List<SprintWebModel> _sprints = new();
+    private List<SprintWebModel> _sprints = [];
 
     public InitializationType Type => InitializationType.StateService;
 
@@ -46,24 +46,15 @@ public class SprintStateService(ISharedRequestSender requestSender, ITraceCollec
         await tracer.Sprint.AddTicketToSprint.ChangesApplied(GetType(), notification.TraceId);
         NotifyStateChanged();
     }
-
-    public async Task Apply(WebAddTicketToSprintNotification notification)
-    {
-        var sprint = _sprints.FirstOrDefault(s => s.SprintId == notification.SprintId);
-
-        if (sprint == null)
-        {
-            await tracer.Sprint.AddTicketToSprint.NoAggregateFound(GetType(), notification.TraceId);
-            return;
-        }
-
-        sprint.Apply(notification);
-        await tracer.Sprint.AddTicketToSprint.ChangesApplied(GetType(), notification.TraceId);
-        NotifyStateChanged();
-    }
-
+    
     public async Task Apply(WebSetSprintActiveStatusNotification notification)
     {
+        if (_sprints.FirstOrDefault(s => s.SprintId == notification.SprintId) == null)
+        {
+            await tracer.Sprint.ActiveStatus.NoAggregateFound(GetType(), notification.TraceId);
+            return;
+        }
+        
         foreach (var loadedSprint in _sprints)
         {
             if (loadedSprint.SprintId == notification.SprintId)

@@ -50,6 +50,10 @@ public class TagNotificationsReceiver(ITagStateService tagStateService, ITraceCo
 
                             await tagStateService.Apply(webTagUpdatedNotification);
                             break;
+                        case TagNotification.NotificationOneofCase.None:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
                     }
             }
             catch (RpcException ex) when (ex.StatusCode == StatusCode.Unavailable)

@@ -5,5 +5,5 @@ namespace Service.Admin.Web.Communication.Reports;
 
 public interface IReportStateServiceFactory
 {
-    IReportStateService? Get(SortingType sortingType);
+    IReportStateService? GetService(SortingType sortingType);
 }

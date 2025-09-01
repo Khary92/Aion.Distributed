@@ -54,6 +54,10 @@ public class TicketNotificationsReceiver(ITraceCollector tracer, ITicketStateSer
                         case TicketNotification.NotificationOneofCase.TicketDocumentationUpdated:
                             await ticketStateService.Apply(notification.TicketDocumentationUpdated.ToNotification());
                             break;
+                        case TicketNotification.NotificationOneofCase.None:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
                     }
             }
             catch (RpcException ex) when (ex.StatusCode == StatusCode.Unavailable)

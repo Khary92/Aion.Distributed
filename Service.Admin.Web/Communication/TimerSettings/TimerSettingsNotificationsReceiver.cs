@@ -53,18 +53,22 @@ public class TimerSettingsNotificationsReceiver(
                             await tracer.TimerSettings.ChangeDocuTimerInterval.NotificationReceived(GetType(),
                                 webDocuIntervalChangedNotification.TraceId, notification.TimerSettingsCreated);
 
-                            timerSettingsStateService.Apply(webDocuIntervalChangedNotification);
+                            await timerSettingsStateService.Apply(webDocuIntervalChangedNotification);
                             break;
 
                         case TimerSettingsNotification.NotificationOneofCase.SnapshotSaveIntervalChanged:
                             var webSnapshotIntervalChangedNotification =
                                 notification.SnapshotSaveIntervalChanged.ToNotification();
 
-                            await tracer.TimerSettings.ChangeDocuTimerInterval.NotificationReceived(GetType(),
+                            await tracer.TimerSettings.ChangeSnapshotInterval.NotificationReceived(GetType(),
                                 webSnapshotIntervalChangedNotification.TraceId, notification.TimerSettingsCreated);
 
-                            timerSettingsStateService.Apply(webSnapshotIntervalChangedNotification);
+                            await timerSettingsStateService.Apply(webSnapshotIntervalChangedNotification);
                             break;
+                        case TimerSettingsNotification.NotificationOneofCase.None:
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
                     }
             }
             catch (RpcException ex) when (ex.StatusCode == StatusCode.Unavailable)

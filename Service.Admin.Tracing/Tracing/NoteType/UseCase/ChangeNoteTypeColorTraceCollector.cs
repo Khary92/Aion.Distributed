@@ -9,7 +9,7 @@ public class ChangeNoteTypeColorTraceCollector(ITracingDataSender sender)
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = "Change Color requested";
+        const string log = "Change Color requested";
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.NoteType,
             UseCaseMeta.ChangeNoteTypeColor,

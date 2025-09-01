@@ -8,7 +8,7 @@ public class CreateTicketTraceCollector(ITracingDataSender sender) : ICreateTick
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = "Create Ticket requested";
+        const string log = "Create Ticket requested";
 
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.Ticket,
@@ -47,20 +47,7 @@ public class CreateTicketTraceCollector(ITracingDataSender sender) : ICreateTick
             log,
             DateTimeOffset.Now));
     }
-
-    public async Task AggregateReceived(Type originClassType, Guid traceId, object command)
-    {
-        var log = $"Received aggregate {command}";
-        await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Ticket,
-            UseCaseMeta.CreateTicket,
-            LoggingMeta.AggregateReceived,
-            originClassType,
-            traceId,
-            log,
-            DateTimeOffset.Now));
-    }
-
+    
     public async Task AggregateAdded(Type originClassType, Guid traceId)
     {
         var log = $"Added aggregate with id:{traceId}";

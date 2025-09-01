@@ -31,7 +31,7 @@ namespace Service.Admin.Web;
 
 public static class AdminServiceExtension
 {
-    private static readonly string ServerAddress = "http://core-service:8080";
+    private const string ServerAddress = "http://core-service:8080";
 
     public static void AddWebServices(this IServiceCollection services)
     {
@@ -72,8 +72,7 @@ public static class AdminServiceExtension
     private static void AddReceiverServices(IServiceCollection services)
     {
         services.AddSingleton<ReportReceiver>();
-        services.AddSingleton<IReportReceiver>(sp => sp.GetRequiredService<ReportReceiver>());
-
+        
         services.AddSingleton<TicketNotificationsReceiver>();
         services.AddHostedService<TicketNotificationHostedService>();
 
@@ -109,8 +108,8 @@ public static class AdminServiceExtension
 
         services.AddSingleton<IReportStateServiceFactory, ReportStateServiceFactory>();
 
-        foreach (SortingType sortingType in Enum.GetValues(typeof(SortingType)))
-            services.AddSingleton<IReportStateService>(sp => new ReportStateService(sortingType));
+        foreach (var sortingType in Enum.GetValues<SortingType>())
+            services.AddSingleton<IReportStateService>(_ => new ReportStateService(sortingType));
 
         services.AddSingleton<TicketStateService>();
         services.AddSingleton<ITicketStateService>(sp => sp.GetRequiredService<TicketStateService>());
@@ -147,19 +146,19 @@ public static class AdminServiceExtension
 
     private static void AddSharedDataServices(this IServiceCollection services)
     {
-        services.AddSingleton<ITicketCommandSender>(sp => new TicketCommandSender(ServerAddress));
-        services.AddSingleton<ITicketRequestSender>(sp => new TicketRequestSender(ServerAddress));
+        services.AddSingleton<ITicketCommandSender>(_ => new TicketCommandSender(ServerAddress));
+        services.AddSingleton<ITicketRequestSender>(_ => new TicketRequestSender(ServerAddress));
 
-        services.AddSingleton<ISprintCommandSender>(sp => new SprintCommandSender(ServerAddress));
-        services.AddSingleton<ISprintRequestSender>(sp => new SprintRequestSender(ServerAddress));
+        services.AddSingleton<ISprintCommandSender>(_ => new SprintCommandSender(ServerAddress));
+        services.AddSingleton<ISprintRequestSender>(_ => new SprintRequestSender(ServerAddress));
 
-        services.AddSingleton<ITagCommandSender>(sp => new TagCommandSender(ServerAddress));
-        services.AddSingleton<ITagRequestSender>(sp => new TagRequestSender(ServerAddress));
+        services.AddSingleton<ITagCommandSender>(_ => new TagCommandSender(ServerAddress));
+        services.AddSingleton<ITagRequestSender>(_ => new TagRequestSender(ServerAddress));
 
-        services.AddSingleton<INoteTypeCommandSender>(sp => new NoteTypeCommandSender(ServerAddress));
-        services.AddSingleton<INoteTypeRequestSender>(sp => new NoteTypeRequestSender(ServerAddress));
+        services.AddSingleton<INoteTypeCommandSender>(_ => new NoteTypeCommandSender(ServerAddress));
+        services.AddSingleton<INoteTypeRequestSender>(_ => new NoteTypeRequestSender(ServerAddress));
 
-        services.AddSingleton<ITimerSettingsCommandSender>(sp => new TimerSettingsCommandSender(ServerAddress));
-        services.AddSingleton<ITimerSettingsRequestSender>(sp => new TimerSettingsRequestSender(ServerAddress));
+        services.AddSingleton<ITimerSettingsCommandSender>(_ => new TimerSettingsCommandSender(ServerAddress));
+        services.AddSingleton<ITimerSettingsRequestSender>(_ => new TimerSettingsRequestSender(ServerAddress));
     }
 }

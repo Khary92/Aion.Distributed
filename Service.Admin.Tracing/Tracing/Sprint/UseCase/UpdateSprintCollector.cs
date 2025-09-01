@@ -8,7 +8,7 @@ public class UpdateSprintCollector(ITracingDataSender sender) : IUpdateSprintCol
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = "Change sprint data requested";
+        const string log = "Change sprint data requested";
 
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.Sprint,
@@ -20,7 +20,7 @@ public class UpdateSprintCollector(ITracingDataSender sender) : IUpdateSprintCol
             DateTimeOffset.Now));
     }
 
-    public async Task CommandSent(Type originClassType, Guid traceId, object command)
+    public async Task SendingCommand(Type originClassType, Guid traceId, object command)
     {
         var log = $"Sent {command}";
 
@@ -78,7 +78,7 @@ public class UpdateSprintCollector(ITracingDataSender sender) : IUpdateSprintCol
 
     public async Task NoEntitySelected(Type originClassType, Guid traceId)
     {
-        var log = "No ticket entity selected";
+        const string log = "No ticket entity selected";
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.Sprint,
             UseCaseMeta.UpdateSprint,
