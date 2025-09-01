@@ -2,4 +2,4 @@
 
 namespace Client.Desktop.Communication.Requests.Analysis.Records;
 
-public record ClientGetSprintAnalysisById(Guid SprintId, Guid TraceId);
+public record ClientGetSprintAnalysisById(Guid SprintId);

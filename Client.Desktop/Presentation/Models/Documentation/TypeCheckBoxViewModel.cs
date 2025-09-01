@@ -1,5 +1,4 @@
 using System;
-using Client.Desktop.Communication.Requests;
 using Client.Desktop.DataModels;
 using ReactiveUI;
 

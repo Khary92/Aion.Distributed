@@ -91,14 +91,14 @@ public class ExportService(
         Dictionary<DateTimeOffset, List<TicketDataHolder>> result)
     {
         var timeSlots =
-            await requestSender.Send(new ClientGetTimeSlotsForWorkDayIdRequest(workDay.WorkDayId, Guid.NewGuid()));
+            await requestSender.Send(new ClientGetTimeSlotsForWorkDayIdRequest(workDay.WorkDayId));
 
         if (timeSlots.Count == 0) return;
 
         foreach (var timeSlot in timeSlots)
         {
             var ticket =
-                await requestSender.Send(new ClientGetTicketByIdRequest(timeSlot.SelectedTicketId, Guid.NewGuid()));
+                await requestSender.Send(new ClientGetTicketByIdRequest(timeSlot.SelectedTicketId));
 
             var elapsedSeconds = (int)(timeSlot.EndTime - timeSlot.StartTime).TotalSeconds;
 

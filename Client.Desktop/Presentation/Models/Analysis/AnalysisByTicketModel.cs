@@ -39,7 +39,7 @@ public class AnalysisByTicketModel(IMessenger messenger, IRequestSender requestS
     public async Task InitializeAsync()
     {
         Tickets.Clear();
-        Tickets.AddRange(await requestSender.Send(new ClientGetAllTicketsRequest(Guid.NewGuid())));
+        Tickets.AddRange(await requestSender.Send(new ClientGetAllTicketsRequest()));
     }
 
     public void RegisterMessenger()
@@ -68,7 +68,7 @@ public class AnalysisByTicketModel(IMessenger messenger, IRequestSender requestS
     public async Task SetAnalysisByTicket(TicketClientModel selectedTicket)
     {
         AnalysisByTicket =
-            await requestSender.Send(new ClientGetTicketAnalysisById(selectedTicket.TicketId, Guid.NewGuid()));
+            await requestSender.Send(new ClientGetTicketAnalysisById(selectedTicket.TicketId));
     }
 
     public string GetMarkdownString()

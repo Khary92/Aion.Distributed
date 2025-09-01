@@ -39,7 +39,7 @@ public class AnalysisBySprintModel(IMessenger messenger, IRequestSender requestS
     public async Task InitializeAsync()
     {
         Sprints.Clear();
-        Sprints!.AddRange(await requestSender.Send(new ClientGetAllSprintsRequest(Guid.NewGuid())));
+        Sprints!.AddRange(await requestSender.Send(new ClientGetAllSprintsRequest()));
     }
 
     public void RegisterMessenger()
@@ -164,6 +164,6 @@ public class AnalysisBySprintModel(IMessenger messenger, IRequestSender requestS
     public async Task SetAnalysisForSprint(SprintClientModel selectedSprint)
     {
         AnalysisBySprint =
-            await requestSender.Send(new ClientGetSprintAnalysisById(selectedSprint.SprintId, Guid.NewGuid()));
+            await requestSender.Send(new ClientGetSprintAnalysisById(selectedSprint.SprintId));
     }
 }

@@ -51,7 +51,7 @@ public class StatisticsViewModel(
     {
         AvailableTags.Clear();
 
-        var tagClientModels = await requestSender.Send(new ClientGetAllTagsRequest(Guid.NewGuid()));
+        var tagClientModels = await requestSender.Send(new ClientGetAllTagsRequest());
 
         foreach (var tagDto in tagClientModels) AvailableTags.Add(tagCheckBoxViewFactory.Create(tagDto));
 
@@ -84,6 +84,18 @@ public class StatisticsViewModel(
         });
         
         messenger.Register<ClientChangeProductivityNotification>(this, async void (_, notification) =>
+        {
+            if (StatisticsData?.StatisticsId != notification.StatisticsDataId)
+            {
+                await tracer.Statistics.ChangeTagSelection.WrongModel(GetType(), notification.TraceId);
+                return;
+            }
+            
+            StatisticsData!.Apply(notification);
+            await tracer.Statistics.ChangeTagSelection.ChangesApplied(GetType(), notification.TraceId);
+        });
+        
+        messenger.Register<ClientChangeTagSelectionNotification>(this, async void (_, notification) =>
         {
             if (StatisticsData?.StatisticsId != notification.StatisticsDataId)
             {

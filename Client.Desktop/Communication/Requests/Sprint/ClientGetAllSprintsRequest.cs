@@ -2,4 +2,4 @@
 
 namespace Client.Desktop.Communication.Requests.Sprint;
 
-public record ClientGetAllSprintsRequest(Guid TraceId);
+public record ClientGetAllSprintsRequest();

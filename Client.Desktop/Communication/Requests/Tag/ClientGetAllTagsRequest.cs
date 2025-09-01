@@ -2,4 +2,4 @@
 
 namespace Client.Desktop.Communication.Requests.Tag;
 
-public record ClientGetAllTagsRequest(Guid TraceId);
+public record ClientGetAllTagsRequest();

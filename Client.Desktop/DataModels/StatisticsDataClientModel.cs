@@ -101,4 +101,9 @@ public sealed class StatisticsDataClientModel : ReactiveObject
         IsNeutral = notification.IsNeutral;
         IsUnproductive = notification.IsUnproductive;
     }
+
+    public void Apply(ClientChangeTagSelectionNotification notification)
+    {
+        TagIds = notification.SelectedTagIds;
+    }
 }

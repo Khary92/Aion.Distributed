@@ -5,7 +5,9 @@ import "DTO/trace_data.proto";
 
 option csharp_namespace = "Proto.Requests.WorkDays";
 
-message GetAllWorkDaysRequestProto {}
+message GetAllWorkDaysRequestProto {
+  TraceDataProto traceData = 1;
+}
 
 message GetSelectedWorkDayRequestProto {
   string work_day_id = 1;

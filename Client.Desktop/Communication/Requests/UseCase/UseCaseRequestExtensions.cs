@@ -4,6 +4,7 @@ using System.Linq;
 using Client.Desktop.Communication.Notifications;
 using Client.Desktop.Communication.Requests.UseCase.Records;
 using Google.Protobuf.WellKnownTypes;
+using Proto.DTO.TraceData;
 using Proto.Requests.UseCase;
 
 namespace Client.Desktop.Communication.Requests.UseCase;
@@ -13,9 +14,9 @@ public static class UseCaseRequestExtensions
     public static GetTimeSlotControlDataRequestProto ToProto(this ClientGetTimeSlotControlDataRequest request) => new()
     {
         Date = Timestamp.FromDateTimeOffset(request.Date),
-        TraceData = new()
+        TraceData = new TraceDataProto
         {
-            TraceId = Guid.NewGuid().ToString()
+            TraceId = request.TraceId.ToString()
         }
     };
 
@@ -29,6 +30,6 @@ public static class UseCaseRequestExtensions
     {
         return new ClientGetTimeSlotControlResponse(
             proto.StatisticsDataProto.ToClientModel(), proto.TicketProto.ToClientModel(),
-            proto.TimeSlotProto.ToClientModel(), Guid.Parse(proto.TraceData.TraceId));
+            proto.TimeSlotProto.ToClientModel());
     }
 }

@@ -3,4 +3,4 @@ using System.Collections.Generic;
 
 namespace Client.Desktop.Communication.Requests.Tag;
 
-public record ClientGetTagsByIdsRequest(List<Guid> TagIds, Guid TraceId);
+public record ClientGetTagsByIdsRequest(List<Guid> TagIds);

@@ -2,4 +2,4 @@
 
 namespace Client.Desktop.Communication.Requests.NoteType;
 
-public record ClientGetAllNoteTypesRequest(Guid TraceId);
+public record ClientGetAllNoteTypesRequest();

@@ -49,7 +49,11 @@ public static class TicketProtoExtensions
             TicketDocumentationUpdated = new TicketDocumentationUpdatedNotification
             {
                 TicketId = proto.TicketId.ToString(),
-                Documentation = proto.Documentation
+                Documentation = proto.Documentation,
+                TraceData = new TraceDataProto
+                {
+                    TraceId = proto.TraceId.ToString()
+                }
             }
         };
     }

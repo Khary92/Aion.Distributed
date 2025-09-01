@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
-using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using Grpc.Core;
 using Proto.Notifications.TimerSettings;
@@ -13,8 +12,7 @@ namespace Client.Desktop.Communication.Notifications.TimerSettings;
 
 public class TimerSettingsNotificationReceiver(
     TimerSettingsNotificationService.TimerSettingsNotificationServiceClient client,
-    IMessenger messenger,
-    ITraceCollector tracer) : IStreamClient
+    IMessenger messenger) : IStreamClient
 {
     public async Task StartListening(CancellationToken cancellationToken)
     {

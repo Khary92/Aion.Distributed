@@ -71,7 +71,7 @@ public class DocumentationModel(
 
     public async Task InitializeAsync()
     {
-        var noteTypeModels = await requestSender.Send(new ClientGetAllNoteTypesRequest(Guid.NewGuid()));
+        var noteTypeModels = await requestSender.Send(new ClientGetAllNoteTypesRequest());
 
         Options.Clear();
 
@@ -86,7 +86,7 @@ public class DocumentationModel(
         }
 
         AllTickets.Clear();
-        AllTickets.AddRange(await requestSender.Send(new ClientGetAllTicketsRequest(Guid.NewGuid())));
+        AllTickets.AddRange(await requestSender.Send(new ClientGetAllTicketsRequest()));
 
         if (!AllTickets.Any())
         {
@@ -164,7 +164,7 @@ public class DocumentationModel(
                 }
 
                 var noteType =
-                    await requestSender.Send(new ClientGetNoteTypeByIdRequest(notification.NoteTypeId, Guid.NewGuid()));
+                    await requestSender.Send(new ClientGetNoteTypeByIdRequest(notification.NoteTypeId));
 
                 noteViewModel.Note.NoteType = noteType;
                 noteViewModel.Note.Apply(notification);

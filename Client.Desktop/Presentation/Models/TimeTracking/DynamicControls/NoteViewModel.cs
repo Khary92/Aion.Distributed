@@ -80,7 +80,7 @@ public class NoteViewModel : ReactiveObject
     public async Task Initialize()
     {
         NoteTypes.Clear();
-        var noteTypeDtos = await _requestSender.Send(new ClientGetAllNoteTypesRequest(Guid.NewGuid()));
+        var noteTypeDtos = await _requestSender.Send(new ClientGetAllNoteTypesRequest());
         NoteTypes.AddRange(noteTypeDtos);
 
         if (Note.NoteTypeId == Guid.Empty || !NoteTypes.Any()) return;
