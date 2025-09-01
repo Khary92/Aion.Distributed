@@ -6,7 +6,7 @@ namespace Core.Domain.Test.Entities;
 
 public class TagTestBase : AggregateTestBase<TagEvent>
 {
-    protected virtual Tag Rehydrate(List<TagEvent> events)
+    protected static Tag Rehydrate(List<TagEvent> events)
     {
         return Tag.Rehydrate(events);
     }

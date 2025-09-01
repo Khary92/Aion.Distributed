@@ -9,7 +9,7 @@ public class ChangeProductivityTraceCollector(ITracingDataSender sender)
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = "Change statics data requested";
+        const string log = "Change statics data requested";
 
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.StatisticsData,
@@ -75,11 +75,5 @@ public class ChangeProductivityTraceCollector(ITracingDataSender sender)
             traceId,
             log,
             DateTimeOffset.Now));
-    }
-
-    private static string GetName(object @object)
-    {
-        var commandType = @object.GetType();
-        return commandType.Name;
     }
 }

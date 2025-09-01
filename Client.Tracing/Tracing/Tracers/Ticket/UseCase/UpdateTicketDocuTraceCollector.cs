@@ -8,7 +8,7 @@ public class UpdateTicketDocuTraceCollector(ITracingDataSender sender) : IUpdate
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = $"Update ticket documentation requested";
+        const string log = "Update ticket documentation requested";
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.Ticket,
             UseCaseMeta.UpdateTicketDocumentation,

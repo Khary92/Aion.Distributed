@@ -81,6 +81,18 @@ public class StatisticsViewModel(
             tagViewModel.Tag.Apply(notification);
             await tracer.Tag.Update.ChangesApplied(GetType(), notification.TraceId);
         });
+        
+        messenger.Register<ClientChangeTagSelectionCommand>(this, async void (_, notification) =>
+        {
+            if (StatisticsData?.StatisticsId != notification.StatisticsDataId)
+            {
+                await tracer.Statistics.ChangeTagSelection.WrongModel(GetType(), notification.TraceId);
+                return;
+            }
+            
+            StatisticsData!.Apply(notification);
+            await tracer.Statistics.ChangeTagSelection.ChangesApplied(GetType(), notification.TraceId);
+        });
     }
 
     public async Task Update()
@@ -117,7 +129,7 @@ public class StatisticsViewModel(
             var tagSelectionCommand =
                 new ClientChangeTagSelectionCommand(StatisticsData.StatisticsId, StatisticsData.TagIds, traceId);
 
-            await tracer.Statistics.ChangeProductivity.SendingCommand(GetType(), traceId, tagSelectionCommand);
+            await tracer.Statistics.ChangeTagSelection.SendingCommand(GetType(), traceId, tagSelectionCommand);
             await commandSender.Send(tagSelectionCommand);
         }
     }

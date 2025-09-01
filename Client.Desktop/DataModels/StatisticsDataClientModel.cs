@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Client.Desktop.Communication.Commands.StatisticsData.Records;
 using ReactiveUI;
 
 namespace Client.Desktop.DataModels;
@@ -92,4 +93,9 @@ public sealed class StatisticsDataClientModel : ReactiveObject
     private record PreviousProductivityState(bool IsProductive, bool IsNeutral, bool IsUnproductive);
 
     private record PreviousTagsState(List<Guid> TagIds);
+
+    public void Apply(ClientChangeTagSelectionCommand notification)
+    {
+        TagIds = notification.SelectedTagIds;
+    }
 }

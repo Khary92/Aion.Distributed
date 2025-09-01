@@ -6,7 +6,7 @@ namespace Core.Domain.Test.Entities;
 
 public abstract class SprintTestBase : AggregateTestBase<SprintEvent>
 {
-    protected virtual Sprint Rehydrate(List<SprintEvent> events)
+    protected static Sprint Rehydrate(List<SprintEvent> events)
     {
         return Sprint.Rehydrate(events);
     }

@@ -37,7 +37,7 @@ public static class TracingServices
 
     private static void AddACommonTracingServices(this IServiceCollection services)
     {
-        services.AddScoped<ITracingDataSender>(sp => new TracingDataSender("http://127.0.0.1:8082"));
+        services.AddScoped<ITracingDataSender>(_ => new TracingDataSender("http://127.0.0.1:8082"));
         services.AddScoped<ITraceCollector, TraceCollector>();
     }
 

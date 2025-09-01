@@ -34,17 +34,21 @@ public class WorkDaysModel(
         WorkDays.Clear();
         WorkDays.AddRange(await requestSender.Send(new ClientGetAllWorkDaysRequest(Guid.NewGuid())));
 
-        if (!await requestSender.Send(new ClientIsWorkDayExistingRequest(DateTimeOffset.Now, Guid.NewGuid())))
+        var traceId = Guid.NewGuid();
+
+        if (await requestSender.Send(new ClientIsWorkDayExistingRequest(DateTimeOffset.Now, Guid.NewGuid())))
         {
-            var traceId = Guid.NewGuid();
-            await tracer.WorkDay.Create.StartUseCase(GetType(), traceId);
-
-            var clientCreateWorkDayCommand = new ClientCreateWorkDayCommand(Guid.NewGuid(), DateTimeOffset.Now,
-                traceId);
-
-            await tracer.WorkDay.Create.SendingCommand(GetType(), traceId, clientCreateWorkDayCommand);
-            await commandSender.Send(clientCreateWorkDayCommand);
+            await tracer.WorkDay.Create.ActionAborted(GetType(), traceId);
+            return;
         }
+
+        await tracer.WorkDay.Create.StartUseCase(GetType(), traceId);
+
+        var clientCreateWorkDayCommand = new ClientCreateWorkDayCommand(Guid.NewGuid(), DateTimeOffset.Now,
+            traceId);
+
+        await tracer.WorkDay.Create.SendingCommand(GetType(), traceId, clientCreateWorkDayCommand);
+        await commandSender.Send(clientCreateWorkDayCommand);
     }
 
     public void RegisterMessenger()

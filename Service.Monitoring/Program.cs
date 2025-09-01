@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Service.Monitoring;
 
-public class Program
+public abstract class Program
 {
     [STAThread]
     public static async Task Main(string[] args)

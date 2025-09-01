@@ -6,7 +6,7 @@ namespace Core.Domain.Test.Entities;
 
 public class TimeSlotTestBase : AggregateTestBase<TimeSlotEvent>
 {
-    protected virtual TimeSlot Rehydrate(List<TimeSlotEvent> events)
+    protected static TimeSlot Rehydrate(List<TimeSlotEvent> events)
     {
         return TimeSlot.Rehydrate(events);
     }

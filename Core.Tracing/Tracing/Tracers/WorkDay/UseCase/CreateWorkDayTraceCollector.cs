@@ -2,32 +2,46 @@ using Service.Monitoring.Shared;
 using Service.Monitoring.Shared.Enums;
 using Service.Monitoring.Shared.Tracing;
 
-namespace Client.Tracing.Tracing.Tracers.WorkDay.UseCase;
+namespace Core.Server.Tracing.Tracing.Tracers.WorkDay.UseCase;
 
 public class CreateWorkDayTraceCollector(ITracingDataSender sender) : ICreateWorkDayTraceCollector
 {
-    public async Task StartUseCase(Type originClassType, Guid traceId)
+    public async Task CommandReceived(Type originClassType, Guid traceId, object protoCommand)
     {
-        const string log = "Create WorkDay requested";
+        var log = $"Command received {GetName(protoCommand)}:{protoCommand}";
 
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.WorkDay,
             UseCaseMeta.CreateWorkDay,
-            LoggingMeta.ActionRequested,
+            LoggingMeta.CommandReceived,
             originClassType,
             traceId,
             log,
             DateTimeOffset.Now));
     }
 
-    public async Task SendingCommand(Type originClassType, Guid traceId, object command)
+    public async Task EventPersisted(Type originClassType, Guid traceId, object @event)
     {
-        var log = $"Sent {command}";
+        var log = $"Event persisted {@event}";
 
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.WorkDay,
-            UseCaseMeta.CommandSent,
-            LoggingMeta.ActionRequested,
+            UseCaseMeta.CreateWorkDay,
+            LoggingMeta.EventPersisted,
+            originClassType,
+            traceId,
+            log,
+            DateTimeOffset.Now));
+    }
+
+    public async Task SendingNotification(Type originClassType, Guid traceId, object notification)
+    {
+        var log = $"Notification sent {GetName(notification)}:{notification}";
+
+        await sender.Send(new ServiceTraceDataCommand(
+            SortingType.WorkDay,
+            UseCaseMeta.CreateWorkDay,
+            LoggingMeta.SendingNotification,
             originClassType,
             traceId,
             log,
@@ -36,40 +50,12 @@ public class CreateWorkDayTraceCollector(ITracingDataSender sender) : ICreateWor
 
     public async Task ActionAborted(Type originClassType, Guid traceId)
     {
-        const string log = "Action aborted because work day already exists";
+        const string log = "Task aborted";
 
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.WorkDay,
             UseCaseMeta.CreateWorkDay,
             LoggingMeta.ActionAborted,
-            originClassType,
-            traceId,
-            log,
-            DateTimeOffset.Now));
-    }
-
-    public async Task NotificationReceived(Type originClassType, Guid traceId, object notification)
-    {
-        var log = $"Received {GetName(notification)}:{notification}";
-
-        await sender.Send(new ServiceTraceDataCommand(
-            SortingType.WorkDay,
-            UseCaseMeta.CreateWorkDay,
-            LoggingMeta.NotificationReceived,
-            originClassType,
-            traceId,
-            log,
-            DateTimeOffset.Now));
-    }
-
-    public async Task AggregateAdded(Type originClassType, Guid traceId)
-    {
-        var log = $"Added aggregate with id:{traceId}";
-
-        await sender.Send(new ServiceTraceDataCommand(
-            SortingType.WorkDay,
-            UseCaseMeta.CreateWorkDay,
-            LoggingMeta.AggregateAdded,
             originClassType,
             traceId,
             log,

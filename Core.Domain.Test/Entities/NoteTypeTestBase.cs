@@ -6,7 +6,7 @@ namespace Core.Domain.Test.Entities;
 
 public class NoteTypeTestBase : AggregateTestBase<NoteTypeEvent>
 {
-    protected virtual NoteType Rehydrate(List<NoteTypeEvent> events)
+    protected static NoteType Rehydrate(List<NoteTypeEvent> events)
     {
         return NoteType.Rehydrate(events);
     }

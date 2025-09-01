@@ -6,6 +6,7 @@ using Core.Server.Tracing.Tracing.Tracers.Tag;
 using Core.Server.Tracing.Tracing.Tracers.Ticket;
 using Core.Server.Tracing.Tracing.Tracers.TimerSettings;
 using Core.Server.Tracing.Tracing.Tracers.TimeSlot;
+using Core.Server.Tracing.Tracing.Tracers.WorkDay;
 
 namespace Core.Server.Tracing.Tracing.Tracers;
 
@@ -17,7 +18,8 @@ public class TraceCollector(
     INoteUseCaseSelector noteUseCaseSelector,
     ITimerSettingsUseCaseSelector timerSettingsUseCaseSelector,
     IStatisticsDataUseCaseSelector statisticsDataUseCaseSelector,
-    ITimeSlotUseCaseSelector timeSlotUseCaseSelector) : ITraceCollector
+    ITimeSlotUseCaseSelector timeSlotUseCaseSelector,
+    IWorkDayUseCaseSelector workDayUseCaseSelector) : ITraceCollector
 {
     public ITicketUseCaseSelector Ticket => ticketUseCaseSelector;
     public INoteTypeUseCaseSelector NoteType => noteTypeUseCaseSelector;
@@ -27,4 +29,5 @@ public class TraceCollector(
     public INoteUseCaseSelector Note => noteUseCaseSelector;
     public ITimerSettingsUseCaseSelector TimerSettings => timerSettingsUseCaseSelector;
     public ITimeSlotUseCaseSelector TimeSlot => timeSlotUseCaseSelector;
+    public IWorkDayUseCaseSelector WorkDay => workDayUseCaseSelector;
 }

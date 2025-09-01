@@ -28,6 +28,5 @@ public class SettingsModel(IMessenger messenger, ILocalSettingsCommandSender loc
     public void SetExportPath()
     {
         localSettingsCommandService.Send(new SetExportPathCommand(Settings!.ExportPath));
-        ;
     }
 }

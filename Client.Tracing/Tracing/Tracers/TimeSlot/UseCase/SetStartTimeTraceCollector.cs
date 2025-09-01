@@ -8,7 +8,7 @@ public class SetStartTimeTraceCollector(ITracingDataSender sender) : ISetStartTi
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = "Requested pushing start time slot data after failed shutdown";
+        const string log = "Requested pushing start time slot data after failed shutdown";
 
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.TimeSlot,
@@ -35,7 +35,7 @@ public class SetStartTimeTraceCollector(ITracingDataSender sender) : ISetStartTi
 
     public async Task CacheIsEmpty(Type originClassType, Guid traceId)
     {
-        var log = "Aborted because cache is empty";
+        const string log = "Aborted because cache is empty";
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.TimeSlot,
             UseCaseMeta.SetStartTime,
@@ -44,11 +44,5 @@ public class SetStartTimeTraceCollector(ITracingDataSender sender) : ISetStartTi
             traceId,
             log,
             DateTimeOffset.Now));
-    }
-
-    private static string GetName(object @object)
-    {
-        var commandType = @object.GetType();
-        return commandType.Name;
     }
 }

@@ -21,8 +21,6 @@ public class TicketVerificationProvider : IVerificationProvider
 
     public ImmutableList<VerificationStep> GetVerificationSteps(UseCaseMeta useCaseMeta)
     {
-        if (useCaseMeta == UseCaseMeta.CreateTicket) return _createTicketSteps;
-
-        return ImmutableList.Create<VerificationStep>();
+        return useCaseMeta == UseCaseMeta.CreateTicket ? _createTicketSteps : ImmutableList.Create<VerificationStep>();
     }
 }

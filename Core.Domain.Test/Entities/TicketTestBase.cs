@@ -6,7 +6,7 @@ namespace Core.Domain.Test.Entities;
 
 public abstract class TicketTestBase : AggregateTestBase<TicketEvent>
 {
-    protected virtual Ticket Rehydrate(List<TicketEvent> events)
+    protected static Ticket Rehydrate(List<TicketEvent> events)
     {
         return Ticket.Rehydrate(events);
     }

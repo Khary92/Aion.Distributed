@@ -9,7 +9,7 @@ public class ChangeTagSelectionTraceCollector(ITracingDataSender sender)
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = "Change statistics data requested";
+        const string log = "Change statistics data requested";
 
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.StatisticsData,
@@ -21,7 +21,7 @@ public class ChangeTagSelectionTraceCollector(ITracingDataSender sender)
             DateTimeOffset.Now));
     }
 
-    public async Task CommandSent(Type originClassType, Guid traceId, object command)
+    public async Task SendingCommand(Type originClassType, Guid traceId, object command)
     {
         var log = $"Sent {command}";
 
@@ -77,9 +77,8 @@ public class ChangeTagSelectionTraceCollector(ITracingDataSender sender)
             DateTimeOffset.Now));
     }
 
-    private static string GetName(object @object)
+    public async Task WrongModel(Type originClassType, Guid traceId)
     {
-        var commandType = @object.GetType();
-        return commandType.Name;
+        throw new NotImplementedException();
     }
 }

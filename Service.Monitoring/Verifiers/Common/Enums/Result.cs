@@ -4,7 +4,6 @@ public enum Result
 {
     Success,
     Exception,
-    Aborted,
     NotFound,
     TimedOut,
     WrongOrder,

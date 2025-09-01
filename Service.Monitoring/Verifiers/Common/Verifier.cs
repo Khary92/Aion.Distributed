@@ -10,7 +10,7 @@ namespace Service.Monitoring.Verifiers.Common;
 public class Verifier : IVerifier
 {
     private readonly Timer _timer = new(10000);
-    private readonly List<TraceData> _traceData = new();
+    private readonly List<TraceData> _traceData = [];
 
     private readonly Guid _traceId;
     private readonly SortingType _sortingType;

@@ -6,7 +6,7 @@ namespace Core.Domain.Test.Entities;
 
 public class WorkDayTestBase : AggregateTestBase<WorkDayEvent>
 {
-    protected virtual WorkDay Rehydrate(List<WorkDayEvent> events)
+    protected static WorkDay Rehydrate(List<WorkDayEvent> events)
     {
         return WorkDay.Rehydrate(events);
     }

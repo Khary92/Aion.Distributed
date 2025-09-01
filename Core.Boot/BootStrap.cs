@@ -1,7 +1,6 @@
 ﻿using Core.Persistence;
 using Core.Persistence.DbContext;
 using Core.Server;
-using Core.Server.Services.UseCase;
 using Core.Server.Tracing;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Server.Kestrel.Core;

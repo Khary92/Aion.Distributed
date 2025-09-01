@@ -46,7 +46,7 @@ public class TicketTest : TicketTestBase
     [Test]
     public void DocumentationChangedEventChangesField()
     {
-        var newDocumentation = "newDocumentation";
+        const string newDocumentation = "newDocumentation";
 
         var created = new TicketCreatedEvent(_initialTicketId, InitialName, InitialBookingNumber,
             InitialDocumentation, _initialSprintIds);
