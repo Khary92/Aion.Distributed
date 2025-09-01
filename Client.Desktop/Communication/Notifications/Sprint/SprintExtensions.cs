@@ -20,8 +20,7 @@ public static class SprintExtensions
     public static ClientSprintActiveStatusSetNotification
         ToClientNotification(this SprintActiveStatusSetNotification notification)
     {
-        return new ClientSprintActiveStatusSetNotification(Guid.Parse(notification.SprintId), notification.IsActive,
-            Guid.Parse(notification.TraceData.TraceId));
+        return new ClientSprintActiveStatusSetNotification();
     }
 
     public static ClientSprintDataUpdatedNotification
@@ -35,7 +34,6 @@ public static class SprintExtensions
     public static ClientTicketAddedToActiveSprintNotification ToClientNotification(
         this TicketAddedToActiveSprintNotification notification)
     {
-        return new ClientTicketAddedToActiveSprintNotification(Guid.Parse(notification.TicketId),
-            Guid.Parse(notification.TraceData.TraceId));
+        return new ClientTicketAddedToActiveSprintNotification();
     }
 }

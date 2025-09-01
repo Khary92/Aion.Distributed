@@ -16,6 +16,12 @@ public partial class ContentWrapper : Window
 {
     private readonly IShutDownHandler _shutDownHandler;
 
+    public ContentWrapper()
+    {
+        InitializeComponent();
+        _shutDownHandler = null!;
+    }
+    
     public ContentWrapper(ContentWrapperViewModel viewModel, IShutDownHandler shutDownHandler)
     {
         _shutDownHandler = shutDownHandler;

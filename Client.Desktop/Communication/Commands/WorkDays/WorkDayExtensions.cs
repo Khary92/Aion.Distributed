@@ -1,4 +1,3 @@
-using System;
 using Client.Desktop.Communication.Commands.WorkDays.Records;
 using Google.Protobuf.WellKnownTypes;
 using Proto.Command.WorkDays;
@@ -16,7 +15,7 @@ public static class WorkDayExtensions
             Date = Timestamp.FromDateTimeOffset(command.Date),
             TraceData = new TraceDataProto
             {
-                TraceId = Guid.NewGuid().ToString()
+                TraceId = command.TraceId.ToString()
             }
         };
     }

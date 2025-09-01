@@ -1,5 +1,3 @@
-﻿using System;
+﻿namespace Client.Desktop.Communication.Notifications.Sprint.Records;
 
-namespace Client.Desktop.Communication.Notifications.Sprint.Records;
-
-public record ClientSprintActiveStatusSetNotification(Guid SprintId, bool IsActive, Guid TraceId);
+public record ClientSprintActiveStatusSetNotification;

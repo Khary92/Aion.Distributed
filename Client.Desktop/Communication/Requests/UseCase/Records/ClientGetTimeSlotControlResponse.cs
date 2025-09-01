@@ -1,5 +1,4 @@
-﻿using System;
-using Client.Desktop.DataModels;
+﻿using Client.Desktop.DataModels;
 
 namespace Client.Desktop.Communication.Requests.UseCase.Records;
 

@@ -1,5 +1,3 @@
-﻿using System;
+﻿namespace Client.Desktop.Communication.Requests.NoteType;
 
-namespace Client.Desktop.Communication.Requests.NoteType;
-
-public record ClientGetAllNoteTypesRequest();
+public record ClientGetAllNoteTypesRequest;

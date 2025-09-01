@@ -12,8 +12,7 @@ public static class NoteExtensions
     {
         return new NewNoteMessage(new NoteClientModel(
                 Guid.Parse(notification.NoteId), notification.Text, Guid.Parse(notification.NoteTypeId),
-                Guid.Parse(notification.TimeSlotId), notification.TimeStamp.ToDateTimeOffset()),
-            Guid.Parse(notification.TraceData.TraceId));
+                Guid.Parse(notification.TimeSlotId), notification.TimeStamp.ToDateTimeOffset()));
     }
 
     public static ClientNoteUpdatedNotification ToClientNotification(this NoteUpdatedNotification notification)

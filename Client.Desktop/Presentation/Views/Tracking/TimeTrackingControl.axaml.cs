@@ -5,6 +5,11 @@ namespace Client.Desktop.Presentation.Views.Tracking;
 
 public partial class TimeTrackingControl : UserControl
 {
+    public TimeTrackingControl()
+    {
+        InitializeComponent();
+    }
+    
     public TimeTrackingControl(TimeTrackingViewModel viewModel)
     {
         InitializeComponent();

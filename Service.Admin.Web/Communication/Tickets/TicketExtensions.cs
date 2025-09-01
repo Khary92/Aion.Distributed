@@ -73,6 +73,7 @@ public static class TicketExtensions
     public static WebTicketDocumentationUpdatedNotification ToNotification(
         this TicketDocumentationUpdatedNotification notification)
     {
-        return new WebTicketDocumentationUpdatedNotification(Guid.Parse(notification.TicketId));
+        return new WebTicketDocumentationUpdatedNotification(Guid.Parse(notification.TicketId),
+            Guid.Parse(notification.TraceData.TraceId));
     }
 }

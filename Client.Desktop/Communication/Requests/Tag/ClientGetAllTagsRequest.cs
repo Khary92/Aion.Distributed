@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace Client.Desktop.Communication.Requests.Tag;
 
-public record ClientGetAllTagsRequest();
+public record ClientGetAllTagsRequest;

@@ -6,16 +6,6 @@ namespace Client.Desktop.Communication.Commands.StatisticsData;
 
 public static class StatisticsDataExtensions
 {
-    public static CreateStatisticsDataCommandProto ToProto(this ClientCreateStatisticsDataCommand command)
-    {
-        return new CreateStatisticsDataCommandProto
-        {
-            StatisticsDataId = command.StatisticsDataId.ToString(),
-            IsProductive = command.IsProductive,
-            TagIds = { command.TagIds.ToRepeatedField() }
-        };
-    }
-
     public static ChangeTagSelectionCommandProto ToProto(this ClientChangeTagSelectionCommand command)
     {
         return new ChangeTagSelectionCommandProto

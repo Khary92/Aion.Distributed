@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Client.Desktop.Communication.Notifications;
 using Client.Desktop.Communication.Requests.UseCase.Records;

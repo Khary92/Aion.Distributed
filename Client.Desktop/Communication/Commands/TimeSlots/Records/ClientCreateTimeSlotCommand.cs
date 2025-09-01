@@ -8,5 +8,4 @@ public record ClientCreateTimeSlotCommand(
     Guid WorkDayId,
     DateTimeOffset StartTime,
     DateTimeOffset EndTime,
-    bool IsTimerRunning,
-    Guid TraceId);
+    bool IsTimerRunning);

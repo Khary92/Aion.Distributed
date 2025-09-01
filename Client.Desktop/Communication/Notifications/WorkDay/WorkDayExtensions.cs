@@ -10,6 +10,6 @@ public static class WorkDayExtensions
     public static NewWorkDayMessage ToNewEntityMessage(this WorkDayCreatedNotification notification)
     {
         return new NewWorkDayMessage(new WorkDayClientModel(Guid.Parse(notification.WorkDayId),
-            notification.Date.ToDateTimeOffset()), Guid.Parse(notification.TraceData.TraceId));
+            notification.Date.ToDateTimeOffset()));
     }
 }

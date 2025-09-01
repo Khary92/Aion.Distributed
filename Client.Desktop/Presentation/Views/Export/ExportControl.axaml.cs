@@ -5,6 +5,11 @@ namespace Client.Desktop.Presentation.Views.Export;
 
 public partial class ExportControl : UserControl
 {
+    public ExportControl()
+    {
+        InitializeComponent();
+    }
+    
     public ExportControl(ExportViewModel exportViewModel)
     {
         InitializeComponent();

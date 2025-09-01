@@ -150,8 +150,6 @@ public class TimeTrackingModel(
         });
 
         //TODO This implementation is bad. Fix that 
-        messenger.Register<ClientTicketAddedToSprintNotification>(this,
-            async void (_, _) => { await InitializeAsync(); });
         messenger.Register<ClientTicketAddedToActiveSprintNotification>(this,
             async void (_, _) => { await InitializeAsync(); });
 

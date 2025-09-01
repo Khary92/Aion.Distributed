@@ -5,6 +5,11 @@ namespace Client.Desktop.Presentation.Views.Analysis;
 
 public partial class AnalysisControlWrapper : UserControl
 {
+    public AnalysisControlWrapper()
+    {
+        InitializeComponent();
+    }
+    
     public AnalysisControlWrapper(AnalysisControlWrapperViewModel viewModel)
     {
         InitializeComponent();

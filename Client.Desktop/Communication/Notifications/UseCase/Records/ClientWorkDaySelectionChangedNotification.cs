@@ -1,5 +1,3 @@
-﻿using System;
+﻿namespace Client.Desktop.Communication.Notifications.UseCase.Records;
 
-namespace Client.Desktop.Communication.Notifications.UseCase.Records;
-
-public record ClientWorkDaySelectionChangedNotification(Guid TraceId);
+public record ClientWorkDaySelectionChangedNotification;

@@ -1,5 +1,3 @@
-﻿using System;
+﻿namespace Client.Desktop.Communication.Requests.Sprint;
 
-namespace Client.Desktop.Communication.Requests.Sprint;
-
-public record ClientGetAllSprintsRequest();
+public record ClientGetAllSprintsRequest;
