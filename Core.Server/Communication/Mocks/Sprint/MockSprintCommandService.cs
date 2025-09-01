@@ -27,7 +27,7 @@ public class MockSprintCommandService(SprintNotificationService sprintsNotificat
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"[Error] AddTicketToActiveSprint failed: {ex.Message}");
+            await Console.Error.WriteLineAsync($"[Error] AddTicketToActiveSprint failed: {ex.Message}");
             return new CommandResponse { Success = false };
         }
     }
@@ -56,7 +56,7 @@ public class MockSprintCommandService(SprintNotificationService sprintsNotificat
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"[Error] CreateSprint failed: {ex.Message}");
+            await Console.Error.WriteLineAsync($"[Error] CreateSprint failed: {ex.Message}");
             return new CommandResponse { Success = false };
         }
     }
@@ -81,7 +81,7 @@ public class MockSprintCommandService(SprintNotificationService sprintsNotificat
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"[Error] SetSprintActiveStatus failed: {ex.Message}");
+            await Console.Error.WriteLineAsync($"[Error] SetSprintActiveStatus failed: {ex.Message}");
             return new CommandResponse { Success = false };
         }
     }
@@ -109,7 +109,7 @@ public class MockSprintCommandService(SprintNotificationService sprintsNotificat
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"[Error] UpdateSprintData failed: {ex.Message}");
+            await Console.Error.WriteLineAsync($"[Error] UpdateSprintData failed: {ex.Message}");
             return new CommandResponse { Success = false };
         }
     }

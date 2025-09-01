@@ -3,5 +3,4 @@
 public interface ITimeSlotControlService
 {
     Task Create(Guid ticketId, DateTimeOffset date, Guid traceId);
-    Task Load(Guid timeSlotId, Guid traceId);
 }

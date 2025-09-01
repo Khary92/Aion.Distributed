@@ -27,7 +27,7 @@ public class MockTagCommandService(TagNotificationService tagNotificationService
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"[Error] CreateTag failed: {ex.Message}");
+            await Console.Error.WriteLineAsync($"[Error] CreateTag failed: {ex.Message}");
             return new CommandResponse { Success = false };
         }
     }
@@ -51,7 +51,7 @@ public class MockTagCommandService(TagNotificationService tagNotificationService
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"[Error] UpdateTag failed: {ex.Message}");
+            await Console.Error.WriteLineAsync($"[Error] UpdateTag failed: {ex.Message}");
             return new CommandResponse { Success = false };
         }
     }

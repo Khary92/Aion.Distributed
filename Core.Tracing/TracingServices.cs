@@ -15,6 +15,8 @@ using Core.Server.Tracing.Tracing.Tracers.TimerSettings;
 using Core.Server.Tracing.Tracing.Tracers.TimerSettings.UseCase;
 using Core.Server.Tracing.Tracing.Tracers.TimeSlot;
 using Core.Server.Tracing.Tracing.Tracers.TimeSlot.UseCase;
+using Core.Server.Tracing.Tracing.Tracers.WorkDay;
+using Core.Server.Tracing.Tracing.Tracers.WorkDay.UseCase;
 using Microsoft.Extensions.DependencyInjection;
 using Service.Monitoring.Shared.Tracing;
 
@@ -33,6 +35,14 @@ public static class TracingServices
         AddTicketTracingServices(services);
         AddTimerSettingsTracingServices(services);
         AddTimeSlotTracingServices(services);
+        AddWorkDayTracingServices(services);
+    }
+
+    private static void AddWorkDayTracingServices(IServiceCollection services)
+    {
+        services.AddSingleton<ICreateWorkDayTraceCollector, CreateWorkDayTraceCollector>();
+
+        services.AddSingleton<IWorkDayUseCaseSelector, WorkDayUseCaseSelector>();
     }
 
     private static void AddACommonTracingServices(this IServiceCollection services)

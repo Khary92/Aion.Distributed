@@ -6,6 +6,7 @@ using Core.Server.Services.Entities.StatisticsData;
 using Core.Server.Services.Entities.Tickets;
 using Core.Server.Services.Entities.TimeSlots;
 using Core.Server.Services.Entities.WorkDays;
+using Proto.DTO.TraceData;
 using Proto.Requests.UseCase;
 
 namespace Core.Server.Communication.Endpoints.UseCase.Handler;
@@ -35,7 +36,7 @@ public class LoadTimeSlotControlDataHandler(
                 StatisticsDataProto = statisticsData.ToProto(),
                 TicketProto = ticket!.ToProto(),
                 TimeSlotProto = timeSlot.ToProto(),
-                TraceData = new()
+                TraceData = new TraceDataProto
                 {
                     TraceId = request.TraceId.ToString()
                 }

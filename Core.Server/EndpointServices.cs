@@ -94,6 +94,7 @@ public static class EndpointServices
 
         app.MapGrpcService<NoteRequestReceiver>();
         app.MapGrpcService<MockNoteTypeRequestService>();
+        app.MapGrpcService<MockNoteRequestReceiver>();
         app.MapGrpcService<MockSprintRequestService>();
         app.MapGrpcService<MockStatisticsDataRequestService>();
         app.MapGrpcService<MockTagRequestService>();

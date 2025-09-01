@@ -23,7 +23,7 @@ public class AddTicketToActiveSprintCommandHandler(
             return;
         }
 
-        var activeSprint = (await sprintRequestsService.GetActiveSprint());
+        var activeSprint = await sprintRequestsService.GetActiveSprint();
 
         if (activeSprint == null)
         {

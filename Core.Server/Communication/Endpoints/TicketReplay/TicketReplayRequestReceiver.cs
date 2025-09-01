@@ -12,11 +12,11 @@ public class TicketReplayRequestReceiver(ITicketRequestsService ticketRequestsSe
         ServerCallContext context)
     {
         var documentation = await ticketRequestsService.GetDocumentationByTicketId(Guid.Parse(request.TicketId));
-        var getReplayResponseProto = new GetReplayResponseProto()
+        var getReplayResponseProto = new GetReplayResponseProto
         {
             TicketReplays =
             {
-                documentation.ConvertAll(d => new TicketReplayProto()
+                documentation.ConvertAll(d => new TicketReplayProto
                 {
                     DocumentationEntry = d
                 })

@@ -32,7 +32,7 @@ public class MockStatisticsDataCommandService(StatisticsDataNotificationService 
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"[Error] ChangeProductivity failed: {ex.Message}");
+            await Console.Error.WriteLineAsync($"[Error] ChangeProductivity failed: {ex.Message}");
             return new CommandResponse { Success = false };
         }
     }
@@ -58,7 +58,7 @@ public class MockStatisticsDataCommandService(StatisticsDataNotificationService 
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"[Error] ChangeTagSelection failed: {ex.Message}");
+            await Console.Error.WriteLineAsync($"[Error] ChangeTagSelection failed: {ex.Message}");
             return new CommandResponse { Success = false };
         }
     }
@@ -88,7 +88,7 @@ public class MockStatisticsDataCommandService(StatisticsDataNotificationService 
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"[Error] CreateStatisticsData failed: {ex.Message}");
+            await Console.Error.WriteLineAsync($"[Error] CreateStatisticsData failed: {ex.Message}");
             return new CommandResponse { Success = false };
         }
     }

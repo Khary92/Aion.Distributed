@@ -90,7 +90,7 @@ public static class SprintProtoExtensions
     {
         return new SprintNotification
         {
-            TicketAddedToActiveSprint = new TicketAddedToActiveSprintNotification()
+            TicketAddedToActiveSprint = new TicketAddedToActiveSprintNotification
             {
                 TicketId = command.TicketId.ToString(),
                 TraceData = new TraceDataProto

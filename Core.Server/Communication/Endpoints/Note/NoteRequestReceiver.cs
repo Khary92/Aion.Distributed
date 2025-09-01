@@ -5,7 +5,7 @@ using Proto.Requests.Notes;
 
 namespace Core.Server.Communication.Endpoints.Note;
 
-public class NoteRequestReceiver(INoteRequestsService noteRequestsService, ITraceCollector tracer)
+public class NoteRequestReceiver(INoteRequestsService noteRequestsService)
     : NotesRequestService.NotesRequestServiceBase
 {
     public override async Task<GetNotesResponseProto> GetNotesByTicketId(GetNotesByTicketIdRequestProto request,

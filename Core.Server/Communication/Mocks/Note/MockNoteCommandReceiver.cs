@@ -31,7 +31,7 @@ public class MockNoteCommandReceiver(NoteNotificationService noteNotificationSer
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"[Error] CreateNote failed: {ex.Message}");
+            await Console.Error.WriteLineAsync($"[Error] CreateNote failed: {ex.Message}");
             return new CommandResponse { Success = false };
         }
     }
@@ -58,7 +58,7 @@ public class MockNoteCommandReceiver(NoteNotificationService noteNotificationSer
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"[Error] UpdateNote failed: {ex.Message}");
+            await Console.Error.WriteLineAsync($"[Error] UpdateNote failed: {ex.Message}");
             return new CommandResponse { Success = false };
         }
     }

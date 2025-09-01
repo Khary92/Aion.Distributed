@@ -31,7 +31,7 @@ public class MockTimerSettingsCommandService(TimerSettingsNotificationService no
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"[Error] CreateTimerSettings failed: {ex.Message}");
+            await Console.Error.WriteLineAsync($"[Error] CreateTimerSettings failed: {ex.Message}");
             return new CommandResponse { Success = false };
         }
     }
@@ -57,7 +57,7 @@ public class MockTimerSettingsCommandService(TimerSettingsNotificationService no
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"[Error] ChangeDocuTimerSaveInterval failed: {ex.Message}");
+            await Console.Error.WriteLineAsync($"[Error] ChangeDocuTimerSaveInterval failed: {ex.Message}");
             return new CommandResponse { Success = false };
         }
     }
@@ -83,7 +83,7 @@ public class MockTimerSettingsCommandService(TimerSettingsNotificationService no
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"[Error] ChangeSnapshotSaveInterval failed: {ex.Message}");
+            await Console.Error.WriteLineAsync($"[Error] ChangeSnapshotSaveInterval failed: {ex.Message}");
             return new CommandResponse { Success = false };
         }
     }

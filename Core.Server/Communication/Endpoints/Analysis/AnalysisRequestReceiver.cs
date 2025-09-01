@@ -21,7 +21,6 @@ public class AnalysisRequestReceiver(
     {
         var selectedSprint = await sprintRequestsService.GetById(Guid.Parse(request.SprintId));
 
-        // TODO check nullable types
         return await analysisDataService.GetAnalysisBySprint(selectedSprint!);
     }
 
@@ -29,8 +28,7 @@ public class AnalysisRequestReceiver(
     {
         var selectedTag = await tagRequestsService.GetTagById(Guid.Parse(request.TagId));
 
-        // TODO check nullable types
-        return await analysisDataService.GetAnalysisByTag(selectedTag!);
+        return await analysisDataService.GetAnalysisByTag(selectedTag);
     }
 
     public override async Task<AnalysisByTicketProto> GetTicketAnalysis(GetTicketAnalysisById request,
@@ -38,7 +36,6 @@ public class AnalysisRequestReceiver(
     {
         var selectedTicket = await ticketRequestsService.GetTicketById(Guid.Parse(request.TicketId));
 
-        //TODO check nullable types
         return await analysisDataService.GetAnalysisByTicket(selectedTicket!);
     }
 }

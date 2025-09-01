@@ -27,7 +27,7 @@ public class MockTraceReportCommandService(TraceReportNotificationService notifi
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"[Error] SendTraceReport failed: {ex.Message}");
+            await Console.Error.WriteLineAsync($"[Error] SendTraceReport failed: {ex.Message}");
             return new CommandResponse { Success = false };
         }
     }

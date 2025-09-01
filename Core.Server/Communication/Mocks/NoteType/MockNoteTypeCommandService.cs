@@ -28,7 +28,7 @@ public class MockNoteTypeCommandService(NoteTypeNotificationService noteTypeNoti
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"[Error] ChangeNoteTypeColor failed: {ex.Message}");
+            await Console.Error.WriteLineAsync($"[Error] ChangeNoteTypeColor failed: {ex.Message}");
             return new CommandResponse { Success = false };
         }
     }
@@ -53,7 +53,7 @@ public class MockNoteTypeCommandService(NoteTypeNotificationService noteTypeNoti
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"[Error] ChangeNoteTypeName failed: {ex.Message}");
+            await Console.Error.WriteLineAsync($"[Error] ChangeNoteTypeName failed: {ex.Message}");
             return new CommandResponse { Success = false };
         }
     }
@@ -79,7 +79,7 @@ public class MockNoteTypeCommandService(NoteTypeNotificationService noteTypeNoti
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"[Error] CreateNoteType failed: {ex.Message}");
+            await Console.Error.WriteLineAsync($"[Error] CreateNoteType failed: {ex.Message}");
             return new CommandResponse { Success = false };
         }
     }

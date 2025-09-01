@@ -1,4 +1,5 @@
-﻿using Grpc.Core;
+﻿using System.Collections.Concurrent;
+using Grpc.Core;
 using Proto.Notifications.WorkDay;
 
 namespace Core.Server.Communication.Endpoints.WorkDay;
@@ -6,11 +7,8 @@ namespace Core.Server.Communication.Endpoints.WorkDay;
 public class
     WorkDayNotificationService : Proto.Notifications.WorkDay.WorkDayNotificationService.WorkDayNotificationServiceBase
 {
-    private readonly Dictionary<Guid, (IServerStreamWriter<WorkDayNotification> Stream, CancellationToken Token)>
-        _clients
-            = new();
-
-    private readonly Lock _lock = new();
+    private readonly ConcurrentDictionary<Guid, (IServerStreamWriter<WorkDayNotification> Stream, CancellationToken Token)>
+        _clients = new();
 
     public override async Task SubscribeWorkDayNotifications(
         SubscribeRequest request,
@@ -18,11 +16,7 @@ public class
         ServerCallContext context)
     {
         var clientId = Guid.NewGuid();
-
-        lock (_lock)
-        {
-            _clients.Add(clientId, (responseStream, context.CancellationToken));
-        }
+        _clients[clientId] = (responseStream, context.CancellationToken);
 
         try
         {
@@ -33,22 +27,20 @@ public class
         }
         finally
         {
-            lock (_lock)
-            {
-                _clients.Remove(clientId);
-            }
+            _clients.TryRemove(clientId, out _);
         }
     }
 
     public async Task SendNotificationAsync(WorkDayNotification notification)
     {
-        List<Guid> clientsToRemove = new();
-
-        foreach (var (clientId, (stream, token)) in _clients)
+        foreach (var clientDictionary in _clients)
         {
+            var clientId = clientDictionary.Key;
+            var (stream, token) = clientDictionary.Value;
+
             if (token.IsCancellationRequested)
             {
-                clientsToRemove.Add(clientId);
+                _clients.TryRemove(clientId, out _);
                 continue;
             }
 
@@ -58,15 +50,9 @@ public class
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Fehler beim Senden an Client {clientId}: {ex.Message}");
-                clientsToRemove.Add(clientId);
+                Console.WriteLine($"Error when sending to {clientId}: {ex.Message}");
+                _clients.TryRemove(clientId, out _);
             }
         }
-
-        if (clientsToRemove.Count > 0)
-            lock (_lock)
-            {
-                foreach (var clientId in clientsToRemove) _clients.Remove(clientId);
-            }
     }
 }

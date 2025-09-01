@@ -69,7 +69,6 @@ public static class DtoExtensions
             Guid.Parse(ticket.TicketId),
             ticket.Name,
             ticket.BookingNumber,
-            ticket.Documentation,
             [..sprintIds]
         );
     }

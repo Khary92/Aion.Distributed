@@ -1,8 +1,9 @@
-@using Service.Admin.Web.Communication.NoteType
-@using Service.Admin.Web.Communication.NoteType.State
 @rendermode InteractiveServer
 @inject INoteTypeStateService NoteTypeStateService
 @inject INoteTypeController NoteTypeController
+@using Service.Admin.Web.Communication.NoteType
+@using Service.Admin.Web.Communication.NoteType.State
+@implements IDisposable
 
 <div class="row">
     <div class="col-5">
@@ -35,9 +36,10 @@
             </tr>
             </thead>
             <tbody>
-            @foreach (var noteType in NoteTypeStateService.NoteTypes)
+            @foreach (var noteType in NoteTypeStateService.NoteTypes.ToList())
             {
-                <tr class="@(NoteTypeController.SelectedNoteType == noteType ? "table-active" : "")"
+                <tr @key="noteType"
+                    class="@(NoteTypeController.SelectedNoteType == noteType ? "table-active" : "")"
                     @onclick="() => NoteTypeController.SelectedNoteType = noteType">
                     <td>@noteType.Name</td>
                     <td>
@@ -59,11 +61,22 @@
 </style>
 
 @code {
+    private Action? _onStateChangedHandler;
 
     protected override async Task OnInitializedAsync()
     {
-        NoteTypeStateService.OnStateChanged += async () => await InvokeAsync(StateHasChanged);
+        _onStateChangedHandler = () => _ = InvokeAsync(StateHasChanged);
+        NoteTypeStateService.OnStateChanged += _onStateChangedHandler;
+
         await base.OnInitializedAsync();
+    }
+
+    public void Dispose()
+    {
+        if (_onStateChangedHandler is not null)
+        {
+            NoteTypeStateService.OnStateChanged -= _onStateChangedHandler;
+        }
     }
 
 }

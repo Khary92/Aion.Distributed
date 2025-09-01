@@ -6,7 +6,6 @@ public class TicketWebModel(
     Guid ticketId,
     string name,
     string bookingNumber,
-    string documentation,
     List<Guid> sprintIds)
 {
     public Guid TicketId { get; } = ticketId;
@@ -26,5 +25,6 @@ public class TicketWebModel(
 
     public void Apply(WebTicketDocumentationUpdatedNotification notification)
     {
+        // Not required yet. This is a dummy for consistency reasons.
     }
 }

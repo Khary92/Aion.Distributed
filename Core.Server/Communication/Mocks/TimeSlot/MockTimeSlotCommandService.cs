@@ -33,7 +33,7 @@ public class MockTimeSlotCommandService(TimeSlotNotificationService timeSlotNoti
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"[Error] CreateTimeSlot failed: {ex.Message}");
+            await Console.Error.WriteLineAsync($"[Error] CreateTimeSlot failed: {ex.Message}");
             return new CommandResponse { Success = false };
         }
     }
@@ -57,7 +57,7 @@ public class MockTimeSlotCommandService(TimeSlotNotificationService timeSlotNoti
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"[Error] AddNote failed: {ex.Message}");
+            await Console.Error.WriteLineAsync($"[Error] AddNote failed: {ex.Message}");
             return new CommandResponse { Success = false };
         }
     }
@@ -82,7 +82,7 @@ public class MockTimeSlotCommandService(TimeSlotNotificationService timeSlotNoti
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"[Error] SetStartTime failed: {ex.Message}");
+            await Console.Error.WriteLineAsync($"[Error] SetStartTime failed: {ex.Message}");
             return new CommandResponse { Success = false };
         }
     }
@@ -106,7 +106,7 @@ public class MockTimeSlotCommandService(TimeSlotNotificationService timeSlotNoti
         }
         catch (Exception ex)
         {
-            Console.Error.WriteLine($"[Error] SetEndTime failed: {ex.Message}");
+            await Console.Error.WriteLineAsync($"[Error] SetEndTime failed: {ex.Message}");
             return new CommandResponse { Success = false };
         }
     }

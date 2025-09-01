@@ -60,7 +60,7 @@ public static class TicketExtensions
     {
         return new NewTicketMessage(new TicketWebModel(
             Guid.Parse(notification.TicketId), notification.Name, notification.BookingNumber,
-            string.Empty, notification.SprintIds.ToGuidList()), Guid.Parse(notification.TraceData.TraceId));
+            notification.SprintIds.ToGuidList()), Guid.Parse(notification.TraceData.TraceId));
     }
 
     public static WebTicketDataUpdatedNotification ToNotification(this TicketDataUpdatedNotification notification)

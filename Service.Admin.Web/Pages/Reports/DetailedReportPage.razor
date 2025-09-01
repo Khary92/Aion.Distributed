@@ -142,7 +142,7 @@
         _reportStateService = StateServiceFactory.GetService(SelectedSortingType);
         _reportStateService!.OnStateChanged += OnServiceStateChanged;
 
-        _selectedReportIndex = _reportStateService.Reports.Any() == true ? 0 : -1;
+        _selectedReportIndex = _reportStateService.Reports.Any() ? 0 : -1;
         UpdateSelectedReportRecord();
 
         _ = InvokeAsync(StateHasChanged);
