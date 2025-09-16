@@ -11,6 +11,7 @@ public class StartupScheduler(IEnumerable<IStartupTask> startupTasks, IStreamLif
     private readonly List<StartupTask> _order =
     [
         StartupTask.RegisterMessenger,
+        StartupTask.NotificationStream,
         StartupTask.AsyncInitialize,
         StartupTask.CheckUnsentCommands
     ];
@@ -20,9 +21,16 @@ public class StartupScheduler(IEnumerable<IStartupTask> startupTasks, IStreamLif
 
     public async Task Execute()
     {
-        foreach (var task in _order) await LoadingStrategy[task].Execute();
+        foreach (var task in _order)
+        {
+            if (task == StartupTask.NotificationStream)
+            {
+                // This needs to be started in a thread as this will be blocking
+                _ = Task.Run(async () => await streamLifeCycleHandler.Start());
+                continue;
+            }
 
-        // This needs to be started in a thread as this will be blocking
-        _ = Task.Run(async () => await streamLifeCycleHandler.Start());
+            await LoadingStrategy[task].Execute();
+        }
     }
 }
