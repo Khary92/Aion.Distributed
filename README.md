@@ -7,7 +7,7 @@ It was created as a **learning and demonstration project** to explore and apply 
 
 ## 🚀 Architecture Overview
 
-This project intentionally applies established software engineering principles:
+This project intentionally applies established software engineering principles.
 A more detailed explanation and some thoughts are available in [documentation.pdf](./documentation.pdf).
 
 - **Clean Architecture** (Hexagonal, Dependency Rule)
