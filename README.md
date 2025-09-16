@@ -8,6 +8,7 @@ It was created as a **learning and demonstration project** to explore and apply 
 ## 🚀 Architecture Overview
 
 This project intentionally applies established software engineering principles:
+A more detailed explanation and some thoughts are available in [documentation.pdf](./documentation.pdf).
 
 - **Clean Architecture** (Hexagonal, Dependency Rule)
 - **Interface-based Programming**
@@ -49,12 +50,10 @@ The goal is not primarily a finished product, but rather a realistic case study 
 ## ▶️ How to Run
 
 1. Clone this repository
-2. Start the database in Docker (`docker-compose up`)
+2. Start the PostgreSQL database in Docker (`docker-compose up`)
 3. The web interface can be reached via http://localhost:5000
-4. PGAdming can be reached via http://localhost:5050 (Password: aionpass)
+4. pgAdmin can be reached via http://localhost:5050 (Password: aionpass)
 5. The Avalonia Client must be compiled and started via the .exe file
-
-⚠️ Note: Some parts are still unstable or incomplete.
 
 ---
 
