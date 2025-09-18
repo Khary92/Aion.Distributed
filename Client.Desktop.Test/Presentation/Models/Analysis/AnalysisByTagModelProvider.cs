@@ -32,6 +32,10 @@ public static class AnalysisByTagModelProvider
         requestSender
             .Setup(rs => rs.Send(It.IsAny<ClientGetAllTagsRequest>()))!
             .ReturnsAsync(initialTags.ToList());
+        
+        requestSender
+            .Setup(rs => rs.Send(It.IsAny<ClientGetTagAnalysisById>()))!
+            .ReturnsAsync(new AnalysisByTagDecorator(CreateAnalysisByTag()));
 
         return await CreateFixture(messenger, requestSender, tracer);
     }
@@ -43,7 +47,8 @@ public static class AnalysisByTagModelProvider
 
         instance.RegisterMessenger();
         await instance.InitializeAsync();
-
+        await instance.SetAnalysisForTag(CreateTagClientModel());
+        
         return new AnalysisModelFixture<AnalysisByTagModel>
         {
             Instance = instance,
@@ -63,12 +68,11 @@ public static class AnalysisByTagModelProvider
 
         var timeSlotClientModel = new TimeSlotClientModel(timeSlotId, Guid.NewGuid(), Guid.NewGuid(),
             DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, new List<Guid>(), false);
-
-
+        
         return new AnalysisByTag()
         {
-            StatisticsData = new List<StatisticsDataClientModel>() { statisticsDataClientModel },
-            TimeSlots = new List<TimeSlotClientModel>() { timeSlotClientModel }
+            StatisticsData = [statisticsDataClientModel],
+            TimeSlots = [timeSlotClientModel]
         };
     }
 }
