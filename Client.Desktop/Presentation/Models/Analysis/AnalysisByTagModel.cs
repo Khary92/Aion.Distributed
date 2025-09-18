@@ -17,7 +17,7 @@ using ReactiveUI;
 
 namespace Client.Desktop.Presentation.Models.Analysis;
 
-public class AnalysisByTagModel(IRequestSender requestSender, IMessenger messenger, ITraceCollector tracer)
+public class AnalysisByTagModel(IMessenger messenger, IRequestSender requestSender, ITraceCollector tracer)
     : ReactiveObject, IInitializeAsync, IRegisterMessenger
 {
     private AnalysisByTagDecorator? _analysisByTag;

@@ -23,7 +23,8 @@ public class NoteTest : NoteTestBase
 
         var aggregate = Rehydrate(events);
 
-        AssertNoteState(aggregate, _noteId, InitialText, _initialNoteTypeId, _initialTimeSlotId, _initialTimeStamp);
+        AssertNoteState(aggregate, _noteId, InitialText, _initialNoteTypeId, _initialTicketId, _initialTimeSlotId,
+            _initialTimeStamp);
     }
 
     [Test]
@@ -34,11 +35,12 @@ public class NoteTest : NoteTestBase
 
         var created = new NoteCreatedEvent(_noteId, InitialText, _initialNoteTypeId, _initialTicketId,
             _initialTimeSlotId, _initialTimeStamp);
-        var updated = new NoteUpdatedEvent(Guid.NewGuid(), newText, newNoteTypeId);
+        var updated = new NoteUpdatedEvent(_noteId, newText, newNoteTypeId);
         var events = CreateEventList(created, updated);
 
         var aggregate = Rehydrate(events);
 
-        AssertNoteState(aggregate, _noteId, newText, newNoteTypeId, _initialTimeSlotId, _initialTimeStamp);
+        AssertNoteState(aggregate, _noteId, newText, newNoteTypeId, _initialTicketId, _initialTimeSlotId,
+            _initialTimeStamp);
     }
 }

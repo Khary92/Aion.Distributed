@@ -9,30 +9,22 @@ using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using Moq;
 
-namespace Client.Desktop.Test.Presentation.Models;
+namespace Client.Desktop.Test.Presentation.Models.Analysis;
 
-public sealed class ModelFixture<TModel>
+public static class AnalysisBySprintModelProvider
 {
-    public required TModel Instance { get; init; }
-    public required Mock<IRequestSender> RequestSender { get; init; }
-    public required Mock<ITraceCollector> Tracer { get; init; }
-    public required IMessenger Messenger { get; init; }
-}
+    private static IMessenger CreateMessenger() => new WeakReferenceMessenger();
 
-public static class ModelTestProvider
-{
-    public static IMessenger CreateMessenger() => new WeakReferenceMessenger();
-
-    public static Mock<ITraceCollector> CreateTracerMock()
+    private static Mock<ITraceCollector> CreateTracerMock()
         => new() { DefaultValue = DefaultValue.Mock };
 
-    public static Mock<IRequestSender> CreateRequestSenderMock() => new();
+    private static Mock<IRequestSender> CreateRequestSenderMock() => new();
 
     private static SprintClientModel CreateSprintClientModel() => new(Guid.NewGuid(), "InitialSprintName", true,
         DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, new List<Guid>());
 
 
-    public static async Task<ModelFixture<AnalysisBySprintModel>> CreateAnalysisBySprintModelAsync(
+    public static async Task<ModelFixture<AnalysisBySprintModel>> Create(
         IReadOnlyList<SprintClientModel?> initialSprints)
     {
         var messenger = CreateMessenger();
@@ -45,8 +37,8 @@ public static class ModelTestProvider
 
         return await CreateFixture(messenger, requestSender, tracer);
     }
-    
-    public static async Task<ModelFixture<AnalysisBySprintModel>> CreateAnalysisBySprintModelAsync()
+
+    public static async Task<ModelFixture<AnalysisBySprintModel>> Create()
     {
         var messenger = CreateMessenger();
         var requestSender = CreateRequestSenderMock();
@@ -60,17 +52,19 @@ public static class ModelTestProvider
 
         requestSender
             .Setup(rs => rs.Send(It.IsAny<ClientGetAllSprintsRequest>()))
-            .ReturnsAsync(new List<SprintClientModel?>() { sprintClientModel });
+            .ReturnsAsync([sprintClientModel]);
 
         return await CreateFixture(messenger, requestSender, tracer);
     }
-    
-    private static async Task<ModelFixture<AnalysisBySprintModel>> CreateFixture(IMessenger messenger, Mock<IRequestSender> requestSender, Mock<ITraceCollector> tracer)
+
+    private static async Task<ModelFixture<AnalysisBySprintModel>> CreateFixture(IMessenger messenger,
+        Mock<IRequestSender> requestSender, Mock<ITraceCollector> tracer)
     {
         var instance = new AnalysisBySprintModel(messenger, requestSender.Object, tracer.Object);
 
         instance.RegisterMessenger();
         await instance.InitializeAsync();
+        await instance.SetAnalysisForSprint(CreateSprintClientModel());
 
         return new ModelFixture<AnalysisBySprintModel>
         {
@@ -86,25 +80,25 @@ public static class ModelTestProvider
         var timeSlotId = Guid.NewGuid();
         var statisticsId = Guid.NewGuid();
         var ticketId = Guid.NewGuid();
-        
+
         var statisticsDataClientModel =
             new StatisticsDataClientModel(statisticsId, timeSlotId, new List<Guid>(), true, false, false);
-        
+
         var timeSlotClientModel = new TimeSlotClientModel(timeSlotId, Guid.NewGuid(), Guid.NewGuid(),
             DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, new List<Guid>(), false);
 
         var ticketClientModel = new TicketClientModel(ticketId, "TicketName", "TicketBookingNumber",
-            "TicketDocumentation", new List<Guid>() {sprintClientModel.SprintId});
-        
+            "TicketDocumentation", new List<Guid>() { sprintClientModel.SprintId });
+
         return new AnalysisBySprint()
         {
             SprintName = sprintClientModel.Name,
-            ProductiveTags = new Dictionary<string, int>() {{"Productive Tag", 2}},
-            NeutralTags = new Dictionary<string, int>() {{"Neutral Tag", 1}},
-            UnproductiveTags = new Dictionary<string, int>() {{"Unproductive Tag", 1}},
-            StatisticsData = new List<StatisticsDataClientModel>() {statisticsDataClientModel},
-            Tickets = new List<TicketClientModel>() {ticketClientModel},
-            TimeSlots = new List<TimeSlotClientModel>() {timeSlotClientModel}
+            ProductiveTags = new Dictionary<string, int>() { { "Productive Tag", 2 } },
+            NeutralTags = new Dictionary<string, int>() { { "Neutral Tag", 1 } },
+            UnproductiveTags = new Dictionary<string, int>() { { "Unproductive Tag", 1 } },
+            StatisticsData = new List<StatisticsDataClientModel>() { statisticsDataClientModel },
+            Tickets = new List<TicketClientModel>() { ticketClientModel },
+            TimeSlots = new List<TimeSlotClientModel>() { timeSlotClientModel }
         };
     }
 }

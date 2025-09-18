@@ -14,13 +14,13 @@ public class AnalysisBySprintModelTest
     public async Task AddSprint()
     {
         var newSprintClientModel = new SprintClientModel(Guid.NewGuid(), "name", true, DateTimeOffset.UtcNow,
-            DateTimeOffset.UtcNow, new List<Guid>());
+            DateTimeOffset.UtcNow, []);
         var newSprintMessage = new NewSprintMessage(newSprintClientModel, Guid.NewGuid());
 
-        var fixture = await ModelTestProvider.CreateAnalysisBySprintModelAsync();
+        var fixture = await AnalysisBySprintModelProvider.Create(new List<SprintClientModel?>());
         fixture.Messenger.Send(newSprintMessage);
 
-        Assert.That(fixture.Instance.Sprints.Count, Is.EqualTo(1));
+        Assert.That(fixture.Instance.Sprints, Has.Count.EqualTo(1));
     }
 
     [Test]
@@ -31,10 +31,9 @@ public class AnalysisBySprintModelTest
         var changedSprintName = "ChangedSprintName";
         var newSprintClientModel = new SprintClientModel(sprintId, sprintName, true, DateTimeOffset.UtcNow,
             DateTimeOffset.UtcNow, new List<Guid>());
-        
+
         var fixture =
-            await ModelTestProvider.CreateAnalysisBySprintModelAsync(new List<SprintClientModel?>()
-                { newSprintClientModel });
+            await AnalysisBySprintModelProvider.Create(new List<SprintClientModel?>() { newSprintClientModel });
         var clientSprintDataUpdateNotification = new ClientSprintDataUpdatedNotification(sprintId, changedSprintName,
             DateTimeOffset.MinValue, DateTimeOffset.MaxValue, Guid.NewGuid());
 
@@ -46,11 +45,19 @@ public class AnalysisBySprintModelTest
     [Test]
     public async Task GetMarkdownString()
     {
-        var fixture = await ModelTestProvider.CreateAnalysisBySprintModelAsync();
+        var fixture = await AnalysisBySprintModelProvider.Create();
 
         var markdownString = fixture.Instance.GetMarkdownString();
 
-        Assert.That(ExpectedMarkdownString, Is.EqualTo(markdownString));
+        var normalizedActual = NormalizeNewLinesToLf(markdownString);
+        var normalizedExpected = NormalizeNewLinesToLf(ExpectedMarkdownString);
+
+        Assert.That(normalizedActual, Is.EqualTo(normalizedExpected));
+    }
+
+    private static string NormalizeNewLinesToLf(string input)
+    {
+        return input.Replace("\r\n", "\n").Replace("\r", "\n");
     }
 
     private static string ExpectedMarkdownString =>
