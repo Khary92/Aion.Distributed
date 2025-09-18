@@ -17,7 +17,7 @@ public class AnalysisBySprintModelTest
             DateTimeOffset.UtcNow, new List<Guid>());
         var newSprintMessage = new NewSprintMessage(newSprintClientModel, Guid.NewGuid());
 
-        var fixture = await ModelTestProvider.CreateAnalysisBySprintModelAsync(new List<SprintClientModel?>());
+        var fixture = await ModelTestProvider.CreateAnalysisBySprintModelAsync();
         fixture.Messenger.Send(newSprintMessage);
 
         Assert.That(fixture.Instance.Sprints.Count, Is.EqualTo(1));
@@ -31,15 +31,28 @@ public class AnalysisBySprintModelTest
         var changedSprintName = "ChangedSprintName";
         var newSprintClientModel = new SprintClientModel(sprintId, sprintName, true, DateTimeOffset.UtcNow,
             DateTimeOffset.UtcNow, new List<Guid>());
+        
         var fixture =
             await ModelTestProvider.CreateAnalysisBySprintModelAsync(new List<SprintClientModel?>()
                 { newSprintClientModel });
-
         var clientSprintDataUpdateNotification = new ClientSprintDataUpdatedNotification(sprintId, changedSprintName,
             DateTimeOffset.MinValue, DateTimeOffset.MaxValue, Guid.NewGuid());
-        
+
         fixture.Messenger.Send(clientSprintDataUpdateNotification);
-        
+
         Assert.That(fixture.Instance.Sprints.First().Name, Is.EqualTo(changedSprintName));
     }
+
+    [Test]
+    public async Task GetMarkdownString()
+    {
+        var fixture = await ModelTestProvider.CreateAnalysisBySprintModelAsync();
+
+        var markdownString = fixture.Instance.GetMarkdownString();
+
+        Assert.That(ExpectedMarkdownString, Is.EqualTo(markdownString));
+    }
+
+    private static string ExpectedMarkdownString =>
+        "### Overview for InitialSprintName\r\n\r\n#### Top 3 most associated tags for Productive\r\n\r\n| Tag Name | Count |\r\n|----------|--------|\r\n| Productive Tag | 2 |\r\n\r\n\r\n#### Top 3 most associated tags for Neutral\r\n\r\n| Tag Name | Count |\r\n|----------|--------|\r\n| Neutral Tag | 1 |\r\n\r\n\r\n#### Top 3 most associated tags for Unproductive\r\n\r\n| Tag Name | Count |\r\n|----------|--------|\r\n| Unproductive Tag | 1 |\r\n\r\n";
 }
