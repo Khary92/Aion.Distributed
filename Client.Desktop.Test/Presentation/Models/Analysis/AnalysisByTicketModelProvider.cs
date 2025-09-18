@@ -1,6 +1,7 @@
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.Communication.Requests.Analysis.Records;
 using Client.Desktop.Communication.Requests.Sprint;
+using Client.Desktop.Communication.Requests.Ticket;
 using Client.Desktop.DataModels;
 using Client.Desktop.DataModels.Decorators;
 using Client.Desktop.DataModels.Decorators.Entities;
@@ -11,7 +12,7 @@ using Moq;
 
 namespace Client.Desktop.Test.Presentation.Models.Analysis;
 
-public static class AnalysisBySprintModelProvider
+public static class AnalysisByTicketModelProvider
 {
     private static IMessenger CreateMessenger() => new WeakReferenceMessenger();
 
@@ -20,53 +21,55 @@ public static class AnalysisBySprintModelProvider
 
     private static Mock<IRequestSender> CreateRequestSenderMock() => new();
 
-    private static SprintClientModel CreateSprintClientModel() => new(Guid.NewGuid(), "InitialSprintName", true,
-        DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, new List<Guid>());
+    private static TicketClientModel CreateTicketClientModel() => new(Guid.NewGuid(), "InitialTicketName", "InitialBookingNumber", "Documentation",
+        []);
 
 
-    public static async Task<AnalysisModelFixture<AnalysisBySprintModel>> Create(
-        IReadOnlyList<SprintClientModel?> initialSprints)
+    public static async Task<AnalysisModelFixture<AnalysisByTicketModel>> Create(
+        List<TicketClientModel?> initialTickets)
     {
         var messenger = CreateMessenger();
         var requestSender = CreateRequestSenderMock();
         var tracer = CreateTracerMock();
 
         requestSender
-            .Setup(rs => rs.Send(It.IsAny<ClientGetAllSprintsRequest>()))!
-            .ReturnsAsync(initialSprints as List<SprintClientModel?>);
+            .Setup(rs => rs.Send(It.IsAny<ClientGetAllTicketsRequest>()))!
+            .ReturnsAsync(initialTickets.ToList()!);
 
         return await CreateFixture(messenger, requestSender, tracer);
     }
-
-    public static async Task<AnalysisModelFixture<AnalysisBySprintModel>> Create()
+    
+    
+    public static async Task<AnalysisModelFixture<AnalysisByTicketModel>> Create()
     {
         var messenger = CreateMessenger();
         var requestSender = CreateRequestSenderMock();
         var tracer = CreateTracerMock();
 
-        var sprintClientModel = CreateSprintClientModel();
+        var sprintClientModel = CreateTicketClientModel();
 
         requestSender
-            .Setup(rs => rs.Send(It.IsAny<ClientGetSprintAnalysisById>()))
-            .ReturnsAsync(new AnalysisBySprintDecorator(CreateAnalysisBySprint(sprintClientModel)));
+            .Setup(rs => rs.Send(It.IsAny<ClientGetTicketAnalysisById>()))
+            .ReturnsAsync(new AnalysisByTicketDecorator(CreateAnalysisByTicket()));
 
         requestSender
-            .Setup(rs => rs.Send(It.IsAny<ClientGetAllSprintsRequest>()))
+            .Setup(rs => rs.Send(It.IsAny<ClientGetAllTicketsRequest>()))
             .ReturnsAsync([sprintClientModel]);
 
         return await CreateFixture(messenger, requestSender, tracer);
     }
 
-    private static async Task<AnalysisModelFixture<AnalysisBySprintModel>> CreateFixture(IMessenger messenger,
+    private static async Task<AnalysisModelFixture<AnalysisByTicketModel>> CreateFixture(IMessenger messenger,
         Mock<IRequestSender> requestSender, Mock<ITraceCollector> tracer)
     {
-        var instance = new AnalysisBySprintModel(messenger, requestSender.Object, tracer.Object);
+        var instance = new AnalysisByTicketModel(messenger, requestSender.Object, tracer.Object);
 
         instance.RegisterMessenger();
         await instance.InitializeAsync();
-        await instance.SetAnalysisForSprint(CreateSprintClientModel());
+        
+        await instance.SetAnalysisByTicket(CreateTicketClientModel());
 
-        return new AnalysisModelFixture<AnalysisBySprintModel>
+        return new AnalysisModelFixture<AnalysisByTicketModel>
         {
             Instance = instance,
             RequestSender = requestSender,
@@ -75,11 +78,10 @@ public static class AnalysisBySprintModelProvider
         };
     }
 
-    private static AnalysisBySprint CreateAnalysisBySprint(SprintClientModel sprintClientModel)
+    private static AnalysisByTicket CreateAnalysisByTicket()
     {
         var timeSlotId = Guid.NewGuid();
         var statisticsId = Guid.NewGuid();
-        var ticketId = Guid.NewGuid();
 
         var statisticsDataClientModel =
             new StatisticsDataClientModel(statisticsId, timeSlotId, new List<Guid>(), true, false, false);
@@ -87,18 +89,15 @@ public static class AnalysisBySprintModelProvider
         var timeSlotClientModel = new TimeSlotClientModel(timeSlotId, Guid.NewGuid(), Guid.NewGuid(),
             DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, new List<Guid>(), false);
 
-        var ticketClientModel = new TicketClientModel(ticketId, "TicketName", "TicketBookingNumber",
-            "TicketDocumentation", new List<Guid>() { sprintClientModel.SprintId });
 
-        return new AnalysisBySprint()
+        return new AnalysisByTicket()
         {
-            SprintName = sprintClientModel.Name,
+            TicketName = "TicketName",
             ProductiveTags = new Dictionary<string, int>() { { "Productive Tag", 2 } },
             NeutralTags = new Dictionary<string, int>() { { "Neutral Tag", 1 } },
             UnproductiveTags = new Dictionary<string, int>() { { "Unproductive Tag", 1 } },
-            StatisticsData = new List<StatisticsDataClientModel>() { statisticsDataClientModel },
-            Tickets = new List<TicketClientModel>() { ticketClientModel },
-            TimeSlots = new List<TimeSlotClientModel>() { timeSlotClientModel }
+            StatisticData = [statisticsDataClientModel],
+            TimeSlots = [timeSlotClientModel]
         };
     }
 }

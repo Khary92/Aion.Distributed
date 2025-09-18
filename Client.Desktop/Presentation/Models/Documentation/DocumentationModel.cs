@@ -23,8 +23,8 @@ using ReactiveUI;
 namespace Client.Desktop.Presentation.Models.Documentation;
 
 public class DocumentationModel(
-    IRequestSender requestSender,
     IMessenger messenger,
+    IRequestSender requestSender,
     INoteViewFactory noteViewFactory,
     ITypeCheckBoxViewModelFactory typeCheckBoxViewModelFactory,
     ITraceCollector tracer)

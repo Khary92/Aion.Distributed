@@ -5,7 +5,7 @@ using Moq;
 
 namespace Client.Desktop.Test.Presentation.Models;
 
-public sealed class ModelFixture<TModel>
+public sealed class AnalysisModelFixture<TModel>
 {
     public required TModel Instance { get; init; }
     public required Mock<IRequestSender> RequestSender { get; init; }

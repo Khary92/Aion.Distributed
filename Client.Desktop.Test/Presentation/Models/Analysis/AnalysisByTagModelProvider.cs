@@ -23,7 +23,7 @@ public static class AnalysisByTagModelProvider
     private static TagClientModel CreateTagClientModel() => new(Guid.NewGuid(), "InitialTagName", true);
 
 
-    public static async Task<ModelFixture<AnalysisByTagModel>> Create(IReadOnlyList<TagClientModel> initialTags)
+    public static async Task<AnalysisModelFixture<AnalysisByTagModel>> Create(IReadOnlyList<TagClientModel> initialTags)
     {
         var messenger = CreateMessenger();
         var requestSender = CreateRequestSenderMock();
@@ -36,7 +36,7 @@ public static class AnalysisByTagModelProvider
         return await CreateFixture(messenger, requestSender, tracer);
     }
     
-    private static async Task<ModelFixture<AnalysisByTagModel>> CreateFixture(IMessenger messenger,
+    private static async Task<AnalysisModelFixture<AnalysisByTagModel>> CreateFixture(IMessenger messenger,
         Mock<IRequestSender> requestSender, Mock<ITraceCollector> tracer)
     {
         var instance = new AnalysisByTagModel(messenger, requestSender.Object, tracer.Object);
@@ -44,7 +44,7 @@ public static class AnalysisByTagModelProvider
         instance.RegisterMessenger();
         await instance.InitializeAsync();
 
-        return new ModelFixture<AnalysisByTagModel>
+        return new AnalysisModelFixture<AnalysisByTagModel>
         {
             Instance = instance,
             RequestSender = requestSender,
