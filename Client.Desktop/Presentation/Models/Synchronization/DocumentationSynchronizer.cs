@@ -27,6 +27,26 @@ public class DocumentationSynchronizer(ICommandSender commandSender)
 
     public void SetSynchronizationValue(Guid ticketId, string documentation)
     {
+        string? currentDocumentation = null;
+
+        if (_documentationById.TryGetValue(ticketId, out var existing))
+        {
+            currentDocumentation = existing;
+        }
+        else if (_ticketDecoratorsById.TryGetValue(ticketId, out var existingDecorators))
+        {
+            foreach (var dec in existingDecorators.Keys)
+            {
+                currentDocumentation = dec.DisplayedDocumentation;
+                break;
+            }
+        }
+
+        if (string.Equals(currentDocumentation, documentation, StringComparison.Ordinal))
+        {
+            return;
+        }
+
         _documentationById.AddOrUpdate(ticketId, documentation, (_, _) => documentation);
 
         _dirtyTickets.TryAdd(ticketId, 0);
@@ -66,5 +86,21 @@ public class DocumentationSynchronizer(ICommandSender commandSender)
 
             _dirtyTickets.TryRemove(ticketId, out _);
         }
+    }
+    
+    public bool IsTicketDirty(Guid ticketId) => _dirtyTickets.ContainsKey(ticketId);
+
+    public ConcurrentDictionary<TicketReplayDecorator, byte> GetDecoratorsById(Guid ticketId)
+    {
+        return _ticketDecoratorsById.TryGetValue(ticketId, out var decorators)
+            ? decorators
+            : new ConcurrentDictionary<TicketReplayDecorator, byte>();
+    }
+
+    public void RemoveTicket(Guid ticketId)
+    {
+        _ticketDecoratorsById.TryRemove(ticketId, out _);
+        _documentationById.TryRemove(ticketId, out _);
+        _dirtyTickets.TryRemove(ticketId, out _);
     }
 }
