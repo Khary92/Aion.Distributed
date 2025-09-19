@@ -7,7 +7,7 @@ namespace Client.Desktop.Presentation.Models.Documentation;
 public class TypeCheckBoxViewModel(NoteTypeClientModel noteTypeClientModel)
     : ReactiveObject
 {
-    private readonly NoteTypeClientModel _noteType = noteTypeClientModel;
+    private readonly NoteTypeClientModel _noteTypeClientModel = noteTypeClientModel;
     private readonly Guid _noteTypeId = noteTypeClientModel.NoteTypeId;
     private bool _isChecked;
 
@@ -25,7 +25,7 @@ public class TypeCheckBoxViewModel(NoteTypeClientModel noteTypeClientModel)
 
     public NoteTypeClientModel NoteType
     {
-        get => _noteType;
-        init => this.RaiseAndSetIfChanged(ref _noteType, value);
+        get => _noteTypeClientModel;
+        init => this.RaiseAndSetIfChanged(ref _noteTypeClientModel, value);
     }
 }

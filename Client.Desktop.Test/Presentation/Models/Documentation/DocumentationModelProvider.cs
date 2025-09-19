@@ -1,12 +1,16 @@
 using Client.Desktop.Communication.Requests;
+using Client.Desktop.Communication.Requests.Notes.Records;
+using Client.Desktop.Communication.Requests.NoteType;
+using Client.Desktop.Communication.Requests.Ticket;
 using Client.Desktop.DataModels;
 using Client.Desktop.Presentation.Factories;
 using Client.Desktop.Presentation.Models.Documentation;
+using Client.Desktop.Presentation.Models.TimeTracking.DynamicControls;
 using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using Moq;
 
-namespace Client.Desktop.Test.Presentation.Models.Analysis;
+namespace Client.Desktop.Test.Presentation.Models.Documentation;
 
 public static class DocumentationModelProvider
 {
@@ -29,9 +33,9 @@ public static class DocumentationModelProvider
     private static Mock<INoteViewFactory> CreateNoteViewFactoryMock() => new();
     private static Mock<ITypeCheckBoxViewModelFactory> CreateTypeCheckBoxViewModelFactoryMock() => new();
 
-    private static TagClientModel CreateTagClientModel() => new(Guid.NewGuid(), "InitialTagName", true);
 
-    public static async Task<DocumentationModelFixture> Create(List<NoteTypeClientModel> initialNoteTypes,
+    public static async Task<DocumentationModelFixture> Create(List<NoteClientModel> initialNotes,
+        List<NoteTypeClientModel> initialNoteTypes,
         List<TicketClientModel> initialTickets)
     {
         var messenger = CreateMessenger();
@@ -39,6 +43,29 @@ public static class DocumentationModelProvider
         var tracer = CreateTracerMock();
         var noteViewFactory = CreateNoteViewFactoryMock();
         var typeCheckBoxViewModelFactory = CreateTypeCheckBoxViewModelFactoryMock();
+        
+        requestSender
+            .Setup(rs => rs.Send(It.IsAny<ClientGetAllTicketsRequest>()))
+            .ReturnsAsync(initialTickets);
+
+        requestSender
+            .Setup(rs => rs.Send(It.IsAny<ClientGetAllNoteTypesRequest>()))
+            .ReturnsAsync(initialNoteTypes);
+
+        requestSender
+            .Setup(rs => rs.Send(It.IsAny<ClientGetNotesByTicketIdRequest>()))
+            .ReturnsAsync(initialNotes);
+
+        var noteViewModel = new NoteViewModel(null!, requestSender.Object, messenger, tracer.Object)
+        {
+            Note = initialNotes.First()
+        };
+        await noteViewModel.Initialize();
+        noteViewFactory.Setup(nvf => nvf.Create(It.IsAny<NoteClientModel>()))
+            .ReturnsAsync(noteViewModel);
+
+        typeCheckBoxViewModelFactory.Setup(tf => tf.Create(It.IsAny<NoteTypeClientModel>()))
+            .Returns(new TypeCheckBoxViewModel(((initialNoteTypes.Count != 0 ? initialNoteTypes.First() : null)!)));
 
         return await CreateFixture(messenger, requestSender, tracer, noteViewFactory, typeCheckBoxViewModelFactory);
     }
@@ -52,6 +79,8 @@ public static class DocumentationModelProvider
 
         instance.RegisterMessenger();
         await instance.InitializeAsync();
+
+        await instance.UpdateNotesForSelectedTicket();
 
         return new DocumentationModelFixture()
         {

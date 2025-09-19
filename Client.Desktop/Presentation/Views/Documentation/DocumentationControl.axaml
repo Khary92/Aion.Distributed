@@ -49,7 +49,7 @@
                                HorizontalAlignment="Center"
                                Margin="0,0,0,10" />
 
-                    <ItemsControl Grid.Row="1" ItemsSource="{Binding Model.Options}"
+                    <ItemsControl Grid.Row="1" ItemsSource="{Binding Model.AllNoteTypes}"
                                   VerticalAlignment="Stretch">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate DataType="documentation1:TypeCheckBoxViewModel">

@@ -32,7 +32,7 @@ public class DocumentationModel(
 {
     private ObservableCollection<NoteViewModel> _allNotes = [];
     private ObservableCollection<TicketClientModel> _allTickets = [];
-    private ObservableCollection<TypeCheckBoxViewModel> _options = [];
+    private ObservableCollection<TypeCheckBoxViewModel> _allNoteTypes = [];
     private ObservableCollection<NoteViewModel> _selectedNotes = [];
 
     private TicketClientModel? _selectedTicket;
@@ -43,7 +43,7 @@ public class DocumentationModel(
         set => this.RaiseAndSetIfChanged(ref _allTickets, value);
     }
 
-    private ObservableCollection<NoteViewModel> AllNotes
+    public ObservableCollection<NoteViewModel> AllNotes
     {
         get => _allNotes;
         set => this.RaiseAndSetIfChanged(ref _allNotes, value);
@@ -55,10 +55,10 @@ public class DocumentationModel(
         set => this.RaiseAndSetIfChanged(ref _selectedNotes, value);
     }
 
-    public ObservableCollection<TypeCheckBoxViewModel> Options
+    public ObservableCollection<TypeCheckBoxViewModel> AllNoteTypes
     {
-        get => _options;
-        set => this.RaiseAndSetIfChanged(ref _options, value);
+        get => _allNoteTypes;
+        set => this.RaiseAndSetIfChanged(ref _allNoteTypes, value);
     }
 
     public TicketClientModel? SelectedTicket
@@ -73,13 +73,13 @@ public class DocumentationModel(
     {
         var noteTypeModels = await requestSender.Send(new ClientGetAllNoteTypesRequest());
 
-        Options.Clear();
+        AllNoteTypes.Clear();
 
         foreach (var option in noteTypeModels)
         {
             var typeCheckBoxViewModel = typeCheckBoxViewModelFactory.Create(option);
 
-            Options.Add(typeCheckBoxViewModel);
+            AllNoteTypes.Add(typeCheckBoxViewModel);
 
             typeCheckBoxViewModel.WhenAnyValue(x => x.IsChecked)
                 .Subscribe(_ => FilterNotes());
@@ -120,7 +120,7 @@ public class DocumentationModel(
 
     private void FilterNotes()
     {
-        var selectedTypes = Options.Where(opt => opt.IsChecked).Select(opt => opt).ToHashSet();
+        var selectedTypes = AllNoteTypes.Where(opt => opt.IsChecked).Select(opt => opt).ToHashSet();
 
         var filteredNotes = AllNotes
             .Where(n => selectedTypes.Any(st => st.NoteTypeId == n.Note.NoteTypeId))
@@ -155,7 +155,7 @@ public class DocumentationModel(
             {
                 await tracer.Note.Update.NotificationReceived(GetType(), notification.TraceId, notification);
 
-                var noteViewModel = AllNotes.FirstOrDefault(n => n.Note.NoteId == notification.NoteTypeId);
+                var noteViewModel = AllNotes.FirstOrDefault(n => n.Note.NoteId == notification.NoteId);
 
                 if (noteViewModel == null)
                 {
@@ -185,7 +185,7 @@ public class DocumentationModel(
         {
             var typeCheckBoxViewModel = typeCheckBoxViewModelFactory.Create(message.NoteType);
 
-            Options.Add(typeCheckBoxViewModel);
+            AllNoteTypes.Add(typeCheckBoxViewModel);
 
             await tracer.NoteType.Create.AggregateAdded(GetType(), message.TraceId);
         });
@@ -194,7 +194,7 @@ public class DocumentationModel(
         {
             await tracer.NoteType.ChangeName.NotificationReceived(GetType(), notification.TraceId, notification);
 
-            var typeCheckBoxViewModel = Options.FirstOrDefault(opt => opt.NoteTypeId == notification.NoteTypeId);
+            var typeCheckBoxViewModel = AllNoteTypes.FirstOrDefault(opt => opt.NoteTypeId == notification.NoteTypeId);
 
             if (typeCheckBoxViewModel is null)
             {
@@ -209,7 +209,7 @@ public class DocumentationModel(
         {
             tracer.NoteType.ChangeColor.NotificationReceived(GetType(), notification.TraceId, notification);
 
-            var typeCheckBoxViewModel = Options.FirstOrDefault(opt => opt.NoteTypeId == notification.NoteTypeId);
+            var typeCheckBoxViewModel = AllNoteTypes.FirstOrDefault(opt => opt.NoteTypeId == notification.NoteTypeId);
 
             if (typeCheckBoxViewModel is null)
             {
