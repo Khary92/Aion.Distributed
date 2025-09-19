@@ -23,6 +23,13 @@ public class SettingsModel(IMessenger messenger, ILocalSettingsCommandSender loc
         messenger.Register<ExportPathSetNotification>(this, void (_, m) => { Settings!.ExportPath = m.ExportPath; });
 
         messenger.Register<SettingsClientModel>(this, void (_, m) => { Settings = m; });
+        
+        messenger.Register<WorkDaySelectedNotification>(this, void (_, m) =>
+        {
+            if (Settings == null) return;
+            
+            Settings.SelectedDate = m.Date;
+        });
     }
 
     public void SetExportPath()
