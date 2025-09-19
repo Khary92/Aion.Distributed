@@ -19,10 +19,10 @@ using ReactiveUI;
 namespace Client.Desktop.Presentation.Models.Settings;
 
 public class WorkDaysModel(
+    IMessenger messenger,
     ICommandSender commandSender,
     IRequestSender requestSender,
     ILocalSettingsCommandSender localSettingsCommandSender,
-    IMessenger messenger,
     ITraceCollector tracer) : ReactiveObject, IInitializeAsync, IRegisterMessenger
 {
     public ObservableCollection<WorkDayClientModel> WorkDays { get; } = [];
