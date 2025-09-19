@@ -79,8 +79,12 @@ public class TimeTrackingModel(
     public async Task InitializeAsync()
     {
         FilteredTickets.Clear();
-        var tickets = await requestSender.Send(new ClientGetTicketsForCurrentSprintRequest());
-        FilteredTickets.AddRange(tickets);
+        var ticketsInSprint = await requestSender.Send(new ClientGetTicketsForCurrentSprintRequest());
+        FilteredTickets.AddRange(ticketsInSprint);
+
+        AllTickets.Clear();
+        var allTickets = await requestSender.Send(new ClientGetAllTicketsRequest());
+        AllTickets.AddRange(allTickets);
 
         await LoadTimeSlotViewModels();
     }
@@ -199,15 +203,8 @@ public class TimeTrackingModel(
     private async Task HandleTicketSprintSelectionChangedNotification(ClientSprintSelectionChangedNotification message)
     {
         FilteredTickets.Clear();
-
-        var currentSprint = await requestSender.Send(new ClientGetActiveSprintRequest());
-
-        if (currentSprint == null) throw new InvalidOperationException("No active sprint");
-
-        var ticketClientModels = await requestSender.Send(new ClientGetAllTicketsRequest());
-        foreach (var modelTicket in ticketClientModels.Where(modelTicket =>
-                     modelTicket.SprintIds.Contains(currentSprint.SprintId)))
-            FilteredTickets.Add(modelTicket);
+        var ticketClientModels = await requestSender.Send(new ClientGetTicketsForCurrentSprintRequest());
+        FilteredTickets.Add(ticketClientModels);
     }
 
     private async Task HandleTimeSlotControlCreatedNotification(ClientTimeSlotControlCreatedNotification message)
@@ -223,16 +220,10 @@ public class TimeTrackingModel(
     private async Task HandleWorkDaySelectionChangedNotification(ClientWorkDaySelectionChangedNotification message)
     {
         FilteredTickets.Clear();
-
-        var currentSprint = await requestSender.Send(new ClientGetActiveSprintRequest());
-
-        if (currentSprint == null) throw new InvalidOperationException("No active sprint");
-
+        
         var ticketModels = await requestSender.Send(new ClientGetAllTicketsRequest());
-
-        foreach (var ticket in ticketModels.Where(modelTicket =>
-                     modelTicket.SprintIds.Contains(currentSprint.SprintId)))
-            FilteredTickets.Add(ticket);
+        
+        FilteredTickets.Add(ticketModels);
 
         TimeSlotViewModels.Clear();
         await LoadTimeSlotViewModels();

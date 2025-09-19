@@ -38,7 +38,7 @@ public class TimeSlotViewModel : ReactiveObject
         });
 
         ToggleTimerCommand = ReactiveCommand.Create(UpdateTimerState);
-        SwitchToDocumentationViewCommand = ReactiveCommand.Create(SwitchToNotestreamView);
+        SwitchToDocumentationViewCommand = ReactiveCommand.Create(SwitchToNoteStreamView);
         SwitchToStatisticsViewCommand = ReactiveCommand.Create(SwitchToStatisticsView);
         StartReplayCommand = ReactiveCommand.CreateFromTask(StartReplayMode);
         PreviousStateCommand = ReactiveCommand.Create(PreviousState);
@@ -83,7 +83,7 @@ public class TimeSlotViewModel : ReactiveObject
             _noteStreamViewModelFactory.Create(timeSlotId, ticketId);
         StatisticsViewModel = _statisticsViewModelFactory.Create(statisticsDataClientModel);
 
-        SwitchToNotestreamView();
+        SwitchToNoteStreamView();
     }
 
     private async Task StartReplayMode()
@@ -119,7 +119,7 @@ public class TimeSlotViewModel : ReactiveObject
         await documentationViewModel.AddNoteControl();
     }
 
-    private void SwitchToNotestreamView()
+    private void SwitchToNoteStreamView()
     {
         CurrentView = NoteStreamViewModel;
     }
