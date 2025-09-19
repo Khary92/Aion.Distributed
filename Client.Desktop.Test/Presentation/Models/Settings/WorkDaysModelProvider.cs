@@ -1,5 +1,7 @@
 using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.Requests;
+using Client.Desktop.Communication.Requests.WorkDays.Records;
+using Client.Desktop.DataModels;
 using Client.Desktop.Presentation.Models.Settings;
 using Client.Desktop.Services.LocalSettings;
 using Client.Tracing.Tracing.Tracers;
@@ -32,7 +34,7 @@ public static class WorkDaysModelProvider
 
     private static Mock<ILocalSettingsCommandSender> CreateLocalSettingsCommandSenderMock() => new();
 
-    public static async Task<WorkDaysModelFixture> Create()
+    public static async Task<WorkDaysModelFixture> Create(List<WorkDayClientModel> initialWorkDays, bool isWorkDayExisting)
     {
         var messenger = CreateMessenger();
         var requestSender = CreateRequestSenderMock();
@@ -40,6 +42,14 @@ public static class WorkDaysModelProvider
         var localSettingsCommandSender = CreateCommandSender();
         var localSettingsCommandSenderMock = CreateLocalSettingsCommandSenderMock();
 
+        requestSender
+            .Setup(rs => rs.Send(It.IsAny<ClientGetAllWorkDaysRequest>()))
+            .ReturnsAsync(initialWorkDays);
+        
+        requestSender
+            .Setup(rs => rs.Send(It.IsAny<ClientIsWorkDayExistingRequest>()))
+            .ReturnsAsync(isWorkDayExisting);
+        
         return await CreateFixture(messenger, localSettingsCommandSender, requestSender, tracer,
             localSettingsCommandSenderMock);
     }
