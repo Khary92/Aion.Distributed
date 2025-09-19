@@ -24,7 +24,7 @@ public class TicketReplayDecorator : ReactiveObject
         _requestSender = requestSender;
         Ticket = ticketClientModel;
 
-        DisplayedDocumentation = ticketClientModel.Documentation;
+        ticketClientModel.WhenAnyValue(x => x.Documentation).Subscribe(x => DisplayedDocumentation = x);
     }
 
     public TicketClientModel Ticket { get; init; }
