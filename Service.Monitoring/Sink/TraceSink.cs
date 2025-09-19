@@ -7,7 +7,8 @@ using Service.Monitoring.Verifiers.Common.Records;
 
 namespace Service.Monitoring.Sink;
 
-public class TraceSink(IReportSender reportSender, IVerifierFactory verifierFactory, TraceDataSendPolicy sendPolicy) : ITraceSink
+public class TraceSink(IReportSender reportSender, IVerifierFactory verifierFactory, TraceDataSendPolicy sendPolicy)
+    : ITraceSink
 {
     private readonly ConcurrentDictionary<Guid, IVerifier> _ticketVerifiers = new();
 

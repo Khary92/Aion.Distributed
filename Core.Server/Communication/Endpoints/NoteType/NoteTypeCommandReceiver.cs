@@ -23,7 +23,7 @@ public class NoteTypeCommandReceiver(
         ServerCallContext context)
     {
         await tracer.NoteType.ChangeName.CommandReceived(GetType(), Guid.Parse(request.TraceData.TraceId), request);
-        
+
         await noteTypeCommandsService.ChangeName(request.ToCommand());
         return new CommandResponse { Success = true };
     }
@@ -32,7 +32,7 @@ public class NoteTypeCommandReceiver(
         ServerCallContext context)
     {
         await tracer.NoteType.Create.CommandReceived(GetType(), Guid.Parse(request.TraceData.TraceId), request);
-        
+
         Console.WriteLine($"[CreateNoteType] ID: {request.NoteTypeId}, Name: {request.Name}, Color: {request.Color}");
 
         await noteTypeCommandsService.Create(request.ToCommand());

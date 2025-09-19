@@ -1,4 +1,3 @@
-using Client.Desktop.DataModels;
 using Client.Desktop.DataModels.Local;
 using Client.Desktop.Presentation.Models.Settings;
 using Client.Desktop.Services.LocalSettings;
@@ -9,19 +8,20 @@ namespace Client.Desktop.Test.Presentation.Models.Settings;
 
 public static class SettingsModelProvider
 {
-    public sealed class SettingsModelFixture
+    private static IMessenger CreateMessenger()
     {
-        public required SettingsModel Instance { get; init; }
-        public required IMessenger Messenger { get; init; }
-        public required Mock<ILocalSettingsCommandSender> LocalSettingsCommandSender { get; init; }
-        
-        public required SettingsClientModel InitialSettings { get; init; }
+        return new WeakReferenceMessenger();
     }
 
-    private static IMessenger CreateMessenger() => new WeakReferenceMessenger();
-    private static Mock<ILocalSettingsCommandSender> CreateLocalSettingsCommandSenderMock() => new();
+    private static Mock<ILocalSettingsCommandSender> CreateLocalSettingsCommandSenderMock()
+    {
+        return new Mock<ILocalSettingsCommandSender>();
+    }
 
-    private static SettingsClientModel CreateSettingsClientModel() => new("InitialExportPath");
+    private static SettingsClientModel CreateSettingsClientModel()
+    {
+        return new SettingsClientModel("InitialExportPath");
+    }
 
     public static SettingsModelFixture Create()
     {
@@ -39,15 +39,24 @@ public static class SettingsModelProvider
         instance.RegisterMessenger();
 
         var settingsClientModel = CreateSettingsClientModel();
-        
+
         messenger.Send(settingsClientModel);
 
-        return new SettingsModelFixture()
+        return new SettingsModelFixture
         {
             Instance = instance,
             LocalSettingsCommandSender = localSettingsCommandSender,
             Messenger = messenger,
-            InitialSettings = settingsClientModel,
+            InitialSettings = settingsClientModel
         };
+    }
+
+    public sealed class SettingsModelFixture
+    {
+        public required SettingsModel Instance { get; init; }
+        public required IMessenger Messenger { get; init; }
+        public required Mock<ILocalSettingsCommandSender> LocalSettingsCommandSender { get; init; }
+
+        public required SettingsClientModel InitialSettings { get; init; }
     }
 }

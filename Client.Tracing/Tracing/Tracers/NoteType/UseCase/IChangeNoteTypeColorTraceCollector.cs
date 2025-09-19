@@ -1,6 +1,6 @@
 namespace Client.Tracing.Tracing.Tracers.NoteType.UseCase;
 
-public interface  IChangeNoteTypeColorTraceCollector
+public interface IChangeNoteTypeColorTraceCollector
 {
     Task NotificationReceived(Type originClassType, Guid traceId, object notification);
     Task NoAggregateFound(Type originClassType, Guid traceId);

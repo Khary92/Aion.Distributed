@@ -16,7 +16,7 @@ public class TimerSettingsCommandsService(
     public async Task ChangeSnapshotInterval(ChangeSnapshotSaveIntervalCommand command)
     {
         await timerSettingsEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
-        
+
         var notification = command.ToNotification();
         await tracer.TimerSettings.ChangeSnapshotInterval.EventPersisted(GetType(), command.TraceId,
             notification.SnapshotSaveIntervalChanged);
@@ -29,7 +29,7 @@ public class TimerSettingsCommandsService(
     public async Task ChangeDocumentationInterval(ChangeDocuTimerSaveIntervalCommand command)
     {
         await timerSettingsEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
-        
+
         var notification = command.ToNotification();
         await tracer.TimerSettings.ChangeDocuTimerInterval.EventPersisted(GetType(), command.TraceId,
             notification.DocuTimerSaveIntervalChanged);
@@ -42,7 +42,7 @@ public class TimerSettingsCommandsService(
     public async Task Create(CreateTimerSettingsCommand command)
     {
         await timerSettingsEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
-        
+
         var notification = command.ToNotification();
         await tracer.TimerSettings.Create.EventPersisted(GetType(), command.TraceId,
             notification.TimerSettingsCreated);

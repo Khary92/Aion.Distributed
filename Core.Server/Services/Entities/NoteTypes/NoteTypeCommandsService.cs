@@ -39,7 +39,7 @@ public class NoteTypeCommandsService(
     {
         await noteTypeEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
         var notification = command.ToNotification();
-        
+
         await tracer.NoteType.ChangeColor.EventPersisted(GetType(), command.TraceId,
             notification.NoteTypeColorChanged);
 

@@ -36,11 +36,11 @@ public class AddTicketToActiveSprintCommandHandler(
             await tracer.Sprint.AddTicketToSprint.TicketIsAlreadyInSprint(GetType(), command.TraceId);
             return;
         }
-        
+
         ticketDto.SprintIds.Add(activeSprint.SprintId);
         await ticketCommandsService.UpdateData(new UpdateTicketDataCommand(ticketDto.TicketId, ticketDto.Name,
             ticketDto.BookingNumber, ticketDto.SprintIds, command.TraceId));
-        
+
         await tracer.Sprint.AddTicketToSprint.AddedSprintIdToTicket(GetType(), command.TraceId,
             activeSprint.SprintId);
 

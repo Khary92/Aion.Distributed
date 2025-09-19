@@ -19,13 +19,16 @@ public static class NoteTypeRequestExtensions
         };
     }
 
-    public static GetTimerSettingsRequestProto ToProto(this ClientGetTimerSettingsRequest request) => new()
+    public static GetTimerSettingsRequestProto ToProto(this ClientGetTimerSettingsRequest request)
     {
-        TraceData = new TraceDataProto
+        return new GetTimerSettingsRequestProto
         {
-            TraceId = request.TraceId.ToString()
-        }
-    };
+            TraceData = new TraceDataProto
+            {
+                TraceId = request.TraceId.ToString()
+            }
+        };
+    }
 
     public static GetNoteTypeByIdRequestProto ToProto(this ClientGetNoteTypeByIdRequest request)
     {

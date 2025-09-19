@@ -32,7 +32,7 @@ public static class SprintProtoExtensions
             }
         };
     }
-    
+
     public static CreateSprintCommand ToCommand(
         this CreateSprintCommandProto proto)
     {
@@ -85,7 +85,7 @@ public static class SprintProtoExtensions
             }
         };
     }
-    
+
     public static SprintNotification ToNotification(this AddTicketToSprintCommand command)
     {
         return new SprintNotification

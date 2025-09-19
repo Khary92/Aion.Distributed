@@ -9,7 +9,7 @@ public partial class AnalysisControlWrapper : UserControl
     {
         InitializeComponent();
     }
-    
+
     public AnalysisControlWrapper(AnalysisControlWrapperViewModel viewModel)
     {
         InitializeComponent();

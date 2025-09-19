@@ -58,7 +58,7 @@ public class TicketNotificationReceiver(
                             await tracer.Ticket.Update.NotificationReceived(GetType(),
                                 Guid.Parse(notificationTicketDocumentationUpdated.TraceData.TraceId),
                                 notificationTicketDocumentationUpdated);
-                            
+
                             Dispatcher.UIThread.Post(() =>
                             {
                                 messenger.Send(notificationTicketDocumentationUpdated.ToClientNotification());

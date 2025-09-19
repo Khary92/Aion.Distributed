@@ -90,10 +90,6 @@ public sealed class StatisticsDataClientModel : ReactiveObject
         return true;
     }
 
-    private record PreviousProductivityState(bool IsProductive, bool IsNeutral, bool IsUnproductive);
-
-    private record PreviousTagsState(List<Guid> TagIds);
-
 
     public void Apply(ClientChangeProductivityNotification notification)
     {
@@ -106,4 +102,8 @@ public sealed class StatisticsDataClientModel : ReactiveObject
     {
         TagIds = notification.SelectedTagIds;
     }
+
+    private record PreviousProductivityState(bool IsProductive, bool IsNeutral, bool IsUnproductive);
+
+    private record PreviousTagsState(List<Guid> TagIds);
 }

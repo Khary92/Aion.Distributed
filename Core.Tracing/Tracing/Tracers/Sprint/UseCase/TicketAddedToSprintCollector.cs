@@ -64,7 +64,7 @@ public class TicketAddedToSprintCollector(ITracingDataSender sender) : ITicketAd
 
     public async Task NoActiveSprint(Type originClassType, Guid traceId)
     {
-        var log = $"No active sprint found";
+        var log = "No active sprint found";
 
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.Sprint,
@@ -92,7 +92,7 @@ public class TicketAddedToSprintCollector(ITracingDataSender sender) : ITicketAd
 
     public async Task TicketIsAlreadyInSprint(Type originClassType, Guid traceId)
     {
-        var log = $"Ticket was already added to sprint";
+        var log = "Ticket was already added to sprint";
 
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.Sprint,

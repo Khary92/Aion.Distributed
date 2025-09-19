@@ -11,7 +11,7 @@ public class StatisticsViewModelFactory(IServiceProvider serviceProvider) : ISta
     {
         var statisticsViewModel =
             serviceProvider.GetRequiredService<StatisticsViewModel>();
-        
+
         statisticsViewModel.StatisticsData = statisticsData;
         return statisticsViewModel;
     }

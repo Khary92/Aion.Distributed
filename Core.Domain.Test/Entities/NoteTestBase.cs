@@ -37,7 +37,8 @@ public class NoteTestBase : AggregateTestBase<NoteEvent>
             Assert.That(aggregate.NoteTypeId, Is.EqualTo(expectedNoteTypeId));
             Assert.That(aggregate.Text, Is.EqualTo(expectedText));
             Assert.That(aggregate.TicketId, Is.EqualTo(expectedTicketId));
-            Assert.That(aggregate.TimeSlotId, Is.EqualTo(expectedTimeSlotId));;
+            Assert.That(aggregate.TimeSlotId, Is.EqualTo(expectedTimeSlotId));
+            ;
             Assert.That(aggregate.TimeStamp, Is.EqualTo(expectedTimeStamp));
         });
     }

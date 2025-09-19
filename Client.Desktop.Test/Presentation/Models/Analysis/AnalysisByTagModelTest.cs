@@ -31,7 +31,7 @@ public class AnalysisByTagModelTest
         var newTagClientModel = new TagClientModel(tagId, tagName, true);
 
         var fixture =
-            await AnalysisByTagModelProvider.Create(new List<TagClientModel>() { newTagClientModel });
+            await AnalysisByTagModelProvider.Create(new List<TagClientModel> { newTagClientModel });
         var clientTagDataUpdateNotification = new ClientTagUpdatedNotification(tagId, changedTagName, Guid.NewGuid());
 
         fixture.Messenger.Send(clientTagDataUpdateNotification);

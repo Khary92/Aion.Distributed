@@ -23,7 +23,7 @@ public class WorkDaysModel(
     ICommandSender commandSender,
     IRequestSender requestSender,
     ILocalSettingsCommandSender localSettingsCommandSender,
-    ITraceCollector tracer) : ReactiveObject, IInitializeAsync, IRegisterMessenger
+    ITraceCollector tracer) : ReactiveObject, IInitializeAsync, IMessengerRegistration, IRecipient<NewWorkDayMessage>
 {
     public ObservableCollection<WorkDayClientModel> WorkDays { get; } = [];
 
@@ -53,11 +53,18 @@ public class WorkDaysModel(
 
     public void RegisterMessenger()
     {
-        messenger.Register<NewWorkDayMessage>(this, async void (_, m) =>
-        {
-            WorkDays.Add(m.WorkDay);
-            await tracer.WorkDay.Create.AggregateAdded(GetType(), m.WorkDay.WorkDayId);
-        });
+        messenger.RegisterAll(this);
+    }
+
+    public void UnregisterMessenger()
+    {
+        messenger.UnregisterAll(this);
+    }
+
+    public void Receive(NewWorkDayMessage message)
+    {
+        WorkDays.Add(message.WorkDay);
+        _ = tracer.WorkDay.Create.AggregateAdded(GetType(), message.WorkDay.WorkDayId);
     }
 
     public void SetSelectedWorkday(WorkDayClientModel selectedWorkDay)

@@ -68,7 +68,7 @@ public class StatisticsViewModel(
             AvailableTags.Add(tagCheckBoxViewFactory.Create(message.Tag));
             await tracer.Tag.Create.AggregateAdded(GetType(), message.TraceId);
         });
-        
+
         messenger.Register<ClientTagUpdatedNotification>(this, async void (_, notification) =>
         {
             var tagViewModel = AvailableTags.FirstOrDefault(t => t.Tag!.TagId == notification.TagId);
@@ -78,11 +78,11 @@ public class StatisticsViewModel(
                 await tracer.Tag.Update.NoAggregateFound(GetType(), notification.TraceId);
                 return;
             }
-            
+
             tagViewModel.Tag.Apply(notification);
             await tracer.Tag.Update.ChangesApplied(GetType(), notification.TraceId);
         });
-        
+
         messenger.Register<ClientChangeProductivityNotification>(this, async void (_, notification) =>
         {
             if (StatisticsData?.StatisticsId != notification.StatisticsDataId)
@@ -90,11 +90,11 @@ public class StatisticsViewModel(
                 await tracer.Statistics.ChangeTagSelection.WrongModel(GetType(), notification.TraceId);
                 return;
             }
-            
+
             StatisticsData!.Apply(notification);
             await tracer.Statistics.ChangeTagSelection.ChangesApplied(GetType(), notification.TraceId);
         });
-        
+
         messenger.Register<ClientChangeTagSelectionNotification>(this, async void (_, notification) =>
         {
             if (StatisticsData?.StatisticsId != notification.StatisticsDataId)
@@ -102,7 +102,7 @@ public class StatisticsViewModel(
                 await tracer.Statistics.ChangeTagSelection.WrongModel(GetType(), notification.TraceId);
                 return;
             }
-            
+
             StatisticsData!.Apply(notification);
             await tracer.Statistics.ChangeTagSelection.ChangesApplied(GetType(), notification.TraceId);
         });

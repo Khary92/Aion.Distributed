@@ -197,6 +197,7 @@ h1, h2, h3, h4, h5, h6 {
     padding: var(--general-control-padding);
     border-radius: var(--corner-radius);
 }
+
 .form-select:disabled {
     font-family: var(--font-family-regular);
     color: var(--foreground-color);

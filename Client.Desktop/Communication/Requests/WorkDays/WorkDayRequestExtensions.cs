@@ -12,40 +12,52 @@ namespace Client.Desktop.Communication.Requests.WorkDays;
 
 public static class WorkDayRequestExtensions
 {
-    public static GetAllWorkDaysRequestProto ToProto(this ClientGetAllWorkDaysRequest request) => new()
+    public static GetAllWorkDaysRequestProto ToProto(this ClientGetAllWorkDaysRequest request)
     {
-        TraceData = new TraceDataProto
+        return new GetAllWorkDaysRequestProto
         {
-            TraceId = request.TraceId.ToString()
-        }
-    };
+            TraceData = new TraceDataProto
+            {
+                TraceId = request.TraceId.ToString()
+            }
+        };
+    }
 
-    public static GetSelectedWorkDayRequestProto ToProto(this ClientGetSelectedWorkDayRequest request) => new()
+    public static GetSelectedWorkDayRequestProto ToProto(this ClientGetSelectedWorkDayRequest request)
     {
-        WorkDayId = request.WorkDayId.ToString(),
-        TraceData = new TraceDataProto
+        return new GetSelectedWorkDayRequestProto
         {
-            TraceId = request.TraceId.ToString()
-        }
-    };
+            WorkDayId = request.WorkDayId.ToString(),
+            TraceData = new TraceDataProto
+            {
+                TraceId = request.TraceId.ToString()
+            }
+        };
+    }
 
-    public static GetWorkDayByDateRequestProto ToProto(this ClientGetWorkDayByDateRequest request) => new()
+    public static GetWorkDayByDateRequestProto ToProto(this ClientGetWorkDayByDateRequest request)
     {
-        Date = Timestamp.FromDateTimeOffset(request.Date),
-        TraceData = new TraceDataProto
+        return new GetWorkDayByDateRequestProto
         {
-            TraceId = request.TraceId.ToString()
-        }
-    };
+            Date = Timestamp.FromDateTimeOffset(request.Date),
+            TraceData = new TraceDataProto
+            {
+                TraceId = request.TraceId.ToString()
+            }
+        };
+    }
 
-    public static IsWorkDayExistingRequestProto ToProto(this ClientIsWorkDayExistingRequest request) => new()
+    public static IsWorkDayExistingRequestProto ToProto(this ClientIsWorkDayExistingRequest request)
     {
-        Date = Timestamp.FromDateTimeOffset(request.Date),
-        TraceData = new TraceDataProto
+        return new IsWorkDayExistingRequestProto
         {
-            TraceId = request.TraceId.ToString()
-        }
-    };
+            Date = Timestamp.FromDateTimeOffset(request.Date),
+            TraceData = new TraceDataProto
+            {
+                TraceId = request.TraceId.ToString()
+            }
+        };
+    }
 
     public static WorkDayClientModel ToClientModel(this WorkDayProto proto)
     {

@@ -12,12 +12,6 @@ namespace Client.Desktop.Test.Presentation.Models.Synchronization;
 [TestOf(typeof(DocumentationSynchronizer))]
 public class DocumentationSynchronizerTest
 {
-    private DocumentationSynchronizer _synchronizer;
-    private Mock<ICommandSender> _commandSenderMock;
-    private Mock<IRequestSender> _requestSenderMock;
-    private Guid _ticketId;
-    private TicketReplayDecorator _ticketReplayDecorator;
-
     [SetUp]
     public void SetUp()
     {
@@ -28,6 +22,12 @@ public class DocumentationSynchronizerTest
         _ticketReplayDecorator = new TicketReplayDecorator(_requestSenderMock.Object,
             new TicketClientModel(_ticketId, "Test Name", "123", "Initial Documentation", new List<Guid>()));
     }
+
+    private DocumentationSynchronizer _synchronizer;
+    private Mock<ICommandSender> _commandSenderMock;
+    private Mock<IRequestSender> _requestSenderMock;
+    private Guid _ticketId;
+    private TicketReplayDecorator _ticketReplayDecorator;
 
     [Test]
     public void RegisterWhenCalledAddsTicketReplayDecoratorToTicketDecoratorsById()
@@ -52,8 +52,8 @@ public class DocumentationSynchronizerTest
     [Test]
     public async Task FireCommandWhenCalledSendsCommandsForDirtyTickets()
     {
-        string updatedDocumentation = "Updated Documentation";
-        Guid traceId = Guid.NewGuid();
+        var updatedDocumentation = "Updated Documentation";
+        var traceId = Guid.NewGuid();
         _synchronizer.Register(_ticketId, _ticketReplayDecorator);
         _synchronizer.SetSynchronizationValue(_ticketId, updatedDocumentation);
 

@@ -19,7 +19,9 @@ using ReactiveUI;
 namespace Client.Desktop.Presentation.Models.Analysis;
 
 public class AnalysisBySprintModel(IMessenger messenger, IRequestSender requestSender, ITraceCollector tracer)
-    : ReactiveObject, IRegisterMessenger, IInitializeAsync
+    : ReactiveObject, IMessengerRegistration, IInitializeAsync,
+        IRecipient<NewSprintMessage>,
+        IRecipient<ClientSprintDataUpdatedNotification>
 {
     private const int AmountOfTagsShown = 3;
 
@@ -43,25 +45,32 @@ public class AnalysisBySprintModel(IMessenger messenger, IRequestSender requestS
 
     public void RegisterMessenger()
     {
-        messenger.Register<NewSprintMessage>(this, async void (_, message) =>
+        messenger.RegisterAll(this);
+    }
+
+    public void UnregisterMessenger()
+    {
+        messenger.UnregisterAll(this);
+    }
+
+    public void Receive(ClientSprintDataUpdatedNotification notification)
+    {
+        var sprint = Sprints.FirstOrDefault(s => s.SprintId == notification.SprintId);
+
+        if (sprint == null)
         {
-            Sprints.Add(message.Sprint);
-            await tracer.Sprint.Create.AggregateAdded(GetType(), message.TraceId);
-        });
+            _ = tracer.Sprint.Update.NoAggregateFound(GetType(), notification.TraceId);
+            return;
+        }
 
-        messenger.Register<ClientSprintDataUpdatedNotification>(this, async void (_, notification) =>
-        {
-            var sprint = Sprints.FirstOrDefault(s => s.SprintId == notification.SprintId);
+        sprint.Apply(notification);
+        _ = tracer.Sprint.Update.ChangesApplied(GetType(), notification.TraceId);
+    }
 
-            if (sprint == null)
-            {
-                await tracer.Sprint.Update.NoAggregateFound(GetType(), notification.TraceId);
-                return;
-            }
-
-            sprint.Apply(notification);
-            await tracer.Sprint.Update.ChangesApplied(GetType(), notification.TraceId);
-        });
+    public void Receive(NewSprintMessage message)
+    {
+        Sprints.Add(message.Sprint);
+        _ = tracer.Sprint.Create.AggregateAdded(GetType(), message.TraceId);
     }
 
     public string GetMarkdownString()

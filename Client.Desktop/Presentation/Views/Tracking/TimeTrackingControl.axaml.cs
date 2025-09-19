@@ -9,7 +9,7 @@ public partial class TimeTrackingControl : UserControl
     {
         InitializeComponent();
     }
-    
+
     public TimeTrackingControl(TimeTrackingViewModel viewModel)
     {
         InitializeComponent();

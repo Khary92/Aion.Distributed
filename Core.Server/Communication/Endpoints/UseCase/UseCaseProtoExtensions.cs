@@ -33,6 +33,7 @@ public static class UseCaseProtoExtensions
 
     public static GetTimeSlotControlDataForDateRequest ToRequest(this GetTimeSlotControlDataRequestProto proto)
     {
-        return new GetTimeSlotControlDataForDateRequest(proto.Date.ToDateTimeOffset(), Guid.Parse(proto.TraceData.TraceId));
+        return new GetTimeSlotControlDataForDateRequest(proto.Date.ToDateTimeOffset(),
+            Guid.Parse(proto.TraceData.TraceId));
     }
 }

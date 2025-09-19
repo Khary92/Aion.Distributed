@@ -4,6 +4,7 @@ using System.Linq;
 using Client.Desktop.Communication.Requests.Notes.Records;
 using Client.Desktop.DataModels;
 using Proto.DTO.Note;
+using Proto.DTO.TraceData;
 using Proto.Requests.Notes;
 
 namespace Client.Desktop.Communication.Requests.Notes;
@@ -15,7 +16,7 @@ public static class NoteRequestExtensions
         return new GetNotesByTimeSlotIdRequestProto
         {
             TimeSlotId = request.TimeSlotId.ToString(),
-            TraceData = new()
+            TraceData = new TraceDataProto
             {
                 TraceId = request.TraceId.ToString()
             }
@@ -27,7 +28,7 @@ public static class NoteRequestExtensions
         return new GetNotesByTicketIdRequestProto
         {
             TicketId = request.TicketId.ToString(),
-            TraceData = new()
+            TraceData = new TraceDataProto
             {
                 TraceId = request.TraceId.ToString()
             }

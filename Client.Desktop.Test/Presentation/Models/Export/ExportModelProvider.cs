@@ -12,24 +12,30 @@ namespace Client.Desktop.Test.Presentation.Models.Export;
 
 public static class ExportModelProvider
 {
-    public sealed class ExportModelFixture
+    private static IMessenger CreateMessenger()
     {
-        public required ExportModel Instance { get; init; }
-        public required Mock<IRequestSender> RequestSender { get; init; }
-        public required Mock<ITraceCollector> Tracer { get; init; }
-        public required IMessenger Messenger { get; init; }
-        public required Mock<IExportService> ExportService { get; init; }
-        public required Mock<ILocalSettingsService> LocalSettingsService { get; init; }
+        return new WeakReferenceMessenger();
     }
 
-    private static IMessenger CreateMessenger() => new WeakReferenceMessenger();
-
     private static Mock<ITraceCollector> CreateTracerMock()
-        => new() { DefaultValue = DefaultValue.Mock };
+    {
+        return new Mock<ITraceCollector> { DefaultValue = DefaultValue.Mock };
+    }
 
-    private static Mock<IRequestSender> CreateRequestSenderMock() => new();
-    private static Mock<ILocalSettingsService> CreateLocalSettingsServiceMock() => new();
-    private static Mock<IExportService> CreateExportServiceMock() => new();
+    private static Mock<IRequestSender> CreateRequestSenderMock()
+    {
+        return new Mock<IRequestSender>();
+    }
+
+    private static Mock<ILocalSettingsService> CreateLocalSettingsServiceMock()
+    {
+        return new Mock<ILocalSettingsService>();
+    }
+
+    private static Mock<IExportService> CreateExportServiceMock()
+    {
+        return new Mock<IExportService>();
+    }
 
     public static async Task<ExportModelFixture> Create(List<WorkDayClientModel> initialWorkDays)
     {
@@ -57,14 +63,24 @@ public static class ExportModelProvider
         await instance.InitializeAsync();
 
 
-        return new ExportModelFixture()
+        return new ExportModelFixture
         {
             Instance = instance,
             RequestSender = requestSender,
             Tracer = tracer,
             Messenger = messenger,
             LocalSettingsService = localSettingsService,
-            ExportService = exportService,
+            ExportService = exportService
         };
+    }
+
+    public sealed class ExportModelFixture
+    {
+        public required ExportModel Instance { get; init; }
+        public required Mock<IRequestSender> RequestSender { get; init; }
+        public required Mock<ITraceCollector> Tracer { get; init; }
+        public required IMessenger Messenger { get; init; }
+        public required Mock<IExportService> ExportService { get; init; }
+        public required Mock<ILocalSettingsService> LocalSettingsService { get; init; }
     }
 }

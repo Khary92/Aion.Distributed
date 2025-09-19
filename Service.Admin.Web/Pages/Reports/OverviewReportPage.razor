@@ -45,7 +45,7 @@
         _overViewReportStateService!.OnStateChanged += OnServiceStateChanged;
         return Task.CompletedTask;
     }
-    
+
     private void OnServiceStateChanged()
     {
         _ = InvokeAsync(StateHasChanged);

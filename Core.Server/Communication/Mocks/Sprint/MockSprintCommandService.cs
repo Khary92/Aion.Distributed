@@ -31,7 +31,7 @@ public class MockSprintCommandService(SprintNotificationService sprintsNotificat
             return new CommandResponse { Success = false };
         }
     }
-    
+
     public override async Task<CommandResponse> CreateSprint(CreateSprintCommandProto request,
         ServerCallContext context)
     {

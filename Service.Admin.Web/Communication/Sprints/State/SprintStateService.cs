@@ -46,7 +46,7 @@ public class SprintStateService(ISharedRequestSender requestSender, ITraceCollec
         await tracer.Sprint.AddTicketToSprint.ChangesApplied(GetType(), notification.TraceId);
         NotifyStateChanged();
     }
-    
+
     public async Task Apply(WebSetSprintActiveStatusNotification notification)
     {
         if (_sprints.FirstOrDefault(s => s.SprintId == notification.SprintId) == null)
@@ -54,7 +54,7 @@ public class SprintStateService(ISharedRequestSender requestSender, ITraceCollec
             await tracer.Sprint.ActiveStatus.NoAggregateFound(GetType(), notification.TraceId);
             return;
         }
-        
+
         foreach (var loadedSprint in _sprints)
         {
             if (loadedSprint.SprintId == notification.SprintId)

@@ -7,7 +7,8 @@ namespace Core.Server.Communication.Endpoints.TraceReport;
 public class TraceReportNotificationService : Proto.Notifications.TraceReports.TraceReportNotificationService.
     TraceReportNotificationServiceBase
 {
-    private readonly ConcurrentDictionary<Guid, (IServerStreamWriter<TraceReportNotification> Stream, CancellationToken Token)>
+    private readonly ConcurrentDictionary<Guid, (IServerStreamWriter<TraceReportNotification> Stream, CancellationToken
+            Token)>
         _clients = new();
 
     public override async Task SubscribeTraceReportNotifications(

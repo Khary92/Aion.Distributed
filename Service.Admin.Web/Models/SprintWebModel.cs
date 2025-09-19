@@ -22,7 +22,7 @@ public class SprintWebModel
     public DateTimeOffset StartTime { get; private set; }
 
     public DateTimeOffset EndTime { get; private set; }
-    
+
     public bool IsActive { get; set; }
 
     private List<Guid> TicketIds { get; }
@@ -31,7 +31,7 @@ public class SprintWebModel
     {
         TicketIds.Add(notification.TicketId);
     }
-    
+
     public void Apply(WebSprintDataUpdatedNotification notification)
     {
         Name = notification.Name;

@@ -13,24 +13,27 @@ using Client.Desktop.Communication.Requests.Sprint;
 using Client.Desktop.Communication.Requests.Ticket;
 using Client.Desktop.Communication.Requests.UseCase.Records;
 using Client.Desktop.DataModels;
-using Client.Desktop.DataModels.Local;
 using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Register;
 using Client.Desktop.Presentation.Factories;
-using Client.Desktop.Services.LocalSettings.Commands;
+using Client.Desktop.Services.LocalSettings;
 using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
+using DynamicData;
 using ReactiveUI;
-using ListEx = DynamicData.ListEx;
 
 namespace Client.Desktop.Presentation.Models.TimeTracking;
 
 public class TimeTrackingModel(
+    IMessenger messenger,
     ICommandSender commandSender,
     IRequestSender requestSender,
-    IMessenger messenger,
     ITimeSlotViewModelFactory timeSlotViewModelFactory,
-    ITraceCollector tracer) : ReactiveObject, IInitializeAsync, IRegisterMessenger
+    ILocalSettingsService localSettingsService,
+    ITraceCollector tracer) : ReactiveObject, IInitializeAsync, IMessengerRegistration, IRecipient<NewTicketMessage>,
+    IRecipient<ClientTicketDataUpdatedNotification>, IRecipient<ClientTicketAddedToActiveSprintNotification>,
+    IRecipient<ClientSprintSelectionChangedNotification>, IRecipient<ClientTimeSlotControlCreatedNotification>,
+    IRecipient<ClientWorkDaySelectionChangedNotification>
 {
     private int _currentViewModelIndex;
     private ObservableCollection<TicketClientModel> _filteredTickets = [];
@@ -38,7 +41,6 @@ public class TimeTrackingModel(
     private string _selectedTicketName = string.Empty;
 
     private ObservableCollection<TimeSlotViewModel> _timeSlotViewModels = [];
-    private SettingsClientModel? _localSettings;
 
     public string SelectedTicketName
     {
@@ -76,13 +78,61 @@ public class TimeTrackingModel(
 
     public async Task InitializeAsync()
     {
-        var currentSprint = await requestSender.Send(new ClientGetActiveSprintRequest());
-
-        if (currentSprint == null) return;
-
         FilteredTickets.Clear();
         var tickets = await requestSender.Send(new ClientGetTicketsForCurrentSprintRequest());
-        ListEx.AddRange(FilteredTickets, tickets);
+        FilteredTickets.AddRange(tickets);
+
+        await LoadTimeSlotViewModels();
+    }
+
+    public void RegisterMessenger()
+    {
+        messenger.RegisterAll(this);
+    }
+
+    public void UnregisterMessenger()
+    {
+        messenger.UnregisterAll(this);
+    }
+
+    public void Receive(ClientSprintSelectionChangedNotification message)
+    {
+        _ = HandleTicketSprintSelectionChangedNotification(message);
+    }
+
+    //TODO Fix this!
+    public void Receive(ClientTicketAddedToActiveSprintNotification message)
+    {
+        _ = InitializeAsync();
+    }
+
+    public void Receive(ClientTicketDataUpdatedNotification message)
+    {
+        var ticketClientModel = AllTickets.FirstOrDefault(tsv => tsv.TicketId == message.TicketId);
+
+        if (ticketClientModel == null)
+        {
+            _ = tracer.Ticket.Update.NoAggregateFound(GetType(), message.TraceId);
+            return;
+        }
+
+        ticketClientModel.Apply(message);
+        _ = tracer.Ticket.Update.ChangesApplied(GetType(), message.TraceId);
+    }
+
+    public void Receive(ClientTimeSlotControlCreatedNotification message)
+    {
+        _ = HandleTimeSlotControlCreatedNotification(message);
+    }
+
+    public void Receive(ClientWorkDaySelectionChangedNotification message)
+    {
+        _ = HandleWorkDaySelectionChangedNotification(message);
+    }
+
+    public void Receive(NewTicketMessage message)
+    {
+        _ = HandleNewTicketMessage(message);
     }
 
     private async Task LoadTimeSlotViewModels()
@@ -91,7 +141,7 @@ public class TimeTrackingModel(
 
         var controlDataList =
             await requestSender.Send(
-                new ClientGetTimeSlotControlDataRequest(_localSettings!.SelectedDate, Guid.NewGuid()));
+                new ClientGetTimeSlotControlDataRequest(localSettingsService.SelectedDate, Guid.NewGuid()));
 
         foreach (var controlData in controlDataList)
         {
@@ -105,98 +155,6 @@ public class TimeTrackingModel(
             CurrentViewModelIndex = TimeSlotViewModels.Count - 1;
             SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.TicketReplayDecorator.Ticket.Name;
         }
-    }
-
-    public void RegisterMessenger()
-    {
-        messenger.Register<SettingsClientModel>(this, async void (_, m) =>
-        {
-            _localSettings = m;
-            await InitializeAsync();
-            await LoadTimeSlotViewModels();
-        });
-
-        messenger.Register<WorkDaySelectedNotification>(this, async void (_, m) =>
-        {
-            _localSettings!.SelectedDate = m.Date;
-            await InitializeAsync();
-        });
-
-        messenger.Register<NewTicketMessage>(this, async void (_, message) =>
-        {
-            AllTickets.Add(message.Ticket);
-            await tracer.Ticket.Create.AggregateAdded(GetType(), message.TraceId);
-
-            var currentSprint = await requestSender.Send(new ClientGetActiveSprintRequest());
-
-            if (currentSprint == null) return;
-
-            if (currentSprint.TicketIds.Contains(message.Ticket.TicketId))
-                FilteredTickets.Add(message.Ticket);
-        });
-
-        messenger.Register<ClientTicketDataUpdatedNotification>(this, async void (_, notification) =>
-        {
-            var ticketClientModel = AllTickets.FirstOrDefault(tsv => tsv.TicketId == notification.TicketId);
-
-            if (ticketClientModel == null)
-            {
-                await tracer.Ticket.Update.NoAggregateFound(GetType(), notification.TraceId);
-                return;
-            }
-
-            ticketClientModel.Apply(notification);
-            await tracer.Ticket.Update.ChangesApplied(GetType(), notification.TraceId);
-        });
-
-        //TODO This implementation is bad. Fix that 
-        messenger.Register<ClientTicketAddedToActiveSprintNotification>(this,
-            async void (_, _) => { await InitializeAsync(); });
-
-        messenger.Register<ClientTimeSlotControlCreatedNotification>(this, async void (_, notification) =>
-        {
-            TimeSlotViewModels.Add(await
-                timeSlotViewModelFactory.Create(notification.Ticket, notification.StatisticsData,
-                    notification.TimeSlot));
-
-            CurrentViewModelIndex = TimeSlotViewModels.Count - 1;
-            SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.TicketReplayDecorator.Ticket.Name;
-        });
-
-        messenger.Register<ClientSprintSelectionChangedNotification>(this, async void (_, _) =>
-        {
-            FilteredTickets.Clear();
-
-            var currentSprint = await requestSender.Send(new ClientGetActiveSprintRequest());
-
-            if (currentSprint == null)
-            {
-                throw new InvalidOperationException("No active sprint");
-            }
-
-            var ticketClientModels = await requestSender.Send(new ClientGetAllTicketsRequest());
-            foreach (var modelTicket in ticketClientModels.Where(modelTicket =>
-                         modelTicket.SprintIds.Contains(currentSprint.SprintId)))
-                FilteredTickets.Add(modelTicket);
-        });
-
-        messenger.Register<ClientWorkDaySelectionChangedNotification>(this, async void (_, _) =>
-        {
-            FilteredTickets.Clear();
-
-            var currentSprint = await requestSender.Send(new ClientGetActiveSprintRequest());
-
-            if (currentSprint == null) throw new InvalidOperationException("No active sprint");
-
-            var ticketDtos = await requestSender.Send(new ClientGetAllTicketsRequest());
-
-            foreach (var ticket in ticketDtos.Where(modelTicket =>
-                         modelTicket.SprintIds.Contains(currentSprint.SprintId)))
-                FilteredTickets.Add(ticket);
-
-            TimeSlotViewModels.Clear();
-            await LoadTimeSlotViewModels();
-        });
     }
 
     public void TogglePreviousViewModel()
@@ -222,6 +180,61 @@ public class TimeTrackingModel(
         if (SelectedTicket == null) return;
 
         await commandSender.Send(new ClientCreateTimeSlotControlCommand(SelectedTicket.TicketId,
-            _localSettings!.SelectedDate, Guid.NewGuid()));
+            localSettingsService.SelectedDate, Guid.NewGuid()));
+    }
+
+    private async Task HandleNewTicketMessage(NewTicketMessage message)
+    {
+        AllTickets.Add(message.Ticket);
+        await tracer.Ticket.Create.AggregateAdded(GetType(), message.TraceId);
+
+        var currentSprint = await requestSender.Send(new ClientGetActiveSprintRequest());
+
+        if (currentSprint == null) return;
+
+        if (currentSprint.TicketIds.Contains(message.Ticket.TicketId))
+            FilteredTickets.Add(message.Ticket);
+    }
+
+    private async Task HandleTicketSprintSelectionChangedNotification(ClientSprintSelectionChangedNotification message)
+    {
+        FilteredTickets.Clear();
+
+        var currentSprint = await requestSender.Send(new ClientGetActiveSprintRequest());
+
+        if (currentSprint == null) throw new InvalidOperationException("No active sprint");
+
+        var ticketClientModels = await requestSender.Send(new ClientGetAllTicketsRequest());
+        foreach (var modelTicket in ticketClientModels.Where(modelTicket =>
+                     modelTicket.SprintIds.Contains(currentSprint.SprintId)))
+            FilteredTickets.Add(modelTicket);
+    }
+
+    private async Task HandleTimeSlotControlCreatedNotification(ClientTimeSlotControlCreatedNotification message)
+    {
+        TimeSlotViewModels.Add(await
+            timeSlotViewModelFactory.Create(message.Ticket, message.StatisticsData,
+                message.TimeSlot));
+
+        CurrentViewModelIndex = TimeSlotViewModels.Count - 1;
+        SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.TicketReplayDecorator.Ticket.Name;
+    }
+
+    private async Task HandleWorkDaySelectionChangedNotification(ClientWorkDaySelectionChangedNotification message)
+    {
+        FilteredTickets.Clear();
+
+        var currentSprint = await requestSender.Send(new ClientGetActiveSprintRequest());
+
+        if (currentSprint == null) throw new InvalidOperationException("No active sprint");
+
+        var ticketModels = await requestSender.Send(new ClientGetAllTicketsRequest());
+
+        foreach (var ticket in ticketModels.Where(modelTicket =>
+                     modelTicket.SprintIds.Contains(currentSprint.SprintId)))
+            FilteredTickets.Add(ticket);
+
+        TimeSlotViewModels.Clear();
+        await LoadTimeSlotViewModels();
     }
 }

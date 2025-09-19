@@ -18,7 +18,8 @@ using ReactiveUI;
 namespace Client.Desktop.Presentation.Models.Analysis;
 
 public class AnalysisByTagModel(IMessenger messenger, IRequestSender requestSender, ITraceCollector tracer)
-    : ReactiveObject, IInitializeAsync, IRegisterMessenger
+    : ReactiveObject, IInitializeAsync, IMessengerRegistration, IRecipient<NewTagMessage>,
+        IRecipient<ClientTagUpdatedNotification>
 {
     private AnalysisByTagDecorator? _analysisByTag;
 
@@ -40,25 +41,32 @@ public class AnalysisByTagModel(IMessenger messenger, IRequestSender requestSend
 
     public void RegisterMessenger()
     {
-        messenger.Register<NewTagMessage>(this, async void (_, message) =>
+        messenger.RegisterAll(this);
+    }
+
+    public void UnregisterMessenger()
+    {
+        messenger.UnregisterAll(this);
+    }
+
+    public void Receive(ClientTagUpdatedNotification message)
+    {
+        var tag = Tags.FirstOrDefault(t => t.TagId == message.TagId);
+
+        if (tag == null)
         {
-            Tags.Add(message.Tag);
-            await tracer.Tag.Create.AggregateAdded(GetType(), message.TraceId);
-        });
+            _ = tracer.Tag.Update.NoAggregateFound(GetType(), message.TraceId);
+            return;
+        }
 
-        messenger.Register<ClientTagUpdatedNotification>(this, async void (_, notification) =>
-        {
-            var tag = Tags.FirstOrDefault(t => t.TagId == notification.TagId);
+        tag.Name = message.Name;
+        _ = tracer.Tag.Update.ChangesApplied(GetType(), message.TraceId);
+    }
 
-            if (tag == null)
-            {
-                await tracer.Tag.Update.NoAggregateFound(GetType(), notification.TraceId);
-                return;
-            }
-
-            tag.Name = notification.Name;
-            await tracer.Tag.Update.ChangesApplied(GetType(), notification.TraceId);
-        });
+    public void Receive(NewTagMessage message)
+    {
+        Tags.Add(message.Tag);
+        _ = tracer.Tag.Create.AggregateAdded(GetType(), message.TraceId);
     }
 
     public async Task SetAnalysisForTag(TagClientModel selectedTag)

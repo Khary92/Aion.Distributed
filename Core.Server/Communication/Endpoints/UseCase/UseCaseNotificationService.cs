@@ -8,7 +8,8 @@ namespace Core.Server.Communication.Endpoints.UseCase;
 public class
     UseCaseNotificationService : Proto.Notifications.UseCase.UseCaseNotificationService.UseCaseNotificationServiceBase
 {
-    private readonly ConcurrentDictionary<Guid, (IServerStreamWriter<UseCaseNotification> Stream, CancellationToken Token)>
+    private readonly ConcurrentDictionary<Guid, (IServerStreamWriter<UseCaseNotification> Stream, CancellationToken
+            Token)>
         _clients = new();
 
     public override async Task SubscribeUseCaseNotifications(

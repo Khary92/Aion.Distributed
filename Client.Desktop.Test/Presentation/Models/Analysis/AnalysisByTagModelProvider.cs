@@ -13,14 +13,25 @@ namespace Client.Desktop.Test.Presentation.Models.Analysis;
 
 public static class AnalysisByTagModelProvider
 {
-    private static IMessenger CreateMessenger() => new WeakReferenceMessenger();
+    private static IMessenger CreateMessenger()
+    {
+        return new WeakReferenceMessenger();
+    }
 
     private static Mock<ITraceCollector> CreateTracerMock()
-        => new() { DefaultValue = DefaultValue.Mock };
+    {
+        return new Mock<ITraceCollector> { DefaultValue = DefaultValue.Mock };
+    }
 
-    private static Mock<IRequestSender> CreateRequestSenderMock() => new();
+    private static Mock<IRequestSender> CreateRequestSenderMock()
+    {
+        return new Mock<IRequestSender>();
+    }
 
-    private static TagClientModel CreateTagClientModel() => new(Guid.NewGuid(), "InitialTagName", true);
+    private static TagClientModel CreateTagClientModel()
+    {
+        return new TagClientModel(Guid.NewGuid(), "InitialTagName", true);
+    }
 
 
     public static async Task<AnalysisModelFixture<AnalysisByTagModel>> Create(IReadOnlyList<TagClientModel> initialTags)
@@ -32,14 +43,14 @@ public static class AnalysisByTagModelProvider
         requestSender
             .Setup(rs => rs.Send(It.IsAny<ClientGetAllTagsRequest>()))!
             .ReturnsAsync(initialTags.ToList());
-        
+
         requestSender
             .Setup(rs => rs.Send(It.IsAny<ClientGetTagAnalysisById>()))!
             .ReturnsAsync(new AnalysisByTagDecorator(CreateAnalysisByTag()));
 
         return await CreateFixture(messenger, requestSender, tracer);
     }
-    
+
     private static async Task<AnalysisModelFixture<AnalysisByTagModel>> CreateFixture(IMessenger messenger,
         Mock<IRequestSender> requestSender, Mock<ITraceCollector> tracer)
     {
@@ -48,7 +59,7 @@ public static class AnalysisByTagModelProvider
         instance.RegisterMessenger();
         await instance.InitializeAsync();
         await instance.SetAnalysisForTag(CreateTagClientModel());
-        
+
         return new AnalysisModelFixture<AnalysisByTagModel>
         {
             Instance = instance,
@@ -68,8 +79,8 @@ public static class AnalysisByTagModelProvider
 
         var timeSlotClientModel = new TimeSlotClientModel(timeSlotId, Guid.NewGuid(), Guid.NewGuid(),
             DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, new List<Guid>(), false);
-        
-        return new AnalysisByTag()
+
+        return new AnalysisByTag
         {
             StatisticsData = [statisticsDataClientModel],
             TimeSlots = [timeSlotClientModel]

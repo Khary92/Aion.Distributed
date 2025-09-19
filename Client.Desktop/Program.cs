@@ -24,10 +24,10 @@ public static class Program
         await host.StartAsync();
 
         var serviceProvider = host.Services;
-        
+
         BuildAvaloniaApp(serviceProvider)
             .StartWithClassicDesktopLifetime(args);
-        
+
         await host.StopAsync();
     }
 

@@ -12,7 +12,8 @@ namespace Client.Desktop.Communication.Notifications.Tag;
 
 public class TagNotificationReceiver(
     TagNotificationService.TagNotificationServiceClient client,
-    IMessenger messenger, ITraceCollector tracer) : IStreamClient
+    IMessenger messenger,
+    ITraceCollector tracer) : IStreamClient
 {
     public async Task StartListening(CancellationToken cancellationToken)
     {
@@ -27,10 +28,10 @@ public class TagNotificationReceiver(
                     {
                         case TagNotification.NotificationOneofCase.TagCreated:
                         {
-                                var notificationTagCreated = notification.TagCreated;
-                            
-                                await tracer.Tag.Create.NotificationReceived(GetType(),
-                                    Guid.Parse(notificationTagCreated.TraceData.TraceId), notificationTagCreated);
+                            var notificationTagCreated = notification.TagCreated;
+
+                            await tracer.Tag.Create.NotificationReceived(GetType(),
+                                Guid.Parse(notificationTagCreated.TraceData.TraceId), notificationTagCreated);
                             Dispatcher.UIThread.Post(() =>
                             {
                                 messenger.Send(notificationTagCreated.ToNewEntityMessage());
@@ -39,10 +40,10 @@ public class TagNotificationReceiver(
                         }
                         case TagNotification.NotificationOneofCase.TagUpdated:
                         {
-                                var notificationTagUpdated = notification.TagUpdated;
-                            
-                                await tracer.Tag.Update.NotificationReceived(GetType(),
-                                    Guid.Parse(notificationTagUpdated.TraceData.TraceId), notificationTagUpdated);
+                            var notificationTagUpdated = notification.TagUpdated;
+
+                            await tracer.Tag.Update.NotificationReceived(GetType(),
+                                Guid.Parse(notificationTagUpdated.TraceData.TraceId), notificationTagUpdated);
                             Dispatcher.UIThread.Post(() =>
                             {
                                 messenger.Send(notificationTagUpdated.ToClientNotification());

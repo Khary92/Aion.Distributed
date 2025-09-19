@@ -24,8 +24,11 @@ public static class DtoExtensions
         return noteTypeListProto == null ? [] : noteTypeListProto.NoteTypes.Select(ToClientModel).ToList();
     }
 
-    public static TimerSettingsClientModel ToClientModel(this TimerSettingsProto proto) =>
-        new(Guid.Parse(proto.TimerSettingsId), proto.DocumentationSaveInterval, proto.SnapshotSaveInterval);
+    public static TimerSettingsClientModel ToClientModel(this TimerSettingsProto proto)
+    {
+        return new TimerSettingsClientModel(Guid.Parse(proto.TimerSettingsId), proto.DocumentationSaveInterval,
+            proto.SnapshotSaveInterval);
+    }
 
     public static NoteTypeClientModel ToClientModel(this NoteTypeProto noteType)
     {

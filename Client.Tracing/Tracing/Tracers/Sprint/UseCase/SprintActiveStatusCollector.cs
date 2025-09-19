@@ -5,7 +5,7 @@ using Service.Monitoring.Shared.Tracing;
 namespace Client.Tracing.Tracing.Tracers.Sprint.UseCase;
 
 public class SprintActiveStatusCollector(ITracingDataSender sender) : ISprintActiveStatusCollector
-{ 
+{
     public async Task NotificationReceived(Type originClassType, Guid traceId, object notification)
     {
         var log = $"Received {notification}";

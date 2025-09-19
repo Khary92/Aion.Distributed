@@ -22,7 +22,7 @@ public class TimeSlotControlService(
         var workDay = await workDayRequestsService.GetWorkDayByDate(date);
 
         if (workDay is null) throw new Exception("WorkDay is null. Something went horribly wrong.");
-        
+
         var existingTicket = await ticketRequestsService.GetTicketById(ticketId);
         if (existingTicket is null) throw new Exception("Ticket is null. Something went horribly wrong.");
 

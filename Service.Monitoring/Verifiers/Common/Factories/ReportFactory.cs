@@ -8,12 +8,12 @@ public class ReportFactory(IEnumerable<IVerificationProvider> verificationProvid
 {
     private readonly Dictionary<SortingType, IVerificationProvider> _verificationProviders =
         verificationProviders.ToDictionary(ts => ts.SortingType);
-    
+
     public Report Create(Guid traceId, SortingType sortingType, UseCaseMeta useCaseMeta, List<TraceData> traceData)
     {
         var verificationSteps = _verificationProviders[sortingType].GetVerificationSteps(useCaseMeta);
         traceData.Sort((a, b) => a.TimeStamp.CompareTo(b.TimeStamp));
-        
+
         return new Report(traceData.First().TimeStamp,
             traceData.First().SortingType,
             traceData.First().UseCaseMeta,

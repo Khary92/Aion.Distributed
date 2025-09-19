@@ -1,4 +1,3 @@
-﻿
-namespace Client.Desktop.Communication.Requests.Ticket;
+﻿namespace Client.Desktop.Communication.Requests.Ticket;
 
 public record ClientGetTicketsForCurrentSprintRequest;

@@ -45,7 +45,7 @@ public class CreateSprintTraceCollector(ITracingDataSender sender) : ICreateSpri
             log,
             DateTimeOffset.Now));
     }
-    
+
     public async Task AggregateAdded(Type originClassType, Guid traceId)
     {
         var log = $"Added aggregate with id:{traceId}";

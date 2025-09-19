@@ -6,12 +6,10 @@ using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.Communication.Requests.WorkDays.Records;
 using Client.Desktop.DataModels;
-using Client.Desktop.DataModels.Local;
 using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Register;
 using Client.Desktop.Services.Export;
 using Client.Desktop.Services.LocalSettings;
-using Client.Desktop.Services.LocalSettings.Commands;
 using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
@@ -25,10 +23,10 @@ public class ExportModel(
     IExportService exportService,
     ITraceCollector tracer,
     ILocalSettingsService settingsService)
-    : ReactiveObject, IInitializeAsync, IRegisterMessenger
+    : ReactiveObject, IInitializeAsync, IMessengerRegistration, IRecipient<NewWorkDayMessage>
 {
     private string _markdownText = string.Empty;
-    
+
     public ObservableCollection<WorkDayClientModel> WorkDays { get; } = [];
     public ObservableCollection<WorkDayClientModel> SelectedWorkDays { get; } = [];
 
@@ -50,11 +48,18 @@ public class ExportModel(
 
     public void RegisterMessenger()
     {
-        messenger.Register<NewWorkDayMessage>(this, async void (_, m) =>
-        {
-            WorkDays.Add(m.WorkDay);
-            await tracer.WorkDay.Create.AggregateAdded(GetType(), m.WorkDay.WorkDayId);
-        });
+        messenger.RegisterAll(this);
+    }
+
+    public void UnregisterMessenger()
+    {
+        messenger.UnregisterAll(this);
+    }
+
+    public void Receive(NewWorkDayMessage message)
+    {
+        WorkDays.Add(message.WorkDay);
+        _ = tracer.WorkDay.Create.AggregateAdded(GetType(), message.WorkDay.WorkDayId);
     }
 
     public async Task<bool> ExportFileAsync()

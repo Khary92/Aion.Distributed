@@ -10,14 +10,17 @@ namespace Client.Desktop.Communication.Requests.UseCase;
 
 public static class UseCaseRequestExtensions
 {
-    public static GetTimeSlotControlDataRequestProto ToProto(this ClientGetTimeSlotControlDataRequest request) => new()
+    public static GetTimeSlotControlDataRequestProto ToProto(this ClientGetTimeSlotControlDataRequest request)
     {
-        Date = Timestamp.FromDateTimeOffset(request.Date),
-        TraceData = new TraceDataProto
+        return new GetTimeSlotControlDataRequestProto
         {
-            TraceId = request.TraceId.ToString()
-        }
-    };
+            Date = Timestamp.FromDateTimeOffset(request.Date),
+            TraceData = new TraceDataProto
+            {
+                TraceId = request.TraceId.ToString()
+            }
+        };
+    }
 
 
     public static List<ClientGetTimeSlotControlResponse> ToResponseDataList(this TimeSlotControlDataListProto proto)

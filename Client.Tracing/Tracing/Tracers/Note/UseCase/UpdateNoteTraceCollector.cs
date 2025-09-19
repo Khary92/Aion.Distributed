@@ -8,7 +8,7 @@ public class UpdateNoteTraceCollector(ITracingDataSender sender) : IUpdateNoteTr
 {
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
-        var log = $"Update note requested";
+        var log = "Update note requested";
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.Note,
             UseCaseMeta.UpdateNote,

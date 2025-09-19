@@ -6,13 +6,13 @@ namespace Client.Desktop.DataModels;
 
 public class TimerSettingsClientModel : ReactiveObject
 {
-    private Guid _timerSettingsId;
-    private int _documentationSaveInterval;
-    private int _snapshotSaveInterval;
+    private int _currentDocuSecondsCount;
 
     private int _currentSnapshotSecondsCount;
-    private int _currentDocuSecondsCount;
-    
+    private int _documentationSaveInterval;
+    private int _snapshotSaveInterval;
+    private Guid _timerSettingsId;
+
     public TimerSettingsClientModel(Guid timerSettingsId, int documentationSaveInterval, int snapshotSaveInterval)
     {
         TimerSettingsId = timerSettingsId;
@@ -37,7 +37,7 @@ public class TimerSettingsClientModel : ReactiveObject
         get => _snapshotSaveInterval;
         set => this.RaiseAndSetIfChanged(ref _snapshotSaveInterval, value);
     }
-    
+
     public bool IsDocuSaveIntervalReached()
     {
         _currentDocuSecondsCount++;
@@ -62,8 +62,8 @@ public class TimerSettingsClientModel : ReactiveObject
     {
         SnapshotSaveInterval = notification.SaveInterval;
     }
-    
-    
+
+
     public void Apply(ClientDocuTimerSaveIntervalChangedNotification notification)
     {
         DocumentationSaveInterval = notification.SaveInterval;

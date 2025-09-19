@@ -31,7 +31,7 @@ public class AnalysisByTicketModelTest
         var newTicketClientModel = new TicketClientModel(ticketId, ticketName, "bookingNumber", "Documentation", []);
 
         var fixture =
-            await AnalysisByTicketModelProvider.Create(new List<TicketClientModel?>() { newTicketClientModel });
+            await AnalysisByTicketModelProvider.Create(new List<TicketClientModel?> { newTicketClientModel });
         var clientTicketDataUpdateNotification = new ClientTicketDataUpdatedNotification(ticketId, changedTicketName,
             "BookingNumber", [], Guid.NewGuid());
 

@@ -1,6 +1,7 @@
 using Client.Desktop.Communication.Commands.TimeSlots.Records;
 using Google.Protobuf.WellKnownTypes;
 using Proto.Command.TimeSlots;
+using Proto.DTO.TraceData;
 
 namespace Client.Desktop.Communication.Commands.TimeSlots;
 
@@ -34,7 +35,7 @@ public static class TimeSlotExtensions
         {
             TimeSlotId = command.TimeSlotId.ToString(),
             Time = Timestamp.FromDateTimeOffset(command.Time),
-            TraceData = new()
+            TraceData = new TraceDataProto
             {
                 TraceId = command.TraceId.ToString()
             }
@@ -47,7 +48,7 @@ public static class TimeSlotExtensions
         {
             TimeSlotId = command.TimeSlotId.ToString(),
             Time = Timestamp.FromDateTimeOffset(command.Time),
-            TraceData = new()
+            TraceData = new TraceDataProto
             {
                 TraceId = command.TraceId.ToString()
             }

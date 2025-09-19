@@ -42,7 +42,7 @@ public class TagController(ITraceCollector tracer, ISharedCommandSender commandS
     {
         var traceId = Guid.NewGuid();
         await tracer.Tag.Create.StartUseCase(GetType(), traceId);
-        
+
         var createTagCommand = new WebCreateTagCommand(Guid.NewGuid(), InputTagName, traceId);
 
         await tracer.Tag.Create.SendingCommand(GetType(), traceId, createTagCommand);

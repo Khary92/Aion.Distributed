@@ -13,8 +13,8 @@ namespace Client.Desktop.Presentation.Models.TimeTracking;
 
 public class TimeSlotViewModel : ReactiveObject
 {
-    private readonly IStatisticsViewModelFactory _statisticsViewModelFactory;
     private readonly INoteStreamViewModelFactory _noteStreamViewModelFactory;
+    private readonly IStatisticsViewModelFactory _statisticsViewModelFactory;
     private object _currentView = null!;
     private string _elapsedTimeRepresentation = null!;
     private string _timerButtonText = null!;
@@ -46,15 +46,6 @@ public class TimeSlotViewModel : ReactiveObject
         AddNoteCommand = ReactiveCommand.CreateFromTask(AddNoteHotkeyFired);
     }
 
-    public void CreateSubViewModels(Guid ticketId, Guid timeSlotId, StatisticsDataClientModel statisticsDataClientModel)
-    {
-        NoteStreamViewModel =
-            _noteStreamViewModelFactory.Create(timeSlotId, ticketId);
-        StatisticsViewModel = _statisticsViewModelFactory.Create(statisticsDataClientModel);
-        
-        SwitchToNotestreamView();
-    }
-
     public required NoteStreamViewModel NoteStreamViewModel { get; set; }
     public required StatisticsViewModel StatisticsViewModel { get; set; }
 
@@ -84,6 +75,15 @@ public class TimeSlotViewModel : ReactiveObject
     {
         get => _elapsedTimeRepresentation;
         set => this.RaiseAndSetIfChanged(ref _elapsedTimeRepresentation, value);
+    }
+
+    public void CreateSubViewModels(Guid ticketId, Guid timeSlotId, StatisticsDataClientModel statisticsDataClientModel)
+    {
+        NoteStreamViewModel =
+            _noteStreamViewModelFactory.Create(timeSlotId, ticketId);
+        StatisticsViewModel = _statisticsViewModelFactory.Create(statisticsDataClientModel);
+
+        SwitchToNotestreamView();
     }
 
     private async Task StartReplayMode()

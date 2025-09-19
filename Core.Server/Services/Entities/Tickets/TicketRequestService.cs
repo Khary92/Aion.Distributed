@@ -56,7 +56,7 @@ public class TicketRequestService(
     {
         var ticketDocumentationEventsByTicketId =
             await ticketEventStore.GetTicketDocumentationEventsByTicketId(ticketId);
-        
+
         return ticketDocumentationEventsByTicketId.Select(t => t.Documentation).ToList();
     }
 }

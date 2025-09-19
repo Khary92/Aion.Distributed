@@ -21,7 +21,7 @@ public partial class ContentWrapper : Window
         InitializeComponent();
         _shutDownHandler = null!;
     }
-    
+
     public ContentWrapper(ContentWrapperViewModel viewModel, IShutDownHandler shutDownHandler)
     {
         _shutDownHandler = shutDownHandler;

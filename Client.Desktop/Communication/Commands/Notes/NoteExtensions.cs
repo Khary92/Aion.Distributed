@@ -7,29 +7,35 @@ namespace Client.Desktop.Communication.Commands.Notes;
 
 public static class NoteExtensions
 {
-    public static CreateNoteCommandProto ToProto(this ClientCreateNoteCommand command) => new()
+    public static CreateNoteCommandProto ToProto(this ClientCreateNoteCommand command)
     {
-        NoteId = command.NoteId.ToString(),
-        NoteTypeId = command.NoteTypeId.ToString(),
-        Text = command.Text,
-        TicketId = command.TicketId.ToString(),
-        TimeSlotId = command.TimeSlotId.ToString(),
-        TimeStamp = Timestamp.FromDateTimeOffset(command.TimeStamp),
-        TraceData = new TraceDataProto
+        return new CreateNoteCommandProto
         {
-            TraceId = command.TraceId.ToString()
-        }
-    };
+            NoteId = command.NoteId.ToString(),
+            NoteTypeId = command.NoteTypeId.ToString(),
+            Text = command.Text,
+            TicketId = command.TicketId.ToString(),
+            TimeSlotId = command.TimeSlotId.ToString(),
+            TimeStamp = Timestamp.FromDateTimeOffset(command.TimeStamp),
+            TraceData = new TraceDataProto
+            {
+                TraceId = command.TraceId.ToString()
+            }
+        };
+    }
 
-    public static UpdateNoteCommandProto ToProto(this ClientUpdateNoteCommand command) => new()
+    public static UpdateNoteCommandProto ToProto(this ClientUpdateNoteCommand command)
     {
-        NoteId = command.NoteId.ToString(),
-        Text = command.Text,
-        NoteTypeId = command.NoteTypeId.ToString(),
-        TimeSlotId = command.TimeSlotId.ToString(),
-        TraceData = new TraceDataProto
+        return new UpdateNoteCommandProto
         {
-            TraceId = command.TraceId.ToString()
-        }
-    };
+            NoteId = command.NoteId.ToString(),
+            Text = command.Text,
+            NoteTypeId = command.NoteTypeId.ToString(),
+            TimeSlotId = command.TimeSlotId.ToString(),
+            TraceData = new TraceDataProto
+            {
+                TraceId = command.TraceId.ToString()
+            }
+        };
+    }
 }

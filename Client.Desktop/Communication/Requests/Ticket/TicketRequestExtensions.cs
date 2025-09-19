@@ -8,23 +8,38 @@ namespace Client.Desktop.Communication.Requests.Ticket;
 
 public static class TicketRequestExtensions
 {
-    public static GetAllTicketsRequestProto ToProto(this ClientGetAllTicketsRequest request) => new();
-    
-    public static GetTicketByIdRequestProto ToProto(this ClientGetTicketByIdRequest request) => new()
+    public static GetAllTicketsRequestProto ToProto(this ClientGetAllTicketsRequest request)
     {
-        TicketId = request.TicketId.ToString()
-    };
+        return new GetAllTicketsRequestProto();
+    }
+
+    public static GetTicketByIdRequestProto ToProto(this ClientGetTicketByIdRequest request)
+    {
+        return new GetTicketByIdRequestProto
+        {
+            TicketId = request.TicketId.ToString()
+        };
+    }
 
     public static GetTicketsForCurrentSprintRequestProto
-        ToProto(this ClientGetTicketsForCurrentSprintRequest request) => new();
+        ToProto(this ClientGetTicketsForCurrentSprintRequest request)
+    {
+        return new GetTicketsForCurrentSprintRequestProto();
+    }
 
     public static GetTicketsWithShowAllSwitchRequestProto
-        ToProto(this ClientGetTicketsWithShowAllSwitchRequest request) => new()
+        ToProto(this ClientGetTicketsWithShowAllSwitchRequest request)
     {
-        IsShowAll = request.IsShowAll
-    };
+        return new GetTicketsWithShowAllSwitchRequestProto
+        {
+            IsShowAll = request.IsShowAll
+        };
+    }
 
-    public static TicketClientModel ToClientModel(this TicketCreatedNotification notification) => new(
-        Guid.Parse(notification.TicketId), notification.Name, notification.BookingNumber,
-        string.Empty, notification.SprintIds.ToGuidList());
+    public static TicketClientModel ToClientModel(this TicketCreatedNotification notification)
+    {
+        return new TicketClientModel(
+            Guid.Parse(notification.TicketId), notification.Name, notification.BookingNumber,
+            string.Empty, notification.SprintIds.ToGuidList());
+    }
 }

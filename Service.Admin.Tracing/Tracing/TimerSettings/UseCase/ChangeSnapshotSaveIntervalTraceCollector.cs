@@ -48,7 +48,7 @@ public class ChangeSnapshotSaveIntervalTraceCollector(ITracingDataSender sender)
             log,
             DateTimeOffset.Now));
     }
-    
+
     public async Task ChangesApplied(Type originClassType, Guid traceId)
     {
         var log = $"Changed applied id:{traceId}";

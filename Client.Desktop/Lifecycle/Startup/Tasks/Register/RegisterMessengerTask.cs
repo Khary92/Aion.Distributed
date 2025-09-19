@@ -6,7 +6,7 @@ using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 
 namespace Client.Desktop.Lifecycle.Startup.Tasks.Register;
 
-public class RegisterMessengerTask(IEnumerable<IRegisterMessenger> messengerComponents) : IStartupTask
+public class RegisterMessengerTask(IEnumerable<IMessengerRegistration> messengerComponents) : IStartupTask
 {
     public StartupTask StartupTask => StartupTask.RegisterMessenger;
 

@@ -18,7 +18,7 @@ public static class TracingServices
 
         services.AddSingleton<IReportSender>(_ => new ReportSender("http://admin-web:8081"));
     }
-    
+
     private static void AddPolicyServices(IServiceCollection services)
     {
         services.AddSingleton(

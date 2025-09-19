@@ -1,4 +1,3 @@
-﻿
-namespace Client.Desktop.Communication.Notifications.UseCase.Records;
+﻿namespace Client.Desktop.Communication.Notifications.UseCase.Records;
 
 public record ClientSaveDocumentationNotification;

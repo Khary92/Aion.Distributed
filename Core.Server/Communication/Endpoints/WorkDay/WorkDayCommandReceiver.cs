@@ -11,7 +11,6 @@ public class WorkDayCommandReceiver(IWorkDayCommandsService workDayCommandsServi
     public override async Task<CommandResponse> CreateWorkDay(CreateWorkDayCommandProto request,
         ServerCallContext context)
     {
-        
         await tracer.WorkDay.Create.CommandReceived(GetType(), Guid.Parse(request.TraceData.TraceId), request);
 
         await workDayCommandsService.Create(request.ToCommand());

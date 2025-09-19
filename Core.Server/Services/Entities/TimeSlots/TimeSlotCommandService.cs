@@ -16,7 +16,7 @@ public class TimeSlotCommandService(
     public async Task SetEndTime(SetEndTimeCommand command)
     {
         await timeSlotEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
-        
+
         var notification = command.ToNotification();
         await tracer.TimeSlot.SetEndTime.EventPersisted(GetType(), command.TraceId, notification.EndTimeSet);
 
@@ -28,7 +28,7 @@ public class TimeSlotCommandService(
     public async Task SetStartTime(SetStartTimeCommand command)
     {
         await timeSlotEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
-        
+
         var notification = command.ToNotification();
         await tracer.TimeSlot.SetStartTime.EventPersisted(GetType(), command.TraceId,
             notification.StartTimeSet);
@@ -41,7 +41,7 @@ public class TimeSlotCommandService(
     public async Task AddNote(AddNoteCommand command)
     {
         await timeSlotEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
-        
+
         var notification = command.ToNotification();
         await tracer.TimeSlot.AddNote.EventPersisted(GetType(), command.TraceId,
             notification.NoteAddedToTimeSlot);
@@ -54,7 +54,7 @@ public class TimeSlotCommandService(
     public async Task Create(CreateTimeSlotCommand command)
     {
         await timeSlotEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
-        
+
         var notification = command.ToNotification();
         await tracer.TimeSlot.Create.EventPersisted(GetType(), command.TraceId, notification.TimeSlotCreated);
 

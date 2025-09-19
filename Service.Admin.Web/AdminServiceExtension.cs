@@ -72,7 +72,7 @@ public static class AdminServiceExtension
     private static void AddReceiverServices(IServiceCollection services)
     {
         services.AddSingleton<ReportReceiver>();
-        
+
         services.AddSingleton<TicketNotificationsReceiver>();
         services.AddHostedService<TicketNotificationHostedService>();
 

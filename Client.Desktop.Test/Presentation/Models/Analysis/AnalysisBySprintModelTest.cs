@@ -33,7 +33,7 @@ public class AnalysisBySprintModelTest
             DateTimeOffset.UtcNow, new List<Guid>());
 
         var fixture =
-            await AnalysisBySprintModelProvider.Create(new List<SprintClientModel?>() { newSprintClientModel });
+            await AnalysisBySprintModelProvider.Create(new List<SprintClientModel?> { newSprintClientModel });
         var clientSprintDataUpdateNotification = new ClientSprintDataUpdatedNotification(sprintId, changedSprintName,
             DateTimeOffset.MinValue, DateTimeOffset.MaxValue, Guid.NewGuid());
 

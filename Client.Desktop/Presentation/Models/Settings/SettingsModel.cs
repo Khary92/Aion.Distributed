@@ -8,7 +8,8 @@ using ReactiveUI;
 namespace Client.Desktop.Presentation.Models.Settings;
 
 public class SettingsModel(IMessenger messenger, ILocalSettingsCommandSender localSettingsCommandService)
-    : ReactiveObject, IRegisterMessenger
+    : ReactiveObject, IMessengerRegistration, IRecipient<ExportPathSetNotification>,
+        IRecipient<WorkDaySelectedNotification>, IRecipient<SettingsClientModel>
 {
     private SettingsClientModel? _settingsDto;
 
@@ -20,16 +21,29 @@ public class SettingsModel(IMessenger messenger, ILocalSettingsCommandSender loc
 
     public void RegisterMessenger()
     {
-        messenger.Register<ExportPathSetNotification>(this, void (_, m) => { Settings!.ExportPath = m.ExportPath; });
+        messenger.RegisterAll(this);
+    }
 
-        messenger.Register<SettingsClientModel>(this, void (_, m) => { Settings = m; });
-        
-        messenger.Register<WorkDaySelectedNotification>(this, void (_, m) =>
-        {
-            if (Settings == null) return;
-            
-            Settings.SelectedDate = m.Date;
-        });
+    public void UnregisterMessenger()
+    {
+        messenger.UnregisterAll(this);
+    }
+
+    public void Receive(ExportPathSetNotification message)
+    {
+        Settings!.ExportPath = message.ExportPath;
+    }
+
+    public void Receive(SettingsClientModel message)
+    {
+        Settings = message;
+    }
+
+    public void Receive(WorkDaySelectedNotification message)
+    {
+        if (Settings == null) return;
+
+        Settings.SelectedDate = message.Date;
     }
 
     public void SetExportPath()

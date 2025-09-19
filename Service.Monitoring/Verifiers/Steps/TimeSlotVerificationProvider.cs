@@ -8,6 +8,7 @@ namespace Service.Monitoring.Verifiers.Steps;
 public class TimeSlotVerificationProvider : IVerificationProvider
 {
     public SortingType SortingType => SortingType.TimeSlot;
+
     public ImmutableList<VerificationStep> GetVerificationSteps(UseCaseMeta useCaseMeta)
     {
         return ImmutableList.Create<VerificationStep>();

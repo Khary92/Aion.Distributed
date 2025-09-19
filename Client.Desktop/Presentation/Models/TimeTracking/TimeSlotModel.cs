@@ -43,7 +43,7 @@ public class TimeSlotModel(
 
     public void RegisterMessenger()
     {
-        messenger.Register<ClientTicketDocumentationUpdatedNotification>(this, async void(_, notification) =>
+        messenger.Register<ClientTicketDocumentationUpdatedNotification>(this, async void (_, notification) =>
         {
             if (TicketReplayDecorator.Ticket.TicketId == notification.TicketId) return;
 

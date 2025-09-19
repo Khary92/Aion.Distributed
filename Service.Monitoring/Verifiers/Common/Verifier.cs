@@ -9,13 +9,13 @@ namespace Service.Monitoring.Verifiers.Common;
 
 public class Verifier : IVerifier
 {
+    private readonly IReportFactory _reportFactory;
+    private readonly SortingType _sortingType;
     private readonly Timer _timer = new(10000);
     private readonly List<TraceData> _traceData = [];
 
     private readonly Guid _traceId;
-    private readonly SortingType _sortingType;
     private readonly UseCaseMeta _useCaseMeta;
-    private readonly IReportFactory _reportFactory;
 
     public Verifier(Guid traceId, SortingType sortingType, UseCaseMeta useCaseMeta, IReportFactory reportFactory)
     {

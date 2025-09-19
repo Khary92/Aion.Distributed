@@ -27,7 +27,7 @@ public class TagCommandsService(
     public async Task Create(CreateTagCommand command)
     {
         await tagEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
-        
+
         var notification = command.ToNotification();
         await tracer.Tag.Create.EventPersisted(GetType(), command.TraceId, notification.TagCreated);
 

@@ -19,7 +19,7 @@ public class CreateTicketUseCaseCollector(ITracingDataSender sender) : ICreateTi
             log,
             DateTimeOffset.Now));
     }
-    
+
     public async Task AggregateAdded(Type originClassType, Guid traceId)
     {
         var log = $"Added aggregate with id:{traceId}";

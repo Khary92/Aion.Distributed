@@ -9,7 +9,7 @@ public partial class ExportControl : UserControl
     {
         InitializeComponent();
     }
-    
+
     public ExportControl(ExportViewModel exportViewModel)
     {
         InitializeComponent();

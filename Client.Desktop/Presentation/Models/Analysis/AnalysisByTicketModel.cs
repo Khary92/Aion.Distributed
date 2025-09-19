@@ -19,7 +19,8 @@ using ReactiveUI;
 namespace Client.Desktop.Presentation.Models.Analysis;
 
 public class AnalysisByTicketModel(IMessenger messenger, IRequestSender requestSender, ITraceCollector tracer)
-    : ReactiveObject, IInitializeAsync, IRegisterMessenger
+    : ReactiveObject, IInitializeAsync, IMessengerRegistration, IRecipient<NewTicketMessage>,
+        IRecipient<ClientTicketDataUpdatedNotification>
 {
     private const int AmountOfTagsShown = 3;
 
@@ -43,25 +44,32 @@ public class AnalysisByTicketModel(IMessenger messenger, IRequestSender requestS
 
     public void RegisterMessenger()
     {
-        messenger.Register<NewTicketMessage>(this, async void (_, message) =>
+        messenger.RegisterAll(this);
+    }
+
+    public void UnregisterMessenger()
+    {
+        messenger.UnregisterAll(this);
+    }
+
+    public void Receive(ClientTicketDataUpdatedNotification message)
+    {
+        var ticket = Tickets.FirstOrDefault(t => t.TicketId == message.TicketId);
+
+        if (ticket == null)
         {
-            Tickets.Add(message.Ticket);
-            await tracer.Ticket.Create.AggregateAdded(GetType(), message.TraceId);
-        });
+            _ = tracer.Ticket.Update.NoAggregateFound(GetType(), message.TraceId);
+            return;
+        }
 
-        messenger.Register<ClientTicketDataUpdatedNotification>(this, async void (_, notification) =>
-        {
-            var ticket = Tickets.FirstOrDefault(t => t.TicketId == notification.TicketId);
+        ticket.Apply(message);
+        _ = tracer.Ticket.Update.ChangesApplied(GetType(), message.TraceId);
+    }
 
-            if (ticket == null)
-            {
-                await tracer.Ticket.Update.NoAggregateFound(GetType(), notification.TraceId);
-                return;
-            }
-
-            ticket.Apply(notification);
-            await tracer.Ticket.Update.ChangesApplied(GetType(), notification.TraceId);
-        });
+    public void Receive(NewTicketMessage message)
+    {
+        Tickets.Add(message.Ticket);
+        _ = tracer.Ticket.Create.AggregateAdded(GetType(), message.TraceId);
     }
 
     public async Task SetAnalysisByTicket(TicketClientModel selectedTicket)

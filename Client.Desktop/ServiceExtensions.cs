@@ -140,16 +140,16 @@ public static class ServiceExtensions
         services.AddSingleton<LocalSettingsProjector>();
         services.AddSingleton<ILocalSettingsService>(sp => sp.GetRequiredService<LocalSettingsProjector>());
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<LocalSettingsProjector>());
+        services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<LocalSettingsProjector>());
 
         services.AddSingleton<ILocalSettingsCommandSender, LocalSettingsCommandSender>();
 
         services.AddSingleton<ExportService>();
         services.AddSingleton<IExportService>(sp => sp.GetRequiredService<ExportService>());
-        services.AddSingleton<IRegisterMessenger>(sp => sp.GetRequiredService<ExportService>());
 
         services.AddSingleton<TimerService>();
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<TimerService>());
-        services.AddSingleton<IRegisterMessenger>(sp => sp.GetRequiredService<TimerService>());
+        services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<TimerService>());
     }
 
     private static void AddSharedDataServices(this IServiceCollection services)
@@ -217,34 +217,34 @@ public static class ServiceExtensions
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<DocumentationViewModel>());
 
         services.AddSingleton<DocumentationModel>();
-        services.AddSingleton<IRegisterMessenger>(sp => sp.GetRequiredService<DocumentationModel>());
+        services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<DocumentationModel>());
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<DocumentationModel>());
 
         services.AddSingleton<SettingsModel>();
-        services.AddSingleton<IRegisterMessenger>(sp => sp.GetRequiredService<SettingsModel>());
+        services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<SettingsModel>());
 
         services.AddSingleton<WorkDaysModel>();
-        services.AddSingleton<IRegisterMessenger>(sp => sp.GetRequiredService<WorkDaysModel>());
+        services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<WorkDaysModel>());
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<WorkDaysModel>());
 
         services.AddSingleton<TimeTrackingModel>();
-        services.AddSingleton<IRegisterMessenger>(sp => sp.GetRequiredService<TimeTrackingModel>());
+        services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<TimeTrackingModel>());
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<TimeTrackingModel>());
 
         services.AddSingleton<ExportModel>();
-        services.AddSingleton<IRegisterMessenger>(sp => sp.GetRequiredService<ExportModel>());
+        services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<ExportModel>());
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<ExportModel>());
 
         services.AddSingleton<AnalysisByTagModel>();
-        services.AddSingleton<IRegisterMessenger>(sp => sp.GetRequiredService<AnalysisByTagModel>());
+        services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<AnalysisByTagModel>());
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<AnalysisByTagModel>());
 
         services.AddSingleton<AnalysisByTicketModel>();
-        services.AddSingleton<IRegisterMessenger>(sp => sp.GetRequiredService<AnalysisByTicketModel>());
+        services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<AnalysisByTicketModel>());
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<AnalysisByTicketModel>());
 
         services.AddSingleton<AnalysisBySprintModel>();
-        services.AddSingleton<IRegisterMessenger>(sp => sp.GetRequiredService<AnalysisBySprintModel>());
+        services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<AnalysisBySprintModel>());
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<AnalysisBySprintModel>());
     }
 

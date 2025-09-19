@@ -14,34 +14,11 @@ using Timer = System.Timers.Timer;
 namespace Client.Desktop.Services;
 
 public class TimerService(IRequestSender requestSender, IMessenger messenger)
-    : IRegisterMessenger, IInitializeAsync
+    : IMessengerRegistration, IInitializeAsync, IRecipient<ClientSnapshotSaveIntervalChangedNotification>,
+        IRecipient<ClientDocuTimerSaveIntervalChangedNotification>
 {
     private readonly Timer _timer = new(1000);
     private TimerSettingsClientModel? _timerSettings;
-
-    private void OnTick(object? sender, ElapsedEventArgs e)
-    {
-        if (_timerSettings == null) return;
-
-        if (_timerSettings.IsDocuSaveIntervalReached())
-        {
-            messenger.Send(new ClientSaveDocumentationNotification());
-        }
-
-        if (_timerSettings.IsSnapSveIntervalReached())
-        {
-            messenger.Send(new ClientCreateSnapshotNotification());
-        }
-    }
-
-    public void RegisterMessenger()
-    {
-        messenger.Register<ClientSnapshotSaveIntervalChangedNotification>(this,
-            (_, notification) => { _timerSettings!.Apply(notification); });
-
-        messenger.Register<ClientDocuTimerSaveIntervalChangedNotification>(this,
-            (_, notification) => { _timerSettings!.Apply(notification); });
-    }
 
     public InitializationType Type => InitializationType.Service;
 
@@ -51,5 +28,34 @@ public class TimerService(IRequestSender requestSender, IMessenger messenger)
         _timer.Elapsed += OnTick;
         _timer.AutoReset = true;
         _timer.Start();
+    }
+
+    public void RegisterMessenger()
+    {
+        messenger.RegisterAll(this);
+    }
+
+    public void UnregisterMessenger()
+    {
+        messenger.UnregisterAll(this);
+    }
+
+    public void Receive(ClientDocuTimerSaveIntervalChangedNotification message)
+    {
+        _timerSettings!.Apply(message);
+    }
+
+    public void Receive(ClientSnapshotSaveIntervalChangedNotification message)
+    {
+        _timerSettings!.Apply(message);
+    }
+
+    private void OnTick(object? sender, ElapsedEventArgs e)
+    {
+        if (_timerSettings == null) return;
+
+        if (_timerSettings.IsDocuSaveIntervalReached()) messenger.Send(new ClientSaveDocumentationNotification());
+
+        if (_timerSettings.IsSnapSveIntervalReached()) messenger.Send(new ClientCreateSnapshotNotification());
     }
 }

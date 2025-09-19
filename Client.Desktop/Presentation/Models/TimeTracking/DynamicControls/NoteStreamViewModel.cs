@@ -28,9 +28,9 @@ public class NoteStreamViewModel(
     ITraceCollector tracer)
     : ReactiveObject
 {
+    private SettingsClientModel? _settingsClient;
     private Guid _ticketId;
     private Guid _timeSlotId;
-    private SettingsClientModel? _settingsClient;
     public ObservableCollection<NoteViewModel> Notes { get; } = [];
 
     public Guid TicketId

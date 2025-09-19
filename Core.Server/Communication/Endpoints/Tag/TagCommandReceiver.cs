@@ -11,7 +11,7 @@ public class TagCommandReceiver(ITagCommandsService tagCommandsService, ITraceCo
     public override async Task<CommandResponse> CreateTag(CreateTagCommandProto request, ServerCallContext context)
     {
         await tracer.Tag.Create.CommandReceived(GetType(), Guid.Parse(request.TraceData.TraceId), request);
-        
+
         await tagCommandsService.Create(request.ToCommand());
         return new CommandResponse { Success = true };
     }

@@ -1,5 +1,5 @@
-
 using Proto.Command.Tickets;
+using Proto.DTO.TraceData;
 
 namespace Client.Desktop.Communication.Commands.Ticket;
 
@@ -11,7 +11,7 @@ public static class TicketExtensions
         {
             TicketId = command.TicketId.ToString(),
             Documentation = command.Documentation,
-            TraceData = new()
+            TraceData = new TraceDataProto
             {
                 TraceId = command.TraceId.ToString()
             }

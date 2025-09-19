@@ -6,11 +6,10 @@ namespace Service.Admin.Web.Communication.NoteType;
 
 public class NoteTypeController(ISharedCommandSender commandSender, ITraceCollector tracer) : INoteTypeController
 {
+    public bool IsEditMode { get; set; }
     public string InputName { get; set; } = string.Empty;
     public string InputColor { get; set; } = "#000000";
     public NoteTypeWebModel? SelectedNoteType { get; set; }
-
-    public bool IsEditMode { get; set; }
 
     public bool CanSave => !string.IsNullOrWhiteSpace(InputName) &&
                            !string.IsNullOrWhiteSpace(InputColor);

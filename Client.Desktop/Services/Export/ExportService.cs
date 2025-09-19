@@ -9,28 +9,23 @@ using Client.Desktop.Communication.Requests;
 using Client.Desktop.Communication.Requests.Ticket;
 using Client.Desktop.Communication.Requests.TimeSlots.Records;
 using Client.Desktop.DataModels;
-using Client.Desktop.DataModels.Local;
 using Client.Desktop.FileSystem;
-using Client.Desktop.Lifecycle.Startup.Tasks.Register;
-using Client.Desktop.Services.LocalSettings.Commands;
-using CommunityToolkit.Mvvm.Messaging;
+using Client.Desktop.Services.LocalSettings;
 
 namespace Client.Desktop.Services.Export;
 
 public class ExportService(
     IRequestSender requestSender,
     IFileSystemWriter fileSystemWriter,
-    IMessenger messenger)
-    : IExportService, IRegisterMessenger
+    ILocalSettingsService localSettingsService)
+    : IExportService
 {
-    private SettingsClientModel? LocalSettings { get; set; }
-
     public async Task<bool> ExportToFile(Collection<WorkDayClientModel> workDayDtos)
     {
         if (workDayDtos.Count == 0) return false;
 
         var markdownString = await GetMarkdownString(workDayDtos);
-        var filePath = BuildFilePath(workDayDtos.First().Date.Date, LocalSettings!.ExportPath);
+        var filePath = BuildFilePath(workDayDtos.First().Date.Date, localSettingsService.GetExportPath());
 
         try
         {
@@ -62,14 +57,6 @@ public class ExportService(
         }
 
         return builder.ToString();
-    }
-
-    public void RegisterMessenger()
-    {
-        messenger.Register<ExportPathSetNotification>(this,
-            (_, message) => { LocalSettings!.ExportPath = message.ExportPath; });
-
-        messenger.Register<SettingsClientModel>(this, (_, message) => { LocalSettings = message; });
     }
 
     private static string BuildFilePath(DateTime date, string exportPath)

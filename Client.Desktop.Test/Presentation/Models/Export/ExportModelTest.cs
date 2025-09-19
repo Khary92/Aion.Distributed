@@ -46,7 +46,7 @@ public class ExportModelTest
         Assert.That(fixture.Instance.WorkDays, Has.Count.EqualTo(1));
         Assert.That(isExportedSuccessful, Is.True);
     }
-    
+
     [Test]
     public async Task ExportPathInvalid()
     {
@@ -60,7 +60,7 @@ public class ExportModelTest
         Assert.That(fixture.Instance.WorkDays, Has.Count.EqualTo(1));
         Assert.That(isExportedSuccessful, Is.False);
     }
-    
+
     [Test]
     public async Task ExportWritingFileFailed()
     {
@@ -73,7 +73,7 @@ public class ExportModelTest
         Assert.That(fixture.Instance.WorkDays, Has.Count.EqualTo(1));
         Assert.That(isExportedSuccessful, Is.False);
     }
-    
+
     [Test]
     public async Task GetMarkdownString()
     {

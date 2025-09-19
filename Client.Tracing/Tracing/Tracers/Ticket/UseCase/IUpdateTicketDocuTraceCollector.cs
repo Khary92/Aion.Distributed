@@ -6,5 +6,4 @@ public interface IUpdateTicketDocuTraceCollector
     Task SendingCommand(Type originClassType, Guid traceId, object command);
     Task AggregateAdded(Type originClassType, Guid traceId);
     Task NotificationReceived(Type originClassType, Guid traceId, object notification);
-
 }

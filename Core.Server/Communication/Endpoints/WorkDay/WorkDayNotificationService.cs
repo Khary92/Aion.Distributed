@@ -7,7 +7,8 @@ namespace Core.Server.Communication.Endpoints.WorkDay;
 public class
     WorkDayNotificationService : Proto.Notifications.WorkDay.WorkDayNotificationService.WorkDayNotificationServiceBase
 {
-    private readonly ConcurrentDictionary<Guid, (IServerStreamWriter<WorkDayNotification> Stream, CancellationToken Token)>
+    private readonly ConcurrentDictionary<Guid, (IServerStreamWriter<WorkDayNotification> Stream, CancellationToken
+            Token)>
         _clients = new();
 
     public override async Task SubscribeWorkDayNotifications(

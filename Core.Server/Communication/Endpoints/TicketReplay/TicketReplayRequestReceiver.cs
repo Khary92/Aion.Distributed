@@ -22,7 +22,7 @@ public class TicketReplayRequestReceiver(ITicketRequestsService ticketRequestsSe
                 })
             }
         };
-        
+
         return getReplayResponseProto;
     }
 }

@@ -17,7 +17,7 @@ public class ReportStateService(SortingType sortingType) : IReportStateService
     }
 
     public SortingType SortingType => sortingType;
-    
+
     private void NotifyStateChanged()
     {
         OnStateChanged?.Invoke();

@@ -9,7 +9,8 @@ public class
     TimeSlotNotificationService : Proto.Notifications.TimeSlots.TimeSlotNotificationService.
     TimeSlotNotificationServiceBase
 {
-    private readonly ConcurrentDictionary<Guid, (IServerStreamWriter<TimeSlotNotification> Stream, CancellationToken Token)>
+    private readonly ConcurrentDictionary<Guid, (IServerStreamWriter<TimeSlotNotification> Stream, CancellationToken
+            Token)>
         _clients = new();
 
     public override async Task SubscribeTimeSlotNotifications(

@@ -12,7 +12,7 @@ public class ReportReceiver(IReportStateServiceFactory reportStateServiceFactory
     {
         var report = new ReportRecord(DateTimeOffset.Now, request.UseCase, request.State, request.LatencyInMs,
             request.Traces.ToReportTrace());
-        
+
         reportStateServiceFactory.GetService(SortingType.Overview)!.AddReport(report);
 
         var sortingType = Enum.Parse<SortingType>(request.SortType);

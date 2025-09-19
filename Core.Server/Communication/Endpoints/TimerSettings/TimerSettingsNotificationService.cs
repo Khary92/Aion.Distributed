@@ -5,7 +5,8 @@ using SubscribeRequest = Proto.Notifications.TimerSettings.SubscribeRequest;
 
 namespace Core.Server.Communication.Endpoints.TimerSettings;
 
-public class TimerSettingsNotificationService : Proto.Notifications.TimerSettings.TimerSettingsNotificationService.TimerSettingsNotificationServiceBase
+public class TimerSettingsNotificationService : Proto.Notifications.TimerSettings.TimerSettingsNotificationService.
+    TimerSettingsNotificationServiceBase
 {
     private readonly ConcurrentDictionary<Guid, (IServerStreamWriter<TimerSettingsNotification> Stream,
             CancellationToken Token)>

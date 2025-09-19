@@ -1,6 +1,5 @@
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.Communication.Requests.Analysis.Records;
-using Client.Desktop.Communication.Requests.Sprint;
 using Client.Desktop.Communication.Requests.Ticket;
 using Client.Desktop.DataModels;
 using Client.Desktop.DataModels.Decorators;
@@ -14,15 +13,26 @@ namespace Client.Desktop.Test.Presentation.Models.Analysis;
 
 public static class AnalysisByTicketModelProvider
 {
-    private static IMessenger CreateMessenger() => new WeakReferenceMessenger();
+    private static IMessenger CreateMessenger()
+    {
+        return new WeakReferenceMessenger();
+    }
 
     private static Mock<ITraceCollector> CreateTracerMock()
-        => new() { DefaultValue = DefaultValue.Mock };
+    {
+        return new Mock<ITraceCollector> { DefaultValue = DefaultValue.Mock };
+    }
 
-    private static Mock<IRequestSender> CreateRequestSenderMock() => new();
+    private static Mock<IRequestSender> CreateRequestSenderMock()
+    {
+        return new Mock<IRequestSender>();
+    }
 
-    private static TicketClientModel CreateTicketClientModel() => new(Guid.NewGuid(), "InitialTicketName", "InitialBookingNumber", "Documentation",
-        []);
+    private static TicketClientModel CreateTicketClientModel()
+    {
+        return new TicketClientModel(Guid.NewGuid(), "InitialTicketName", "InitialBookingNumber", "Documentation",
+            []);
+    }
 
 
     public static async Task<AnalysisModelFixture<AnalysisByTicketModel>> Create(
@@ -38,8 +48,8 @@ public static class AnalysisByTicketModelProvider
 
         return await CreateFixture(messenger, requestSender, tracer);
     }
-    
-    
+
+
     public static async Task<AnalysisModelFixture<AnalysisByTicketModel>> Create()
     {
         var messenger = CreateMessenger();
@@ -66,7 +76,7 @@ public static class AnalysisByTicketModelProvider
 
         instance.RegisterMessenger();
         await instance.InitializeAsync();
-        
+
         await instance.SetAnalysisByTicket(CreateTicketClientModel());
 
         return new AnalysisModelFixture<AnalysisByTicketModel>
@@ -90,12 +100,12 @@ public static class AnalysisByTicketModelProvider
             DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, new List<Guid>(), false);
 
 
-        return new AnalysisByTicket()
+        return new AnalysisByTicket
         {
             TicketName = "TicketName",
-            ProductiveTags = new Dictionary<string, int>() { { "Productive Tag", 2 } },
-            NeutralTags = new Dictionary<string, int>() { { "Neutral Tag", 1 } },
-            UnproductiveTags = new Dictionary<string, int>() { { "Unproductive Tag", 1 } },
+            ProductiveTags = new Dictionary<string, int> { { "Productive Tag", 2 } },
+            NeutralTags = new Dictionary<string, int> { { "Neutral Tag", 1 } },
+            UnproductiveTags = new Dictionary<string, int> { { "Unproductive Tag", 1 } },
             StatisticData = [statisticsDataClientModel],
             TimeSlots = [timeSlotClientModel]
         };

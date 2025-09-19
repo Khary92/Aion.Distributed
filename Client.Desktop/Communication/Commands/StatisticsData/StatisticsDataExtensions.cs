@@ -1,6 +1,7 @@
 using Client.Desktop.Communication.Commands.StatisticsData.Records;
 using Client.Proto;
 using Proto.Command.StatisticsData;
+using Proto.DTO.TraceData;
 
 namespace Client.Desktop.Communication.Commands.StatisticsData;
 
@@ -12,7 +13,7 @@ public static class StatisticsDataExtensions
         {
             StatisticsDataId = command.StatisticsDataId.ToString(),
             SelectedTagIds = { command.SelectedTagIds.ToRepeatedField() },
-            TraceData = new()
+            TraceData = new TraceDataProto
             {
                 TraceId = command.TraceId.ToString()
             }
@@ -27,7 +28,7 @@ public static class StatisticsDataExtensions
             IsProductive = command.IsProductive,
             IsNeutral = command.IsNeutral,
             IsUnproductive = command.IsUnproductive,
-            TraceData = new()
+            TraceData = new TraceDataProto
             {
                 TraceId = command.TraceId.ToString()
             }
