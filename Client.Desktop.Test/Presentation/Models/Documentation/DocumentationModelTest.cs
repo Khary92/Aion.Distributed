@@ -145,8 +145,71 @@ public class DocumentationModelTest
         Assert.That(fixture.Instance.AllNotes, Has.Count.EqualTo(1));
         Assert.That(fixture.Instance.AllTickets.First().Name, Is.EqualTo(newTicketName));
     }
+    
+    
+    [Test]
+    public async Task ClientNoteUpdatedNotification_WithUnknownId_DoesNotChangeCounts()
+    {
+        var initialData = CreateInitialData();
+        var fixture =
+            await DocumentationModelProvider.Create(initialData.Notes, initialData.NoteTypes, initialData.Tickets);
 
+        var beforeNotes = fixture.Instance.AllNotes.Count;
+        var beforeTypes = fixture.Instance.AllNoteTypes.Count;
+        var beforeTickets = fixture.Instance.AllTickets.Count;
 
+        var notification = new ClientNoteUpdatedNotification(Guid.NewGuid(), "Irrelevant",
+            Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
+
+        fixture.Messenger.Send(notification);
+
+        Assert.That(fixture.Instance.AllNotes.Count, Is.EqualTo(beforeNotes));
+        Assert.That(fixture.Instance.AllNoteTypes.Count, Is.EqualTo(beforeTypes));
+        Assert.That(fixture.Instance.AllTickets.Count, Is.EqualTo(beforeTickets));
+    }
+
+    [Test]
+    public async Task ClientNoteTypeNameChangedNotification_WithUnknownId_DoesNotChangeCounts()
+    {
+        var initialData = CreateInitialData();
+        var fixture =
+            await DocumentationModelProvider.Create(initialData.Notes, initialData.NoteTypes, initialData.Tickets);
+
+        var beforeNotes = fixture.Instance.AllNotes.Count;
+        var beforeTypes = fixture.Instance.AllNoteTypes.Count;
+        var beforeTickets = fixture.Instance.AllTickets.Count;
+
+        var notification =
+            new ClientNoteTypeNameChangedNotification(Guid.NewGuid(), "NewName", Guid.NewGuid());
+
+        fixture.Messenger.Send(notification);
+
+        Assert.That(fixture.Instance.AllNotes.Count, Is.EqualTo(beforeNotes));
+        Assert.That(fixture.Instance.AllNoteTypes.Count, Is.EqualTo(beforeTypes));
+        Assert.That(fixture.Instance.AllTickets.Count, Is.EqualTo(beforeTickets));
+    }
+
+    [Test]
+    public async Task ClientTicketDataUpdatedNotification_WithUnknownId_DoesNotChangeCounts()
+    {
+        var initialData = CreateInitialData();
+        var fixture =
+            await DocumentationModelProvider.Create(initialData.Notes, initialData.NoteTypes, initialData.Tickets);
+
+        var beforeNotes = fixture.Instance.AllNotes.Count;
+        var beforeTypes = fixture.Instance.AllNoteTypes.Count;
+        var beforeTickets = fixture.Instance.AllTickets.Count;
+
+        var notification = new ClientTicketDataUpdatedNotification(Guid.NewGuid(), "NewName",
+            "BookingNumber", [], Guid.NewGuid());
+
+        fixture.Messenger.Send(notification);
+
+        Assert.That(fixture.Instance.AllNotes.Count, Is.EqualTo(beforeNotes));
+        Assert.That(fixture.Instance.AllNoteTypes.Count, Is.EqualTo(beforeTypes));
+        Assert.That(fixture.Instance.AllTickets.Count, Is.EqualTo(beforeTickets));
+    }
+    
     private static (
         List<NoteClientModel> Notes,
         List<NoteTypeClientModel> NoteTypes,
@@ -166,3 +229,4 @@ public class DocumentationModelTest
         return ([note], [noteType], [ticket], noteId, noteTypeId, ticketId);
     }
 }
+

@@ -20,16 +20,15 @@ using ReactiveUI;
 namespace Client.Desktop.Presentation.Models.Export;
 
 public class ExportModel(
-    IRequestSender requestSender,
     IMessenger messenger,
+    IRequestSender requestSender,
     IExportService exportService,
     ITraceCollector tracer,
     ILocalSettingsService settingsService)
     : ReactiveObject, IInitializeAsync, IRegisterMessenger
 {
-    private string _markdownText = null!;
-    private SettingsClientModel? _settingsClient;
-
+    private string _markdownText = string.Empty;
+    
     public ObservableCollection<WorkDayClientModel> WorkDays { get; } = [];
     public ObservableCollection<WorkDayClientModel> SelectedWorkDays { get; } = [];
 
@@ -51,11 +50,6 @@ public class ExportModel(
 
     public void RegisterMessenger()
     {
-        messenger.Register<ExportPathSetNotification>(this,
-            void (_, message) => { _settingsClient!.ExportPath = message.ExportPath; });
-
-        messenger.Register<SettingsClientModel>(this, (_, message) => { _settingsClient = message; });
-
         messenger.Register<NewWorkDayMessage>(this, async void (_, m) =>
         {
             WorkDays.Add(m.WorkDay);
@@ -70,9 +64,9 @@ public class ExportModel(
         return false;
     }
 
-    private async void RefreshMarkdownViewerHandler(object? sender, NotifyCollectionChangedEventArgs e)
+    private void RefreshMarkdownViewerHandler(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        await GetMarkdownTextAsync();
+        _ = GetMarkdownTextAsync();
     }
 
     public async Task<string> GetMarkdownTextAsync()
