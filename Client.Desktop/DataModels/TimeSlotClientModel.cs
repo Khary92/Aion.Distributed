@@ -23,8 +23,8 @@ public class TimeSlotClientModel : ReactiveObject
         TimeSlotId = timeSlotId;
         WorkDayId = workDayId;
         SelectedTicketId = ticketId;
-        StartTime = startTime;
-        EndTime = endTime;
+        StartTime = startTime.ToOffset(TimeSpan.FromHours(2));
+        EndTime = endTime.ToOffset(TimeSpan.FromHours(2));
         NoteIds = noteIds;
         IsTimerRunning = isTimerRunning;
 

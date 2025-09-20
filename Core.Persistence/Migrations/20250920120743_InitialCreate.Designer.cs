@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Core.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20250724121825_InitialCreate")]
+    [Migration("20250920120743_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -42,10 +42,7 @@ namespace Core.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<TimeSpan>("Offset")
-                        .HasColumnType("interval");
-
-                    b.Property<DateTime>("TimeStamp")
+                    b.Property<DateTimeOffset>("TimeStamp")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("EventId");
@@ -70,10 +67,7 @@ namespace Core.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<TimeSpan>("Offset")
-                        .HasColumnType("interval");
-
-                    b.Property<DateTime>("TimeStamp")
+                    b.Property<DateTimeOffset>("TimeStamp")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("EventId");
@@ -98,10 +92,7 @@ namespace Core.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<TimeSpan>("Offset")
-                        .HasColumnType("interval");
-
-                    b.Property<DateTime>("TimeStamp")
+                    b.Property<DateTimeOffset>("TimeStamp")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("EventId");
@@ -126,10 +117,7 @@ namespace Core.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<TimeSpan>("Offset")
-                        .HasColumnType("interval");
-
-                    b.Property<DateTime>("TimeStamp")
+                    b.Property<DateTimeOffset>("TimeStamp")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("EventId");
@@ -154,10 +142,7 @@ namespace Core.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<TimeSpan>("Offset")
-                        .HasColumnType("interval");
-
-                    b.Property<DateTime>("TimeStamp")
+                    b.Property<DateTimeOffset>("TimeStamp")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("EventId");
@@ -182,10 +167,7 @@ namespace Core.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<TimeSpan>("Offset")
-                        .HasColumnType("interval");
-
-                    b.Property<DateTime>("TimeStamp")
+                    b.Property<DateTimeOffset>("TimeStamp")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("EventId");
@@ -210,10 +192,7 @@ namespace Core.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<TimeSpan>("Offset")
-                        .HasColumnType("interval");
-
-                    b.Property<DateTime>("TimeStamp")
+                    b.Property<DateTimeOffset>("TimeStamp")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("EventId");
@@ -238,10 +217,7 @@ namespace Core.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<TimeSpan>("Offset")
-                        .HasColumnType("interval");
-
-                    b.Property<DateTime>("TimeStamp")
+                    b.Property<DateTimeOffset>("TimeStamp")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("EventId");
@@ -266,10 +242,7 @@ namespace Core.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<TimeSpan>("Offset")
-                        .HasColumnType("interval");
-
-                    b.Property<DateTime>("TimeStamp")
+                    b.Property<DateTimeOffset>("TimeStamp")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("EventId");

@@ -10,7 +10,6 @@ public class NoteEventsStore(IDbContextFactory<AppDbContext> appDbContextFactory
     public async Task StoreEventAsync(NoteEvent @event)
     {
         await using var appDbContext = await appDbContextFactory.CreateDbContextAsync();
-
         await appDbContext.NoteEvents.AddAsync(@event);
         await appDbContext.SaveChangesAsync();
     }

@@ -2,8 +2,7 @@ namespace Domain.Events.Note;
 
 public record NoteEvent(
     Guid EventId,
-    DateTime TimeStamp,
-    TimeSpan Offset,
+    DateTimeOffset TimeStamp,
     string EventType,
     Guid EntityId,
     string EventPayload)

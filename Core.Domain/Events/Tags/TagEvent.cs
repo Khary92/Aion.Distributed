@@ -2,8 +2,7 @@ namespace Domain.Events.Tags;
 
 public record TagEvent(
     Guid EventId,
-    DateTime TimeStamp,
-    TimeSpan Offset,
+    DateTimeOffset TimeStamp,
     string EventType,
     Guid EntityId,
     string EventPayload)

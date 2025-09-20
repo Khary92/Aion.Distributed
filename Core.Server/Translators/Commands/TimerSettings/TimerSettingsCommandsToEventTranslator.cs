@@ -33,7 +33,6 @@ public class TimerSettingsCommandsToEventTranslator : ITimerSettingsCommandsToEv
 
     private static TimerSettingsEvent CreateDatabaseEvent(string eventName, Guid entityId, string json)
     {
-        return new TimerSettingsEvent(Guid.NewGuid(), DateTime.UtcNow, TimeZoneInfo.Local.GetUtcOffset(DateTime.UtcNow),
-            eventName, entityId, json);
+        return new TimerSettingsEvent(Guid.NewGuid(), DateTimeOffset.Now, eventName, entityId, json);
     }
 }

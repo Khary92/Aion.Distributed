@@ -15,8 +15,7 @@ public class TimeSlotTestBase : AggregateTestBase<TimeSlotEvent>
     {
         return new TimeSlotEvent(
             Guid.NewGuid(),
-            new DateTime(2023, 1, 1, 12, 0, 0),
-            new TimeSpan(0),
+            DateTimeOffset.Now, 
             domainEvent.GetType().Name,
             Guid.NewGuid(),
             JsonSerializer.Serialize(domainEvent));

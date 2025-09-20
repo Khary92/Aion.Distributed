@@ -24,8 +24,6 @@ public class TagCommandsToEventTranslator : ITagCommandsToEventTranslator
 
     private static TagEvent CreateDatabaseEvent(string eventName, Guid entityId, string json)
     {
-        return new TagEvent(Guid.NewGuid(), DateTime.UtcNow, TimeZoneInfo.Local.GetUtcOffset(DateTime.UtcNow),
-            eventName,
-            entityId, json);
+        return new TagEvent(Guid.NewGuid(), DateTimeOffset.Now, eventName, entityId, json);
     }
 }

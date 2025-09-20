@@ -15,8 +15,6 @@ public class WorkDayCommandsToEventTranslator : IWorkDayCommandsToEventTranslato
 
     private static WorkDayEvent CreateDatabaseEvent(string eventName, Guid entityId, string json)
     {
-        return new WorkDayEvent(Guid.NewGuid(), DateTime.UtcNow, TimeZoneInfo.Local.GetUtcOffset(DateTime.UtcNow),
-            eventName,
-            entityId, json);
+        return new WorkDayEvent(Guid.NewGuid(), DateTimeOffset.Now, eventName, entityId, json);
     }
 }

@@ -45,8 +45,6 @@ public class SprintCommandsToEventTranslator : ISprintCommandsToEventTranslator
 
     private static SprintEvent CreateDatabaseEvent(string eventName, Guid entityId, string json)
     {
-        return new SprintEvent(Guid.NewGuid(), DateTime.UtcNow, TimeZoneInfo.Local.GetUtcOffset(DateTime.UtcNow),
-            eventName,
-            entityId, json);
+        return new SprintEvent(Guid.NewGuid(), DateTimeOffset.Now, eventName, entityId, json);
     }
 }

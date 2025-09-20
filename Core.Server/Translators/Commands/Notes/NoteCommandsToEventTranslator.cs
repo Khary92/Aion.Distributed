@@ -27,8 +27,6 @@ public class NoteCommandsToEventTranslator : INoteCommandsToEventTranslator
 
     private static NoteEvent CreateDatabaseEvent(string eventName, Guid entityId, string json)
     {
-        return new NoteEvent(Guid.NewGuid(), DateTime.UtcNow, TimeZoneInfo.Local.GetUtcOffset(DateTime.UtcNow),
-            eventName,
-            entityId, json);
+        return new NoteEvent(Guid.NewGuid(), DateTimeOffset.Now, eventName, entityId, json);
     }
 }

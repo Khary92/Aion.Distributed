@@ -42,8 +42,6 @@ public class TimeSlotCommandsToEventTranslator : ITimeSlotCommandsToEventTransla
 
     private static TimeSlotEvent CreateDatabaseEvent(string eventName, Guid entityId, string json)
     {
-        return new TimeSlotEvent(Guid.NewGuid(), DateTime.UtcNow, TimeZoneInfo.Local.GetUtcOffset(DateTime.UtcNow),
-            eventName,
-            entityId, json);
+        return new TimeSlotEvent(Guid.NewGuid(), DateTimeOffset.Now, eventName, entityId, json);
     }
 }

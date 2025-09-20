@@ -8,6 +8,7 @@ using Domain.Events.TimerSettings;
 using Domain.Events.TimeSlots;
 using Domain.Events.WorkDays;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Core.Persistence.DbContext;
 
@@ -36,31 +37,35 @@ public sealed class AppDbContext : Microsoft.EntityFrameworkCore.DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<TicketEvent>()
-            .HasKey(te => te.EventId);
+        base.OnModelCreating(modelBuilder);
+        
+        var dateTimeOffsetConverter = new ValueConverter<DateTimeOffset, DateTimeOffset>(
+            v => v.ToUniversalTime(),  
+            v => v                    
+        );
 
-        modelBuilder.Entity<SprintEvent>()
-            .HasKey(te => te.EventId);
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            var properties = entityType.ClrType.GetProperties()
+                .Where(p => p.PropertyType == typeof(DateTimeOffset));
 
-        modelBuilder.Entity<StatisticsDataEvent>()
-            .HasKey(te => te.EventId);
+            foreach (var property in properties)
+            {
+                modelBuilder.Entity(entityType.ClrType)
+                    .Property(property.Name)
+                    .HasConversion(dateTimeOffsetConverter);
+            }
+        }
 
-        modelBuilder.Entity<TimeSlotEvent>()
-            .HasKey(te => te.EventId);
-
-        modelBuilder.Entity<WorkDayEvent>()
-            .HasKey(te => te.EventId);
-
-        modelBuilder.Entity<TagEvent>()
-            .HasKey(te => te.EventId);
-
-        modelBuilder.Entity<NoteEvent>()
-            .HasKey(te => te.EventId);
-
-        modelBuilder.Entity<NoteTypeEvent>()
-            .HasKey(te => te.EventId);
-
-        modelBuilder.Entity<TimerSettingsEvent>()
-            .HasKey(te => te.EventId);
+        modelBuilder.Entity<TicketEvent>().HasKey(te => te.EventId);
+        modelBuilder.Entity<NoteEvent>().HasKey(te => te.EventId);
+        modelBuilder.Entity<SprintEvent>().HasKey(te => te.EventId);
+        modelBuilder.Entity<StatisticsDataEvent>().HasKey(te => te.EventId);
+        modelBuilder.Entity<TimeSlotEvent>().HasKey(te => te.EventId);
+        modelBuilder.Entity<WorkDayEvent>().HasKey(te => te.EventId);
+        modelBuilder.Entity<TagEvent>().HasKey(te => te.EventId);
+        modelBuilder.Entity<NoteTypeEvent>().HasKey(te => te.EventId);
+        modelBuilder.Entity<TimerSettingsEvent>().HasKey(te => te.EventId);
     }
+
 }

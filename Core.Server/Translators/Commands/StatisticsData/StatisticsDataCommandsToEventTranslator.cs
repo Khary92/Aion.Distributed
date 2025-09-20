@@ -38,8 +38,6 @@ public class StatisticsDataCommandsToEventTranslator : IStatisticsDataCommandsTo
 
     private static StatisticsDataEvent CreateDatabaseEvent(string eventName, Guid entityId, string json)
     {
-        return new StatisticsDataEvent(Guid.NewGuid(), DateTime.UtcNow,
-            TimeZoneInfo.Local.GetUtcOffset(DateTime.UtcNow), eventName,
-            entityId, json);
+        return new StatisticsDataEvent(Guid.NewGuid(), DateTimeOffset.Now, eventName, entityId, json);
     }
 }
