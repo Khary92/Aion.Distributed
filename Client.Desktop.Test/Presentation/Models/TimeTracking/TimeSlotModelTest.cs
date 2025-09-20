@@ -89,14 +89,14 @@ public class TimeSlotModelTest
     }
 
     [Test]
-    public async Task ReceiveClientSaveDocumentationNotification_TimesChanged()
+    public async Task ReceiveClientCreateSnapshotNotification_TimesChanged()
     {
         var fixture = await TimeSlotModelProvider.Create(null);
         fixture.TimeSlot.StartTime = fixture.TimeSlot.StartTime.AddHours(-1);
         fixture.TimeSlot.EndTime = fixture.TimeSlot.EndTime.AddHours(1);
-        var clientSaveDocumentationNotification = new ClientSaveDocumentationNotification();
+        var clientCreateSnapshotNotification = new ClientCreateSnapshotNotification();
 
-        fixture.Messenger.Send(clientSaveDocumentationNotification);
+        fixture.Messenger.Send(clientCreateSnapshotNotification);
 
         fixture.EndTimeCache.Verify(ec => ec.Store(It.IsAny<ClientSetEndTimeCommand>()));
         fixture.StartTimeCache.Verify(ec => ec.Store(It.IsAny<ClientSetStartTimeCommand>()));
