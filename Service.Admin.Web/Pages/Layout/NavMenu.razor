@@ -17,6 +17,83 @@
 
 }
 
+<style>
+    .nav-scrollable {
+        background: #0d1117;
+        color: #c9d1d9;
+    }
+
+    .nav .nav-link.section {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        color: #c9d1d9;
+        font-weight: 600;
+        padding: 0.6rem 0.75rem;
+        border-radius: 6px;
+        transition: background-color .2s ease, color .2s ease;
+    }
+    .nav .nav-link.section:hover,
+    .nav .nav-link.section:focus {
+        background: #161b22;
+        color: #ffffff;
+        outline: none;
+    }
+
+    .nav .caret {
+        margin-left: auto;
+        transition: transform .2s ease;
+        opacity: .85;
+    }
+    .nav .caret.rotate {
+        transform: rotate(180deg);
+    }
+
+    .submenu {
+        overflow: hidden;
+        max-height: 0;
+        opacity: 0;
+        transform-origin: top;
+        transition: max-height .25s ease, opacity .2s ease;
+        margin-left: 0.35rem;
+        border-left: 1px dashed #2d333b;
+        margin-top: 0.15rem;
+    }
+    .submenu.open {
+        max-height: 400px; 
+        opacity: 1;
+    }
+
+    .submenu .nav-link {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        color: #9da7b3;
+        padding: 0.45rem 0.75rem 0.45rem 1rem;
+        border-radius: 6px;
+        transition: background-color .2s ease, color .2s ease, padding-left .15s ease;
+    }
+    .submenu .nav-link:hover,
+    .submenu .nav-link.active {
+        color: #ffffff;
+        background: #161b22;
+        padding-left: 1.15rem;
+    }
+
+    .nav .bi {
+        font-size: 1rem;
+        opacity: .95;
+    }
+    .submenu .bi {
+        font-size: 0.95rem;
+        opacity: .9;
+    }
+
+    .submenu-parent {
+        margin-bottom: .25rem;
+    }
+</style>
+
 <div class="top-row navbar navbar-dark">
     <div class="container">
         <a class="navbar-brand" href="">Administration</a>
@@ -29,40 +106,50 @@
     <nav class="nav flex-column">
 
         <div class="nav-item px-3 submenu-parent">
-            <a class="nav-link" role="button" tabindex="0" @onclick="ToggleMonitoringMenu">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Monitoring
-                <span style="font-size: 0.8em;">@(_isMonitoringMenuOpen ? "▲" : "▼")</span>
+            <a class="nav-link section" role="button" tabindex="0"
+               @onclick="ToggleMonitoringMenu"
+               aria-expanded="@_isMonitoringMenuOpen"
+               aria-controls="submenu-monitoring">
+                <span class="bi bi-activity" aria-hidden="true"></span>
+                Monitoring
+                <span class="bi bi-chevron-down caret @( _isMonitoringMenuOpen ? "rotate" : "" )" aria-hidden="true"></span>
             </a>
-            @if (_isMonitoringMenuOpen)
-            {
-                <div class="submenu">
-                    <NavLink class="nav-link" href="reportsOverview">Overview</NavLink>
-                    <NavLink class="nav-link" href="reports">Reports</NavLink>
-                </div>
-            }
+            <div id="submenu-monitoring" class="submenu @( _isMonitoringMenuOpen ? "open" : "" )">
+                <NavLink class="nav-link" href="reportsOverview" Match="NavLinkMatch.Prefix">
+                    <span class="bi bi-grid" aria-hidden="true"></span>
+                    Overview
+                </NavLink>
+                <NavLink class="nav-link" href="reports" Match="NavLinkMatch.Prefix">
+                    <span class="bi bi-file-bar-graph" aria-hidden="true"></span>
+                    Reports
+                </NavLink>
+            </div>
         </div>
-
         <div class="nav-item px-3 submenu-parent">
-            <a class="nav-link" role="button" tabindex="0" @onclick="ToggleDataMenu">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Data
-                <span style="font-size: 0.8em;">@(_isDataMenuOpen ? "▲" : "▼")</span>
+            <a class="nav-link section" role="button" tabindex="0"
+               @onclick="ToggleDataMenu"
+               aria-expanded="@_isDataMenuOpen"
+               aria-controls="submenu-data">
+                <span class="bi bi-collection" aria-hidden="true"></span>
+                Data
+                <span class="bi bi-chevron-down caret @( _isDataMenuOpen ? "rotate" : "" )" aria-hidden="true"></span>
             </a>
-            @if (_isDataMenuOpen)
-            {
-                <div class="submenu">
-                    <NavLink class="nav-link" href="sprintData">
-                        <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> SprintData
-                    </NavLink>
-                    <NavLink class="nav-link" href="metaData">
-                        <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Data
-                    </NavLink>
-                </div>
-            }
+            <div id="submenu-data" class="submenu @( _isDataMenuOpen ? "open" : "" )">
+                <NavLink class="nav-link" href="sprintData" Match="NavLinkMatch.Prefix">
+                    <span class="bi bi-clipboard-data" aria-hidden="true"></span>
+                    Sprint
+                </NavLink>
+                <NavLink class="nav-link" href="metaData" Match="NavLinkMatch.Prefix">
+                    <span class="bi bi-database" aria-hidden="true"></span>
+                    Meta
+                </NavLink>
+            </div>
         </div>
 
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="timerSettings">
-                <span class="bi bi-list-nested-nav-menu" aria-hidden="true"></span> Settings
+            <NavLink class="nav-link section" href="timerSettings" Match="NavLinkMatch.Prefix">
+                <span class="bi bi-gear" aria-hidden="true"></span>
+                Settings
             </NavLink>
         </div>
     </nav>
