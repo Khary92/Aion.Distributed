@@ -65,11 +65,11 @@ public class ExportService(
     }
 
     private async Task<Dictionary<DateTimeOffset, List<TicketDataHolder>>> GetDataForSelectedWorkDays(
-        Collection<WorkDayClientModel> workDayDtos)
+        Collection<WorkDayClientModel> workDayModels)
     {
         var result = new Dictionary<DateTimeOffset, List<TicketDataHolder>>();
 
-        foreach (var workDay in workDayDtos) await FillDictionaryForWorkday(workDay, result);
+        foreach (var workDay in workDayModels) await FillDictionaryForWorkday(workDay, result);
 
         return result;
     }
