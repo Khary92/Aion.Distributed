@@ -1,3 +1,3 @@
 namespace Domain.Events.StatisticsData;
 
-public record TagSelectionChangedEvent(Guid TagId, List<Guid> SelectedTagIds);
+public record TagSelectionChangedEvent(Guid StatisticsId, List<Guid> SelectedTagIds);
