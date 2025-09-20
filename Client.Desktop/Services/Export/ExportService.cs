@@ -69,7 +69,8 @@ public class ExportService(
     {
         var result = new Dictionary<DateTimeOffset, List<TicketDataHolder>>();
 
-        foreach (var workDay in workDayModels) await FillDictionaryForWorkday(workDay, result);
+        var snapshot = workDayModels.ToList();
+        foreach (var workDay in snapshot) await FillDictionaryForWorkday(workDay, result);
 
         return result;
     }
