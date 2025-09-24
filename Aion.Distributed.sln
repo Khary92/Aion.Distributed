@@ -34,6 +34,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Admin.Proto", "Serv
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Admin.Tracing", "Service.Admin.Tracing\Service.Admin.Tracing.csproj", "{913B576F-F8E1-40DD-9DA8-4E87D3213376}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Persistence.Test", "Core.Persistence.Test\Core.Persistence.Test.csproj", "{1F3603C5-2040-43A3-BE60-6B8747824A4A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -108,5 +110,9 @@ Global
 		{913B576F-F8E1-40DD-9DA8-4E87D3213376}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{913B576F-F8E1-40DD-9DA8-4E87D3213376}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{913B576F-F8E1-40DD-9DA8-4E87D3213376}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1F3603C5-2040-43A3-BE60-6B8747824A4A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1F3603C5-2040-43A3-BE60-6B8747824A4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1F3603C5-2040-43A3-BE60-6B8747824A4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1F3603C5-2040-43A3-BE60-6B8747824A4A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

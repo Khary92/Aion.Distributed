@@ -3,7 +3,7 @@ using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using Moq;
 
-namespace Client.Desktop.Test.Presentation.Models;
+namespace Client.Desktop.Test.Presentation.Models.Analysis;
 
 public sealed class AnalysisModelFixture<TModel>
 {

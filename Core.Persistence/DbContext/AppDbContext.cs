@@ -1,4 +1,5 @@
-﻿using Domain.Events.Note;
+﻿using System.Runtime.InteropServices.ComTypes;
+using Domain.Events.Note;
 using Domain.Events.NoteTypes;
 using Domain.Events.Sprints;
 using Domain.Events.StatisticsData;
@@ -16,7 +17,7 @@ public sealed class AppDbContext : Microsoft.EntityFrameworkCore.DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
-        Database.Migrate();
+        _ = Database.IsRelational() ? Database.MigrateAsync() : Database.EnsureCreatedAsync();
     }
 
     public DbSet<TicketEvent> TicketEvents { get; set; } = null!;
