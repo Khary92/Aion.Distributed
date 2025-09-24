@@ -17,7 +17,13 @@ public sealed class AppDbContext : Microsoft.EntityFrameworkCore.DbContext
 {
     public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
     {
-        _ = Database.IsRelational() ? Database.MigrateAsync() : Database.EnsureCreatedAsync();
+        if (Database.IsRelational())
+        {
+            Database.Migrate();
+            return;
+        }
+
+        Database.EnsureCreated();
     }
 
     public DbSet<TicketEvent> TicketEvents { get; set; } = null!;
