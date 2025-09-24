@@ -36,7 +36,8 @@ jobs:
 
       - name: Test + Coverage
         run: >
-          dotnet test --configuration Release --no-build --logger "trx;LogFileName=test_results.trx"
+          dotnet test --configuration Release --no-build
+          --logger "trx;LogFileName=test_results.trx"
           -p:CollectCoverage=true
           -p:CoverletOutputFormat=cobertura
           -p:CoverletOutput=TestResults/coverage/
@@ -59,4 +60,23 @@ jobs:
           name: coverage-cobertura
           path: |
             **/TestResults/coverage/*.xml
+          if-no-files-found: warn
+
+      - name: Install ReportGenerator
+        run: dotnet tool install -g dotnet-reportgenerator-globaltool
+
+      - name: Generate Coverage Report (HTML)
+        run: |
+          reportgenerator \
+            -reports:**/TestResults/coverage/coverage.cobertura.xml \
+            -targetdir:CoverageReport \
+            -reporttypes:HtmlInline;TextSummary
+          test -f CoverageReport/Summary.txt && cat CoverageReport/Summary.txt || true
+
+      - name: Upload Coverage HTML
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-html
+          path: CoverageReport
           if-no-files-found: warn
