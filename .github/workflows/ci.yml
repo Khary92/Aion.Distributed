@@ -62,13 +62,14 @@ jobs:
       - name: Install ReportGenerator
         run: dotnet tool install -g dotnet-reportgenerator-globaltool
 
-      - name: Generate Coverage Report (HTML)
+      - name: Generate Coverage Report (HTML + TextSummary)
+        shell: bash
         run: |
           reportgenerator \
-            -reports:**/TestResults/**/coverage.cobertura.xml \
-            -targetdir:CoverageReport \
-            -reporttypes:HtmlInline;TextSummary
-          test -f CoverageReport/Summary.txt && cat CoverageReport/Summary.txt || true
+            -reports:"**/TestResults/**/coverage.cobertura.xml" \
+            -targetdir:"CoverageReport" \
+            -reporttypes:"HtmlInline;TextSummary"
+          if [ -f CoverageReport/Summary.txt ]; then cat CoverageReport/Summary.txt; fi
 
       - name: Upload Coverage HTML
         if: always()
@@ -77,3 +78,4 @@ jobs:
           name: coverage-html
           path: CoverageReport
           if-no-files-found: warn
+
