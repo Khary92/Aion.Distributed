@@ -34,14 +34,11 @@ jobs:
       - name: Build (Release)
         run: dotnet build --configuration Release --no-restore
 
-      - name: Test + Coverage
+      - name: Test + Coverage (XPlat)
         run: >
           dotnet test --configuration Release --no-build
           --logger "trx;LogFileName=test_results.trx"
-          -p:CollectCoverage=true
-          -p:CoverletOutputFormat=cobertura
-          -p:CoverletOutput=TestResults/coverage/
-          -p:SkipAutoProps=true
+          --collect:"XPlat Code Coverage"
 
       - name: Upload Test Results (TRX)
         if: always()
@@ -59,7 +56,7 @@ jobs:
         with:
           name: coverage-cobertura
           path: |
-            **/TestResults/coverage/*.xml
+            **/TestResults/**/coverage.cobertura.xml
           if-no-files-found: warn
 
       - name: Install ReportGenerator
@@ -68,7 +65,7 @@ jobs:
       - name: Generate Coverage Report (HTML)
         run: |
           reportgenerator \
-            -reports:**/TestResults/coverage/coverage.cobertura.xml \
+            -reports:**/TestResults/**/coverage.cobertura.xml \
             -targetdir:CoverageReport \
             -reporttypes:HtmlInline;TextSummary
           test -f CoverageReport/Summary.txt && cat CoverageReport/Summary.txt || true
