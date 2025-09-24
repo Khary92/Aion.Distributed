@@ -15,7 +15,7 @@ public class LoadTimeSlotControlDataHandler(
     IWorkDayRequestsService workDayRequestsService,
     ITimeSlotRequestsService timeSlotRequestsService,
     IStatisticsDataRequestsService statisticsDataRequestsService,
-    ITicketRequestsService ticketRequestsService)
+    ITicketRequestsService ticketRequestsService) : ILoadTimeSlotControlDataHandler
 {
     public async Task<TimeSlotControlDataListProto> Handle(GetTimeSlotControlDataForDateRequest request)
     {

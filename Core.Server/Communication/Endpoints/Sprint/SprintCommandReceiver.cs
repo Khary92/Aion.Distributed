@@ -8,8 +8,8 @@ namespace Core.Server.Communication.Endpoints.Sprint;
 
 public class SprintCommandReceiver(
     ISprintCommandsService sprintsCommandsService,
-    AddTicketToActiveSprintCommandHandler addTicketToActiveSprintCommandHandler,
-    SetSprintActiveStatusCommandHandler setSprintActiveStatusCommandHandler,
+    IAddTicketToActiveSprintCommandHandler addTicketToActiveSprintCommandHandler,
+    ISetSprintActiveStatusCommandHandler setSprintActiveStatusCommandHandler,
     ITraceCollector tracer)
     : SprintCommandProtoService.SprintCommandProtoServiceBase
 {

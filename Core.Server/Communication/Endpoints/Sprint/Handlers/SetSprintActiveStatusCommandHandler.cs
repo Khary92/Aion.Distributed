@@ -5,7 +5,7 @@ namespace Core.Server.Communication.Endpoints.Sprint.Handlers;
 
 public class SetSprintActiveStatusCommandHandler(
     ISprintCommandsService sprintCommandsService,
-    ISprintRequestsService sprintRequestsService)
+    ISprintRequestsService sprintRequestsService) : ISetSprintActiveStatusCommandHandler
 {
     public async Task Handle(SetSprintActiveStatusCommand command)
     {

@@ -62,7 +62,7 @@ public class TicketCommandsToEventTranslatorTest
         Assert.That(payload!.TicketId, Is.EqualTo(ticketId));
         Assert.That(payload.Name, Is.EqualTo("T-1 Updated"));
         Assert.That(payload.BookingNumber, Is.EqualTo("BN-999"));
-        CollectionAssert.AreEquivalent(sprintIds, payload.SprintIds);
+        Assert.That(payload.SprintIds, Is.EquivalentTo(sprintIds));
     }
 
     [Test]

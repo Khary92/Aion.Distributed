@@ -46,7 +46,7 @@ namespace Core.Server.Test.Communication.Endpoints.Analysis
             var sprintId = Guid.NewGuid();
             var request = new GetSprintAnalysisById { SprintId = sprintId.ToString() };
             var expectedAnalysis = new AnalysisBySprintProto();
-            var sprint = new Sprint();
+            var sprint = new Domain.Entities.Sprint();
 
             _sprintRequestsServiceMock
                 .Setup(service => service.GetById(sprintId))
@@ -73,7 +73,7 @@ namespace Core.Server.Test.Communication.Endpoints.Analysis
             );
 
             _sprintRequestsServiceMock.Verify(service => service.GetById(It.IsAny<Guid>()), Times.Never);
-            _analysisDataServiceMock.Verify(service => service.GetAnalysisBySprint(It.IsAny<Sprint>()), Times.Never);
+            _analysisDataServiceMock.Verify(service => service.GetAnalysisBySprint(It.IsAny<Domain.Entities.Sprint>()), Times.Never);
         }
 
         [Test]
@@ -82,7 +82,7 @@ namespace Core.Server.Test.Communication.Endpoints.Analysis
             var tagId = Guid.NewGuid();
             var request = new GetTagAnalysisById { TagId = tagId.ToString() };
             var expectedAnalysis = new AnalysisByTagProto();
-            var tag = new Tag();
+            var tag = new Domain.Entities.Tag();
 
             _tagRequestsServiceMock
                 .Setup(service => service.GetTagById(tagId))
@@ -109,7 +109,7 @@ namespace Core.Server.Test.Communication.Endpoints.Analysis
             );
 
             _tagRequestsServiceMock.Verify(service => service.GetTagById(It.IsAny<Guid>()), Times.Never);
-            _analysisDataServiceMock.Verify(service => service.GetAnalysisByTag(It.IsAny<Tag>()), Times.Never);
+            _analysisDataServiceMock.Verify(service => service.GetAnalysisByTag(It.IsAny<Domain.Entities.Tag>()), Times.Never);
         }
 
         [Test]
@@ -118,7 +118,7 @@ namespace Core.Server.Test.Communication.Endpoints.Analysis
             var ticketId = Guid.NewGuid();
             var request = new GetTicketAnalysisById { TicketId = ticketId.ToString() };
             var expectedAnalysis = new AnalysisByTicketProto();
-            var ticket = new Ticket();
+            var ticket = new Domain.Entities.Ticket();
 
             _ticketRequestsServiceMock
                 .Setup(service => service.GetTicketById(ticketId))
@@ -145,7 +145,7 @@ namespace Core.Server.Test.Communication.Endpoints.Analysis
             );
 
             _ticketRequestsServiceMock.Verify(service => service.GetTicketById(It.IsAny<Guid>()), Times.Never);
-            _analysisDataServiceMock.Verify(service => service.GetAnalysisByTicket(It.IsAny<Ticket>()), Times.Never);
+            _analysisDataServiceMock.Verify(service => service.GetAnalysisByTicket(It.IsAny<Domain.Entities.Ticket>()), Times.Never);
         }
     }
 }
