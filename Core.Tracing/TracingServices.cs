@@ -104,6 +104,7 @@ public static class TracingServices
     {
         services.AddSingleton<ICreateTicketTraceCollector, CreateTicketTraceCollector>();
         services.AddSingleton<IUpdateTicketTraceCollector, UpdateTicketTraceCollector>();
+        services.AddSingleton<IChangeDocumentationTraceCollector, ChangeDocumentationTraceCollector>();
 
         services.AddSingleton<ITicketUseCaseSelector, TicketUseCaseSelector>();
     }

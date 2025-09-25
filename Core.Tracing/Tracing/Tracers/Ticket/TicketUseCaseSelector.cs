@@ -4,8 +4,10 @@ namespace Core.Server.Tracing.Tracing.Tracers.Ticket;
 
 public class TicketUseCaseSelector(
     ICreateTicketTraceCollector createCollector,
-    IUpdateTicketTraceCollector updateCollector) : ITicketUseCaseSelector
+    IUpdateTicketTraceCollector updateCollector,
+    IChangeDocumentationTraceCollector documentationTraceCollector) : ITicketUseCaseSelector
 {
     public ICreateTicketTraceCollector Create => createCollector;
     public IUpdateTicketTraceCollector Update => updateCollector;
+    public IChangeDocumentationTraceCollector ChangeDocumentation => documentationTraceCollector;
 }

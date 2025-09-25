@@ -29,8 +29,8 @@ public class TicketCommandReceiver(ITicketCommandsService ticketCommandsService,
     public override async Task<CommandResponse> UpdateTicketDocumentation(UpdateTicketDocumentationCommandProto request,
         ServerCallContext context)
     {
-        Console.WriteLine($"[UpdateTicketDocumentation] ID: {request.TicketId}, Doc: {request.Documentation}");
-
+        await tracer.Ticket.ChangeDocumentation.CommandReceived(GetType(), Guid.Parse(request.TraceData.TraceId), request);
+        
         await ticketCommandsService.UpdateDocumentation(request.ToCommand());
         return new CommandResponse { Success = true };
     }

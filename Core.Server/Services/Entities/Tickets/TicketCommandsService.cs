@@ -28,7 +28,13 @@ public class TicketCommandsService(
     {
         await ticketEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
 
-        await ticketNotificationService.SendNotificationAsync(command.ToNotification());
+        var notification = command.ToNotification();
+        await tracer.Ticket.ChangeDocumentation.EventPersisted(GetType(), command.TraceId,
+            notification.TicketDocumentationUpdated);
+
+        await tracer.Ticket.ChangeDocumentation.SendingNotification(GetType(), command.TraceId,
+            notification.TicketDocumentationUpdated);
+        await ticketNotificationService.SendNotificationAsync(notification);
     }
 
     public async Task Create(CreateTicketCommand command)

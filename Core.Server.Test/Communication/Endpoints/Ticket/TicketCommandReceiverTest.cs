@@ -22,7 +22,10 @@ public class TicketCommandReceiverTest
     public void SetUp()
     {
         _serviceMock = new Mock<ITicketCommandsService>();
-        _tracerMock = new Mock<ITraceCollector>();
+        _tracerMock = new Mock<ITraceCollector>()
+        {
+            DefaultValueProvider = DefaultValueProvider.Mock
+        };
         _tracerMock.Setup(t => t.Ticket.Create).Returns(Mock.Of<ICreateTicketTraceCollector>());
         _tracerMock.Setup(t => t.Ticket.Update).Returns(Mock.Of<IUpdateTicketTraceCollector>());
 

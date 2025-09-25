@@ -6,4 +6,5 @@ public interface ITicketUseCaseSelector
 {
     ICreateTicketTraceCollector Create { get; }
     IUpdateTicketTraceCollector Update { get; }
+    IChangeDocumentationTraceCollector ChangeDocumentation { get; }
 }

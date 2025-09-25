@@ -21,10 +21,11 @@ public class TraceEvaluator(ImmutableList<VerificationStep> verificationSteps)
         {
             var found = counts.GetValueOrDefault(step.LoggingMeta, 0);
 
-            if (step.Invoked == Invoked.Equals && found != step.Count) return false;
-            if (step.Invoked == Invoked.AtLeast && found < step.Count) return false;
-            
-            return step.Invoked == Invoked.Optional;
+            if (step.Invoked == Invoked.Optional) return false;
+            if (step.Invoked == Invoked.Equals && found == step.Count) return false;
+            if (step.Invoked == Invoked.AtLeast && found >= step.Count) return false;
+
+            return true;
         });
 
         return hasViolation ? Result.Failed : Result.Success;
