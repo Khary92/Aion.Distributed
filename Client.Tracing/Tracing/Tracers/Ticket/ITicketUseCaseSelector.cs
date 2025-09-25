@@ -4,7 +4,7 @@ namespace Client.Tracing.Tracing.Tracers.Ticket;
 
 public interface ITicketUseCaseSelector
 {
-    IUpdateTicketDocuTraceCollector Documentation { get; }
+    IUpdateTicketDocuTraceCollector ChangeDocumentation { get; }
     ICreateTicketUseCaseCollector Create { get; }
     IUpdateTicketTraceCollector Update { get; }
 }

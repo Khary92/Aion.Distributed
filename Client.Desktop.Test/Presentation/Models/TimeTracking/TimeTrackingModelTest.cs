@@ -34,7 +34,7 @@ public class TimeTrackingModelTest
     {
         var fixture = await TimeTrackingModelProvider.Create([], []);
 
-        var newTicket = new TicketClientModel(Guid.NewGuid(), "NewTicketName", "BookingNumber", "Documentation", []);
+        var newTicket = new TicketClientModel(Guid.NewGuid(), "NewTicketName", "BookingNumber", "ChangeDocumentation", []);
 
         fixture.Messenger.Send(new NewTicketMessage(newTicket, Guid.NewGuid()));
 
@@ -44,7 +44,7 @@ public class TimeTrackingModelTest
     [Test]
     public async Task ReceiveNewTicketMessage()
     {
-        var newTicket = new TicketClientModel(Guid.NewGuid(), "NewTicketName", "BookingNumber", "Documentation", []);
+        var newTicket = new TicketClientModel(Guid.NewGuid(), "NewTicketName", "BookingNumber", "ChangeDocumentation", []);
         var fixture = await TimeTrackingModelProvider.Create([newTicket], []);
 
         fixture.Messenger.Send(new NewTicketMessage(newTicket, Guid.NewGuid()));
@@ -71,9 +71,9 @@ public class TimeTrackingModelTest
         var initialData = CreateInitialData();
         var fixture = await TimeTrackingModelProvider.Create([initialData.InitialTicket], []);
         var newTicketOne =
-            new TicketClientModel(Guid.NewGuid(), "NewTicketNameOne", "BookingNumberOne", "Documentation", []);
+            new TicketClientModel(Guid.NewGuid(), "NewTicketNameOne", "BookingNumberOne", "ChangeDocumentation", []);
         var newTicketTwo =
-            new TicketClientModel(Guid.NewGuid(), "NewTicketNameTwo", "BookingNumberTwo", "Documentation", []);
+            new TicketClientModel(Guid.NewGuid(), "NewTicketNameTwo", "BookingNumberTwo", "ChangeDocumentation", []);
         fixture.RequestSender.Setup(rs => rs.Send(new ClientGetTicketsForCurrentSprintRequest()))
             .ReturnsAsync([newTicketOne, newTicketTwo]);
 
@@ -90,10 +90,10 @@ public class TimeTrackingModelTest
         var initialData = CreateInitialData();
         var fixture = await TimeTrackingModelProvider.Create([initialData.InitialTicket], []);
         var newTicketOne =
-            new TicketClientModel(Guid.NewGuid(), "NewTicketNameOne", "BookingNumberOne", "Documentation",
+            new TicketClientModel(Guid.NewGuid(), "NewTicketNameOne", "BookingNumberOne", "ChangeDocumentation",
                 [fixture.CurrentSprintId]);
         var newTicketTwo =
-            new TicketClientModel(Guid.NewGuid(), "NewTicketNameTwo", "BookingNumberTwo", "Documentation",
+            new TicketClientModel(Guid.NewGuid(), "NewTicketNameTwo", "BookingNumberTwo", "ChangeDocumentation",
                 [fixture.CurrentSprintId]);
         fixture.RequestSender.Setup(rs => rs.Send(new ClientGetTicketsForCurrentSprintRequest()))
             .ReturnsAsync([newTicketOne, newTicketTwo]);

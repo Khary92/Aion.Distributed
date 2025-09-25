@@ -20,12 +20,14 @@ public class TraceEvaluator(ImmutableList<VerificationStep> verificationSteps)
         var hasViolation = verificationSteps.Any(step =>
         {
             var found = counts.GetValueOrDefault(step.LoggingMeta, 0);
-            return step.Invoked == Invoked.Equals
-                ? found != step.Count
-                : found < step.Count;
+
+            if (step.Invoked == Invoked.Equals && found != step.Count) return false;
+            if (step.Invoked == Invoked.AtLeast && found < step.Count) return false;
+            
+            return step.Invoked == Invoked.Optional;
         });
 
-        return hasViolation ? Result.InvalidInvocationCount : Result.Success;
+        return hasViolation ? Result.Failed : Result.Success;
     }
 
     private Result CheckForImmediateResults(List<TraceData> traces)

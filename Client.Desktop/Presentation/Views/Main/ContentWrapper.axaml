@@ -70,7 +70,7 @@
                         <Button Grid.Row="2" HorizontalContentAlignment="Center"
                                 VerticalContentAlignment="Center" VerticalAlignment="Stretch"
                                 HorizontalAlignment="Stretch"
-                                Content="Documentation" Command="{Binding OnDocumentationClickCommand}" />
+                                Content="ChangeDocumentation" Command="{Binding OnDocumentationClickCommand}" />
                         <Button Grid.Row="3" HorizontalContentAlignment="Center"
                                 VerticalContentAlignment="Center" VerticalAlignment="Stretch"
                                 HorizontalAlignment="Stretch"

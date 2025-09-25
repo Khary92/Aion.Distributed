@@ -54,7 +54,7 @@ public class TrackingSlotModel(
         if (Ticket.TicketId != message.TicketId) return;
 
         Ticket.Apply(message);
-        _ = tracer.Ticket.Documentation.NotificationReceived(GetType(), message.TraceId, message);
+        _ = tracer.Ticket.ChangeDocumentation.NotificationReceived(GetType(), message.TraceId, message);
     }
 
     public void Receive(ClientTicketDataUpdatedNotification message)

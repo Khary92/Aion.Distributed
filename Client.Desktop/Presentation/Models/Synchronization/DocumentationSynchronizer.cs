@@ -7,11 +7,12 @@ using Client.Desktop.Communication.Commands.Ticket;
 using Client.Desktop.Communication.Notifications.Client.Records;
 using Client.Desktop.Communication.Notifications.Ticket.Records;
 using Client.Desktop.Lifecycle.Startup.Tasks.Register;
+using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 
 namespace Client.Desktop.Presentation.Models.Synchronization;
 
-public class DocumentationSynchronizer(IMessenger messenger, ICommandSender commandSender)
+public class DocumentationSynchronizer(IMessenger messenger, ICommandSender commandSender, ITraceCollector tracer)
     : IMessengerRegistration, IRecipient<ClientTicketDocumentationUpdatedNotification>,
         IRecipient<ClientSaveDocumentationNotification>, IDocumentationSynchronizer
 {
@@ -53,6 +54,7 @@ public class DocumentationSynchronizer(IMessenger messenger, ICommandSender comm
     private async Task SendCommand(ClientSaveDocumentationNotification message)
     {
         var traceId = Guid.NewGuid();
+        await tracer.Ticket.ChangeDocumentation.StartUseCase(GetType(), traceId);
 
         var dirtyTickets = _listeners
             .Select(l => l.Ticket)
@@ -61,12 +63,21 @@ public class DocumentationSynchronizer(IMessenger messenger, ICommandSender comm
             .Where(t => t.IsDirty)
             .ToList();
 
+        if (dirtyTickets.Count == 0)
+        {
+            await tracer.Ticket.ChangeDocumentation.ActionAborted(GetType(), traceId);
+        }
+
         foreach (var ticket in dirtyTickets)
         {
-            await commandSender.Send(new ClientUpdateTicketDocumentationCommand(
+            var clientUpdateTicketDocumentationCommand = new ClientUpdateTicketDocumentationCommand(
                 ticket.TicketId,
                 ticket.Documentation,
-                traceId));
+                traceId);
+            
+            await tracer.Ticket.ChangeDocumentation.SendingCommand(GetType(), traceId,
+                clientUpdateTicketDocumentationCommand);
+            await commandSender.Send(clientUpdateTicketDocumentationCommand);
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
@@ -33,13 +34,13 @@ public class StartTimeChangedCache(
 
         var data = await fileSystemReader.GetObject<Dictionary<Guid, ClientSetStartTimeCommand>>(Path);
 
-        foreach (var command in data.Values)
+        foreach (var commandWithCorrectTraceId in data.Values.Select(command => command with { TraceId = traceId }))
         {
-            await tracer.TimeSlot.SetStartTime.SendingCommand(GetType(), traceId, command);
-            await commandSender.Send(command);
+            await tracer.TimeSlot.SetStartTime.SendingCommand(GetType(), traceId, commandWithCorrectTraceId);
+            await commandSender.Send(commandWithCorrectTraceId);
         }
 
-        CleanUp();
+        await CleanUp(traceId);
     }
 
     public void Store(ClientSetStartTimeCommand command)
@@ -50,8 +51,13 @@ public class StartTimeChangedCache(
         fileSystemWriter.Write(JsonSerializer.Serialize(_commands), Path);
     }
 
-    private void CleanUp()
+    private async Task CleanUp(Guid traceId)
     {
         fileSystemWrapper.Delete(Path);
+
+        if (fileSystemWrapper.IsFileExisting(Path))
+        {
+            await tracer.TimeSlot.SetEndTime.FlushingCacheFailed(GetType(), traceId, Path);
+        }
     }
 }

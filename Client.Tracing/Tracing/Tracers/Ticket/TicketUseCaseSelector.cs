@@ -7,7 +7,7 @@ public class TicketUseCaseSelector(
     ICreateTicketUseCaseCollector createTicketUseCaseCollector,
     IUpdateTicketTraceCollector updateTicketTraceCollector) : ITicketUseCaseSelector
 {
-    public IUpdateTicketDocuTraceCollector Documentation => updateCollector;
+    public IUpdateTicketDocuTraceCollector ChangeDocumentation => updateCollector;
     public ICreateTicketUseCaseCollector Create => createTicketUseCaseCollector;
     public IUpdateTicketTraceCollector Update => updateTicketTraceCollector;
 }

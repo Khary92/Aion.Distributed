@@ -95,7 +95,7 @@ public class TraceEvaluatorTest
 
         var result = evaluator.GetResultState(traces);
 
-        Assert.That(result, Is.EqualTo(Result.InvalidInvocationCount));
+        Assert.That(result, Is.EqualTo(Result.Failed));
     }
 
     [Test]
@@ -134,7 +134,7 @@ public class TraceEvaluatorTest
 
         var result = evaluator.GetResultState(traces);
 
-        Assert.That(result, Is.EqualTo(Result.InvalidInvocationCount));
+        Assert.That(result, Is.EqualTo(Result.Failed));
     }
 
     [Test]
@@ -177,6 +177,6 @@ public class TraceEvaluatorTest
 
         var result = evaluator.GetResultState(traces);
 
-        Assert.That(result, Is.EqualTo(Result.InvalidInvocationCount));
+        Assert.That(result, Is.EqualTo(Result.Failed));
     }
 }

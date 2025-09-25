@@ -46,4 +46,17 @@ public class SetEndTimeTraceCollector(ITracingDataSender sender) : ISetEndTimeTr
             log,
             DateTimeOffset.Now));
     }
+
+    public async Task FlushingCacheFailed(Type originClassType, Guid traceId, string filePath)
+    {
+        var log = "The data was persisted, but the file could not be deleted " + filePath;
+        await sender.Send(new ServiceTraceDataCommand(
+            SortingType.TimeSlot,
+            UseCaseMeta.SetEndTime,
+            LoggingMeta.ExceptionOccured,
+            originClassType,
+            traceId,
+            log,
+            DateTimeOffset.Now));
+    }
 }

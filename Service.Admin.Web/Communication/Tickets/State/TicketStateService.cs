@@ -54,12 +54,12 @@ public class TicketStateService(ISharedRequestSender requestSender, ITraceCollec
 
         if (ticket == null)
         {
-            await tracer.Sprint.AddTicketToSprint.NoAggregateFound(GetType(), notification.TraceId);
+            await tracer.Ticket.ChangeDocumentation.NoAggregateFound(GetType(), notification.TraceId);
             return;
         }
 
         ticket.Apply(notification);
-        await tracer.Sprint.AddTicketToSprint.ChangesApplied(GetType(), notification.TraceId);
+        await tracer.Ticket.ChangeDocumentation.ChangesApplied(GetType(), notification.TraceId);
         NotifyStateChanged();
     }
 

@@ -85,7 +85,7 @@ public static class TimeTrackingModelProvider
 
     private static TicketClientModel CreateTicketClientModel()
     {
-        return new TicketClientModel(Guid.NewGuid(), "InitialTicketName", "InitialBookingNumber", "Documentation",
+        return new TicketClientModel(Guid.NewGuid(), "InitialTicketName", "InitialBookingNumber", "ChangeDocumentation",
             []);
     }
 

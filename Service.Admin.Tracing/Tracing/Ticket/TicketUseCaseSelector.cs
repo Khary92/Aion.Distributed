@@ -4,8 +4,10 @@ namespace Service.Admin.Tracing.Tracing.Ticket;
 
 public class TicketUseCaseSelector(
     ICreateTicketTraceCollector createCollector,
-    IUpdateTicketTraceCollector updateCollector) : ITicketUseCaseSelector
+    IUpdateTicketTraceCollector updateCollector,
+    IChangeDocumentationTraceCollector documentationCollector) : ITicketUseCaseSelector
 {
     public ICreateTicketTraceCollector Create => createCollector;
     public IUpdateTicketTraceCollector Update => updateCollector;
+    public IChangeDocumentationTraceCollector ChangeDocumentation => documentationCollector;
 }

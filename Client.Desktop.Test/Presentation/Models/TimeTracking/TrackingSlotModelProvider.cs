@@ -39,7 +39,7 @@ public static class TrackingSlotModelProvider
         var synchronizer = CreateSynchronizerMock();
 
         requestSender.Setup(rs => rs.Send(It.IsAny<ClientGetTicketReplaysByIdRequest>())).ReturnsAsync([
-            new DocumentationReplay("Documentation"), new DocumentationReplay("Second Part")
+            new DocumentationReplay("ChangeDocumentation"), new DocumentationReplay("Second Part")
         ]);
 
         return await CreateFixture(messenger, tracer, synchronizer, startTimeCache, endTimeCache,

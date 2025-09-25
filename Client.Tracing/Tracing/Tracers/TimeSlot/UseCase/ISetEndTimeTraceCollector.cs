@@ -5,4 +5,5 @@ public interface ISetEndTimeTraceCollector
     Task StartUseCase(Type originClassType, Guid traceId);
     Task SendingCommand(Type originClassType, Guid traceId, object command);
     Task CacheIsEmpty(Type originClassType, Guid traceId);
+    Task FlushingCacheFailed(Type originClassType, Guid traceId, string filePath);
 }

@@ -30,7 +30,7 @@ public static class AnalysisByTicketModelProvider
 
     private static TicketClientModel CreateTicketClientModel()
     {
-        return new TicketClientModel(Guid.NewGuid(), "InitialTicketName", "InitialBookingNumber", "Documentation",
+        return new TicketClientModel(Guid.NewGuid(), "InitialTicketName", "InitialBookingNumber", "ChangeDocumentation",
             []);
     }
 

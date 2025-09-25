@@ -5,7 +5,7 @@ public enum Result
     Success,
     Exception,
     EntityNotFound,
-    InvalidInvocationCount,
+    Failed,
     NoValidationAvailable,
     Aborted,
     OngoingValidation

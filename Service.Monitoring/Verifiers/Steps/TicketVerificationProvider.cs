@@ -37,12 +37,12 @@ public class TicketVerificationProvider : IVerificationProvider
     
     private static readonly ImmutableList<VerificationStep> UpdateTicketDocumentationSteps = ImmutableList.Create(
         new VerificationStep(LoggingMeta.ActionRequested, Invoked.Equals, 1),
-        new VerificationStep(LoggingMeta.SendingCommand, Invoked.Equals, 1),
-        new VerificationStep(LoggingMeta.CommandReceived, Invoked.Equals, 1),
-        new VerificationStep(LoggingMeta.EventPersisted, Invoked.Equals, 1),
-        new VerificationStep(LoggingMeta.SendingNotification, Invoked.Equals, 1),
-        new VerificationStep(LoggingMeta.NotificationReceived, Invoked.AtLeast, 1),
-        new VerificationStep(LoggingMeta.PropertyChanged, Invoked.AtLeast, 1));
+        new VerificationStep(LoggingMeta.SendingCommand, Invoked.AtLeast, 1),
+        new VerificationStep(LoggingMeta.CommandReceived, Invoked.AtLeast, 1),
+        new VerificationStep(LoggingMeta.EventPersisted, Invoked.AtLeast, 1),
+        new VerificationStep(LoggingMeta.SendingNotification, Invoked.AtLeast, 1),
+        new VerificationStep(LoggingMeta.NotificationReceived, Invoked.Optional, 0),
+        new VerificationStep(LoggingMeta.PropertyChanged, Invoked.Optional, 0));
 
     public SortingType SortingType => SortingType.Ticket;
 

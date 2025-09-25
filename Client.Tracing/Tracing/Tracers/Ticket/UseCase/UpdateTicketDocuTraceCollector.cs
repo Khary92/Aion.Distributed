@@ -46,6 +46,18 @@ public class UpdateTicketDocuTraceCollector(ITracingDataSender sender) : IUpdate
             DateTimeOffset.Now));
     }
 
+    public async Task ActionAborted(Type originClassType, Guid traceId)
+    {
+        var log = "No dirty ticket documentation found!";
+        await sender.Send(new ServiceTraceDataCommand(
+            SortingType.Ticket,
+            UseCaseMeta.UpdateTicketDocumentation,
+            LoggingMeta.ActionAborted,
+            originClassType,
+            traceId,
+            log,
+            DateTimeOffset.Now)); }
+
     public async Task AggregateAdded(Type originClassType, Guid traceId)
     {
         var log = $"Added aggregate with id:{traceId}";

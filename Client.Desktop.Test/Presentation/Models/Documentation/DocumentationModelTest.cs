@@ -119,7 +119,7 @@ public class DocumentationModelTest
         var fixture =
             await DocumentationModelProvider.Create(initialData.Notes, initialData.NoteTypes, initialData.Tickets);
         var noteUpdatedNotification =
-            new TicketClientModel(Guid.NewGuid(), "NewTicketName", "BookingNumber", "Documentation", []);
+            new TicketClientModel(Guid.NewGuid(), "NewTicketName", "BookingNumber", "ChangeDocumentation", []);
 
         fixture.Messenger.Send(new NewTicketMessage(noteUpdatedNotification, Guid.NewGuid()));
 
@@ -225,7 +225,7 @@ public class DocumentationModelTest
         var note = new NoteClientModel(noteId, "InitialNoteText", noteTypeId, Guid.NewGuid(),
             DateTimeOffset.Now);
         var noteType = new NoteTypeClientModel(noteTypeId, "InitialNoteTypeName", "#FFFFF");
-        var ticket = new TicketClientModel(ticketId, "InitialTicketName", "BookingNumber", "Documentation", []);
+        var ticket = new TicketClientModel(ticketId, "InitialTicketName", "BookingNumber", "ChangeDocumentation", []);
         return ([note], [noteType], [ticket], noteId, noteTypeId, ticketId);
     }
 }
