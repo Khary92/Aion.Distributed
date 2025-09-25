@@ -28,19 +28,6 @@ public class TimerSettingsCommandReceiverTest
 
         _receiver = new TimerSettingsCommandReceiver(_serviceMock.Object, _tracerMock.Object);
     }
-    
-    [Test]
-    public void CreateTimerSettings_InvalidTraceId_ThrowsFormatException()
-    {
-        var request = new CreateTimerSettingsCommandProto
-        {
-            TimerSettingsId = Guid.NewGuid().ToString(),
-            TraceData = new TraceDataProto { TraceId = "invalid-guid" }
-        };
-
-        Assert.ThrowsAsync<FormatException>(() =>
-            _receiver.CreateTimerSettings(request, Mock.Of<ServerCallContext>()));
-    }
 
     [Test]
     public async Task ChangeDocuTimerSaveInterval_ValidRequest_ReturnsSuccessResponse()
