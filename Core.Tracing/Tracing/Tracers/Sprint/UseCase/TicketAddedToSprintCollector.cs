@@ -12,7 +12,7 @@ public class TicketAddedToSprintCollector(ITracingDataSender sender) : ITicketAd
 
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.Sprint,
-            UseCaseMeta.TicketAddedToSprint,
+            UseCaseMeta.AddTicketToCurrentSprint,
             LoggingMeta.CommandReceived,
             originClassType,
             traceId,
@@ -26,7 +26,7 @@ public class TicketAddedToSprintCollector(ITracingDataSender sender) : ITicketAd
 
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.Sprint,
-            UseCaseMeta.TicketAddedToSprint,
+            UseCaseMeta.AddTicketToCurrentSprint,
             LoggingMeta.EventPersisted,
             originClassType,
             traceId,
@@ -40,7 +40,7 @@ public class TicketAddedToSprintCollector(ITracingDataSender sender) : ITicketAd
 
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.Sprint,
-            UseCaseMeta.TicketAddedToSprint,
+            UseCaseMeta.AddTicketToCurrentSprint,
             LoggingMeta.SendingNotification,
             originClassType,
             traceId,
@@ -54,7 +54,7 @@ public class TicketAddedToSprintCollector(ITracingDataSender sender) : ITicketAd
 
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.Sprint,
-            UseCaseMeta.TicketAddedToSprint,
+            UseCaseMeta.AddTicketToCurrentSprint,
             LoggingMeta.AggregateNotFound,
             originClassType,
             traceId,
@@ -68,7 +68,7 @@ public class TicketAddedToSprintCollector(ITracingDataSender sender) : ITicketAd
 
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.Sprint,
-            UseCaseMeta.TicketAddedToSprint,
+            UseCaseMeta.AddTicketToCurrentSprint,
             LoggingMeta.AggregateNotFound,
             originClassType,
             traceId,
@@ -82,7 +82,7 @@ public class TicketAddedToSprintCollector(ITracingDataSender sender) : ITicketAd
 
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.Sprint,
-            UseCaseMeta.TicketAddedToSprint,
+            UseCaseMeta.AddTicketToCurrentSprint,
             LoggingMeta.SprintIdAddedToTicket,
             originClassType,
             traceId,
@@ -96,7 +96,7 @@ public class TicketAddedToSprintCollector(ITracingDataSender sender) : ITicketAd
 
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.Sprint,
-            UseCaseMeta.TicketAddedToSprint,
+            UseCaseMeta.AddTicketToCurrentSprint,
             LoggingMeta.ActionAborted,
             originClassType,
             traceId,

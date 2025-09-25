@@ -7,8 +7,8 @@ public class ComponentInitializer(
 {
     private readonly List<InitializationType> _order =
     [
-        InitializationType.Controller,
-        InitializationType.StateService
+        InitializationType.StateService,
+        InitializationType.Controller
     ];
 
     private Dictionary<InitializationType, List<IInitializeAsync>> LoadingStrategy =>

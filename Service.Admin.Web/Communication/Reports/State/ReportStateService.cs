@@ -7,12 +7,13 @@ public class ReportStateService(SortingType sortingType) : IReportStateService
 {
     private readonly List<ReportRecord> _reports = [];
 
-    public IReadOnlyList<ReportRecord> Reports => _reports.AsReadOnly();
+    public IReadOnlyList<ReportRecord> Reports => _reports.ToList().AsReadOnly();
+
     public event Action? OnStateChanged;
 
     public void AddReport(ReportRecord report)
     {
-        _reports.Add(report);
+        _reports.Insert(0, report);
         NotifyStateChanged();
     }
 

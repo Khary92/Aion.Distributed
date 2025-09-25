@@ -10,11 +10,11 @@ namespace Service.Monitoring.Sink;
 public class TraceSink(IReportSender reportSender, IVerifierFactory verifierFactory, TraceDataSendPolicy sendPolicy)
     : ITraceSink
 {
-    private readonly ConcurrentDictionary<Guid, IVerifier> _ticketVerifiers = new();
+    private readonly ConcurrentDictionary<Guid, IVerifier> _verifiers = new();
 
     public void AddTrace(TraceData traceData)
     {
-        var verifier = _ticketVerifiers.GetOrAdd(traceData.TraceId, _ =>
+        var verifier = _verifiers.GetOrAdd(traceData.TraceId, _ =>
         {
             var newVerifier = verifierFactory.Create(traceData.TraceId, traceData.SortingType, traceData.UseCaseMeta);
             newVerifier.VerificationCompleted += SaveReport;
@@ -29,7 +29,7 @@ public class TraceSink(IReportSender reportSender, IVerifierFactory verifierFact
         try
         {
             await sendPolicy.Policy.ExecuteAsync(() => reportSender.Send(e));
-            _ticketVerifiers.TryRemove(e.TraceId, out _);
+            _verifiers.TryRemove(e.TraceId, out _);
         }
         catch (Exception ex)
         {

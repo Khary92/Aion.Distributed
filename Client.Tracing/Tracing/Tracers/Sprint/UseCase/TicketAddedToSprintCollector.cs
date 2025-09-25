@@ -11,7 +11,7 @@ public class TicketAddedToSprintCollector(ITracingDataSender sender) : ITicketAd
         var log = $"Received {notification}";
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.Sprint,
-            UseCaseMeta.TicketAddedToSprint,
+            UseCaseMeta.AddTicketToCurrentSprint,
             LoggingMeta.NotificationReceived,
             originClassType,
             traceId,
@@ -24,7 +24,7 @@ public class TicketAddedToSprintCollector(ITracingDataSender sender) : ITicketAd
         var log = $"Aggregate not found id:{traceId}";
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.Sprint,
-            UseCaseMeta.TicketAddedToSprint,
+            UseCaseMeta.AddTicketToCurrentSprint,
             LoggingMeta.AggregateNotFound,
             originClassType,
             traceId,
@@ -37,7 +37,7 @@ public class TicketAddedToSprintCollector(ITracingDataSender sender) : ITicketAd
         var log = $"Changed applied id:{traceId}";
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.Sprint,
-            UseCaseMeta.TicketAddedToSprint,
+            UseCaseMeta.AddTicketToCurrentSprint,
             LoggingMeta.PropertyChanged,
             originClassType,
             traceId,

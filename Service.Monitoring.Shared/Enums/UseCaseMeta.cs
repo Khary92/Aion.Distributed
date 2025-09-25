@@ -2,34 +2,38 @@ namespace Service.Monitoring.Shared.Enums;
 
 public enum UseCaseMeta
 {
+    //NoteType
+    ChangeNoteTypeColor,
+    ChangeNoteTypeName,
+    CreateNoteType,
+    //Note
+    CreateNote,
+    UpdateNote,
+    //Sprint
+    CreateSprint,
+    UpdateSprint,
+    ChangeSprintActiveStatus,
+    AddTicketToCurrentSprint,
+    //StatisticsData
+    CreateStatisticsData,
+    ChangeProductivity,
+    ChangeTagSelection,
+    //Tag
+    CreateTag,
+    UpdateTag,
     //Ticket
     CreateTicket,
     UpdateTicket,
     UpdateTicketDocumentation,
-
-
-    CreateNote,
-    UpdateNote,
-    ChangeNoteTypeColor,
-    ChangeNoteTypeName,
-    CreateNoteType,
-    CreateTag,
-    UpdateTag,
-    CreateSprint,
-    ChangeSprintActiveStatus,
-    TicketAddedToSprint,
-    UpdateSprint,
-    AddTicketToCurrentSprint,
+    //TimerSettings
+    CreateTimerSettings,
     ChangeDocuTimerSaveInterval,
     ChangeSnapshotSaveInterval,
-    CreateTimerSettings,
-    CreateWorkDay,
-    CommandSent,
-    CreateStatisticsData,
-    ChangeProductivity,
-    ChangeTagSelection,
-    AddNoteToTimeSlot,
+    //TimeSlot
     CreateTimeSlot,
+    AddNoteToTimeSlot,
+    SetStartTime,
     SetEndTime,
-    SetStartTime
+    //WorkDay
+    CreateWorkDay
 }

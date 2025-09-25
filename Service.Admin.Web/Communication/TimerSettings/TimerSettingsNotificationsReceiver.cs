@@ -68,7 +68,7 @@ public class TimerSettingsNotificationsReceiver(
                         case TimerSettingsNotification.NotificationOneofCase.None:
                             break;
                         default:
-                            throw new ArgumentOutOfRangeException();
+                            throw  new ArgumentOutOfRangeException();
                     }
             }
             catch (RpcException ex) when (ex.StatusCode == StatusCode.Unavailable)
