@@ -199,7 +199,7 @@ public static class ServiceExtensions
     private static void AddModels(this IServiceCollection services)
     {
         services.AddTransient<TypeCheckBoxViewModel>();
-        services.AddTransient<TimeSlotViewModel>();
+        services.AddTransient<TrackingSlotViewModel>();
         services.AddTransient<TrackingSlotModel>();
 
         services.AddSingleton<AnalysisByTagViewModel>();
@@ -267,7 +267,7 @@ public static class ServiceExtensions
         services.AddSingleton<IStatisticsViewModelFactory, StatisticsViewModelFactory>();
         services.AddTransient<StatisticsViewModel>();
 
-        services.AddSingleton<ITimeSlotViewModelFactory, TimeSlotViewModelFactory>();
+        services.AddSingleton<ITrackingSlotViewModelFactory, TrackingSlotViewModelFactory>();
     }
 
     private static void AddNotificationReceivers(this IServiceCollection services)

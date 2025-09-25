@@ -4,7 +4,7 @@ using ReactiveUI;
 
 namespace Client.Desktop.Presentation.Views.Tracking;
 
-public partial class TimeSlotControl : UserControl, IViewFor<TimeSlotViewModel>
+public partial class TimeSlotControl : UserControl, IViewFor<TrackingSlotViewModel>
 {
     public TimeSlotControl()
     {
@@ -14,8 +14,8 @@ public partial class TimeSlotControl : UserControl, IViewFor<TimeSlotViewModel>
     object? IViewFor.ViewModel
     {
         get => ViewModel;
-        set => ViewModel = (TimeSlotViewModel?)value;
+        set => ViewModel = (TrackingSlotViewModel?)value;
     }
 
-    public TimeSlotViewModel? ViewModel { get; set; }
+    public TrackingSlotViewModel? ViewModel { get; set; }
 }

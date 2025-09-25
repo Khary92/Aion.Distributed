@@ -34,9 +34,9 @@ public static class TimeTrackingModelProvider
         return new Mock<ICommandSender>();
     }
 
-    private static Mock<ITimeSlotViewModelFactory> CreateTimeSlotViewModelFactoryMock()
+    private static Mock<ITrackingSlotViewModelFactory> CreateTimeSlotViewModelFactoryMock()
     {
-        return new Mock<ITimeSlotViewModelFactory>();
+        return new Mock<ITrackingSlotViewModelFactory>();
     }
 
     private static Mock<IDocumentationSynchronizer> CreateDocumentationSynchronizerMock()
@@ -128,7 +128,7 @@ public static class TimeTrackingModelProvider
             Ticket = CreateTicketClientModel()
         };
 
-        var timeSlotViewModel = new TimeSlotViewModel(timeSlotModel, statisticsViewModelFactory.Object,
+        var timeSlotViewModel = new TrackingSlotViewModel(timeSlotModel, statisticsViewModelFactory.Object,
             noteStreamViewModelFactory.Object, messenger)
         {
             NoteStreamViewModel = null,
@@ -149,7 +149,7 @@ public static class TimeTrackingModelProvider
 
     private static async Task<TimeTrackingModelFixture> CreateFixture(IMessenger messenger,
         Mock<IRequestSender> requestSender, Mock<ICommandSender> commandSender,
-        Mock<ITimeSlotViewModelFactory> timeSlotViewModelFactory,
+        Mock<ITrackingSlotViewModelFactory> timeSlotViewModelFactory,
         Mock<ITraceCollector> tracer, Mock<ILocalSettingsService> localSettingsService,
         Mock<IDocumentationSynchronizer> documentationSynchronizer,
         SprintClientModel sprintClientModel)
@@ -179,7 +179,7 @@ public static class TimeTrackingModelProvider
         public required IMessenger Messenger { get; init; }
         public required Mock<IRequestSender> RequestSender { get; init; }
         public required Mock<ICommandSender> CommandSender { get; init; }
-        public required Mock<ITimeSlotViewModelFactory> TimeSlotViewModelFactory { get; init; }
+        public required Mock<ITrackingSlotViewModelFactory> TimeSlotViewModelFactory { get; init; }
         public required Mock<ILocalSettingsService> LocalSettingsService { get; init; }
         public required Guid CurrentSprintId { get; init; }
     }

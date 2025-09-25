@@ -11,7 +11,7 @@ using Unit = System.Reactive.Unit;
 
 namespace Client.Desktop.Presentation.Models.TimeTracking;
 
-public class TimeSlotViewModel : ReactiveObject
+public class TrackingSlotViewModel : ReactiveObject
 {
     private readonly INoteStreamViewModelFactory _noteStreamViewModelFactory;
     private readonly IStatisticsViewModelFactory _statisticsViewModelFactory;
@@ -21,7 +21,7 @@ public class TimeSlotViewModel : ReactiveObject
 
     private ViewTimer _viewTimer = null!;
 
-    public TimeSlotViewModel(TrackingSlotModel model,
+    public TrackingSlotViewModel(TrackingSlotModel model,
         IStatisticsViewModelFactory statisticsViewModelFactory,
         INoteStreamViewModelFactory noteStreamViewModelFactory,
         IMessenger messenger)

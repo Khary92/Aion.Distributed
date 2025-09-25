@@ -12,7 +12,7 @@ using Moq;
 
 namespace Client.Desktop.Test.Presentation.Models.TimeTracking;
 
-public static class TimeSlotModelProvider
+public static class TrackingSlotModelProvider
 {
     private static IMessenger CreateMessenger()
     {
@@ -23,14 +23,13 @@ public static class TimeSlotModelProvider
     {
         return new Mock<ITraceCollector> { DefaultValue = DefaultValue.Mock };
     }
-
-
-    private static Mock<IDocumentationSynchronizer>  CreateSynchronizerMock() => new ();
+    
+    private static Mock<IDocumentationSynchronizer> CreateSynchronizerMock() => new();
     private static Mock<IPersistentCache<ClientSetStartTimeCommand>> CreateStartTimeCacheMock() => new();
     private static Mock<IPersistentCache<ClientSetEndTimeCommand>> CreateEndTimeCacheMock() => new();
     private static Mock<IRequestSender> CreateRequestSenderMock() => new();
 
-    public static async Task<TimeSlotModelFixture> Create(TimeSlotClientModel? initialTimeSlot)
+    public static async Task<TrackingSlotModelFixture> Create(TimeSlotClientModel? initialTimeSlot)
     {
         var messenger = CreateMessenger();
         var tracer = CreateTracerMock();
@@ -47,7 +46,7 @@ public static class TimeSlotModelProvider
             requestSender, initialTimeSlot);
     }
 
-    private static async Task<TimeSlotModelFixture> CreateFixture(IMessenger messenger, Mock<ITraceCollector> tracer,
+    private static Task<TrackingSlotModelFixture> CreateFixture(IMessenger messenger, Mock<ITraceCollector> tracer,
         Mock<IDocumentationSynchronizer> documentationSynchronizer,
         Mock<IPersistentCache<ClientSetStartTimeCommand>> startTimeCache,
         Mock<IPersistentCache<ClientSetEndTimeCommand>> endTimeCache, Mock<IRequestSender> requestSender,
@@ -59,12 +58,14 @@ public static class TimeSlotModelProvider
         instance.RegisterMessenger();
 
         var ticket = new TicketClientModel(Guid.NewGuid(), "Name", "bookingNumber", "documentation from ticket", []);
+        ticket.DocumentationSynchronizer = documentationSynchronizer.Object;
+        instance.Ticket = ticket;
 
         var timeSlot = timeSlotClientModel ?? new TimeSlotClientModel(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(),
             DateTimeOffset.Now, DateTimeOffset.Now, [], false);
         instance.TimeSlot = timeSlot;
 
-        return new TimeSlotModelFixture
+        return Task.FromResult(new TrackingSlotModelFixture
         {
             Instance = instance,
             Tracer = tracer,
@@ -74,10 +75,10 @@ public static class TimeSlotModelProvider
             RequestSender = requestSender,
             TimeSlot = timeSlot,
             Ticket = ticket
-        };
+        });
     }
 
-    public sealed class TimeSlotModelFixture
+    public sealed class TrackingSlotModelFixture
     {
         public required TrackingSlotModel Instance { get; init; }
         public required Mock<IPersistentCache<ClientSetStartTimeCommand>> StartTimeCache { get; init; }

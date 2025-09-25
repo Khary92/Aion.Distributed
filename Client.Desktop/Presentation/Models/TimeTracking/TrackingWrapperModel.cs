@@ -30,7 +30,7 @@ public class TimeTrackingModel(
     ICommandSender commandSender,
     IRequestSender requestSender,
     IDocumentationSynchronizer documentationSynchronizer,
-    ITimeSlotViewModelFactory timeSlotViewModelFactory,
+    ITrackingSlotViewModelFactory trackingSlotViewModelFactory,
     ILocalSettingsService localSettingsService,
     ITraceCollector tracer) : ReactiveObject, IInitializeAsync, IMessengerRegistration, IRecipient<NewTicketMessage>,
     IRecipient<ClientTicketDataUpdatedNotification>, IRecipient<ClientTicketAddedToActiveSprintNotification>,
@@ -42,7 +42,7 @@ public class TimeTrackingModel(
     private TicketClientModel? _selectedTicket;
     private string _selectedTicketName = string.Empty;
 
-    private ObservableCollection<TimeSlotViewModel> _timeSlotViewModels = [];
+    private ObservableCollection<TrackingSlotViewModel> _timeSlotViewModels = [];
 
     public string SelectedTicketName
     {
@@ -68,7 +68,7 @@ public class TimeTrackingModel(
         set => this.RaiseAndSetIfChanged(ref _filteredTickets, value);
     }
 
-    public ObservableCollection<TimeSlotViewModel> TimeSlotViewModels
+    public ObservableCollection<TrackingSlotViewModel> TimeSlotViewModels
     {
         get => _timeSlotViewModels;
         set => this.RaiseAndSetIfChanged(ref _timeSlotViewModels, value);
@@ -151,7 +151,7 @@ public class TimeTrackingModel(
 
         foreach (var controlData in controlDataList)
         {
-            var timeSlotViewModel = await timeSlotViewModelFactory.Create(controlData.Ticket,
+            var timeSlotViewModel = await trackingSlotViewModelFactory.Create(controlData.Ticket,
                 controlData.StatisticsData, controlData.TimeSlot);
             TimeSlotViewModels.Add(timeSlotViewModel);
         }
@@ -219,7 +219,7 @@ public class TimeTrackingModel(
     private async Task HandleTimeSlotControlCreatedNotification(ClientTrackingControlCreatedNotification message)
     {
         TimeSlotViewModels.Add(await
-            timeSlotViewModelFactory.Create(message.Ticket, message.StatisticsData,
+            trackingSlotViewModelFactory.Create(message.Ticket, message.StatisticsData,
                 message.TimeSlot));
 
         await tracer.Client.CreateTrackingControl.AggregateAdded(GetType(), message.TraceId);

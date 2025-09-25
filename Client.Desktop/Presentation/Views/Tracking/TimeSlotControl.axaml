@@ -5,7 +5,7 @@
              xmlns:timeTracking1="clr-namespace:Client.Desktop.Presentation.Models.TimeTracking"
              xmlns:dynamicControls="clr-namespace:Client.Desktop.Presentation.Models.TimeTracking.DynamicControls"
              xmlns:dynamicControl="clr-namespace:Client.Desktop.Presentation.Views.Tracking.DynamicControl"
-             x:DataType="timeTracking1:TimeSlotViewModel"
+             x:DataType="timeTracking1:TrackingSlotViewModel"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="Client.Desktop.Presentation.Views.Tracking.TimeSlotControl"
              HorizontalAlignment="Stretch" VerticalAlignment="Stretch">

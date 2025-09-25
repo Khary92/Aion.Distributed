@@ -11,7 +11,7 @@
              VerticalAlignment="Stretch">
 
     <UserControl.DataTemplates>
-        <DataTemplate DataType="timeTracking1:TimeSlotViewModel">
+        <DataTemplate DataType="timeTracking1:TrackingSlotViewModel">
             <tracking:TimeSlotControl />
         </DataTemplate>
     </UserControl.DataTemplates>

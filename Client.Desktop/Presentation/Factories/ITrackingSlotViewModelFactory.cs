@@ -4,8 +4,8 @@ using Client.Desktop.Presentation.Models.TimeTracking;
 
 namespace Client.Desktop.Presentation.Factories;
 
-public interface ITimeSlotViewModelFactory
+public interface ITrackingSlotViewModelFactory
 {
-    Task<TimeSlotViewModel> Create(TicketClientModel ticket, StatisticsDataClientModel statisticsData,
+    Task<TrackingSlotViewModel> Create(TicketClientModel ticket, StatisticsDataClientModel statisticsData,
         TimeSlotClientModel timeSlot);
 }

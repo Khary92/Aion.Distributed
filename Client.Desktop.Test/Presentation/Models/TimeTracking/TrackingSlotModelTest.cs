@@ -15,7 +15,7 @@ public class TrackingSlotModelTest
     [Test]
     public async Task Initialize()
     {
-        var fixture = await TimeSlotModelProvider.Create(null);
+        var fixture = await TrackingSlotModelProvider.Create(null);
 
         Assert.That(fixture.Instance, Is.Not.Null);
     }
@@ -26,7 +26,7 @@ public class TrackingSlotModelTest
         var initialTimeSlot = new TimeSlotClientModel(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(),
             DateTimeOffset.Now, DateTimeOffset.Now,
             [], false);
-        var fixture = await TimeSlotModelProvider.Create(initialTimeSlot);
+        var fixture = await TrackingSlotModelProvider.Create(initialTimeSlot);
 
         var before = fixture.Instance.TimeSlot.IsTimerRunning;
         fixture.Instance.ToggleTimerState();
@@ -44,7 +44,7 @@ public class TrackingSlotModelTest
     [Test]
     public async Task ReceiveClientTicketDocumentationUpdatedNotification()
     {
-        var fixture = await TimeSlotModelProvider.Create(null);
+        var fixture = await TrackingSlotModelProvider.Create(null);
 
         var newDocumentation = "NewDocumentation";
         var clientTicketDocumentationUpdatedNotification =
@@ -59,7 +59,7 @@ public class TrackingSlotModelTest
     [Test]
     public async Task ReceiveClientTicketDataUpdatedNotification()
     {
-        var fixture = await TimeSlotModelProvider.Create(null);
+        var fixture = await TrackingSlotModelProvider.Create(null);
 
         var newName = "New Name from test";
         var clientTicketDataUpdatedNotification =
@@ -74,7 +74,7 @@ public class TrackingSlotModelTest
     [Test]
     public async Task ReceiveClientCreateSnapshotNotification_TimesChanged()
     {
-        var fixture = await TimeSlotModelProvider.Create(null);
+        var fixture = await TrackingSlotModelProvider.Create(null);
         fixture.TimeSlot.StartTime = fixture.TimeSlot.StartTime.AddHours(-1);
         fixture.TimeSlot.EndTime = fixture.TimeSlot.EndTime.AddHours(1);
         var clientCreateSnapshotNotification = new ClientCreateSnapshotNotification();

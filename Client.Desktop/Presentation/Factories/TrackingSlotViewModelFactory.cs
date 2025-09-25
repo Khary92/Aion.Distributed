@@ -8,15 +8,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Client.Desktop.Presentation.Factories;
 
-public class TimeSlotViewModelFactory(
+public class TrackingSlotViewModelFactory(
     IServiceProvider serviceProvider,
     IDocumentationSynchronizer documentationSynchronizer)
-    : ITimeSlotViewModelFactory
+    : ITrackingSlotViewModelFactory
 {
-    public async Task<TimeSlotViewModel> Create(TicketClientModel ticket, StatisticsDataClientModel statisticsData,
+    public async Task<TrackingSlotViewModel> Create(TicketClientModel ticket, StatisticsDataClientModel statisticsData,
         TimeSlotClientModel timeSlot)
     {
-        var timeSlotViewModel = serviceProvider.GetRequiredService<TimeSlotViewModel>();
+        var timeSlotViewModel = serviceProvider.GetRequiredService<TrackingSlotViewModel>();
 
         ticket.DocumentationSynchronizer = documentationSynchronizer;
         timeSlotViewModel.Model.Ticket = ticket;
