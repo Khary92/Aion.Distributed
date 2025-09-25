@@ -37,15 +37,6 @@ public class TimerSettingsNotificationsReceiver(
                 await foreach (var notification in call.ResponseStream.ReadAllAsync(stoppingToken))
                     switch (notification.NotificationCase)
                     {
-                        case TimerSettingsNotification.NotificationOneofCase.TimerSettingsCreated:
-                            var newTimerSettingsMessage = notification.TimerSettingsCreated.ToNewEntityMessage();
-
-                            await tracer.TimerSettings.Create.NotificationReceived(GetType(),
-                                newTimerSettingsMessage.TraceId, notification.TimerSettingsCreated);
-
-                            await timerSettingsStateService.SetTimerSettings(newTimerSettingsMessage);
-                            break;
-
                         case TimerSettingsNotification.NotificationOneofCase.DocuTimerSaveIntervalChanged:
                             var webDocuIntervalChangedNotification =
                                 notification.DocuTimerSaveIntervalChanged.ToNotification();

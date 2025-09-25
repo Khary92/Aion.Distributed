@@ -8,7 +8,6 @@ public interface ITimerSettingsStateService
 {
     TimerSettingsWebModel TimerSettings { get; }
     event Action? OnStateChanged;
-    Task SetTimerSettings(NewTimerSettingsMessage timerSettingsMessage);
     Task Apply(WebDocuIntervalChangedNotification notification);
     Task Apply(WebSnapshotIntervalChangedNotification notification);
 }

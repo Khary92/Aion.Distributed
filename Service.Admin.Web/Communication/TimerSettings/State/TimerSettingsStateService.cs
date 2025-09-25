@@ -1,7 +1,6 @@
 ﻿using Proto.Requests.TimerSettings;
 using Service.Admin.Tracing;
 using Service.Admin.Web.Communication.TimerSettings.Notifications;
-using Service.Admin.Web.Communication.TimerSettings.Records;
 using Service.Admin.Web.Communication.Wrappers;
 using Service.Admin.Web.Models;
 using Service.Admin.Web.Services;
@@ -10,7 +9,6 @@ namespace Service.Admin.Web.Communication.TimerSettings.State;
 
 public class TimerSettingsStateService(
     ISharedRequestSender requestSender,
-    ISharedCommandSender commandSender,
     ITraceCollector tracer)
     : ITimerSettingsStateService, IInitializeAsync
 {
@@ -26,25 +24,13 @@ public class TimerSettingsStateService(
             return;
         }
 
-        var traceId = Guid.NewGuid();
-        await tracer.TimerSettings.Create.StartUseCase(GetType(), traceId);
-
-        var webCreateTimerSettingsCommand = new WebCreateTimerSettingsCommand(Guid.NewGuid(), 30, 30, traceId);
-        await tracer.TimerSettings.Create.SendingCommand(GetType(), traceId, webCreateTimerSettingsCommand);
-        await commandSender.Send(webCreateTimerSettingsCommand.ToProto());
+        throw new Exception("Timer settings not found");
     }
 
     public TimerSettingsWebModel TimerSettings { get; private set; } = new(Guid.Empty, 0, 0);
 
     public event Action? OnStateChanged;
-
-    public async Task SetTimerSettings(NewTimerSettingsMessage timerSettingsMessage)
-    {
-        TimerSettings = timerSettingsMessage.TimerSettings;
-        await tracer.TimerSettings.Create.AggregateAdded(GetType(), timerSettingsMessage.TraceId);
-        NotifyStateChanged();
-    }
-
+    
     public async Task Apply(WebDocuIntervalChangedNotification notification)
     {
         TimerSettings.DocumentationSaveInterval = notification.DocumentationSaveInterval;

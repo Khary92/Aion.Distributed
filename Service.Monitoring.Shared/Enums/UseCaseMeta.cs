@@ -26,7 +26,6 @@ public enum UseCaseMeta
     UpdateTicket,
     UpdateTicketDocumentation,
     //TimerSettings
-    CreateTimerSettings,
     ChangeDocuTimerSaveInterval,
     ChangeSnapshotSaveInterval,
     //TimeSlot

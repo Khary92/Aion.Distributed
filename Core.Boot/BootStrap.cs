@@ -1,7 +1,9 @@
-﻿using Core.Persistence;
+﻿using System.Text.Json;
+using Core.Persistence;
 using Core.Persistence.DbContext;
 using Core.Server;
 using Core.Server.Tracing;
+using Domain.Events.TimerSettings;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
@@ -44,9 +46,28 @@ public static class BootStrap
         {
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             await db.Database.MigrateAsync();
+
+            await SeedAsync(db);
         }
 
         app.AddEndPoints();
         await app.RunAsync();
+    }
+
+    private static async Task SeedAsync(AppDbContext db)
+    {
+        if (db.TimerSettingsEvents.Any())
+        {
+            return;
+        }
+
+        var settingsId = Guid.NewGuid();
+
+        var settingsCreatedEvent = new TimerSettingsCreatedEvent(settingsId, 30, 30);
+
+        db.TimerSettingsEvents.Add(new TimerSettingsEvent(Guid.NewGuid(), DateTimeOffset.Now,
+            nameof(TimerSettingsCreatedEvent), settingsId, JsonSerializer.Serialize(settingsCreatedEvent)));
+        
+        await db.SaveChangesAsync();
     }
 }

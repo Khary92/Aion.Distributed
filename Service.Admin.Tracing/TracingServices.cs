@@ -53,8 +53,6 @@ public static class TracingServices
 
         services.AddSingleton<INoteTypeUseCaseSelector, NoteTypeUseCaseSelector>();
 
-
-        services.AddSingleton<ICreateTimerSettingsTraceCollector, CreateTimerSettingsTraceCollector>();
         services.AddSingleton<IChangeDocuTimerSaveIntervalTraceCollector, ChangeDocuTimerSaveIntervalTraceCollector>();
         services.AddSingleton<IChangeSnapshotSaveIntervalTraceCollector, ChangeSnapshotSaveIntervalTraceCollector>();
 
