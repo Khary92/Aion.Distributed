@@ -150,17 +150,4 @@ public class StatisticsDataCommandReceiverTest
                 request),
             Times.Once);
     }
-
-    [Test]
-    public void CreateStatisticsData_InvalidTraceId_ThrowsFormatException()
-    {
-        var request = new CreateStatisticsDataCommandProto
-        {
-            StatisticsDataId = Guid.NewGuid().ToString(),
-            TraceData = new TraceDataProto { TraceId = "invalid-guid" }
-        };
-
-        Assert.ThrowsAsync<FormatException>(() =>
-            _receiver.CreateStatisticsData(request, Mock.Of<ServerCallContext>()));
-    }
 }

@@ -66,8 +66,7 @@
                     TextWrapping="Wrap"
                     HorizontalAlignment="Stretch"
                     VerticalAlignment="Stretch"
-                    IsEnabled="{Binding !Model.TicketReplayDecorator.IsReplayMode}"
-                    Text="{Binding Model.TicketReplayDecorator.DisplayedDocumentation, Mode= TwoWay}" />
+                    Text="{Binding Model.Ticket.Documentation, Mode= TwoWay}" />
             </ScrollViewer>
         </Grid>
         <Border BorderThickness="1,2,2,2" Margin="0,0,0,5"

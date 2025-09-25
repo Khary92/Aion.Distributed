@@ -93,17 +93,13 @@ public class TimeSlotViewModel : ReactiveObject
 
     private void NextState()
     {
-        if (!Model.TicketReplayDecorator.IsReplayMode) return;
-
-        Model.TicketReplayDecorator.Next();
+        //TODO
     }
 
 
     private void PreviousState()
     {
-        if (!Model.TicketReplayDecorator.IsReplayMode) return;
-
-        Model.TicketReplayDecorator.Previous();
+        //TODO
     }
 
     private void UpdateTimerState()

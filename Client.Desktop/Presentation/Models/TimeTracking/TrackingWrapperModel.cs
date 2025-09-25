@@ -16,6 +16,7 @@ using Client.Desktop.DataModels;
 using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Register;
 using Client.Desktop.Presentation.Factories;
+using Client.Desktop.Presentation.Models.Synchronization;
 using Client.Desktop.Services.LocalSettings;
 using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
@@ -28,6 +29,7 @@ public class TimeTrackingModel(
     IMessenger messenger,
     ICommandSender commandSender,
     IRequestSender requestSender,
+    IDocumentationSynchronizer documentationSynchronizer,
     ITimeSlotViewModelFactory timeSlotViewModelFactory,
     ILocalSettingsService localSettingsService,
     ITraceCollector tracer) : ReactiveObject, IInitializeAsync, IMessengerRegistration, IRecipient<NewTicketMessage>,
@@ -157,7 +159,7 @@ public class TimeTrackingModel(
         if (TimeSlotViewModels.Any())
         {
             CurrentViewModelIndex = TimeSlotViewModels.Count - 1;
-            SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.TicketReplayDecorator.Ticket.Name;
+            SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.Ticket.Name;
         }
     }
 
@@ -167,7 +169,7 @@ public class TimeTrackingModel(
 
         TimeSlotViewModels[CurrentViewModelIndex].ToggleTimerCommand.Execute();
         CurrentViewModelIndex -= 1;
-        SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.TicketReplayDecorator.Ticket.Name;
+        SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.Ticket.Name;
     }
 
     public void ToggleNextViewModel()
@@ -176,7 +178,7 @@ public class TimeTrackingModel(
 
         TimeSlotViewModels[CurrentViewModelIndex].ToggleTimerCommand.Execute();
         CurrentViewModelIndex += 1;
-        SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.TicketReplayDecorator.Ticket.Name;
+        SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.Ticket.Name;
     }
 
     public async Task CreateNewTimeSlotViewModel()
@@ -221,9 +223,9 @@ public class TimeTrackingModel(
                 message.TimeSlot));
 
         await tracer.Client.CreateTrackingControl.AggregateAdded(GetType(), message.TraceId);
-        
+
         CurrentViewModelIndex = TimeSlotViewModels.Count - 1;
-        SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.TicketReplayDecorator.Ticket.Name;
+        SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.Ticket.Name;
     }
 
     private async Task HandleWorkDaySelectionChangedNotification(ClientWorkDaySelectionChangedNotification message)

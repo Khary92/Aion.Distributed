@@ -1,15 +1,16 @@
 using System;
 using System.Threading.Tasks;
-using Client.Desktop.Communication.Requests;
 using Client.Desktop.DataModels;
-using Client.Desktop.DataModels.Decorators.Replays;
+using Client.Desktop.Presentation.Models.Synchronization;
 using Client.Desktop.Presentation.Models.TimeTracking;
 using Client.Desktop.Presentation.Views.Custom;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Client.Desktop.Presentation.Factories;
 
-public class TimeSlotViewModelFactory(IServiceProvider serviceProvider, IRequestSender requestSender)
+public class TimeSlotViewModelFactory(
+    IServiceProvider serviceProvider,
+    IDocumentationSynchronizer documentationSynchronizer)
     : ITimeSlotViewModelFactory
 {
     public async Task<TimeSlotViewModel> Create(TicketClientModel ticket, StatisticsDataClientModel statisticsData,
@@ -17,13 +18,8 @@ public class TimeSlotViewModelFactory(IServiceProvider serviceProvider, IRequest
     {
         var timeSlotViewModel = serviceProvider.GetRequiredService<TimeSlotViewModel>();
 
-        var replayDecorator = new TicketReplayDecorator(requestSender, ticket)
-        {
-            DisplayedDocumentation = ticket.Documentation,
-            IsReplayMode = false
-        };
-
-        timeSlotViewModel.Model.TicketReplayDecorator = replayDecorator;
+        ticket.DocumentationSynchronizer = documentationSynchronizer;
+        timeSlotViewModel.Model.Ticket = ticket;
         timeSlotViewModel.Model.TimeSlot = timeSlot;
 
         timeSlotViewModel.CreateSubViewModels(ticket.TicketId, timeSlot.TimeSlotId, statisticsData);

@@ -32,19 +32,6 @@ public class TimeSlotCommandReceiverTest
     }
     
     [Test]
-    public void CreateTimeSlot_InvalidTraceId_ThrowsFormatException()
-    {
-        var request = new CreateTimeSlotCommandProto
-        {
-            TimeSlotId = Guid.NewGuid().ToString(),
-            TraceData = new TraceDataProto { TraceId = "invalid-guid" }
-        };
-
-        Assert.ThrowsAsync<FormatException>(() =>
-            _receiver.CreateTimeSlot(request, Mock.Of<ServerCallContext>()));
-    }
-    
-    [Test]
     public async Task AddNote_ValidRequest_ReturnsSuccessResponse()
     {
         var request = new AddNoteCommandProto

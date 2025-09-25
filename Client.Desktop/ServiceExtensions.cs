@@ -25,7 +25,6 @@ using Client.Desktop.Communication.Requests.Replays;
 using Client.Desktop.Communication.Requests.StatisticsData;
 using Client.Desktop.Communication.Requests.TimeSlots;
 using Client.Desktop.Communication.Requests.WorkDays;
-using Client.Desktop.DataModels.Decorators.Replays;
 using Client.Desktop.FileSystem;
 using Client.Desktop.FileSystem.Serializer;
 using Client.Desktop.Lifecycle.Shutdown;
@@ -150,6 +149,10 @@ public static class ServiceExtensions
         services.AddSingleton<TimerService>();
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<TimerService>());
         services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<TimerService>());
+        
+        services.AddSingleton<DocumentationSynchronizer>();
+        services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<DocumentationSynchronizer>());
+        services.AddSingleton<IDocumentationSynchronizer>(sp => sp.GetRequiredService<DocumentationSynchronizer>());
     }
 
     private static void AddSharedDataServices(this IServiceCollection services)
@@ -179,7 +182,6 @@ public static class ServiceExtensions
 
     private static void AddSynchronizationServices(this IServiceCollection services)
     {
-        services.AddSingleton<IStateSynchronizer<TicketReplayDecorator, string>, DocumentationSynchronizer>();
         services.AddSingleton<IPersistentCache<ClientSetStartTimeCommand>, StartTimeChangedCache>();
         services.AddSingleton<IPersistentCache<ClientSetEndTimeCommand>, EndTimeChangedCache>();
     }

@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
 using Client.Desktop.Communication.Notifications.Ticket.Records;
+using Client.Desktop.Presentation.Models.Synchronization;
 using ReactiveUI;
 
 namespace Client.Desktop.DataModels;
 
-public class TicketClientModel : ReactiveObject
+public class TicketClientModel : ReactiveObject, IDocumentationSynchronizationListener
 {
     private readonly Guid _ticketId;
     private string _bookingNumber = string.Empty;
@@ -21,11 +22,22 @@ public class TicketClientModel : ReactiveObject
         BookingNumber = bookingNumber;
         Documentation = documentation;
         SprintIds = sprintIds;
-        PreviousDocumentation = documentation;
     }
 
-    private string PreviousDocumentation { get; set; }
+    public bool IsDirty { get; private set; }
 
+    private IDocumentationSynchronizer? _documentationSynchronizer;
+    
+    public IDocumentationSynchronizer? DocumentationSynchronizer
+    {
+        get => _documentationSynchronizer;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _documentationSynchronizer, value);
+            _documentationSynchronizer?.Register(this);
+        }
+    }
+    
     public Guid TicketId
     {
         get => _ticketId;
@@ -53,7 +65,13 @@ public class TicketClientModel : ReactiveObject
     public string Documentation
     {
         get => _documentation;
-        set => this.RaiseAndSetIfChanged(ref _documentation, value);
+        set
+        {
+            if (string.Equals(_documentation, value, StringComparison.Ordinal)) return;
+            this.RaiseAndSetIfChanged(ref _documentation, value);
+            DocumentationSynchronizer?.Synchronize(_ticketId, value);
+            IsDirty = true;
+        }
     }
 
     public void Apply(ClientTicketDataUpdatedNotification notification)
@@ -66,18 +84,8 @@ public class TicketClientModel : ReactiveObject
     public void Apply(ClientTicketDocumentationUpdatedNotification notification)
     {
         Documentation = notification.Documentation;
+        IsDirty = false;
     }
-
-    public void SynchronizeDocumentation(string documentation)
-    {
-        PreviousDocumentation = Documentation;
-        Documentation = documentation;
-    }
-
-    public bool IsDocumentationChanged()
-    {
-        var result = !PreviousDocumentation.Equals(Documentation);
-        PreviousDocumentation = Documentation;
-        return result;
-    }
+    
+    public TicketClientModel Ticket => this;
 }

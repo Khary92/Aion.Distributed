@@ -5,7 +5,6 @@ using Client.Desktop.Communication.Requests.Client.Records;
 using Client.Desktop.Communication.Requests.Sprint;
 using Client.Desktop.Communication.Requests.Ticket;
 using Client.Desktop.DataModels;
-using Client.Desktop.DataModels.Decorators.Replays;
 using Client.Desktop.Presentation.Factories;
 using Client.Desktop.Presentation.Models.Synchronization;
 using Client.Desktop.Presentation.Models.TimeTracking;
@@ -40,6 +39,11 @@ public static class TimeTrackingModelProvider
         return new Mock<ITimeSlotViewModelFactory>();
     }
 
+    private static Mock<IDocumentationSynchronizer> CreateDocumentationSynchronizerMock()
+    {
+        return new Mock<IDocumentationSynchronizer>();
+    }
+
     private static Mock<ILocalSettingsService> CreateLocalSettingsServiceMock()
     {
         return new Mock<ILocalSettingsService>();
@@ -48,14 +52,6 @@ public static class TimeTrackingModelProvider
     private static Mock<ITraceCollector> CreateTracerMock()
     {
         return new Mock<ITraceCollector>
-        {
-            DefaultValue = DefaultValue.Mock
-        };
-    }
-
-    private static Mock<IStateSynchronizer<TicketReplayDecorator, string>> CreateTicketDocumentStateSynchronizerMock()
-    {
-        return new Mock<IStateSynchronizer<TicketReplayDecorator, string>>()
         {
             DefaultValue = DefaultValue.Mock
         };
@@ -102,11 +98,11 @@ public static class TimeTrackingModelProvider
         var timeSlotViewModelFactory = CreateTimeSlotViewModelFactoryMock();
         var tracer = CreateTracerMock();
         var localSettingsService = CreateLocalSettingsServiceMock();
-        var ticketDocumentStateSynchronizer = CreateTicketDocumentStateSynchronizerMock();
         var startTimeCache = CreateStartTimeCacheMock();
         var endTimeCache = CreateEndTimeCacheMock();
         var statisticsViewModelFactory = CreateStatisticsViewModelFactoryMock();
         var noteStreamViewModelFactory = CreateNoteStreamViewModelFactoryMock();
+        var documentationSynchronizer = CreateDocumentationSynchronizerMock();
 
         requestSender
             .Setup(rs => rs.Send(It.IsAny<ClientGetTicketsForCurrentSprintRequest>()))
@@ -127,11 +123,9 @@ public static class TimeTrackingModelProvider
             .Setup(rs => rs.Send(It.IsAny<ClientGetAllTicketsRequest>()))
             .ReturnsAsync(initialTickets);
 
-        var timeSlotModel = new TrackingSlotModel(messenger, ticketDocumentStateSynchronizer.Object,
-            startTimeCache.Object,
-            endTimeCache.Object, tracer.Object)
+        var timeSlotModel = new TrackingSlotModel(messenger, startTimeCache.Object, endTimeCache.Object, tracer.Object)
         {
-            TicketReplayDecorator = new TicketReplayDecorator(requestSender.Object, CreateTicketClientModel())
+            Ticket = CreateTicketClientModel()
         };
 
         var timeSlotViewModel = new TimeSlotViewModel(timeSlotModel, statisticsViewModelFactory.Object,
@@ -150,16 +144,18 @@ public static class TimeTrackingModelProvider
                 timeSlotViewModel);
 
         return await CreateFixture(messenger, requestSender, commandSender, timeSlotViewModelFactory, tracer,
-            localSettingsService, sprintClientModel);
+            localSettingsService, documentationSynchronizer,sprintClientModel);
     }
 
     private static async Task<TimeTrackingModelFixture> CreateFixture(IMessenger messenger,
         Mock<IRequestSender> requestSender, Mock<ICommandSender> commandSender,
         Mock<ITimeSlotViewModelFactory> timeSlotViewModelFactory,
         Mock<ITraceCollector> tracer, Mock<ILocalSettingsService> localSettingsService,
+        Mock<IDocumentationSynchronizer> documentationSynchronizer,
         SprintClientModel sprintClientModel)
     {
         var instance = new TimeTrackingModel(messenger, commandSender.Object, requestSender.Object,
+            documentationSynchronizer.Object,
             timeSlotViewModelFactory.Object, localSettingsService.Object, tracer.Object);
 
         instance.RegisterMessenger();

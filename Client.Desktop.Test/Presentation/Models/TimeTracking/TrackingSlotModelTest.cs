@@ -42,35 +42,18 @@ public class TrackingSlotModelTest
     }
 
     [Test]
-    public async Task ToggleReplayMode()
-    {
-        var fixture = await TimeSlotModelProvider.Create(null);
-
-        await fixture.Instance.ToggleReplayMode();
-
-        Assert.That(fixture.Instance.TicketReplayDecorator.IsReplayMode, Is.True);
-        Assert.That(fixture.Instance.TicketReplayDecorator.DisplayedDocumentation, Is.Not.EqualTo(string.Empty));
-
-        await fixture.Instance.ToggleReplayMode();
-
-        Assert.That(fixture.Instance.TicketReplayDecorator.IsReplayMode, Is.False);
-        Assert.That(fixture.Instance.TicketReplayDecorator.DisplayedDocumentation,
-            Is.EqualTo(fixture.TicketReplayDecorator.Ticket.Documentation));
-    }
-
-    [Test]
     public async Task ReceiveClientTicketDocumentationUpdatedNotification()
     {
         var fixture = await TimeSlotModelProvider.Create(null);
 
         var newDocumentation = "NewDocumentation";
         var clientTicketDocumentationUpdatedNotification =
-            new ClientTicketDocumentationUpdatedNotification(fixture.TicketReplayDecorator.Ticket.TicketId,
+            new ClientTicketDocumentationUpdatedNotification(fixture.Ticket.TicketId,
                 newDocumentation, Guid.NewGuid());
 
         fixture.Messenger.Send(clientTicketDocumentationUpdatedNotification);
 
-        Assert.That(fixture.Instance.TicketReplayDecorator.DisplayedDocumentation, Is.EqualTo(newDocumentation));
+        Assert.That(fixture.Ticket.Documentation, Is.EqualTo(newDocumentation));
     }
 
     [Test]
@@ -80,12 +63,12 @@ public class TrackingSlotModelTest
 
         var newName = "New Name from test";
         var clientTicketDataUpdatedNotification =
-            new ClientTicketDataUpdatedNotification(fixture.TicketReplayDecorator.Ticket.TicketId, newName,
+            new ClientTicketDataUpdatedNotification(fixture.Ticket.TicketId, newName,
                 "BookingNumber", [], Guid.NewGuid());
 
         fixture.Messenger.Send(clientTicketDataUpdatedNotification);
 
-        Assert.That(fixture.Instance.TicketReplayDecorator.Ticket.Name, Is.EqualTo(newName));
+        Assert.That(fixture.Instance.Ticket.Ticket.Name, Is.EqualTo(newName));
     }
 
     [Test]
@@ -100,31 +83,5 @@ public class TrackingSlotModelTest
 
         fixture.EndTimeCache.Verify(ec => ec.Store(It.IsAny<ClientSetEndTimeCommand>()));
         fixture.StartTimeCache.Verify(ec => ec.Store(It.IsAny<ClientSetStartTimeCommand>()));
- }
-
-    [Test]
-    public async Task ReceiveClientSaveDocumentationNotification_DocumentationNotChanged()
-    {
-        var fixture = await TimeSlotModelProvider.Create(null);
-        var clientSaveDocumentationNotification = new ClientSaveDocumentationNotification();
-
-        fixture.Messenger.Send(clientSaveDocumentationNotification);
-
-        fixture.DocumentationSynchronizer.Verify(ds => ds.SetSynchronizationValue(It.IsAny<Guid>(), It.IsAny<string>()),
-            Times.Never);
-        fixture.DocumentationSynchronizer.Verify(ds => ds.FireCommand(It.IsAny<Guid>()), Times.Never);
-    }
-
-    [Test]
-    public async Task ReceiveClientSaveDocumentationNotification_DocumentationChanged()
-    {
-        var fixture = await TimeSlotModelProvider.Create(null);
-        var clientSaveDocumentationNotification = new ClientSaveDocumentationNotification();
-
-        fixture.TicketReplayDecorator.Ticket.Documentation = "New Documentation from test";
-        fixture.Messenger.Send(clientSaveDocumentationNotification);
-
-        fixture.DocumentationSynchronizer.Verify(ds => ds.SetSynchronizationValue(It.IsAny<Guid>(), It.IsAny<string>()));
-        fixture.DocumentationSynchronizer.Verify(ds => ds.FireCommand(It.IsAny<Guid>()));
     }
 }

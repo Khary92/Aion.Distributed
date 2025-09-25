@@ -4,8 +4,6 @@ using Client.Desktop.Communication.Commands.TimeSlots.Records;
 using Client.Desktop.Communication.Notifications.Client.Records;
 using Client.Desktop.Communication.Notifications.Ticket.Records;
 using Client.Desktop.DataModels;
-using Client.Desktop.DataModels.Decorators.Replays;
-using Client.Desktop.Presentation.Models.Synchronization;
 using Client.Desktop.Services.Cache;
 using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
@@ -15,26 +13,19 @@ namespace Client.Desktop.Presentation.Models.TimeTracking;
 
 public class TrackingSlotModel(
     IMessenger messenger,
-    IStateSynchronizer<TicketReplayDecorator, string> ticketDocumentStateSynchronizer,
     IPersistentCache<ClientSetStartTimeCommand> startTimeCache,
     IPersistentCache<ClientSetEndTimeCommand> endTimeCache,
     ITraceCollector tracer) : ReactiveObject, IRecipient<ClientTicketDocumentationUpdatedNotification>,
-    IRecipient<ClientTicketDataUpdatedNotification>, IRecipient<ClientSaveDocumentationNotification>,
+    IRecipient<ClientTicketDataUpdatedNotification>,
     IRecipient<ClientCreateSnapshotNotification>
 {
-    private TicketReplayDecorator _selectedTicketReplayDecorator = null!;
+    private TicketClientModel _ticket = null!;
     private TimeSlotClientModel _timeSlot = null!;
 
-    public TicketReplayDecorator TicketReplayDecorator
+    public TicketClientModel Ticket
     {
-        get => _selectedTicketReplayDecorator;
-        set
-        {
-            this.RaiseAndSetIfChanged(ref _selectedTicketReplayDecorator, value);
-
-            ticketDocumentStateSynchronizer.Register(_selectedTicketReplayDecorator.Ticket.TicketId,
-                _selectedTicketReplayDecorator);
-        }
+        get => _ticket;
+        set => this.RaiseAndSetIfChanged(ref _ticket, value);
     }
 
     public TimeSlotClientModel TimeSlot
@@ -55,26 +46,22 @@ public class TrackingSlotModel(
 
     public async Task ToggleReplayMode()
     {
-        TicketReplayDecorator.IsReplayMode = !TicketReplayDecorator.IsReplayMode;
-
-        if (TicketReplayDecorator.IsReplayMode) await TicketReplayDecorator.LoadHistory();
-
-        if (!TicketReplayDecorator.IsReplayMode) TicketReplayDecorator.ExitReplay();
+//TODO
     }
 
     public void Receive(ClientTicketDocumentationUpdatedNotification message)
     {
-        if (TicketReplayDecorator.Ticket.TicketId != message.TicketId) return;
+        if (Ticket.TicketId != message.TicketId) return;
 
-        TicketReplayDecorator.Ticket.Apply(message);
+        Ticket.Apply(message);
         _ = tracer.Ticket.Documentation.NotificationReceived(GetType(), message.TraceId, message);
     }
 
     public void Receive(ClientTicketDataUpdatedNotification message)
     {
-        if (TicketReplayDecorator.Ticket.TicketId != message.TicketId) return;
+        if (Ticket.TicketId != message.TicketId) return;
 
-        TicketReplayDecorator.Ticket.Apply(message);
+        Ticket.Apply(message);
         _ = tracer.Ticket.Update.ChangesApplied(GetType(), message.TraceId);
     }
 
@@ -94,19 +81,5 @@ public class TrackingSlotModel(
 
             startTimeCache.Store(setStartTimeCommand);
         }
-    }
-    
-    public void Receive(ClientSaveDocumentationNotification message) => _ = HandleClientSaveDocumentationNotification(message);
-    private async Task HandleClientSaveDocumentationNotification(ClientSaveDocumentationNotification message)
-    {
-        if (!TicketReplayDecorator.Ticket.IsDocumentationChanged()) return;
-
-        var traceId = Guid.NewGuid();
-        await tracer.Ticket.Documentation.StartUseCase(GetType(), traceId);
-
-        ticketDocumentStateSynchronizer.SetSynchronizationValue(TicketReplayDecorator.Ticket.TicketId,
-            TicketReplayDecorator.Ticket.Documentation);
-
-        await ticketDocumentStateSynchronizer.FireCommand(traceId);
     }
 }

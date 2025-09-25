@@ -1,97 +1,72 @@
-using System;
-using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.Commands.Ticket;
-using Client.Desktop.DataModels.Decorators.Replays;
+using Client.Desktop.Communication.Notifications.Client.Records;
+using Client.Desktop.Communication.Notifications.Ticket.Records;
+using Client.Desktop.Lifecycle.Startup.Tasks.Register;
+using CommunityToolkit.Mvvm.Messaging;
 
 namespace Client.Desktop.Presentation.Models.Synchronization;
 
-public class DocumentationSynchronizer(ICommandSender commandSender)
-    : IStateSynchronizer<TicketReplayDecorator, string>
+public class DocumentationSynchronizer(IMessenger messenger, ICommandSender commandSender)
+    : IMessengerRegistration, IRecipient<ClientTicketDocumentationUpdatedNotification>,
+        IRecipient<ClientSaveDocumentationNotification>, IDocumentationSynchronizer
 {
-    private readonly ConcurrentDictionary<Guid, byte> _dirtyTickets = new();
-    private readonly ConcurrentDictionary<Guid, string> _documentationById = new();
+    private readonly List<IDocumentationSynchronizationListener> _listeners = [];
 
-    private readonly ConcurrentDictionary<Guid, ConcurrentDictionary<TicketReplayDecorator, byte>>
-        _ticketDecoratorsById = new();
-
-    public void Register(Guid ticketId, TicketReplayDecorator ticket)
+    public void Register(IDocumentationSynchronizationListener listener)
     {
-        var decorators =
-            _ticketDecoratorsById.GetOrAdd(ticketId, _ => new ConcurrentDictionary<TicketReplayDecorator, byte>());
-        decorators.TryAdd(ticket, 0);
+        _listeners.Add(listener);
     }
 
-
-    public void SetSynchronizationValue(Guid ticketId, string documentation)
+    public void RegisterMessenger()
     {
-        string? currentDocumentation = null;
+        messenger.RegisterAll(this);
+    }
 
-        if (_documentationById.TryGetValue(ticketId, out var existing))
-            currentDocumentation = existing;
-        else if (_ticketDecoratorsById.TryGetValue(ticketId, out var existingDecorators))
-            foreach (var dec in existingDecorators.Keys)
-            {
-                currentDocumentation = dec.DisplayedDocumentation;
-                break;
-            }
+    public void UnregisterMessenger()
+    {
+        messenger.UnregisterAll(this);
+    }
 
-        if (string.Equals(currentDocumentation, documentation, StringComparison.Ordinal)) return;
-
-        _documentationById.AddOrUpdate(ticketId, documentation, (_, _) => documentation);
-
-        _dirtyTickets.TryAdd(ticketId, 0);
-
-        if (!_ticketDecoratorsById.TryGetValue(ticketId, out var decorators)) return;
-
-        foreach (var decorator in decorators.Keys)
+    public void Synchronize(Guid ticketId, string documentation)
+    {
+        foreach (var listener in _listeners.Where(listener => listener.Ticket.TicketId == ticketId))
         {
-            if (string.Equals(decorator.DisplayedDocumentation, documentation, StringComparison.Ordinal)) continue;
-
-            decorator.DisplayedDocumentation = documentation;
+            listener.Ticket.Documentation = documentation;
         }
     }
 
-    public async Task FireCommand(Guid traceId)
+    public void Receive(ClientTicketDocumentationUpdatedNotification message)
     {
-        foreach (var ticketId in _dirtyTickets.Keys)
+        foreach (var listener in _listeners.Where(listener => listener.Ticket.TicketId == message.TicketId))
         {
-            if (!_documentationById.TryGetValue(ticketId, out var documentation))
-                continue;
-
-            if (_ticketDecoratorsById.TryGetValue(ticketId, out var decorators))
-                foreach (var decorator in decorators.Keys)
-                {
-                    if (!string.Equals(decorator.DisplayedDocumentation, documentation, StringComparison.Ordinal))
-                        decorator.DisplayedDocumentation = documentation;
-
-                    decorator.Ticket.SynchronizeDocumentation(documentation);
-                }
-
-            await commandSender.Send(
-                new ClientUpdateTicketDocumentationCommand(ticketId, documentation, traceId));
-
-            _dirtyTickets.TryRemove(ticketId, out _);
+            listener.Ticket.Apply(message);
         }
     }
 
-    public bool IsTicketDirty(Guid ticketId)
-    {
-        return _dirtyTickets.ContainsKey(ticketId);
-    }
+    public void Receive(ClientSaveDocumentationNotification message) => _ = SendCommand(message);
 
-    public ConcurrentDictionary<TicketReplayDecorator, byte> GetDecoratorsById(Guid ticketId)
+    private async Task SendCommand(ClientSaveDocumentationNotification message)
     {
-        return _ticketDecoratorsById.TryGetValue(ticketId, out var decorators)
-            ? decorators
-            : new ConcurrentDictionary<TicketReplayDecorator, byte>();
-    }
+        var traceId = Guid.NewGuid();
 
-    public void RemoveTicket(Guid ticketId)
-    {
-        _ticketDecoratorsById.TryRemove(ticketId, out _);
-        _documentationById.TryRemove(ticketId, out _);
-        _dirtyTickets.TryRemove(ticketId, out _);
+        var dirtyTickets = _listeners
+            .Select(l => l.Ticket)
+            .GroupBy(t => t.TicketId)
+            .Select(g => g.First())
+            .Where(t => t.IsDirty)
+            .ToList();
+
+        foreach (var ticket in dirtyTickets)
+        {
+            await commandSender.Send(new ClientUpdateTicketDocumentationCommand(
+                ticket.TicketId,
+                ticket.Documentation,
+                traceId));
+        }
     }
 }
