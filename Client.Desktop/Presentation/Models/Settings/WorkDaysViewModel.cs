@@ -1,5 +1,5 @@
 using System.Reactive.Linq;
-using Client.Desktop.Communication.Notifications.UseCase.Records;
+using Client.Desktop.Communication.Notifications.Client.Records;
 using Client.Desktop.DataModels;
 using CommunityToolkit.Mvvm.Messaging;
 using ReactiveUI;

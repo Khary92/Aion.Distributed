@@ -1,4 +1,6 @@
 using Client.Tracing.Tracing.Tracers;
+using Client.Tracing.Tracing.Tracers.Client;
+using Client.Tracing.Tracing.Tracers.Client.UseCase;
 using Client.Tracing.Tracing.Tracers.Note;
 using Client.Tracing.Tracing.Tracers.Note.UseCase;
 using Client.Tracing.Tracing.Tracers.NoteType;
@@ -33,8 +35,9 @@ public static class TracingServices
         AddWorkdayTracingServices(services);
         AddStatisticsDataTracingServices(services);
         AddTimeSlotTracingServices(services);
+        AddClientTracingServices(services);
     }
-
+    
     private static void AddACommonTracingServices(this IServiceCollection services)
     {
         services.AddScoped<ITracingDataSender>(_ => new TracingDataSender("http://127.0.0.1:8082"));
@@ -105,5 +108,12 @@ public static class TracingServices
         services.AddSingleton<ISetEndTimeTraceCollector, SetEndTimeTraceCollector>();
 
         services.AddSingleton<ITimeSlotUseCaseSelector, TimeSlotUseCaseSelector>();
+    }
+    
+    private static void AddClientTracingServices(IServiceCollection services)
+    {
+        services.AddSingleton<ICreateTrackingControlCollector, CreateTrackingControlCollector>();
+
+        services.AddSingleton<IClientUseCaseSelector, ClientUseCaseSelector>();
     }
 }

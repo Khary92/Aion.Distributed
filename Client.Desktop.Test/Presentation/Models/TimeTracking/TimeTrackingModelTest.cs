@@ -1,10 +1,10 @@
-﻿using Client.Desktop.Communication.Commands.UseCases.Records;
+﻿using Client.Desktop.Communication.Commands.Client.Records;
+using Client.Desktop.Communication.Notifications.Client.Records;
 using Client.Desktop.Communication.Notifications.Sprint.Records;
 using Client.Desktop.Communication.Notifications.Ticket.Records;
-using Client.Desktop.Communication.Notifications.UseCase.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
+using Client.Desktop.Communication.Requests.Client.Records;
 using Client.Desktop.Communication.Requests.Ticket;
-using Client.Desktop.Communication.Requests.UseCase.Records;
 using Client.Desktop.DataModels;
 using Client.Desktop.Presentation.Models.TimeTracking;
 using CommunityToolkit.Mvvm.Messaging;
@@ -111,8 +111,8 @@ public class TimeTrackingModelTest
         var initialData = CreateInitialData();
         var fixture = await TimeTrackingModelProvider.Create([initialData.InitialTicket], []);
 
-        fixture.Messenger.Send(new ClientTimeSlotControlCreatedNotification(initialData.InitialStatisticsData,
-            initialData.InitialTicket, initialData.InitialTimeSlot));
+        fixture.Messenger.Send(new ClientTrackingControlCreatedNotification(initialData.InitialStatisticsData,
+            initialData.InitialTicket, initialData.InitialTimeSlot, Guid.NewGuid()));
 
         Assert.That(fixture.Instance.TimeSlotViewModels, Has.Count.EqualTo(1));
     }
@@ -139,7 +139,7 @@ public class TimeTrackingModelTest
 
         await fixture.Instance.CreateNewTimeSlotViewModel();
 
-        fixture.CommandSender.Verify(cs => cs.Send(It.IsAny<ClientCreateTimeSlotControlCommand>()), Times.Never);
+        fixture.CommandSender.Verify(cs => cs.Send(It.IsAny<ClientCreateTrackingControlCommand>()), Times.Never);
     }
 
     [Test]
@@ -151,7 +151,7 @@ public class TimeTrackingModelTest
 
         await fixture.Instance.CreateNewTimeSlotViewModel();
 
-        fixture.CommandSender.Verify(cs => cs.Send(It.IsAny<ClientCreateTimeSlotControlCommand>()));
+        fixture.CommandSender.Verify(cs => cs.Send(It.IsAny<ClientCreateTrackingControlCommand>()));
     }
 
     [Test]
@@ -169,9 +169,9 @@ public class TimeTrackingModelTest
         fixture.Instance.ToggleNextViewModel();
 
         Assert.That(fixture.Instance.CurrentViewModelIndex, Is.EqualTo(1));
-        
+
         fixture.Instance.TogglePreviousViewModel();
-        
+
         Assert.That(fixture.Instance.CurrentViewModelIndex, Is.EqualTo(0));
     }
 

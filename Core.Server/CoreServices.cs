@@ -1,3 +1,5 @@
+using Core.Server.Communication.Endpoints.Client;
+using Core.Server.Communication.Endpoints.Client.Handler;
 using Core.Server.Communication.Endpoints.Note;
 using Core.Server.Communication.Endpoints.NoteType;
 using Core.Server.Communication.Endpoints.Sprint;
@@ -8,9 +10,8 @@ using Core.Server.Communication.Endpoints.Ticket;
 using Core.Server.Communication.Endpoints.TimerSettings;
 using Core.Server.Communication.Endpoints.TimeSlot;
 using Core.Server.Communication.Endpoints.TraceReport;
-using Core.Server.Communication.Endpoints.UseCase;
-using Core.Server.Communication.Endpoints.UseCase.Handler;
 using Core.Server.Communication.Endpoints.WorkDay;
+using Core.Server.Services.Client;
 using Core.Server.Services.Entities.Notes;
 using Core.Server.Services.Entities.NoteTypes;
 using Core.Server.Services.Entities.Sprints;
@@ -20,7 +21,6 @@ using Core.Server.Services.Entities.Tickets;
 using Core.Server.Services.Entities.TimerSettings;
 using Core.Server.Services.Entities.TimeSlots;
 using Core.Server.Services.Entities.WorkDays;
-using Core.Server.Services.UseCase;
 using Core.Server.Translators.Commands.Notes;
 using Core.Server.Translators.Commands.NoteTypes;
 using Core.Server.Translators.Commands.Sprints;
@@ -47,7 +47,7 @@ public static class CoreServices
 
     private static void AddCommonServices(this IServiceCollection services)
     {
-        services.AddScoped<ITimeSlotControlService, TimeSlotControlService>();
+        services.AddScoped<ITrackingControlService, TrackingControlService>();
         services.AddScoped<IAnalysisDataService, AnalysisDataService>();
     }
 

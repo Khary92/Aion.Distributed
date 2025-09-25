@@ -1,4 +1,6 @@
 ﻿using System.Threading.Tasks;
+using Client.Desktop.Communication.Commands.Client;
+using Client.Desktop.Communication.Commands.Client.Records;
 using Client.Desktop.Communication.Commands.Notes;
 using Client.Desktop.Communication.Commands.Notes.Records;
 using Client.Desktop.Communication.Commands.StatisticsData;
@@ -6,8 +8,6 @@ using Client.Desktop.Communication.Commands.StatisticsData.Records;
 using Client.Desktop.Communication.Commands.Ticket;
 using Client.Desktop.Communication.Commands.TimeSlots;
 using Client.Desktop.Communication.Commands.TimeSlots.Records;
-using Client.Desktop.Communication.Commands.UseCases;
-using Client.Desktop.Communication.Commands.UseCases.Records;
 using Client.Desktop.Communication.Commands.WorkDays;
 using Client.Desktop.Communication.Commands.WorkDays.Records;
 using Client.Desktop.Communication.Policies;
@@ -19,7 +19,7 @@ public class CommandSender(
     INoteCommandSender noteCommandSender,
     IStatisticsDataCommandSender statisticsDataCommandSender,
     ITimeSlotCommandSender timeSlotCommandSender,
-    IUseCaseCommandSender useCaseCommandSender,
+    IClientCommandSender clientCommandSender,
     IWorkDayCommandSender workDayCommandSender,
     ITicketCommandSender ticketCommandSender,
     CommandRetryPolicy sender) : ICommandSender
@@ -60,10 +60,10 @@ public class CommandSender(
             timeSlotCommandSender.Send(command));
     }
 
-    public async Task<bool> Send(ClientCreateTimeSlotControlCommand command)
+    public async Task<bool> Send(ClientCreateTrackingControlCommand command)
     {
         return await sender.Policy.ExecuteAsync(() =>
-            useCaseCommandSender.Send(command));
+            clientCommandSender.Send(command));
     }
 
     public async Task<bool> Send(ClientCreateWorkDayCommand command)

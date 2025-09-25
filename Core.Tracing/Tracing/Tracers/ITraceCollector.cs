@@ -1,3 +1,4 @@
+using Core.Server.Tracing.Tracing.Tracers.Client;
 using Core.Server.Tracing.Tracing.Tracers.Note;
 using Core.Server.Tracing.Tracing.Tracers.NoteType;
 using Core.Server.Tracing.Tracing.Tracers.Sprint;
@@ -21,4 +22,5 @@ public interface ITraceCollector
     ITimerSettingsUseCaseSelector TimerSettings { get; }
     ITimeSlotUseCaseSelector TimeSlot { get; }
     IWorkDayUseCaseSelector WorkDay { get; }
+    IClientUseCaseSelector Client { get; }
 }

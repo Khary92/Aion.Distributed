@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands.TimeSlots.Records;
+using Client.Desktop.Communication.Notifications.Client.Records;
 using Client.Desktop.Communication.Notifications.Ticket.Records;
-using Client.Desktop.Communication.Notifications.UseCase.Records;
 using Client.Desktop.DataModels;
 using Client.Desktop.DataModels.Decorators.Replays;
 using Client.Desktop.Presentation.Models.Synchronization;

@@ -29,10 +29,11 @@ public enum UseCaseMeta
     ChangeDocuTimerSaveInterval,
     ChangeSnapshotSaveInterval,
     //TimeSlot
-    CreateTimeSlot,
     AddNoteToTimeSlot,
     SetStartTime,
     SetEndTime,
+    //UseCase
+    CreateTrackingControl,
     //WorkDay
     CreateWorkDay
 }

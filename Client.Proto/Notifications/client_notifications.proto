@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+import "DTO/tracking_control_data.proto";
+import "DTO/trace_data.proto";
+
+option csharp_namespace = "Proto.Notifications.Client";
+
+service NotificationService {
+  rpc SendSprintSelectionChanged(SprintSelectionChangedNotification) returns (NotificationResponse);
+  rpc SendTrackingControlCreated(TrackingControlCreatedNotification) returns (NotificationResponse);
+}
+
+service ClientNotificationService {
+  rpc SubscribeClientNotifications(SubscribeRequest) returns (stream ClientNotification);
+}
+
+message ClientNotification {
+  oneof notification {
+    SprintSelectionChangedNotification sprintSelectionChanged = 1;
+    TrackingControlCreatedNotification timeSlotControlCreated = 2;
+  }
+}
+
+message SprintSelectionChangedNotification {
+  TraceDataProto traceData = 1;
+}
+
+message TrackingControlCreatedNotification {
+  TrackingControlDataProto time_slot_control_data = 1;
+  TraceDataProto traceData = 2;
+}
+
+message NotificationResponse {
+  bool success = 1;
+}
+
+message SubscribeRequest {}

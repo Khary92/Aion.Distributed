@@ -24,7 +24,6 @@ public class TimeSlotCommandReceiverTest
         _serviceMock = new Mock<ITimeSlotCommandsService>();
         _tracerMock = new Mock<ITraceCollector>();
 
-        _tracerMock.Setup(t => t.TimeSlot.Create).Returns(Mock.Of<ICreateTimeSlotTraceCollector>());
         _tracerMock.Setup(t => t.TimeSlot.AddNote).Returns(Mock.Of<IAddNoteTraceCollector>());
         _tracerMock.Setup(t => t.TimeSlot.SetStartTime).Returns(Mock.Of<ISetStartTimeTraceCollector>());
         _tracerMock.Setup(t => t.TimeSlot.SetEndTime).Returns(Mock.Of<ISetEndTimeTraceCollector>());

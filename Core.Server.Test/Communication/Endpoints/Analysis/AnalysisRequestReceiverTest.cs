@@ -1,8 +1,8 @@
 using Core.Server.Communication.Endpoints.Analysis;
+using Core.Server.Services.Client;
 using Core.Server.Services.Entities.Sprints;
 using Core.Server.Services.Entities.Tags;
 using Core.Server.Services.Entities.Tickets;
-using Core.Server.Services.UseCase;
 using Domain.Entities;
 using Grpc.Core;
 using Moq;

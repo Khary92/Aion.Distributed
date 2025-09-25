@@ -1,7 +1,7 @@
-﻿using Core.Server.Services.Entities.Sprints;
+﻿using Core.Server.Services.Client;
+using Core.Server.Services.Entities.Sprints;
 using Core.Server.Services.Entities.Tags;
 using Core.Server.Services.Entities.Tickets;
-using Core.Server.Services.UseCase;
 using Grpc.Core;
 using Proto.DTO.AnalysisBySprint;
 using Proto.DTO.AnalysisByTag;

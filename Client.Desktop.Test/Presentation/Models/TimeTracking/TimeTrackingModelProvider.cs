@@ -1,12 +1,11 @@
 using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.Commands.TimeSlots.Records;
 using Client.Desktop.Communication.Requests;
+using Client.Desktop.Communication.Requests.Client.Records;
 using Client.Desktop.Communication.Requests.Sprint;
 using Client.Desktop.Communication.Requests.Ticket;
-using Client.Desktop.Communication.Requests.UseCase.Records;
 using Client.Desktop.DataModels;
 using Client.Desktop.DataModels.Decorators.Replays;
-using Client.Desktop.Presentation;
 using Client.Desktop.Presentation.Factories;
 using Client.Desktop.Presentation.Models.Synchronization;
 using Client.Desktop.Presentation.Models.TimeTracking;
@@ -121,14 +120,15 @@ public static class TimeTrackingModelProvider
             .ReturnsAsync(sprintClientModel);
 
         requestSender
-            .Setup(rs => rs.Send(It.IsAny<ClientGetTimeSlotControlDataRequest>()))
+            .Setup(rs => rs.Send(It.IsAny<ClientGetTrackingControlDataRequest>()))
             .ReturnsAsync(initialTimeSlots);
-        
+
         requestSender
             .Setup(rs => rs.Send(It.IsAny<ClientGetAllTicketsRequest>()))
             .ReturnsAsync(initialTickets);
 
-        var timeSlotModel = new TrackingSlotModel(messenger, ticketDocumentStateSynchronizer.Object, startTimeCache.Object,
+        var timeSlotModel = new TrackingSlotModel(messenger, ticketDocumentStateSynchronizer.Object,
+            startTimeCache.Object,
             endTimeCache.Object, tracer.Object)
         {
             TicketReplayDecorator = new TicketReplayDecorator(requestSender.Object, CreateTicketClientModel())
@@ -156,7 +156,8 @@ public static class TimeTrackingModelProvider
     private static async Task<TimeTrackingModelFixture> CreateFixture(IMessenger messenger,
         Mock<IRequestSender> requestSender, Mock<ICommandSender> commandSender,
         Mock<ITimeSlotViewModelFactory> timeSlotViewModelFactory,
-        Mock<ITraceCollector> tracer, Mock<ILocalSettingsService> localSettingsService, SprintClientModel sprintClientModel)
+        Mock<ITraceCollector> tracer, Mock<ILocalSettingsService> localSettingsService,
+        SprintClientModel sprintClientModel)
     {
         var instance = new TimeTrackingModel(messenger, commandSender.Object, requestSender.Object,
             timeSlotViewModelFactory.Object, localSettingsService.Object, tracer.Object);
@@ -184,7 +185,6 @@ public static class TimeTrackingModelProvider
         public required Mock<ICommandSender> CommandSender { get; init; }
         public required Mock<ITimeSlotViewModelFactory> TimeSlotViewModelFactory { get; init; }
         public required Mock<ILocalSettingsService> LocalSettingsService { get; init; }
-        
         public required Guid CurrentSprintId { get; init; }
     }
 }

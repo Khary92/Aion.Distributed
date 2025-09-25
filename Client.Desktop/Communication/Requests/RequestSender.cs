@@ -4,6 +4,8 @@ using Client.Desktop.Communication.Notifications;
 using Client.Desktop.Communication.Policies;
 using Client.Desktop.Communication.Requests.Analysis;
 using Client.Desktop.Communication.Requests.Analysis.Records;
+using Client.Desktop.Communication.Requests.Client;
+using Client.Desktop.Communication.Requests.Client.Records;
 using Client.Desktop.Communication.Requests.Notes;
 using Client.Desktop.Communication.Requests.Notes.Records;
 using Client.Desktop.Communication.Requests.NoteType;
@@ -17,8 +19,6 @@ using Client.Desktop.Communication.Requests.Ticket;
 using Client.Desktop.Communication.Requests.Timer;
 using Client.Desktop.Communication.Requests.TimeSlots;
 using Client.Desktop.Communication.Requests.TimeSlots.Records;
-using Client.Desktop.Communication.Requests.UseCase;
-using Client.Desktop.Communication.Requests.UseCase.Records;
 using Client.Desktop.Communication.Requests.WorkDays;
 using Client.Desktop.Communication.Requests.WorkDays.Records;
 using Client.Desktop.DataModels;
@@ -42,7 +42,7 @@ public class RequestSender(
     ITimeSlotRequestSender timeSlotRequestSender,
     IWorkDayRequestSender workDayRequestSender,
     ITicketReplayRequestSender ticketReplayRequestSender,
-    IUseCaseRequestSender useCaseRequestSender,
+    IClientRequestSender useCaseRequestSender,
     IAnalysisRequestSender analysisRequestSender,
     ITimerSettingsRequestSender timerSettingsRequestSender,
     RequestRetryPolicy requestSender) : IRequestSender
@@ -204,7 +204,7 @@ public class RequestSender(
             ticketReplayRequestSender.Send(request));
     }
 
-    public async Task<List<ClientGetTrackingControlResponse>> Send(ClientGetTimeSlotControlDataRequest request)
+    public async Task<List<ClientGetTrackingControlResponse>> Send(ClientGetTrackingControlDataRequest request)
     {
         return await requestSender.Policy.ExecuteAsync(() =>
             useCaseRequestSender.Send(request));

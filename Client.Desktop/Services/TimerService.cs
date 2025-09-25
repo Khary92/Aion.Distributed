@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using System.Timers;
+using Client.Desktop.Communication.Notifications.Client.Records;
 using Client.Desktop.Communication.Notifications.TimerSettings.Records;
-using Client.Desktop.Communication.Notifications.UseCase.Records;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.Communication.Requests.Timer;
 using Client.Desktop.DataModels;

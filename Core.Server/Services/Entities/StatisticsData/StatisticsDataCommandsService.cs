@@ -40,10 +40,10 @@ public class StatisticsDataCommandsService(
     {
         await statisticsDataEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
         var statistics = command.ToNotification();
-        await tracer.Statistics.Create.EventPersisted(GetType(), command.TraceId,
+        await tracer.Client.CreateTrackingControl.EventPersisted(GetType(), command.TraceId,
             statistics.StatisticsDataCreated);
 
-        await tracer.Statistics.Create.SendingNotification(GetType(), command.TraceId,
+        await tracer.Client.CreateTrackingControl.SendingNotification(GetType(), command.TraceId,
             statistics.StatisticsDataCreated);
         await statisticsDataNotificationService.SendNotificationAsync(command.ToNotification());
     }

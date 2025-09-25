@@ -26,7 +26,6 @@ public class StatisticsDataCommandReceiverTest
 
         _tracerMock.Setup(t => t.Statistics.ChangeProductivity).Returns(Mock.Of<IChangeProductivityTraceCollector>());
         _tracerMock.Setup(t => t.Statistics.ChangeTagSelection).Returns(Mock.Of<IChangeTagSelectionTraceCollector>());
-        _tracerMock.Setup(t => t.Statistics.Create).Returns(Mock.Of<ICreateStatisticsDataTraceCollector>());
 
         _receiver = new StatisticsDataCommandReceiver(_serviceMock.Object, _tracerMock.Object);
     }

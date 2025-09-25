@@ -12,20 +12,10 @@ public class TimeSlotVerificationProvider : IVerificationProvider
 
     public TimeSlotVerificationProvider()
     {
-        _verificationProvider.Add(UseCaseMeta.CreateTimeSlot, CreateTimeSlotSteps);
         _verificationProvider.Add(UseCaseMeta.AddNoteToTimeSlot, AddNoteToTimeSlotSteps);
         _verificationProvider.Add(UseCaseMeta.SetStartTime, SetStartTimeSteps);
         _verificationProvider.Add(UseCaseMeta.SetEndTime, SetEndTimeSteps);
     }
-
-    private static readonly ImmutableList<VerificationStep> CreateTimeSlotSteps = ImmutableList.Create(
-        new VerificationStep(LoggingMeta.ActionRequested, Invoked.Equals, 1),
-        new VerificationStep(LoggingMeta.SendingCommand, Invoked.Equals, 1),
-        new VerificationStep(LoggingMeta.CommandReceived, Invoked.Equals, 1),
-        new VerificationStep(LoggingMeta.EventPersisted, Invoked.Equals, 1),
-        new VerificationStep(LoggingMeta.SendingNotification, Invoked.Equals, 1),
-        new VerificationStep(LoggingMeta.NotificationReceived, Invoked.AtLeast, 1),
-        new VerificationStep(LoggingMeta.AggregateAdded, Invoked.AtLeast, 1));
 
     private static readonly ImmutableList<VerificationStep> AddNoteToTimeSlotSteps = ImmutableList.Create(
         new VerificationStep(LoggingMeta.ActionRequested, Invoked.Equals, 1),

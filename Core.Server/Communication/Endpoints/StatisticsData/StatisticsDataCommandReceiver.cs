@@ -29,13 +29,4 @@ public class StatisticsDataCommandReceiver(
         await statisticsDataCommandsService.ChangeTagSelection(request.ToCommand());
         return new CommandResponse { Success = true };
     }
-
-    public override async Task<CommandResponse> CreateStatisticsData(CreateStatisticsDataCommandProto request,
-        ServerCallContext context)
-    {
-        await tracer.Statistics.Create.CommandReceived(GetType(), Guid.Parse(request.TraceData.TraceId), request);
-
-        await statisticsDataCommandsService.Create(request.ToCommand());
-        return new CommandResponse { Success = true };
-    }
 }

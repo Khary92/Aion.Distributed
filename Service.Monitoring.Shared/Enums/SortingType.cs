@@ -11,5 +11,6 @@ public enum SortingType
     WorkDay,
     Sprint,
     StatisticsData,
-    TimeSlot
+    TimeSlot,
+    Client
 }

@@ -15,20 +15,7 @@ public static class TimeSlotExtensions
             TimeSlotId = command.TimeSlotId.ToString()
         };
     }
-
-    public static CreateTimeSlotCommandProto ToProto(this ClientCreateTimeSlotCommand command)
-    {
-        return new CreateTimeSlotCommandProto
-        {
-            TimeSlotId = command.TimeSlotId.ToString(),
-            WorkDayId = command.WorkDayId.ToString(),
-            SelectedTicketId = command.SelectedTicketId.ToString(),
-            StartTime = Timestamp.FromDateTimeOffset(command.StartTime),
-            EndTime = Timestamp.FromDateTimeOffset(command.EndTime),
-            IsTimerRunning = command.IsTimerRunning
-        };
-    }
-
+    
     public static SetStartTimeCommandProto ToProto(this ClientSetStartTimeCommand command)
     {
         return new SetStartTimeCommandProto

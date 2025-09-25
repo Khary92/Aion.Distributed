@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+import "DTO/tracking_control_data.proto";
+import "google/protobuf/timestamp.proto";
+import "DTO/trace_data.proto";
+
+option csharp_namespace = "Proto.Requests.Client";
+
+message GetTrackingControlDataRequestProto {
+  google.protobuf.Timestamp date = 1;
+  TraceDataProto traceData = 2;
+}
+
+message TrackingControlDataListProto {
+  repeated TrackingControlDataProto time_slot_control_data = 1;
+}
+
+service ClientRequestService {
+  rpc GetTrackingControlDataByDate(GetTrackingControlDataRequestProto) returns (TrackingControlDataListProto);
+}

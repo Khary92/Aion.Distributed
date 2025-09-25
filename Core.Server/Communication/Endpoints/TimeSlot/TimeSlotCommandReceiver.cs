@@ -8,15 +8,6 @@ namespace Core.Server.Communication.Endpoints.TimeSlot;
 public class TimeSlotCommandReceiver(ITimeSlotCommandsService timeSlotCommandsService, ITraceCollector tracer)
     : TimeSlotCommandProtoService.TimeSlotCommandProtoServiceBase
 {
-    public override async Task<CommandResponse> CreateTimeSlot(CreateTimeSlotCommandProto request,
-        ServerCallContext context)
-    {
-        await tracer.TimeSlot.Create.CommandReceived(GetType(), Guid.Parse(request.TraceData.TraceId), request);
-
-        await timeSlotCommandsService.Create(request.ToCommand());
-        return new CommandResponse { Success = true };
-    }
-
     public override async Task<CommandResponse> AddNote(AddNoteCommandProto request, ServerCallContext context)
     {
         await tracer.TimeSlot.AddNote.CommandReceived(GetType(), Guid.Parse(request.TraceData.TraceId), request);

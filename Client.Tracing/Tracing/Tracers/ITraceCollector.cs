@@ -1,3 +1,4 @@
+using Client.Tracing.Tracing.Tracers.Client;
 using Client.Tracing.Tracing.Tracers.Note;
 using Client.Tracing.Tracing.Tracers.NoteType;
 using Client.Tracing.Tracing.Tracers.Sprint;
@@ -19,4 +20,5 @@ public interface ITraceCollector
     IWorkDayUseCaseSelector WorkDay { get; }
     IStatisticsDataUseCaseSelector Statistics { get; }
     ITimeSlotUseCaseSelector TimeSlot { get; }
+    IClientUseCaseSelector Client { get; }
 }

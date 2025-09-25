@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Client.Desktop.Communication.Notifications.UseCase.Records;
+using Client.Desktop.Communication.Notifications.Client.Records;
 using Client.Desktop.DataModels;
 using Client.Desktop.Presentation.Factories;
 using Client.Desktop.Presentation.Models.TimeTracking.DynamicControls;

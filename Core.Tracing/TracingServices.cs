@@ -1,4 +1,6 @@
 using Core.Server.Tracing.Tracing.Tracers;
+using Core.Server.Tracing.Tracing.Tracers.Client;
+using Core.Server.Tracing.Tracing.Tracers.Client.UseCase;
 using Core.Server.Tracing.Tracing.Tracers.Note;
 using Core.Server.Tracing.Tracing.Tracers.Note.UseCase;
 using Core.Server.Tracing.Tracing.Tracers.NoteType;
@@ -19,6 +21,8 @@ using Core.Server.Tracing.Tracing.Tracers.WorkDay;
 using Core.Server.Tracing.Tracing.Tracers.WorkDay.UseCase;
 using Microsoft.Extensions.DependencyInjection;
 using Service.Monitoring.Shared.Tracing;
+using CreateNoteTraceCollector = Core.Server.Tracing.Tracing.Tracers.Note.UseCase.CreateNoteTraceCollector;
+using NoteUseCaseSelector = Core.Server.Tracing.Tracing.Tracers.Note.NoteUseCaseSelector;
 
 namespace Core.Server.Tracing;
 
@@ -36,8 +40,9 @@ public static class TracingServices
         AddTimerSettingsTracingServices(services);
         AddTimeSlotTracingServices(services);
         AddWorkDayTracingServices(services);
+        AddClientTracingServices(services);
     }
-
+    
     private static void AddWorkDayTracingServices(IServiceCollection services)
     {
         services.AddSingleton<ICreateWorkDayTraceCollector, CreateWorkDayTraceCollector>();
@@ -83,7 +88,6 @@ public static class TracingServices
     {
         services.AddSingleton<IChangeProductivityTraceCollector, ChangeProductivityTraceCollector>();
         services.AddSingleton<IChangeTagSelectionTraceCollector, ChangeTagSelectionTraceCollector>();
-        services.AddSingleton<ICreateStatisticsDataTraceCollector, CreateStatisticsDataTraceCollector>();
 
         services.AddSingleton<IStatisticsDataUseCaseSelector, StatisticsDataUseCaseSelector>();
     }
@@ -114,11 +118,18 @@ public static class TracingServices
 
     private static void AddTimeSlotTracingServices(this IServiceCollection services)
     {
-        services.AddSingleton<ICreateTimeSlotTraceCollector, CreateTimeSlotTraceCollector>();
         services.AddSingleton<IAddNoteTraceCollector, AddNoteTraceCollector>();
         services.AddSingleton<ISetStartTimeTraceCollector, SetStartTimeTraceCollector>();
         services.AddSingleton<ISetEndTimeTraceCollector, SetEndTimeTraceCollector>();
 
         services.AddSingleton<ITimeSlotUseCaseSelector, TimeSlotUseCaseSelector>();
     }
+    
+    private static void AddClientTracingServices(IServiceCollection services)
+    {
+        services.AddSingleton<ICreateTrackingControlCollector, CreateTrackingControlCollector>();
+
+        services.AddSingleton<IClientUseCaseSelector, ClientUseCaseSelector>();
+    }
+
 }

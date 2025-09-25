@@ -1,12 +1,13 @@
 using System;
 using System.Threading;
 using Client.Desktop.Communication.Commands;
+using Client.Desktop.Communication.Commands.Client;
 using Client.Desktop.Communication.Commands.Notes;
 using Client.Desktop.Communication.Commands.StatisticsData;
 using Client.Desktop.Communication.Commands.TimeSlots;
 using Client.Desktop.Communication.Commands.TimeSlots.Records;
-using Client.Desktop.Communication.Commands.UseCases;
 using Client.Desktop.Communication.Commands.WorkDays;
+using Client.Desktop.Communication.Notifications.Client;
 using Client.Desktop.Communication.Notifications.Note;
 using Client.Desktop.Communication.Notifications.NoteType;
 using Client.Desktop.Communication.Notifications.Sprint;
@@ -14,16 +15,15 @@ using Client.Desktop.Communication.Notifications.StatisticsData;
 using Client.Desktop.Communication.Notifications.Tag;
 using Client.Desktop.Communication.Notifications.Ticket;
 using Client.Desktop.Communication.Notifications.TimerSettings;
-using Client.Desktop.Communication.Notifications.UseCase;
 using Client.Desktop.Communication.Notifications.WorkDay;
 using Client.Desktop.Communication.Policies;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.Communication.Requests.Analysis;
+using Client.Desktop.Communication.Requests.Client;
 using Client.Desktop.Communication.Requests.Notes;
 using Client.Desktop.Communication.Requests.Replays;
 using Client.Desktop.Communication.Requests.StatisticsData;
 using Client.Desktop.Communication.Requests.TimeSlots;
-using Client.Desktop.Communication.Requests.UseCase;
 using Client.Desktop.Communication.Requests.WorkDays;
 using Client.Desktop.DataModels.Decorators.Replays;
 using Client.Desktop.FileSystem;
@@ -58,6 +58,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using Grpc.Net.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
+using Proto.Notifications.Client;
 using Proto.Notifications.Note;
 using Proto.Notifications.NoteType;
 using Proto.Notifications.Sprint;
@@ -65,7 +66,6 @@ using Proto.Notifications.StatisticsData;
 using Proto.Notifications.Tag;
 using Proto.Notifications.Ticket;
 using Proto.Notifications.TimerSettings;
-using Proto.Notifications.UseCase;
 using Proto.Notifications.WorkDay;
 using Service.Proto.Shared.Commands.NoteTypes;
 using Service.Proto.Shared.Commands.Sprints;
@@ -277,7 +277,7 @@ public static class ServiceExtensions
         services.AddSingleton<IStreamClient, NoteTypeNotificationReceiver>();
         services.AddSingleton<IStreamClient, SprintNotificationReceiver>();
         services.AddSingleton<IStreamClient, TagNotificationReceiver>();
-        services.AddSingleton<IStreamClient, UseCaseNotificationReceiver>();
+        services.AddSingleton<IStreamClient, ClientNotificationReceiver>();
         services.AddSingleton<IStreamClient, WorkDayNotificationReceiver>();
         services.AddSingleton<IStreamClient, TimerSettingsNotificationReceiver>();
         services.AddSingleton<IStreamClient, StatisticsDataNotificationReceiver>();
@@ -288,7 +288,7 @@ public static class ServiceExtensions
         services.AddSingleton(new SprintNotificationService.SprintNotificationServiceClient(channel));
         services.AddSingleton(new TagNotificationService.TagNotificationServiceClient(channel));
         services.AddSingleton(new TimerSettingsNotificationService.TimerSettingsNotificationServiceClient(channel));
-        services.AddSingleton(new UseCaseNotificationService.UseCaseNotificationServiceClient(channel));
+        services.AddSingleton(new ClientNotificationService.ClientNotificationServiceClient(channel));
         services.AddSingleton(new WorkDayNotificationService.WorkDayNotificationServiceClient(channel));
         services.AddSingleton(new NoteTypeProtoNotificationService.NoteTypeProtoNotificationServiceClient(channel));
         services.AddSingleton(new StatisticsDataNotificationService.StatisticsDataNotificationServiceClient(channel));
@@ -301,7 +301,7 @@ public static class ServiceExtensions
         services.AddScoped<INoteCommandSender, NoteCommandSender>();
         services.AddScoped<IStatisticsDataCommandSender, StatisticsDataCommandSender>();
         services.AddScoped<ITimeSlotCommandSender, TimeSlotCommandSender>();
-        services.AddScoped<IUseCaseCommandSender, UseCaseCommandSender>();
+        services.AddScoped<IClientCommandSender, ClientCommandSender>();
         services.AddScoped<IWorkDayCommandSender, WorkDayCommandSender>();
     }
 
@@ -313,7 +313,7 @@ public static class ServiceExtensions
         services.AddScoped<ITimeSlotRequestSender, TimeSlotRequestSender>();
         services.AddScoped<IWorkDayRequestSender, WorkDayRequestSender>();
         services.AddScoped<ITicketReplayRequestSender, TicketReplayRequestSender>();
-        services.AddScoped<IUseCaseRequestSender, UseCaseRequestSender>();
+        services.AddScoped<IClientRequestSender, ClientRequestSender>();
         services.AddScoped<IStatisticsDataRequestSender, StatisticsDataRequestSender>();
 
         services.AddScoped<IAnalysisRequestSender, AnalysisRequestSender>();

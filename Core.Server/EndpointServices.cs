@@ -1,4 +1,5 @@
 ﻿using Core.Server.Communication.Endpoints.Analysis;
+using Core.Server.Communication.Endpoints.Client;
 using Core.Server.Communication.Endpoints.Note;
 using Core.Server.Communication.Endpoints.NoteType;
 using Core.Server.Communication.Endpoints.Sprint;
@@ -8,9 +9,9 @@ using Core.Server.Communication.Endpoints.Ticket;
 using Core.Server.Communication.Endpoints.TicketReplay;
 using Core.Server.Communication.Endpoints.TimerSettings;
 using Core.Server.Communication.Endpoints.TimeSlot;
-using Core.Server.Communication.Endpoints.UseCase;
 using Core.Server.Communication.Endpoints.WorkDay;
 using Core.Server.Communication.Mocks.Analysis;
+using Core.Server.Communication.Mocks.Client;
 using Core.Server.Communication.Mocks.Note;
 using Core.Server.Communication.Mocks.NoteType;
 using Core.Server.Communication.Mocks.Sprint;
@@ -20,7 +21,6 @@ using Core.Server.Communication.Mocks.Ticket;
 using Core.Server.Communication.Mocks.TimerSettings;
 using Core.Server.Communication.Mocks.TimeSlot;
 using Core.Server.Communication.Mocks.TraceReport;
-using Core.Server.Communication.Mocks.UseCase;
 using Core.Server.Communication.Mocks.WorkDay;
 
 namespace Core.Server;
@@ -44,7 +44,7 @@ public static class EndpointServices
         app.MapGrpcService<TicketCommandReceiver>();
         app.MapGrpcService<TimerSettingsCommandReceiver>();
         app.MapGrpcService<TimeSlotCommandReceiver>();
-        app.MapGrpcService<UseCaseCommandReceiver>();
+        app.MapGrpcService<ClientCommandReceiver>();
         app.MapGrpcService<WorkDayCommandReceiver>();
     }
 
@@ -89,7 +89,7 @@ public static class EndpointServices
         app.MapGrpcService<MockTimerSettingsCommandService>();
         app.MapGrpcService<MockTimeSlotCommandService>();
         app.MapGrpcService<MockTraceReportCommandService>();
-        app.MapGrpcService<MockUseCaseCommandService>();
+        app.MapGrpcService<MockClientCommandService>();
         app.MapGrpcService<MockWorkDayCommandService>();
 
         app.MapGrpcService<NoteRequestReceiver>();
@@ -102,7 +102,7 @@ public static class EndpointServices
         app.MapGrpcService<MockTimerSettingsRequestService>();
         app.MapGrpcService<MockTimeSlotRequestService>();
         app.MapGrpcService<MockWorkDayRequestService>();
-        app.MapGrpcService<MockUseCaseRequestService>();
+        app.MapGrpcService<MockClientRequestService>();
         app.MapGrpcService<MockAnalysisRequestService>();
     }
 }
