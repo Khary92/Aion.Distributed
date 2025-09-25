@@ -17,7 +17,7 @@ public static class UseCaseProtoExtensions
         {
             TimeSlotControlCreated = new TimeSlotControlCreatedNotification
             {
-                TimeSlotControlData = new TimeSlotControlDataProto
+                TimeSlotControlData = new TrackingControlDataProto
                 {
                     TicketProto = ticket.ToProto(),
                     StatisticsDataProto = statisticsData.ToProto(),

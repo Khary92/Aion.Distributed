@@ -13,7 +13,7 @@ using ReactiveUI;
 
 namespace Client.Desktop.Presentation.Models.TimeTracking;
 
-public class TimeSlotModel(
+public class TrackingSlotModel(
     IMessenger messenger,
     IStateSynchronizer<TicketReplayDecorator, string> ticketDocumentStateSynchronizer,
     IPersistentCache<ClientSetStartTimeCommand> startTimeCache,

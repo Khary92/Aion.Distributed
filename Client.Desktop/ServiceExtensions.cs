@@ -198,7 +198,7 @@ public static class ServiceExtensions
     {
         services.AddTransient<TypeCheckBoxViewModel>();
         services.AddTransient<TimeSlotViewModel>();
-        services.AddTransient<TimeSlotModel>();
+        services.AddTransient<TrackingSlotModel>();
 
         services.AddSingleton<AnalysisByTagViewModel>();
         services.AddSingleton<AnalysisByTicketViewModel>();

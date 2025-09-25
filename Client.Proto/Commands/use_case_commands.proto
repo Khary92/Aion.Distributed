@@ -6,10 +6,10 @@ import "google/protobuf/timestamp.proto";
 import "DTO/trace_data.proto";
 
 service UseCaseCommandProtoService {
-  rpc CreateTimeSlotControl (CreateTimeSlotControlCommandProto) returns (CommandResponse);
+  rpc CreateTimeSlotControl (CreateTrackingControlCommandProto) returns (CommandResponse);
 }
 
-message CreateTimeSlotControlCommandProto {
+message CreateTrackingControlCommandProto {
   string ticketId = 1;
   google.protobuf.Timestamp date = 2;
   TraceDataProto traceData = 3;

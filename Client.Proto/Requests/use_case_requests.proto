@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-import "DTO/time_slot_control_data.proto";
+import "DTO/tracking_control_data.proto";
 import "google/protobuf/timestamp.proto";
 import "DTO/trace_data.proto";
 
@@ -11,10 +11,10 @@ message GetTimeSlotControlDataRequestProto {
   TraceDataProto traceData = 2;
 }
 
-message TimeSlotControlDataListProto {
-  repeated TimeSlotControlDataProto time_slot_control_data = 1;
+message TrackingControlDataListProto {
+  repeated TrackingControlDataProto time_slot_control_data = 1;
 }
 
 service UseCaseRequestService {
-  rpc GetTimeSlotControlDataByDate(GetTimeSlotControlDataRequestProto) returns (TimeSlotControlDataListProto);
+  rpc GetTimeSlotControlDataByDate(GetTimeSlotControlDataRequestProto) returns (TrackingControlDataListProto);
 }

@@ -11,27 +11,27 @@ using Proto.Requests.UseCase;
 
 namespace Core.Server.Communication.Endpoints.UseCase.Handler;
 
-public class LoadTimeSlotControlDataHandler(
+public class LoadTrackingControlDataHandler(
     IWorkDayRequestsService workDayRequestsService,
     ITimeSlotRequestsService timeSlotRequestsService,
     IStatisticsDataRequestsService statisticsDataRequestsService,
-    ITicketRequestsService ticketRequestsService) : ILoadTimeSlotControlDataHandler
+    ITicketRequestsService ticketRequestsService) : ILoadTrackingControlDataHandler
 {
-    public async Task<TimeSlotControlDataListProto> Handle(GetTimeSlotControlDataForDateRequest request)
+    public async Task<TrackingControlDataListProto> Handle(GetTimeSlotControlDataForDateRequest request)
     {
         var workDayByDate = await workDayRequestsService.GetWorkDayByDate(request.Date);
 
-        if (workDayByDate == null) return new TimeSlotControlDataListProto();
+        if (workDayByDate == null) return new TrackingControlDataListProto();
 
         var timeSlots = await timeSlotRequestsService.GetTimeSlotsForWorkDayId(workDayByDate.WorkDayId);
 
-        var timeSlotControlDataList = new TimeSlotControlDataListProto();
+        var timeSlotControlDataList = new TrackingControlDataListProto();
         foreach (var timeSlot in timeSlots)
         {
             var statisticsData = await statisticsDataRequestsService.GetStatisticsDataByTimeSlotId(timeSlot.TimeSlotId);
             var ticket = await ticketRequestsService.GetTicketById(timeSlot.SelectedTicketId);
 
-            timeSlotControlDataList.TimeSlotControlData.Add(new TimeSlotControlDataProto
+            timeSlotControlDataList.TimeSlotControlData.Add(new TrackingControlDataProto
             {
                 StatisticsDataProto = statisticsData.ToProto(),
                 TicketProto = ticket!.ToProto(),

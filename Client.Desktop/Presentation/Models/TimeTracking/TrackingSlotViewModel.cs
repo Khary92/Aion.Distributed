@@ -21,7 +21,7 @@ public class TimeSlotViewModel : ReactiveObject
 
     private ViewTimer _viewTimer = null!;
 
-    public TimeSlotViewModel(TimeSlotModel model,
+    public TimeSlotViewModel(TrackingSlotModel model,
         IStatisticsViewModelFactory statisticsViewModelFactory,
         INoteStreamViewModelFactory noteStreamViewModelFactory,
         IMessenger messenger)
@@ -49,7 +49,7 @@ public class TimeSlotViewModel : ReactiveObject
     public required NoteStreamViewModel NoteStreamViewModel { get; set; }
     public required StatisticsViewModel StatisticsViewModel { get; set; }
 
-    public TimeSlotModel Model { get; }
+    public TrackingSlotModel Model { get; }
 
     public ReactiveCommand<Unit, Unit> ToggleTimerCommand { get; }
     public ReactiveCommand<Unit, Unit> SwitchToDocumentationViewCommand { get; }

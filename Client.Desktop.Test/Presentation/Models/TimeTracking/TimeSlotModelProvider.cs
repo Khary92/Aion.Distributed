@@ -54,7 +54,7 @@ public static class TimeSlotModelProvider
         Mock<IPersistentCache<ClientSetEndTimeCommand>> endTimeCache, Mock<IRequestSender> requestSender,
         TimeSlotClientModel? timeSlotClientModel)
     {
-        var instance = new TimeSlotModel(messenger, documentationSynchronizer.Object, startTimeCache.Object,
+        var instance = new TrackingSlotModel(messenger, documentationSynchronizer.Object, startTimeCache.Object,
             endTimeCache.Object, tracer.Object);
 
         instance.RegisterMessenger();
@@ -83,7 +83,7 @@ public static class TimeSlotModelProvider
 
     public sealed class TimeSlotModelFixture
     {
-        public required TimeSlotModel Instance { get; init; }
+        public required TrackingSlotModel Instance { get; init; }
         public required Mock<IStateSynchronizer<TicketReplayDecorator, string>> DocumentationSynchronizer { get; init; }
         public required Mock<IPersistentCache<ClientSetStartTimeCommand>> StartTimeCache { get; init; }
         public required Mock<IPersistentCache<ClientSetEndTimeCommand>> EndTimeCache { get; init; }

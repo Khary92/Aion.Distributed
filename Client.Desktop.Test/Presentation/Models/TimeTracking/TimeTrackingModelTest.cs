@@ -20,7 +20,7 @@ public class TimeTrackingModelTest
     public async Task Initialize()
     {
         var initialData = CreateInitialData();
-        var timeSlotData = new ClientGetTimeSlotControlResponse(initialData.InitialStatisticsData,
+        var timeSlotData = new ClientGetTrackingControlResponse(initialData.InitialStatisticsData,
             initialData.InitialTicket, initialData.InitialTimeSlot);
 
         var fixture = await TimeTrackingModelProvider.Create([initialData.InitialTicket], [timeSlotData]);
@@ -121,7 +121,7 @@ public class TimeTrackingModelTest
     public async Task ReceiveClientWorkDaySelectionChangedNotification()
     {
         var initialData = CreateInitialData();
-        var timeSlotData = new ClientGetTimeSlotControlResponse(initialData.InitialStatisticsData,
+        var timeSlotData = new ClientGetTrackingControlResponse(initialData.InitialStatisticsData,
             initialData.InitialTicket, initialData.InitialTimeSlot);
         var fixture = await TimeTrackingModelProvider.Create([initialData.InitialTicket], [timeSlotData]);
 
@@ -160,9 +160,9 @@ public class TimeTrackingModelTest
         var firstData = CreateInitialData();
         var secondData = CreateInitialData();
         var fixture = await TimeTrackingModelProvider.Create([], [
-            new ClientGetTimeSlotControlResponse(firstData.InitialStatisticsData, firstData.InitialTicket,
+            new ClientGetTrackingControlResponse(firstData.InitialStatisticsData, firstData.InitialTicket,
                 firstData.InitialTimeSlot),
-            new ClientGetTimeSlotControlResponse(secondData.InitialStatisticsData, secondData.InitialTicket,
+            new ClientGetTrackingControlResponse(secondData.InitialStatisticsData, secondData.InitialTicket,
                 secondData.InitialTimeSlot)
         ]);
 

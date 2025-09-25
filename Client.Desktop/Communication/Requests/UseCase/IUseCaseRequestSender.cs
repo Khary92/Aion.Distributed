@@ -6,5 +6,5 @@ namespace Client.Desktop.Communication.Requests.UseCase;
 
 public interface IUseCaseRequestSender
 {
-    Task<List<ClientGetTimeSlotControlResponse>> Send(ClientGetTimeSlotControlDataRequest request);
+    Task<List<ClientGetTrackingControlResponse>> Send(ClientGetTimeSlotControlDataRequest request);
 }

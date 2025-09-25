@@ -9,8 +9,8 @@ using Moq;
 namespace Client.Desktop.Test.Presentation.Models.TimeTracking;
 
 [TestFixture]
-[TestOf(typeof(TimeSlotModel))]
-public class TimeSlotModelTest
+[TestOf(typeof(TrackingSlotModel))]
+public class TrackingSlotModelTest
 {
     [Test]
     public async Task Initialize()

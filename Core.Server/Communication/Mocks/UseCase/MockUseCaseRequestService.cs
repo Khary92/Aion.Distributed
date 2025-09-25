@@ -9,7 +9,7 @@ namespace Core.Server.Communication.Mocks.UseCase;
 
 public class MockUseCaseRequestService : UseCaseRequestService.UseCaseRequestServiceBase
 {
-    public override Task<TimeSlotControlDataListProto> GetTimeSlotControlDataByDate(
+    public override Task<TrackingControlDataListProto> GetTimeSlotControlDataByDate(
         GetTimeSlotControlDataRequestProto request, ServerCallContext context)
     {
         var statisticsDataProto = new StatisticsDataProto
@@ -42,16 +42,16 @@ public class MockUseCaseRequestService : UseCaseRequestService.UseCaseRequestSer
             IsTimerRunning = true
         };
 
-        var timeSlotData = new TimeSlotControlDataProto
+        var timeSlotData = new TrackingControlDataProto
         {
             StatisticsDataProto = statisticsDataProto,
             TicketProto = ticketProto,
             TimeSlotProto = timeSlotProto
         };
 
-        return Task.FromResult(new TimeSlotControlDataListProto
+        return Task.FromResult(new TrackingControlDataListProto
         {
-            TimeSlotControlData = { timeSlotData }
+            TimeSlotControlData = {  timeSlotData }
         });
     }
 }

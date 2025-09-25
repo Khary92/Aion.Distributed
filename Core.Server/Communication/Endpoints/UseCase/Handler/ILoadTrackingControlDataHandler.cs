@@ -3,7 +3,7 @@ using Proto.Requests.UseCase;
 
 namespace Core.Server.Communication.Endpoints.UseCase.Handler;
 
-public interface ILoadTimeSlotControlDataHandler
+public interface ILoadTrackingControlDataHandler
 {
-    Task<TimeSlotControlDataListProto> Handle(GetTimeSlotControlDataForDateRequest request);
+    Task<TrackingControlDataListProto> Handle(GetTimeSlotControlDataForDateRequest request);
 }

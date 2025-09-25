@@ -2,7 +2,7 @@
 
 namespace Client.Desktop.Communication.Requests.UseCase.Records;
 
-public record ClientGetTimeSlotControlResponse(
+public record ClientGetTrackingControlResponse(
     StatisticsDataClientModel StatisticsData,
     TicketClientModel Ticket,
     TimeSlotClientModel TimeSlot);

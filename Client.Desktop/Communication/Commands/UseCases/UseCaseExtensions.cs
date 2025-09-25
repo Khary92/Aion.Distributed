@@ -7,9 +7,9 @@ namespace Client.Desktop.Communication.Commands.UseCases;
 
 public static class UseCaseExtensions
 {
-    public static CreateTimeSlotControlCommandProto ToProto(this ClientCreateTimeSlotControlCommand command)
+    public static CreateTrackingControlCommandProto ToProto(this ClientCreateTimeSlotControlCommand command)
     {
-        return new CreateTimeSlotControlCommandProto
+        return new CreateTrackingControlCommandProto
         {
             TicketId = command.TicketId.ToString(),
             Date = Timestamp.FromDateTimeOffset(command.Date),

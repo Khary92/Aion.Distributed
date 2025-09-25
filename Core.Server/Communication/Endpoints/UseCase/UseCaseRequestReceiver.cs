@@ -4,12 +4,12 @@ using Proto.Requests.UseCase;
 
 namespace Core.Server.Communication.Endpoints.UseCase;
 
-public class UseCaseRequestReceiver(ILoadTimeSlotControlDataHandler loadTimeSlotControlDataHandler)
+public class UseCaseRequestReceiver(ILoadTrackingControlDataHandler loadTrackingControlDataHandler)
     : UseCaseRequestService.UseCaseRequestServiceBase
 {
-    public override async Task<TimeSlotControlDataListProto> GetTimeSlotControlDataByDate(
+    public override async Task<TrackingControlDataListProto> GetTimeSlotControlDataByDate(
         GetTimeSlotControlDataRequestProto request, ServerCallContext context)
     {
-        return await loadTimeSlotControlDataHandler.Handle(request.ToRequest());
+        return await loadTrackingControlDataHandler.Handle(request.ToRequest());
     }
 }

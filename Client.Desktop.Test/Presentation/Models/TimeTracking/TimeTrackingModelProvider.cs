@@ -95,7 +95,7 @@ public static class TimeTrackingModelProvider
     }
 
     public static async Task<TimeTrackingModelFixture> Create(List<TicketClientModel> initialTickets,
-        List<ClientGetTimeSlotControlResponse> initialTimeSlots)
+        List<ClientGetTrackingControlResponse> initialTimeSlots)
     {
         var messenger = CreateMessenger();
         var requestSender = CreateRequestSenderMock();
@@ -128,7 +128,7 @@ public static class TimeTrackingModelProvider
             .Setup(rs => rs.Send(It.IsAny<ClientGetAllTicketsRequest>()))
             .ReturnsAsync(initialTickets);
 
-        var timeSlotModel = new TimeSlotModel(messenger, ticketDocumentStateSynchronizer.Object, startTimeCache.Object,
+        var timeSlotModel = new TrackingSlotModel(messenger, ticketDocumentStateSynchronizer.Object, startTimeCache.Object,
             endTimeCache.Object, tracer.Object)
         {
             TicketReplayDecorator = new TicketReplayDecorator(requestSender.Object, CreateTicketClientModel())

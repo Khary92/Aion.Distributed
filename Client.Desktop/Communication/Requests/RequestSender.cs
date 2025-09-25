@@ -204,7 +204,7 @@ public class RequestSender(
             ticketReplayRequestSender.Send(request));
     }
 
-    public async Task<List<ClientGetTimeSlotControlResponse>> Send(ClientGetTimeSlotControlDataRequest request)
+    public async Task<List<ClientGetTrackingControlResponse>> Send(ClientGetTimeSlotControlDataRequest request)
     {
         return await requestSender.Policy.ExecuteAsync(() =>
             useCaseRequestSender.Send(request));

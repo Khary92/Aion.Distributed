@@ -1,5 +1,6 @@
 using Core.Server.Communication.Endpoints.UseCase;
 using Core.Server.Services.UseCase;
+using Core.Server.Tracing.Tracing.Tracers;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 using Moq;
@@ -13,19 +14,25 @@ namespace Core.Server.Test.Communication.Endpoints.UseCase;
 public class UseCaseCommandReceiverTest
 {
     private Mock<ITimeSlotControlService> _serviceMock;
+
+    private Mock<ITraceCollector> _tracerMock = new()
+    {
+        DefaultValueProvider = DefaultValueProvider.Mock
+    };
+
     private UseCaseCommandReceiver _receiver;
 
     [SetUp]
     public void SetUp()
     {
         _serviceMock = new Mock<ITimeSlotControlService>();
-        _receiver = new UseCaseCommandReceiver(_serviceMock.Object);
+        _receiver = new UseCaseCommandReceiver(_serviceMock.Object, _tracerMock.Object);
     }
 
     [Test]
-    public async Task CreateTimeSlotControl_ValidRequest_ReturnsSuccessResponse()
+    public async Task CreateTrackingControl_ValidRequest_ReturnsSuccessResponse()
     {
-        var request = new CreateTimeSlotControlCommandProto
+        var request = new CreateTrackingControlCommandProto
         {
             TicketId = Guid.NewGuid().ToString(),
             Date = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow),
@@ -43,9 +50,9 @@ public class UseCaseCommandReceiverTest
     }
 
     [Test]
-    public void CreateTimeSlotControl_InvalidTicketId_ThrowsFormatException()
+    public void CreateTrackingControl_InvalidTicketId_ThrowsFormatException()
     {
-        var request = new CreateTimeSlotControlCommandProto
+        var request = new CreateTrackingControlCommandProto
         {
             TicketId = "invalid-guid",
             Date = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow),
@@ -57,9 +64,9 @@ public class UseCaseCommandReceiverTest
     }
 
     [Test]
-    public void CreateTimeSlotControl_InvalidTraceId_ThrowsFormatException()
+    public void CreateTrackingControl_InvalidTraceId_ThrowsFormatException()
     {
-        var request = new CreateTimeSlotControlCommandProto
+        var request = new CreateTrackingControlCommandProto
         {
             TicketId = Guid.NewGuid().ToString(),
             Date = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow),
@@ -71,9 +78,9 @@ public class UseCaseCommandReceiverTest
     }
 
     [Test]
-    public void CreateTimeSlotControl_ServiceThrowsException_ExceptionPropagates()
+    public void CreateTrackingControl_ServiceThrowsException_ExceptionPropagates()
     {
-        var request = new CreateTimeSlotControlCommandProto
+        var request = new CreateTrackingControlCommandProto
         {
             TicketId = Guid.NewGuid().ToString(),
             Date = Timestamp.FromDateTimeOffset(DateTimeOffset.UtcNow),

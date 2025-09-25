@@ -23,14 +23,14 @@ public static class UseCaseRequestExtensions
     }
 
 
-    public static List<ClientGetTimeSlotControlResponse> ToResponseDataList(this TimeSlotControlDataListProto proto)
+    public static List<ClientGetTrackingControlResponse> ToResponseDataList(this TrackingControlDataListProto proto)
     {
         return proto.TimeSlotControlData.Select(ToResponseData).ToList();
     }
 
-    private static ClientGetTimeSlotControlResponse ToResponseData(this TimeSlotControlDataProto proto)
+    private static ClientGetTrackingControlResponse ToResponseData(this TrackingControlDataProto proto)
     {
-        return new ClientGetTimeSlotControlResponse(
+        return new ClientGetTrackingControlResponse(
             proto.StatisticsDataProto.ToClientModel(), proto.TicketProto.ToClientModel(),
             proto.TimeSlotProto.ToClientModel());
     }

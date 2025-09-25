@@ -5,7 +5,7 @@ namespace Core.Server.Communication.Mocks.UseCase;
 
 public class MockUseCaseCommandService : UseCaseCommandProtoService.UseCaseCommandProtoServiceBase
 {
-    public override Task<CommandResponse> CreateTimeSlotControl(CreateTimeSlotControlCommandProto request,
+    public override Task<CommandResponse> CreateTimeSlotControl(CreateTrackingControlCommandProto request,
         ServerCallContext context)
     {
         Console.WriteLine($"[CreateTimeSlotControl] TicketId: {request.TicketId}");
