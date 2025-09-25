@@ -59,7 +59,7 @@ public class ExportModel(
     public void Receive(NewWorkDayMessage message)
     {
         WorkDays.Add(message.WorkDay);
-        _ = tracer.WorkDay.Create.AggregateAdded(GetType(), message.WorkDay.WorkDayId);
+        _ = tracer.WorkDay.Create.AggregateAdded(GetType(), message.TraceId);
     }
 
     public async Task<bool> ExportFileAsync()

@@ -38,17 +38,4 @@ public class TimerSettingsCommandsService(
             notification.DocuTimerSaveIntervalChanged);
         await notificationService.SendNotificationAsync(command.ToNotification());
     }
-
-    public async Task Create(CreateTimerSettingsCommand command)
-    {
-        await timerSettingsEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
-
-        var notification = command.ToNotification();
-        await tracer.TimerSettings.Create.EventPersisted(GetType(), command.TraceId,
-            notification.TimerSettingsCreated);
-
-        await tracer.TimerSettings.Create.SendingNotification(GetType(), command.TraceId,
-            notification.TimerSettingsCreated);
-        await notificationService.SendNotificationAsync(command.ToNotification());
-    }
 }

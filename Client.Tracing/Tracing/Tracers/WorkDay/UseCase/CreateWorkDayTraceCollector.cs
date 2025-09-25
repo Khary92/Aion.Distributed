@@ -27,7 +27,7 @@ public class CreateWorkDayTraceCollector(ITracingDataSender sender) : ICreateWor
         await sender.Send(new ServiceTraceDataCommand(
             SortingType.WorkDay,
             UseCaseMeta.CreateWorkDay,
-            LoggingMeta.ActionRequested,
+            LoggingMeta.SendingCommand,
             originClassType,
             traceId,
             log,

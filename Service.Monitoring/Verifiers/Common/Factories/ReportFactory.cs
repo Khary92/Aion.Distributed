@@ -17,7 +17,7 @@ public class ReportFactory(IEnumerable<IVerificationProvider> verificationProvid
         return new Report(traceData.First().TimeStamp,
             traceData.First().SortingType,
             traceData.First().UseCaseMeta,
-            new UseCaseStateEvaluator(verificationSteps).GetResultState(traceData),
+            new TraceEvaluator(verificationSteps).GetResultState(traceData),
             GetLatencyInMs(traceData),
             traceData,
             traceId);

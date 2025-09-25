@@ -10,15 +10,6 @@ public class TimerSettingsCommandReceiver(
     ITraceCollector tracer)
     : TimerSettingsCommandProtoService.TimerSettingsCommandProtoServiceBase
 {
-    public override async Task<CommandResponse> CreateTimerSettings(CreateTimerSettingsCommandProto request,
-        ServerCallContext context)
-    {
-        await tracer.TimerSettings.Create.CommandReceived(GetType(), Guid.Parse(request.TraceData.TraceId), request);
-
-        await timerSettingsCommandsService.Create(request.ToCommand());
-        return new CommandResponse { Success = true };
-    }
-
     public override async Task<CommandResponse> ChangeDocuTimerSaveInterval(
         ChangeDocuTimerSaveIntervalCommandProto request, ServerCallContext context)
     {

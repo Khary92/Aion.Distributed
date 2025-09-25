@@ -28,27 +28,7 @@ public class TimerSettingsCommandReceiverTest
 
         _receiver = new TimerSettingsCommandReceiver(_serviceMock.Object, _tracerMock.Object);
     }
-
-    [Test]
-    public async Task CreateTimerSettings_ValidRequest_ReturnsSuccessResponse()
-    {
-        var request = new CreateTimerSettingsCommandProto
-        {
-            TimerSettingsId = Guid.NewGuid().ToString(),
-            TraceData = new TraceDataProto { TraceId = Guid.NewGuid().ToString() }
-        };
-
-        var response = await _receiver.CreateTimerSettings(request, Mock.Of<ServerCallContext>());
-
-        Assert.That(response.Success);
-        _serviceMock.Verify(s => s.Create(It.IsAny<CreateTimerSettingsCommand>()), Times.Once);
-        _tracerMock.Verify(t => t.TimerSettings.Create.CommandReceived(
-                typeof(TimerSettingsCommandReceiver),
-                Guid.Parse(request.TraceData.TraceId),
-                request),
-            Times.Once);
-    }
-
+    
     [Test]
     public void CreateTimerSettings_InvalidTraceId_ThrowsFormatException()
     {
@@ -60,29 +40,6 @@ public class TimerSettingsCommandReceiverTest
 
         Assert.ThrowsAsync<FormatException>(() =>
             _receiver.CreateTimerSettings(request, Mock.Of<ServerCallContext>()));
-    }
-
-    [Test]
-    public void CreateTimerSettings_ServiceThrowsException_ExceptionPropagates()
-    {
-        var request = new CreateTimerSettingsCommandProto
-        {
-            TimerSettingsId = Guid.NewGuid().ToString(),
-            TraceData = new TraceDataProto { TraceId = Guid.NewGuid().ToString() }
-        };
-
-        _serviceMock
-            .Setup(s => s.Create(It.IsAny<CreateTimerSettingsCommand>()))
-            .ThrowsAsync(new InvalidOperationException());
-
-        Assert.ThrowsAsync<InvalidOperationException>(() =>
-            _receiver.CreateTimerSettings(request, Mock.Of<ServerCallContext>()));
-
-        _tracerMock.Verify(t => t.TimerSettings.Create.CommandReceived(
-                typeof(TimerSettingsCommandReceiver),
-                Guid.Parse(request.TraceData.TraceId),
-                request),
-            Times.Once);
     }
 
     [Test]

@@ -56,7 +56,7 @@ public static class CoreServices
         services.AddScoped<IAddTicketToActiveSprintCommandHandler, AddTicketToActiveSprintCommandHandler>();
         services.AddScoped<ISetSprintActiveStatusCommandHandler, SetSprintActiveStatusCommandHandler>();
 
-        services.AddScoped<LoadTimeSlotControlDataHandler>();
+        services.AddScoped<ILoadTimeSlotControlDataHandler, LoadTimeSlotControlDataHandler>();
     }
 
     private static void AddRequestsServices(this IServiceCollection services)

@@ -49,10 +49,10 @@ public class SprintVerificationProvider : IVerificationProvider
         new VerificationStep(LoggingMeta.ActionRequested, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.SendingCommand, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.CommandReceived, Invoked.Equals, 1),
-        new VerificationStep(LoggingMeta.EventPersisted, Invoked.Equals, 1),
-        new VerificationStep(LoggingMeta.SendingNotification, Invoked.Equals, 1),
-        new VerificationStep(LoggingMeta.NotificationReceived, Invoked.AtLeast, 1),
-        new VerificationStep(LoggingMeta.PropertyChanged, Invoked.AtLeast, 1));
+        new VerificationStep(LoggingMeta.EventPersisted, Invoked.Equals, 2),
+        new VerificationStep(LoggingMeta.SendingNotification, Invoked.Equals, 2),
+        new VerificationStep(LoggingMeta.NotificationReceived, Invoked.AtLeast, 2),
+        new VerificationStep(LoggingMeta.PropertyChanged, Invoked.AtLeast, 2));
     
     public SortingType SortingType => SortingType.Sprint;
 

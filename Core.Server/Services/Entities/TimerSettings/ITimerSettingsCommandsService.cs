@@ -6,5 +6,4 @@ public interface ITimerSettingsCommandsService
 {
     Task ChangeSnapshotInterval(ChangeSnapshotSaveIntervalCommand command);
     Task ChangeDocumentationInterval(ChangeDocuTimerSaveIntervalCommand command);
-    Task Create(CreateTimerSettingsCommand command);
 }

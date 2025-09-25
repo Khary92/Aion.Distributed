@@ -36,6 +36,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Admin.Tracing", "Se
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core.Persistence.Test", "Core.Persistence.Test\Core.Persistence.Test.csproj", "{1F3603C5-2040-43A3-BE60-6B8747824A4A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Monitoring.Test", "Service.Monitoring.Test\Service.Monitoring.Test.csproj", "{3C62101E-49A7-40BB-952B-843AD329FC87}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -114,5 +116,9 @@ Global
 		{1F3603C5-2040-43A3-BE60-6B8747824A4A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1F3603C5-2040-43A3-BE60-6B8747824A4A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1F3603C5-2040-43A3-BE60-6B8747824A4A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C62101E-49A7-40BB-952B-843AD329FC87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C62101E-49A7-40BB-952B-843AD329FC87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C62101E-49A7-40BB-952B-843AD329FC87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C62101E-49A7-40BB-952B-843AD329FC87}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

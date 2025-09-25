@@ -39,7 +39,7 @@ public class WorkDaysModelTest
         var fixture = await WorkDaysModelProvider.Create([], false);
         var newWorkDay = new WorkDayClientModel(Guid.NewGuid(), DateTimeOffset.Now);
 
-        fixture.Messenger.Send(new NewWorkDayMessage(newWorkDay));
+        fixture.Messenger.Send(new NewWorkDayMessage(newWorkDay, Guid.NewGuid()));
 
         Assert.That(fixture.Instance.WorkDays, Has.Count.EqualTo(1));
     }

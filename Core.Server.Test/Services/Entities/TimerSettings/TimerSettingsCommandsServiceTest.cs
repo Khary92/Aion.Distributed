@@ -66,19 +66,4 @@ public class TimerSettingsCommandsServiceTest
         _mockEventTranslator.Verify(et => et.ToEvent(cmd), Times.Once);
         _mockEventStore.Verify(es => es.StoreEventAsync(It.IsAny<TimerSettingsEvent>()), Times.Once);
     }
-
-    [Test]
-    public async Task Create()
-    {
-        var cmd = new CreateTimerSettingsCommand(
-            Guid.NewGuid(),
-            10,
-            10,
-            Guid.NewGuid());
-
-        await _instance.Create(cmd);
-
-        _mockEventTranslator.Verify(et => et.ToEvent(cmd), Times.Once);
-        _mockEventStore.Verify(es => es.StoreEventAsync(It.IsAny<TimerSettingsEvent>()), Times.Once);
-    }
 }

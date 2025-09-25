@@ -4,9 +4,10 @@ public enum Result
 {
     Success,
     Exception,
-    NotFound,
+    EntityNotFound,
     TimedOut,
-    WrongOrder,
     InvalidInvocationCount,
-    NoValidationAvailable
+    NoValidationAvailable,
+    Aborted,
+    OngoingValidation
 }
