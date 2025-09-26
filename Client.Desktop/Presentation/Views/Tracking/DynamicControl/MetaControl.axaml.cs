@@ -4,9 +4,9 @@ using ReactiveUI;
 
 namespace Client.Desktop.Presentation.Views.Tracking.DynamicControl;
 
-public partial class StatisticsControl : UserControl, IViewFor<StatisticsViewModel>
+public partial class MetaControl : UserControl, IViewFor<StatisticsViewModel>
 {
-    public StatisticsControl()
+    public MetaControl()
     {
         InitializeComponent();
     }

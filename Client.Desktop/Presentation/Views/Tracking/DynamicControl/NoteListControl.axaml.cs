@@ -4,9 +4,9 @@ using ReactiveUI;
 
 namespace Client.Desktop.Presentation.Views.Tracking.DynamicControl;
 
-public partial class NotesStreamControl : UserControl, IViewFor<NoteStreamViewModel>
+public partial class NoteListControl : UserControl, IViewFor<NoteStreamViewModel>
 {
-    public NotesStreamControl()
+    public NoteListControl()
     {
         InitializeComponent();
     }

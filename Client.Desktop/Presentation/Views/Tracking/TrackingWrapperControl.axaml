@@ -6,13 +6,13 @@
              xmlns:tracking="clr-namespace:Client.Desktop.Presentation.Views.Tracking"
              x:DataType="timeTracking1:TimeTrackingViewModel"
              mc:Ignorable="d"
-             x:Class="Client.Desktop.Presentation.Views.Tracking.TimeTrackingControl"
+             x:Class="Client.Desktop.Presentation.Views.Tracking.TrackingWrapperControl"
              HorizontalAlignment="Stretch"
              VerticalAlignment="Stretch">
 
     <UserControl.DataTemplates>
         <DataTemplate DataType="timeTracking1:TrackingSlotViewModel">
-            <tracking:TimeSlotControl />
+            <tracking:TrackingSlotControl />
         </DataTemplate>
     </UserControl.DataTemplates>
 
@@ -58,7 +58,7 @@
 
                 <Carousel.ItemTemplate>
                     <DataTemplate>
-                        <tracking:TimeSlotControl DataContext="{Binding}"
+                        <tracking:TrackingSlotControl DataContext="{Binding}"
                                                   HorizontalAlignment="Stretch"
                                                   VerticalAlignment="Stretch" />
                     </DataTemplate>

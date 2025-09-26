@@ -190,7 +190,7 @@ public static class ServiceExtensions
     {
         services.AddSingleton<ContentWrapper>();
         services.AddSingleton<SettingsCompositeControl>();
-        services.AddSingleton<TimeTrackingControl>();
+        services.AddSingleton<TrackingWrapperControl>();
         services.AddSingleton<DocumentationControl>();
         services.AddSingleton<ExportControl>();
         services.AddSingleton<AnalysisControlWrapper>();

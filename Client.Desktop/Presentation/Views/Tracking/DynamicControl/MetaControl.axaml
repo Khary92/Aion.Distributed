@@ -6,7 +6,7 @@
              xmlns:dynamicControl="clr-namespace:Client.Desktop.Presentation.Views.Tracking.DynamicControl"
              x:DataType="dynamicControls1:StatisticsViewModel"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Client.Desktop.Presentation.Views.Tracking.DynamicControl.StatisticsControl">
+             x:Class="Client.Desktop.Presentation.Views.Tracking.DynamicControl.MetaControl">
     <Grid RowDefinitions="Auto,*" VerticalAlignment="Stretch">
         <Grid Grid.Row="0" ColumnDefinitions="*,*,*" Margin="10">
             <RadioButton Grid.Column="0" Content="Productive" GroupName="{Binding ViewId}"

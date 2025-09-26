@@ -24,7 +24,7 @@ public class ContentWrapperViewModel : ReactiveObject
     private int _menuWidth;
 
     public ContentWrapperViewModel(SettingsCompositeControl settingsCompositeControl,
-        TimeTrackingControl timeTrackingControl, ExportControl exportControl,
+        TrackingWrapperControl timeTrackingControl, ExportControl exportControl,
         AnalysisControlWrapper analysisControlWrapper, DocumentationControl documentationControl)
     {
         OnSettingsClickCommand = ReactiveCommand.CreateFromTask(async () =>

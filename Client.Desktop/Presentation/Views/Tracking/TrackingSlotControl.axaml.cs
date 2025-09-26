@@ -4,9 +4,9 @@ using ReactiveUI;
 
 namespace Client.Desktop.Presentation.Views.Tracking;
 
-public partial class TimeSlotControl : UserControl, IViewFor<TrackingSlotViewModel>
+public partial class TrackingSlotControl : UserControl, IViewFor<TrackingSlotViewModel>
 {
-    public TimeSlotControl()
+    public TrackingSlotControl()
     {
         InitializeComponent();
     }

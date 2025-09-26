@@ -7,15 +7,15 @@
              xmlns:dynamicControl="clr-namespace:Client.Desktop.Presentation.Views.Tracking.DynamicControl"
              x:DataType="timeTracking1:TrackingSlotViewModel"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Client.Desktop.Presentation.Views.Tracking.TimeSlotControl"
+             x:Class="Client.Desktop.Presentation.Views.Tracking.TrackingSlotControl"
              HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
 
     <UserControl.DataTemplates>
         <DataTemplate DataType="dynamicControls:StatisticsViewModel">
-            <dynamicControl:StatisticsControl />
+            <dynamicControl:MetaControl />
         </DataTemplate>
         <DataTemplate DataType="dynamicControls:NoteStreamViewModel">
-            <dynamicControl:NotesStreamControl />
+            <dynamicControl:NoteListControl />
         </DataTemplate>
     </UserControl.DataTemplates>
 

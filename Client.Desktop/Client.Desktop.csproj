@@ -64,11 +64,11 @@
         <AdditionalFiles Include="Presentation\Views\Setting\SettingsControl.axaml"/>
         <AdditionalFiles Include="Presentation\Views\Setting\WorkDaysControl.axaml"/>
         <AdditionalFiles Include="Presentation\Views\Tracking\DynamicControl\NoteControl.axaml"/>
-        <AdditionalFiles Include="Presentation\Views\Tracking\DynamicControl\NotesStreamControl.axaml"/>
-        <AdditionalFiles Include="Presentation\Views\Tracking\DynamicControl\StatisticsControl.axaml"/>
+        <AdditionalFiles Include="Presentation\Views\Tracking\DynamicControl\NoteListControl.axaml" />
+        <AdditionalFiles Include="Presentation\Views\Tracking\DynamicControl\NoteListControl.axaml" />
         <AdditionalFiles Include="Presentation\Views\Tracking\DynamicControl\TagCheckBoxControl.axaml"/>
-        <AdditionalFiles Include="Presentation\Views\Tracking\TimeSlotControl.axaml"/>
-        <AdditionalFiles Include="Presentation\Views\Tracking\TimeTrackingControl.axaml"/>
+        <AdditionalFiles Include="Presentation\Views\Tracking\TrackingSlotControl.axaml" />
+        <AdditionalFiles Include="Presentation\Views\Tracking\TrackingWrapperControl.axaml" />
     </ItemGroup>
 
     <ItemGroup>

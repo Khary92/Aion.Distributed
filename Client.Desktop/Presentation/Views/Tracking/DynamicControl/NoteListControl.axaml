@@ -6,7 +6,7 @@
              xmlns:dynamicControl="clr-namespace:Client.Desktop.Presentation.Views.Tracking.DynamicControl"
              x:DataType="dynamicControls1:NoteStreamViewModel"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Client.Desktop.Presentation.Views.Tracking.DynamicControl.NotesStreamControl">
+             x:Class="Client.Desktop.Presentation.Views.Tracking.DynamicControl.NoteListControl">
 
 
     <UserControl.DataTemplates>
