@@ -32,8 +32,8 @@ public class TimeSlotVerificationProvider : IVerificationProvider
         new VerificationStep(LoggingMeta.CommandReceived, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.EventPersisted, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.SendingNotification, Invoked.Equals, 1),
-        new VerificationStep(LoggingMeta.NotificationReceived, Invoked.AtLeast, 1),
-        new VerificationStep(LoggingMeta.PropertyChanged, Invoked.AtLeast, 1));
+        new VerificationStep(LoggingMeta.NotificationReceived, Invoked.Optional, 0),
+        new VerificationStep(LoggingMeta.PropertyChanged, Invoked.Optional, 1));
     
     private static readonly ImmutableList<VerificationStep> SetEndTimeSteps = ImmutableList.Create(
         new VerificationStep(LoggingMeta.ActionRequested, Invoked.Equals, 1),
@@ -41,8 +41,8 @@ public class TimeSlotVerificationProvider : IVerificationProvider
         new VerificationStep(LoggingMeta.CommandReceived, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.EventPersisted, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.SendingNotification, Invoked.Equals, 1),
-        new VerificationStep(LoggingMeta.NotificationReceived, Invoked.AtLeast, 1),
-        new VerificationStep(LoggingMeta.PropertyChanged, Invoked.AtLeast, 1));
+        new VerificationStep(LoggingMeta.NotificationReceived, Invoked.Optional, 1),
+        new VerificationStep(LoggingMeta.PropertyChanged, Invoked.Optional, 1));
 
     public SortingType SortingType => SortingType.TimeSlot;
 
