@@ -2,10 +2,11 @@ using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Service.Admin.Tracing;
 using Service.Admin.Web;
-using Service.Admin.Web.Communication.Reports;
-using Service.Admin.Web.Communication.Tickets;
+using Service.Admin.Web.Communication.Receiver;
+using Service.Admin.Web.Communication.Receiver.Reports;
 using Service.Admin.Web.Pages;
 using Service.Admin.Web.Services;
+using Service.Admin.Web.Services.Startup;
 
 var builder = WebApplication.CreateBuilder(args);
 

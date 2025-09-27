@@ -1,4 +1,4 @@
-using Service.Admin.Web.Communication.Tickets.Notifications;
+using Service.Admin.Web.Communication.Records.Notifications;
 
 namespace Service.Admin.Web.Models;
 
