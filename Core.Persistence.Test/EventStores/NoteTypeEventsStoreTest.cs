@@ -11,10 +11,6 @@ namespace Core.Persistence.Test.EventStores;
 [TestOf(typeof(NoteTypeEventsStore))]
 public class NoteTypeEventsStoreTest
 {
-    private Mock<IDbContextFactory<AppDbContext>> _dbContextFactoryMock;
-    private DbContextOptions<AppDbContext> _dbOptions;
-    private NoteTypeEventsStore _instance;
-
     [SetUp]
     public void SetUp()
     {
@@ -30,6 +26,10 @@ public class NoteTypeEventsStoreTest
 
         _instance = new NoteTypeEventsStore(_dbContextFactoryMock.Object);
     }
+
+    private Mock<IDbContextFactory<AppDbContext>> _dbContextFactoryMock;
+    private DbContextOptions<AppDbContext> _dbOptions;
+    private NoteTypeEventsStore _instance;
 
     [Test]
     public async Task StoreEventAsync_persists_event()

@@ -6,13 +6,16 @@ namespace Client.Tracing.Tracing.Tracers.TimeSlot.UseCase;
 
 public class SetStartTimeTraceCollector(ITracingDataSender sender) : ISetStartTimeTraceCollector
 {
+    private const SortingType Sorting = SortingType.TimeSlot;
+    private const UseCaseMeta UseCase = UseCaseMeta.SetStartTime;
+
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
         const string log = "Requested pushing start time slot data after failed shutdown";
 
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.TimeSlot,
-            UseCaseMeta.SetStartTime,
+            Sorting,
+            UseCase,
             LoggingMeta.ActionRequested,
             originClassType,
             traceId,
@@ -24,8 +27,8 @@ public class SetStartTimeTraceCollector(ITracingDataSender sender) : ISetStartTi
     {
         var log = $"Sent {command}";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.TimeSlot,
-            UseCaseMeta.SetStartTime,
+            Sorting,
+            UseCase,
             LoggingMeta.SendingCommand,
             originClassType,
             traceId,
@@ -37,8 +40,8 @@ public class SetStartTimeTraceCollector(ITracingDataSender sender) : ISetStartTi
     {
         const string log = "Aborted because cache is empty";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.TimeSlot,
-            UseCaseMeta.SetStartTime,
+            Sorting,
+            UseCase,
             LoggingMeta.ActionAborted,
             originClassType,
             traceId,

@@ -9,9 +9,6 @@ namespace Core.Server.Test.Services.Entities.Notes;
 [TestOf(typeof(NoteRequestsService))]
 public class NoteRequestsServiceTest
 {
-    private Mock<IEventStore<NoteEvent>> _mockEventStore;
-    private NoteRequestsService _instance;
-
     [SetUp]
     public void SetUp()
     {
@@ -22,6 +19,9 @@ public class NoteRequestsServiceTest
 
         _instance = new NoteRequestsService(_mockEventStore.Object);
     }
+
+    private Mock<IEventStore<NoteEvent>> _mockEventStore;
+    private NoteRequestsService _instance;
 
     [Test]
     public async Task GetNotesByTimeSlotId_CallsGetAllEventsAsync()

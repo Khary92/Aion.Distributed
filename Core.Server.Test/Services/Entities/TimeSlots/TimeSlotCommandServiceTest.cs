@@ -13,20 +13,13 @@ namespace Core.Server.Test.Services.Entities.TimeSlots;
 [TestOf(typeof(TimeSlotCommandService))]
 public class TimeSlotCommandServiceTest
 {
-    private Mock<TimeSlotNotificationService> _mockNotificationService;
-    private Mock<IEventStore<TimeSlotEvent>> _mockEventStore;
-    private Mock<ITimeSlotCommandsToEventTranslator> _mockEventTranslator;
-    private Mock<ITraceCollector> _mockTracer;
-
-    private TimeSlotCommandService _instance;
-
     [SetUp]
     public void SetUp()
     {
         _mockNotificationService = new Mock<TimeSlotNotificationService>();
         _mockEventStore = new Mock<IEventStore<TimeSlotEvent>>();
         _mockEventTranslator = new Mock<ITimeSlotCommandsToEventTranslator>();
-        _mockTracer = new Mock<ITraceCollector>()
+        _mockTracer = new Mock<ITraceCollector>
         {
             DefaultValueProvider = DefaultValueProvider.Mock
         };
@@ -37,6 +30,13 @@ public class TimeSlotCommandServiceTest
             _mockEventTranslator.Object,
             _mockTracer.Object);
     }
+
+    private Mock<TimeSlotNotificationService> _mockNotificationService;
+    private Mock<IEventStore<TimeSlotEvent>> _mockEventStore;
+    private Mock<ITimeSlotCommandsToEventTranslator> _mockEventTranslator;
+    private Mock<ITraceCollector> _mockTracer;
+
+    private TimeSlotCommandService _instance;
 
     [Test]
     public async Task SetEndTime()

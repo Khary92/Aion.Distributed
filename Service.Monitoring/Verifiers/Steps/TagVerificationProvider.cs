@@ -8,14 +8,6 @@ namespace Service.Monitoring.Verifiers.Steps;
 
 public class TagVerificationProvider : IVerificationProvider
 {
-    private readonly Dictionary<UseCaseMeta, ImmutableList<VerificationStep>> _verificationProvider = new();
-
-    public TagVerificationProvider()
-    {
-        _verificationProvider.Add(UseCaseMeta.CreateTag, CreateTagSteps);
-        _verificationProvider.Add(UseCaseMeta.UpdateTag, UpdateTagSteps);
-    }
-
     private static readonly ImmutableList<VerificationStep> CreateTagSteps = ImmutableList.Create(
         new VerificationStep(LoggingMeta.ActionRequested, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.SendingCommand, Invoked.Equals, 1),
@@ -33,6 +25,14 @@ public class TagVerificationProvider : IVerificationProvider
         new VerificationStep(LoggingMeta.SendingNotification, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.NotificationReceived, Invoked.AtLeast, 1),
         new VerificationStep(LoggingMeta.PropertyChanged, Invoked.AtLeast, 1));
+
+    private readonly Dictionary<UseCaseMeta, ImmutableList<VerificationStep>> _verificationProvider = new();
+
+    public TagVerificationProvider()
+    {
+        _verificationProvider.Add(UseCaseMeta.CreateTag, CreateTagSteps);
+        _verificationProvider.Add(UseCaseMeta.UpdateTag, UpdateTagSteps);
+    }
 
     public SortingType SortingType => SortingType.Tag;
 

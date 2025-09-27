@@ -52,7 +52,7 @@ public class MockClientRequestService : ClientRequestService.ClientRequestServic
 
         return Task.FromResult(new TrackingControlDataListProto
         {
-            TimeSlotControlData = {  timeSlotData }
+            TimeSlotControlData = { timeSlotData }
         });
     }
 }

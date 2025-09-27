@@ -8,13 +8,6 @@ namespace Service.Monitoring.Verifiers.Steps;
 
 public class ClientVerificationProvider : IVerificationProvider
 {
-    private readonly Dictionary<UseCaseMeta, ImmutableList<VerificationStep>> _verificationProvider = new();
-
-    public ClientVerificationProvider()
-    {
-        _verificationProvider.Add(UseCaseMeta.CreateTrackingControl, CreateTimeSlotSteps);
-    }
-
     private static readonly ImmutableList<VerificationStep> CreateTimeSlotSteps = ImmutableList.Create(
         new VerificationStep(LoggingMeta.ActionRequested, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.SendingCommand, Invoked.Equals, 1),
@@ -23,6 +16,13 @@ public class ClientVerificationProvider : IVerificationProvider
         new VerificationStep(LoggingMeta.SendingNotification, Invoked.Equals, 3),
         new VerificationStep(LoggingMeta.NotificationReceived, Invoked.AtLeast, 1),
         new VerificationStep(LoggingMeta.AggregateAdded, Invoked.AtLeast, 1));
+
+    private readonly Dictionary<UseCaseMeta, ImmutableList<VerificationStep>> _verificationProvider = new();
+
+    public ClientVerificationProvider()
+    {
+        _verificationProvider.Add(UseCaseMeta.CreateTrackingControl, CreateTimeSlotSteps);
+    }
 
     public SortingType SortingType => SortingType.Client;
 

@@ -11,9 +11,12 @@ namespace Service.Monitoring.Test.Verifiers.Common;
 [TestOf(typeof(TraceEvaluator))]
 public class TraceEvaluatorTest
 {
-    private static TraceData Trace(LoggingMeta loggingMeta) =>
-        new(SortingType.Note, UseCaseMeta.AddNoteToTimeSlot, loggingMeta, "AnyClass", Guid.NewGuid(), "A log",
+    private static TraceData Trace(LoggingMeta loggingMeta)
+    {
+        return new TraceData(SortingType.Note, UseCaseMeta.AddNoteToTimeSlot, loggingMeta, "AnyClass", Guid.NewGuid(),
+            "A log",
             DateTimeOffset.Now);
+    }
 
     [Test]
     public void Returns_NoValidationAvailable_When_No_Steps()
@@ -72,7 +75,7 @@ public class TraceEvaluatorTest
         {
             Trace(LoggingMeta.SendingCommand),
             Trace(LoggingMeta.ActionRequested),
-            Trace(LoggingMeta.SendingCommand),
+            Trace(LoggingMeta.SendingCommand)
         };
 
         var result = evaluator.GetResultState(traces);
@@ -111,7 +114,7 @@ public class TraceEvaluatorTest
         {
             Trace(LoggingMeta.EventPersisted),
             Trace(LoggingMeta.NotificationReceived),
-            Trace(LoggingMeta.EventPersisted),
+            Trace(LoggingMeta.EventPersisted)
         };
 
         var result = evaluator.GetResultState(traces);
@@ -152,7 +155,7 @@ public class TraceEvaluatorTest
             Trace(LoggingMeta.ActionRequested),
             Trace(LoggingMeta.NotificationReceived),
             Trace(LoggingMeta.SendingCommand),
-            Trace(LoggingMeta.NotificationReceived),
+            Trace(LoggingMeta.NotificationReceived)
         };
 
         var result = evaluator.GetResultState(traces);

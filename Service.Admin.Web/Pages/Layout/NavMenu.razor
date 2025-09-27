@@ -33,6 +33,7 @@
         border-radius: 6px;
         transition: background-color .2s ease, color .2s ease;
     }
+
     .nav .nav-link.section:hover,
     .nav .nav-link.section:focus {
         background: #161b22;
@@ -45,6 +46,7 @@
         transition: transform .2s ease;
         opacity: .85;
     }
+
     .nav .caret.rotate {
         transform: rotate(180deg);
     }
@@ -59,8 +61,9 @@
         border-left: 1px dashed #2d333b;
         margin-top: 0.15rem;
     }
+
     .submenu.open {
-        max-height: 400px; 
+        max-height: 400px;
         opacity: 1;
     }
 
@@ -73,6 +76,7 @@
         border-radius: 6px;
         transition: background-color .2s ease, color .2s ease, padding-left .15s ease;
     }
+
     .submenu .nav-link:hover,
     .submenu .nav-link.active {
         color: #ffffff;
@@ -84,6 +88,7 @@
         font-size: 1rem;
         opacity: .95;
     }
+
     .submenu .bi {
         font-size: 0.95rem;
         opacity: .9;
@@ -112,9 +117,10 @@
                aria-controls="submenu-monitoring">
                 <span class="bi bi-activity" aria-hidden="true"></span>
                 Monitoring
-                <span class="bi bi-chevron-down caret @( _isMonitoringMenuOpen ? "rotate" : "" )" aria-hidden="true"></span>
+                <span class="bi bi-chevron-down caret @(_isMonitoringMenuOpen ? "rotate" : "")"
+                      aria-hidden="true"></span>
             </a>
-            <div id="submenu-monitoring" class="submenu @( _isMonitoringMenuOpen ? "open" : "" )">
+            <div id="submenu-monitoring" class="submenu @(_isMonitoringMenuOpen ? "open" : "")">
                 <NavLink class="nav-link" href="reportsOverview" Match="NavLinkMatch.Prefix">
                     <span class="bi bi-grid" aria-hidden="true"></span>
                     Overview
@@ -132,9 +138,9 @@
                aria-controls="submenu-data">
                 <span class="bi bi-collection" aria-hidden="true"></span>
                 Data
-                <span class="bi bi-chevron-down caret @( _isDataMenuOpen ? "rotate" : "" )" aria-hidden="true"></span>
+                <span class="bi bi-chevron-down caret @(_isDataMenuOpen ? "rotate" : "")" aria-hidden="true"></span>
             </a>
-            <div id="submenu-data" class="submenu @( _isDataMenuOpen ? "open" : "" )">
+            <div id="submenu-data" class="submenu @(_isDataMenuOpen ? "open" : "")">
                 <NavLink class="nav-link" href="sprintData" Match="NavLinkMatch.Prefix">
                     <span class="bi bi-clipboard-data" aria-hidden="true"></span>
                     Sprint

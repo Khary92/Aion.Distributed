@@ -9,13 +9,13 @@ namespace Core.Server.Test.Translators.Commands.TimerSettings;
 [TestOf(typeof(TimerSettingsCommandsToEventTranslator))]
 public class TimerSettingsCommandsToEventTranslatorTest
 {
-    private TimerSettingsCommandsToEventTranslator _translator;
-
     [SetUp]
     public void SetUp()
     {
         _translator = new TimerSettingsCommandsToEventTranslator();
     }
+
+    private TimerSettingsCommandsToEventTranslator _translator;
 
     [Test]
     public void ToEvent_ChangeDocuTimerSaveIntervalCommand_BuildsExpectedEvent()

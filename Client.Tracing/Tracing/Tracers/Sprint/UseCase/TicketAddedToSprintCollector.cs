@@ -6,12 +6,15 @@ namespace Client.Tracing.Tracing.Tracers.Sprint.UseCase;
 
 public class TicketAddedToSprintCollector(ITracingDataSender sender) : ITicketAddedToSprintCollector
 {
+    private const SortingType Sorting = SortingType.Sprint;
+    private const UseCaseMeta UseCase = UseCaseMeta.AddTicketToCurrentSprint;
+
     public async Task NotificationReceived(Type originClassType, Guid traceId, object notification)
     {
         var log = $"Received {notification}";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Sprint,
-            UseCaseMeta.AddTicketToCurrentSprint,
+            Sorting,
+            UseCase,
             LoggingMeta.NotificationReceived,
             originClassType,
             traceId,
@@ -23,8 +26,8 @@ public class TicketAddedToSprintCollector(ITracingDataSender sender) : ITicketAd
     {
         var log = $"Aggregate not found id:{traceId}";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Sprint,
-            UseCaseMeta.AddTicketToCurrentSprint,
+            Sorting,
+            UseCase,
             LoggingMeta.AggregateNotFound,
             originClassType,
             traceId,
@@ -36,8 +39,8 @@ public class TicketAddedToSprintCollector(ITracingDataSender sender) : ITicketAd
     {
         var log = $"Changed applied id:{traceId}";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Sprint,
-            UseCaseMeta.AddTicketToCurrentSprint,
+            Sorting,
+            UseCase,
             LoggingMeta.PropertyChanged,
             originClassType,
             traceId,

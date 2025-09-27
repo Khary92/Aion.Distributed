@@ -15,7 +15,7 @@ public abstract class SprintTestBase : AggregateTestBase<SprintEvent>
     {
         return new SprintEvent(
             Guid.NewGuid(),
-            DateTimeOffset.Now, 
+            DateTimeOffset.Now,
             domainEvent.GetType().Name,
             Guid.NewGuid(),
             JsonSerializer.Serialize(domainEvent));

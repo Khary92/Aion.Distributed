@@ -13,21 +13,21 @@ namespace Core.Server.Test.Communication.Endpoints.TimerSettings;
 [TestOf(typeof(TimerSettingsCommandReceiver))]
 public class TimerSettingsCommandReceiverTest
 {
-    private Mock<ITimerSettingsCommandsService> _serviceMock;
-    private Mock<ITraceCollector> _tracerMock;
-    private TimerSettingsCommandReceiver _receiver;
-
     [SetUp]
     public void SetUp()
     {
         _serviceMock = new Mock<ITimerSettingsCommandsService>();
-        _tracerMock = new Mock<ITraceCollector>()
+        _tracerMock = new Mock<ITraceCollector>
         {
             DefaultValueProvider = DefaultValueProvider.Mock
         };
 
         _receiver = new TimerSettingsCommandReceiver(_serviceMock.Object, _tracerMock.Object);
     }
+
+    private Mock<ITimerSettingsCommandsService> _serviceMock;
+    private Mock<ITraceCollector> _tracerMock;
+    private TimerSettingsCommandReceiver _receiver;
 
     [Test]
     public async Task ChangeDocuTimerSaveInterval_ValidRequest_ReturnsSuccessResponse()

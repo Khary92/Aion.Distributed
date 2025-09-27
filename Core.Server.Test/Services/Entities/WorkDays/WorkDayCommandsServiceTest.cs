@@ -2,6 +2,7 @@
 using Core.Server.Services.Entities.WorkDays;
 using Core.Server.Tracing.Tracing.Tracers;
 using Core.Server.Translators.Commands.WorkDays;
+using Domain.Entities;
 using Domain.Events.WorkDays;
 using Domain.Interfaces;
 using Moq;
@@ -13,14 +14,6 @@ namespace Core.Server.Test.Services.Entities.WorkDays;
 [TestOf(typeof(WorkDayCommandsService))]
 public class WorkDayCommandsServiceTest
 {
-    private Mock<WorkDayNotificationService> _mockNotificationService;
-    private Mock<IEventStore<WorkDayEvent>> _mockEventStore;
-    private Mock<IWorkDayCommandsToEventTranslator> _mockEventTranslator;
-    private Mock<IWorkDayRequestsService> _mockRequestsService;
-    private Mock<ITraceCollector> _mockTracer;
-
-    private WorkDayCommandsService _instance;
-
     [SetUp]
     public void SetUp()
     {
@@ -28,14 +21,14 @@ public class WorkDayCommandsServiceTest
         _mockEventStore = new Mock<IEventStore<WorkDayEvent>>();
         _mockEventTranslator = new Mock<IWorkDayCommandsToEventTranslator>();
         _mockRequestsService = new Mock<IWorkDayRequestsService>();
-        _mockTracer = new Mock<ITraceCollector>()
+        _mockTracer = new Mock<ITraceCollector>
         {
             DefaultValueProvider = DefaultValueProvider.Mock
         };
 
         _mockRequestsService
             .Setup(s => s.GetAll())
-            .ReturnsAsync(new List<Domain.Entities.WorkDay>());
+            .ReturnsAsync(new List<WorkDay>());
 
         _instance = new WorkDayCommandsService(
             _mockEventStore.Object,
@@ -44,6 +37,14 @@ public class WorkDayCommandsServiceTest
             _mockRequestsService.Object,
             _mockTracer.Object);
     }
+
+    private Mock<WorkDayNotificationService> _mockNotificationService;
+    private Mock<IEventStore<WorkDayEvent>> _mockEventStore;
+    private Mock<IWorkDayCommandsToEventTranslator> _mockEventTranslator;
+    private Mock<IWorkDayRequestsService> _mockRequestsService;
+    private Mock<ITraceCollector> _mockTracer;
+
+    private WorkDayCommandsService _instance;
 
     [Test]
     public async Task Create()

@@ -37,7 +37,7 @@ public static class TracingServices
         AddTimeSlotTracingServices(services);
         AddClientTracingServices(services);
     }
-    
+
     private static void AddACommonTracingServices(this IServiceCollection services)
     {
         services.AddScoped<ITracingDataSender>(_ => new TracingDataSender("http://127.0.0.1:8082"));
@@ -109,7 +109,7 @@ public static class TracingServices
 
         services.AddSingleton<ITimeSlotUseCaseSelector, TimeSlotUseCaseSelector>();
     }
-    
+
     private static void AddClientTracingServices(IServiceCollection services)
     {
         services.AddSingleton<ICreateTrackingControlCollector, CreateTrackingControlCollector>();

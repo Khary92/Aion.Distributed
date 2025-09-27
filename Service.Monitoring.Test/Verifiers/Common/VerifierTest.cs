@@ -13,15 +13,6 @@ namespace Service.Monitoring.Test.Verifiers.Common;
 [TestOf(typeof(Verifier))]
 public class VerifierTest
 {
-    private Mock<IReportFactory> _reportFactoryMock;
-    private Guid _traceId;
-    private SortingType _sortingType;
-    private UseCaseMeta _useCaseMeta;
-    private List<TraceData> _traceDataList;
-    private Report _mockReport;
-
-    private Verifier _instance;
-    
     [SetUp]
     public void SetUp()
     {
@@ -61,6 +52,15 @@ public class VerifierTest
         _instance = new Verifier(_traceId, _sortingType, _useCaseMeta, _reportFactoryMock.Object);
     }
 
+    private Mock<IReportFactory> _reportFactoryMock;
+    private Guid _traceId;
+    private SortingType _sortingType;
+    private UseCaseMeta _useCaseMeta;
+    private List<TraceData> _traceDataList;
+    private Report _mockReport;
+
+    private Verifier _instance;
+
     [Test]
     public void Add_ShouldStartAndStopTimer()
     {
@@ -75,7 +75,7 @@ public class VerifierTest
 
         Assert.DoesNotThrow(() => _instance.Add(traceData));
     }
-    
+
     [Test]
     public void VerificationCompleted_ShouldContainCorrectReportValues()
     {
@@ -97,7 +97,7 @@ public class VerifierTest
 
         Assert.That(eventRaised, "VerificationCompleted event was not raised.");
     }
-    
+
     [Test]
     public void Timer_IsReset_EveryTimeAddIsCalled()
     {

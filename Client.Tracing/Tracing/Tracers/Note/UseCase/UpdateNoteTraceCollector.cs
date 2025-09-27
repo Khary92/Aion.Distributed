@@ -6,12 +6,15 @@ namespace Client.Tracing.Tracing.Tracers.Note.UseCase;
 
 public class UpdateNoteTraceCollector(ITracingDataSender sender) : IUpdateNoteTraceCollector
 {
+    private const SortingType Sorting = SortingType.Note;
+    private const UseCaseMeta UseCase = UseCaseMeta.UpdateNote;
+
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
         var log = "Update note requested";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Note,
-            UseCaseMeta.UpdateNote,
+            Sorting,
+            UseCase,
             LoggingMeta.ActionRequested,
             originClassType,
             traceId,
@@ -23,8 +26,8 @@ public class UpdateNoteTraceCollector(ITracingDataSender sender) : IUpdateNoteTr
     {
         var log = $"Sending command {command}";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Note,
-            UseCaseMeta.UpdateNote,
+            Sorting,
+            UseCase,
             LoggingMeta.SendingCommand,
             originClassType,
             traceId,
@@ -36,8 +39,8 @@ public class UpdateNoteTraceCollector(ITracingDataSender sender) : IUpdateNoteTr
     {
         var log = $"Received {notification}";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Note,
-            UseCaseMeta.UpdateNote,
+            Sorting,
+            UseCase,
             LoggingMeta.NotificationReceived,
             originClassType,
             traceId,
@@ -49,8 +52,8 @@ public class UpdateNoteTraceCollector(ITracingDataSender sender) : IUpdateNoteTr
     {
         var log = $"Aggregate not found id:{traceId}";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Note,
-            UseCaseMeta.UpdateNote,
+            Sorting,
+            UseCase,
             LoggingMeta.AggregateNotFound,
             originClassType,
             traceId,
@@ -62,8 +65,8 @@ public class UpdateNoteTraceCollector(ITracingDataSender sender) : IUpdateNoteTr
     {
         var log = $"Changed applied id:{traceId}";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Note,
-            UseCaseMeta.UpdateNote,
+            Sorting,
+            UseCase,
             LoggingMeta.ActionRequested,
             originClassType,
             traceId,
@@ -75,8 +78,8 @@ public class UpdateNoteTraceCollector(ITracingDataSender sender) : IUpdateNoteTr
     {
         var log = $"Exception occured {exception}";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Note,
-            UseCaseMeta.UpdateNote,
+            Sorting,
+            UseCase,
             LoggingMeta.ExceptionOccured,
             originClassType,
             traceId,

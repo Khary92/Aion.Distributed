@@ -31,7 +31,7 @@ public class TimerSettingsStateService(
     public TimerSettingsWebModel TimerSettings { get; private set; } = new(Guid.Empty, 0, 0);
 
     public event Action? OnStateChanged;
-    
+
     public async Task Apply(WebDocuIntervalChangedNotification notification)
     {
         TimerSettings.DocumentationSaveInterval = notification.DocumentationSaveInterval;

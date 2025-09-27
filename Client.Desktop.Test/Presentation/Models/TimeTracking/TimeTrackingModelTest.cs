@@ -34,7 +34,8 @@ public class TimeTrackingModelTest
     {
         var fixture = await TimeTrackingModelProvider.Create([], []);
 
-        var newTicket = new TicketClientModel(Guid.NewGuid(), "NewTicketName", "BookingNumber", "ChangeDocumentation", []);
+        var newTicket =
+            new TicketClientModel(Guid.NewGuid(), "NewTicketName", "BookingNumber", "ChangeDocumentation", []);
 
         fixture.Messenger.Send(new NewTicketMessage(newTicket, Guid.NewGuid()));
 
@@ -44,7 +45,8 @@ public class TimeTrackingModelTest
     [Test]
     public async Task ReceiveNewTicketMessage()
     {
-        var newTicket = new TicketClientModel(Guid.NewGuid(), "NewTicketName", "BookingNumber", "ChangeDocumentation", []);
+        var newTicket =
+            new TicketClientModel(Guid.NewGuid(), "NewTicketName", "BookingNumber", "ChangeDocumentation", []);
         var fixture = await TimeTrackingModelProvider.Create([newTicket], []);
 
         fixture.Messenger.Send(new NewTicketMessage(newTicket, Guid.NewGuid()));

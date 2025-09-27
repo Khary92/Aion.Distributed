@@ -56,7 +56,8 @@ public class TimeSlotCommandService(
         await timeSlotEventStore.StoreEventAsync(eventTranslator.ToEvent(command));
 
         var notification = command.ToNotification();
-        await tracer.Client.CreateTrackingControl.EventPersisted(GetType(), command.TraceId, notification.TimeSlotCreated);
+        await tracer.Client.CreateTrackingControl.EventPersisted(GetType(), command.TraceId,
+            notification.TimeSlotCreated);
 
         await tracer.Client.CreateTrackingControl.SendingNotification(GetType(), command.TraceId,
             notification.TimeSlotCreated);

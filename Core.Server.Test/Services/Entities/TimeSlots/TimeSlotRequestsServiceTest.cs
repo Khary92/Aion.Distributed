@@ -9,9 +9,6 @@ namespace Core.Server.Test.Services.Entities.TimeSlots;
 [TestOf(typeof(TimeSlotRequestsService))]
 public class TimeSlotRequestsServiceTest
 {
-    private Mock<IEventStore<TimeSlotEvent>> _mockEventStore;
-    private TimeSlotRequestsService _instance;
-
     [SetUp]
     public void SetUp()
     {
@@ -25,6 +22,9 @@ public class TimeSlotRequestsServiceTest
 
         _instance = new TimeSlotRequestsService(_mockEventStore.Object);
     }
+
+    private Mock<IEventStore<TimeSlotEvent>> _mockEventStore;
+    private TimeSlotRequestsService _instance;
 
     [Test]
     public async Task GetAll_CallsGetAllEventsAsync()

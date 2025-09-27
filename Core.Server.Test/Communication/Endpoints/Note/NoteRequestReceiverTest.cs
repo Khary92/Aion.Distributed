@@ -10,15 +10,15 @@ namespace Core.Server.Test.Communication.Endpoints.Note;
 [TestOf(typeof(NoteRequestReceiver))]
 public class NoteRequestReceiverTest
 {
-    private Mock<INoteRequestsService> _mockNoteRequestsService;
-    private NoteRequestReceiver _requestReceiver;
-
     [SetUp]
     public void SetUp()
     {
         _mockNoteRequestsService = new Mock<INoteRequestsService>();
         _requestReceiver = new NoteRequestReceiver(_mockNoteRequestsService.Object);
     }
+
+    private Mock<INoteRequestsService> _mockNoteRequestsService;
+    private NoteRequestReceiver _requestReceiver;
 
     [Test]
     public async Task GetNotesByTicketId_ValidRequest_ReturnsExpectedNotes()

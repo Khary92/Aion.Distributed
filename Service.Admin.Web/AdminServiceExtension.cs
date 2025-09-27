@@ -1,12 +1,10 @@
 ﻿using Grpc.Core;
 using Polly;
-using Service.Admin.Web.Communication;
 using Service.Admin.Web.Communication.Receiver;
 using Service.Admin.Web.Communication.Receiver.Reports;
 using Service.Admin.Web.Communication.Sender;
 using Service.Admin.Web.Communication.Sender.Common;
 using Service.Admin.Web.Communication.Sender.Policies;
-using Service.Admin.Web.Services;
 using Service.Admin.Web.Services.Startup;
 using Service.Admin.Web.Services.State;
 using Service.Monitoring.Shared.Enums;

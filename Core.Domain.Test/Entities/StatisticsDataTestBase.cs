@@ -15,7 +15,7 @@ public abstract class StatisticsDataTestBase : AggregateTestBase<StatisticsDataE
     {
         return new StatisticsDataEvent(
             Guid.NewGuid(),
-            DateTimeOffset.Now, 
+            DateTimeOffset.Now,
             domainEvent.GetType().Name,
             Guid.NewGuid(),
             JsonSerializer.Serialize(domainEvent));

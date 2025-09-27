@@ -11,10 +11,6 @@ namespace Core.Persistence.Test.EventStores;
 [TestOf(typeof(WorkDayEventsStore))]
 public class WorkDayEventsStoreTest
 {
-    private Mock<IDbContextFactory<AppDbContext>> _dbContextFactoryMock;
-    private DbContextOptions<AppDbContext> _dbOptions;
-    private WorkDayEventsStore _instance;
-
     [SetUp]
     public void SetUp()
     {
@@ -30,6 +26,10 @@ public class WorkDayEventsStoreTest
 
         _instance = new WorkDayEventsStore(_dbContextFactoryMock.Object);
     }
+
+    private Mock<IDbContextFactory<AppDbContext>> _dbContextFactoryMock;
+    private DbContextOptions<AppDbContext> _dbOptions;
+    private WorkDayEventsStore _instance;
 
     [Test]
     public async Task StoreEventAsync_persists_event()

@@ -56,8 +56,6 @@ public class StartTimeChangedCache(
         fileSystemWrapper.Delete(Path);
 
         if (fileSystemWrapper.IsFileExisting(Path))
-        {
             await tracer.TimeSlot.SetEndTime.FlushingCacheFailed(GetType(), traceId, Path);
-        }
     }
 }

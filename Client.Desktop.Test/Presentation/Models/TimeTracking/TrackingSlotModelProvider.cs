@@ -23,11 +23,26 @@ public static class TrackingSlotModelProvider
     {
         return new Mock<ITraceCollector> { DefaultValue = DefaultValue.Mock };
     }
-    
-    private static Mock<IDocumentationSynchronizer> CreateSynchronizerMock() => new();
-    private static Mock<IPersistentCache<ClientSetStartTimeCommand>> CreateStartTimeCacheMock() => new();
-    private static Mock<IPersistentCache<ClientSetEndTimeCommand>> CreateEndTimeCacheMock() => new();
-    private static Mock<IRequestSender> CreateRequestSenderMock() => new();
+
+    private static Mock<IDocumentationSynchronizer> CreateSynchronizerMock()
+    {
+        return new Mock<IDocumentationSynchronizer>();
+    }
+
+    private static Mock<IPersistentCache<ClientSetStartTimeCommand>> CreateStartTimeCacheMock()
+    {
+        return new Mock<IPersistentCache<ClientSetStartTimeCommand>>();
+    }
+
+    private static Mock<IPersistentCache<ClientSetEndTimeCommand>> CreateEndTimeCacheMock()
+    {
+        return new Mock<IPersistentCache<ClientSetEndTimeCommand>>();
+    }
+
+    private static Mock<IRequestSender> CreateRequestSenderMock()
+    {
+        return new Mock<IRequestSender>();
+    }
 
     public static async Task<TrackingSlotModelFixture> Create(TimeSlotClientModel? initialTimeSlot)
     {

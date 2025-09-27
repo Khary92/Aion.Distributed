@@ -9,13 +9,13 @@ namespace Core.Server.Test.Translators.Commands.StatisticsData;
 [TestOf(typeof(StatisticsDataCommandsToEventTranslator))]
 public class StatisticsDataCommandsToEventTranslatorTest
 {
-    private StatisticsDataCommandsToEventTranslator _translator;
-
     [SetUp]
     public void SetUp()
     {
         _translator = new StatisticsDataCommandsToEventTranslator();
     }
+
+    private StatisticsDataCommandsToEventTranslator _translator;
 
     [Test]
     public void ToEvent_CreateStatisticsDataCommand_BuildsExpectedEvent()

@@ -8,15 +8,6 @@ namespace Service.Monitoring.Verifiers.Steps;
 
 public class TimeSlotVerificationProvider : IVerificationProvider
 {
-    private readonly Dictionary<UseCaseMeta, ImmutableList<VerificationStep>> _verificationProvider = new();
-
-    public TimeSlotVerificationProvider()
-    {
-        _verificationProvider.Add(UseCaseMeta.AddNoteToTimeSlot, AddNoteToTimeSlotSteps);
-        _verificationProvider.Add(UseCaseMeta.SetStartTime, SetStartTimeSteps);
-        _verificationProvider.Add(UseCaseMeta.SetEndTime, SetEndTimeSteps);
-    }
-
     private static readonly ImmutableList<VerificationStep> AddNoteToTimeSlotSteps = ImmutableList.Create(
         new VerificationStep(LoggingMeta.ActionRequested, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.SendingCommand, Invoked.Equals, 1),
@@ -34,7 +25,7 @@ public class TimeSlotVerificationProvider : IVerificationProvider
         new VerificationStep(LoggingMeta.SendingNotification, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.NotificationReceived, Invoked.Optional, 0),
         new VerificationStep(LoggingMeta.PropertyChanged, Invoked.Optional, 1));
-    
+
     private static readonly ImmutableList<VerificationStep> SetEndTimeSteps = ImmutableList.Create(
         new VerificationStep(LoggingMeta.ActionRequested, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.SendingCommand, Invoked.Equals, 1),
@@ -43,6 +34,15 @@ public class TimeSlotVerificationProvider : IVerificationProvider
         new VerificationStep(LoggingMeta.SendingNotification, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.NotificationReceived, Invoked.Optional, 1),
         new VerificationStep(LoggingMeta.PropertyChanged, Invoked.Optional, 1));
+
+    private readonly Dictionary<UseCaseMeta, ImmutableList<VerificationStep>> _verificationProvider = new();
+
+    public TimeSlotVerificationProvider()
+    {
+        _verificationProvider.Add(UseCaseMeta.AddNoteToTimeSlot, AddNoteToTimeSlotSteps);
+        _verificationProvider.Add(UseCaseMeta.SetStartTime, SetStartTimeSteps);
+        _verificationProvider.Add(UseCaseMeta.SetEndTime, SetEndTimeSteps);
+    }
 
     public SortingType SortingType => SortingType.TimeSlot;
 

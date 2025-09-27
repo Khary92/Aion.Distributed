@@ -14,10 +14,6 @@ namespace Core.Server.Test.Communication.Endpoints.TimeSlot;
 [TestOf(typeof(TimeSlotCommandReceiver))]
 public class TimeSlotCommandReceiverTest
 {
-    private Mock<ITimeSlotCommandsService> _serviceMock;
-    private Mock<ITraceCollector> _tracerMock;
-    private TimeSlotCommandReceiver _receiver;
-
     [SetUp]
     public void SetUp()
     {
@@ -30,7 +26,11 @@ public class TimeSlotCommandReceiverTest
 
         _receiver = new TimeSlotCommandReceiver(_serviceMock.Object, _tracerMock.Object);
     }
-    
+
+    private Mock<ITimeSlotCommandsService> _serviceMock;
+    private Mock<ITraceCollector> _tracerMock;
+    private TimeSlotCommandReceiver _receiver;
+
     [Test]
     public async Task AddNote_ValidRequest_ReturnsSuccessResponse()
     {
@@ -102,7 +102,7 @@ public class TimeSlotCommandReceiverTest
         Assert.ThrowsAsync<FormatException>(() =>
             _receiver.SetStartTime(request, Mock.Of<ServerCallContext>()));
     }
-    
+
     [Test]
     public void SetEndTime_InvalidTraceId_ThrowsFormatException()
     {

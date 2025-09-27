@@ -1,6 +1,6 @@
 ﻿using Core.Server.Services.Entities.Sprints;
 using Core.Server.Services.Entities.Tickets;
-using Domain.Events.Tickets;
+using Domain.Entities;
 using Domain.Interfaces;
 using Moq;
 
@@ -10,10 +10,6 @@ namespace Core.Server.Test.Services.Entities.Tickets;
 [TestOf(typeof(TicketRequestService))]
 public class TicketRequestServiceTest
 {
-    private Mock<ITicketEventsStore> _mockEventStore;
-    private Mock<ISprintRequestsService> _mockSprintRequests;
-    private TicketRequestService _instance;
-
     [SetUp]
     public void SetUp()
     {
@@ -34,6 +30,10 @@ public class TicketRequestServiceTest
             _mockEventStore.Object,
             _mockSprintRequests.Object);
     }
+
+    private Mock<ITicketEventsStore> _mockEventStore;
+    private Mock<ISprintRequestsService> _mockSprintRequests;
+    private TicketRequestService _instance;
 
     [Test]
     public async Task GetAll_CallsGetAllEventsAsync()
@@ -66,7 +66,7 @@ public class TicketRequestServiceTest
     {
         _mockSprintRequests
             .Setup(s => s.GetActiveSprint())
-            .ReturnsAsync((Domain.Entities.Sprint?)null);
+            .ReturnsAsync((Sprint?)null);
 
         var result = await _instance.GetTicketsForCurrentSprint();
 
@@ -78,14 +78,15 @@ public class TicketRequestServiceTest
     [Test]
     public async Task GetTicketsForCurrentSprint_WithActiveSprint_CallsGetAllEventsAsync()
     {
-        var activeSprint = new Domain.Entities.Sprint {
+        var activeSprint = new Sprint
+        {
             SprintId = Guid.NewGuid(),
             Name = "Sprint 1",
             StartDate = DateTimeOffset.Now,
             EndDate = DateTimeOffset.Now.AddDays(7),
             IsActive = true
         };
-        
+
         _mockSprintRequests
             .Setup(s => s.GetActiveSprint())
             .ReturnsAsync(activeSprint);

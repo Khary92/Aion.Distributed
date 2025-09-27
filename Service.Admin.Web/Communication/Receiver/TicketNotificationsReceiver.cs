@@ -55,9 +55,10 @@ public class TicketNotificationsReceiver(ITraceCollector tracer, ITicketStateSer
                         case TicketNotification.NotificationOneofCase.TicketDocumentationUpdated:
                             var ticketDocumentationUpdated = notification.TicketDocumentationUpdated.ToNotification();
 
-                            await tracer.Ticket.ChangeDocumentation.NotificationReceived(GetType(), ticketDocumentationUpdated.TraceId,
+                            await tracer.Ticket.ChangeDocumentation.NotificationReceived(GetType(),
+                                ticketDocumentationUpdated.TraceId,
                                 ticketDocumentationUpdated);
-                            
+
                             await ticketStateService.Apply(ticketDocumentationUpdated);
                             break;
                         case TicketNotification.NotificationOneofCase.None:

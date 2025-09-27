@@ -7,12 +7,15 @@ namespace Client.Tracing.Tracing.Tracers.NoteType.UseCase;
 public class ChangeNoteTypeNameTraceCollector(ITracingDataSender sender)
     : IChangeNoteTypeNameTraceCollector
 {
+    private const SortingType Sorting = SortingType.NoteType;
+    private const UseCaseMeta UseCase = UseCaseMeta.ChangeNoteTypeName;
+
     public async Task NotificationReceived(Type originClassType, Guid traceId, object notification)
     {
         var log = $"Received {notification}";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.NoteType,
-            UseCaseMeta.ChangeNoteTypeName,
+            Sorting,
+            UseCase,
             LoggingMeta.NotificationReceived,
             originClassType,
             traceId,
@@ -24,8 +27,8 @@ public class ChangeNoteTypeNameTraceCollector(ITracingDataSender sender)
     {
         var log = $"Aggregate not found id:{traceId}";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.NoteType,
-            UseCaseMeta.ChangeNoteTypeName,
+            Sorting,
+            UseCase,
             LoggingMeta.AggregateNotFound,
             originClassType,
             traceId,
@@ -37,8 +40,8 @@ public class ChangeNoteTypeNameTraceCollector(ITracingDataSender sender)
     {
         var log = $"Changed applied id:{traceId}";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.NoteType,
-            UseCaseMeta.ChangeNoteTypeName,
+            Sorting,
+            UseCase,
             LoggingMeta.PropertyChanged,
             originClassType,
             traceId,

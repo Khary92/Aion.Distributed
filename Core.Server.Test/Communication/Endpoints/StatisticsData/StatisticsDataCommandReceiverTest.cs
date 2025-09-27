@@ -14,10 +14,6 @@ namespace Core.Server.Test.Communication.Endpoints.StatisticsData;
 [TestOf(typeof(StatisticsDataCommandReceiver))]
 public class StatisticsDataCommandReceiverTest
 {
-    private Mock<IStatisticsDataCommandsService> _serviceMock;
-    private Mock<ITraceCollector> _tracerMock;
-    private StatisticsDataCommandReceiver _receiver;
-
     [SetUp]
     public void SetUp()
     {
@@ -29,6 +25,10 @@ public class StatisticsDataCommandReceiverTest
 
         _receiver = new StatisticsDataCommandReceiver(_serviceMock.Object, _tracerMock.Object);
     }
+
+    private Mock<IStatisticsDataCommandsService> _serviceMock;
+    private Mock<ITraceCollector> _tracerMock;
+    private StatisticsDataCommandReceiver _receiver;
 
     [Test]
     public async Task ChangeProductivity_ValidRequest_ReturnsSuccessResponse()

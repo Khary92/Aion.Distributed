@@ -32,7 +32,7 @@ public class LoadTrackingControlDataHandler(
             var statisticsData = await statisticsDataRequestsService.GetStatisticsDataByTimeSlotId(timeSlot.TimeSlotId);
             var ticket = await ticketRequestsService.GetTicketById(timeSlot.SelectedTicketId);
 
-            timeSlotControlDataList.TimeSlotControlData.Add(new TrackingControlDataProto()
+            timeSlotControlDataList.TimeSlotControlData.Add(new TrackingControlDataProto
             {
                 StatisticsDataProto = statisticsData.ToProto(),
                 TicketProto = ticket!.ToProto(),

@@ -14,19 +14,13 @@ namespace Core.Server.Test.Communication.Endpoints.Sprint;
 [TestOf(typeof(SprintCommandReceiver))]
 public class SprintCommandReceiverTest
 {
-    private Mock<ISprintCommandsService> _serviceMock;
-    private Mock<IAddTicketToActiveSprintCommandHandler> _addTicketHandlerMock;
-    private Mock<ISetSprintActiveStatusCommandHandler> _setActiveStatusHandlerMock;
-    private Mock<ITraceCollector> _tracerMock;
-    private SprintCommandReceiver _receiver;
-
     [SetUp]
     public void SetUp()
     {
         _serviceMock = new Mock<ISprintCommandsService>();
         _addTicketHandlerMock = new Mock<IAddTicketToActiveSprintCommandHandler>();
         _setActiveStatusHandlerMock = new Mock<ISetSprintActiveStatusCommandHandler>();
-        _tracerMock = new Mock<ITraceCollector>()
+        _tracerMock = new Mock<ITraceCollector>
         {
             DefaultValueProvider = DefaultValueProvider.Mock
         };
@@ -37,6 +31,12 @@ public class SprintCommandReceiverTest
             _setActiveStatusHandlerMock.Object,
             _tracerMock.Object);
     }
+
+    private Mock<ISprintCommandsService> _serviceMock;
+    private Mock<IAddTicketToActiveSprintCommandHandler> _addTicketHandlerMock;
+    private Mock<ISetSprintActiveStatusCommandHandler> _setActiveStatusHandlerMock;
+    private Mock<ITraceCollector> _tracerMock;
+    private SprintCommandReceiver _receiver;
 
     [Test]
     public async Task AddTicketToActiveSprint_ValidRequest_ReturnsSuccessResponse()
@@ -107,7 +107,7 @@ public class SprintCommandReceiverTest
         Assert.ThrowsAsync<FormatException>(() =>
             _receiver.CreateSprint(request, Mock.Of<ServerCallContext>()));
     }
-    
+
 
     [Test]
     public async Task SetSprintActiveStatus_ValidRequest_ReturnsSuccessResponse()
@@ -167,7 +167,7 @@ public class SprintCommandReceiverTest
                 request),
             Times.Once);
     }
-    
+
     [Test]
     public void UpdateSprintData_InvalidTraceId_ThrowsFormatException()
     {

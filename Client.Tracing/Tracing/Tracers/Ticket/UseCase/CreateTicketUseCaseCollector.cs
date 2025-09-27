@@ -6,13 +6,16 @@ namespace Client.Tracing.Tracing.Tracers.Ticket.UseCase;
 
 public class CreateTicketUseCaseCollector(ITracingDataSender sender) : ICreateTicketUseCaseCollector
 {
+    private const SortingType Sorting = SortingType.Ticket;
+    private const UseCaseMeta UseCase = UseCaseMeta.CreateTicket;
+
     public async Task NotificationReceived(Type originClassType, Guid traceId, object notification)
     {
         var log = $"Received {GetName(notification)}:{notification}";
 
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Ticket,
-            UseCaseMeta.CreateTicket,
+            Sorting,
+            UseCase,
             LoggingMeta.NotificationReceived,
             originClassType,
             traceId,
@@ -24,8 +27,8 @@ public class CreateTicketUseCaseCollector(ITracingDataSender sender) : ICreateTi
     {
         var log = $"Added aggregate with id:{traceId}";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Ticket,
-            UseCaseMeta.CreateTicket,
+            Sorting,
+            UseCase,
             LoggingMeta.AggregateAdded,
             originClassType,
             traceId,

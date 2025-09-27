@@ -13,21 +13,21 @@ namespace Core.Server.Test.Communication.Endpoints.Client;
 [TestOf(typeof(ClientCommandReceiver))]
 public class ClientCommandReceiverTest
 {
-    private Mock<ITrackingControlService> _serviceMock;
-
-    private Mock<ITraceCollector> _tracerMock = new()
-    {
-        DefaultValueProvider = DefaultValueProvider.Mock
-    };
-
-    private ClientCommandReceiver _receiver;
-
     [SetUp]
     public void SetUp()
     {
         _serviceMock = new Mock<ITrackingControlService>();
         _receiver = new ClientCommandReceiver(_serviceMock.Object, _tracerMock.Object);
     }
+
+    private Mock<ITrackingControlService> _serviceMock;
+
+    private readonly Mock<ITraceCollector> _tracerMock = new()
+    {
+        DefaultValueProvider = DefaultValueProvider.Mock
+    };
+
+    private ClientCommandReceiver _receiver;
 
     [Test]
     public async Task CreateTrackingControl_ValidRequest_ReturnsSuccessResponse()

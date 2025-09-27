@@ -7,13 +7,16 @@ namespace Client.Tracing.Tracing.Tracers.Statistics.UseCase;
 public class ChangeTagSelectionTraceCollector(ITracingDataSender sender)
     : IChangeTagSelectionTraceCollector
 {
+    private const SortingType Sorting = SortingType.StatisticsData;
+    private const UseCaseMeta UseCase = UseCaseMeta.ChangeTagSelection;
+
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
         const string log = "Change statistics data requested";
 
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.StatisticsData,
-            UseCaseMeta.ChangeTagSelection,
+            Sorting,
+            UseCase,
             LoggingMeta.ActionRequested,
             originClassType,
             traceId,
@@ -26,8 +29,8 @@ public class ChangeTagSelectionTraceCollector(ITracingDataSender sender)
         var log = $"Sent {command}";
 
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.StatisticsData,
-            UseCaseMeta.ChangeTagSelection,
+            Sorting,
+            UseCase,
             LoggingMeta.SendingCommand,
             originClassType,
             traceId,
@@ -40,8 +43,8 @@ public class ChangeTagSelectionTraceCollector(ITracingDataSender sender)
         var log = $"Received {notification}";
 
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.StatisticsData,
-            UseCaseMeta.ChangeTagSelection,
+            Sorting,
+            UseCase,
             LoggingMeta.NotificationReceived,
             originClassType,
             traceId,
@@ -54,8 +57,8 @@ public class ChangeTagSelectionTraceCollector(ITracingDataSender sender)
         var log = $"Aggregate not found id:{traceId}";
 
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.StatisticsData,
-            UseCaseMeta.ChangeTagSelection,
+            Sorting,
+            UseCase,
             LoggingMeta.AggregateNotFound,
             originClassType,
             traceId,
@@ -68,8 +71,8 @@ public class ChangeTagSelectionTraceCollector(ITracingDataSender sender)
         var log = $"Changed applied id:{traceId}";
 
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.StatisticsData,
-            UseCaseMeta.ChangeTagSelection,
+            Sorting,
+            UseCase,
             LoggingMeta.PropertyChanged,
             originClassType,
             traceId,
@@ -82,8 +85,8 @@ public class ChangeTagSelectionTraceCollector(ITracingDataSender sender)
         const string log = "This model does not match with the target StatisticsDataId";
 
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.StatisticsData,
-            UseCaseMeta.ChangeTagSelection,
+            Sorting,
+            UseCase,
             LoggingMeta.DoesNotHandle,
             originClassType,
             traceId,

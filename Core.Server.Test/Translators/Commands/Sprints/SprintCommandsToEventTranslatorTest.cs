@@ -9,13 +9,13 @@ namespace Core.Server.Test.Translators.Commands.Sprints;
 [TestOf(typeof(SprintCommandsToEventTranslator))]
 public class SprintCommandsToEventTranslatorTest
 {
-    private SprintCommandsToEventTranslator _translator;
-
     [SetUp]
     public void SetUp()
     {
         _translator = new SprintCommandsToEventTranslator();
     }
+
+    private SprintCommandsToEventTranslator _translator;
 
     [Test]
     public void ToEvent_CreateSprintCommand_BuildsExpectedSprintEvent()

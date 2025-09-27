@@ -6,12 +6,15 @@ namespace Client.Tracing.Tracing.Tracers.Note.UseCase;
 
 public class CreateNoteTraceCollector(ITracingDataSender sender) : ICreateNoteTraceCollector
 {
+    private const SortingType Sorting = SortingType.Note;
+    private const UseCaseMeta UseCase = UseCaseMeta.CreateNote;
+
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
         var log = "Create note requested";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Note,
-            UseCaseMeta.CreateNote,
+            Sorting,
+            UseCase,
             LoggingMeta.ActionRequested,
             originClassType,
             traceId,
@@ -23,8 +26,8 @@ public class CreateNoteTraceCollector(ITracingDataSender sender) : ICreateNoteTr
     {
         var log = $"Sending command {command}";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Note,
-            UseCaseMeta.CreateNote,
+            Sorting,
+            UseCase,
             LoggingMeta.NotificationReceived,
             originClassType,
             traceId,
@@ -36,8 +39,8 @@ public class CreateNoteTraceCollector(ITracingDataSender sender) : ICreateNoteTr
     {
         var log = $"Received {notification}";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Note,
-            UseCaseMeta.CreateNote,
+            Sorting,
+            UseCase,
             LoggingMeta.NotificationReceived,
             originClassType,
             traceId,
@@ -49,8 +52,8 @@ public class CreateNoteTraceCollector(ITracingDataSender sender) : ICreateNoteTr
     {
         var log = $"Added aggregate with id:{traceId}";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Note,
-            UseCaseMeta.CreateNote,
+            Sorting,
+            UseCase,
             LoggingMeta.AggregateAdded,
             originClassType,
             traceId,
@@ -62,8 +65,8 @@ public class CreateNoteTraceCollector(ITracingDataSender sender) : ICreateNoteTr
     {
         var log = $"Exception occured {exception}";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Note,
-            UseCaseMeta.CreateNote,
+            Sorting,
+            UseCase,
             LoggingMeta.ExceptionOccured,
             originClassType,
             traceId,

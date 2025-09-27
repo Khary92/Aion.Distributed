@@ -6,12 +6,15 @@ namespace Client.Tracing.Tracing.Tracers.Ticket.UseCase;
 
 public class UpdateTicketDocuTraceCollector(ITracingDataSender sender) : IUpdateTicketDocuTraceCollector
 {
+    private const SortingType Sorting = SortingType.Ticket;
+    private const UseCaseMeta UseCase = UseCaseMeta.UpdateTicketDocumentation;
+
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
         const string log = "Update ticket documentation requested";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Ticket,
-            UseCaseMeta.UpdateTicketDocumentation,
+            Sorting,
+            UseCase,
             LoggingMeta.ActionRequested,
             originClassType,
             traceId,
@@ -23,8 +26,8 @@ public class UpdateTicketDocuTraceCollector(ITracingDataSender sender) : IUpdate
     {
         var log = $"Sending command {command}";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Ticket,
-            UseCaseMeta.UpdateTicketDocumentation,
+            Sorting,
+            UseCase,
             LoggingMeta.SendingCommand,
             originClassType,
             traceId,
@@ -37,8 +40,8 @@ public class UpdateTicketDocuTraceCollector(ITracingDataSender sender) : IUpdate
         var log = $"Received {GetName(notification)}:{notification}";
 
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Ticket,
-            UseCaseMeta.UpdateTicketDocumentation,
+            Sorting,
+            UseCase,
             LoggingMeta.NotificationReceived,
             originClassType,
             traceId,
@@ -50,20 +53,21 @@ public class UpdateTicketDocuTraceCollector(ITracingDataSender sender) : IUpdate
     {
         var log = "No dirty ticket documentation found!";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Ticket,
-            UseCaseMeta.UpdateTicketDocumentation,
+            Sorting,
+            UseCase,
             LoggingMeta.ActionAborted,
             originClassType,
             traceId,
             log,
-            DateTimeOffset.Now)); }
+            DateTimeOffset.Now));
+    }
 
     public async Task AggregateAdded(Type originClassType, Guid traceId)
     {
         var log = $"Added aggregate with id:{traceId}";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Ticket,
-            UseCaseMeta.UpdateTicketDocumentation,
+            Sorting,
+            UseCase,
             LoggingMeta.AggregateAdded,
             originClassType,
             traceId,

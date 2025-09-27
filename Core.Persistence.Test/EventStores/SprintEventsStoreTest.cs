@@ -11,10 +11,6 @@ namespace Core.Persistence.Test.EventStores;
 [TestOf(typeof(SprintEventsStore))]
 public class SprintEventsStoreTest
 {
-    private Mock<IDbContextFactory<AppDbContext>> _dbContextFactoryMock;
-    private DbContextOptions<AppDbContext> _dbOptions;
-    private SprintEventsStore _instance;
-
     [SetUp]
     public void SetUp()
     {
@@ -30,6 +26,10 @@ public class SprintEventsStoreTest
 
         _instance = new SprintEventsStore(_dbContextFactoryMock.Object);
     }
+
+    private Mock<IDbContextFactory<AppDbContext>> _dbContextFactoryMock;
+    private DbContextOptions<AppDbContext> _dbOptions;
+    private SprintEventsStore _instance;
 
     [Test]
     public async Task StoreEventAsync_persists_event()

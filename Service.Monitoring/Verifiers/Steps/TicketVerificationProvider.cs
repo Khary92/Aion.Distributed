@@ -8,15 +8,6 @@ namespace Service.Monitoring.Verifiers.Steps;
 
 public class TicketVerificationProvider : IVerificationProvider
 {
-    private readonly Dictionary<UseCaseMeta, ImmutableList<VerificationStep>> _verificationProvider = new();
-
-    public TicketVerificationProvider()
-    {
-        _verificationProvider.Add(UseCaseMeta.CreateTicket, CreateTicketSteps);
-        _verificationProvider.Add(UseCaseMeta.UpdateTicket, UpdateTicketSteps);
-        _verificationProvider.Add(UseCaseMeta.UpdateTicketDocumentation, UpdateTicketDocumentationSteps);
-    }
-
     private static readonly ImmutableList<VerificationStep> CreateTicketSteps = ImmutableList.Create(
         new VerificationStep(LoggingMeta.ActionRequested, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.SendingCommand, Invoked.Equals, 1),
@@ -25,7 +16,7 @@ public class TicketVerificationProvider : IVerificationProvider
         new VerificationStep(LoggingMeta.SendingNotification, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.NotificationReceived, Invoked.AtLeast, 1),
         new VerificationStep(LoggingMeta.AggregateAdded, Invoked.AtLeast, 1));
-    
+
     private static readonly ImmutableList<VerificationStep> UpdateTicketSteps = ImmutableList.Create(
         new VerificationStep(LoggingMeta.ActionRequested, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.SendingCommand, Invoked.Equals, 1),
@@ -34,7 +25,7 @@ public class TicketVerificationProvider : IVerificationProvider
         new VerificationStep(LoggingMeta.SendingNotification, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.NotificationReceived, Invoked.AtLeast, 1),
         new VerificationStep(LoggingMeta.PropertyChanged, Invoked.AtLeast, 1));
-    
+
     private static readonly ImmutableList<VerificationStep> UpdateTicketDocumentationSteps = ImmutableList.Create(
         new VerificationStep(LoggingMeta.ActionRequested, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.SendingCommand, Invoked.AtLeast, 1),
@@ -43,6 +34,15 @@ public class TicketVerificationProvider : IVerificationProvider
         new VerificationStep(LoggingMeta.SendingNotification, Invoked.AtLeast, 1),
         new VerificationStep(LoggingMeta.NotificationReceived, Invoked.Optional, 0),
         new VerificationStep(LoggingMeta.PropertyChanged, Invoked.Optional, 0));
+
+    private readonly Dictionary<UseCaseMeta, ImmutableList<VerificationStep>> _verificationProvider = new();
+
+    public TicketVerificationProvider()
+    {
+        _verificationProvider.Add(UseCaseMeta.CreateTicket, CreateTicketSteps);
+        _verificationProvider.Add(UseCaseMeta.UpdateTicket, UpdateTicketSteps);
+        _verificationProvider.Add(UseCaseMeta.UpdateTicketDocumentation, UpdateTicketDocumentationSteps);
+    }
 
     public SortingType SortingType => SortingType.Ticket;
 

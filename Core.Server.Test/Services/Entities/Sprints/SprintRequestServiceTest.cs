@@ -9,9 +9,6 @@ namespace Core.Server.Test.Services.Entities.Sprints;
 [TestOf(typeof(SprintRequestService))]
 public class SprintRequestServiceTest
 {
-    private Mock<IEventStore<SprintEvent>> _mockEventStore;
-    private SprintRequestService _instance;
-
     [SetUp]
     public void SetUp()
     {
@@ -25,6 +22,9 @@ public class SprintRequestServiceTest
 
         _instance = new SprintRequestService(_mockEventStore.Object);
     }
+
+    private Mock<IEventStore<SprintEvent>> _mockEventStore;
+    private SprintRequestService _instance;
 
     [Test]
     public async Task GetAll_CallsGetAllEventsAsync()

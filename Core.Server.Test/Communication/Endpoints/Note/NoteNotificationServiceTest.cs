@@ -9,13 +9,13 @@ namespace Core.Server.Test.Communication.Endpoints.Note;
 [TestOf(typeof(NoteNotificationService))]
 public class NoteNotificationServiceTest
 {
-    private NoteNotificationService _service;
-
     [SetUp]
     public void SetUp()
     {
         _service = new NoteNotificationService();
     }
+
+    private NoteNotificationService _service;
 
     [Test]
     public async Task Subscribe_and_send_writes_to_active_client()
@@ -38,9 +38,9 @@ public class NoteNotificationServiceTest
         var notificationId = Guid.NewGuid();
         var notification = new NoteNotification
         {
-            NoteCreated = new NoteCreatedNotification()
+            NoteCreated = new NoteCreatedNotification
             {
-                NoteId = notificationId.ToString(),
+                NoteId = notificationId.ToString()
             }
         };
         await _service.SendNotificationAsync(notification);
@@ -127,10 +127,6 @@ public class NoteNotificationServiceTest
             StatusCore = statusCore;
         }
 
-        public static ServerCallContext WithCancellation(CancellationToken token)
-            => new FakeServerCallContext(new Metadata(), token, "localhost", "/proto.NoteNotificationService/Subscribe",
-                "ipv4:127.0.0.1:12345", DateTime.MaxValue, new WriteOptions(), new Status());
-
         protected override string MethodCore { get; }
         protected override string HostCore { get; }
         protected override string PeerCore { get; }
@@ -140,12 +136,25 @@ public class NoteNotificationServiceTest
         protected override Metadata ResponseTrailersCore { get; } = [];
         protected override Status StatusCore { get; set; }
         protected override WriteOptions? WriteOptionsCore { get; set; }
+
         protected override AuthContext AuthContextCore { get; } =
             new("fake", new Dictionary<string, List<AuthProperty>>());
 
-        protected override ContextPropagationToken CreatePropagationTokenCore(ContextPropagationOptions? options) =>
-            CreatePropagationToken(options);
+        public static ServerCallContext WithCancellation(CancellationToken token)
+        {
+            return new FakeServerCallContext(new Metadata(), token, "localhost",
+                "/proto.NoteNotificationService/Subscribe",
+                "ipv4:127.0.0.1:12345", DateTime.MaxValue, new WriteOptions(), new Status());
+        }
 
-        protected override Task WriteResponseHeadersAsyncCore(Metadata responseHeaders) => Task.CompletedTask;
+        protected override ContextPropagationToken CreatePropagationTokenCore(ContextPropagationOptions? options)
+        {
+            return CreatePropagationToken(options);
+        }
+
+        protected override Task WriteResponseHeadersAsyncCore(Metadata responseHeaders)
+        {
+            return Task.CompletedTask;
+        }
     }
 }

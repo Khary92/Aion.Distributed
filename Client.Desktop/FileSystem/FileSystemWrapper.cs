@@ -15,7 +15,7 @@ public class FileSystemWrapper : IFileSystemWrapper
     }
 
     public void Delete(string filePath)
-    { 
+    {
         File.Delete(filePath);
     }
 }

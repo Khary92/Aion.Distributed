@@ -16,7 +16,7 @@ public class ClientCommandReceiver(ITrackingControlService trackingControlServic
 
         await trackingControlService.Create(Guid.Parse(request.TicketId), request.Date.ToDateTimeOffset(),
             Guid.Parse(request.TraceData.TraceId));
-        
+
         return new CommandResponse { Success = true };
     }
 }

@@ -6,13 +6,16 @@ namespace Client.Tracing.Tracing.Tracers.WorkDay.UseCase;
 
 public class CreateWorkDayTraceCollector(ITracingDataSender sender) : ICreateWorkDayTraceCollector
 {
+    private const SortingType Sorting = SortingType.WorkDay;
+    private const UseCaseMeta UseCase = UseCaseMeta.CreateWorkDay;
+
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
         const string log = "Create WorkDay requested";
 
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.WorkDay,
-            UseCaseMeta.CreateWorkDay,
+            Sorting,
+            UseCase,
             LoggingMeta.ActionRequested,
             originClassType,
             traceId,
@@ -25,8 +28,8 @@ public class CreateWorkDayTraceCollector(ITracingDataSender sender) : ICreateWor
         var log = $"Sent {command}";
 
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.WorkDay,
-            UseCaseMeta.CreateWorkDay,
+            Sorting,
+            UseCase,
             LoggingMeta.SendingCommand,
             originClassType,
             traceId,
@@ -39,8 +42,8 @@ public class CreateWorkDayTraceCollector(ITracingDataSender sender) : ICreateWor
         const string log = "Action aborted because work day already exists";
 
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.WorkDay,
-            UseCaseMeta.CreateWorkDay,
+            Sorting,
+            UseCase,
             LoggingMeta.ActionAborted,
             originClassType,
             traceId,
@@ -53,8 +56,8 @@ public class CreateWorkDayTraceCollector(ITracingDataSender sender) : ICreateWor
         var log = $"Received {GetName(notification)}:{notification}";
 
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.WorkDay,
-            UseCaseMeta.CreateWorkDay,
+            Sorting,
+            UseCase,
             LoggingMeta.NotificationReceived,
             originClassType,
             traceId,
@@ -67,8 +70,8 @@ public class CreateWorkDayTraceCollector(ITracingDataSender sender) : ICreateWor
         var log = $"Added aggregate with id:{traceId}";
 
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.WorkDay,
-            UseCaseMeta.CreateWorkDay,
+            Sorting,
+            UseCase,
             LoggingMeta.AggregateAdded,
             originClassType,
             traceId,

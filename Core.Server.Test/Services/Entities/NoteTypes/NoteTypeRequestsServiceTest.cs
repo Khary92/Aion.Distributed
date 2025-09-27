@@ -9,9 +9,6 @@ namespace Core.Server.Test.Services.Entities.NoteTypes;
 [TestOf(typeof(NoteTypeRequestsService))]
 public class NoteTypeRequestsServiceTest
 {
-    private Mock<IEventStore<NoteTypeEvent>> _mockEventStore;
-    private NoteTypeRequestsService _instance;
-
     [SetUp]
     public void SetUp()
     {
@@ -25,6 +22,9 @@ public class NoteTypeRequestsServiceTest
 
         _instance = new NoteTypeRequestsService(_mockEventStore.Object);
     }
+
+    private Mock<IEventStore<NoteTypeEvent>> _mockEventStore;
+    private NoteTypeRequestsService _instance;
 
     [Test]
     public async Task GetAll_CallsGetAllEventsAsync()

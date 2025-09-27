@@ -8,15 +8,15 @@ namespace Service.Monitoring.Test.Verifiers.Common.Factories;
 [TestOf(typeof(VerifierFactory))]
 public class VerifierFactoryTest
 {
-    private Mock<IReportFactory> _mockReportFactory;
-    private VerifierFactory _verifierFactory;
-
     [SetUp]
     public void Setup()
     {
         _mockReportFactory = new Mock<IReportFactory>();
         _verifierFactory = new VerifierFactory(_mockReportFactory.Object);
     }
+
+    private Mock<IReportFactory> _mockReportFactory;
+    private VerifierFactory _verifierFactory;
 
     [Test]
     public void Create_ShouldReturnVerifier_WithValidParameters()

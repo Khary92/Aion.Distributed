@@ -11,10 +11,6 @@ namespace Core.Persistence.Test.EventStores;
 [TestOf(typeof(StatisticsDataEventsStore))]
 public class StatisticsDataEventsStoreTest
 {
-    private Mock<IDbContextFactory<AppDbContext>> _dbContextFactoryMock;
-    private DbContextOptions<AppDbContext> _dbOptions;
-    private StatisticsDataEventsStore _instance;
-
     [SetUp]
     public void SetUp()
     {
@@ -30,6 +26,10 @@ public class StatisticsDataEventsStoreTest
 
         _instance = new StatisticsDataEventsStore(_dbContextFactoryMock.Object);
     }
+
+    private Mock<IDbContextFactory<AppDbContext>> _dbContextFactoryMock;
+    private DbContextOptions<AppDbContext> _dbOptions;
+    private StatisticsDataEventsStore _instance;
 
     [Test]
     public async Task StoreEventAsync_persists_event()

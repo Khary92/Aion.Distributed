@@ -14,10 +14,6 @@ namespace Core.Server.Test.Communication.Endpoints.Tag;
 [TestOf(typeof(TagCommandReceiver))]
 public class TagCommandReceiverTest
 {
-    private Mock<ITagCommandsService> _serviceMock;
-    private Mock<ITraceCollector> _tracerMock;
-    private TagCommandReceiver _receiver;
-
     [SetUp]
     public void SetUp()
     {
@@ -28,6 +24,10 @@ public class TagCommandReceiverTest
 
         _receiver = new TagCommandReceiver(_serviceMock.Object, _tracerMock.Object);
     }
+
+    private Mock<ITagCommandsService> _serviceMock;
+    private Mock<ITraceCollector> _tracerMock;
+    private TagCommandReceiver _receiver;
 
     [Test]
     public async Task CreateTag_ValidRequest_ReturnsSuccessResponse()

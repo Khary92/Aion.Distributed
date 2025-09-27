@@ -23,6 +23,12 @@ public class DocumentationSynchronizer(IMessenger messenger, ICommandSender comm
         _listeners.Add(listener);
     }
 
+    public void Synchronize(Guid ticketId, string documentation)
+    {
+        foreach (var listener in _listeners.Where(listener => listener.Ticket.TicketId == ticketId))
+            listener.Ticket.Documentation = documentation;
+    }
+
     public void RegisterMessenger()
     {
         messenger.RegisterAll(this);
@@ -33,23 +39,16 @@ public class DocumentationSynchronizer(IMessenger messenger, ICommandSender comm
         messenger.UnregisterAll(this);
     }
 
-    public void Synchronize(Guid ticketId, string documentation)
+    public void Receive(ClientSaveDocumentationNotification message)
     {
-        foreach (var listener in _listeners.Where(listener => listener.Ticket.TicketId == ticketId))
-        {
-            listener.Ticket.Documentation = documentation;
-        }
+        _ = SendCommand(message);
     }
 
     public void Receive(ClientTicketDocumentationUpdatedNotification message)
     {
         foreach (var listener in _listeners.Where(listener => listener.Ticket.TicketId == message.TicketId))
-        {
             listener.Ticket.Apply(message);
-        }
     }
-
-    public void Receive(ClientSaveDocumentationNotification message) => _ = SendCommand(message);
 
     private async Task SendCommand(ClientSaveDocumentationNotification message)
     {
@@ -63,10 +62,7 @@ public class DocumentationSynchronizer(IMessenger messenger, ICommandSender comm
             .Where(t => t.IsDirty)
             .ToList();
 
-        if (dirtyTickets.Count == 0)
-        {
-            await tracer.Ticket.ChangeDocumentation.ActionAborted(GetType(), traceId);
-        }
+        if (dirtyTickets.Count == 0) await tracer.Ticket.ChangeDocumentation.ActionAborted(GetType(), traceId);
 
         foreach (var ticket in dirtyTickets)
         {
@@ -74,7 +70,7 @@ public class DocumentationSynchronizer(IMessenger messenger, ICommandSender comm
                 ticket.TicketId,
                 ticket.Documentation,
                 traceId);
-            
+
             await tracer.Ticket.ChangeDocumentation.SendingCommand(GetType(), traceId,
                 clientUpdateTicketDocumentationCommand);
             await commandSender.Send(clientUpdateTicketDocumentationCommand);

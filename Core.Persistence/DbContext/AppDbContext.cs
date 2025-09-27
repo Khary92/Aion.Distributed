@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices.ComTypes;
-using Domain.Events.Note;
+﻿using Domain.Events.Note;
 using Domain.Events.NoteTypes;
 using Domain.Events.Sprints;
 using Domain.Events.StatisticsData;
@@ -45,10 +44,10 @@ public sealed class AppDbContext : Microsoft.EntityFrameworkCore.DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        
+
         var dateTimeOffsetConverter = new ValueConverter<DateTimeOffset, DateTimeOffset>(
-            v => v.ToUniversalTime(),  
-            v => v                    
+            v => v.ToUniversalTime(),
+            v => v
         );
 
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
@@ -57,11 +56,9 @@ public sealed class AppDbContext : Microsoft.EntityFrameworkCore.DbContext
                 .Where(p => p.PropertyType == typeof(DateTimeOffset));
 
             foreach (var property in properties)
-            {
                 modelBuilder.Entity(entityType.ClrType)
                     .Property(property.Name)
                     .HasConversion(dateTimeOffsetConverter);
-            }
         }
 
         modelBuilder.Entity<TicketEvent>().HasKey(te => te.EventId);
@@ -74,5 +71,4 @@ public sealed class AppDbContext : Microsoft.EntityFrameworkCore.DbContext
         modelBuilder.Entity<NoteTypeEvent>().HasKey(te => te.EventId);
         modelBuilder.Entity<TimerSettingsEvent>().HasKey(te => te.EventId);
     }
-
 }

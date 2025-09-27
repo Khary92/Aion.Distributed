@@ -5,7 +5,6 @@ using Service.Admin.Web;
 using Service.Admin.Web.Communication.Receiver;
 using Service.Admin.Web.Communication.Receiver.Reports;
 using Service.Admin.Web.Pages;
-using Service.Admin.Web.Services;
 using Service.Admin.Web.Services.Startup;
 
 var builder = WebApplication.CreateBuilder(args);

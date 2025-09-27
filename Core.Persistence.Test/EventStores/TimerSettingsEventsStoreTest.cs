@@ -11,10 +11,6 @@ namespace Core.Persistence.Test.EventStores;
 [TestOf(typeof(TimerSettingsEventsStore))]
 public class TimerSettingsEventsStoreTest
 {
-    private Mock<IDbContextFactory<AppDbContext>> _dbContextFactoryMock;
-    private DbContextOptions<AppDbContext> _dbOptions;
-    private TimerSettingsEventsStore _instance;
-
     [SetUp]
     public void SetUp()
     {
@@ -30,6 +26,10 @@ public class TimerSettingsEventsStoreTest
 
         _instance = new TimerSettingsEventsStore(_dbContextFactoryMock.Object);
     }
+
+    private Mock<IDbContextFactory<AppDbContext>> _dbContextFactoryMock;
+    private DbContextOptions<AppDbContext> _dbOptions;
+    private TimerSettingsEventsStore _instance;
 
     [Test]
     public async Task StoreEventAsync_persists_event()

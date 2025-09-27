@@ -6,12 +6,15 @@ namespace Client.Tracing.Tracing.Tracers.Tag.UseCase;
 
 public class UpdateTagTraceCollector(ITracingDataSender sender) : IUpdateTagTraceCollector
 {
+    private const SortingType Sorting = SortingType.Tag;
+    private const UseCaseMeta UseCase = UseCaseMeta.UpdateTag;
+
     public async Task NotificationReceived(Type originClassType, Guid traceId, object notification)
     {
         var log = $"Received {notification}";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Tag,
-            UseCaseMeta.UpdateTag,
+            Sorting,
+            UseCase,
             LoggingMeta.NotificationReceived,
             originClassType,
             traceId,
@@ -23,8 +26,8 @@ public class UpdateTagTraceCollector(ITracingDataSender sender) : IUpdateTagTrac
     {
         var log = $"Aggregate not found id:{traceId}";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Tag,
-            UseCaseMeta.UpdateTag,
+            Sorting,
+            UseCase,
             LoggingMeta.AggregateNotFound,
             originClassType,
             traceId,
@@ -36,8 +39,8 @@ public class UpdateTagTraceCollector(ITracingDataSender sender) : IUpdateTagTrac
     {
         var log = $"Changed applied id:{traceId}";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Tag,
-            UseCaseMeta.UpdateTag,
+            Sorting,
+            UseCase,
             LoggingMeta.PropertyChanged,
             originClassType,
             traceId,

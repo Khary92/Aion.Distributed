@@ -23,8 +23,8 @@
 
     <ItemGroup>
         <ProjectReference Include="..\Client.Desktop\Client.Desktop.csproj"/>
-        <ProjectReference Include="..\Core.Persistence\Core.Persistence.csproj" />
-        <ProjectReference Include="..\Service.Monitoring\Service.Monitoring.csproj" />
+        <ProjectReference Include="..\Core.Persistence\Core.Persistence.csproj"/>
+        <ProjectReference Include="..\Service.Monitoring\Service.Monitoring.csproj"/>
     </ItemGroup>
 
 </Project>

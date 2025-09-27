@@ -9,15 +9,15 @@ namespace Core.Server.Test.Translators.Commands.TimeSlots;
 [TestOf(typeof(TimeSlotCommandsToEventTranslator))]
 public class TimeSlotCommandsToEventTranslatorTest
 {
-    private TimeSlotCommandsToEventTranslator _translator;
-
     [SetUp]
     public void SetUp()
     {
         _translator = new TimeSlotCommandsToEventTranslator();
     }
-    
-    
+
+    private TimeSlotCommandsToEventTranslator _translator;
+
+
     [Test]
     public void ToEvent_CreateTimeSlotCommand_BuildsExpectedEvent()
     {

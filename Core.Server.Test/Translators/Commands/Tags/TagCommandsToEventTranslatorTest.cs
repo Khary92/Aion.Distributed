@@ -9,13 +9,13 @@ namespace Core.Server.Test.Translators.Commands.Tags;
 [TestOf(typeof(TagCommandsToEventTranslator))]
 public class TagCommandsToEventTranslatorTest
 {
-    private TagCommandsToEventTranslator _translator;
-
     [SetUp]
     public void SetUp()
     {
         _translator = new TagCommandsToEventTranslator();
     }
+
+    private TagCommandsToEventTranslator _translator;
 
     [Test]
     public void ToEvent_CreateTagCommand_BuildsExpectedTagEvent()

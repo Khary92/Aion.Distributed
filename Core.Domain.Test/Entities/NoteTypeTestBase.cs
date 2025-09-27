@@ -15,7 +15,7 @@ public class NoteTypeTestBase : AggregateTestBase<NoteTypeEvent>
     {
         return new NoteTypeEvent(
             Guid.NewGuid(),
-            DateTimeOffset.Now, 
+            DateTimeOffset.Now,
             domainEvent.GetType().Name,
             Guid.NewGuid(),
             JsonSerializer.Serialize(domainEvent));

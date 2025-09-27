@@ -9,9 +9,6 @@ namespace Core.Server.Test.Services.Entities.TimerSettings;
 [TestOf(typeof(TimerSettingsRequestsService))]
 public class TimerSettingsRequestsServiceTest
 {
-    private Mock<IEventStore<TimerSettingsEvent>> _mockEventStore;
-    private TimerSettingsRequestsService _instance;
-
     [SetUp]
     public void SetUp()
     {
@@ -22,6 +19,9 @@ public class TimerSettingsRequestsServiceTest
 
         _instance = new TimerSettingsRequestsService(_mockEventStore.Object);
     }
+
+    private Mock<IEventStore<TimerSettingsEvent>> _mockEventStore;
+    private TimerSettingsRequestsService _instance;
 
     [Test]
     public void Get_CallsGetAllEventsAsync_AndThrowsWhenNoEvents()

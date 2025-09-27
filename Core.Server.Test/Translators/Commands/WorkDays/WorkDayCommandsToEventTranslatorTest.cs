@@ -9,13 +9,13 @@ namespace Core.Server.Test.Translators.Commands.WorkDays;
 [TestOf(typeof(WorkDayCommandsToEventTranslator))]
 public class WorkDayCommandsToEventTranslatorTest
 {
-    private WorkDayCommandsToEventTranslator _translator;
-
     [SetUp]
     public void SetUp()
     {
         _translator = new WorkDayCommandsToEventTranslator();
     }
+
+    private WorkDayCommandsToEventTranslator _translator;
 
     [Test]
     public void ToEvent_CreateWorkDayCommand_BuildsExpectedWorkDayEvent()

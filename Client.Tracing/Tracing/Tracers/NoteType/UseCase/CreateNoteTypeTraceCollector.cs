@@ -6,12 +6,15 @@ namespace Client.Tracing.Tracing.Tracers.NoteType.UseCase;
 
 public class CreateNoteTypeTraceCollector(ITracingDataSender sender) : ICreateNoteTypeTraceCollector
 {
+    private const SortingType Sorting = SortingType.NoteType;
+    private const UseCaseMeta UseCase = UseCaseMeta.CreateNoteType;
+
     public async Task NotificationReceived(Type originClassType, Guid traceId, object notification)
     {
         var log = $"Received {notification}";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.NoteType,
-            UseCaseMeta.CreateNoteType,
+            Sorting,
+            UseCase,
             LoggingMeta.NotificationReceived,
             originClassType,
             traceId,
@@ -23,8 +26,8 @@ public class CreateNoteTypeTraceCollector(ITracingDataSender sender) : ICreateNo
     {
         var log = $"Added aggregate with id:{traceId}";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.NoteType,
-            UseCaseMeta.CreateNoteType,
+            Sorting,
+            UseCase,
             LoggingMeta.AggregateAdded,
             originClassType,
             traceId,

@@ -1,4 +1,3 @@
-using Client.Tracing.Tracing.Tracers.Note.UseCase;
 using Service.Monitoring.Shared;
 using Service.Monitoring.Shared.Enums;
 using Service.Monitoring.Shared.Tracing;
@@ -7,12 +6,15 @@ namespace Client.Tracing.Tracing.Tracers.Client.UseCase;
 
 public class CreateTrackingControlCollector(ITracingDataSender sender) : ICreateTrackingControlCollector
 {
+    private const SortingType Sorting = SortingType.Client;
+    private const UseCaseMeta UseCase = UseCaseMeta.CreateTrackingControl;
+
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
         var log = "Creation of tracking control requested";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Client,
-            UseCaseMeta.CreateTrackingControl,
+            Sorting,
+            UseCase,
             LoggingMeta.ActionRequested,
             originClassType,
             traceId,
@@ -24,8 +26,8 @@ public class CreateTrackingControlCollector(ITracingDataSender sender) : ICreate
     {
         var log = $"Sending command {command}";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Client,
-            UseCaseMeta.CreateTrackingControl,
+            Sorting,
+            UseCase,
             LoggingMeta.SendingCommand,
             originClassType,
             traceId,
@@ -37,8 +39,8 @@ public class CreateTrackingControlCollector(ITracingDataSender sender) : ICreate
     {
         var log = $"Received {notification}";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Client,
-            UseCaseMeta.CreateTrackingControl,
+            Sorting,
+            UseCase,
             LoggingMeta.NotificationReceived,
             originClassType,
             traceId,
@@ -50,8 +52,8 @@ public class CreateTrackingControlCollector(ITracingDataSender sender) : ICreate
     {
         var log = $"Added aggregate with id:{traceId}";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Client,
-            UseCaseMeta.CreateTrackingControl,
+            Sorting,
+            UseCase,
             LoggingMeta.AggregateAdded,
             originClassType,
             traceId,
@@ -63,8 +65,8 @@ public class CreateTrackingControlCollector(ITracingDataSender sender) : ICreate
     {
         var log = $"Exception occured {exception}";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.Client,
-            UseCaseMeta.CreateTrackingControl,
+            Sorting,
+            UseCase,
             LoggingMeta.ExceptionOccured,
             originClassType,
             traceId,

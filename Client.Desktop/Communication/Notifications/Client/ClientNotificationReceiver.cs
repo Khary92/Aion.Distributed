@@ -31,7 +31,7 @@ public class ClientNotificationReceiver(
                             await tracer.Client.CreateTrackingControl.NotificationReceived(GetType(),
                                 Guid.Parse(notification.TimeSlotControlCreated.TraceData.TraceId),
                                 notification.TimeSlotControlCreated);
-                            
+
                             Dispatcher.UIThread.Post(() =>
                             {
                                 messenger.Send(notification.TimeSlotControlCreated.ToClientNotification());

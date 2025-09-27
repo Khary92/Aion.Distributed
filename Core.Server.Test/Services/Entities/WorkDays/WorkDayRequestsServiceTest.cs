@@ -9,9 +9,6 @@ namespace Core.Server.Test.Services.Entities.WorkDays;
 [TestOf(typeof(WorkDayRequestsService))]
 public class WorkDayRequestsServiceTest
 {
-    private Mock<IEventStore<WorkDayEvent>> _mockEventStore;
-    private WorkDayRequestsService _instance;
-
     [SetUp]
     public void SetUp()
     {
@@ -22,6 +19,9 @@ public class WorkDayRequestsServiceTest
 
         _instance = new WorkDayRequestsService(_mockEventStore.Object);
     }
+
+    private Mock<IEventStore<WorkDayEvent>> _mockEventStore;
+    private WorkDayRequestsService _instance;
 
     [Test]
     public async Task GetAll_CallsGetAllEventsAsync()

@@ -13,20 +13,13 @@ namespace Core.Server.Test.Services.Entities.Tags;
 [TestOf(typeof(TagCommandsService))]
 public class TagCommandsServiceTest
 {
-    private Mock<TagNotificationService> _mockTagNotificationService;
-    private Mock<IEventStore<TagEvent>> _mockEventStore;
-    private Mock<ITagCommandsToEventTranslator> _mockEventTranslator;
-    private Mock<ITraceCollector> _mockTracer;
-
-    private TagCommandsService _instance;
-
     [SetUp]
     public void SetUp()
     {
         _mockTagNotificationService = new Mock<TagNotificationService>();
         _mockEventStore = new Mock<IEventStore<TagEvent>>();
         _mockEventTranslator = new Mock<ITagCommandsToEventTranslator>();
-        _mockTracer = new Mock<ITraceCollector>()
+        _mockTracer = new Mock<ITraceCollector>
         {
             DefaultValueProvider = DefaultValueProvider.Mock
         };
@@ -37,6 +30,13 @@ public class TagCommandsServiceTest
             _mockEventTranslator.Object,
             _mockTracer.Object);
     }
+
+    private Mock<TagNotificationService> _mockTagNotificationService;
+    private Mock<IEventStore<TagEvent>> _mockEventStore;
+    private Mock<ITagCommandsToEventTranslator> _mockEventTranslator;
+    private Mock<ITraceCollector> _mockTracer;
+
+    private TagCommandsService _instance;
 
     [Test]
     public async Task Create()

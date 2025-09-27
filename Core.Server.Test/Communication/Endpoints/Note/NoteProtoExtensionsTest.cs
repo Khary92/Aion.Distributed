@@ -57,7 +57,7 @@ public class NoteProtoExtensionsTest
         Assert.That(result.TimeSlotId.ToString(), Is.EqualTo(proto.TimeSlotId));
         Assert.That(result.TraceId.ToString(), Is.EqualTo(proto.TraceData.TraceId));
     }
-    
+
     [Test]
     public void ToNotification_CreateNoteCommand_ReturnsNoteNotification()
     {
@@ -76,7 +76,7 @@ public class NoteProtoExtensionsTest
         Assert.That(result.NoteCreated.TimeStamp, Is.EqualTo(command.TimeStamp.ToTimestamp()));
         Assert.That(result.NoteCreated.TraceData.TraceId, Is.EqualTo(command.TraceId.ToString()));
     }
-    
+
     [Test]
     public void ToNotification_UpdateNoteCommand_ReturnsNoteNotification()
     {
@@ -93,7 +93,7 @@ public class NoteProtoExtensionsTest
         Assert.That(result.NoteUpdated.TimeSlotId, Is.EqualTo(command.TimeSlotId.ToString()));
         Assert.That(result.NoteUpdated.TraceData.TraceId, Is.EqualTo(command.TraceId.ToString()));
     }
-    
+
     [Test]
     public void ToProtoList_ListOfNotes_ReturnsGetNotesResponseProto()
     {
@@ -121,7 +121,7 @@ public class NoteProtoExtensionsTest
 
         Assert.That(result, Is.Not.Null);
         Assert.That(result.Notes.Count, Is.EqualTo(notes.Count));
-        for (int i = 0; i < notes.Count; i++)
+        for (var i = 0; i < notes.Count; i++)
         {
             Assert.That(result.Notes[i].NoteId, Is.EqualTo(notes[i].NoteId.ToString()));
             Assert.That(result.Notes[i].Text, Is.EqualTo(notes[i].Text));

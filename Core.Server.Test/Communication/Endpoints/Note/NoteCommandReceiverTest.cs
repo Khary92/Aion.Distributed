@@ -15,10 +15,6 @@ namespace Core.Server.Test.Communication.Endpoints.Note;
 [TestOf(typeof(NoteCommandReceiver))]
 public class NoteCommandReceiverTest
 {
-    private Mock<INoteCommandsService> _noteCommandsServiceMock;
-    private Mock<ITraceCollector> _traceCollectorMock;
-    private NoteCommandReceiver _noteCommandReceiver;
-
     [SetUp]
     public void SetUp()
     {
@@ -29,6 +25,10 @@ public class NoteCommandReceiverTest
 
         _noteCommandReceiver = new NoteCommandReceiver(_noteCommandsServiceMock.Object, _traceCollectorMock.Object);
     }
+
+    private Mock<INoteCommandsService> _noteCommandsServiceMock;
+    private Mock<ITraceCollector> _traceCollectorMock;
+    private NoteCommandReceiver _noteCommandReceiver;
 
     [Test]
     public async Task CreateNote_ValidRequest_ReturnsSuccessResponse()

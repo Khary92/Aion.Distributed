@@ -5,7 +5,8 @@ using SubscribeRequest = Proto.Notifications.Note.SubscribeRequest;
 
 namespace Core.Server.Communication.Endpoints.Note;
 
-public class NoteNotificationService : Proto.Notifications.Note.NoteNotificationService.NoteNotificationServiceBase, INoteNotificationService
+public class NoteNotificationService : Proto.Notifications.Note.NoteNotificationService.NoteNotificationServiceBase,
+    INoteNotificationService
 {
     private readonly ConcurrentDictionary<Guid, (IServerStreamWriter<NoteNotification> Stream,
             CancellationToken Token)>

@@ -77,7 +77,7 @@ public static class EndpointServices
         app.MapGrpcService<UseCaseNotificationService>();
         app.MapGrpcService<WorkDayNotificationService>();
     }
-    
+
     public static void AddMockingEndpoints(this WebApplication app)
     {
         app.MapGrpcService<MockNoteCommandReceiver>();

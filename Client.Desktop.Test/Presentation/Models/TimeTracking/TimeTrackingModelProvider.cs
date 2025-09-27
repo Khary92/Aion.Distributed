@@ -59,7 +59,7 @@ public static class TimeTrackingModelProvider
 
     private static Mock<IPersistentCache<ClientSetStartTimeCommand>> CreateStartTimeCacheMock()
     {
-        return new Mock<IPersistentCache<ClientSetStartTimeCommand>>()
+        return new Mock<IPersistentCache<ClientSetStartTimeCommand>>
         {
             DefaultValue = DefaultValue.Mock
         };
@@ -67,7 +67,7 @@ public static class TimeTrackingModelProvider
 
     private static Mock<IPersistentCache<ClientSetEndTimeCommand>> CreateEndTimeCacheMock()
     {
-        return new Mock<IPersistentCache<ClientSetEndTimeCommand>>()
+        return new Mock<IPersistentCache<ClientSetEndTimeCommand>>
         {
             DefaultValue = DefaultValue.Mock
         };
@@ -144,7 +144,7 @@ public static class TimeTrackingModelProvider
                 timeSlotViewModel);
 
         return await CreateFixture(messenger, requestSender, commandSender, timeSlotViewModelFactory, tracer,
-            localSettingsService, documentationSynchronizer,sprintClientModel);
+            localSettingsService, documentationSynchronizer, sprintClientModel);
     }
 
     private static async Task<TimeTrackingModelFixture> CreateFixture(IMessenger messenger,

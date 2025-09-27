@@ -6,13 +6,16 @@ namespace Client.Tracing.Tracing.Tracers.TimeSlot.UseCase;
 
 public class SetEndTimeTraceCollector(ITracingDataSender sender) : ISetEndTimeTraceCollector
 {
+    private const SortingType Sorting = SortingType.TimeSlot;
+    private const UseCaseMeta UseCase = UseCaseMeta.SetEndTime;
+
     public async Task StartUseCase(Type originClassType, Guid traceId)
     {
         const string log = "Requested pushing end time slot data after failed shutdown";
 
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.TimeSlot,
-            UseCaseMeta.SetEndTime,
+            Sorting,
+            UseCase,
             LoggingMeta.ActionRequested,
             originClassType,
             traceId,
@@ -25,8 +28,8 @@ public class SetEndTimeTraceCollector(ITracingDataSender sender) : ISetEndTimeTr
     {
         var log = $"Sent {command}";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.TimeSlot,
-            UseCaseMeta.SetEndTime,
+            Sorting,
+            UseCase,
             LoggingMeta.SendingCommand,
             originClassType,
             traceId,
@@ -38,8 +41,8 @@ public class SetEndTimeTraceCollector(ITracingDataSender sender) : ISetEndTimeTr
     {
         const string log = "Aborted because cache is empty";
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.TimeSlot,
-            UseCaseMeta.SetEndTime,
+            Sorting,
+            UseCase,
             LoggingMeta.ActionAborted,
             originClassType,
             traceId,
@@ -51,8 +54,8 @@ public class SetEndTimeTraceCollector(ITracingDataSender sender) : ISetEndTimeTr
     {
         var log = "The data was persisted, but the file could not be deleted " + filePath;
         await sender.Send(new ServiceTraceDataCommand(
-            SortingType.TimeSlot,
-            UseCaseMeta.SetEndTime,
+            Sorting,
+            UseCase,
             LoggingMeta.ExceptionOccured,
             originClassType,
             traceId,

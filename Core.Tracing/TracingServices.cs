@@ -42,7 +42,7 @@ public static class TracingServices
         AddWorkDayTracingServices(services);
         AddClientTracingServices(services);
     }
-    
+
     private static void AddWorkDayTracingServices(IServiceCollection services)
     {
         services.AddSingleton<ICreateWorkDayTraceCollector, CreateWorkDayTraceCollector>();
@@ -125,12 +125,11 @@ public static class TracingServices
 
         services.AddSingleton<ITimeSlotUseCaseSelector, TimeSlotUseCaseSelector>();
     }
-    
+
     private static void AddClientTracingServices(IServiceCollection services)
     {
         services.AddSingleton<ICreateTrackingControlCollector, CreateTrackingControlCollector>();
 
         services.AddSingleton<IClientUseCaseSelector, ClientUseCaseSelector>();
     }
-
 }

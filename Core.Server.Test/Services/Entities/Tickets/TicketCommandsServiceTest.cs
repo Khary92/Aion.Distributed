@@ -13,20 +13,13 @@ namespace Core.Server.Test.Services.Entities.Tickets;
 [TestOf(typeof(TicketCommandsService))]
 public class TicketCommandsServiceTest
 {
-    private Mock<TicketNotificationService> _mockTicketNotificationService;
-    private Mock<ITicketEventsStore> _mockEventStore;
-    private Mock<ITicketCommandsToEventTranslator> _mockEventTranslator;
-    private Mock<ITraceCollector> _mockTracer;
-
-    private TicketCommandsService _instance;
-
     [SetUp]
     public void SetUp()
     {
         _mockTicketNotificationService = new Mock<TicketNotificationService>();
         _mockEventStore = new Mock<ITicketEventsStore>();
         _mockEventTranslator = new Mock<ITicketCommandsToEventTranslator>();
-        _mockTracer = new Mock<ITraceCollector>()
+        _mockTracer = new Mock<ITraceCollector>
         {
             DefaultValueProvider = DefaultValueProvider.Mock
         };
@@ -37,6 +30,13 @@ public class TicketCommandsServiceTest
             _mockEventTranslator.Object,
             _mockTracer.Object);
     }
+
+    private Mock<TicketNotificationService> _mockTicketNotificationService;
+    private Mock<ITicketEventsStore> _mockEventStore;
+    private Mock<ITicketCommandsToEventTranslator> _mockEventTranslator;
+    private Mock<ITraceCollector> _mockTracer;
+
+    private TicketCommandsService _instance;
 
     [Test]
     public async Task UpdateData()

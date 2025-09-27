@@ -11,6 +11,8 @@ public class TicketClientModel : ReactiveObject, IDocumentationSynchronizationLi
     private readonly Guid _ticketId;
     private string _bookingNumber = string.Empty;
     private string _documentation = string.Empty;
+
+    private IDocumentationSynchronizer? _documentationSynchronizer;
     private string _name = string.Empty;
     private List<Guid> _sprintIds = [];
 
@@ -26,8 +28,6 @@ public class TicketClientModel : ReactiveObject, IDocumentationSynchronizationLi
 
     public bool IsDirty { get; private set; }
 
-    private IDocumentationSynchronizer? _documentationSynchronizer;
-    
     public IDocumentationSynchronizer? DocumentationSynchronizer
     {
         get => _documentationSynchronizer;
@@ -37,7 +37,7 @@ public class TicketClientModel : ReactiveObject, IDocumentationSynchronizationLi
             _documentationSynchronizer?.Register(this);
         }
     }
-    
+
     public Guid TicketId
     {
         get => _ticketId;
@@ -74,6 +74,8 @@ public class TicketClientModel : ReactiveObject, IDocumentationSynchronizationLi
         }
     }
 
+    public TicketClientModel Ticket => this;
+
     public void Apply(ClientTicketDataUpdatedNotification notification)
     {
         BookingNumber = notification.BookingNumber;
@@ -86,6 +88,4 @@ public class TicketClientModel : ReactiveObject, IDocumentationSynchronizationLi
         Documentation = notification.Documentation;
         IsDirty = false;
     }
-    
-    public TicketClientModel Ticket => this;
 }

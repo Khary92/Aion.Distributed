@@ -5,7 +5,8 @@ using Core.Server.Translators.Commands.StatisticsData;
 using Domain.Events.StatisticsData;
 using Domain.Interfaces;
 using Moq;
-using StatisticsDataNotificationService = Core.Server.Communication.Endpoints.StatisticsData.StatisticsDataNotificationService;
+using StatisticsDataNotificationService =
+    Core.Server.Communication.Endpoints.StatisticsData.StatisticsDataNotificationService;
 
 namespace Core.Server.Test.Services.Entities.StatisticsData;
 
@@ -13,20 +14,13 @@ namespace Core.Server.Test.Services.Entities.StatisticsData;
 [TestOf(typeof(StatisticsDataCommandsService))]
 public class StatisticsDataCommandsServiceTest
 {
-    private Mock<StatisticsDataNotificationService> _mockStatisticsDataNotificationService;
-    private Mock<IEventStore<StatisticsDataEvent>> _mockEventStore;
-    private Mock<IStatisticsDataCommandsToEventTranslator> _mockEventTranslator;
-    private Mock<ITraceCollector> _mockTracer;
-
-    private StatisticsDataCommandsService _instance;
-
     [SetUp]
     public void SetUp()
     {
         _mockStatisticsDataNotificationService = new Mock<StatisticsDataNotificationService>();
         _mockEventStore = new Mock<IEventStore<StatisticsDataEvent>>();
         _mockEventTranslator = new Mock<IStatisticsDataCommandsToEventTranslator>();
-        _mockTracer = new Mock<ITraceCollector>()
+        _mockTracer = new Mock<ITraceCollector>
         {
             DefaultValueProvider = DefaultValueProvider.Mock
         };
@@ -37,6 +31,13 @@ public class StatisticsDataCommandsServiceTest
             _mockEventTranslator.Object,
             _mockTracer.Object);
     }
+
+    private Mock<StatisticsDataNotificationService> _mockStatisticsDataNotificationService;
+    private Mock<IEventStore<StatisticsDataEvent>> _mockEventStore;
+    private Mock<IStatisticsDataCommandsToEventTranslator> _mockEventTranslator;
+    private Mock<ITraceCollector> _mockTracer;
+
+    private StatisticsDataCommandsService _instance;
 
     [Test]
     public async Task ChangeTagSelection()

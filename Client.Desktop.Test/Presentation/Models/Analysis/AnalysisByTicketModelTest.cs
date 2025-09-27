@@ -28,7 +28,8 @@ public class AnalysisByTicketModelTest
         var ticketId = Guid.NewGuid();
         var ticketName = "InitialTicketName";
         var changedTicketName = "ChangedTicketName";
-        var newTicketClientModel = new TicketClientModel(ticketId, ticketName, "bookingNumber", "ChangeDocumentation", []);
+        var newTicketClientModel =
+            new TicketClientModel(ticketId, ticketName, "bookingNumber", "ChangeDocumentation", []);
 
         var fixture =
             await AnalysisByTicketModelProvider.Create(new List<TicketClientModel?> { newTicketClientModel });

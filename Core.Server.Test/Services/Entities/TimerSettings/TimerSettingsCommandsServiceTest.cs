@@ -14,20 +14,13 @@ namespace Core.Server.Test.Services.Entities.TimerSettings;
 [TestOf(typeof(TimerSettingsCommandsService))]
 public class TimerSettingsCommandsServiceTest
 {
-    private Mock<TimerSettingsNotificationService> _mockNotificationService;
-    private Mock<IEventStore<TimerSettingsEvent>> _mockEventStore;
-    private Mock<ITimerSettingsCommandsToEventTranslator> _mockEventTranslator;
-    private Mock<ITraceCollector> _mockTracer;
-
-    private TimerSettingsCommandsService _instance;
-
     [SetUp]
     public void SetUp()
     {
         _mockNotificationService = new Mock<TimerSettingsNotificationService>();
         _mockEventStore = new Mock<IEventStore<TimerSettingsEvent>>();
         _mockEventTranslator = new Mock<ITimerSettingsCommandsToEventTranslator>();
-        _mockTracer = new Mock<ITraceCollector>()
+        _mockTracer = new Mock<ITraceCollector>
         {
             DefaultValueProvider = DefaultValueProvider.Mock
         };
@@ -38,6 +31,13 @@ public class TimerSettingsCommandsServiceTest
             _mockEventTranslator.Object,
             _mockTracer.Object);
     }
+
+    private Mock<TimerSettingsNotificationService> _mockNotificationService;
+    private Mock<IEventStore<TimerSettingsEvent>> _mockEventStore;
+    private Mock<ITimerSettingsCommandsToEventTranslator> _mockEventTranslator;
+    private Mock<ITraceCollector> _mockTracer;
+
+    private TimerSettingsCommandsService _instance;
 
     [Test]
     public async Task ChangeSnapshotInterval()

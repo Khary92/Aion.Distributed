@@ -59,8 +59,8 @@
                 <Carousel.ItemTemplate>
                     <DataTemplate>
                         <tracking:TrackingSlotControl DataContext="{Binding}"
-                                                  HorizontalAlignment="Stretch"
-                                                  VerticalAlignment="Stretch" />
+                                                      HorizontalAlignment="Stretch"
+                                                      VerticalAlignment="Stretch" />
                     </DataTemplate>
                 </Carousel.ItemTemplate>
             </Carousel>

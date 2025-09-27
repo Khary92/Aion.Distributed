@@ -13,20 +13,13 @@ namespace Core.Server.Test.Services.Entities.Sprints;
 [TestOf(typeof(SprintCommandsService))]
 public class SprintCommandsServiceTest
 {
-    private Mock<SprintNotificationService> _mockSprintNotificationService;
-    private Mock<IEventStore<SprintEvent>> _mockEventStore;
-    private Mock<ISprintCommandsToEventTranslator> _mockEventTranslator;
-    private Mock<ITraceCollector> _mockTracer;
-
-    private SprintCommandsService _instance;
-
     [SetUp]
     public void SetUp()
     {
         _mockSprintNotificationService = new Mock<SprintNotificationService>();
         _mockEventStore = new Mock<IEventStore<SprintEvent>>();
         _mockEventTranslator = new Mock<ISprintCommandsToEventTranslator>();
-        _mockTracer = new Mock<ITraceCollector>()
+        _mockTracer = new Mock<ITraceCollector>
         {
             DefaultValueProvider = DefaultValueProvider.Mock
         };
@@ -37,6 +30,13 @@ public class SprintCommandsServiceTest
             _mockEventTranslator.Object,
             _mockTracer.Object);
     }
+
+    private Mock<SprintNotificationService> _mockSprintNotificationService;
+    private Mock<IEventStore<SprintEvent>> _mockEventStore;
+    private Mock<ISprintCommandsToEventTranslator> _mockEventTranslator;
+    private Mock<ITraceCollector> _mockTracer;
+
+    private SprintCommandsService _instance;
 
     [Test]
     public async Task Create()

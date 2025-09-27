@@ -56,10 +56,7 @@ public static class BootStrap
 
     private static async Task SeedAsync(AppDbContext db)
     {
-        if (db.TimerSettingsEvents.Any())
-        {
-            return;
-        }
+        if (db.TimerSettingsEvents.Any()) return;
 
         var settingsId = Guid.NewGuid();
 
@@ -67,7 +64,7 @@ public static class BootStrap
 
         db.TimerSettingsEvents.Add(new TimerSettingsEvent(Guid.NewGuid(), DateTimeOffset.Now,
             nameof(TimerSettingsCreatedEvent), settingsId, JsonSerializer.Serialize(settingsCreatedEvent)));
-        
+
         await db.SaveChangesAsync();
     }
 }

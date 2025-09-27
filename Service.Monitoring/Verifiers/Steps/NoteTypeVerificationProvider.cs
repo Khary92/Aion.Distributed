@@ -8,15 +8,6 @@ namespace Service.Monitoring.Verifiers.Steps;
 
 public class NoteTypeVerificationProvider : IVerificationProvider
 {
-    private readonly Dictionary<UseCaseMeta, ImmutableList<VerificationStep>> _verificationProvider = new();
-
-    public NoteTypeVerificationProvider()
-    {
-        _verificationProvider.Add(UseCaseMeta.CreateNoteType, CreateNoteTypeSteps);
-        _verificationProvider.Add(UseCaseMeta.ChangeNoteTypeColor, ChangeNoteTypeColorSteps);
-        _verificationProvider.Add(UseCaseMeta.ChangeNoteTypeName, ChangeNoteTypeNameSteps);
-    }
-
     private static readonly ImmutableList<VerificationStep> CreateNoteTypeSteps = ImmutableList.Create(
         new VerificationStep(LoggingMeta.ActionRequested, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.SendingCommand, Invoked.Equals, 1),
@@ -43,6 +34,15 @@ public class NoteTypeVerificationProvider : IVerificationProvider
         new VerificationStep(LoggingMeta.SendingNotification, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.NotificationReceived, Invoked.AtLeast, 1),
         new VerificationStep(LoggingMeta.PropertyChanged, Invoked.AtLeast, 1));
+
+    private readonly Dictionary<UseCaseMeta, ImmutableList<VerificationStep>> _verificationProvider = new();
+
+    public NoteTypeVerificationProvider()
+    {
+        _verificationProvider.Add(UseCaseMeta.CreateNoteType, CreateNoteTypeSteps);
+        _verificationProvider.Add(UseCaseMeta.ChangeNoteTypeColor, ChangeNoteTypeColorSteps);
+        _verificationProvider.Add(UseCaseMeta.ChangeNoteTypeName, ChangeNoteTypeNameSteps);
+    }
 
     public SortingType SortingType => SortingType.NoteType;
 

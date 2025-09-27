@@ -14,15 +14,11 @@ namespace Core.Server.Test.Communication.Endpoints.Ticket;
 [TestOf(typeof(TicketCommandReceiver))]
 public class TicketCommandReceiverTest
 {
-    private Mock<ITicketCommandsService> _serviceMock;
-    private Mock<ITraceCollector> _tracerMock;
-    private TicketCommandReceiver _receiver;
-
     [SetUp]
     public void SetUp()
     {
         _serviceMock = new Mock<ITicketCommandsService>();
-        _tracerMock = new Mock<ITraceCollector>()
+        _tracerMock = new Mock<ITraceCollector>
         {
             DefaultValueProvider = DefaultValueProvider.Mock
         };
@@ -31,6 +27,10 @@ public class TicketCommandReceiverTest
 
         _receiver = new TicketCommandReceiver(_serviceMock.Object, _tracerMock.Object);
     }
+
+    private Mock<ITicketCommandsService> _serviceMock;
+    private Mock<ITraceCollector> _tracerMock;
+    private TicketCommandReceiver _receiver;
 
     [Test]
     public async Task CreateTicket_ValidRequest_ReturnsSuccessResponse()

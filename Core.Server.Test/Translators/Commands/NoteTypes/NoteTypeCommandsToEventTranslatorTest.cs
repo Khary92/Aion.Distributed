@@ -9,13 +9,13 @@ namespace Core.Server.Test.Translators.Commands.NoteTypes;
 [TestOf(typeof(NoteTypeCommandsToEventTranslator))]
 public class NoteTypeCommandsToEventTranslatorTest
 {
-    private NoteTypeCommandsToEventTranslator _translator;
-
     [SetUp]
     public void SetUp()
     {
         _translator = new NoteTypeCommandsToEventTranslator();
     }
+
+    private NoteTypeCommandsToEventTranslator _translator;
 
     [Test]
     public void ToEvent_CreateNoteTypeCommand_BuildsExpectedNoteTypeEvent()

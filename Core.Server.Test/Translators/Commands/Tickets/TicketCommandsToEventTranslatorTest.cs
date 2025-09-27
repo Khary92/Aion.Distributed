@@ -2,7 +2,6 @@
 using Core.Server.Communication.Records.Commands.Entities.Tickets;
 using Core.Server.Translators.Commands.Tickets;
 using Domain.Events.Tickets;
-using NUnit.Framework.Legacy;
 
 namespace Core.Server.Test.Translators.Commands.Tickets;
 
@@ -10,13 +9,13 @@ namespace Core.Server.Test.Translators.Commands.Tickets;
 [TestOf(typeof(TicketCommandsToEventTranslator))]
 public class TicketCommandsToEventTranslatorTest
 {
-    private TicketCommandsToEventTranslator _translator;
-
     [SetUp]
     public void SetUp()
     {
         _translator = new TicketCommandsToEventTranslator();
     }
+
+    private TicketCommandsToEventTranslator _translator;
 
     [Test]
     public void ToEvent_CreateTicketCommand_BuildsExpectedTicketEvent()

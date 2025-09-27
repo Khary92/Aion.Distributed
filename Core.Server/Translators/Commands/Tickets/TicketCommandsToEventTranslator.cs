@@ -35,6 +35,6 @@ public class TicketCommandsToEventTranslator : ITicketCommandsToEventTranslator
 
     private static TicketEvent CreateDatabaseEvent(string eventName, Guid entityId, string json)
     {
-        return new TicketEvent(Guid.NewGuid(), DateTimeOffset.Now,  eventName, entityId, json);
+        return new TicketEvent(Guid.NewGuid(), DateTimeOffset.Now, eventName, entityId, json);
     }
 }

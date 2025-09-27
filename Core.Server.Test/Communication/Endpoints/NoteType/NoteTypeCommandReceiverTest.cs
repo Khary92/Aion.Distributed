@@ -14,10 +14,6 @@ namespace Core.Server.Test.Communication.Endpoints.NoteType;
 [TestOf(typeof(NoteTypeCommandReceiver))]
 public class NoteTypeCommandReceiverTest
 {
-    private NoteTypeCommandReceiver _receiver;
-    private Mock<INoteTypeCommandsService> _mockService;
-    private Mock<ITraceCollector> _mockTracer;
-
     [SetUp]
     public void SetUp()
     {
@@ -29,6 +25,10 @@ public class NoteTypeCommandReceiverTest
 
         _receiver = new NoteTypeCommandReceiver(_mockService.Object, _mockTracer.Object);
     }
+
+    private NoteTypeCommandReceiver _receiver;
+    private Mock<INoteTypeCommandsService> _mockService;
+    private Mock<ITraceCollector> _mockTracer;
 
     [Test]
     public async Task ChangeNoteTypeColor_SuccessfulCommand_ResponseSuccess()

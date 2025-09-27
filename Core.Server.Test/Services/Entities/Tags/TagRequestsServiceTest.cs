@@ -9,9 +9,6 @@ namespace Core.Server.Test.Services.Entities.Tags;
 [TestOf(typeof(TagRequestsService))]
 public class TagRequestsServiceTest
 {
-    private Mock<IEventStore<TagEvent>> _mockEventStore;
-    private TagRequestsService _instance;
-
     [SetUp]
     public void SetUp()
     {
@@ -25,6 +22,9 @@ public class TagRequestsServiceTest
 
         _instance = new TagRequestsService(_mockEventStore.Object);
     }
+
+    private Mock<IEventStore<TagEvent>> _mockEventStore;
+    private TagRequestsService _instance;
 
     [Test]
     public async Task GetAll_CallsGetAllEventsAsync()

@@ -13,8 +13,8 @@ public class StatisticsDataTest : StatisticsDataTestBase
     private readonly bool _initialIsUnproductive = false;
     private readonly List<Guid> _initialTagIds = [];
     private readonly Guid _initialTimeSlotId = Guid.NewGuid();
-    
-    
+
+
     [Test]
     public void CreatedEventSetsInitialState()
     {
@@ -49,7 +49,7 @@ public class StatisticsDataTest : StatisticsDataTestBase
     [Test]
     public void TagSelectionChangedEventChangesFields()
     {
-        var newTags = new List<Guid>() { Guid.NewGuid() };
+        var newTags = new List<Guid> { Guid.NewGuid() };
 
         var created = new StatisticsDataCreatedEvent(_initialStatisticsId, _initialIsProductive, _initialIsNeutral,
             _initialIsUnproductive, _initialTagIds, _initialTimeSlotId);

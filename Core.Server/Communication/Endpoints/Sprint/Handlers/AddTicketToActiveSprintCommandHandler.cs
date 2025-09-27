@@ -13,7 +13,6 @@ public class AddTicketToActiveSprintCommandHandler(
     ISprintCommandsService sprintCommandsService,
     ITraceCollector tracer) : IAddTicketToActiveSprintCommandHandler
 {
-
     public async Task Handle(AddTicketToActiveSprintCommand command)
     {
         var ticketDto = await ticketRequestsService.GetTicketById(command.TicketId);

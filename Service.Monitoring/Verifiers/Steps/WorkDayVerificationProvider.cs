@@ -8,13 +8,6 @@ namespace Service.Monitoring.Verifiers.Steps;
 
 public class WorkDayVerificationProvider : IVerificationProvider
 {
-    private readonly Dictionary<UseCaseMeta, ImmutableList<VerificationStep>> _verificationProvider = new();
-
-    public WorkDayVerificationProvider()
-    {
-        _verificationProvider.Add(UseCaseMeta.CreateWorkDay, CreateWorkDaySteps);
-    }
-
     private static readonly ImmutableList<VerificationStep> CreateWorkDaySteps = ImmutableList.Create(
         new VerificationStep(LoggingMeta.ActionRequested, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.SendingCommand, Invoked.Equals, 1),
@@ -23,6 +16,13 @@ public class WorkDayVerificationProvider : IVerificationProvider
         new VerificationStep(LoggingMeta.SendingNotification, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.NotificationReceived, Invoked.AtLeast, 1),
         new VerificationStep(LoggingMeta.AggregateAdded, Invoked.AtLeast, 1));
+
+    private readonly Dictionary<UseCaseMeta, ImmutableList<VerificationStep>> _verificationProvider = new();
+
+    public WorkDayVerificationProvider()
+    {
+        _verificationProvider.Add(UseCaseMeta.CreateWorkDay, CreateWorkDaySteps);
+    }
 
     public SortingType SortingType => SortingType.WorkDay;
 

@@ -15,7 +15,7 @@ public static class TimeSlotExtensions
             TimeSlotId = command.TimeSlotId.ToString()
         };
     }
-    
+
     public static SetStartTimeCommandProto ToProto(this ClientSetStartTimeCommand command)
     {
         return new SetStartTimeCommandProto

@@ -9,9 +9,6 @@ namespace Core.Server.Test.Services.Entities.StatisticsData;
 [TestOf(typeof(StatisticsDataRequestsService))]
 public class StatisticsDataRequestsServiceTest
 {
-    private Mock<IEventStore<StatisticsDataEvent>> _mockEventStore;
-    private StatisticsDataRequestsService _instance;
-
     [SetUp]
     public void SetUp()
     {
@@ -22,6 +19,9 @@ public class StatisticsDataRequestsServiceTest
 
         _instance = new StatisticsDataRequestsService(_mockEventStore.Object);
     }
+
+    private Mock<IEventStore<StatisticsDataEvent>> _mockEventStore;
+    private StatisticsDataRequestsService _instance;
 
     [Test]
     public async Task GetAll_CallsGetAllEventsAsync()

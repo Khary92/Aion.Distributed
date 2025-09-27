@@ -149,7 +149,7 @@ public static class ServiceExtensions
         services.AddSingleton<TimerService>();
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<TimerService>());
         services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<TimerService>());
-        
+
         services.AddSingleton<DocumentationSynchronizer>();
         services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<DocumentationSynchronizer>());
         services.AddSingleton<IDocumentationSynchronizer>(sp => sp.GetRequiredService<DocumentationSynchronizer>());

@@ -8,15 +8,6 @@ namespace Service.Monitoring.Verifiers.Steps;
 
 public class StatisticsDataVerificationProvider : IVerificationProvider
 {
-    private readonly Dictionary<UseCaseMeta, ImmutableList<VerificationStep>> _verificationProvider = new();
-
-    public StatisticsDataVerificationProvider()
-    {
-        _verificationProvider.Add(UseCaseMeta.CreateStatisticsData, CreateStatisticsDataSteps);
-        _verificationProvider.Add(UseCaseMeta.ChangeProductivity, ChangeProductivitySteps);
-        _verificationProvider.Add(UseCaseMeta.ChangeTagSelection, ChangeTagSelectionSteps);
-    }
-
     private static readonly ImmutableList<VerificationStep> CreateStatisticsDataSteps = ImmutableList.Create(
         new VerificationStep(LoggingMeta.ActionRequested, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.SendingCommand, Invoked.Equals, 1),
@@ -43,6 +34,15 @@ public class StatisticsDataVerificationProvider : IVerificationProvider
         new VerificationStep(LoggingMeta.SendingNotification, Invoked.Equals, 1),
         new VerificationStep(LoggingMeta.NotificationReceived, Invoked.AtLeast, 1),
         new VerificationStep(LoggingMeta.PropertyChanged, Invoked.AtLeast, 1));
+
+    private readonly Dictionary<UseCaseMeta, ImmutableList<VerificationStep>> _verificationProvider = new();
+
+    public StatisticsDataVerificationProvider()
+    {
+        _verificationProvider.Add(UseCaseMeta.CreateStatisticsData, CreateStatisticsDataSteps);
+        _verificationProvider.Add(UseCaseMeta.ChangeProductivity, ChangeProductivitySteps);
+        _verificationProvider.Add(UseCaseMeta.ChangeTagSelection, ChangeTagSelectionSteps);
+    }
 
     public SortingType SortingType => SortingType.StatisticsData;
 
