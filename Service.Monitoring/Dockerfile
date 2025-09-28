@@ -27,9 +27,9 @@ WORKDIR /app
 COPY --from=publish /app/publish .
 
 # Root-Zertifikat hinzufügen (im CRT-Format, nicht PFX!)
-USER root
-COPY Certificates/server.crt /usr/local/share/ca-certificates/server.crt
-RUN update-ca-certificates
+#USER root
+#COPY Certificates/server.crt /usr/local/share/ca-certificates/server.crt
+#RUN update-ca-certificates
 
 # PFX nur als Volume mounten, nicht ins Image packen
 # -> docker-compose.yml: mount ./Certificates/server.pfx:/app/server.pfx

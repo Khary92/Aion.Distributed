@@ -9,7 +9,7 @@ RUN adduser --disabled-password --gecos "" --uid $APP_UID appuser
 
 # Verzeichnis vorbereiten mit korrekten Rechten
 RUN mkdir -p /app/DataProtection-Keys && chown -R $APP_UID /app/DataProtection-Keys
-EXPOSE 5002
+EXPOSE 5000
 WORKDIR /app
 
 # STAGE: Build
@@ -38,11 +38,11 @@ WORKDIR /app
 COPY --from=publish /app/publish .
 
 # Zertifikat (CRT) einspielen und trusten
-USER root
-COPY Certificates/server.crt /usr/local/share/ca-certificates/server.crt
-RUN update-ca-certificates
+#USER root
+#COPY Certificates/server.crt /usr/local/share/ca-certificates/server.crt
+#RUN update-ca-certificates
 
 # Zurück zu normalem User
-USER appuser
+#USER appuser
 
 ENTRYPOINT ["dotnet", "Service.Admin.Web.dll"]

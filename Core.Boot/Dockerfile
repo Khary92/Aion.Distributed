@@ -35,11 +35,10 @@ WORKDIR /app
 COPY --from=publish /app/publish .
 
 # Zertifikat als CRT für Truststore hinzufügen
-USER root
-COPY Certificates/server.crt /usr/local/share/ca-certificates/server.crt
-RUN update-ca-certificates
+#USER root
+#COPY Certificates/server.crt /usr/local/share/ca-certificates/server.crt
+#RUN update-ca-certificates
 
-COPY Global.Settings/settings.json /settings.json
 # optional wieder als non-root laufen lassen
 # USER appuser
 

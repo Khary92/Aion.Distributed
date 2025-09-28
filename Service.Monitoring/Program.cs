@@ -41,7 +41,7 @@ public abstract class Program
                     listenOptions.UseHttps("/app/certs/server.pfx");
                 }
 
-                listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
+                listenOptions.Protocols = HttpProtocols.Http2;
             });
         });
         
