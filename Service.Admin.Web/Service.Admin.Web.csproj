@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Global.Settings\Global.Settings.csproj" />
         <ProjectReference Include="..\Service.Admin.Proto\Service.Admin.Proto.csproj"/>
         <ProjectReference Include="..\Service.Admin.Tracing\Service.Admin.Tracing.csproj"/>
         <ProjectReference Include="..\Service.Proto.Shared\Service.Proto.Shared.csproj"/>
@@ -15,9 +16,9 @@
 
     <ItemGroup>
         <PackageReference Include="Grpc.AspNetCore.Server" Version="2.71.0"/>
-        <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="9.0.7"/>
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.3"/>
-        <PackageReference Include="Polly" Version="8.6.2"/>
+        <PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="10.0.0-rc.1.25451.107" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+        <PackageReference Include="Polly" Version="8.6.4" />
     </ItemGroup>
 
     <ItemGroup>

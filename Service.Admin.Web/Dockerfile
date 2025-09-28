@@ -9,8 +9,7 @@ RUN adduser --disabled-password --gecos "" --uid $APP_UID appuser
 
 # Verzeichnis vorbereiten mit korrekten Rechten
 RUN mkdir -p /app/DataProtection-Keys && chown -R $APP_UID /app/DataProtection-Keys
-
-USER $APP_UID
+EXPOSE 5002
 WORKDIR /app
 
 # STAGE: Build
@@ -28,12 +27,22 @@ RUN dotnet build "./Service.Admin.Web.csproj" -c $BUILD_CONFIGURATION -o /app/bu
 
 # STAGE: Publish
 FROM build AS publish
-
 ARG BUILD_CONFIGURATION=Release
 RUN dotnet publish "./Service.Admin.Web.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
 
 # STAGE: Final
 FROM base AS final
 WORKDIR /app
+
+# Copy app binaries
 COPY --from=publish /app/publish .
+
+# Zertifikat (CRT) einspielen und trusten
+USER root
+COPY Certificates/server.crt /usr/local/share/ca-certificates/server.crt
+RUN update-ca-certificates
+
+# Zurück zu normalem User
+USER appuser
+
 ENTRYPOINT ["dotnet", "Service.Admin.Web.dll"]

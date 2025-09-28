@@ -22,7 +22,7 @@ public class TicketNotificationsReceiver(ITraceCollector tracer, ITicketStateSer
             }
         };
 
-        var channel = GrpcChannel.ForAddress("http://core-service:8080", channelOptions);
+        var channel = GrpcChannel.ForAddress("https://core-service:5001", channelOptions);
         var client = new TicketNotificationService.TicketNotificationServiceClient(channel);
 
         while (!stoppingToken.IsCancellationRequested)

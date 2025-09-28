@@ -40,7 +40,8 @@ public static class TracingServices
 
     private static void AddACommonTracingServices(this IServiceCollection services)
     {
-        services.AddScoped<ITracingDataSender>(_ => new TracingDataSender("http://127.0.0.1:8082"));
+        //TODO add config somehow.
+        services.AddScoped<ITracingDataSender>(sp => new TracingDataSender("http://127.0.0.1:5002"));
         services.AddScoped<ITraceCollector, TraceCollector>();
     }
 

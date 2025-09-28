@@ -1,0 +1,26 @@
+﻿{
+  "GlobalSettings": {
+    "UseHttps": false,
+    "IsRunningInDocker": true
+  },
+  "AdminSettings": {
+    "Host": "admin-web",
+    "Port": 5000,
+    "DockerPort": 5000
+  },
+  "ServerSettings": {
+    "Host": "core-service",
+    "Port": 5001,
+    "DockerHostnameForClient": "localhost",
+    "DockerPort": 5001
+  },
+  "MonitoringSettings": {
+    "Host": "monitoring-service",
+    "Port": 5002,
+    "DockerPort": 5002
+  },
+  "DatabaseSettings": {
+    "ConnectionString": "Host=postgres;Database=aion;Username=aionuser;Password=aionpass"
+  }
+}
+

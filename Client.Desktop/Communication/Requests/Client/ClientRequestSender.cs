@@ -9,9 +9,14 @@ namespace Client.Desktop.Communication.Requests.Client;
 
 public class ClientRequestSender : IClientRequestSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
-    private readonly ClientRequestService.ClientRequestServiceClient _client = new(Channel);
+    private readonly ClientRequestService.ClientRequestServiceClient _client;
 
+    public ClientRequestSender(string address)
+    {
+        var channel = GrpcChannel.ForAddress(address);
+        _client = new ClientRequestService.ClientRequestServiceClient(channel);
+    }
+    
     public async Task<List<ClientGetTrackingControlResponse>> Send(ClientGetTrackingControlDataRequest request)
     {
         var timeSlotControlDatalist = await _client.GetTrackingControlDataByDateAsync(request.ToProto());

@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands.TimeSlots.Records;
-using Client.Proto;
 using Grpc.Net.Client;
 using Proto.Command.TimeSlots;
 
@@ -8,8 +7,13 @@ namespace Client.Desktop.Communication.Commands.TimeSlots;
 
 public class TimeSlotCommandSender : ITimeSlotCommandSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
-    private readonly TimeSlotCommandProtoService.TimeSlotCommandProtoServiceClient _client = new(Channel);
+    private readonly TimeSlotCommandProtoService.TimeSlotCommandProtoServiceClient _client;
+
+    public TimeSlotCommandSender(string address)
+    {
+        var channel = GrpcChannel.ForAddress(address);
+        _client = new TimeSlotCommandProtoService.TimeSlotCommandProtoServiceClient(channel);
+    }
 
     public async Task<bool> Send(ClientSetStartTimeCommand command)
     {

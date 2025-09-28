@@ -22,7 +22,7 @@ public class TagNotificationsReceiver(ITagStateService tagStateService, ITraceCo
             }
         };
 
-        var channel = GrpcChannel.ForAddress("http://core-service:8080", channelOptions);
+        var channel = GrpcChannel.ForAddress("https://core-service:5001", channelOptions);
         var client = new TagNotificationService.TagNotificationServiceClient(channel);
 
         while (!stoppingToken.IsCancellationRequested)

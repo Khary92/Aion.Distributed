@@ -1,6 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using Service.Monitoring.Communication;
+using Service.Monitoring.Config;
 using Service.Monitoring.Sink;
 using Service.Monitoring.Verifiers.Common;
 using Service.Monitoring.Verifiers.Common.Factories;
@@ -15,8 +16,13 @@ public static class TracingServices
         AddSinks(services);
         AddVerifiers(services);
         AddPolicyServices(services);
+        AddReportSender(services);
+    }
 
-        services.AddSingleton<IReportSender>(_ => new ReportSender("http://admin-web:8081"));
+    private static void AddReportSender(IServiceCollection services)
+    {
+        services.AddSingleton<IMonitoringConfig, MonitoringConfig>();
+        services.AddSingleton<IReportSender>(sp => new ReportSender(sp.GetRequiredService<IMonitoringConfig>().GetWebAdminServerUrl()));
     }
 
     private static void AddPolicyServices(IServiceCollection services)

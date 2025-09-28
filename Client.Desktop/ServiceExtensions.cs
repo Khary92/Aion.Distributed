@@ -53,10 +53,8 @@ using Client.Desktop.Services;
 using Client.Desktop.Services.Cache;
 using Client.Desktop.Services.Export;
 using Client.Desktop.Services.LocalSettings;
-using Client.Proto;
 using CommunityToolkit.Mvvm.Messaging;
 using Grpc.Net.Client;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using Proto.Notifications.Client;
@@ -101,7 +99,7 @@ public static class ServiceExtensions
 
     private static void AddConfigServices(IServiceCollection services)
     {
-        services.AddSingleton<IConfigReader, ConfigReader>();
+        services.AddSingleton<IClientConfig, ClientConfig>();
     }
 
     private static void AddPolicyServices(IServiceCollection services)
@@ -162,22 +160,31 @@ public static class ServiceExtensions
         services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<DocumentationSynchronizer>());
         services.AddSingleton<IDocumentationSynchronizer>(sp => sp.GetRequiredService<DocumentationSynchronizer>());
     }
-    
+
     private static void AddSharedDataServices(this IServiceCollection services)
     {
-        services.AddScoped<ITicketCommandSender>(sp => new TicketCommandSender(sp.GetRequiredService<IConfigReader>().GetServerUrl()));
-        services.AddScoped<ITicketRequestSender>(sp => new TicketRequestSender(sp.GetRequiredService<IConfigReader>().GetServerUrl()));
+        services.AddScoped<ITicketCommandSender>(sp =>
+            new TicketCommandSender(sp.GetRequiredService<IClientConfig>().GetCoreServerUrl()));
+        services.AddScoped<ITicketRequestSender>(sp =>
+            new TicketRequestSender(sp.GetRequiredService<IClientConfig>().GetCoreServerUrl()));
 
-        services.AddScoped<ISprintCommandSender>(sp => new SprintCommandSender(sp.GetRequiredService<IConfigReader>().GetServerUrl()));
-        services.AddScoped<ISprintRequestSender>(sp => new SprintRequestSender(sp.GetRequiredService<IConfigReader>().GetServerUrl()));
+        services.AddScoped<ISprintCommandSender>(sp =>
+            new SprintCommandSender(sp.GetRequiredService<IClientConfig>().GetCoreServerUrl()));
+        services.AddScoped<ISprintRequestSender>(sp =>
+            new SprintRequestSender(sp.GetRequiredService<IClientConfig>().GetCoreServerUrl()));
 
-        services.AddScoped<ITagCommandSender>(sp => new TagCommandSender(sp.GetRequiredService<IConfigReader>().GetServerUrl()));
-        services.AddScoped<ITagRequestSender>(sp => new TagRequestSender(sp.GetRequiredService<IConfigReader>().GetServerUrl()));
+        services.AddScoped<ITagCommandSender>(sp =>
+            new TagCommandSender(sp.GetRequiredService<IClientConfig>().GetCoreServerUrl()));
+        services.AddScoped<ITagRequestSender>(sp =>
+            new TagRequestSender(sp.GetRequiredService<IClientConfig>().GetCoreServerUrl()));
 
-        services.AddScoped<INoteTypeCommandSender>(sp => new NoteTypeCommandSender(sp.GetRequiredService<IConfigReader>().GetServerUrl()));
-        services.AddScoped<INoteTypeRequestSender>(sp => new NoteTypeRequestSender(sp.GetRequiredService<IConfigReader>().GetServerUrl()));
+        services.AddScoped<INoteTypeCommandSender>(sp =>
+            new NoteTypeCommandSender(sp.GetRequiredService<IClientConfig>().GetCoreServerUrl()));
+        services.AddScoped<INoteTypeRequestSender>(sp =>
+            new NoteTypeRequestSender(sp.GetRequiredService<IClientConfig>().GetCoreServerUrl()));
 
-        services.AddScoped<ITimerSettingsRequestSender>(sp => new TimerSettingsRequestSender(sp.GetRequiredService<IConfigReader>().GetServerUrl()));
+        services.AddScoped<ITimerSettingsRequestSender>(sp =>
+            new TimerSettingsRequestSender(sp.GetRequiredService<IClientConfig>().GetCoreServerUrl()));
     }
 
     private static void AddFileSystemServices(this IServiceCollection services)
@@ -291,41 +298,55 @@ public static class ServiceExtensions
         services.AddSingleton<IStreamClient, TimerSettingsNotificationReceiver>();
         services.AddSingleton<IStreamClient, StatisticsDataNotificationReceiver>();
 
-        var channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
-        services.AddSingleton(new TicketNotificationService.TicketNotificationServiceClient(channel));
-        services.AddSingleton(new NoteNotificationService.NoteNotificationServiceClient(channel));
-        services.AddSingleton(new SprintNotificationService.SprintNotificationServiceClient(channel));
-        services.AddSingleton(new TagNotificationService.TagNotificationServiceClient(channel));
-        services.AddSingleton(new TimerSettingsNotificationService.TimerSettingsNotificationServiceClient(channel));
-        services.AddSingleton(new ClientNotificationService.ClientNotificationServiceClient(channel));
-        services.AddSingleton(new WorkDayNotificationService.WorkDayNotificationServiceClient(channel));
-        services.AddSingleton(new NoteTypeProtoNotificationService.NoteTypeProtoNotificationServiceClient(channel));
-        services.AddSingleton(new StatisticsDataNotificationService.StatisticsDataNotificationServiceClient(channel));
+        services.AddSingleton<GrpcChannel>(sp =>
+            GrpcChannel.ForAddress(sp.GetRequiredService<IClientConfig>().GetCoreServerUrl()));
+        services.AddSingleton<TicketNotificationService.TicketNotificationServiceClient>();
+        services.AddSingleton<NoteNotificationService.NoteNotificationServiceClient>();
+        services.AddSingleton<SprintNotificationService.SprintNotificationServiceClient>();
+        services.AddSingleton<TagNotificationService.TagNotificationServiceClient>();
+        services.AddSingleton<TimerSettingsNotificationService.TimerSettingsNotificationServiceClient>();
+        services.AddSingleton<ClientNotificationService.ClientNotificationServiceClient>();
+        services.AddSingleton<WorkDayNotificationService.WorkDayNotificationServiceClient>();
+        services.AddSingleton<NoteTypeProtoNotificationService.NoteTypeProtoNotificationServiceClient>();
+        services.AddSingleton<StatisticsDataNotificationService.StatisticsDataNotificationServiceClient>();
     }
 
     private static void AddCommandSenders(this IServiceCollection services)
     {
         services.AddScoped<ICommandSender, CommandSender>();
 
-        services.AddScoped<INoteCommandSender, NoteCommandSender>();
-        services.AddScoped<IStatisticsDataCommandSender, StatisticsDataCommandSender>();
-        services.AddScoped<ITimeSlotCommandSender, TimeSlotCommandSender>();
-        services.AddScoped<IClientCommandSender, ClientCommandSender>();
-        services.AddScoped<IWorkDayCommandSender, WorkDayCommandSender>();
+        services.AddScoped<INoteCommandSender>(sp =>
+            new NoteCommandSender(sp.GetRequiredService<IClientConfig>().GetCoreServerUrl()));
+        services.AddScoped<IStatisticsDataCommandSender>(sp =>
+            new StatisticsDataCommandSender(sp.GetRequiredService<IClientConfig>().GetCoreServerUrl()));
+        services.AddScoped<ITimeSlotCommandSender>(sp =>
+            new TimeSlotCommandSender(sp.GetRequiredService<IClientConfig>().GetCoreServerUrl()));
+        services.AddScoped<IClientCommandSender>(sp =>
+            new ClientCommandSender(sp.GetRequiredService<IClientConfig>().GetCoreServerUrl()));
+        services.AddScoped<IWorkDayCommandSender>(sp =>
+            new WorkDayCommandSender(sp.GetRequiredService<IClientConfig>().GetCoreServerUrl()));
     }
 
     private static void AddRequestSenders(this IServiceCollection services)
     {
         services.AddScoped<IRequestSender, RequestSender>();
 
-        services.AddScoped<INotesRequestSender, NotesRequestSender>();
-        services.AddScoped<ITimeSlotRequestSender, TimeSlotRequestSender>();
-        services.AddScoped<IWorkDayRequestSender, WorkDayRequestSender>();
-        services.AddScoped<ITicketReplayRequestSender, TicketReplayRequestSender>();
-        services.AddScoped<IClientRequestSender, ClientRequestSender>();
-        services.AddScoped<IStatisticsDataRequestSender, StatisticsDataRequestSender>();
+        services.AddScoped<INotesRequestSender>(sp =>
+            new NotesRequestSender(sp.GetRequiredService<IClientConfig>().GetCoreServerUrl()));
+        services.AddScoped<ITimeSlotRequestSender>(sp =>
+            new TimeSlotRequestSender(sp.GetRequiredService<IClientConfig>().GetCoreServerUrl()));
+        services.AddScoped<IWorkDayRequestSender>(sp =>
+            new WorkDayRequestSender(sp.GetRequiredService<IClientConfig>().GetCoreServerUrl()));
+        services.AddScoped<ITicketReplayRequestSender>(sp =>
+            new TicketReplayRequestSender(sp.GetRequiredService<IClientConfig>().GetCoreServerUrl()));
+        services.AddScoped<IClientRequestSender>(sp =>
+            new ClientRequestSender(sp.GetRequiredService<IClientConfig>().GetCoreServerUrl()));
+        services.AddScoped<IStatisticsDataRequestSender>(sp =>
+            new StatisticsDataRequestSender(sp.GetRequiredService<IClientConfig>().GetCoreServerUrl()));
+        services.AddScoped<IAnalysisRequestSender>(sp =>
+            new AnalysisRequestSender(sp.GetRequiredService<IAnalysisMapper>(),
+                sp.GetRequiredService<IClientConfig>().GetCoreServerUrl()));
 
-        services.AddScoped<IAnalysisRequestSender, AnalysisRequestSender>();
         services.AddScoped<IAnalysisMapper, AnalysisMapper>();
     }
 }

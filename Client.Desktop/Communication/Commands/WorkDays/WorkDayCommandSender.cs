@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands.WorkDays.Records;
-using Client.Proto;
 using Grpc.Net.Client;
 using Proto.Command.WorkDays;
 
@@ -8,8 +7,13 @@ namespace Client.Desktop.Communication.Commands.WorkDays;
 
 public class WorkDayCommandSender : IWorkDayCommandSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
-    private readonly WorkDayCommandProtoService.WorkDayCommandProtoServiceClient _client = new(Channel);
+    private readonly WorkDayCommandProtoService.WorkDayCommandProtoServiceClient _client;
+
+    public WorkDayCommandSender(string address)
+    {
+        var channel = GrpcChannel.ForAddress(address);
+        _client = new WorkDayCommandProtoService.WorkDayCommandProtoServiceClient(channel);
+    }
 
     public async Task<bool> Send(ClientCreateWorkDayCommand command)
     {

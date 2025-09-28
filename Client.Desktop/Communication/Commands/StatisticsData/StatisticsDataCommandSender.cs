@@ -8,9 +8,14 @@ namespace Client.Desktop.Communication.Commands.StatisticsData;
 
 public class StatisticsDataCommandSender : IStatisticsDataCommandSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
-    private readonly StatisticsDataCommandProtoService.StatisticsDataCommandProtoServiceClient _client = new(Channel);
+    private readonly StatisticsDataCommandProtoService.StatisticsDataCommandProtoServiceClient _client;
 
+    public StatisticsDataCommandSender(string address)
+    {
+        var channel = GrpcChannel.ForAddress(address);
+        _client = new StatisticsDataCommandProtoService.StatisticsDataCommandProtoServiceClient(channel);
+    }
+    
     public async Task<bool> Send(ClientChangeTagSelectionCommand command)
     {
         var response = await _client.ChangeTagSelectionAsync(command.ToProto());

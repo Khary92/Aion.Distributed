@@ -5,6 +5,7 @@ using Service.Admin.Web.Communication.Receiver.Reports;
 using Service.Admin.Web.Communication.Sender;
 using Service.Admin.Web.Communication.Sender.Common;
 using Service.Admin.Web.Communication.Sender.Policies;
+using Service.Admin.Web.Config;
 using Service.Admin.Web.Services.Startup;
 using Service.Admin.Web.Services.State;
 using Service.Monitoring.Shared.Enums;
@@ -23,8 +24,6 @@ namespace Service.Admin.Web;
 
 public static class AdminServiceExtension
 {
-    private const string ServerAddress = "http://core-service:8080";
-
     public static void AddWebServices(this IServiceCollection services)
     {
         RegisterStateServices(services);
@@ -85,6 +84,8 @@ public static class AdminServiceExtension
     {
         services.AddRazorComponents()
             .AddInteractiveServerComponents();
+        
+        services.AddSingleton<IAdminConfig, AdminConfig>();
 
         services.AddGrpc(options =>
         {
@@ -138,19 +139,29 @@ public static class AdminServiceExtension
 
     private static void AddSharedDataServices(this IServiceCollection services)
     {
-        services.AddSingleton<ITicketCommandSender>(_ => new TicketCommandSender(ServerAddress));
-        services.AddSingleton<ITicketRequestSender>(_ => new TicketRequestSender(ServerAddress));
+        services.AddSingleton<ITicketCommandSender>(sp =>
+            new TicketCommandSender(sp.GetRequiredService<IAdminConfig>().GetCoreServerUrl()));
+        services.AddSingleton<ITicketRequestSender>(sp =>
+            new TicketRequestSender(sp.GetRequiredService<IAdminConfig>().GetCoreServerUrl()));
 
-        services.AddSingleton<ISprintCommandSender>(_ => new SprintCommandSender(ServerAddress));
-        services.AddSingleton<ISprintRequestSender>(_ => new SprintRequestSender(ServerAddress));
+        services.AddSingleton<ISprintCommandSender>(sp =>
+            new SprintCommandSender(sp.GetRequiredService<IAdminConfig>().GetCoreServerUrl()));
+        services.AddSingleton<ISprintRequestSender>(sp =>
+            new SprintRequestSender(sp.GetRequiredService<IAdminConfig>().GetCoreServerUrl()));
 
-        services.AddSingleton<ITagCommandSender>(_ => new TagCommandSender(ServerAddress));
-        services.AddSingleton<ITagRequestSender>(_ => new TagRequestSender(ServerAddress));
+        services.AddSingleton<ITagCommandSender>(sp =>
+            new TagCommandSender(sp.GetRequiredService<IAdminConfig>().GetCoreServerUrl()));
+        services.AddSingleton<ITagRequestSender>(sp =>
+            new TagRequestSender(sp.GetRequiredService<IAdminConfig>().GetCoreServerUrl()));
 
-        services.AddSingleton<INoteTypeCommandSender>(_ => new NoteTypeCommandSender(ServerAddress));
-        services.AddSingleton<INoteTypeRequestSender>(_ => new NoteTypeRequestSender(ServerAddress));
+        services.AddSingleton<INoteTypeCommandSender>(sp =>
+            new NoteTypeCommandSender(sp.GetRequiredService<IAdminConfig>().GetCoreServerUrl()));
+        services.AddSingleton<INoteTypeRequestSender>(sp =>
+            new NoteTypeRequestSender(sp.GetRequiredService<IAdminConfig>().GetCoreServerUrl()));
 
-        services.AddSingleton<ITimerSettingsCommandSender>(_ => new TimerSettingsCommandSender(ServerAddress));
-        services.AddSingleton<ITimerSettingsRequestSender>(_ => new TimerSettingsRequestSender(ServerAddress));
+        services.AddSingleton<ITimerSettingsCommandSender>(sp =>
+            new TimerSettingsCommandSender(sp.GetRequiredService<IAdminConfig>().GetCoreServerUrl()));
+        services.AddSingleton<ITimerSettingsRequestSender>(sp =>
+            new TimerSettingsRequestSender(sp.GetRequiredService<IAdminConfig>().GetCoreServerUrl()));
     }
 }

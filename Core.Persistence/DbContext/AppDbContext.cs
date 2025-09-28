@@ -7,24 +7,16 @@ using Domain.Events.Tickets;
 using Domain.Events.TimerSettings;
 using Domain.Events.TimeSlots;
 using Domain.Events.WorkDays;
+using Global.Settings.Types;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.Extensions.Options;
 
 namespace Core.Persistence.DbContext;
 
-public sealed class AppDbContext : Microsoft.EntityFrameworkCore.DbContext
+public sealed class AppDbContext(DbContextOptions<AppDbContext> options, IOptions<DatabaseSettings> databaseConfiguration)
+    : Microsoft.EntityFrameworkCore.DbContext(options)
 {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-    {
-        if (Database.IsRelational())
-        {
-            Database.Migrate();
-            return;
-        }
-
-        Database.EnsureCreated();
-    }
-
     public DbSet<TicketEvent> TicketEvents { get; set; } = null!;
     public DbSet<SprintEvent> SprintEvents { get; set; } = null!;
     public DbSet<StatisticsDataEvent> StatisticsDataEvents { get; set; } = null!;
@@ -38,7 +30,7 @@ public sealed class AppDbContext : Microsoft.EntityFrameworkCore.DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         if (optionsBuilder.IsConfigured) return;
-        optionsBuilder.UseNpgsql(DatabaseConfiguration.GetConnectionString());
+        optionsBuilder.UseNpgsql(databaseConfiguration.Value.ConnectionString);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

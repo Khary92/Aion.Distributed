@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests.StatisticsData.Records;
 using Client.Desktop.DataModels;
-using Client.Proto;
 using Grpc.Net.Client;
 using Proto.Requests.StatisticsData;
 
@@ -9,8 +8,13 @@ namespace Client.Desktop.Communication.Requests.StatisticsData;
 
 public class StatisticsDataRequestSender : IStatisticsDataRequestSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
-    private readonly StatisticsDataRequestService.StatisticsDataRequestServiceClient _client = new(Channel);
+    private readonly StatisticsDataRequestService.StatisticsDataRequestServiceClient _client;
+
+    public StatisticsDataRequestSender(string address)
+    {
+        var channel = GrpcChannel.ForAddress(address);
+        _client = new StatisticsDataRequestService.StatisticsDataRequestServiceClient(channel);
+    }
 
     public async Task<StatisticsDataClientModel> Send(ClientGetStatisticsDataByTimeSlotIdRequest request)
     {

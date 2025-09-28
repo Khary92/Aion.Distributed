@@ -10,9 +10,14 @@ namespace Client.Desktop.Communication.Requests.Replays;
 
 public class TicketReplayRequestSender : ITicketReplayRequestSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
-    private readonly TicketReplayRequestService.TicketReplayRequestServiceClient _client = new(Channel);
+    private readonly TicketReplayRequestService.TicketReplayRequestServiceClient _client;
 
+    public TicketReplayRequestSender(string address)
+    {
+        var channel = GrpcChannel.ForAddress(address);
+        _client = new TicketReplayRequestService.TicketReplayRequestServiceClient(channel);
+    }
+    
     public async Task<List<DocumentationReplay>> Send(ClientGetTicketReplaysByIdRequest request)
     {
         var response = await _client.GetReplayDataAsync(request.ToProto());

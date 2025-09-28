@@ -11,9 +11,14 @@ namespace Client.Desktop.Communication.Requests.WorkDays;
 
 public class WorkDayRequestSender : IWorkDayRequestSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
-    private readonly WorkDayRequestService.WorkDayRequestServiceClient _client = new(Channel);
+    private readonly WorkDayRequestService.WorkDayRequestServiceClient _client;
 
+    public WorkDayRequestSender(string address)
+    {
+        var channel = GrpcChannel.ForAddress(address);
+        _client = new WorkDayRequestService.WorkDayRequestServiceClient(channel);
+    }
+    
     public async Task<List<WorkDayClientModel>> Send(ClientGetAllWorkDaysRequest request)
     {
         var response = await _client.GetAllWorkDaysAsync(request.ToProto());
