@@ -25,6 +25,7 @@ using Client.Desktop.Communication.Requests.Replays;
 using Client.Desktop.Communication.Requests.StatisticsData;
 using Client.Desktop.Communication.Requests.TimeSlots;
 using Client.Desktop.Communication.Requests.WorkDays;
+using Client.Desktop.Config;
 using Client.Desktop.FileSystem;
 using Client.Desktop.FileSystem.Serializer;
 using Client.Desktop.Lifecycle.Shutdown;
@@ -55,6 +56,7 @@ using Client.Desktop.Services.LocalSettings;
 using Client.Proto;
 using CommunityToolkit.Mvvm.Messaging;
 using Grpc.Net.Client;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using Proto.Notifications.Client;
@@ -82,6 +84,7 @@ public static class ServiceExtensions
 {
     public static void AddPresentationServices(this IServiceCollection services)
     {
+        AddConfigServices(services);
         AddPolicyServices(services);
         AddSchedulerServices(services);
         AddLocalServices(services);
@@ -94,6 +97,11 @@ public static class ServiceExtensions
         AddRequestSenders(services);
         AddCommandSenders(services);
         AddFileSystemServices(services);
+    }
+
+    private static void AddConfigServices(IServiceCollection services)
+    {
+        services.AddSingleton<IConfigReader, ConfigReader>();
     }
 
     private static void AddPolicyServices(IServiceCollection services)
@@ -154,23 +162,22 @@ public static class ServiceExtensions
         services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<DocumentationSynchronizer>());
         services.AddSingleton<IDocumentationSynchronizer>(sp => sp.GetRequiredService<DocumentationSynchronizer>());
     }
-
+    
     private static void AddSharedDataServices(this IServiceCollection services)
     {
-        var serverAddress = "http://localhost:8081";
-        services.AddScoped<ITicketCommandSender>(_ => new TicketCommandSender(serverAddress));
-        services.AddScoped<ITicketRequestSender>(_ => new TicketRequestSender(serverAddress));
+        services.AddScoped<ITicketCommandSender>(sp => new TicketCommandSender(sp.GetRequiredService<IConfigReader>().GetServerUrl()));
+        services.AddScoped<ITicketRequestSender>(sp => new TicketRequestSender(sp.GetRequiredService<IConfigReader>().GetServerUrl()));
 
-        services.AddScoped<ISprintCommandSender>(_ => new SprintCommandSender(serverAddress));
-        services.AddScoped<ISprintRequestSender>(_ => new SprintRequestSender(serverAddress));
+        services.AddScoped<ISprintCommandSender>(sp => new SprintCommandSender(sp.GetRequiredService<IConfigReader>().GetServerUrl()));
+        services.AddScoped<ISprintRequestSender>(sp => new SprintRequestSender(sp.GetRequiredService<IConfigReader>().GetServerUrl()));
 
-        services.AddScoped<ITagCommandSender>(_ => new TagCommandSender(serverAddress));
-        services.AddScoped<ITagRequestSender>(_ => new TagRequestSender(serverAddress));
+        services.AddScoped<ITagCommandSender>(sp => new TagCommandSender(sp.GetRequiredService<IConfigReader>().GetServerUrl()));
+        services.AddScoped<ITagRequestSender>(sp => new TagRequestSender(sp.GetRequiredService<IConfigReader>().GetServerUrl()));
 
-        services.AddScoped<INoteTypeCommandSender>(_ => new NoteTypeCommandSender(serverAddress));
-        services.AddScoped<INoteTypeRequestSender>(_ => new NoteTypeRequestSender(serverAddress));
+        services.AddScoped<INoteTypeCommandSender>(sp => new NoteTypeCommandSender(sp.GetRequiredService<IConfigReader>().GetServerUrl()));
+        services.AddScoped<INoteTypeRequestSender>(sp => new NoteTypeRequestSender(sp.GetRequiredService<IConfigReader>().GetServerUrl()));
 
-        services.AddScoped<ITimerSettingsRequestSender>(_ => new TimerSettingsRequestSender(serverAddress));
+        services.AddScoped<ITimerSettingsRequestSender>(sp => new TimerSettingsRequestSender(sp.GetRequiredService<IConfigReader>().GetServerUrl()));
     }
 
     private static void AddFileSystemServices(this IServiceCollection services)

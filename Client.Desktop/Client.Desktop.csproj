@@ -29,6 +29,7 @@
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.5"/>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0-preview.5.25277.114"/>
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.5"/>
+        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="9.0.9" />
         <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
         <PackageReference Include="Polly" Version="8.6.2"/>
         <PackageReference Include="ReactiveUI" Version="20.3.1"/>
@@ -80,6 +81,13 @@
         <EmbeddedResource Include="Presentation\Themes\Fonts\PtSans\PTSans-BoldItalic.ttf"/>
         <EmbeddedResource Include="Presentation\Themes\Fonts\PtSans\PTSans-Italic.ttf"/>
         <EmbeddedResource Include="Presentation\Themes\Fonts\PtSans\PTSans-Regular.ttf"/>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="appsettings.json" />
+      <Content Include="appsettings.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </Content>
     </ItemGroup>
 
 </Project>
