@@ -51,7 +51,7 @@ public static class CoreServices
 
     private static void AddTraceSender(this IServiceCollection services)
     {
-        services.AddScoped<ITracingDataSender>(sp =>
+        services.AddSingleton<ITracingDataSender>(sp =>
             new TracingDataSender(sp.GetRequiredService<IGrpcUrlBuilder>()
                 .From(ResolvingServices.Server)
                 .To(ResolvingServices.Monitoring)

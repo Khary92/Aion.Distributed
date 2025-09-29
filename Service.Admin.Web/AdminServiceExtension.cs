@@ -39,7 +39,7 @@ public static class AdminServiceExtension
     
     private static void AddTraceSender(this IServiceCollection services)
     {
-        services.AddScoped<ITracingDataSender>(sp =>
+        services.AddSingleton<ITracingDataSender>(sp =>
             new TracingDataSender(sp.GetRequiredService<IGrpcUrlBuilder>()
                 .From(ResolvingServices.WebAdmin)
                 .To(ResolvingServices.Monitoring)

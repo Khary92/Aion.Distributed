@@ -60,7 +60,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-//app.UseRouting();
+app.UseHttpsRedirection();
+app.UseRouting();
 app.UseAntiforgery();
 
 app.MapGrpcService<TicketNotificationsReceiver>();
