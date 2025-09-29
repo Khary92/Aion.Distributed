@@ -14,14 +14,15 @@ public static class Program
     [STAThread]
     public static async Task Main(string[] args)
     {
-        var host = Host.CreateDefaultBuilder(args)
-            .SetConfiguration()
-            .ConfigureServices((_, services) =>
-            {
-                services.AddPresentationServices();
-                services.AddTracingServices();
-            })
-            .Build();
+        var hostBuilder = Host.CreateDefaultBuilder(args);
+        hostBuilder.SetConfiguration();
+        hostBuilder.ConfigureServices((_, services) =>
+        {
+            services.AddPresentationServices();
+            services.AddTracingServices();
+        });
+        
+        var host = hostBuilder.Build();
 
         await host.StartAsync();
 

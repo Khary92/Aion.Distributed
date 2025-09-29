@@ -5,15 +5,16 @@ services:
       context: .
       dockerfile: ./Core.Boot/Dockerfile
     ports:
-      - "5001:5001"
+      - "8081:8080"
     environment:
+      - ASPNETCORE_URLS=http://+:8080
       - ConnectionStrings__DefaultConnection=Host=postgres;Database=aion;Username=aionuser;Password=aionpass
       - TZ=Europe/Berlin
     depends_on:
       - postgres
     restart: unless-stopped
     volumes:
-      - ./Certificates:/app/certs:ro   
+      - ./Certificates:/app/certs:ro
       - ./DataProtection-Keys:/app/DataProtection-Keys:rw
 
   monitoring-service:
@@ -21,7 +22,10 @@ services:
       context: .
       dockerfile: ./Service.Monitoring/Dockerfile
     ports:
-      - "5002:5002"
+      - "8082:8080"
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+      - TZ=Europe/Berlin
     volumes:
       - ./Certificates:/app/certs:ro
       - ./DataProtection-Keys:/app/DataProtection-Keys:rw
@@ -34,7 +38,10 @@ services:
       context: .
       dockerfile: ./Service.Admin.Web/Dockerfile
     ports:
-      - "5000:5000"
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_URLS=http://+:8080
+      - TZ=Europe/Berlin
     volumes:
       - ./Certificates:/app/certs:ro
       - ./DataProtection-Keys:/app/DataProtection-Keys:rw

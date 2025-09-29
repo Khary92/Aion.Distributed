@@ -23,9 +23,6 @@ public static class TracingServices
 
     private static void AddACommonTracingServices(this IServiceCollection services)
     {
-        //TODO add config somehow
-        services.AddSingleton<ITracingDataSender>(_ =>
-            new TracingDataSender("http://127.0.0.1:5002"));
         services.AddSingleton<ITraceCollector, TraceCollector>();
     }
 

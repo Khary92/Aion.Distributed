@@ -1,7 +1,8 @@
+using Global.Settings.Types;
+using Global.Settings.UrlResolver;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using Service.Monitoring.Communication;
-using Service.Monitoring.Config;
 using Service.Monitoring.Sink;
 using Service.Monitoring.Verifiers.Common;
 using Service.Monitoring.Verifiers.Common.Factories;
@@ -21,8 +22,10 @@ public static class TracingServices
 
     private static void AddReportSender(IServiceCollection services)
     {
-        services.AddSingleton<IMonitoringConfig, MonitoringConfig>();
-        services.AddSingleton<IReportSender>(sp => new ReportSender(sp.GetRequiredService<IMonitoringConfig>().GetWebAdminServerUrl()));
+        services.AddSingleton<IReportSender>(sp => new ReportSender(sp.GetRequiredService<IGrpcUrlBuilder>()
+            .From(ResolvingServices.Monitoring)
+            .To(ResolvingServices.WebAdmin)
+            .BuildAddress()));
     }
 
     private static void AddPolicyServices(IServiceCollection services)

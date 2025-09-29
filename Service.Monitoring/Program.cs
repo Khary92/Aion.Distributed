@@ -34,7 +34,7 @@ public abstract class Program
 
         builder.WebHost.ConfigureKestrel(options =>
         {
-            options.ListenAnyIP(monitoringSettings.Port, listenOptions =>
+            options.ListenAnyIP(monitoringSettings.GrpcPort, listenOptions =>
             {
                 if (globalSettings.UseHttps)
                 {

@@ -41,11 +41,16 @@ public static class BootStrap
 
         builder.WebHost.ConfigureKestrel(options =>
         {
-            options.ListenAnyIP(serverSettings.Port, listenOptions =>
+            options.ListenAnyIP(serverSettings.GrpcPort, listenOptions =>
             {
                 if (globalSettings.UseHttps)
                 {
                     listenOptions.UseHttps("/app/certs/server.pfx");
+                }
+                //TODO FIX ELSE!
+                else
+                {
+                    AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
                 }
 
                 listenOptions.Protocols = HttpProtocols.Http2;

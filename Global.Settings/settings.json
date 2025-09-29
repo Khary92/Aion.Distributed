@@ -1,23 +1,29 @@
 ﻿{
   "GlobalSettings": {
-    "UseHttps": false,
-    "IsRunningInDocker": true
+    "UseHttps": false
   },
   "AdminSettings": {
-    "Host": "admin-web",
-    "Port": 5000,
-    "DockerPort": 5000
+    "HostName": "admin-web",
+    "GrpcPort": 8081,
+    "DockerGrpcPort": 8080,
+    "DockerHostName": "localhost",
+    "IsRunningInDocker": true,
+    "DockerInternalWebPort": 8080,
+    "ExposedWebPort": 5000
   },
   "ServerSettings": {
-    "Host": "core-service",
-    "Port": 5001,
-    "DockerHostnameForClient": "localhost",
-    "DockerPort": 5001
+    "HostName": "core-service",
+    "GrpcPort": 8080,
+    "DockerGrpcPort": 8081,
+    "DockerHostName": "localhost",
+    "IsRunningInDocker": true
   },
   "MonitoringSettings": {
-    "Host": "monitoring-service",
-    "Port": 5002,
-    "DockerPort": 5002
+    "HostName": "monitoring-service",
+    "GrpcPort": 8080,
+    "DockerGrpcPort": 8082,
+    "DockerHostName": "localhost",
+    "IsRunningInDocker": true
   },
   "DatabaseSettings": {
     "ConnectionString": "Host=postgres;Database=aion;Username=aionuser;Password=aionpass"

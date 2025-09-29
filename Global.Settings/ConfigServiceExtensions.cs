@@ -1,4 +1,6 @@
 ﻿using Global.Settings.Types;
+using Global.Settings.UrlResolver;
+using Global.Settings.UrlResolver.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,15 +16,41 @@ public static class ConfigServiceExtensions
             .SetBasePath(AppContext.BaseDirectory)
             .AddJsonFile("settings.json", optional: false, reloadOnChange: true)
             .AddEnvironmentVariables();
-        
-        builder.Services.Configure<GlobalSettings>(builder.Configuration.GetSection("GlobalSettings"));
-        builder.Services.Configure<AdminSettings>(builder.Configuration.GetSection("AdminSettings"));
-        builder.Services.Configure<DatabaseSettings>(builder.Configuration.GetSection("DatabaseSettings"));
-        builder.Services.Configure<MonitoringSettings>(builder.Configuration.GetSection("MonitoringSettings"));
-        builder.Services.Configure<ServerSettings>(builder.Configuration.GetSection("ServerSettings"));
+
+        builder.Services
+            .AddOptions<GlobalSettings>()
+            .Bind(builder.Configuration.GetSection("GlobalSettings"))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
+        builder.Services
+            .AddOptions<AdminSettings>()
+            .Bind(builder.Configuration.GetSection("AdminSettings"))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
+        builder.Services
+            .AddOptions<DatabaseSettings>()
+            .Bind(builder.Configuration.GetSection("DatabaseSettings"))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
+        builder.Services
+            .AddOptions<MonitoringSettings>()
+            .Bind(builder.Configuration.GetSection("MonitoringSettings"))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
+        builder.Services
+            .AddOptions<ServerSettings>()
+            .Bind(builder.Configuration.GetSection("ServerSettings"))
+            .ValidateDataAnnotations()
+            .ValidateOnStart();
+
+        builder.Services.AddUrlBuilder();
     }
 
-    public static IHostBuilder SetConfiguration(this IHostBuilder hostBuilder)
+    public static void SetConfiguration(this IHostBuilder hostBuilder)
     {
         hostBuilder.ConfigureAppConfiguration((_, config) =>
         {
@@ -33,13 +61,41 @@ public static class ConfigServiceExtensions
 
         hostBuilder.ConfigureServices((context, services) =>
         {
-            services.Configure<GlobalSettings>(context.Configuration.GetSection("GlobalSettings"));
-            services.Configure<AdminSettings>(context.Configuration.GetSection("AdminSettings"));
-            services.Configure<ServerSettings>(context.Configuration.GetSection("ServerSettings"));
-            services.Configure<MonitoringSettings>(context.Configuration.GetSection("MonitoringSettings"));
-            services.Configure<DatabaseSettings>(context.Configuration.GetSection("DatabaseSettings"));
-        });
+            services.AddOptions<GlobalSettings>()
+                .Bind(context.Configuration.GetSection("GlobalSettings"))
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
 
-        return hostBuilder;
+            services.AddOptions<AdminSettings>()
+                .Bind(context.Configuration.GetSection("AdminSettings"))
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
+
+            services.AddOptions<ServerSettings>()
+                .Bind(context.Configuration.GetSection("ServerSettings"))
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
+
+            services.AddOptions<MonitoringSettings>()
+                .Bind(context.Configuration.GetSection("MonitoringSettings"))
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
+
+            services.AddOptions<DatabaseSettings>()
+                .Bind(context.Configuration.GetSection("DatabaseSettings"))
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
+
+            services.AddUrlBuilder();
+        });
+    }
+
+    private static void AddUrlBuilder(this IServiceCollection services)
+    {
+        services.AddSingleton<IGrpcDataProvider, AdminDataProvider>();
+        services.AddSingleton<IGrpcDataProvider, ServerDataProvider>();
+        services.AddSingleton<IGrpcDataProvider, MonitoringDataProvider>();
+        
+        services.AddSingleton<IGrpcUrlBuilder, GrpcUrlBuilder>();
     }
 }

@@ -1,4 +1,6 @@
-﻿using Grpc.Core;
+﻿using Global.Settings.Types;
+using Global.Settings.UrlResolver;
+using Grpc.Core;
 using Grpc.Net.Client;
 using Proto.Notifications.Ticket;
 using Service.Admin.Tracing;
@@ -7,7 +9,10 @@ using Service.Admin.Web.Services.State;
 
 namespace Service.Admin.Web.Communication.Receiver;
 
-public class TicketNotificationsReceiver(ITraceCollector tracer, ITicketStateService ticketStateService)
+public class TicketNotificationsReceiver(
+    ITraceCollector tracer,
+    ITicketStateService ticketStateService,
+    IGrpcUrlBuilder grpcUrlBuilder)
 {
     public async Task SubscribeToNotifications(CancellationToken stoppingToken = default)
     {
@@ -22,7 +27,14 @@ public class TicketNotificationsReceiver(ITraceCollector tracer, ITicketStateSer
             }
         };
 
-        var channel = GrpcChannel.ForAddress("https://core-service:5001", channelOptions);
+        var channel =
+            GrpcChannel.ForAddress(
+                grpcUrlBuilder
+                    .From(ResolvingServices.WebAdmin)
+                    .To(ResolvingServices.Server)
+                    .BuildAddress(),
+                channelOptions);
+        
         var client = new TicketNotificationService.TicketNotificationServiceClient(channel);
 
         while (!stoppingToken.IsCancellationRequested)

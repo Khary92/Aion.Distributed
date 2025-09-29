@@ -2,7 +2,9 @@
 
 public class MonitoringSettings
 {
-    public string Host { get; set; } = "localhost";
-    public int Port { get; set; } = 0;
-    public int DockerPort { get; set; } = 0;
+    public string HostName { get; set; } = SettingsDefaultValues.String;
+    public int GrpcPort { get; set; } = SettingsDefaultValues.Integer;
+    public string DockerHostName { get; set; } = SettingsDefaultValues.String;
+    public int DockerGrpcPort { get; set; } = SettingsDefaultValues.Integer;
+    public bool IsRunningInDocker { get; set; }
 }

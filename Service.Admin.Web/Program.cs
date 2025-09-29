@@ -28,11 +28,12 @@ var globalSettings = new GlobalSettings();
 builder.Configuration.GetSection("GlobalSettings").Bind(globalSettings);
 
 var adminSettings = new AdminSettings();
-builder.Configuration.GetSection("ServerSettings").Bind(adminSettings);
+builder.Configuration.GetSection("AdminSettings").Bind(adminSettings);
 
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.ListenAnyIP(adminSettings.Port, listenOptions =>
+    // Grpc Listener
+    options.ListenAnyIP(adminSettings.GrpcPort, listenOptions =>
     {
         if (globalSettings.UseHttps)
         {
@@ -40,6 +41,12 @@ builder.WebHost.ConfigureKestrel(options =>
         }
 
         listenOptions.Protocols = HttpProtocols.Http2;
+    });
+    
+    //Web listener
+    options.ListenAnyIP(adminSettings.DockerInternalWebPort, listenOptions =>
+    {
+        listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
     });
 });
 
@@ -53,8 +60,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
-app.UseRouting();
+//app.UseRouting();
 app.UseAntiforgery();
 
 app.MapGrpcService<TicketNotificationsReceiver>();
