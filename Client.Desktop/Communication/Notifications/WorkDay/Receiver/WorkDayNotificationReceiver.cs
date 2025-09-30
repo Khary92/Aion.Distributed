@@ -1,11 +1,9 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Avalonia.Threading;
-using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
+using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
-using Global.Settings.Types;
 using Global.Settings.UrlResolver;
 using Grpc.Core;
 using Grpc.Net.Client;
@@ -16,7 +14,7 @@ namespace Client.Desktop.Communication.Notifications.WorkDay.Receiver;
 public class WorkDayNotificationReceiver(
     IGrpcUrlBuilder grpcUrlBuilder,
     IMessenger messenger,
-    ITraceCollector tracer) : IStreamClient
+    ITraceCollector tracer) : ILocalWorkDayNotificationPublisher
 {
     public async Task StartListening(CancellationToken cancellationToken)
     {
@@ -26,11 +24,11 @@ public class WorkDayNotificationReceiver(
         {
             try
             {
-                using var channel =  GrpcChannel.ForAddress(grpcUrlBuilder
+                using var channel = GrpcChannel.ForAddress(grpcUrlBuilder
                     .From(ResolvingServices.Client)
                     .To(ResolvingServices.Server)
                     .BuildAddress());
-                
+
                 var client = new WorkDayNotificationService.WorkDayNotificationServiceClient(channel);
                 using var call =
                     client.SubscribeWorkDayNotifications(new SubscribeRequest(), cancellationToken: cancellationToken);
@@ -85,11 +83,20 @@ public class WorkDayNotificationReceiver(
                     Guid.Parse(n.TraceData.TraceId),
                     n);
 
-                Dispatcher.UIThread.Post(() => { messenger.Send(n.ToNewEntityMessage()); });
+
+                if (NewWorkDayMessageReceived == null)
+                {
+                    throw new InvalidOperationException(
+                        "Ticket data update received but no forwarding receiver is set");
+                }
+
+                await NewWorkDayMessageReceived.Invoke(n.ToNewEntityMessage());
                 break;
             }
             case WorkDayNotification.NotificationOneofCase.None:
                 break;
         }
     }
+
+    public event Func<NewWorkDayMessage, Task>? NewWorkDayMessageReceived;
 }

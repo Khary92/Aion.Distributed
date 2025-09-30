@@ -2,7 +2,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using AvaloniaEdit.Utils;
+using Client.Desktop.Communication.Local;
 using Client.Desktop.Communication.Notifications.Sprint.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.Communication.Requests;
@@ -18,10 +20,12 @@ using ReactiveUI;
 
 namespace Client.Desktop.Presentation.Models.Analysis;
 
-public class AnalysisBySprintModel(IMessenger messenger, IRequestSender requestSender, ITraceCollector tracer)
-    : ReactiveObject, IMessengerRegistration, IInitializeAsync,
-        IRecipient<NewSprintMessage>,
-        IRecipient<ClientSprintDataUpdatedNotification>
+public class AnalysisBySprintModel(
+    IMessenger messenger,
+    IRequestSender requestSender,
+    ITraceCollector tracer,
+    INotificationPublisherFacade notificationPublisher)
+    : ReactiveObject, IMessengerRegistration, IInitializeAsync
 {
     private const int AmountOfTagsShown = 3;
 
@@ -45,32 +49,37 @@ public class AnalysisBySprintModel(IMessenger messenger, IRequestSender requestS
 
     public void RegisterMessenger()
     {
-        messenger.RegisterAll(this);
+        notificationPublisher.Sprint.NewSprintMessageReceived += HandleNewSprintMessage;
+        notificationPublisher.Sprint.ClientSprintDataUpdatedNotificationReceived +=
+            HandleClientSprintDataUpdatedNotification;
     }
 
     public void UnregisterMessenger()
     {
-        messenger.UnregisterAll(this);
+        notificationPublisher.Sprint.NewSprintMessageReceived -= HandleNewSprintMessage;
+        notificationPublisher.Sprint.ClientSprintDataUpdatedNotificationReceived -=
+            HandleClientSprintDataUpdatedNotification;
     }
 
-    public void Receive(ClientSprintDataUpdatedNotification notification)
+    private async Task HandleNewSprintMessage(NewSprintMessage message)
+    {
+        await Dispatcher.UIThread.InvokeAsync(() => { Sprints.Add(message.Sprint); });
+        await tracer.Sprint.Create.AggregateAdded(GetType(), message.TraceId);
+    }
+
+    private async Task HandleClientSprintDataUpdatedNotification(ClientSprintDataUpdatedNotification notification)
     {
         var sprint = Sprints.FirstOrDefault(s => s.SprintId == notification.SprintId);
 
         if (sprint == null)
         {
-            _ = tracer.Sprint.Update.NoAggregateFound(GetType(), notification.TraceId);
+            await tracer.Sprint.Update.NoAggregateFound(GetType(), notification.TraceId);
             return;
         }
 
-        sprint.Apply(notification);
-        _ = tracer.Sprint.Update.ChangesApplied(GetType(), notification.TraceId);
-    }
-
-    public void Receive(NewSprintMessage message)
-    {
-        Sprints.Add(message.Sprint);
-        _ = tracer.Sprint.Create.AggregateAdded(GetType(), message.TraceId);
+        await Dispatcher.UIThread.InvokeAsync(() => { sprint.Apply(notification); });
+    
+        await tracer.Sprint.Update.ChangesApplied(GetType(), notification.TraceId);
     }
 
     public string GetMarkdownString()

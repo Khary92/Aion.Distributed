@@ -1,4 +1,5 @@
 ﻿using Client.Desktop.Communication.Commands.Client.Records;
+using Client.Desktop.Communication.Local.LocalEvents.Records;
 using Client.Desktop.Communication.Notifications.Client.Records;
 using Client.Desktop.Communication.Notifications.Sprint.Records;
 using Client.Desktop.Communication.Notifications.Ticket.Records;

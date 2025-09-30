@@ -36,9 +36,7 @@ public class App(IServiceProvider serviceProvider) : Application
 
     private void TrayIconClose_OnClick(object? sender, EventArgs e)
     {
-        if (Current?.ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktopApp) return;
-
         var shutdownHandler = serviceProvider.GetRequiredService<IShutDownHandler>();
-        shutdownHandler.Exit(desktopApp);
+        shutdownHandler.Exit();
     }
 }

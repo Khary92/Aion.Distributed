@@ -1,11 +1,9 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Avalonia.Threading;
-using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
+using Client.Desktop.Communication.Notifications.Client.Records;
 using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
-using Global.Settings.Types;
 using Global.Settings.UrlResolver;
 using Grpc.Core;
 using Grpc.Net.Client;
@@ -16,7 +14,7 @@ namespace Client.Desktop.Communication.Notifications.Client.Receiver;
 public class ClientNotificationReceiver(
     IGrpcUrlBuilder grpcUrlBuilder,
     IMessenger messenger,
-    ITraceCollector tracer) : IStreamClient
+    ITraceCollector tracer) : ILocalClientNotificationPublisher
 {
     public async Task StartListening(CancellationToken cancellationToken)
     {
@@ -38,7 +36,7 @@ public class ClientNotificationReceiver(
                 attempt = 0;
 
                 await foreach (var notification in call.ResponseStream.ReadAllAsync(cancellationToken))
-                    await HandleNotificationReceived(notification);
+                    await HandleNotificationReceived(notification, cancellationToken);
 
                 await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
             }
@@ -72,7 +70,7 @@ public class ClientNotificationReceiver(
         }
     }
 
-    private async Task HandleNotificationReceived(ClientNotification notification)
+    private async Task HandleNotificationReceived(ClientNotification notification, CancellationToken stoppingToken)
     {
         switch (notification.NotificationCase)
         {
@@ -82,20 +80,34 @@ public class ClientNotificationReceiver(
                     Guid.Parse(notification.TimeSlotControlCreated.TraceData.TraceId),
                     notification.TimeSlotControlCreated);
 
-                Dispatcher.UIThread.Post(() =>
+
+                if (ClientTrackingControlCreatedNotificationReceived == null)
                 {
-                    messenger.Send(notification.TimeSlotControlCreated.ToClientNotification());
-                });
+                    throw new InvalidOperationException(
+                        "Ticket data update received but no forwarding receiver is set");
+                }
+
+                await ClientTrackingControlCreatedNotificationReceived.Invoke(notification.TimeSlotControlCreated
+                    .ToClientNotification());
+
                 break;
             }
             case ClientNotification.NotificationOneofCase.SprintSelectionChanged:
             {
-                Dispatcher.UIThread.Post(() =>
+                if (ClientSprintSelectionChangedNotificationReceived == null)
                 {
-                    messenger.Send(notification.SprintSelectionChanged.ToClientNotification());
-                });
+                    throw new InvalidOperationException(
+                        "Ticket data update received but no forwarding receiver is set");
+                }
+
+                await ClientSprintSelectionChangedNotificationReceived.Invoke(notification.SprintSelectionChanged
+                    .ToClientNotification());
+
                 break;
             }
         }
     }
+
+    public event Func<ClientSprintSelectionChangedNotification, Task>? ClientSprintSelectionChangedNotificationReceived;
+    public event Func<ClientTrackingControlCreatedNotification, Task>? ClientTrackingControlCreatedNotificationReceived;
 }

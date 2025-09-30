@@ -2,9 +2,8 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
-using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
+using Client.Desktop.Communication.Notifications.TimerSettings.Records;
 using CommunityToolkit.Mvvm.Messaging;
-using Global.Settings.Types;
 using Global.Settings.UrlResolver;
 using Grpc.Core;
 using Grpc.Net.Client;
@@ -15,7 +14,7 @@ namespace Client.Desktop.Communication.Notifications.TimerSettings.Receiver;
 
 public class TimerSettingsNotificationReceiver(
     IGrpcUrlBuilder grpcUrlBuilder,
-    IMessenger messenger) : IStreamClient
+    IMessenger messenger) : ILocalTimerSettingsNotificationPublisher
 {
     public async Task StartListening(CancellationToken cancellationToken)
     {
@@ -25,11 +24,11 @@ public class TimerSettingsNotificationReceiver(
         {
             try
             {
-                using var channel =  GrpcChannel.ForAddress(grpcUrlBuilder
+                using var channel = GrpcChannel.ForAddress(grpcUrlBuilder
                     .From(ResolvingServices.Client)
                     .To(ResolvingServices.Server)
                     .BuildAddress());
-                
+
                 var client = new TimerSettingsNotificationService.TimerSettingsNotificationServiceClient(channel);
                 using var call =
                     client.SubscribeTimerSettingsNotifications(new SubscribeRequest(),
@@ -72,7 +71,7 @@ public class TimerSettingsNotificationReceiver(
         }
     }
 
-    private Task HandleNotificationReceived(TimerSettingsNotification notification)
+    private async Task HandleNotificationReceived(TimerSettingsNotification notification)
     {
         switch (notification.NotificationCase)
         {
@@ -80,26 +79,38 @@ public class TimerSettingsNotificationReceiver(
             {
                 var n = notification.DocuTimerSaveIntervalChanged;
 
-                // TODO: Tracing bei Bedarf ergänzen
+                // TODO: Add tracing
 
-                Dispatcher.UIThread.Post(() => { messenger.Send(n.ToClientNotification()); });
+                if (ClientDocuTimerSaveIntervalChangedNotificationReceived == null)
+                {
+                    throw new InvalidOperationException(
+                        "Ticket data update received but no forwarding receiver is set");
+                }
+
+                await ClientDocuTimerSaveIntervalChangedNotificationReceived.Invoke(n.ToClientNotification());
+                
                 break;
             }
             case TimerSettingsNotification.NotificationOneofCase.SnapshotSaveIntervalChanged:
             {
                 var n = notification.SnapshotSaveIntervalChanged;
 
-                // TODO: Tracing bei Bedarf ergänzen
+                // TODO: Add tracing
+                if (ClientSnapshotSaveIntervalChangedNotificationReceived == null)
+                {
+                    throw new InvalidOperationException(
+                        "Ticket data update received but no forwarding receiver is set");
+                }
 
-                Dispatcher.UIThread.Post(() => { messenger.Send(n.ToClientNotification()); });
+                await ClientSnapshotSaveIntervalChangedNotificationReceived.Invoke(n.ToClientNotification());
+                
                 break;
             }
             case TimerSettingsNotification.NotificationOneofCase.None:
                 break;
-            default:
-                break;
         }
-
-        return Task.CompletedTask;
     }
+
+    public event Func<ClientDocuTimerSaveIntervalChangedNotification, Task>? ClientDocuTimerSaveIntervalChangedNotificationReceived;
+    public event Func<ClientSnapshotSaveIntervalChangedNotification, Task>? ClientSnapshotSaveIntervalChangedNotificationReceived;
 }

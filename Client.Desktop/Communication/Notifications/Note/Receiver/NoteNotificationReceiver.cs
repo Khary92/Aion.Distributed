@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Avalonia.Threading;
-using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
+using Client.Desktop.Communication.Notifications.Note.Records;
+using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
-using Global.Settings.Types;
 using Global.Settings.UrlResolver;
 using Grpc.Core;
 using Grpc.Net.Client;
@@ -16,7 +15,7 @@ namespace Client.Desktop.Communication.Notifications.Note.Receiver;
 public class NoteNotificationReceiver(
     IGrpcUrlBuilder grpcUrlBuilder,
     IMessenger messenger,
-    ITraceCollector tracer) : IStreamClient
+    ITraceCollector tracer) : ILocalNoteNotificationPublisher
 {
     public async Task StartListening(CancellationToken cancellationToken)
     {
@@ -38,7 +37,7 @@ public class NoteNotificationReceiver(
                 attempt = 0;
 
                 await foreach (var notification in call.ResponseStream.ReadAllAsync(cancellationToken))
-                    await HandleNotificationReceived(notification);
+                    await HandleNotificationReceived(notification, cancellationToken);
 
                 await Task.Delay(TimeSpan.FromSeconds(1), cancellationToken);
             }
@@ -72,7 +71,7 @@ public class NoteNotificationReceiver(
         }
     }
 
-    private async Task HandleNotificationReceived(NoteNotification notification)
+    private async Task HandleNotificationReceived(NoteNotification notification, CancellationToken stoppingToken)
     {
         switch (notification.NotificationCase)
         {
@@ -83,7 +82,14 @@ public class NoteNotificationReceiver(
                 await tracer.Note.Create.NotificationReceived(GetType(),
                     Guid.Parse(n.NoteId), n);
 
-                Dispatcher.UIThread.Post(() => { messenger.Send(n.ToNewEntityMessage()); });
+                if (NewNoteMessageReceived == null)
+                {
+                    throw new InvalidOperationException(
+                        "Ticket data update received but no forwarding receiver is set");
+                }
+
+                await NewNoteMessageReceived.Invoke(n.ToNewEntityMessage());
+
                 break;
             }
             case NoteNotification.NotificationOneofCase.NoteUpdated:
@@ -93,11 +99,21 @@ public class NoteNotificationReceiver(
                 await tracer.Note.Create.NotificationReceived(GetType(),
                     Guid.Parse(n.NoteId), n);
 
-                Dispatcher.UIThread.Post(() => { messenger.Send(n.ToClientNotification()); });
+                if (ClientNoteUpdatedNotificationReceived == null)
+                {
+                    throw new InvalidOperationException(
+                        "Ticket data update received but no forwarding receiver is set");
+                }
+
+                await ClientNoteUpdatedNotificationReceived.Invoke(n.ToClientNotification());
+
                 break;
             }
             case NoteNotification.NotificationOneofCase.None:
                 break;
         }
     }
+
+    public event Func<ClientNoteUpdatedNotification, Task>? ClientNoteUpdatedNotificationReceived;
+    public event Func<NewNoteMessage, Task>? NewNoteMessageReceived;
 }

@@ -8,7 +8,7 @@ public class SettingsViewModel : ReactiveObject
     public SettingsViewModel(SettingsModel settingsModel)
     {
         Model = settingsModel;
-        SaveConfigCommand = ReactiveCommand.Create(() => Model.SetExportPath());
+        SaveConfigCommand = ReactiveCommand.CreateFromTask(() => Model.SetExportPath());
     }
 
     public SettingsModel Model { get; }

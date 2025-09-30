@@ -2,10 +2,10 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
-using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
+using Client.Desktop.Communication.Notifications.NoteType.Records;
+using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
-using Global.Settings.Types;
 using Global.Settings.UrlResolver;
 using Grpc.Core;
 using Grpc.Net.Client;
@@ -16,7 +16,7 @@ namespace Client.Desktop.Communication.Notifications.NoteType.Receiver;
 public class NoteTypeNotificationReceiver(
     IGrpcUrlBuilder grpcUrlBuilder,
     IMessenger messenger,
-    ITraceCollector tracer) : IStreamClient
+    ITraceCollector tracer) : ILocalNoteTypeNotificationPublisher
 {
     public async Task StartListening(CancellationToken cancellationToken)
     {
@@ -26,11 +26,11 @@ public class NoteTypeNotificationReceiver(
         {
             try
             {
-                using var channel =  GrpcChannel.ForAddress(grpcUrlBuilder
+                using var channel = GrpcChannel.ForAddress(grpcUrlBuilder
                     .From(ResolvingServices.Client)
                     .To(ResolvingServices.Server)
                     .BuildAddress());
-                
+
                 var client = new NoteTypeProtoNotificationService.NoteTypeProtoNotificationServiceClient(channel);
                 using var call =
                     client.SubscribeNoteNotifications(new SubscribeRequest(), cancellationToken: cancellationToken);
@@ -85,7 +85,14 @@ public class NoteTypeNotificationReceiver(
                     Guid.Parse(n.TraceData.TraceId),
                     n);
 
-                Dispatcher.UIThread.Post(() => { messenger.Send(n.ToClientNotification()); });
+                if (ClientNoteTypeColorChangedNotificationReceived == null)
+                {
+                    throw new InvalidOperationException(
+                        "Ticket data update received but no forwarding receiver is set");
+                }
+
+                await ClientNoteTypeColorChangedNotificationReceived.Invoke(n.ToClientNotification());
+                
                 break;
             }
             case NoteTypeNotification.NotificationOneofCase.NoteTypeCreated:
@@ -97,7 +104,14 @@ public class NoteTypeNotificationReceiver(
                     Guid.Parse(n.TraceData.TraceId),
                     n);
 
-                Dispatcher.UIThread.Post(() => { messenger.Send(n.ToNewEntityMessage()); });
+                if (NewNoteTypeMessageReceived == null)
+                {
+                    throw new InvalidOperationException(
+                        "Ticket data update received but no forwarding receiver is set");
+                }
+
+                await NewNoteTypeMessageReceived.Invoke(n.ToNewEntityMessage());
+                
                 break;
             }
             case NoteTypeNotification.NotificationOneofCase.NoteTypeNameChanged:
@@ -109,11 +123,21 @@ public class NoteTypeNotificationReceiver(
                     Guid.Parse(n.TraceData.TraceId),
                     n);
 
-                Dispatcher.UIThread.Post(() => { messenger.Send(n.ToClientNotification()); });
+                if (ClientNoteTypeNameChangedNotificationReceived == null)
+                {
+                    throw new InvalidOperationException(
+                        "Ticket data update received but no forwarding receiver is set");
+                }
+
+                await ClientNoteTypeNameChangedNotificationReceived.Invoke(n.ToClientNotification());
                 break;
             }
             case NoteTypeNotification.NotificationOneofCase.None:
                 break;
         }
     }
+
+    public event Func<ClientNoteTypeColorChangedNotification, Task>? ClientNoteTypeColorChangedNotificationReceived;
+    public event Func<ClientNoteTypeNameChangedNotification, Task>? ClientNoteTypeNameChangedNotificationReceived;
+    public event Func<NewNoteTypeMessage, Task>? NewNoteTypeMessageReceived;
 }

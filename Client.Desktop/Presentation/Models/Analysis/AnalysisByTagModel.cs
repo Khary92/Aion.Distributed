@@ -1,6 +1,8 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Threading;
+using Client.Desktop.Communication.Local;
 using Client.Desktop.Communication.Notifications.Tag.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.Communication.Requests;
@@ -17,9 +19,12 @@ using ReactiveUI;
 
 namespace Client.Desktop.Presentation.Models.Analysis;
 
-public class AnalysisByTagModel(IMessenger messenger, IRequestSender requestSender, ITraceCollector tracer)
-    : ReactiveObject, IInitializeAsync, IMessengerRegistration, IRecipient<NewTagMessage>,
-        IRecipient<ClientTagUpdatedNotification>
+public class AnalysisByTagModel(
+    IMessenger messenger,
+    IRequestSender requestSender,
+    ITraceCollector tracer,
+    INotificationPublisherFacade notificationPublisher)
+    : ReactiveObject, IInitializeAsync, IMessengerRegistration
 {
     private AnalysisByTagDecorator? _analysisByTag;
 
@@ -35,42 +40,50 @@ public class AnalysisByTagModel(IMessenger messenger, IRequestSender requestSend
 
     public async Task InitializeAsync()
     {
-        Tags.Clear();
-        Tags.AddRange(await requestSender.Send(new ClientGetAllTagsRequest()));
+        var tagClientModels = await requestSender.Send(new ClientGetAllTagsRequest());
+
+        await Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            Tags.Clear();
+            Tags.AddRange(tagClientModels);
+        });
     }
 
     public void RegisterMessenger()
     {
-        messenger.RegisterAll(this);
+        notificationPublisher.Tag.NewTagMessageNotificationReceived += HandleNewTagMessage;
+        notificationPublisher.Tag.ClientTagUpdatedNotificationReceived += HandleClientTagUpdatedNotification;
     }
 
     public void UnregisterMessenger()
     {
-        messenger.UnregisterAll(this);
+        notificationPublisher.Tag.NewTagMessageNotificationReceived -= HandleNewTagMessage;
+        notificationPublisher.Tag.ClientTagUpdatedNotificationReceived -= HandleClientTagUpdatedNotification;
     }
 
-    public void Receive(ClientTagUpdatedNotification message)
+    private async Task HandleClientTagUpdatedNotification(ClientTagUpdatedNotification message)
     {
         var tag = Tags.FirstOrDefault(t => t.TagId == message.TagId);
 
         if (tag == null)
         {
-            _ = tracer.Tag.Update.NoAggregateFound(GetType(), message.TraceId);
+            await tracer.Tag.Update.NoAggregateFound(GetType(), message.TraceId);
             return;
         }
 
-        tag.Name = message.Name;
-        _ = tracer.Tag.Update.ChangesApplied(GetType(), message.TraceId);
+        await Dispatcher.UIThread.InvokeAsync(() => { tag.Apply(message); });
+        await tracer.Tag.Update.ChangesApplied(GetType(), message.TraceId);
     }
 
-    public void Receive(NewTagMessage message)
+    private async Task HandleNewTagMessage(NewTagMessage message)
     {
-        Tags.Add(message.Tag);
-        _ = tracer.Tag.Create.AggregateAdded(GetType(), message.TraceId);
+        await Dispatcher.UIThread.InvokeAsync(() => { Tags.Add(message.Tag); });
+        await tracer.Tag.Create.AggregateAdded(GetType(), message.TraceId);
     }
 
     public async Task SetAnalysisForTag(TagClientModel selectedTag)
     {
-        AnalysisByTag = await requestSender.Send(new ClientGetTagAnalysisById(selectedTag.TagId));
+        var analysisByTagDecorator = await requestSender.Send(new ClientGetTagAnalysisById(selectedTag.TagId));
+        await Dispatcher.UIThread.InvokeAsync(() => { AnalysisByTag = analysisByTagDecorator; });
     }
 }

@@ -12,7 +12,6 @@ using Client.Desktop.DataModels;
 using Client.Desktop.DataModels.Local;
 using Client.Desktop.Presentation.Factories;
 using Client.Desktop.Services.LocalSettings;
-using Client.Desktop.Services.LocalSettings.Commands;
 using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
 using ReactiveUI;

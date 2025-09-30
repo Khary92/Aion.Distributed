@@ -2,6 +2,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Avalonia.Threading;
+using Client.Desktop.Communication.Local;
 using Client.Desktop.Communication.Notifications.Ticket.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.Communication.Requests;
@@ -18,9 +20,12 @@ using ReactiveUI;
 
 namespace Client.Desktop.Presentation.Models.Analysis;
 
-public class AnalysisByTicketModel(IMessenger messenger, IRequestSender requestSender, ITraceCollector tracer)
-    : ReactiveObject, IInitializeAsync, IMessengerRegistration, IRecipient<NewTicketMessage>,
-        IRecipient<ClientTicketDataUpdatedNotification>
+public class AnalysisByTicketModel(
+    IMessenger messenger,
+    IRequestSender requestSender,
+    ITraceCollector tracer,
+    INotificationPublisherFacade notificationPublisher)
+    : ReactiveObject, IInitializeAsync, IMessengerRegistration
 {
     private const int AmountOfTagsShown = 3;
 
@@ -44,32 +49,34 @@ public class AnalysisByTicketModel(IMessenger messenger, IRequestSender requestS
 
     public void RegisterMessenger()
     {
-        messenger.RegisterAll(this);
+        notificationPublisher.Ticket.TicketDataUpdatedNotificationReceived += HandleClientTicketDataUpdatedNotification;
+        notificationPublisher.Ticket.NewTicketNotificationReceived += HandleNewTicketMessage;
     }
 
     public void UnregisterMessenger()
     {
-        messenger.UnregisterAll(this);
+        notificationPublisher.Ticket.TicketDataUpdatedNotificationReceived -= HandleClientTicketDataUpdatedNotification;
+        notificationPublisher.Ticket.NewTicketNotificationReceived -= HandleNewTicketMessage;
     }
 
-    public void Receive(ClientTicketDataUpdatedNotification message)
+    private async Task HandleClientTicketDataUpdatedNotification(ClientTicketDataUpdatedNotification message)
     {
         var ticket = Tickets.FirstOrDefault(t => t.TicketId == message.TicketId);
 
         if (ticket == null)
         {
-            _ = tracer.Ticket.Update.NoAggregateFound(GetType(), message.TraceId);
+            await tracer.Ticket.Update.NoAggregateFound(GetType(), message.TraceId);
             return;
         }
 
-        ticket.Apply(message);
-        _ = tracer.Ticket.Update.ChangesApplied(GetType(), message.TraceId);
+        await Dispatcher.UIThread.InvokeAsync(() => { ticket.Apply(message); });
+        await tracer.Ticket.Update.ChangesApplied(GetType(), message.TraceId);
     }
 
-    public void Receive(NewTicketMessage message)
+    private async Task HandleNewTicketMessage(NewTicketMessage message)
     {
-        Tickets.Add(message.Ticket);
-        _ = tracer.Ticket.Create.AggregateAdded(GetType(), message.TraceId);
+        await Dispatcher.UIThread.InvokeAsync(() => { Tickets.Add(message.Ticket); });
+        await tracer.Ticket.Create.AggregateAdded(GetType(), message.TraceId);
     }
 
     public async Task SetAnalysisByTicket(TicketClientModel selectedTicket)

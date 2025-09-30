@@ -2,10 +2,10 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
-using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
+using Client.Desktop.Communication.Notifications.Ticket.Records;
+using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
-using Global.Settings.Types;
 using Global.Settings.UrlResolver;
 using Grpc.Core;
 using Grpc.Net.Client;
@@ -16,7 +16,7 @@ namespace Client.Desktop.Communication.Notifications.Ticket.Receiver;
 public class TicketNotificationReceiver(
     IGrpcUrlBuilder grpcUrlBuilder,
     IMessenger messenger,
-    ITraceCollector tracer) : IStreamClient
+    ITraceCollector tracer) : ILocalTicketNotificationPublisher
 {
     public async Task StartListening(CancellationToken cancellationToken)
     {
@@ -26,11 +26,11 @@ public class TicketNotificationReceiver(
         {
             try
             {
-                using var channel =  GrpcChannel.ForAddress(grpcUrlBuilder
+                using var channel = GrpcChannel.ForAddress(grpcUrlBuilder
                     .From(ResolvingServices.Client)
                     .To(ResolvingServices.Server)
                     .BuildAddress());
-                
+
                 var client = new TicketNotificationService.TicketNotificationServiceClient(channel);
                 using var call =
                     client.SubscribeTicketNotifications(new SubscribeRequest(), cancellationToken: cancellationToken);
@@ -85,7 +85,13 @@ public class TicketNotificationReceiver(
                     Guid.Parse(n.TraceData.TraceId),
                     n);
 
-                Dispatcher.UIThread.Post(() => { messenger.Send(n.ToNewEntityMessage()); });
+                if (NewTicketNotificationReceived == null)
+                {
+                    throw new InvalidOperationException("New ticket received but no forwarding receiver is set");
+                }
+
+                await NewTicketNotificationReceived.Invoke(n.ToNewEntityMessage());
+
                 break;
             }
             case TicketNotification.NotificationOneofCase.TicketDataUpdated:
@@ -97,7 +103,14 @@ public class TicketNotificationReceiver(
                     Guid.Parse(n.TraceData.TraceId),
                     n);
 
-                Dispatcher.UIThread.Post(() => { messenger.Send(n.ToClientNotification()); });
+                if (TicketDataUpdatedNotificationReceived == null)
+                {
+                    throw new InvalidOperationException(
+                        "Ticket data update received but no forwarding receiver is set");
+                }
+
+                await TicketDataUpdatedNotificationReceived.Invoke(n.ToClientNotification());
+
                 break;
             }
             case TicketNotification.NotificationOneofCase.TicketDocumentationUpdated:
@@ -109,14 +122,25 @@ public class TicketNotificationReceiver(
                     Guid.Parse(n.TraceData.TraceId),
                     n);
 
-                Dispatcher.UIThread.Post(() => { messenger.Send(n.ToClientNotification()); });
+                if (TicketDocumentationUpdatedNotificationReceived == null)
+                {
+                    throw new InvalidOperationException(
+                        "Ticket documentation update received but no forwarding receiver is set");
+                }
+
+                await TicketDocumentationUpdatedNotificationReceived.Invoke(n.ToClientNotification());
+
                 break;
             }
             case TicketNotification.NotificationOneofCase.None:
                 break;
-            default:
-                // optional: unbekannte Fälle ignorieren/loggen
-                break;
         }
     }
+
+    public event Func<ClientTicketDataUpdatedNotification, Task>? TicketDataUpdatedNotificationReceived;
+
+    public event Func<ClientTicketDocumentationUpdatedNotification, Task>?
+        TicketDocumentationUpdatedNotificationReceived;
+
+    public event Func<NewTicketMessage, Task>? NewTicketNotificationReceived;
 }

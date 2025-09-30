@@ -1,53 +1,44 @@
-using Client.Desktop.DataModels.Local;
-using Client.Desktop.Lifecycle.Startup.Tasks.Register;
+using System;
+using System.Threading.Tasks;
 using Client.Desktop.Services.LocalSettings;
-using Client.Desktop.Services.LocalSettings.Commands;
-using CommunityToolkit.Mvvm.Messaging;
 using ReactiveUI;
 
 namespace Client.Desktop.Presentation.Models.Settings;
 
-public class SettingsModel(IMessenger messenger, ILocalSettingsCommandSender localSettingsCommandService)
-    : ReactiveObject, IMessengerRegistration, IRecipient<ExportPathSetNotification>,
-        IRecipient<WorkDaySelectedNotification>, IRecipient<SettingsClientModel>
+public class SettingsModel : ReactiveObject
 {
-    private SettingsClientModel? _settingsDto;
+    private readonly ILocalSettingsService _localSettingsService;
 
-    public SettingsClientModel? Settings
+    private string _exportPath;
+    private DateTimeOffset _selectedDate;
+
+    public SettingsModel(ILocalSettingsService localSettingsService)
     {
-        get => _settingsDto;
-        private set => this.RaiseAndSetIfChanged(ref _settingsDto, value);
+        _localSettingsService = localSettingsService;
+
+        _exportPath = _localSettingsService.ExportPath;
+        _selectedDate = _localSettingsService.SelectedDate;
     }
 
-    public void RegisterMessenger()
+    public string ExportPath
     {
-        messenger.RegisterAll(this);
+        get => _exportPath;
+        set => this.RaiseAndSetIfChanged(ref _exportPath, value);
     }
 
-    public void UnregisterMessenger()
+    public DateTimeOffset SelectedDate
     {
-        messenger.UnregisterAll(this);
+        get => _selectedDate;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _selectedDate, value);
+            //TODO This is probably wrong. Needs fixing sometime
+            _localSettingsService.SetSelectedDate(value);
+        }
     }
-
-    public void Receive(ExportPathSetNotification message)
+    
+    public async Task SetExportPath()
     {
-        Settings!.ExportPath = message.ExportPath;
-    }
-
-    public void Receive(SettingsClientModel message)
-    {
-        Settings = message;
-    }
-
-    public void Receive(WorkDaySelectedNotification message)
-    {
-        if (Settings == null) return;
-
-        Settings.SelectedDate = message.Date;
-    }
-
-    public void SetExportPath()
-    {
-        localSettingsCommandService.Send(new SetExportPathCommand(Settings!.ExportPath));
+       await _localSettingsService.SetExportPath(_exportPath);
     }
 }

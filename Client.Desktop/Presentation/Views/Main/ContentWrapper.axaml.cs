@@ -6,6 +6,7 @@ using Avalonia.Interactivity;
 using Avalonia.Platform;
 using Client.Desktop.Lifecycle.Shutdown;
 using Client.Desktop.Presentation.Models.Main;
+using Microsoft.Extensions.Hosting;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Dto;
 using MsBox.Avalonia.Enums;
@@ -14,17 +15,20 @@ namespace Client.Desktop.Presentation.Views.Main;
 
 public partial class ContentWrapper : Window
 {
+    private readonly IHost _host;
     private readonly IShutDownHandler _shutDownHandler;
 
     public ContentWrapper()
     {
         InitializeComponent();
         _shutDownHandler = null!;
+        _host = null!;
     }
 
-    public ContentWrapper(ContentWrapperViewModel viewModel, IShutDownHandler shutDownHandler)
+    public ContentWrapper(ContentWrapperViewModel viewModel, IShutDownHandler shutDownHandler, IHost host)
     {
         _shutDownHandler = shutDownHandler;
+        _host = host;
         InitializeComponent();
         DataContext = viewModel;
 
@@ -58,7 +62,11 @@ public partial class ContentWrapper : Window
 
         if (result == ButtonResult.Yes &&
             Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopApp)
-            await _shutDownHandler.Exit(desktopApp);
+        {
+            await _shutDownHandler.Exit();
+            await _host.StopAsync();
+            desktopApp.Shutdown(); 
+        }
     }
 
     private void MinimizeApp(object? sender, RoutedEventArgs e)

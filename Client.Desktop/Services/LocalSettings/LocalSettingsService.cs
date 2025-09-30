@@ -3,21 +3,18 @@ using System.Threading.Tasks;
 using Client.Desktop.DataModels.Local;
 using Client.Desktop.FileSystem;
 using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
-using Client.Desktop.Lifecycle.Startup.Tasks.Register;
-using Client.Desktop.Services.LocalSettings.Commands;
 using CommunityToolkit.Mvvm.Messaging;
 using Newtonsoft.Json;
 
 namespace Client.Desktop.Services.LocalSettings;
 
-public class LocalSettingsProjector(
+public class LocalSettingsService(
     IFileSystemReader fileSystemReader,
     IFileSystemWriter fileSystemWriter,
     IFileSystemWrapper fileSystemWrapper,
-    IMessenger messenger) : ILocalSettingsService, IInitializeAsync, IMessengerRegistration,
-    IRecipient<ExportPathSetNotification>, IRecipient<WorkDaySelectedNotification>, IRecipient<SettingsClientModel>
+    IMessenger messenger) : ILocalSettingsService, IInitializeAsync
 {
-    private const string SettingsFileName = "settings.json";
+    private const string SettingsFileName = "localSettings.json";
 
     private SettingsClientModel? ProjectionReferenceInstance { get; set; }
 
@@ -25,7 +22,7 @@ public class LocalSettingsProjector(
 
     public async Task InitializeAsync()
     {
-        await PrepareProjection();
+        await LoadSettings();
     }
 
     public bool IsExportPathValid()
@@ -40,46 +37,25 @@ public class LocalSettingsProjector(
         return SelectedDate.Date == DateTimeOffset.Now.Date;
     }
 
-    public string GetExportPath()
+    public string ExportPath => ProjectionReferenceInstance!.ExportPath;
+
+    public async Task SetSelectedDate(DateTimeOffset date)
     {
-        return ProjectionReferenceInstance == null ? string.Empty : ProjectionReferenceInstance.ExportPath;
+        ProjectionReferenceInstance!.SelectedDate = date;
+        await SaveSettings();
     }
 
-    public void RegisterMessenger()
+    public async Task SetExportPath(string path)
     {
-        messenger.RegisterAll(this);
+        ProjectionReferenceInstance!.ExportPath = path;
+        await SaveSettings();
     }
 
-    public void UnregisterMessenger()
+    private async Task LoadSettings()
     {
-        messenger.UnregisterAll(this);
-    }
-
-    public void Receive(ExportPathSetNotification message)
-    {
-        ProjectionReferenceInstance!.ExportPath = message.ExportPath;
-        _ = SaveSettings();
-    }
-
-    public void Receive(SettingsClientModel message)
-    {
-        ProjectionReferenceInstance = message;
-        _ = SaveSettings();
-    }
-
-    public void Receive(WorkDaySelectedNotification message)
-    {
-        ProjectionReferenceInstance!.SelectedDate = message.Date;
-        _ = SaveSettings();
-    }
-
-    private async Task PrepareProjection()
-    {
-        var settings = fileSystemWrapper.IsFileExisting(SettingsFileName)
+        ProjectionReferenceInstance = fileSystemWrapper.IsFileExisting(SettingsFileName)
             ? (await fileSystemReader.GetObject<SettingsDto>(SettingsFileName)).ToClientModel()
             : new SettingsClientModel("not set");
-
-        messenger.Send(settings);
     }
 
     private async Task SaveSettings()

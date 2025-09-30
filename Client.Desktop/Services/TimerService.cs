@@ -14,12 +14,14 @@ using Timer = System.Timers.Timer;
 namespace Client.Desktop.Services;
 
 public class TimerService(IRequestSender requestSender, IMessenger messenger)
-    : IMessengerRegistration, IInitializeAsync, IRecipient<ClientSnapshotSaveIntervalChangedNotification>,
+    : IDisposable, IMessengerRegistration, IInitializeAsync, IRecipient<ClientSnapshotSaveIntervalChangedNotification>,
         IRecipient<ClientDocuTimerSaveIntervalChangedNotification>
 {
     private readonly Timer _timer = new(1000);
     private TimerSettingsClientModel? _timerSettings;
-
+    
+    private bool _disposed;
+    
     public InitializationType Type => InitializationType.Service;
 
     public async Task InitializeAsync()
@@ -57,5 +59,17 @@ public class TimerService(IRequestSender requestSender, IMessenger messenger)
         if (_timerSettings.IsDocuSaveIntervalReached()) messenger.Send(new ClientSaveDocumentationNotification());
 
         if (_timerSettings.IsSnapSveIntervalReached()) messenger.Send(new ClientCreateSnapshotNotification());
+    }
+
+    public void Dispose()
+    {
+        if (_disposed) return;
+        _disposed = true;
+
+        _timer.Stop();
+        _timer.Elapsed -= OnTick;
+        _timer.Dispose();
+
+        UnregisterMessenger();
     }
 }

@@ -2,10 +2,10 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
-using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
+using Client.Desktop.Communication.Notifications.Tag.Records;
+using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
-using Global.Settings.Types;
 using Global.Settings.UrlResolver;
 using Grpc.Core;
 using Grpc.Net.Client;
@@ -16,7 +16,7 @@ namespace Client.Desktop.Communication.Notifications.Tag.Receiver;
 public class TagNotificationReceiver(
     IGrpcUrlBuilder grpcUrlBuilder,
     IMessenger messenger,
-    ITraceCollector tracer) : IStreamClient
+    ITraceCollector tracer) : ILocalTagNotificationPublisher
 {
     public async Task StartListening(CancellationToken cancellationToken)
     {
@@ -30,7 +30,7 @@ public class TagNotificationReceiver(
                     .From(ResolvingServices.Client)
                     .To(ResolvingServices.Server)
                     .BuildAddress());
-                
+
                 var client = new TagNotificationService.TagNotificationServiceClient(channel);
                 using var call =
                     client.SubscribeTagNotifications(new SubscribeRequest(), cancellationToken: cancellationToken);
@@ -85,7 +85,14 @@ public class TagNotificationReceiver(
                     Guid.Parse(n.TraceData.TraceId),
                     n);
 
-                Dispatcher.UIThread.Post(() => { messenger.Send(n.ToNewEntityMessage()); });
+                if (NewTagMessageNotificationReceived == null)
+                {
+                    throw new InvalidOperationException(
+                        "Ticket data update received but no forwarding receiver is set");
+                }
+
+                await NewTagMessageNotificationReceived.Invoke(n.ToNewEntityMessage());
+                
                 break;
             }
             case TagNotification.NotificationOneofCase.TagUpdated:
@@ -97,11 +104,21 @@ public class TagNotificationReceiver(
                     Guid.Parse(n.TraceData.TraceId),
                     n);
 
-                Dispatcher.UIThread.Post(() => { messenger.Send(n.ToClientNotification()); });
+                if (ClientTagUpdatedNotificationReceived == null)
+                {
+                    throw new InvalidOperationException(
+                        "Ticket data update received but no forwarding receiver is set");
+                }
+
+                await ClientTagUpdatedNotificationReceived.Invoke(n.ToClientNotification());
+                
                 break;
             }
             case TagNotification.NotificationOneofCase.None:
                 break;
         }
     }
+
+    public event Func<ClientTagUpdatedNotification, Task>? ClientTagUpdatedNotificationReceived;
+    public event Func<NewTagMessage, Task>? NewTagMessageNotificationReceived;
 }

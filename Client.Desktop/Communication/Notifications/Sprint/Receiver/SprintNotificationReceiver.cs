@@ -2,10 +2,10 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
-using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
+using Client.Desktop.Communication.Notifications.Sprint.Records;
+using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Tracing.Tracing.Tracers;
 using CommunityToolkit.Mvvm.Messaging;
-using Global.Settings.Types;
 using Global.Settings.UrlResolver;
 using Grpc.Core;
 using Grpc.Net.Client;
@@ -16,7 +16,7 @@ namespace Client.Desktop.Communication.Notifications.Sprint.Receiver;
 public class SprintNotificationReceiver(
     IGrpcUrlBuilder grpcUrlBuilder,
     IMessenger messenger,
-    ITraceCollector tracer) : IStreamClient
+    ITraceCollector tracer) : ILocalSprintNotificationPublisher
 {
     public async Task StartListening(CancellationToken cancellationToken)
     {
@@ -26,11 +26,11 @@ public class SprintNotificationReceiver(
         {
             try
             {
-                using var channel =  GrpcChannel.ForAddress(grpcUrlBuilder
+                using var channel = GrpcChannel.ForAddress(grpcUrlBuilder
                     .From(ResolvingServices.Client)
                     .To(ResolvingServices.Server)
                     .BuildAddress());
-                
+
                 var client = new SprintNotificationService.SprintNotificationServiceClient(channel);
                 using var call =
                     client.SubscribeSprintNotifications(new SubscribeRequest(), cancellationToken: cancellationToken);
@@ -84,7 +84,14 @@ public class SprintNotificationReceiver(
                     Guid.Parse(n.TraceData.TraceId),
                     n);
 
-                Dispatcher.UIThread.Post(() => { messenger.Send(n.ToNewEntityMessage()); });
+                if (NewSprintMessageReceived == null)
+                {
+                    throw new InvalidOperationException(
+                        "Ticket data update received but no forwarding receiver is set");
+                }
+
+                await NewSprintMessageReceived.Invoke(n.ToNewEntityMessage());
+                
                 break;
             }
             case SprintNotification.NotificationOneofCase.SprintActiveStatusSet:
@@ -95,7 +102,14 @@ public class SprintNotificationReceiver(
                     Guid.Parse(n.TraceData.TraceId),
                     n);
 
-                Dispatcher.UIThread.Post(() => { messenger.Send(n.ToClientNotification()); });
+                if (ClientSprintActiveStatusSetNotificationReceived == null)
+                {
+                    throw new InvalidOperationException(
+                        "Ticket data update received but no forwarding receiver is set");
+                }
+
+                await ClientSprintActiveStatusSetNotificationReceived.Invoke(n.ToClientNotification());
+                
                 break;
             }
             case SprintNotification.NotificationOneofCase.SprintDataUpdated:
@@ -106,7 +120,14 @@ public class SprintNotificationReceiver(
                     Guid.Parse(n.TraceData.TraceId),
                     n);
 
-                Dispatcher.UIThread.Post(() => { messenger.Send(n.ToClientNotification()); });
+                if (ClientSprintDataUpdatedNotificationReceived == null)
+                {
+                    throw new InvalidOperationException(
+                        "Ticket data update received but no forwarding receiver is set");
+                }
+
+                await ClientSprintDataUpdatedNotificationReceived.Invoke(n.ToClientNotification());
+                
                 break;
             }
             case SprintNotification.NotificationOneofCase.TicketAddedToActiveSprint:
@@ -117,11 +138,23 @@ public class SprintNotificationReceiver(
                     Guid.Parse(n.TraceData.TraceId),
                     n);
 
-                Dispatcher.UIThread.Post(() => { messenger.Send(n.ToClientNotification()); });
+                if (ClientTicketAddedToActiveSprintNotificationReceived == null)
+                {
+                    throw new InvalidOperationException(
+                        "Ticket data update received but no forwarding receiver is set");
+                }
+
+                await ClientTicketAddedToActiveSprintNotificationReceived.Invoke(n.ToClientNotification());
+                
                 break;
             }
             case SprintNotification.NotificationOneofCase.None:
                 break;
         }
     }
+
+    public event Func<ClientSprintActiveStatusSetNotification, Task>? ClientSprintActiveStatusSetNotificationReceived;
+    public event Func<ClientSprintDataUpdatedNotification, Task>? ClientSprintDataUpdatedNotificationReceived;
+    public event Func<ClientTicketAddedToActiveSprintNotification, Task>? ClientTicketAddedToActiveSprintNotificationReceived;
+    public event Func<NewSprintMessage, Task>? NewSprintMessageReceived;
 }

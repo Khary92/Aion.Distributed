@@ -25,7 +25,7 @@ public class ExportService(
         if (workDayDtos.Count == 0) return false;
 
         var markdownString = await GetMarkdownString(workDayDtos);
-        var filePath = BuildFilePath(workDayDtos.First().Date.Date, localSettingsService.GetExportPath());
+        var filePath = BuildFilePath(workDayDtos.First().Date.Date, localSettingsService.ExportPath);
 
         try
         {

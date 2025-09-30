@@ -7,6 +7,7 @@ using Client.Desktop.Communication.Commands.StatisticsData;
 using Client.Desktop.Communication.Commands.TimeSlots;
 using Client.Desktop.Communication.Commands.TimeSlots.Records;
 using Client.Desktop.Communication.Commands.WorkDays;
+using Client.Desktop.Communication.Local;
 using Client.Desktop.Communication.Notifications.Client.Receiver;
 using Client.Desktop.Communication.Notifications.Note.Receiver;
 using Client.Desktop.Communication.Notifications.NoteType.Receiver;
@@ -31,7 +32,6 @@ using Client.Desktop.Lifecycle.Shutdown;
 using Client.Desktop.Lifecycle.Startup.Scheduler;
 using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Register;
-using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
 using Client.Desktop.Lifecycle.Startup.Tasks.UnsentCommands;
 using Client.Desktop.Presentation.Factories;
 using Client.Desktop.Presentation.Models.Analysis;
@@ -129,9 +129,6 @@ public static class ServiceExtensions
         services.AddSingleton<IStartupTask, RegisterMessengerTask>();
         services.AddSingleton<IStartupTask, SendUnsentCommandsTask>();
 
-        services.AddSingleton<StreamLifeCycleHandler>();
-        services.AddSingleton<IStreamLifeCycleHandler>(sp => sp.GetRequiredService<StreamLifeCycleHandler>());
-
         services.AddSingleton<IShutDownHandler, ShutdownHandler>();
     }
 
@@ -139,12 +136,9 @@ public static class ServiceExtensions
     {
         services.AddSingleton<IMessenger, WeakReferenceMessenger>();
 
-        services.AddSingleton<LocalSettingsProjector>();
-        services.AddSingleton<ILocalSettingsService>(sp => sp.GetRequiredService<LocalSettingsProjector>());
-        services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<LocalSettingsProjector>());
-        services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<LocalSettingsProjector>());
-
-        services.AddSingleton<ILocalSettingsCommandSender, LocalSettingsCommandSender>();
+        services.AddSingleton<LocalSettingsService>();
+        services.AddSingleton<ILocalSettingsService>(sp => sp.GetRequiredService<LocalSettingsService>());
+        services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<LocalSettingsService>());
 
         services.AddSingleton<ExportService>();
         services.AddSingleton<IExportService>(sp => sp.GetRequiredService<ExportService>());
@@ -152,6 +146,7 @@ public static class ServiceExtensions
         services.AddSingleton<TimerService>();
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<TimerService>());
         services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<TimerService>());
+        services.AddSingleton<IDisposable>(sp => sp.GetRequiredService<TimerService>());
 
         services.AddSingleton<DocumentationSynchronizer>();
         services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<DocumentationSynchronizer>());
@@ -253,15 +248,14 @@ public static class ServiceExtensions
         services.AddSingleton<SettingsViewModel>();
         services.AddSingleton<ExportViewModel>();
 
+        services.AddSingleton<SettingsModel>();
+
         services.AddSingleton<DocumentationViewModel>();
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<DocumentationViewModel>());
 
         services.AddSingleton<DocumentationModel>();
         services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<DocumentationModel>());
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<DocumentationModel>());
-
-        services.AddSingleton<SettingsModel>();
-        services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<SettingsModel>());
 
         services.AddSingleton<WorkDaysModel>();
         services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<WorkDaysModel>());
@@ -312,30 +306,49 @@ public static class ServiceExtensions
     {
         services.AddHostedService<ClientNotificationHostedService>();
         services.AddSingleton<ClientNotificationReceiver>();
+        services.AddSingleton<ILocalClientNotificationPublisher>(sp =>
+            sp.GetRequiredService<ClientNotificationReceiver>());
 
         services.AddHostedService<NoteNotificationHostedService>();
         services.AddSingleton<NoteNotificationReceiver>();
+        services.AddSingleton<ILocalNoteNotificationPublisher>(sp =>
+            sp.GetRequiredService<NoteNotificationReceiver>());
 
         services.AddHostedService<NoteTypeNotificationHostedService>();
         services.AddSingleton<NoteTypeNotificationReceiver>();
+        services.AddSingleton<ILocalNoteTypeNotificationPublisher>(sp =>
+            sp.GetRequiredService<NoteTypeNotificationReceiver>());
 
         services.AddHostedService<SprintNotificationHostedService>();
         services.AddSingleton<SprintNotificationReceiver>();
+        services.AddSingleton<ILocalSprintNotificationPublisher>(sp =>
+            sp.GetRequiredService<SprintNotificationReceiver>());
 
         services.AddHostedService<StatisticsDataNotificationHostedService>();
         services.AddSingleton<StatisticsDataNotificationReceiver>();
+        services.AddSingleton<ILocalStatisticsDataNotificationPublisher>(sp =>
+            sp.GetRequiredService<StatisticsDataNotificationReceiver>());
 
         services.AddHostedService<TagNotificationHostedService>();
         services.AddSingleton<TagNotificationReceiver>();
+        services.AddSingleton<ILocalTagNotificationPublisher>(sp => sp.GetRequiredService<TagNotificationReceiver>());
 
         services.AddHostedService<TicketNotificationHostedService>();
         services.AddSingleton<TicketNotificationReceiver>();
+        services.AddSingleton<ILocalTicketNotificationPublisher>(sp =>
+            sp.GetRequiredService<TicketNotificationReceiver>());
 
         services.AddHostedService<TimerSettingsNotificationHostedService>();
         services.AddSingleton<TimerSettingsNotificationReceiver>();
+        services.AddSingleton<ILocalTimerSettingsNotificationPublisher>(sp =>
+            sp.GetRequiredService<TimerSettingsNotificationReceiver>());
 
         services.AddHostedService<WorkDayNotificationHostedService>();
         services.AddSingleton<WorkDayNotificationReceiver>();
+        services.AddSingleton<ILocalWorkDayNotificationPublisher>(sp =>
+            sp.GetRequiredService<WorkDayNotificationReceiver>());
+
+        services.AddSingleton<INotificationPublisherFacade, NotificationPublisherFacade>();
     }
 
     private static void AddCommandSenders(this IServiceCollection services)

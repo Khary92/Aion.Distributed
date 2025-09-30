@@ -5,5 +5,5 @@ namespace Client.Desktop.Lifecycle.Shutdown;
 
 public interface IShutDownHandler
 {
-    Task Exit(IClassicDesktopStyleApplicationLifetime application);
+    Task Exit();
 }
