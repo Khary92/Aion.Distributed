@@ -19,6 +19,24 @@ public class StatisticsDataNotificationReceiver(
     public event Func<ClientChangeProductivityNotification, Task>? ClientChangeProductivityNotificationReceived;
     public event Func<ClientChangeTagSelectionNotification, Task>? ClientChangeTagSelectionNotificationReceived;
 
+    public async Task Publish(ClientChangeProductivityNotification notification)
+    {
+        if (ClientChangeProductivityNotificationReceived == null)
+            throw new InvalidOperationException(
+                "ChangeProductivityNotification received but no forwarding receiver is set");
+
+        await ClientChangeProductivityNotificationReceived.Invoke(notification);
+    }
+
+    public async Task Publish(ClientChangeTagSelectionNotification notification)
+    {
+        if (ClientChangeTagSelectionNotificationReceived == null)
+            throw new InvalidOperationException(
+                "ChangeTagSelectionNotification received but no forwarding receiver is set");
+
+        await ClientChangeTagSelectionNotificationReceived.Invoke(notification);
+    }
+
     public async Task StartListening(CancellationToken cancellationToken)
     {
         var attempt = 0;
@@ -77,33 +95,25 @@ public class StatisticsDataNotificationReceiver(
         {
             case StatisticsDataNotification.NotificationOneofCase.ChangeProductivity:
             {
-                var n = notification.ChangeProductivity;
+                var notificationChangeProductivity = notification.ChangeProductivity;
                 await tracer.Statistics.ChangeProductivity.NotificationReceived(
                     GetType(),
-                    Guid.Parse(n.TraceData.TraceId),
-                    n);
+                    Guid.Parse(notificationChangeProductivity.TraceData.TraceId),
+                    notificationChangeProductivity);
 
-                if (ClientChangeProductivityNotificationReceived == null)
-                    throw new InvalidOperationException(
-                        "Ticket data update received but no forwarding receiver is set");
-
-                await ClientChangeProductivityNotificationReceived.Invoke(n.ToClientNotification());
+                await Publish(notificationChangeProductivity.ToClientNotification());
 
                 break;
             }
             case StatisticsDataNotification.NotificationOneofCase.ChangeTagSelection:
             {
-                var n = notification.ChangeTagSelection;
+                var notificationChangeTagSelection = notification.ChangeTagSelection;
                 await tracer.Statistics.ChangeTagSelection.NotificationReceived(
                     GetType(),
-                    Guid.Parse(n.TraceData.TraceId),
-                    n);
+                    Guid.Parse(notificationChangeTagSelection.TraceData.TraceId),
+                    notificationChangeTagSelection);
 
-                if (ClientChangeTagSelectionNotificationReceived == null)
-                    throw new InvalidOperationException(
-                        "Ticket data update received but no forwarding receiver is set");
-
-                await ClientChangeTagSelectionNotificationReceived.Invoke(n.ToClientNotification());
+                await Publish(notificationChangeTagSelection.ToClientNotification());
 
                 break;
             }

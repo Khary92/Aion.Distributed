@@ -19,6 +19,24 @@ public class ClientNotificationReceiver(
     public event Func<ClientSprintSelectionChangedNotification, Task>? ClientSprintSelectionChangedNotificationReceived;
     public event Func<ClientTrackingControlCreatedNotification, Task>? ClientTrackingControlCreatedNotificationReceived;
 
+    public async Task Publish(ClientTrackingControlCreatedNotification notification)
+    {
+        if (ClientTrackingControlCreatedNotificationReceived == null)
+            throw new InvalidOperationException(
+                "TrackingControlCreatedNotification received but no forwarding receiver is set");
+
+        await ClientTrackingControlCreatedNotificationReceived.Invoke(notification);
+    }
+
+    public async Task Publish(ClientSprintSelectionChangedNotification notification)
+    {
+        if (ClientSprintSelectionChangedNotificationReceived == null)
+            throw new InvalidOperationException(
+                "SprintSelectionChangedNotification received but no forwarding receiver is set");
+
+        await ClientSprintSelectionChangedNotificationReceived.Invoke(notification);
+    }
+
     public async Task StartListening(CancellationToken cancellationToken)
     {
         var attempt = 0;
@@ -81,25 +99,12 @@ public class ClientNotificationReceiver(
                     Guid.Parse(notification.TimeSlotControlCreated.TraceData.TraceId),
                     notification.TimeSlotControlCreated);
 
-
-                if (ClientTrackingControlCreatedNotificationReceived == null)
-                    throw new InvalidOperationException(
-                        "Ticket data update received but no forwarding receiver is set");
-
-                await ClientTrackingControlCreatedNotificationReceived.Invoke(notification.TimeSlotControlCreated
-                    .ToClientNotification());
-
+                await Publish(notification.TimeSlotControlCreated.ToClientNotification());
                 break;
             }
             case ClientNotification.NotificationOneofCase.SprintSelectionChanged:
             {
-                if (ClientSprintSelectionChangedNotificationReceived == null)
-                    throw new InvalidOperationException(
-                        "Ticket data update received but no forwarding receiver is set");
-
-                await ClientSprintSelectionChangedNotificationReceived.Invoke(notification.SprintSelectionChanged
-                    .ToClientNotification());
-
+                await Publish(notification.SprintSelectionChanged.ToClientNotification());
                 break;
             }
         }

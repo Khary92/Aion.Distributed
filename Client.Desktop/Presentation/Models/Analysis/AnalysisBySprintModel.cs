@@ -2,7 +2,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 using AvaloniaEdit.Utils;
 using Client.Desktop.Communication.Local;
 using Client.Desktop.Communication.Notifications.Sprint.Records;
@@ -61,7 +60,7 @@ public class AnalysisBySprintModel(
 
     private async Task HandleNewSprintMessage(NewSprintMessage message)
     {
-        await Dispatcher.UIThread.InvokeAsync(() => { Sprints.Add(message.Sprint); });
+        Sprints.Add(message.Sprint);
         await tracer.Sprint.Create.AggregateAdded(GetType(), message.TraceId);
     }
 
@@ -75,7 +74,7 @@ public class AnalysisBySprintModel(
             return;
         }
 
-        await Dispatcher.UIThread.InvokeAsync(() => { sprint.Apply(notification); });
+        sprint.Apply(notification);
 
         await tracer.Sprint.Update.ChangesApplied(GetType(), notification.TraceId);
     }

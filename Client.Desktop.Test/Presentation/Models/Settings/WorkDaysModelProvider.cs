@@ -3,18 +3,23 @@ using Client.Desktop.Communication.Requests;
 using Client.Desktop.Communication.Requests.WorkDays.Records;
 using Client.Desktop.DataModels;
 using Client.Desktop.Presentation.Models.Settings;
+using Client.Desktop.Services.LocalSettings;
 using Client.Tracing.Tracing.Tracers;
+using Global.Settings.UrlResolver;
 using Moq;
-using IMessenger = CommunityToolkit.Mvvm.Messaging.IMessenger;
-using WeakReferenceMessenger = CommunityToolkit.Mvvm.Messaging.WeakReferenceMessenger;
 
 namespace Client.Desktop.Test.Presentation.Models.Settings;
 
 public static class WorkDaysModelProvider
 {
-    private static IMessenger CreateMessenger()
+    private static TestNotificationPublisherFacade CreateNotificationPublisherMock()
     {
-        return new WeakReferenceMessenger();
+        return new TestNotificationPublisherFacade(CreateGrpcUrlBuilderMock().Object, CreateTracerMock().Object);
+    }
+
+    private static Mock<IGrpcUrlBuilder> CreateGrpcUrlBuilderMock()
+    {
+        return new Mock<IGrpcUrlBuilder>();
     }
 
     private static Mock<ITraceCollector> CreateTracerMock()
@@ -27,24 +32,24 @@ public static class WorkDaysModelProvider
         return new Mock<IRequestSender>();
     }
 
-    private static Mock<ICommandSender> CreateCommandSender()
+    private static Mock<ICommandSender> CreateCommandSenderMock()
     {
         return new Mock<ICommandSender>();
     }
 
-    private static Mock<ILocalSettingsCommandSender> CreateLocalSettingsCommandSenderMock()
+    private static Mock<ILocalSettingsService> CreateLocalSettingsService()
     {
-        return new Mock<ILocalSettingsCommandSender>();
+        return new Mock<ILocalSettingsService>();
     }
 
     public static async Task<WorkDaysModelFixture> Create(List<WorkDayClientModel> initialWorkDays,
         bool isWorkDayExisting)
     {
-        var messenger = CreateMessenger();
         var requestSender = CreateRequestSenderMock();
         var tracer = CreateTracerMock();
-        var localSettingsCommandSender = CreateCommandSender();
-        var localSettingsCommandSenderMock = CreateLocalSettingsCommandSenderMock();
+        var publisherFacade = CreateNotificationPublisherMock();
+        var commandSender = CreateCommandSenderMock();
+        var localSettingsService = CreateLocalSettingsService();
 
         requestSender
             .Setup(rs => rs.Send(It.IsAny<ClientGetAllWorkDaysRequest>()))
@@ -54,19 +59,21 @@ public static class WorkDaysModelProvider
             .Setup(rs => rs.Send(It.IsAny<ClientIsWorkDayExistingRequest>()))
             .ReturnsAsync(isWorkDayExisting);
 
-        return await CreateFixture(messenger, localSettingsCommandSender, requestSender, tracer,
-            localSettingsCommandSenderMock);
+        return await CreateFixture(publisherFacade, commandSender, localSettingsService, requestSender, tracer);
     }
 
-    private static async Task<WorkDaysModelFixture> CreateFixture(IMessenger messenger,
+    private static async Task<WorkDaysModelFixture> CreateFixture(
+        TestNotificationPublisherFacade publisherFacade,
         Mock<ICommandSender> commandSender,
+        Mock<ILocalSettingsService> localSettingsService,
         Mock<IRequestSender> requestSender,
-        Mock<ITraceCollector> tracer, Mock<ILocalSettingsCommandSender> localSettingsCommandSender)
+        Mock<ITraceCollector> tracer)
     {
-        var instance = new WorkDaysModel(commandSender.Object, requestSender.Object,
-            localSettingsCommandSender.Object, tracer.Object);
+        var instance = new WorkDaysModel(commandSender.Object, requestSender.Object, localSettingsService.Object,
+            tracer.Object, publisherFacade);
 
         instance.RegisterMessenger();
+        instance.ClientWorkDaySelectionChangedNotificationReceived += _ => Task.CompletedTask;
         await instance.InitializeAsync();
 
         return new WorkDaysModelFixture
@@ -74,20 +81,19 @@ public static class WorkDaysModelProvider
             Instance = instance,
             RequestSender = requestSender,
             Tracer = tracer,
-            Messenger = messenger,
-            LocalSettingsCommandSender = localSettingsCommandSender,
-            CommandSender = commandSender
+            NotificationPublisher = publisherFacade,
+            CommandSender = commandSender,
+            LocalSettingsService = localSettingsService
         };
     }
 
     public sealed class WorkDaysModelFixture
     {
         public required WorkDaysModel Instance { get; init; }
-        public required IMessenger Messenger { get; init; }
-
+        public required TestNotificationPublisherFacade NotificationPublisher { get; init; }
+        public required Mock<ILocalSettingsService> LocalSettingsService { get; init; }
         public required Mock<IRequestSender> RequestSender { get; init; }
         public required Mock<ICommandSender> CommandSender { get; init; }
-        public required Mock<ILocalSettingsCommandSender> LocalSettingsCommandSender { get; init; }
         public required Mock<ITraceCollector> Tracer { get; init; }
     }
 }

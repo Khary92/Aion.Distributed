@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Avalonia.Threading;
 using Client.Desktop.Communication.Local;
 using Client.Desktop.Communication.Notifications.Tag.Records;
 using Client.Desktop.DataModels;
@@ -41,7 +40,7 @@ public class TagCheckBoxViewModel(ITraceCollector tracer, INotificationPublisher
     {
         if (Tag == null || Tag.TagId != notification.TagId) return;
 
-        await Dispatcher.UIThread.InvokeAsync(() => { Tag.Apply(notification); });
+        Tag.Apply(notification);
 
         await tracer.Tag.Update.ChangesApplied(GetType(), notification.TraceId);
     }

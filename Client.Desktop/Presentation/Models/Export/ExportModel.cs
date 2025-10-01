@@ -2,7 +2,6 @@ using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 using Client.Desktop.Communication.Local;
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.Communication.Requests;
@@ -59,21 +58,19 @@ public class ExportModel(
 
     private async Task HandleNewWorkDayMessage(NewWorkDayMessage message)
     {
-        await Dispatcher.UIThread.InvokeAsync(() => { WorkDays.Add(message.WorkDay); });
+        WorkDays.Add(message.WorkDay);
         await tracer.WorkDay.Create.AggregateAdded(GetType(), message.TraceId);
     }
 
     public async Task<bool> ExportFileAsync()
     {
         if (settingsService.IsExportPathValid()) return await exportService.ExportToFile(WorkDays);
-
         return false;
     }
 
     // async void is bad but it should work for now
     public async void RefreshMarkdownViewerHandler(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        await Dispatcher.UIThread.InvokeAsync(async () =>
-            MarkdownText = await exportService.GetMarkdownString(SelectedWorkDays));
+        MarkdownText = await exportService.GetMarkdownString(SelectedWorkDays);
     }
 }

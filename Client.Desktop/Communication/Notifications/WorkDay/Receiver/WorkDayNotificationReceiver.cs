@@ -17,6 +17,15 @@ public class WorkDayNotificationReceiver(
 {
     public event Func<NewWorkDayMessage, Task>? NewWorkDayMessageReceived;
 
+    public async Task Publish(NewWorkDayMessage message)
+    {
+        if (NewWorkDayMessageReceived == null)
+            throw new InvalidOperationException(
+                "NewWorkDayMessage received but no forwarding receiver is set");
+
+        await NewWorkDayMessageReceived.Invoke(message);
+    }
+
     public async Task StartListening(CancellationToken cancellationToken)
     {
         var attempt = 0;
@@ -75,19 +84,15 @@ public class WorkDayNotificationReceiver(
         {
             case WorkDayNotification.NotificationOneofCase.WorkDayCreated:
             {
-                var n = notification.WorkDayCreated;
+                var notificationWorkDayCreated = notification.WorkDayCreated;
 
                 await tracer.WorkDay.Create.NotificationReceived(
                     GetType(),
-                    Guid.Parse(n.TraceData.TraceId),
-                    n);
+                    Guid.Parse(notificationWorkDayCreated.TraceData.TraceId),
+                    notificationWorkDayCreated);
 
+                await Publish(notificationWorkDayCreated.ToNewEntityMessage());
 
-                if (NewWorkDayMessageReceived == null)
-                    throw new InvalidOperationException(
-                        "Ticket data update received but no forwarding receiver is set");
-
-                await NewWorkDayMessageReceived.Invoke(n.ToNewEntityMessage());
                 break;
             }
             case WorkDayNotification.NotificationOneofCase.None:

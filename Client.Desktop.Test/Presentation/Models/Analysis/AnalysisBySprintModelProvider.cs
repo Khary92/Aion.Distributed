@@ -6,16 +6,21 @@ using Client.Desktop.DataModels.Decorators;
 using Client.Desktop.DataModels.Decorators.Entities;
 using Client.Desktop.Presentation.Models.Analysis;
 using Client.Tracing.Tracing.Tracers;
-using CommunityToolkit.Mvvm.Messaging;
+using Global.Settings.UrlResolver;
 using Moq;
 
 namespace Client.Desktop.Test.Presentation.Models.Analysis;
 
 public static class AnalysisBySprintModelProvider
 {
-    private static IMessenger CreateMessenger()
+    private static TestNotificationPublisherFacade CreateNotificationPublisherMock()
     {
-        return new WeakReferenceMessenger();
+        return new TestNotificationPublisherFacade(CreateGrpcUrlBuilderMock().Object, CreateTracerMock().Object);
+    }
+
+    private static Mock<IGrpcUrlBuilder> CreateGrpcUrlBuilderMock()
+    {
+        return new Mock<IGrpcUrlBuilder>();
     }
 
     private static Mock<ITraceCollector> CreateTracerMock()
@@ -38,22 +43,22 @@ public static class AnalysisBySprintModelProvider
     public static async Task<AnalysisModelFixture<AnalysisBySprintModel>> Create(
         IReadOnlyList<SprintClientModel?> initialSprints)
     {
-        var messenger = CreateMessenger();
         var requestSender = CreateRequestSenderMock();
         var tracer = CreateTracerMock();
+        var publisherFacade = CreateNotificationPublisherMock();
 
         requestSender
             .Setup(rs => rs.Send(It.IsAny<ClientGetAllSprintsRequest>()))!
             .ReturnsAsync(initialSprints as List<SprintClientModel?>);
 
-        return await CreateFixture(messenger, requestSender, tracer);
+        return await CreateFixture(requestSender, tracer, publisherFacade);
     }
 
     public static async Task<AnalysisModelFixture<AnalysisBySprintModel>> Create()
     {
-        var messenger = CreateMessenger();
         var requestSender = CreateRequestSenderMock();
         var tracer = CreateTracerMock();
+        var publisher = CreateNotificationPublisherMock();
 
         var sprintClientModel = CreateSprintClientModel();
 
@@ -65,15 +70,17 @@ public static class AnalysisBySprintModelProvider
             .Setup(rs => rs.Send(It.IsAny<ClientGetAllSprintsRequest>()))
             .ReturnsAsync([sprintClientModel]);
 
-        return await CreateFixture(messenger, requestSender, tracer);
+        return await CreateFixture(requestSender, tracer, publisher);
     }
 
-    private static async Task<AnalysisModelFixture<AnalysisBySprintModel>> CreateFixture(IMessenger messenger,
-        Mock<IRequestSender> requestSender, Mock<ITraceCollector> tracer)
+    private static async Task<AnalysisModelFixture<AnalysisBySprintModel>> CreateFixture(
+        Mock<IRequestSender> requestSender, Mock<ITraceCollector> tracer,
+        TestNotificationPublisherFacade publisherFacade)
     {
-        var instance = new AnalysisBySprintModel(requestSender.Object, tracer.Object);
+        var instance = new AnalysisBySprintModel(requestSender.Object, tracer.Object, publisherFacade);
 
         instance.RegisterMessenger();
+
         await instance.InitializeAsync();
         await instance.SetAnalysisForSprint(CreateSprintClientModel());
 
@@ -82,7 +89,7 @@ public static class AnalysisBySprintModelProvider
             Instance = instance,
             RequestSender = requestSender,
             Tracer = tracer,
-            Messenger = messenger
+            NotificationPublisher = publisherFacade
         };
     }
 

@@ -9,4 +9,7 @@ public interface ILocalNoteNotificationPublisher
 {
     event Func<ClientNoteUpdatedNotification, Task>? ClientNoteUpdatedNotificationReceived;
     event Func<NewNoteMessage, Task>? NewNoteMessageReceived;
+
+    Task Publish(NewNoteMessage message);
+    Task Publish(ClientNoteUpdatedNotification notification);
 }

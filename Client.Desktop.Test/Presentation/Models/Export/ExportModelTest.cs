@@ -2,7 +2,6 @@
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.DataModels;
 using Client.Desktop.Presentation.Models.Export;
-using CommunityToolkit.Mvvm.Messaging;
 using Moq;
 
 namespace Client.Desktop.Test.Presentation.Models.Export;
@@ -27,7 +26,7 @@ public class ExportModelTest
         var fixture = await ExportModelProvider.Create([workDay]);
         var newWorkDay = new WorkDayClientModel(Guid.NewGuid(), DateTimeOffset.Now);
 
-        fixture.Messenger.Send(new NewWorkDayMessage(newWorkDay, Guid.NewGuid()));
+        await fixture.NotificationPublisher.WorkDay.Publish(new NewWorkDayMessage(newWorkDay, Guid.NewGuid()));
 
         Assert.That(fixture.Instance.WorkDays, Has.Count.EqualTo(2));
     }

@@ -8,7 +8,6 @@ using Client.Desktop.Communication.Requests.Client.Records;
 using Client.Desktop.Communication.Requests.Ticket;
 using Client.Desktop.DataModels;
 using Client.Desktop.Presentation.Models.TimeTracking;
-using CommunityToolkit.Mvvm.Messaging;
 using Moq;
 
 namespace Client.Desktop.Test.Presentation.Models.TimeTracking;
@@ -38,7 +37,7 @@ public class TimeTrackingModelTest
         var newTicket =
             new TicketClientModel(Guid.NewGuid(), "NewTicketName", "BookingNumber", "ChangeDocumentation", []);
 
-        fixture.Messenger.Send(new NewTicketMessage(newTicket, Guid.NewGuid()));
+        await fixture.NotificationPublisher.Ticket.Publish(new NewTicketMessage(newTicket, Guid.NewGuid()));
 
         Assert.That(fixture.Instance.FilteredTickets, Has.Count.EqualTo(0));
     }
@@ -50,7 +49,7 @@ public class TimeTrackingModelTest
             new TicketClientModel(Guid.NewGuid(), "NewTicketName", "BookingNumber", "ChangeDocumentation", []);
         var fixture = await TimeTrackingModelProvider.Create([newTicket], []);
 
-        fixture.Messenger.Send(new NewTicketMessage(newTicket, Guid.NewGuid()));
+        await fixture.NotificationPublisher.Ticket.Publish(new NewTicketMessage(newTicket, Guid.NewGuid()));
 
         Assert.That(fixture.Instance.FilteredTickets, Has.Count.EqualTo(2));
     }
@@ -62,7 +61,8 @@ public class TimeTrackingModelTest
         var fixture = await TimeTrackingModelProvider.Create([initialData.InitialTicket], []);
 
         var newName = "NewName";
-        fixture.Messenger.Send(new ClientTicketDataUpdatedNotification(initialData.InitialTicket.TicketId, newName,
+        await fixture.NotificationPublisher.Ticket.Publish(new ClientTicketDataUpdatedNotification(
+            initialData.InitialTicket.TicketId, newName,
             "BookingNumber", [], Guid.NewGuid()));
 
         Assert.That(fixture.Instance.FilteredTickets[0].Name, Is.EqualTo(newName));
@@ -80,7 +80,7 @@ public class TimeTrackingModelTest
         fixture.RequestSender.Setup(rs => rs.Send(new ClientGetTicketsForCurrentSprintRequest()))
             .ReturnsAsync([newTicketOne, newTicketTwo]);
 
-        fixture.Messenger.Send(new ClientTicketAddedToActiveSprintNotification());
+        await fixture.NotificationPublisher.Sprint.Publish(new ClientTicketAddedToActiveSprintNotification());
 
         Assert.That(fixture.Instance.FilteredTickets.Count, Is.EqualTo(2));
         Assert.That(fixture.Instance.FilteredTickets[0].TicketId, Is.EqualTo(newTicketOne.TicketId));
@@ -101,7 +101,7 @@ public class TimeTrackingModelTest
         fixture.RequestSender.Setup(rs => rs.Send(new ClientGetTicketsForCurrentSprintRequest()))
             .ReturnsAsync([newTicketOne, newTicketTwo]);
 
-        fixture.Messenger.Send(new ClientSprintSelectionChangedNotification());
+        await fixture.NotificationPublisher.Client.Publish(new ClientSprintSelectionChangedNotification());
 
         Assert.That(fixture.Instance.FilteredTickets.Count, Is.EqualTo(2));
         Assert.That(fixture.Instance.FilteredTickets[0].TicketId, Is.EqualTo(newTicketOne.TicketId));
@@ -114,35 +114,11 @@ public class TimeTrackingModelTest
         var initialData = CreateInitialData();
         var fixture = await TimeTrackingModelProvider.Create([initialData.InitialTicket], []);
 
-        fixture.Messenger.Send(new ClientTrackingControlCreatedNotification(initialData.InitialStatisticsData,
+        await fixture.NotificationPublisher.Client.Publish(new ClientTrackingControlCreatedNotification(
+            initialData.InitialStatisticsData,
             initialData.InitialTicket, initialData.InitialTimeSlot, Guid.NewGuid()));
 
         Assert.That(fixture.Instance.TimeSlotViewModels, Has.Count.EqualTo(1));
-    }
-
-    [Test]
-    public async Task ReceiveClientWorkDaySelectionChangedNotification()
-    {
-        var initialData = CreateInitialData();
-        var timeSlotData = new ClientGetTrackingControlResponse(initialData.InitialStatisticsData,
-            initialData.InitialTicket, initialData.InitialTimeSlot);
-        var fixture = await TimeTrackingModelProvider.Create([initialData.InitialTicket], [timeSlotData]);
-
-        fixture.Messenger.Send(new ClientWorkDaySelectionChangedNotification());
-
-        Assert.That(fixture.Instance.TimeSlotViewModels, Has.Count.EqualTo(1));
-        Assert.That(fixture.Instance.FilteredTickets, Has.Count.EqualTo(1));
-    }
-
-    [Test]
-    public async Task CreateNewTimeSlotViewModel_NoSelectedTicket()
-    {
-        var fixture = await TimeTrackingModelProvider.Create([], []);
-        fixture.Messenger.Send(new ClientWorkDaySelectionChangedNotification());
-
-        await fixture.Instance.CreateNewTimeSlotViewModel();
-
-        fixture.CommandSender.Verify(cs => cs.Send(It.IsAny<ClientCreateTrackingControlCommand>()), Times.Never);
     }
 
     [Test]

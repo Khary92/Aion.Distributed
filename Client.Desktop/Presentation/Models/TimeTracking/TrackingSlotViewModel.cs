@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 using Client.Desktop.Communication.Local.LocalEvents.Publisher;
 using Client.Desktop.DataModels;
 using Client.Desktop.Presentation.Factories;
@@ -142,14 +141,12 @@ public class TrackingSlotViewModel : ReactiveObject
         _ = HandleTimerTick();
     }
 
-    private async Task HandleTimerTick()
+    private Task HandleTimerTick()
     {
-        if (!Model.TimeSlot.IsTimerRunning) return;
+        if (!Model.TimeSlot.IsTimerRunning) return Task.CompletedTask;
 
-        await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            Model.TimeSlot.EndTime = DateTimeOffset.Now;
-            ElapsedTimeRepresentation = Model.TimeSlot.GetElapsedTime();
-        });
+        Model.TimeSlot.EndTime = DateTimeOffset.Now;
+        ElapsedTimeRepresentation = Model.TimeSlot.GetElapsedTime();
+        return Task.CompletedTask;
     }
 }

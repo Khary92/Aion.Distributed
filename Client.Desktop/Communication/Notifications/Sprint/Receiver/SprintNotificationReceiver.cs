@@ -24,6 +24,42 @@ public class SprintNotificationReceiver(
 
     public event Func<NewSprintMessage, Task>? NewSprintMessageReceived;
 
+    public async Task Publish(NewSprintMessage message)
+    {
+        if (NewSprintMessageReceived == null)
+            throw new InvalidOperationException(
+                "NewSprintMessage received but no forwarding receiver is set");
+
+        await NewSprintMessageReceived.Invoke(message);
+    }
+
+    public async Task Publish(ClientSprintActiveStatusSetNotification notification)
+    {
+        if (ClientSprintActiveStatusSetNotificationReceived == null)
+            throw new InvalidOperationException(
+                "SprintActiveStatusSetNotification received but no forwarding receiver is set");
+
+        await ClientSprintActiveStatusSetNotificationReceived.Invoke(notification);
+    }
+
+    public async Task Publish(ClientSprintDataUpdatedNotification notification)
+    {
+        if (ClientSprintDataUpdatedNotificationReceived == null)
+            throw new InvalidOperationException(
+                "SprintDataUpdatedNotification received but no forwarding receiver is set");
+
+        await ClientSprintDataUpdatedNotificationReceived.Invoke(notification);
+    }
+
+    public async Task Publish(ClientTicketAddedToActiveSprintNotification notification)
+    {
+        if (ClientTicketAddedToActiveSprintNotificationReceived == null)
+            throw new InvalidOperationException(
+                "TicketAddedToActiveSprintNotification received but no forwarding receiver is set");
+
+        await ClientTicketAddedToActiveSprintNotificationReceived.Invoke(notification);
+    }
+
     public async Task StartListening(CancellationToken cancellationToken)
     {
         var attempt = 0;
@@ -82,33 +118,24 @@ public class SprintNotificationReceiver(
         {
             case SprintNotification.NotificationOneofCase.SprintCreated:
             {
-                var n = notification.SprintCreated;
+                var notificationSprintCreated = notification.SprintCreated;
                 await tracer.Sprint.Create.NotificationReceived(
                     GetType(),
-                    Guid.Parse(n.TraceData.TraceId),
-                    n);
+                    Guid.Parse(notificationSprintCreated.TraceData.TraceId),
+                    notificationSprintCreated);
 
-                if (NewSprintMessageReceived == null)
-                    throw new InvalidOperationException(
-                        "Ticket data update received but no forwarding receiver is set");
-
-                await NewSprintMessageReceived.Invoke(n.ToNewEntityMessage());
+                await Publish(notificationSprintCreated.ToNewEntityMessage());
 
                 break;
             }
             case SprintNotification.NotificationOneofCase.SprintActiveStatusSet:
             {
-                var n = notification.SprintActiveStatusSet;
+                var notificationSprintActiveStatusSet = notification.SprintActiveStatusSet;
                 await tracer.Sprint.ActiveStatus.NotificationReceived(
-                    GetType(),
-                    Guid.Parse(n.TraceData.TraceId),
-                    n);
+                    GetType(), Guid.Parse(notificationSprintActiveStatusSet.TraceData.TraceId),
+                    notificationSprintActiveStatusSet);
 
-                if (ClientSprintActiveStatusSetNotificationReceived == null)
-                    throw new InvalidOperationException(
-                        "Ticket data update received but no forwarding receiver is set");
-
-                await ClientSprintActiveStatusSetNotificationReceived.Invoke(n.ToClientNotification());
+                await Publish(notificationSprintActiveStatusSet.ToClientNotification());
 
                 break;
             }
@@ -120,27 +147,19 @@ public class SprintNotificationReceiver(
                     Guid.Parse(n.TraceData.TraceId),
                     n);
 
-                if (ClientSprintDataUpdatedNotificationReceived == null)
-                    throw new InvalidOperationException(
-                        "Ticket data update received but no forwarding receiver is set");
-
-                await ClientSprintDataUpdatedNotificationReceived.Invoke(n.ToClientNotification());
+                await Publish(n.ToClientNotification());
 
                 break;
             }
             case SprintNotification.NotificationOneofCase.TicketAddedToActiveSprint:
             {
-                var n = notification.TicketAddedToActiveSprint;
+                var notificationTicketAddedToActiveSprint = notification.TicketAddedToActiveSprint;
                 await tracer.Sprint.AddTicketToSprint.NotificationReceived(
                     GetType(),
-                    Guid.Parse(n.TraceData.TraceId),
-                    n);
+                    Guid.Parse(notificationTicketAddedToActiveSprint.TraceData.TraceId),
+                    notificationTicketAddedToActiveSprint);
 
-                if (ClientTicketAddedToActiveSprintNotificationReceived == null)
-                    throw new InvalidOperationException(
-                        "Ticket data update received but no forwarding receiver is set");
-
-                await ClientTicketAddedToActiveSprintNotificationReceived.Invoke(n.ToClientNotification());
+                await Publish(notificationTicketAddedToActiveSprint.ToClientNotification());
 
                 break;
             }

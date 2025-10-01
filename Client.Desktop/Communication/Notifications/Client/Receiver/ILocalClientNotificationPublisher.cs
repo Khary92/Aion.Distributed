@@ -9,4 +9,7 @@ public interface ILocalClientNotificationPublisher
 {
     event Func<ClientSprintSelectionChangedNotification, Task>? ClientSprintSelectionChangedNotificationReceived;
     event Func<ClientTrackingControlCreatedNotification, Task>? ClientTrackingControlCreatedNotificationReceived;
+
+    Task Publish(ClientTrackingControlCreatedNotification notification);
+    Task Publish(ClientSprintSelectionChangedNotification notification);
 }

@@ -1,21 +1,17 @@
 using Client.Desktop.DataModels.Local;
 using Client.Desktop.Presentation.Models.Settings;
-using CommunityToolkit.Mvvm.Messaging;
+using Client.Desktop.Services.LocalSettings;
 using Moq;
 
 namespace Client.Desktop.Test.Presentation.Models.Settings;
 
 public static class SettingsModelProvider
 {
-    private static IMessenger CreateMessenger()
+    private static Mock<ILocalSettingsService> CreateLocalSettingsService()
     {
-        return new WeakReferenceMessenger();
+        return new Mock<ILocalSettingsService>();
     }
 
-    private static Mock<ILocalSettingsCommandSender> CreateLocalSettingsCommandSenderMock()
-    {
-        return new Mock<ILocalSettingsCommandSender>();
-    }
 
     private static SettingsClientModel CreateSettingsClientModel()
     {
@@ -24,38 +20,29 @@ public static class SettingsModelProvider
 
     public static SettingsModelFixture Create()
     {
-        var messenger = CreateMessenger();
-        var localSettingsCommandSender = CreateLocalSettingsCommandSenderMock();
+        var localSettingsService = CreateLocalSettingsService();
 
-        return CreateFixture(messenger, localSettingsCommandSender);
+        return CreateFixture(localSettingsService);
     }
 
-    private static SettingsModelFixture CreateFixture(IMessenger messenger,
-        Mock<ILocalSettingsCommandSender> localSettingsCommandSender)
+    private static SettingsModelFixture CreateFixture(Mock<ILocalSettingsService> localSettingsService)
     {
-        var instance = new SettingsModel(messenger, localSettingsCommandSender.Object);
-
-        instance.RegisterMessenger();
+        var instance = new SettingsModel(localSettingsService.Object);
 
         var settingsClientModel = CreateSettingsClientModel();
-
-        messenger.Send(settingsClientModel);
 
         return new SettingsModelFixture
         {
             Instance = instance,
-            LocalSettingsCommandSender = localSettingsCommandSender,
-            Messenger = messenger,
-            InitialSettings = settingsClientModel
+            InitialSettings = settingsClientModel,
+            LocalSettingsService = localSettingsService
         };
     }
 
     public sealed class SettingsModelFixture
     {
         public required SettingsModel Instance { get; init; }
-        public required IMessenger Messenger { get; init; }
-        public required Mock<ILocalSettingsCommandSender> LocalSettingsCommandSender { get; init; }
-
+        public required Mock<ILocalSettingsService> LocalSettingsService { get; init; }
         public required SettingsClientModel InitialSettings { get; init; }
     }
 }

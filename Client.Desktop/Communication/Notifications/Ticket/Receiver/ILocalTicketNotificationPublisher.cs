@@ -10,4 +10,7 @@ public interface ILocalTicketNotificationPublisher
     event Func<ClientTicketDataUpdatedNotification, Task>? TicketDataUpdatedNotificationReceived;
     event Func<ClientTicketDocumentationUpdatedNotification, Task>? TicketDocumentationUpdatedNotificationReceived;
     event Func<NewTicketMessage, Task>? NewTicketNotificationReceived;
+    Task Publish(NewTicketMessage message);
+    Task Publish(ClientTicketDataUpdatedNotification notification);
+    Task Publish(ClientTicketDocumentationUpdatedNotification notification);
 }

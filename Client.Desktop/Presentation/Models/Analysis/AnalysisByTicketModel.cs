@@ -2,7 +2,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 using Client.Desktop.Communication.Local;
 using Client.Desktop.Communication.Notifications.Ticket.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
@@ -67,13 +66,13 @@ public class AnalysisByTicketModel(
             return;
         }
 
-        await Dispatcher.UIThread.InvokeAsync(() => { ticket.Apply(message); });
+        ticket.Apply(message);
         await tracer.Ticket.Update.ChangesApplied(GetType(), message.TraceId);
     }
 
     private async Task HandleNewTicketMessage(NewTicketMessage message)
     {
-        await Dispatcher.UIThread.InvokeAsync(() => { Tickets.Add(message.Ticket); });
+        Tickets.Add(message.Ticket);
         await tracer.Ticket.Create.AggregateAdded(GetType(), message.TraceId);
     }
 

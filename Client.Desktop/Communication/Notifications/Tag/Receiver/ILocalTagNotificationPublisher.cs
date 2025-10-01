@@ -9,4 +9,7 @@ public interface ILocalTagNotificationPublisher
 {
     event Func<ClientTagUpdatedNotification, Task>? ClientTagUpdatedNotificationReceived;
     event Func<NewTagMessage, Task>? NewTagMessageNotificationReceived;
+
+    Task Publish(NewTagMessage message);
+    Task Publish(ClientTagUpdatedNotification notification);
 }

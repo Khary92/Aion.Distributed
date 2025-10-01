@@ -2,7 +2,6 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.Commands.Notes.Records;
 using Client.Desktop.Communication.Local;
@@ -55,16 +54,13 @@ public class NoteViewModel : ReactiveObject, IMessengerRegistration, IInitialize
     {
         var noteTypeViewModels = await _requestSender.Send(new ClientGetAllNoteTypesRequest());
 
-        await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            NoteTypes.Clear();
+        NoteTypes.Clear();
 
-            NoteTypes.AddRange(noteTypeViewModels);
+        NoteTypes.AddRange(noteTypeViewModels);
 
-            if (Note.NoteTypeId == Guid.Empty || !NoteTypes.Any()) return;
+        if (Note.NoteTypeId == Guid.Empty || !NoteTypes.Any()) return;
 
-            Note.NoteType = NoteTypes.FirstOrDefault(nt => nt.NoteTypeId == Note.NoteTypeId);
-        });
+        Note.NoteType = NoteTypes.FirstOrDefault(nt => nt.NoteTypeId == Note.NoteTypeId);
     }
 
     public void RegisterMessenger()
@@ -85,47 +81,39 @@ public class NoteViewModel : ReactiveObject, IMessengerRegistration, IInitialize
 
     private async Task HandleClientNoteTypeNameChangedNotification(ClientNoteTypeNameChangedNotification notification)
     {
-        await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            var noteType = NoteTypes.FirstOrDefault(nt => nt.NoteTypeId == notification.NoteTypeId);
+        var noteType = NoteTypes.FirstOrDefault(nt => nt.NoteTypeId == notification.NoteTypeId);
 
-            if (noteType == null) return;
+        if (noteType == null) return;
 
-            noteType.Apply(notification);
-        });
+        noteType.Apply(notification);
 
         await _tracer.NoteType.ChangeName.ChangesApplied(GetType(), notification.TraceId);
     }
 
     private async Task HandleClientNoteTypeColorChangedNotification(ClientNoteTypeColorChangedNotification notification)
     {
-        await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            var noteType = NoteTypes.FirstOrDefault(nt => nt.NoteTypeId == notification.NoteTypeId);
+        var noteType = NoteTypes.FirstOrDefault(nt => nt.NoteTypeId == notification.NoteTypeId);
 
-            if (noteType == null) return;
+        if (noteType == null) return;
 
-            noteType.Apply(notification);
-        });
+        noteType.Apply(notification);
+
 
         await _tracer.NoteType.ChangeColor.ChangesApplied(GetType(), notification.TraceId);
     }
 
     private async Task HandleNewNoteTypeMessage(NewNoteTypeMessage message)
     {
-        await Dispatcher.UIThread.InvokeAsync(() => { NoteTypes.Add(message.NoteType); });
+        NoteTypes.Add(message.NoteType);
         await _tracer.NoteType.Create.AggregateAdded(GetType(), message.TraceId);
     }
 
     private async Task HandleClientNoteUpdatedNotification(ClientNoteUpdatedNotification notification)
     {
-        await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            if (Note.NoteId != notification.NoteId) return;
+        if (Note.NoteId != notification.NoteId) return;
 
-            Note.Apply(notification);
-            Note.NoteType = NoteTypes.FirstOrDefault(nt => nt.NoteTypeId == Note.NoteTypeId);
-        });
+        Note.Apply(notification);
+        Note.NoteType = NoteTypes.FirstOrDefault(nt => nt.NoteTypeId == Note.NoteTypeId);
 
         await _tracer.Note.Update.ChangesApplied(GetType(), notification.TraceId);
     }
@@ -147,21 +135,23 @@ public class NoteViewModel : ReactiveObject, IMessengerRegistration, IInitialize
         await _commandSender.Send(clientUpdateNoteCommand);
     }
 
-    private async Task SetNextType()
+    private Task SetNextType()
     {
-        if (NoteTypes.Count == 0 || _currentNoteTypeIndex >= NoteTypes.Count - 1) return;
+        if (NoteTypes.Count == 0 || _currentNoteTypeIndex >= NoteTypes.Count - 1) return Task.CompletedTask;
 
         _currentNoteTypeIndex++;
 
-        await Dispatcher.UIThread.InvokeAsync(() => Note.NoteType = NoteTypes[_currentNoteTypeIndex]);
+        Note.NoteType = NoteTypes[_currentNoteTypeIndex];
+        return Task.CompletedTask;
     }
 
-    private async Task SetPreviousType()
+    private Task SetPreviousType()
     {
-        if (NoteTypes.Count == 0 || _currentNoteTypeIndex == 0) return;
+        if (NoteTypes.Count == 0 || _currentNoteTypeIndex == 0) return Task.CompletedTask;
 
         _currentNoteTypeIndex--;
 
-        await Dispatcher.UIThread.InvokeAsync(() => Note.NoteType = NoteTypes[_currentNoteTypeIndex]);
+        Note.NoteType = NoteTypes[_currentNoteTypeIndex];
+        return Task.CompletedTask;
     }
 }

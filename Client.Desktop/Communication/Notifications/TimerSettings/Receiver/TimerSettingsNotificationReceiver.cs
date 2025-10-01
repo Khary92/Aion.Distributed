@@ -20,6 +20,24 @@ public class TimerSettingsNotificationReceiver(
     public event Func<ClientSnapshotSaveIntervalChangedNotification, Task>?
         ClientSnapshotSaveIntervalChangedNotificationReceived;
 
+    public async Task Publish(ClientDocuTimerSaveIntervalChangedNotification notification)
+    {
+        if (ClientDocuTimerSaveIntervalChangedNotificationReceived == null)
+            throw new InvalidOperationException(
+                "Ticket data update received but no forwarding receiver is set");
+
+        await ClientDocuTimerSaveIntervalChangedNotificationReceived.Invoke(notification);
+    }
+
+    public async Task Publish(ClientSnapshotSaveIntervalChangedNotification notification)
+    {
+        if (ClientSnapshotSaveIntervalChangedNotificationReceived == null)
+            throw new InvalidOperationException(
+                "SnapshotSaveIntervalChangedNotification received but no forwarding receiver is set");
+
+        await ClientSnapshotSaveIntervalChangedNotificationReceived.Invoke(notification);
+    }
+
     public async Task StartListening(CancellationToken cancellationToken)
     {
         var attempt = 0;
@@ -82,12 +100,7 @@ public class TimerSettingsNotificationReceiver(
                 var n = notification.DocuTimerSaveIntervalChanged;
 
                 // TODO: Add tracing
-
-                if (ClientDocuTimerSaveIntervalChangedNotificationReceived == null)
-                    throw new InvalidOperationException(
-                        "Ticket data update received but no forwarding receiver is set");
-
-                await ClientDocuTimerSaveIntervalChangedNotificationReceived.Invoke(n.ToClientNotification());
+                await Publish(n.ToClientNotification());
 
                 break;
             }
@@ -96,11 +109,7 @@ public class TimerSettingsNotificationReceiver(
                 var n = notification.SnapshotSaveIntervalChanged;
 
                 // TODO: Add tracing
-                if (ClientSnapshotSaveIntervalChangedNotificationReceived == null)
-                    throw new InvalidOperationException(
-                        "Ticket data update received but no forwarding receiver is set");
-
-                await ClientSnapshotSaveIntervalChangedNotificationReceived.Invoke(n.ToClientNotification());
+                await Publish(n.ToClientNotification());
 
                 break;
             }

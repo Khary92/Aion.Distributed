@@ -2,7 +2,6 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 using Client.Desktop.Communication.Local;
 using Client.Desktop.Communication.Notifications.Note.Records;
 using Client.Desktop.Communication.Notifications.NoteType.Records;
@@ -78,23 +77,19 @@ public class DocumentationModel(
             .Select(typeCheckBoxViewModelFactory.Create)
             .ToList();
 
-        await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            AllNoteTypes.Clear();
-            AllNoteTypes.AddRange(viewModels);
-        });
+
+        AllNoteTypes.Clear();
+        AllNoteTypes.AddRange(viewModels);
+
 
         var ticketClientModels = await requestSender.Send(new ClientGetAllTicketsRequest());
 
-        await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            AllTickets.Clear();
-            AllTickets.AddRange(ticketClientModels);
 
-            if (!AllTickets.Any()) return;
+        AllTickets.Clear();
+        AllTickets.AddRange(ticketClientModels);
 
-            SelectedTicket = AllTickets[0];
-        });
+        if (!AllTickets.Any()) return;
+
 
         await UpdateNotesForSelectedTicket();
     }
@@ -129,12 +124,7 @@ public class DocumentationModel(
     {
         await tracer.Note.Update.NotificationReceived(GetType(), message.TraceId, message);
 
-        NoteViewModel? noteViewModel = null;
-
-        await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            noteViewModel = AllNotes.FirstOrDefault(n => n.Note.NoteId == message.NoteId);
-        });
+        var noteViewModel = AllNotes.FirstOrDefault(n => n.Note.NoteId == message.NoteId);
 
         if (noteViewModel == null)
         {
@@ -145,23 +135,18 @@ public class DocumentationModel(
         var noteType =
             await requestSender.Send(new ClientGetNoteTypeByIdRequest(message.NoteTypeId));
 
-        await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            noteViewModel.Note.NoteType = noteType;
-            noteViewModel.Note.Apply(message);
-        });
+
+        noteViewModel.Note.NoteType = noteType;
+        noteViewModel.Note.Apply(message);
+
 
         await tracer.Note.Update.ChangesApplied(GetType(), message.TraceId);
-        await FilterNotes();
+        FilterNotes();
     }
 
     private async Task HandleClientTicketDataUpdatedNotification(ClientTicketDataUpdatedNotification message)
     {
-        TicketClientModel? ticketClientModel = null;
-        await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            ticketClientModel = AllTickets.FirstOrDefault(t => t.TicketId == message.TicketId);
-        });
+        var ticketClientModel = AllTickets.FirstOrDefault(t => t.TicketId == message.TicketId);
 
         if (ticketClientModel == null)
         {
@@ -169,7 +154,7 @@ public class DocumentationModel(
             return;
         }
 
-        await Dispatcher.UIThread.InvokeAsync(() => { ticketClientModel.Apply(message); });
+        ticketClientModel.Apply(message);
         await tracer.Ticket.Update.ChangesApplied(GetType(), message.TraceId);
     }
 
@@ -177,16 +162,16 @@ public class DocumentationModel(
     {
         var noteViewModel = await noteViewFactory.Create(message.Note);
 
-        await Dispatcher.UIThread.InvokeAsync(() => AllNotes.Add(noteViewModel));
+        AllNotes.Add(noteViewModel);
 
         await tracer.Note.Create.AggregateAdded(GetType(), message.Note.NoteTypeId);
 
-        await FilterNotes();
+        FilterNotes();
     }
 
     private async Task HandleNewTicketMessage(NewTicketMessage message)
     {
-        await Dispatcher.UIThread.InvokeAsync(() => { AllTickets.Add(message.Ticket); });
+        AllTickets.Add(message.Ticket);
         await tracer.Ticket.Create.AggregateAdded(GetType(), message.TraceId);
     }
 
@@ -199,28 +184,25 @@ public class DocumentationModel(
 
         var noteViewModels = await Task.WhenAll(noteModels.Select(noteViewFactory.Create));
 
-        await Dispatcher.UIThread.InvokeAsync(() =>
-            AllNotes = new ObservableCollection<NoteViewModel>(noteViewModels));
 
-        await FilterNotes();
+        AllNotes = new ObservableCollection<NoteViewModel>(noteViewModels);
+
+        FilterNotes();
     }
 
-    private async Task FilterNotes()
+    private void FilterNotes()
     {
-        await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            var selectedTypes = AllNoteTypes
-                .Where(opt => opt.IsChecked)
-                .Select(opt => opt.NoteTypeId)
-                .ToHashSet();
+        var selectedTypes = AllNoteTypes
+            .Where(opt => opt.IsChecked)
+            .Select(opt => opt.NoteTypeId)
+            .ToHashSet();
 
-            var filteredNotes = AllNotes
-                .Where(n => selectedTypes.Contains(n.Note.NoteTypeId))
-                .OrderBy(n => n.Note.TimeStamp)
-                .ToList();
+        var filteredNotes = AllNotes
+            .Where(n => selectedTypes.Contains(n.Note.NoteTypeId))
+            .OrderBy(n => n.Note.TimeStamp)
+            .ToList();
 
-            SelectedNotes.Load(filteredNotes);
-        });
+        SelectedNotes.Load(filteredNotes);
     }
 
 
@@ -228,7 +210,7 @@ public class DocumentationModel(
     {
         var typeCheckBoxViewModel = typeCheckBoxViewModelFactory.Create(message.NoteType);
 
-        await Dispatcher.UIThread.InvokeAsync(() => AllNoteTypes.Add(typeCheckBoxViewModel));
+        AllNoteTypes.Add(typeCheckBoxViewModel);
 
         await tracer.NoteType.Create.AggregateAdded(GetType(), message.TraceId);
     }
@@ -237,9 +219,7 @@ public class DocumentationModel(
     {
         await tracer.NoteType.ChangeName.NotificationReceived(GetType(), message.TraceId, message);
 
-        TypeCheckBoxViewModel? typeCheckBoxViewModel = null;
-        await Dispatcher.UIThread.InvokeAsync(() =>
-            typeCheckBoxViewModel = AllNoteTypes.FirstOrDefault(opt => opt.NoteTypeId == message.NoteTypeId));
+        var typeCheckBoxViewModel = AllNoteTypes.FirstOrDefault(opt => opt.NoteTypeId == message.NoteTypeId);
 
         if (typeCheckBoxViewModel == null)
         {
@@ -247,17 +227,14 @@ public class DocumentationModel(
             return;
         }
 
-        await Dispatcher.UIThread.InvokeAsync(() => typeCheckBoxViewModel.NoteType.Apply(message));
+        typeCheckBoxViewModel.NoteType.Apply(message);
     }
 
     private async Task HandleClientNoteTypeColorChangedNotification(ClientNoteTypeColorChangedNotification message)
     {
         await tracer.NoteType.ChangeColor.NotificationReceived(GetType(), message.TraceId, message);
 
-        TypeCheckBoxViewModel? typeCheckBoxViewModel = null;
-
-        await Dispatcher.UIThread.InvokeAsync(() =>
-            typeCheckBoxViewModel = AllNoteTypes.FirstOrDefault(opt => opt.NoteTypeId == message.NoteTypeId));
+        var typeCheckBoxViewModel = AllNoteTypes.FirstOrDefault(opt => opt.NoteTypeId == message.NoteTypeId);
 
         if (typeCheckBoxViewModel == null)
         {
@@ -265,7 +242,7 @@ public class DocumentationModel(
             return;
         }
 
-        await Dispatcher.UIThread.InvokeAsync(() => typeCheckBoxViewModel.NoteType.Apply(message));
+        typeCheckBoxViewModel.NoteType.Apply(message);
         await tracer.NoteType.ChangeColor.ChangesApplied(GetType(), message.TraceId);
     }
 }

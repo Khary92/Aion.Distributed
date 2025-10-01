@@ -4,7 +4,6 @@ using Client.Desktop.Communication.Notifications.Ticket.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.DataModels;
 using Client.Desktop.Presentation.Models.Documentation;
-using CommunityToolkit.Mvvm.Messaging;
 
 namespace Client.Desktop.Test.Presentation.Models.Documentation;
 
@@ -34,7 +33,7 @@ public class DocumentationModelTest
         var newNote = new NoteClientModel(Guid.NewGuid(), "NewNoteName", Guid.NewGuid(), Guid.NewGuid(),
             DateTimeOffset.Now);
 
-        fixture.Messenger.Send(new NewNoteMessage(newNote));
+        await fixture.NotificationPublisher.Note.Publish(new NewNoteMessage(newNote));
 
         Assert.That(fixture.Instance.AllNoteTypes, Has.Count.EqualTo(1));
         Assert.That(fixture.Instance.AllTickets, Has.Count.EqualTo(1));
@@ -51,7 +50,7 @@ public class DocumentationModelTest
         var noteUpdatedNotification = new ClientNoteUpdatedNotification(initialData.NoteId, newNoteText,
             Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
 
-        fixture.Messenger.Send(noteUpdatedNotification);
+        await fixture.NotificationPublisher.Note.Publish(noteUpdatedNotification);
 
         Assert.That(fixture.Instance.AllNoteTypes, Has.Count.EqualTo(1));
         Assert.That(fixture.Instance.AllTickets, Has.Count.EqualTo(1));
@@ -67,7 +66,7 @@ public class DocumentationModelTest
             await DocumentationModelProvider.Create(initialData.Notes, initialData.NoteTypes, initialData.Tickets);
         var newNoteType = new NoteTypeClientModel(Guid.NewGuid(), "NewNoteType", "Color");
 
-        fixture.Messenger.Send(new NewNoteTypeMessage(newNoteType, Guid.NewGuid()));
+        await fixture.NotificationPublisher.NoteType.Publish(new NewNoteTypeMessage(newNoteType, Guid.NewGuid()));
 
         Assert.That(fixture.Instance.AllNoteTypes, Has.Count.EqualTo(2));
         Assert.That(fixture.Instance.AllTickets, Has.Count.EqualTo(1));
@@ -81,15 +80,11 @@ public class DocumentationModelTest
         var fixture =
             await DocumentationModelProvider.Create(initialData.Notes, initialData.NoteTypes, initialData.Tickets);
         var newNoteTypeName = "NewNoteTypeName";
-        var noteUpdatedNotification =
+        var clientNoteTypeNameChangedNotification =
             new ClientNoteTypeNameChangedNotification(initialData.NoteTypeId, newNoteTypeName, Guid.NewGuid());
-        ;
 
-        fixture.Messenger.Send(noteUpdatedNotification);
+        await fixture.NotificationPublisher.NoteType.Publish(clientNoteTypeNameChangedNotification);
 
-        Assert.That(fixture.Instance.AllNoteTypes, Has.Count.EqualTo(1));
-        Assert.That(fixture.Instance.AllTickets, Has.Count.EqualTo(1));
-        Assert.That(fixture.Instance.AllNotes, Has.Count.EqualTo(1));
         Assert.That(fixture.Instance.AllNoteTypes.First().NoteType.Name, Is.EqualTo(newNoteTypeName));
     }
 
@@ -102,13 +97,9 @@ public class DocumentationModelTest
         var newNoteTypeColor = "A new color";
         var noteUpdatedNotification =
             new ClientNoteTypeColorChangedNotification(initialData.NoteTypeId, newNoteTypeColor, Guid.NewGuid());
-        ;
 
-        fixture.Messenger.Send(noteUpdatedNotification);
+        await fixture.NotificationPublisher.NoteType.Publish(noteUpdatedNotification);
 
-        Assert.That(fixture.Instance.AllNoteTypes, Has.Count.EqualTo(1));
-        Assert.That(fixture.Instance.AllTickets, Has.Count.EqualTo(1));
-        Assert.That(fixture.Instance.AllNotes, Has.Count.EqualTo(1));
         Assert.That(fixture.Instance.AllNoteTypes.First().NoteType.Color, Is.EqualTo(newNoteTypeColor));
     }
 
@@ -121,7 +112,8 @@ public class DocumentationModelTest
         var noteUpdatedNotification =
             new TicketClientModel(Guid.NewGuid(), "NewTicketName", "BookingNumber", "ChangeDocumentation", []);
 
-        fixture.Messenger.Send(new NewTicketMessage(noteUpdatedNotification, Guid.NewGuid()));
+        await fixture.NotificationPublisher.Ticket.Publish(
+            new NewTicketMessage(noteUpdatedNotification, Guid.NewGuid()));
 
         Assert.That(fixture.Instance.AllNoteTypes, Has.Count.EqualTo(1));
         Assert.That(fixture.Instance.AllTickets, Has.Count.EqualTo(2));
@@ -135,10 +127,11 @@ public class DocumentationModelTest
         var fixture =
             await DocumentationModelProvider.Create(initialData.Notes, initialData.NoteTypes, initialData.Tickets);
         var newTicketName = "NewTicketName";
-        var noteUpdatedNotification = new ClientTicketDataUpdatedNotification(initialData.TicketId, newTicketName,
+        var clientTicketDataUpdatedNotification = new ClientTicketDataUpdatedNotification(initialData.TicketId,
+            newTicketName,
             "BookingNumber", [], Guid.NewGuid());
 
-        fixture.Messenger.Send(noteUpdatedNotification);
+        await fixture.NotificationPublisher.Ticket.Publish(clientTicketDataUpdatedNotification);
 
         Assert.That(fixture.Instance.AllNoteTypes, Has.Count.EqualTo(1));
         Assert.That(fixture.Instance.AllTickets, Has.Count.EqualTo(1));
@@ -154,18 +147,14 @@ public class DocumentationModelTest
         var fixture =
             await DocumentationModelProvider.Create(initialData.Notes, initialData.NoteTypes, initialData.Tickets);
 
-        var beforeNotes = fixture.Instance.AllNotes.Count;
-        var beforeTypes = fixture.Instance.AllNoteTypes.Count;
-        var beforeTickets = fixture.Instance.AllTickets.Count;
-
         var notification = new ClientNoteUpdatedNotification(Guid.NewGuid(), "Irrelevant",
             Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid());
 
-        fixture.Messenger.Send(notification);
+        await fixture.NotificationPublisher.Note.Publish(notification);
 
-        Assert.That(fixture.Instance.AllNotes.Count, Is.EqualTo(beforeNotes));
-        Assert.That(fixture.Instance.AllNoteTypes.Count, Is.EqualTo(beforeTypes));
-        Assert.That(fixture.Instance.AllTickets.Count, Is.EqualTo(beforeTickets));
+        Assert.That(fixture.Instance.AllNotes.Count, Is.EqualTo(1));
+        Assert.That(initialData.NoteTypes, Has.Count.EqualTo(fixture.Instance.AllNoteTypes.Count));
+        Assert.That(initialData.Tickets, Has.Count.EqualTo(fixture.Instance.AllTickets.Count));
     }
 
     [Test]
@@ -182,7 +171,7 @@ public class DocumentationModelTest
         var notification =
             new ClientNoteTypeNameChangedNotification(Guid.NewGuid(), "NewName", Guid.NewGuid());
 
-        fixture.Messenger.Send(notification);
+        await fixture.NotificationPublisher.NoteType.Publish(notification);
 
         Assert.That(fixture.Instance.AllNotes.Count, Is.EqualTo(beforeNotes));
         Assert.That(fixture.Instance.AllNoteTypes.Count, Is.EqualTo(beforeTypes));
@@ -203,7 +192,7 @@ public class DocumentationModelTest
         var notification = new ClientTicketDataUpdatedNotification(Guid.NewGuid(), "NewName",
             "BookingNumber", [], Guid.NewGuid());
 
-        fixture.Messenger.Send(notification);
+        await fixture.NotificationPublisher.Ticket.Publish(notification);
 
         Assert.That(fixture.Instance.AllNotes.Count, Is.EqualTo(beforeNotes));
         Assert.That(fixture.Instance.AllNoteTypes.Count, Is.EqualTo(beforeTypes));

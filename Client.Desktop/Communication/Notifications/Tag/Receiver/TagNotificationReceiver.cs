@@ -19,6 +19,25 @@ public class TagNotificationReceiver(
     public event Func<ClientTagUpdatedNotification, Task>? ClientTagUpdatedNotificationReceived;
     public event Func<NewTagMessage, Task>? NewTagMessageNotificationReceived;
 
+    public async Task Publish(NewTagMessage message)
+    {
+        if (NewTagMessageNotificationReceived == null)
+            throw new InvalidOperationException(
+                "NewTagMessage received but no forwarding receiver is set");
+
+        await NewTagMessageNotificationReceived.Invoke(message);
+    }
+
+    public async Task Publish(ClientTagUpdatedNotification notification)
+    {
+        if (ClientTagUpdatedNotificationReceived == null)
+            throw new InvalidOperationException(
+                "TagUpdatedNotification received but no forwarding receiver is set");
+
+        await ClientTagUpdatedNotificationReceived.Invoke(notification);
+    }
+
+
     public async Task StartListening(CancellationToken cancellationToken)
     {
         var attempt = 0;
@@ -77,35 +96,27 @@ public class TagNotificationReceiver(
         {
             case TagNotification.NotificationOneofCase.TagCreated:
             {
-                var n = notification.TagCreated;
+                var notificationTagCreated = notification.TagCreated;
 
                 await tracer.Tag.Create.NotificationReceived(
                     GetType(),
-                    Guid.Parse(n.TraceData.TraceId),
-                    n);
+                    Guid.Parse(notificationTagCreated.TraceData.TraceId),
+                    notificationTagCreated);
 
-                if (NewTagMessageNotificationReceived == null)
-                    throw new InvalidOperationException(
-                        "Ticket data update received but no forwarding receiver is set");
-
-                await NewTagMessageNotificationReceived.Invoke(n.ToNewEntityMessage());
+                await Publish(notificationTagCreated.ToNewEntityMessage());
 
                 break;
             }
             case TagNotification.NotificationOneofCase.TagUpdated:
             {
-                var n = notification.TagUpdated;
+                var notificationTagUpdated = notification.TagUpdated;
 
                 await tracer.Tag.Update.NotificationReceived(
                     GetType(),
-                    Guid.Parse(n.TraceData.TraceId),
-                    n);
+                    Guid.Parse(notificationTagUpdated.TraceData.TraceId),
+                    notificationTagUpdated);
 
-                if (ClientTagUpdatedNotificationReceived == null)
-                    throw new InvalidOperationException(
-                        "Ticket data update received but no forwarding receiver is set");
-
-                await ClientTagUpdatedNotificationReceived.Invoke(n.ToClientNotification());
+                await Publish(notificationTagUpdated.ToClientNotification());
 
                 break;
             }

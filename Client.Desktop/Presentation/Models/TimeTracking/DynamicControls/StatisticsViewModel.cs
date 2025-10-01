@@ -2,7 +2,6 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.Commands.StatisticsData.Records;
 using Client.Desktop.Communication.Local;
@@ -60,17 +59,14 @@ public class StatisticsViewModel(
     {
         var tagClientModels = await requestSender.Send(new ClientGetAllTagsRequest());
 
-        await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            AvailableTags.Clear();
+        AvailableTags.Clear();
 
-            foreach (var tagDto in tagClientModels) AvailableTags.Add(tagCheckBoxViewFactory.Create(tagDto));
+        foreach (var tagDto in tagClientModels) AvailableTags.Add(tagCheckBoxViewFactory.Create(tagDto));
 
-            AvailableTags
-                .Where(tvm => StatisticsData!.TagIds.Contains(tvm.Tag!.TagId))
-                .ToList()
-                .ForEach(tvm => tvm.IsChecked = true);
-        });
+        AvailableTags
+            .Where(tvm => StatisticsData!.TagIds.Contains(tvm.Tag!.TagId))
+            .ToList()
+            .ForEach(tvm => tvm.IsChecked = true);
     }
 
     public void RegisterMessenger()
@@ -119,7 +115,7 @@ public class StatisticsViewModel(
             return;
         }
 
-        await Dispatcher.UIThread.InvokeAsync(() => { tagViewModel.Tag.Apply(notification); });
+        tagViewModel.Tag.Apply(notification);
         await tracer.Tag.Update.ChangesApplied(GetType(), notification.TraceId);
     }
 
@@ -131,7 +127,7 @@ public class StatisticsViewModel(
             return;
         }
 
-        await Dispatcher.UIThread.InvokeAsync(() => StatisticsData!.Apply(notification));
+        StatisticsData!.Apply(notification);
         await tracer.Statistics.ChangeTagSelection.ChangesApplied(GetType(), notification.TraceId);
     }
 
@@ -143,19 +139,17 @@ public class StatisticsViewModel(
             return;
         }
 
-        await Dispatcher.UIThread.InvokeAsync(() => StatisticsData!.Apply(notification));
+        StatisticsData!.Apply(notification);
         await tracer.Statistics.ChangeTagSelection.ChangesApplied(GetType(), notification.TraceId);
     }
 
-    public async Task Update()
+    private async Task Update()
     {
-        await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            StatisticsData!.TagIds = AvailableTags
-                .Where(t => t.IsChecked)
-                .Select(t => t.Tag!.TagId)
-                .ToList();
-        });
+        StatisticsData!.TagIds = AvailableTags
+            .Where(t => t.IsChecked)
+            .Select(t => t.Tag!.TagId)
+            .ToList();
+
 
         if (StatisticsData!.IsProductivityChanged())
         {

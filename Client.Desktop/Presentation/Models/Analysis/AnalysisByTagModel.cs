@@ -1,7 +1,6 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 using Client.Desktop.Communication.Local;
 using Client.Desktop.Communication.Notifications.Tag.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
@@ -40,11 +39,8 @@ public class AnalysisByTagModel(
     {
         var tagClientModels = await requestSender.Send(new ClientGetAllTagsRequest());
 
-        await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            Tags.Clear();
-            Tags.AddRange(tagClientModels);
-        });
+        Tags.Clear();
+        Tags.AddRange(tagClientModels);
     }
 
     public void RegisterMessenger()
@@ -69,19 +65,19 @@ public class AnalysisByTagModel(
             return;
         }
 
-        await Dispatcher.UIThread.InvokeAsync(() => { tag.Apply(message); });
+        tag.Apply(message);
         await tracer.Tag.Update.ChangesApplied(GetType(), message.TraceId);
     }
 
     private async Task HandleNewTagMessage(NewTagMessage message)
     {
-        await Dispatcher.UIThread.InvokeAsync(() => { Tags.Add(message.Tag); });
+        Tags.Add(message.Tag);
         await tracer.Tag.Create.AggregateAdded(GetType(), message.TraceId);
     }
 
     public async Task SetAnalysisForTag(TagClientModel selectedTag)
     {
         var analysisByTagDecorator = await requestSender.Send(new ClientGetTagAnalysisById(selectedTag.TagId));
-        await Dispatcher.UIThread.InvokeAsync(() => { AnalysisByTag = analysisByTagDecorator; });
+        AnalysisByTag = analysisByTagDecorator;
     }
 }

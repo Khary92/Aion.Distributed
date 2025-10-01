@@ -23,6 +23,33 @@ public class TicketNotificationReceiver(
 
     public event Func<NewTicketMessage, Task>? NewTicketNotificationReceived;
 
+    public async Task Publish(NewTicketMessage message)
+    {
+        if (NewTicketNotificationReceived == null)
+            throw new InvalidOperationException("NewTicketMessage received but no forwarding receiver is set");
+
+        await NewTicketNotificationReceived.Invoke(message);
+    }
+
+    public async Task Publish(ClientTicketDataUpdatedNotification notification)
+    {
+        if (TicketDataUpdatedNotificationReceived == null)
+            throw new InvalidOperationException(
+                "TicketDataUpdatedNotification received but no forwarding receiver is set");
+
+        await TicketDataUpdatedNotificationReceived.Invoke(notification);
+    }
+
+    public async Task Publish(ClientTicketDocumentationUpdatedNotification notification)
+    {
+        if (TicketDocumentationUpdatedNotificationReceived == null)
+            throw new InvalidOperationException(
+                "TicketDocumentationUpdatedNotification received but no forwarding receiver is set");
+
+        await TicketDocumentationUpdatedNotificationReceived.Invoke(notification);
+    }
+
+
     public async Task StartListening(CancellationToken cancellationToken)
     {
         var attempt = 0;
@@ -81,51 +108,40 @@ public class TicketNotificationReceiver(
         {
             case TicketNotification.NotificationOneofCase.TicketCreated:
             {
-                var n = notification.TicketCreated;
+                var notificationTicketCreated = notification.TicketCreated;
 
                 await tracer.Ticket.Create.NotificationReceived(
                     GetType(),
-                    Guid.Parse(n.TraceData.TraceId),
-                    n);
+                    Guid.Parse(notificationTicketCreated.TraceData.TraceId),
+                    notificationTicketCreated);
 
-                if (NewTicketNotificationReceived == null)
-                    throw new InvalidOperationException("New ticket received but no forwarding receiver is set");
-
-                await NewTicketNotificationReceived.Invoke(n.ToNewEntityMessage());
+                await Publish(notificationTicketCreated.ToNewEntityMessage());
 
                 break;
             }
             case TicketNotification.NotificationOneofCase.TicketDataUpdated:
             {
-                var n = notification.TicketDataUpdated;
+                var notificationTicketDataUpdated = notification.TicketDataUpdated;
 
                 await tracer.Ticket.Update.NotificationReceived(
                     GetType(),
-                    Guid.Parse(n.TraceData.TraceId),
-                    n);
+                    Guid.Parse(notificationTicketDataUpdated.TraceData.TraceId),
+                    notificationTicketDataUpdated);
 
-                if (TicketDataUpdatedNotificationReceived == null)
-                    throw new InvalidOperationException(
-                        "Ticket data update received but no forwarding receiver is set");
-
-                await TicketDataUpdatedNotificationReceived.Invoke(n.ToClientNotification());
+                await Publish(notificationTicketDataUpdated.ToClientNotification());
 
                 break;
             }
             case TicketNotification.NotificationOneofCase.TicketDocumentationUpdated:
             {
-                var n = notification.TicketDocumentationUpdated;
+                var notificationTicketDocumentationUpdated = notification.TicketDocumentationUpdated;
 
                 await tracer.Ticket.Update.NotificationReceived(
                     GetType(),
-                    Guid.Parse(n.TraceData.TraceId),
-                    n);
+                    Guid.Parse(notificationTicketDocumentationUpdated.TraceData.TraceId),
+                    notificationTicketDocumentationUpdated);
 
-                if (TicketDocumentationUpdatedNotificationReceived == null)
-                    throw new InvalidOperationException(
-                        "Ticket documentation update received but no forwarding receiver is set");
-
-                await TicketDocumentationUpdatedNotificationReceived.Invoke(n.ToClientNotification());
+                await Publish(notificationTicketDocumentationUpdated.ToClientNotification());
 
                 break;
             }

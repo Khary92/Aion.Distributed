@@ -11,4 +11,7 @@ public interface ILocalTimerSettingsNotificationPublisher
 
     event Func<ClientSnapshotSaveIntervalChangedNotification, Task>?
         ClientSnapshotSaveIntervalChangedNotificationReceived;
+
+    Task Publish(ClientDocuTimerSaveIntervalChangedNotification notification);
+    Task Publish(ClientSnapshotSaveIntervalChangedNotification notification);
 }

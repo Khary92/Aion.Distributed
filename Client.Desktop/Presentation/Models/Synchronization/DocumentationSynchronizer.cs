@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.Commands.Ticket;
 using Client.Desktop.Communication.Local;
@@ -81,13 +80,10 @@ public class DocumentationSynchronizer(
         }
     }
 
-    private async Task HandleClientTicketDocumentationUpdatedNotification(
+    private Task HandleClientTicketDocumentationUpdatedNotification(
         ClientTicketDocumentationUpdatedNotification message)
     {
-        await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            foreach (var listener in _listeners.Where(listener => listener.Ticket.TicketId == message.TicketId))
-                listener.Ticket.Apply(message);
-        });
+        foreach (var listener in _listeners.Where(listener => listener.Ticket.TicketId == message.TicketId)) ;
+        return Task.CompletedTask;
     }
 }

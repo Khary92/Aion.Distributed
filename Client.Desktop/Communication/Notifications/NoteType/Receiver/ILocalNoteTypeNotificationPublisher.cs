@@ -10,4 +10,8 @@ public interface ILocalNoteTypeNotificationPublisher
     event Func<ClientNoteTypeColorChangedNotification, Task>? ClientNoteTypeColorChangedNotificationReceived;
     event Func<ClientNoteTypeNameChangedNotification, Task>? ClientNoteTypeNameChangedNotificationReceived;
     event Func<NewNoteTypeMessage, Task>? NewNoteTypeMessageReceived;
+
+    Task Publish(NewNoteTypeMessage message);
+    Task Publish(ClientNoteTypeColorChangedNotification notification);
+    Task Publish(ClientNoteTypeNameChangedNotification notification);
 }

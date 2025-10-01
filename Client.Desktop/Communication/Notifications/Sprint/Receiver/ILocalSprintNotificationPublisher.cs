@@ -11,4 +11,8 @@ public interface ILocalSprintNotificationPublisher
     event Func<ClientSprintDataUpdatedNotification, Task>? ClientSprintDataUpdatedNotificationReceived;
     event Func<ClientTicketAddedToActiveSprintNotification, Task>? ClientTicketAddedToActiveSprintNotificationReceived;
     event Func<NewSprintMessage, Task>? NewSprintMessageReceived;
+    Task Publish(NewSprintMessage message);
+    Task Publish(ClientSprintActiveStatusSetNotification notification);
+    Task Publish(ClientSprintDataUpdatedNotification notification);
+    Task Publish(ClientTicketAddedToActiveSprintNotification notification);
 }

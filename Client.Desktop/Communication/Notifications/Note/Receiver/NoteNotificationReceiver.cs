@@ -19,6 +19,24 @@ public class NoteNotificationReceiver(
     public event Func<ClientNoteUpdatedNotification, Task>? ClientNoteUpdatedNotificationReceived;
     public event Func<NewNoteMessage, Task>? NewNoteMessageReceived;
 
+    public async Task Publish(NewNoteMessage message)
+    {
+        if (NewNoteMessageReceived == null)
+            throw new InvalidOperationException(
+                "NewNoteMessage received but no forwarding receiver is set");
+
+        await NewNoteMessageReceived.Invoke(message);
+    }
+
+    public async Task Publish(ClientNoteUpdatedNotification notification)
+    {
+        if (ClientNoteUpdatedNotificationReceived == null)
+            throw new InvalidOperationException(
+                "ClientNoteUpdatedNotification received but no forwarding receiver is set");
+
+        await ClientNoteUpdatedNotificationReceived.Invoke(notification);
+    }
+
     public async Task StartListening(CancellationToken cancellationToken)
     {
         var attempt = 0;
@@ -77,31 +95,22 @@ public class NoteNotificationReceiver(
         {
             case NoteNotification.NotificationOneofCase.NoteCreated:
             {
-                var n = notification.NoteCreated;
+                var notificationNoteCreated = notification.NoteCreated;
 
                 await tracer.Note.Create.NotificationReceived(GetType(),
-                    Guid.Parse(n.NoteId), n);
+                    Guid.Parse(notificationNoteCreated.NoteId), notificationNoteCreated);
 
-                if (NewNoteMessageReceived == null)
-                    throw new InvalidOperationException(
-                        "Ticket data update received but no forwarding receiver is set");
-
-                await NewNoteMessageReceived.Invoke(n.ToNewEntityMessage());
-
+                await Publish(notificationNoteCreated.ToNewEntityMessage());
                 break;
             }
             case NoteNotification.NotificationOneofCase.NoteUpdated:
             {
-                var n = notification.NoteUpdated;
+                var notificationNoteUpdated = notification.NoteUpdated;
 
                 await tracer.Note.Create.NotificationReceived(GetType(),
-                    Guid.Parse(n.NoteId), n);
+                    Guid.Parse(notificationNoteUpdated.NoteId), notificationNoteUpdated);
 
-                if (ClientNoteUpdatedNotificationReceived == null)
-                    throw new InvalidOperationException(
-                        "Ticket data update received but no forwarding receiver is set");
-
-                await ClientNoteUpdatedNotificationReceived.Invoke(n.ToClientNotification());
+                await Publish(notificationNoteUpdated.ToClientNotification());
 
                 break;
             }

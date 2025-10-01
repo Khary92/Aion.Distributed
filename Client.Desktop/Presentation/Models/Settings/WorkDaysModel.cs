@@ -1,7 +1,6 @@
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.Commands.WorkDays.Records;
 using Client.Desktop.Communication.Local;
@@ -38,24 +37,20 @@ public class WorkDaysModel(
     public async Task InitializeAsync()
     {
         var workDayClientModels = await requestSender.Send(new ClientGetAllWorkDaysRequest(Guid.NewGuid()));
-        var isWorkdayAlreadyExisting =
-            await requestSender.Send(new ClientIsWorkDayExistingRequest(DateTimeOffset.Now, Guid.NewGuid()));
 
-        await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            WorkDays.Clear();
-            WorkDays.AddRange(workDayClientModels);
-        });
+        WorkDays.Clear();
+        WorkDays.AddRange(workDayClientModels);
 
         var traceId = Guid.NewGuid();
-        if (isWorkdayAlreadyExisting)
+        if (await requestSender.Send(new ClientIsWorkDayExistingRequest(DateTimeOffset.Now, Guid.NewGuid())))
         {
             await tracer.WorkDay.Create.ActionAborted(GetType(), traceId);
             return;
         }
 
         await tracer.WorkDay.Create.StartUseCase(GetType(), traceId);
-        var clientCreateWorkDayCommand = new ClientCreateWorkDayCommand(Guid.NewGuid(), DateTimeOffset.Now, traceId);
+        var clientCreateWorkDayCommand =
+            new ClientCreateWorkDayCommand(Guid.NewGuid(), DateTimeOffset.Now, traceId);
         await tracer.WorkDay.Create.SendingCommand(GetType(), traceId, clientCreateWorkDayCommand);
         await commandSender.Send(clientCreateWorkDayCommand);
     }
@@ -72,7 +67,7 @@ public class WorkDaysModel(
 
     private async Task HandleNewWorkDayMessage(NewWorkDayMessage message)
     {
-        await Dispatcher.UIThread.InvokeAsync(() => { WorkDays.Add(message.WorkDay); });
+        WorkDays.Add(message.WorkDay);
         await tracer.WorkDay.Create.AggregateAdded(GetType(), message.TraceId);
     }
 
@@ -82,7 +77,8 @@ public class WorkDaysModel(
             throw new InvalidOperationException(
                 "Ticket data update received but no forwarding receiver is set");
 
-        await ClientWorkDaySelectionChangedNotificationReceived.Invoke(new ClientWorkDaySelectionChangedNotification());
+        await ClientWorkDaySelectionChangedNotificationReceived.Invoke(
+            new ClientWorkDaySelectionChangedNotification());
 
         await localSettingsService.SetSelectedDate(selectedWorkDay.Date);
     }

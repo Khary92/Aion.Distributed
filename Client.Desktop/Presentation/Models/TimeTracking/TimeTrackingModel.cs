@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.Commands.Client.Records;
 using Client.Desktop.Communication.Local;
@@ -82,14 +81,13 @@ public class TimeTrackingModel(
         var ticketsInSprint = await requestSender.Send(new ClientGetTicketsForCurrentSprintRequest());
         var allTickets = await requestSender.Send(new ClientGetAllTicketsRequest());
 
-        await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            FilteredTickets.Clear();
-            FilteredTickets.AddRange(ticketsInSprint);
 
-            AllTickets.Clear();
-            AllTickets.AddRange(allTickets);
-        });
+        FilteredTickets.Clear();
+        FilteredTickets.AddRange(ticketsInSprint);
+
+        AllTickets.Clear();
+        AllTickets.AddRange(allTickets);
+
 
         await LoadTimeSlotViewModels();
     }
@@ -135,42 +133,33 @@ public class TimeTrackingModel(
             trackingSlotViewModels.Add(timeSlotViewModel);
         }
 
-        await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            TimeSlotViewModels.Clear();
-            foreach (var vm in trackingSlotViewModels)
-                TimeSlotViewModels.Add(vm);
 
-            if (TimeSlotViewModels.Any())
-            {
-                CurrentViewModelIndex = TimeSlotViewModels.Count - 1;
-                SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.Ticket.Name;
-            }
-        });
+        TimeSlotViewModels.Clear();
+        foreach (var vm in trackingSlotViewModels)
+            TimeSlotViewModels.Add(vm);
+
+        if (TimeSlotViewModels.Any())
+        {
+            CurrentViewModelIndex = TimeSlotViewModels.Count - 1;
+            SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.Ticket.Name;
+        }
     }
 
     public void TogglePreviousViewModel()
     {
-        Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            if (CurrentViewModelIndex <= 0) return;
+        if (CurrentViewModelIndex <= 0) return;
 
-            TimeSlotViewModels[CurrentViewModelIndex].ToggleTimerCommand.Execute();
-            CurrentViewModelIndex -= 1;
-            SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.Ticket.Name;
-        });
+        TimeSlotViewModels[CurrentViewModelIndex].ToggleTimerCommand.Execute();
+        CurrentViewModelIndex -= 1;
     }
 
     public void ToggleNextViewModel()
     {
-        Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            if (CurrentViewModelIndex == TimeSlotViewModels.Count - 1) return;
+        if (CurrentViewModelIndex == TimeSlotViewModels.Count - 1) return;
 
-            TimeSlotViewModels[CurrentViewModelIndex].ToggleTimerCommand.Execute();
-            CurrentViewModelIndex += 1;
-            SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.Ticket.Name;
-        });
+        TimeSlotViewModels[CurrentViewModelIndex].ToggleTimerCommand.Execute();
+        CurrentViewModelIndex += 1;
+        SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.Ticket.Name;
     }
 
     public async Task CreateNewTimeSlotViewModel()
@@ -196,11 +185,9 @@ public class TimeTrackingModel(
 
         if (currentSprint == null) return;
 
-        await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            if (currentSprint.TicketIds.Contains(message.Ticket.TicketId))
-                FilteredTickets.Add(message.Ticket);
-        });
+
+        if (currentSprint.TicketIds.Contains(message.Ticket.TicketId))
+            FilteredTickets.Add(message.Ticket);
     }
 
     private async Task HandleTicketAddedToActiveSprintNotification(ClientTicketAddedToActiveSprintNotification message)
@@ -218,7 +205,7 @@ public class TimeTrackingModel(
             return;
         }
 
-        await Dispatcher.UIThread.InvokeAsync(() => { ticketClientModel.Apply(message); });
+        ticketClientModel.Apply(message);
 
         await tracer.Ticket.Update.ChangesApplied(GetType(), message.TraceId);
     }
@@ -227,11 +214,9 @@ public class TimeTrackingModel(
     {
         var ticketClientModels = await requestSender.Send(new ClientGetTicketsForCurrentSprintRequest());
 
-        await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            FilteredTickets.Clear();
-            FilteredTickets.AddRange(ticketClientModels);
-        });
+
+        FilteredTickets.Clear();
+        FilteredTickets.AddRange(ticketClientModels);
     }
 
     private async Task HandleTimeSlotControlCreatedNotification(ClientTrackingControlCreatedNotification message)
@@ -239,12 +224,11 @@ public class TimeTrackingModel(
         var trackingSlotViewModel =
             await trackingSlotViewModelFactory.Create(message.Ticket, message.StatisticsData, message.TimeSlot);
 
-        await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            TimeSlotViewModels.Add(trackingSlotViewModel);
-            CurrentViewModelIndex = TimeSlotViewModels.Count - 1;
-            SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.Ticket.Name;
-        });
+
+        TimeSlotViewModels.Add(trackingSlotViewModel);
+        CurrentViewModelIndex = TimeSlotViewModels.Count - 1;
+        SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.Ticket.Name;
+
 
         await tracer.Client.CreateTrackingControl.AggregateAdded(GetType(), message.TraceId);
     }
@@ -253,12 +237,11 @@ public class TimeTrackingModel(
     {
         var ticketModels = await requestSender.Send(new ClientGetAllTicketsRequest());
 
-        await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            FilteredTickets.Clear();
-            FilteredTickets.AddRange(ticketModels);
-            TimeSlotViewModels.Clear();
-        });
+
+        FilteredTickets.Clear();
+        FilteredTickets.AddRange(ticketModels);
+        TimeSlotViewModels.Clear();
+
 
         await LoadTimeSlotViewModels();
     }

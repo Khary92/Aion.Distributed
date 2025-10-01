@@ -7,4 +7,6 @@ namespace Client.Desktop.Communication.Notifications.WorkDay.Receiver;
 public interface ILocalWorkDayNotificationPublisher
 {
     event Func<NewWorkDayMessage, Task>? NewWorkDayMessageReceived;
+
+    Task Publish(NewWorkDayMessage message);
 }

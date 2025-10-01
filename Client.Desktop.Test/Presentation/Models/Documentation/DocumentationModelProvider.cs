@@ -7,16 +7,21 @@ using Client.Desktop.Presentation.Factories;
 using Client.Desktop.Presentation.Models.Documentation;
 using Client.Desktop.Presentation.Models.TimeTracking.DynamicControls;
 using Client.Tracing.Tracing.Tracers;
-using CommunityToolkit.Mvvm.Messaging;
+using Global.Settings.UrlResolver;
 using Moq;
 
 namespace Client.Desktop.Test.Presentation.Models.Documentation;
 
 public static class DocumentationModelProvider
 {
-    private static IMessenger CreateMessenger()
+    private static TestNotificationPublisherFacade CreateNotificationPublisherMock()
     {
-        return new WeakReferenceMessenger();
+        return new TestNotificationPublisherFacade(CreateGrpcUrlBuilderMock().Object, CreateTracerMock().Object);
+    }
+
+    private static Mock<IGrpcUrlBuilder> CreateGrpcUrlBuilderMock()
+    {
+        return new Mock<IGrpcUrlBuilder>();
     }
 
     private static Mock<ITraceCollector> CreateTracerMock()
@@ -39,16 +44,21 @@ public static class DocumentationModelProvider
         return new Mock<ITypeCheckBoxViewModelFactory>();
     }
 
+    private static TicketClientModel CreateTicketModel()
+    {
+        return new TicketClientModel(Guid.NewGuid(), "name", "bookingNumber", "documentation", []);
+    }
 
     public static async Task<DocumentationModelFixture> Create(List<NoteClientModel> initialNotes,
         List<NoteTypeClientModel> initialNoteTypes,
         List<TicketClientModel> initialTickets)
     {
-        var messenger = CreateMessenger();
         var requestSender = CreateRequestSenderMock();
         var tracer = CreateTracerMock();
+        var publisherFacade = CreateNotificationPublisherMock();
         var noteViewFactory = CreateNoteViewFactoryMock();
         var typeCheckBoxViewModelFactory = CreateTypeCheckBoxViewModelFactoryMock();
+        var ticketClientModel = CreateTicketModel();
 
         requestSender
             .Setup(rs => rs.Send(It.IsAny<ClientGetAllTicketsRequest>()))
@@ -62,30 +72,35 @@ public static class DocumentationModelProvider
             .Setup(rs => rs.Send(It.IsAny<ClientGetNotesByTicketIdRequest>()))
             .ReturnsAsync(initialNotes);
 
-        var noteViewModel = new NoteViewModel(null!, requestSender.Object, tracer.Object)
+        var noteViewModel = new NoteViewModel(null!, requestSender.Object, tracer.Object, publisherFacade)
         {
             Note = initialNotes.First()
         };
-        await noteViewModel.Initialize();
+
+        await noteViewModel.InitializeAsync();
         noteViewFactory.Setup(nvf => nvf.Create(It.IsAny<NoteClientModel>()))
             .ReturnsAsync(noteViewModel);
 
         typeCheckBoxViewModelFactory.Setup(tf => tf.Create(It.IsAny<NoteTypeClientModel>()))
             .Returns(new TypeCheckBoxViewModel((initialNoteTypes.Count != 0 ? initialNoteTypes.First() : null)!));
 
-        return await CreateFixture(messenger, requestSender, tracer, noteViewFactory, typeCheckBoxViewModelFactory);
+        return await CreateFixture(requestSender, tracer, publisherFacade, noteViewFactory,
+            typeCheckBoxViewModelFactory, ticketClientModel);
     }
 
-    private static async Task<DocumentationModelFixture> CreateFixture(IMessenger messenger,
-        Mock<IRequestSender> requestSender, Mock<ITraceCollector> tracer, Mock<INoteViewFactory> noteViewFactory,
-        Mock<ITypeCheckBoxViewModelFactory> typeCheckBoxViewModelFactory)
+    private static async Task<DocumentationModelFixture> CreateFixture(
+        Mock<IRequestSender> requestSender,
+        Mock<ITraceCollector> tracer,
+        TestNotificationPublisherFacade publisherFacade,
+        Mock<INoteViewFactory> noteViewFactory,
+        Mock<ITypeCheckBoxViewModelFactory> typeCheckBoxViewModelFactory, TicketClientModel? selectedTicket)
     {
-        var instance = new DocumentationModel(messenger, requestSender.Object, noteViewFactory.Object,
-            typeCheckBoxViewModelFactory.Object, tracer.Object);
+        var instance = new DocumentationModel(requestSender.Object, noteViewFactory.Object,
+            typeCheckBoxViewModelFactory.Object, tracer.Object, publisherFacade);
 
         instance.RegisterMessenger();
         await instance.InitializeAsync();
-
+        instance.SelectedTicket = selectedTicket;
         await instance.UpdateNotesForSelectedTicket();
 
         return new DocumentationModelFixture
@@ -93,7 +108,7 @@ public static class DocumentationModelProvider
             Instance = instance,
             RequestSender = requestSender,
             Tracer = tracer,
-            Messenger = messenger,
+            NotificationPublisher = publisherFacade,
             NoteViewFactory = noteViewFactory,
             TypeCheckBoxViewModelFactory = typeCheckBoxViewModelFactory
         };
@@ -104,7 +119,7 @@ public static class DocumentationModelProvider
         public required DocumentationModel Instance { get; init; }
         public required Mock<IRequestSender> RequestSender { get; init; }
         public required Mock<ITraceCollector> Tracer { get; init; }
-        public required IMessenger Messenger { get; init; }
+        public required TestNotificationPublisherFacade NotificationPublisher { get; init; }
         public required Mock<INoteViewFactory> NoteViewFactory { get; init; }
         public required Mock<ITypeCheckBoxViewModelFactory> TypeCheckBoxViewModelFactory { get; init; }
     }

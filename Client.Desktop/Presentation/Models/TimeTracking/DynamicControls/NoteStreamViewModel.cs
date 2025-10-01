@@ -2,7 +2,6 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.Commands.Notes.Records;
 using Client.Desktop.Communication.Local;
@@ -86,16 +85,14 @@ public class NoteStreamViewModel(
         await InsertNoteViewModel(message.Note);
     }
 
-    private async Task HandleClientNoteUpdatedNotification(ClientNoteUpdatedNotification notification)
+    private Task HandleClientNoteUpdatedNotification(ClientNoteUpdatedNotification notification)
     {
-        await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            var viewModel = Notes.FirstOrDefault(n => n.Note.NoteId == notification.NoteId);
+        var viewModel = Notes.FirstOrDefault(n => n.Note.NoteId == notification.NoteId);
 
-            if (viewModel == null) return;
+        if (viewModel == null) return Task.CompletedTask;
 
-            viewModel.Note.Apply(notification);
-        });
+        viewModel.Note.Apply(notification);
+        return Task.CompletedTask;
     }
 
     private async Task InsertNoteViewModel(NoteClientModel noteClientModel)
@@ -104,6 +101,6 @@ public class NoteStreamViewModel(
             noteClientModel.Text, noteClientModel.NoteTypeId,
             noteClientModel.TimeSlotId, noteClientModel.TimeStamp));
 
-        await Dispatcher.UIThread.InvokeAsync(() => Notes.Insert(0, noteViewModel));
+        Notes.Insert(0, noteViewModel);
     }
 }

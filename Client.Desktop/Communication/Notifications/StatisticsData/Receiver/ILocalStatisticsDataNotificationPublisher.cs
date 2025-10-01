@@ -8,4 +8,7 @@ public interface ILocalStatisticsDataNotificationPublisher
 {
     event Func<ClientChangeProductivityNotification, Task>? ClientChangeProductivityNotificationReceived;
     event Func<ClientChangeTagSelectionNotification, Task>? ClientChangeTagSelectionNotificationReceived;
+
+    Task Publish(ClientChangeProductivityNotification notification);
+    Task Publish(ClientChangeTagSelectionNotification notification);
 }
