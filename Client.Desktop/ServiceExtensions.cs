@@ -9,7 +9,6 @@ using Client.Desktop.Communication.Commands.TimeSlots.Records;
 using Client.Desktop.Communication.Commands.WorkDays;
 using Client.Desktop.Communication.Local;
 using Client.Desktop.Communication.Local.LocalEvents.Publisher;
-using Client.Desktop.Communication.Notifications;
 using Client.Desktop.Communication.Notifications.Client.Receiver;
 using Client.Desktop.Communication.Notifications.Note.Receiver;
 using Client.Desktop.Communication.Notifications.NoteType.Receiver;
@@ -350,7 +349,7 @@ public static class ServiceExtensions
         services.AddSingleton<IStreamClient>(sp => sp.GetRequiredService<WorkDayNotificationReceiver>());
 
         services.AddSingleton<INotificationPublisherFacade, NotificationPublisherFacade>();
-        
+
         services.AddSingleton<IStreamLifeCycleHandler, StreamLifeCycleHandler>();
     }
 

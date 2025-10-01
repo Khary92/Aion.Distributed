@@ -2,10 +2,7 @@
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using Client.Desktop.Communication.Local.LocalEvents.Publisher;
-using Client.Desktop.Communication.Local.LocalEvents.Records;
 using Client.Desktop.DataModels;
-using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
-using Client.Desktop.Lifecycle.Startup.Tasks.Register;
 using Client.Desktop.Presentation.Factories;
 using Client.Desktop.Presentation.Models.TimeTracking.DynamicControls;
 using Client.Desktop.Presentation.Views.Custom;
@@ -16,8 +13,8 @@ namespace Client.Desktop.Presentation.Models.TimeTracking;
 
 public class TrackingSlotViewModel : ReactiveObject
 {
-    private readonly INoteStreamViewModelFactory _noteStreamViewModelFactory;
     private readonly IClientTimerNotificationPublisher _clientTimerNotificationPublisher;
+    private readonly INoteStreamViewModelFactory _noteStreamViewModelFactory;
     private readonly IStatisticsViewModelFactory _statisticsViewModelFactory;
     private object _currentView = null!;
     private string _elapsedTimeRepresentation = null!;

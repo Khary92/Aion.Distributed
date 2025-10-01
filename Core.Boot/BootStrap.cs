@@ -44,14 +44,10 @@ public static class BootStrap
             options.ListenAnyIP(serverSettings.GrpcPort, listenOptions =>
             {
                 if (globalSettings.UseHttps)
-                {
                     listenOptions.UseHttps("/app/certs/server.pfx");
-                }
                 //TODO FIX ELSE!
                 else
-                {
                     AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
-                }
 
                 listenOptions.Protocols = HttpProtocols.Http2;
             });

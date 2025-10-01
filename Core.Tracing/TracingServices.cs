@@ -20,7 +20,6 @@ using Core.Server.Tracing.Tracing.Tracers.TimeSlot.UseCase;
 using Core.Server.Tracing.Tracing.Tracers.WorkDay;
 using Core.Server.Tracing.Tracing.Tracers.WorkDay.UseCase;
 using Microsoft.Extensions.DependencyInjection;
-using Service.Monitoring.Shared.Tracing;
 using CreateNoteTraceCollector = Core.Server.Tracing.Tracing.Tracers.Note.UseCase.CreateNoteTraceCollector;
 using NoteUseCaseSelector = Core.Server.Tracing.Tracing.Tracers.Note.NoteUseCaseSelector;
 

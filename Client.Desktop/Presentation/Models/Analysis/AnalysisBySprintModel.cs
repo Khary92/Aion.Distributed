@@ -76,7 +76,7 @@ public class AnalysisBySprintModel(
         }
 
         await Dispatcher.UIThread.InvokeAsync(() => { sprint.Apply(notification); });
-    
+
         await tracer.Sprint.Update.ChangesApplied(GetType(), notification.TraceId);
     }
 

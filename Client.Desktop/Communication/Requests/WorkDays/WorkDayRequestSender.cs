@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests.WorkDays.Records;
 using Client.Desktop.DataModels;
-using Client.Proto;
 using Grpc.Net.Client;
 using Proto.Requests.WorkDays;
 
@@ -18,7 +17,7 @@ public class WorkDayRequestSender : IWorkDayRequestSender
         var channel = GrpcChannel.ForAddress(address);
         _client = new WorkDayRequestService.WorkDayRequestServiceClient(channel);
     }
-    
+
     public async Task<List<WorkDayClientModel>> Send(ClientGetAllWorkDaysRequest request)
     {
         var response = await _client.GetAllWorkDaysAsync(request.ToProto());

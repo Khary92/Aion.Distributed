@@ -18,9 +18,24 @@ public class TimerService(IRequestSender requestSender, INotificationPublisherFa
     : IDisposable, IMessengerRegistration, IInitializeAsync, IClientTimerNotificationPublisher
 {
     private readonly Timer _timer = new(1000);
-    private TimerSettingsClientModel? _timerSettings;
 
     private bool _disposed;
+    private TimerSettingsClientModel? _timerSettings;
+
+    public event Func<ClientCreateSnapshotNotification, Task>? ClientCreateSnapshotNotificationReceived;
+    public event Func<ClientSaveDocumentationNotification, Task>? ClientSaveDocumentationNotificationReceived;
+
+    public void Dispose()
+    {
+        if (_disposed) return;
+        _disposed = true;
+
+        _timer.Stop();
+        _timer.Elapsed -= OnTick;
+        _timer.Dispose();
+
+        UnregisterMessenger();
+    }
 
     public InitializationType Type => InitializationType.Service;
 
@@ -74,10 +89,8 @@ public class TimerService(IRequestSender requestSender, INotificationPublisherFa
         if (_timerSettings.IsDocuSaveIntervalReached())
         {
             if (ClientSaveDocumentationNotificationReceived == null)
-            {
                 throw new InvalidOperationException(
                     "Ticket data update received but no forwarding receiver is set");
-            }
 
             await ClientSaveDocumentationNotificationReceived
                 .Invoke(new ClientSaveDocumentationNotification());
@@ -86,28 +99,11 @@ public class TimerService(IRequestSender requestSender, INotificationPublisherFa
         if (_timerSettings.IsSnapshotIntervalReached())
         {
             if (ClientCreateSnapshotNotificationReceived == null)
-            {
                 throw new InvalidOperationException(
                     "Ticket data update received but no forwarding receiver is set");
-            }
 
             await ClientCreateSnapshotNotificationReceived
                 .Invoke(new ClientCreateSnapshotNotification());
         }
     }
-
-    public void Dispose()
-    {
-        if (_disposed) return;
-        _disposed = true;
-
-        _timer.Stop();
-        _timer.Elapsed -= OnTick;
-        _timer.Dispose();
-
-        UnregisterMessenger();
-    }
-
-    public event Func<ClientCreateSnapshotNotification, Task>? ClientCreateSnapshotNotificationReceived;
-    public event Func<ClientSaveDocumentationNotification, Task>? ClientSaveDocumentationNotificationReceived;
 }

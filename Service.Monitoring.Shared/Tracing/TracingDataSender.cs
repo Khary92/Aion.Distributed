@@ -12,7 +12,7 @@ public class TracingDataSender : ITracingDataSender
         var channel = GrpcChannel.ForAddress(address);
         _client = new TraceDataCommandProtoService.TraceDataCommandProtoServiceClient(channel);
     }
-    
+
     public async Task<bool> Send(ServiceTraceDataCommand command)
     {
         try

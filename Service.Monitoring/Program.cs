@@ -36,15 +36,12 @@ public abstract class Program
         {
             options.ListenAnyIP(monitoringSettings.GrpcPort, listenOptions =>
             {
-                if (globalSettings.UseHttps)
-                {
-                    listenOptions.UseHttps("/app/certs/server.pfx");
-                }
+                if (globalSettings.UseHttps) listenOptions.UseHttps("/app/certs/server.pfx");
 
                 listenOptions.Protocols = HttpProtocols.Http2;
             });
         });
-        
+
         var app = builder.Build();
         app.UseRouting();
         app.AddEndPoints();

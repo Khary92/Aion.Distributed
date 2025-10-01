@@ -30,7 +30,6 @@ using Core.Server.Translators.Commands.Tickets;
 using Core.Server.Translators.Commands.TimerSettings;
 using Core.Server.Translators.Commands.TimeSlots;
 using Core.Server.Translators.Commands.WorkDays;
-using Global.Settings.Types;
 using Global.Settings.UrlResolver;
 using Service.Monitoring.Shared.Tracing;
 
@@ -57,7 +56,7 @@ public static class CoreServices
                 .To(ResolvingServices.Monitoring)
                 .BuildAddress()));
     }
-    
+
     private static void AddCommonServices(this IServiceCollection services)
     {
         services.AddScoped<ITrackingControlService, TrackingControlService>();

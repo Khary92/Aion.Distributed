@@ -1,6 +1,4 @@
 ﻿using Client.Desktop.Presentation.Models.Settings;
-using Client.Desktop.Services.LocalSettings.Commands;
-using CommunityToolkit.Mvvm.Messaging;
 using Moq;
 
 namespace Client.Desktop.Test.Presentation.Models.Settings;

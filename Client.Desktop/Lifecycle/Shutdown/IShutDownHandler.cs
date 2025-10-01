@@ -1,5 +1,4 @@
 using System.Threading.Tasks;
-using Avalonia.Controls.ApplicationLifetimes;
 
 namespace Client.Desktop.Lifecycle.Shutdown;
 

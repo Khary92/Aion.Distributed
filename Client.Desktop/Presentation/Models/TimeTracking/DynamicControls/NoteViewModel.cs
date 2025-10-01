@@ -15,7 +15,6 @@ using Client.Desktop.DataModels;
 using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Register;
 using Client.Tracing.Tracing.Tracers;
-using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using ReactiveUI;
 using Unit = System.Reactive.Unit;
@@ -25,9 +24,9 @@ namespace Client.Desktop.Presentation.Models.TimeTracking.DynamicControls;
 public class NoteViewModel : ReactiveObject, IMessengerRegistration, IInitializeAsync
 {
     private readonly ICommandSender _commandSender;
+    private readonly INotificationPublisherFacade _notificationPublisher;
     private readonly IRequestSender _requestSender;
     private readonly ITraceCollector _tracer;
-    private readonly INotificationPublisherFacade _notificationPublisher;
     private int _currentNoteTypeIndex;
 
     public NoteViewModel(ICommandSender commandSender, IRequestSender requestSender,
@@ -49,6 +48,24 @@ public class NoteViewModel : ReactiveObject, IMessengerRegistration, IInitialize
     public ReactiveCommand<Unit, Unit> SetNextTypeCommand { get; }
     public ReactiveCommand<Unit, Unit> SetPreviousTypeCommand { get; }
     public ReactiveCommand<Unit, Unit> UpdateNoteCommand { get; }
+
+    public InitializationType Type => InitializationType.ViewModel;
+
+    public async Task InitializeAsync()
+    {
+        var noteTypeViewModels = await _requestSender.Send(new ClientGetAllNoteTypesRequest());
+
+        await Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            NoteTypes.Clear();
+
+            NoteTypes.AddRange(noteTypeViewModels);
+
+            if (Note.NoteTypeId == Guid.Empty || !NoteTypes.Any()) return;
+
+            Note.NoteType = NoteTypes.FirstOrDefault(nt => nt.NoteTypeId == Note.NoteTypeId);
+        });
+    }
 
     public void RegisterMessenger()
     {
@@ -133,9 +150,9 @@ public class NoteViewModel : ReactiveObject, IMessengerRegistration, IInitialize
     private async Task SetNextType()
     {
         if (NoteTypes.Count == 0 || _currentNoteTypeIndex >= NoteTypes.Count - 1) return;
-        
+
         _currentNoteTypeIndex++;
-        
+
         await Dispatcher.UIThread.InvokeAsync(() => Note.NoteType = NoteTypes[_currentNoteTypeIndex]);
     }
 
@@ -144,25 +161,7 @@ public class NoteViewModel : ReactiveObject, IMessengerRegistration, IInitialize
         if (NoteTypes.Count == 0 || _currentNoteTypeIndex == 0) return;
 
         _currentNoteTypeIndex--;
-        
+
         await Dispatcher.UIThread.InvokeAsync(() => Note.NoteType = NoteTypes[_currentNoteTypeIndex]);
-    }
-
-    public InitializationType Type => InitializationType.ViewModel;
-
-    public async Task InitializeAsync()
-    {
-        var noteTypeViewModels = await _requestSender.Send(new ClientGetAllNoteTypesRequest());
-
-        await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            NoteTypes.Clear();
-
-            NoteTypes.AddRange(noteTypeViewModels);
-
-            if (Note.NoteTypeId == Guid.Empty || !NoteTypes.Any()) return;
-
-            Note.NoteType = NoteTypes.FirstOrDefault(nt => nt.NoteTypeId == Note.NoteTypeId);
-        });
     }
 }

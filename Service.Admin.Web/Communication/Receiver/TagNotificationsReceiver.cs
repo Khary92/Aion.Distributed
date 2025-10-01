@@ -1,5 +1,4 @@
-﻿using Global.Settings.Types;
-using Global.Settings.UrlResolver;
+﻿using Global.Settings.UrlResolver;
 using Grpc.Core;
 using Grpc.Net.Client;
 using Proto.Notifications.Tag;
@@ -9,7 +8,10 @@ using Service.Admin.Web.Services.State;
 
 namespace Service.Admin.Web.Communication.Receiver;
 
-public class TagNotificationsReceiver(ITagStateService tagStateService, ITraceCollector tracer, IGrpcUrlBuilder grpcUrlBuilder)
+public class TagNotificationsReceiver(
+    ITagStateService tagStateService,
+    ITraceCollector tracer,
+    IGrpcUrlBuilder grpcUrlBuilder)
 {
     public async Task SubscribeToNotifications(CancellationToken stoppingToken = default)
     {
@@ -31,7 +33,7 @@ public class TagNotificationsReceiver(ITagStateService tagStateService, ITraceCo
                     .To(ResolvingServices.Server)
                     .BuildAddress(),
                 channelOptions);
-        
+
         var client = new TagNotificationService.TagNotificationServiceClient(channel);
 
         while (!stoppingToken.IsCancellationRequested)

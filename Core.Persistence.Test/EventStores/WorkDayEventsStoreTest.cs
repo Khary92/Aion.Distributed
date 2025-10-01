@@ -20,7 +20,7 @@ public class WorkDayEventsStoreTest
         _dbOptions = new DbContextOptionsBuilder<AppDbContext>()
             .UseInMemoryDatabase(dbName)
             .Options;
-        
+
         _databaseSettingsMock = new Mock<IOptions<DatabaseSettings>>();
         _dbContextFactoryMock = new Mock<IDbContextFactory<AppDbContext>>();
         _dbContextFactoryMock

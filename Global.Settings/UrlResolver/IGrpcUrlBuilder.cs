@@ -1,6 +1,4 @@
-﻿using Global.Settings.Types;
-
-namespace Global.Settings.UrlResolver;
+﻿namespace Global.Settings.UrlResolver;
 
 public interface IGrpcUrlBuilder
 {

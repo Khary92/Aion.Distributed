@@ -9,7 +9,8 @@ using ReactiveUI;
 
 namespace Client.Desktop.Presentation.Models.TimeTracking.DynamicControls;
 
-public class TagCheckBoxViewModel(ITraceCollector tracer, INotificationPublisherFacade notificationPublisher) : ReactiveObject, IMessengerRegistration
+public class TagCheckBoxViewModel(ITraceCollector tracer, INotificationPublisherFacade notificationPublisher)
+    : ReactiveObject, IMessengerRegistration
 {
     private bool _isChecked;
     private TagClientModel? _tag;
@@ -41,7 +42,7 @@ public class TagCheckBoxViewModel(ITraceCollector tracer, INotificationPublisher
         if (Tag == null || Tag.TagId != notification.TagId) return;
 
         await Dispatcher.UIThread.InvokeAsync(() => { Tag.Apply(notification); });
-        
+
         await tracer.Tag.Update.ChangesApplied(GetType(), notification.TraceId);
     }
 }

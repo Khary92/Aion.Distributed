@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 using Client.Desktop.Communication.Notifications.StatisticsData.Records;
 using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
 using Client.Tracing.Tracing.Tracers;
@@ -17,12 +16,14 @@ public class StatisticsDataNotificationReceiver(
     IGrpcUrlBuilder grpcUrlBuilder,
     ITraceCollector tracer) : ILocalStatisticsDataNotificationPublisher, IStreamClient
 {
+    public event Func<ClientChangeProductivityNotification, Task>? ClientChangeProductivityNotificationReceived;
+    public event Func<ClientChangeTagSelectionNotification, Task>? ClientChangeTagSelectionNotificationReceived;
+
     public async Task StartListening(CancellationToken cancellationToken)
     {
         var attempt = 0;
 
         while (!cancellationToken.IsCancellationRequested)
-        {
             try
             {
                 using var channel = GrpcChannel.ForAddress(grpcUrlBuilder
@@ -68,7 +69,6 @@ public class StatisticsDataNotificationReceiver(
                     return;
                 }
             }
-        }
     }
 
     private async Task HandleNotificationReceived(StatisticsDataNotification notification)
@@ -82,15 +82,13 @@ public class StatisticsDataNotificationReceiver(
                     GetType(),
                     Guid.Parse(n.TraceData.TraceId),
                     n);
-                
+
                 if (ClientChangeProductivityNotificationReceived == null)
-                {
                     throw new InvalidOperationException(
                         "Ticket data update received but no forwarding receiver is set");
-                }
 
                 await ClientChangeProductivityNotificationReceived.Invoke(n.ToClientNotification());
-                
+
                 break;
             }
             case StatisticsDataNotification.NotificationOneofCase.ChangeTagSelection:
@@ -102,22 +100,15 @@ public class StatisticsDataNotificationReceiver(
                     n);
 
                 if (ClientChangeTagSelectionNotificationReceived == null)
-                {
                     throw new InvalidOperationException(
                         "Ticket data update received but no forwarding receiver is set");
-                }
 
                 await ClientChangeTagSelectionNotificationReceived.Invoke(n.ToClientNotification());
-                
+
                 break;
             }
             case StatisticsDataNotification.NotificationOneofCase.None:
                 break;
-            default:
-                break;
         }
     }
-
-    public event Func<ClientChangeProductivityNotification, Task>? ClientChangeProductivityNotificationReceived;
-    public event Func<ClientChangeTagSelectionNotification, Task>? ClientChangeTagSelectionNotificationReceived;
 }

@@ -172,7 +172,7 @@ public class TimeTrackingModel(
             SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.Ticket.Name;
         });
     }
-    
+
     public async Task CreateNewTimeSlotViewModel()
     {
         if (SelectedTicket == null) return;
@@ -230,10 +230,10 @@ public class TimeTrackingModel(
         await Dispatcher.UIThread.InvokeAsync(() =>
         {
             FilteredTickets.Clear();
-            FilteredTickets.AddRange(ticketClientModels); 
+            FilteredTickets.AddRange(ticketClientModels);
         });
     }
-    
+
     private async Task HandleTimeSlotControlCreatedNotification(ClientTrackingControlCreatedNotification message)
     {
         var trackingSlotViewModel =
@@ -248,7 +248,7 @@ public class TimeTrackingModel(
 
         await tracer.Client.CreateTrackingControl.AggregateAdded(GetType(), message.TraceId);
     }
-    
+
     private async Task HandleWorkDaySelectionChangedNotification(ClientWorkDaySelectionChangedNotification message)
     {
         var ticketModels = await requestSender.Send(new ClientGetAllTicketsRequest());

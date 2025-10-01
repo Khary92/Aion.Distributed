@@ -13,7 +13,6 @@ using Client.Desktop.Lifecycle.Startup.Tasks.Register;
 using Client.Desktop.Services.Export;
 using Client.Desktop.Services.LocalSettings;
 using Client.Tracing.Tracing.Tracers;
-using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using ReactiveUI;
 
@@ -23,7 +22,8 @@ public class ExportModel(
     IRequestSender requestSender,
     IExportService exportService,
     ITraceCollector tracer,
-    ILocalSettingsService settingsService, INotificationPublisherFacade notificationPublisher)
+    ILocalSettingsService settingsService,
+    INotificationPublisherFacade notificationPublisher)
     : ReactiveObject, IInitializeAsync, IMessengerRegistration
 {
     private string _markdownText = string.Empty;
@@ -73,7 +73,7 @@ public class ExportModel(
     // async void is bad but it should work for now
     public async void RefreshMarkdownViewerHandler(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        await Dispatcher.UIThread.InvokeAsync(async () => 
+        await Dispatcher.UIThread.InvokeAsync(async () =>
             MarkdownText = await exportService.GetMarkdownString(SelectedWorkDays));
     }
 }

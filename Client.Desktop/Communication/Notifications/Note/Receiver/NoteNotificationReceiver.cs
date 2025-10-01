@@ -16,12 +16,14 @@ public class NoteNotificationReceiver(
     IGrpcUrlBuilder grpcUrlBuilder,
     ITraceCollector tracer) : ILocalNoteNotificationPublisher, IStreamClient
 {
+    public event Func<ClientNoteUpdatedNotification, Task>? ClientNoteUpdatedNotificationReceived;
+    public event Func<NewNoteMessage, Task>? NewNoteMessageReceived;
+
     public async Task StartListening(CancellationToken cancellationToken)
     {
         var attempt = 0;
 
         while (!cancellationToken.IsCancellationRequested)
-        {
             try
             {
                 using var channel = GrpcChannel.ForAddress(grpcUrlBuilder
@@ -67,7 +69,6 @@ public class NoteNotificationReceiver(
                     return;
                 }
             }
-        }
     }
 
     private async Task HandleNotificationReceived(NoteNotification notification, CancellationToken stoppingToken)
@@ -82,10 +83,8 @@ public class NoteNotificationReceiver(
                     Guid.Parse(n.NoteId), n);
 
                 if (NewNoteMessageReceived == null)
-                {
                     throw new InvalidOperationException(
                         "Ticket data update received but no forwarding receiver is set");
-                }
 
                 await NewNoteMessageReceived.Invoke(n.ToNewEntityMessage());
 
@@ -99,10 +98,8 @@ public class NoteNotificationReceiver(
                     Guid.Parse(n.NoteId), n);
 
                 if (ClientNoteUpdatedNotificationReceived == null)
-                {
                     throw new InvalidOperationException(
                         "Ticket data update received but no forwarding receiver is set");
-                }
 
                 await ClientNoteUpdatedNotificationReceived.Invoke(n.ToClientNotification());
 
@@ -112,7 +109,4 @@ public class NoteNotificationReceiver(
                 break;
         }
     }
-
-    public event Func<ClientNoteUpdatedNotification, Task>? ClientNoteUpdatedNotificationReceived;
-    public event Func<NewNoteMessage, Task>? NewNoteMessageReceived;
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
 using Client.Desktop.Communication.Commands.TimeSlots.Records;
 using Client.Desktop.Lifecycle.Startup.Tasks.Register;
@@ -15,7 +16,8 @@ public class ShutdownHandler(
     IPersistentCache<ClientSetStartTimeCommand> startTimeCache,
     IPersistentCache<ClientSetEndTimeCommand> endTimeCache,
     IDisposable timerService,
-    IEnumerable<IMessengerRegistration> messengers, IStreamLifeCycleHandler streamLifeCycleHandler) : IShutDownHandler
+    IEnumerable<IMessengerRegistration> messengers,
+    IStreamLifeCycleHandler streamLifeCycleHandler) : IShutDownHandler
 {
     public async Task Exit()
     {
@@ -23,23 +25,20 @@ public class ShutdownHandler(
         await endTimeCache.Persist();
 
         streamLifeCycleHandler.Stop();
-        
-        foreach (var messenger in messengers)
-        {
-            messenger.UnregisterMessenger();
-        }
+
+        foreach (var messenger in messengers) messenger.UnregisterMessenger();
 
         try
         {
             timerService.Dispose();
         }
-        catch (ObjectDisposedException) { }
+        catch (ObjectDisposedException)
+        {
+        }
 
         applicationLifetime.StopApplication();
 
-        if (Avalonia.Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopApp)
-        {
+        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopApp)
             desktopApp.Shutdown();
-        }
     }
 }

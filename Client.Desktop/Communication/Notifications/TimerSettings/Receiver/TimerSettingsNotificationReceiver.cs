@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 using Client.Desktop.Communication.Notifications.TimerSettings.Records;
 using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
 using Global.Settings.UrlResolver;
@@ -15,12 +14,17 @@ namespace Client.Desktop.Communication.Notifications.TimerSettings.Receiver;
 public class TimerSettingsNotificationReceiver(
     IGrpcUrlBuilder grpcUrlBuilder) : ILocalTimerSettingsNotificationPublisher, IStreamClient
 {
+    public event Func<ClientDocuTimerSaveIntervalChangedNotification, Task>?
+        ClientDocuTimerSaveIntervalChangedNotificationReceived;
+
+    public event Func<ClientSnapshotSaveIntervalChangedNotification, Task>?
+        ClientSnapshotSaveIntervalChangedNotificationReceived;
+
     public async Task StartListening(CancellationToken cancellationToken)
     {
         var attempt = 0;
 
         while (!cancellationToken.IsCancellationRequested)
-        {
             try
             {
                 using var channel = GrpcChannel.ForAddress(grpcUrlBuilder
@@ -67,7 +71,6 @@ public class TimerSettingsNotificationReceiver(
                     return;
                 }
             }
-        }
     }
 
     private async Task HandleNotificationReceived(TimerSettingsNotification notification)
@@ -81,13 +84,11 @@ public class TimerSettingsNotificationReceiver(
                 // TODO: Add tracing
 
                 if (ClientDocuTimerSaveIntervalChangedNotificationReceived == null)
-                {
                     throw new InvalidOperationException(
                         "Ticket data update received but no forwarding receiver is set");
-                }
 
                 await ClientDocuTimerSaveIntervalChangedNotificationReceived.Invoke(n.ToClientNotification());
-                
+
                 break;
             }
             case TimerSettingsNotification.NotificationOneofCase.SnapshotSaveIntervalChanged:
@@ -96,20 +97,15 @@ public class TimerSettingsNotificationReceiver(
 
                 // TODO: Add tracing
                 if (ClientSnapshotSaveIntervalChangedNotificationReceived == null)
-                {
                     throw new InvalidOperationException(
                         "Ticket data update received but no forwarding receiver is set");
-                }
 
                 await ClientSnapshotSaveIntervalChangedNotificationReceived.Invoke(n.ToClientNotification());
-                
+
                 break;
             }
             case TimerSettingsNotification.NotificationOneofCase.None:
                 break;
         }
     }
-
-    public event Func<ClientDocuTimerSaveIntervalChangedNotification, Task>? ClientDocuTimerSaveIntervalChangedNotificationReceived;
-    public event Func<ClientSnapshotSaveIntervalChangedNotification, Task>? ClientSnapshotSaveIntervalChangedNotificationReceived;
 }

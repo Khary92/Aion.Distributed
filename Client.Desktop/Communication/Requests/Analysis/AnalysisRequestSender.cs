@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests.Analysis.Records;
 using Client.Desktop.DataModels.Decorators;
-using Client.Proto;
 using Grpc.Net.Client;
 using Proto.Requests.AnalysisData;
 
@@ -19,7 +18,7 @@ public class AnalysisRequestSender : IAnalysisRequestSender
         var channel = GrpcChannel.ForAddress(address);
         _client = new AnalysisRequestService.AnalysisRequestServiceClient(channel);
     }
-    
+
     public async Task<AnalysisBySprintDecorator> Send(ClientGetSprintAnalysisById request)
     {
         var response = await _client.GetSprintAnalysisAsync(request.ToProto());

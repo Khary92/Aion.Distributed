@@ -16,12 +16,14 @@ public class ClientNotificationReceiver(
     IGrpcUrlBuilder grpcUrlBuilder,
     ITraceCollector tracer) : ILocalClientNotificationPublisher, IStreamClient
 {
+    public event Func<ClientSprintSelectionChangedNotification, Task>? ClientSprintSelectionChangedNotificationReceived;
+    public event Func<ClientTrackingControlCreatedNotification, Task>? ClientTrackingControlCreatedNotificationReceived;
+
     public async Task StartListening(CancellationToken cancellationToken)
     {
         var attempt = 0;
 
         while (!cancellationToken.IsCancellationRequested)
-        {
             try
             {
                 using var channel = GrpcChannel.ForAddress(grpcUrlBuilder
@@ -67,7 +69,6 @@ public class ClientNotificationReceiver(
                     return;
                 }
             }
-        }
     }
 
     private async Task HandleNotificationReceived(ClientNotification notification, CancellationToken stoppingToken)
@@ -82,10 +83,8 @@ public class ClientNotificationReceiver(
 
 
                 if (ClientTrackingControlCreatedNotificationReceived == null)
-                {
                     throw new InvalidOperationException(
                         "Ticket data update received but no forwarding receiver is set");
-                }
 
                 await ClientTrackingControlCreatedNotificationReceived.Invoke(notification.TimeSlotControlCreated
                     .ToClientNotification());
@@ -95,10 +94,8 @@ public class ClientNotificationReceiver(
             case ClientNotification.NotificationOneofCase.SprintSelectionChanged:
             {
                 if (ClientSprintSelectionChangedNotificationReceived == null)
-                {
                     throw new InvalidOperationException(
                         "Ticket data update received but no forwarding receiver is set");
-                }
 
                 await ClientSprintSelectionChangedNotificationReceived.Invoke(notification.SprintSelectionChanged
                     .ToClientNotification());
@@ -107,7 +104,4 @@ public class ClientNotificationReceiver(
             }
         }
     }
-
-    public event Func<ClientSprintSelectionChangedNotification, Task>? ClientSprintSelectionChangedNotificationReceived;
-    public event Func<ClientTrackingControlCreatedNotification, Task>? ClientTrackingControlCreatedNotificationReceived;
 }

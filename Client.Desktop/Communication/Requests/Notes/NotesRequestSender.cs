@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests.Notes.Records;
 using Client.Desktop.DataModels;
-using Client.Proto;
 using Grpc.Net.Client;
 using Proto.Requests.Notes;
 
@@ -17,7 +16,7 @@ public class NotesRequestSender : INotesRequestSender
         var channel = GrpcChannel.ForAddress(address);
         _client = new NotesRequestService.NotesRequestServiceClient(channel);
     }
-    
+
     public async Task<List<NoteClientModel>> Send(ClientGetNotesByTicketIdRequest request)
     {
         var response = await _client.GetNotesByTicketIdAsync(request.ToProto());

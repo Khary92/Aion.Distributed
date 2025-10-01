@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Client.Desktop.Communication.Notifications.Client.Records;
 using Client.Desktop.Communication.Notifications.Tag.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
 

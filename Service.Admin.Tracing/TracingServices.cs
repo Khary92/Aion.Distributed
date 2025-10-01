@@ -9,7 +9,6 @@ using Service.Admin.Tracing.Tracing.Ticket;
 using Service.Admin.Tracing.Tracing.Ticket.UseCase;
 using Service.Admin.Tracing.Tracing.TimerSettings;
 using Service.Admin.Tracing.Tracing.TimerSettings.UseCase;
-using Service.Monitoring.Shared.Tracing;
 
 namespace Service.Admin.Tracing;
 

@@ -45,6 +45,27 @@ public class NoteStreamViewModel(
         set => this.RaiseAndSetIfChanged(ref _timeSlotId, value);
     }
 
+    public InitializationType Type => InitializationType.ViewModel;
+
+    public async Task InitializeAsync()
+    {
+        var noteClientModels =
+            await requestSender.Send(new ClientGetNotesByTimeSlotIdRequest(TimeSlotId, Guid.NewGuid()));
+        foreach (var note in noteClientModels) await InsertNoteViewModel(note);
+    }
+
+    public void RegisterMessenger()
+    {
+        notificationPublisher.Note.NewNoteMessageReceived += HandleNewNoteMessage;
+        notificationPublisher.Note.ClientNoteUpdatedNotificationReceived += HandleClientNoteUpdatedNotification;
+    }
+
+    public void UnregisterMessenger()
+    {
+        notificationPublisher.Note.NewNoteMessageReceived -= HandleNewNoteMessage;
+        notificationPublisher.Note.ClientNoteUpdatedNotificationReceived -= HandleClientNoteUpdatedNotification;
+    }
+
     public async Task AddNoteControl()
     {
         if (!localSettingsService.IsSelectedDateCurrentDate()) return;
@@ -58,18 +79,6 @@ public class NoteStreamViewModel(
 
         await tracer.Note.Create.SendingCommand(GetType(), tracingId, clientCreateNoteCommand);
         await commandSender.Send(clientCreateNoteCommand);
-    }
-
-    public void RegisterMessenger()
-    {
-        notificationPublisher.Note.NewNoteMessageReceived += HandleNewNoteMessage;
-        notificationPublisher.Note.ClientNoteUpdatedNotificationReceived += HandleClientNoteUpdatedNotification;
-    }
-
-    public void UnregisterMessenger()
-    {
-        notificationPublisher.Note.NewNoteMessageReceived -= HandleNewNoteMessage;
-        notificationPublisher.Note.ClientNoteUpdatedNotificationReceived -= HandleClientNoteUpdatedNotification;
     }
 
     private async Task HandleNewNoteMessage(NewNoteMessage message)
@@ -87,15 +96,6 @@ public class NoteStreamViewModel(
 
             viewModel.Note.Apply(notification);
         });
-    }
-
-    public InitializationType Type => InitializationType.ViewModel;
-
-    public async Task InitializeAsync()
-    {
-        var noteClientModels =
-            await requestSender.Send(new ClientGetNotesByTimeSlotIdRequest(TimeSlotId, Guid.NewGuid()));
-        foreach (var note in noteClientModels) await InsertNoteViewModel(note);
     }
 
     private async Task InsertNoteViewModel(NoteClientModel noteClientModel)

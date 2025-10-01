@@ -28,13 +28,6 @@ public class SettingsModel(ILocalSettingsService localSettingsService) : Reactiv
         }
     }
 
-    public async Task SetExportPath()
-    {
-        if (_exportPath == null) return;
-        
-        await localSettingsService.SetExportPath(_exportPath);
-    }
-
     public InitializationType Type => InitializationType.Model;
 
     public Task InitializeAsync()
@@ -42,5 +35,12 @@ public class SettingsModel(ILocalSettingsService localSettingsService) : Reactiv
         ExportPath = localSettingsService.ExportPath;
         SelectedDate = localSettingsService.SelectedDate;
         return Task.CompletedTask;
+    }
+
+    public async Task SetExportPath()
+    {
+        if (_exportPath == null) return;
+
+        await localSettingsService.SetExportPath(_exportPath);
     }
 }

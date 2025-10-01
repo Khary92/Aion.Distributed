@@ -27,7 +27,9 @@ public class StatisticsViewModel(
     IRequestSender requestSender,
     ITagCheckBoxViewFactory tagCheckBoxViewFactory,
     ITraceCollector tracer,
-    INotificationPublisherFacade notificationPublisher, IClientTimerNotificationPublisher clientTimerNotificationPublisher) : ReactiveObject, IInitializeAsync, IMessengerRegistration
+    INotificationPublisherFacade notificationPublisher,
+    IClientTimerNotificationPublisher clientTimerNotificationPublisher)
+    : ReactiveObject, IInitializeAsync, IMessengerRegistration
 {
     private ObservableCollection<TagCheckBoxViewModel> _availableTags = [];
     private StatisticsDataClientModel? _statisticsData;
@@ -52,6 +54,25 @@ public class StatisticsViewModel(
         set => this.RaiseAndSetIfChanged(ref _availableTags, value);
     }
 
+    public InitializationType Type => InitializationType.ViewModel;
+
+    public async Task InitializeAsync()
+    {
+        var tagClientModels = await requestSender.Send(new ClientGetAllTagsRequest());
+
+        await Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            AvailableTags.Clear();
+
+            foreach (var tagDto in tagClientModels) AvailableTags.Add(tagCheckBoxViewFactory.Create(tagDto));
+
+            AvailableTags
+                .Where(tvm => StatisticsData!.TagIds.Contains(tvm.Tag!.TagId))
+                .ToList()
+                .ForEach(tvm => tvm.IsChecked = true);
+        });
+    }
+
     public void RegisterMessenger()
     {
         notificationPublisher.Tag.NewTagMessageNotificationReceived += HandleNewTagMessage;
@@ -60,7 +81,7 @@ public class StatisticsViewModel(
             HandleClientChangeProductivityNotification;
         notificationPublisher.StatisticsData.ClientChangeTagSelectionNotificationReceived +=
             HandleClientChangeTagSelectionNotification;
-        
+
         clientTimerNotificationPublisher.ClientCreateSnapshotNotificationReceived +=
             HandleClientCreateSnapshotNotification;
     }
@@ -166,24 +187,5 @@ public class StatisticsViewModel(
             await tracer.Statistics.ChangeTagSelection.SendingCommand(GetType(), traceId, tagSelectionCommand);
             await commandSender.Send(tagSelectionCommand);
         }
-    }
-
-    public InitializationType Type => InitializationType.ViewModel;
-
-    public async Task InitializeAsync()
-    {
-        var tagClientModels = await requestSender.Send(new ClientGetAllTagsRequest());
-
-        await Dispatcher.UIThread.InvokeAsync(() =>
-        {
-            AvailableTags.Clear();
-
-            foreach (var tagDto in tagClientModels) AvailableTags.Add(tagCheckBoxViewFactory.Create(tagDto));
-
-            AvailableTags
-                .Where(tvm => StatisticsData!.TagIds.Contains(tvm.Tag!.TagId))
-                .ToList()
-                .ForEach(tvm => tvm.IsChecked = true);
-        });
     }
 }

@@ -18,7 +18,6 @@ using Client.Tracing.Tracing.Tracers.TimeSlot.UseCase;
 using Client.Tracing.Tracing.Tracers.WorkDay;
 using Client.Tracing.Tracing.Tracers.WorkDay.UseCase;
 using Microsoft.Extensions.DependencyInjection;
-using Service.Monitoring.Shared.Tracing;
 
 namespace Client.Tracing;
 

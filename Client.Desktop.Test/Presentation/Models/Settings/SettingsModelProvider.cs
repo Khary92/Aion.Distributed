@@ -1,6 +1,5 @@
 using Client.Desktop.DataModels.Local;
 using Client.Desktop.Presentation.Models.Settings;
-using Client.Desktop.Services.LocalSettings;
 using CommunityToolkit.Mvvm.Messaging;
 using Moq;
 

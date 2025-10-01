@@ -35,13 +35,29 @@ public class TrackingSlotModel(
         set => this.RaiseAndSetIfChanged(ref _timeSlot, value);
     }
 
+    public void RegisterMessenger()
+    {
+        notificationPublisher.Ticket.TicketDocumentationUpdatedNotificationReceived +=
+            HandleClientTicketDocumentationUpdatedNotification;
+        notificationPublisher.Ticket.TicketDataUpdatedNotificationReceived += HandleClientTicketDataUpdatedNotification;
+        timerNotificationPublisher.ClientCreateSnapshotNotificationReceived += HandleClientCreateSnapshotNotification;
+    }
+
+    public void UnregisterMessenger()
+    {
+        notificationPublisher.Ticket.TicketDocumentationUpdatedNotificationReceived -=
+            HandleClientTicketDocumentationUpdatedNotification;
+        notificationPublisher.Ticket.TicketDataUpdatedNotificationReceived -= HandleClientTicketDataUpdatedNotification;
+        timerNotificationPublisher.ClientCreateSnapshotNotificationReceived -= HandleClientCreateSnapshotNotification;
+    }
+
     private Task HandleClientCreateSnapshotNotification(ClientCreateSnapshotNotification message)
     {
         if (TimeSlot.IsEndTimeChanged())
         {
             var setEndTimeCommand =
                 new ClientSetEndTimeCommand(TimeSlot.TimeSlotId, TimeSlot.EndTime, Guid.NewGuid());
-            
+
             endTimeCache.Store(setEndTimeCommand);
         }
 
@@ -71,22 +87,6 @@ public class TrackingSlotModel(
 
         Ticket.Apply(message);
         await tracer.Ticket.ChangeDocumentation.NotificationReceived(GetType(), message.TraceId, message);
-    }
-
-    public void RegisterMessenger()
-    {
-        notificationPublisher.Ticket.TicketDocumentationUpdatedNotificationReceived +=
-            HandleClientTicketDocumentationUpdatedNotification;
-        notificationPublisher.Ticket.TicketDataUpdatedNotificationReceived += HandleClientTicketDataUpdatedNotification;
-        timerNotificationPublisher.ClientCreateSnapshotNotificationReceived += HandleClientCreateSnapshotNotification;
-    }
-
-    public void UnregisterMessenger()
-    {
-        notificationPublisher.Ticket.TicketDocumentationUpdatedNotificationReceived -=
-            HandleClientTicketDocumentationUpdatedNotification;
-        notificationPublisher.Ticket.TicketDataUpdatedNotificationReceived -= HandleClientTicketDataUpdatedNotification;
-        timerNotificationPublisher.ClientCreateSnapshotNotificationReceived -= HandleClientCreateSnapshotNotification;
     }
 
     public void ToggleTimerState()

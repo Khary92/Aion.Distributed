@@ -65,7 +65,7 @@ public partial class ContentWrapper : Window
         {
             await _shutDownHandler.Exit();
             await _host.StopAsync();
-            desktopApp.Shutdown(); 
+            desktopApp.Shutdown();
         }
     }
 

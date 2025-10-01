@@ -15,12 +15,13 @@ public class WorkDayNotificationReceiver(
     IGrpcUrlBuilder grpcUrlBuilder,
     ITraceCollector tracer) : ILocalWorkDayNotificationPublisher, IStreamClient
 {
+    public event Func<NewWorkDayMessage, Task>? NewWorkDayMessageReceived;
+
     public async Task StartListening(CancellationToken cancellationToken)
     {
         var attempt = 0;
 
         while (!cancellationToken.IsCancellationRequested)
-        {
             try
             {
                 using var channel = GrpcChannel.ForAddress(grpcUrlBuilder
@@ -66,7 +67,6 @@ public class WorkDayNotificationReceiver(
                     return;
                 }
             }
-        }
     }
 
     private async Task HandleNotificationReceived(WorkDayNotification notification)
@@ -84,10 +84,8 @@ public class WorkDayNotificationReceiver(
 
 
                 if (NewWorkDayMessageReceived == null)
-                {
                     throw new InvalidOperationException(
                         "Ticket data update received but no forwarding receiver is set");
-                }
 
                 await NewWorkDayMessageReceived.Invoke(n.ToNewEntityMessage());
                 break;
@@ -96,6 +94,4 @@ public class WorkDayNotificationReceiver(
                 break;
         }
     }
-
-    public event Func<NewWorkDayMessage, Task>? NewWorkDayMessageReceived;
 }

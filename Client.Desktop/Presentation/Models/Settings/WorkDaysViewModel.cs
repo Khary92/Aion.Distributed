@@ -18,13 +18,6 @@ public class WorkDaysViewModel : ReactiveObject
             ReactiveCommand.CreateFromTask(SetSelectedWorkday, this.WhenAnyValue(x => x.SelectedWorkDay).Any());
     }
 
-    private async Task SetSelectedWorkday()
-    {
-        if (_selectedWorkDay == null) return;
-
-        await Model.SetSelectedWorkday(SelectedWorkDay!);
-    }
-
     public WorkDaysModel Model { get; }
 
     public ReactiveCommand<Unit, Unit>? LoadSelectedDateCommand { get; internal set; }
@@ -33,5 +26,12 @@ public class WorkDaysViewModel : ReactiveObject
     {
         get => _selectedWorkDay;
         set => this.RaiseAndSetIfChanged(ref _selectedWorkDay, value);
+    }
+
+    private async Task SetSelectedWorkday()
+    {
+        if (_selectedWorkDay == null) return;
+
+        await Model.SetSelectedWorkday(SelectedWorkDay!);
     }
 }

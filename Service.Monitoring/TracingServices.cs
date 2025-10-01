@@ -1,4 +1,3 @@
-using Global.Settings.Types;
 using Global.Settings.UrlResolver;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;

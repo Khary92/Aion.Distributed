@@ -35,19 +35,14 @@ builder.WebHost.ConfigureKestrel(options =>
     // Grpc Listener
     options.ListenAnyIP(adminSettings.GrpcPort, listenOptions =>
     {
-        if (globalSettings.UseHttps)
-        {
-            listenOptions.UseHttps("/app/certs/server.pfx");
-        }
+        if (globalSettings.UseHttps) listenOptions.UseHttps("/app/certs/server.pfx");
 
         listenOptions.Protocols = HttpProtocols.Http2;
     });
-    
+
     //Web listener
-    options.ListenAnyIP(adminSettings.DockerInternalWebPort, listenOptions =>
-    {
-        listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
-    });
+    options.ListenAnyIP(adminSettings.DockerInternalWebPort,
+        listenOptions => { listenOptions.Protocols = HttpProtocols.Http1AndHttp2; });
 });
 
 builder.Logging.AddConsole();

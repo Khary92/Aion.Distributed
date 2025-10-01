@@ -1,6 +1,5 @@
 using Client.Desktop.Communication.Commands.TimeSlots.Records;
 using Client.Desktop.Communication.Local.LocalEvents.Records;
-using Client.Desktop.Communication.Notifications.Client.Records;
 using Client.Desktop.Communication.Notifications.Ticket.Records;
 using Client.Desktop.DataModels;
 using Client.Desktop.Presentation.Models.TimeTracking;

@@ -1,5 +1,4 @@
-﻿using Global.Settings.Types;
-using Global.Settings.UrlResolver;
+﻿using Global.Settings.UrlResolver;
 using Grpc.Core;
 using Grpc.Net.Client;
 using Proto.Notifications.NoteType;
@@ -34,7 +33,7 @@ public class NoteTypeNotificationReceiver(
                     .To(ResolvingServices.Server)
                     .BuildAddress(),
                 channelOptions);
-        
+
         var client = new NoteTypeProtoNotificationService.NoteTypeProtoNotificationServiceClient(channel);
 
         while (!stoppingToken.IsCancellationRequested)

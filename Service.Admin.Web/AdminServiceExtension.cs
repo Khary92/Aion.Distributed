@@ -1,5 +1,4 @@
-﻿using Global.Settings.Types;
-using Global.Settings.UrlResolver;
+﻿using Global.Settings.UrlResolver;
 using Grpc.Core;
 using Polly;
 using Service.Admin.Web.Communication.Receiver;
@@ -36,7 +35,7 @@ public static class AdminServiceExtension
         AddReceiverServices(services);
         AddPolicyServices(services);
     }
-    
+
     private static void AddTraceSender(this IServiceCollection services)
     {
         services.AddSingleton<ITracingDataSender>(sp =>
@@ -96,7 +95,7 @@ public static class AdminServiceExtension
     {
         services.AddRazorComponents()
             .AddInteractiveServerComponents();
-        
+
         services.AddGrpc(options =>
         {
             options.EnableDetailedErrors = true;

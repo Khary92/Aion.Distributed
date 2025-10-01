@@ -7,7 +7,7 @@ namespace Client.Desktop.Presentation.Factories;
 
 public class NoteStreamViewModelFactory(IServiceProvider serviceProvider) : INoteStreamViewModelFactory
 {
-    public async  Task<NoteStreamViewModel> Create(Guid timeSlotId, Guid ticketId)
+    public async Task<NoteStreamViewModel> Create(Guid timeSlotId, Guid ticketId)
     {
         var notesStreamViewModel = serviceProvider.GetRequiredService<NoteStreamViewModel>();
         notesStreamViewModel.TicketId = ticketId;
@@ -15,7 +15,7 @@ public class NoteStreamViewModelFactory(IServiceProvider serviceProvider) : INot
 
         notesStreamViewModel.RegisterMessenger();
         await notesStreamViewModel.InitializeAsync();
-        
+
         return notesStreamViewModel;
     }
 }

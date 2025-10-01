@@ -17,7 +17,8 @@ namespace Client.Desktop.Presentation.Models.Synchronization;
 public class DocumentationSynchronizer(
     ICommandSender commandSender,
     ITraceCollector tracer,
-    INotificationPublisherFacade notificationPublisher, IClientTimerNotificationPublisher clientTimerNotificationPublisher)
+    INotificationPublisherFacade notificationPublisher,
+    IClientTimerNotificationPublisher clientTimerNotificationPublisher)
     : IDocumentationSynchronizer, IMessengerRegistration
 {
     private readonly List<IDocumentationSynchronizationListener> _listeners = [];
@@ -86,9 +87,7 @@ public class DocumentationSynchronizer(
         await Dispatcher.UIThread.InvokeAsync(() =>
         {
             foreach (var listener in _listeners.Where(listener => listener.Ticket.TicketId == message.TicketId))
-            {
                 listener.Ticket.Apply(message);
-            }
         });
     }
 }

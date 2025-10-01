@@ -3,7 +3,6 @@ using Client.Desktop.Communication.Requests;
 using Client.Desktop.Communication.Requests.WorkDays.Records;
 using Client.Desktop.DataModels;
 using Client.Desktop.Presentation.Models.Settings;
-using Client.Desktop.Services.LocalSettings;
 using Client.Tracing.Tracing.Tracers;
 using Moq;
 using IMessenger = CommunityToolkit.Mvvm.Messaging.IMessenger;

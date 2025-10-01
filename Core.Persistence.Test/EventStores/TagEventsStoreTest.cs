@@ -20,7 +20,7 @@ public class TagEventsStoreTest
         _dbOptions = new DbContextOptionsBuilder<AppDbContext>()
             .UseInMemoryDatabase(dbName)
             .Options;
-        
+
         _databaseSettingsMock = new Mock<IOptions<DatabaseSettings>>();
         _dbContextFactoryMock = new Mock<IDbContextFactory<AppDbContext>>();
         _dbContextFactoryMock
@@ -44,7 +44,7 @@ public class TagEventsStoreTest
 
         await _instance.StoreEventAsync(ev);
 
-        await using var verifyContext = new AppDbContext(_dbOptions,_databaseSettingsMock.Object);
+        await using var verifyContext = new AppDbContext(_dbOptions, _databaseSettingsMock.Object);
         var count = await verifyContext.TagEvents.CountAsync();
         Assert.That(count, Is.EqualTo(1));
 

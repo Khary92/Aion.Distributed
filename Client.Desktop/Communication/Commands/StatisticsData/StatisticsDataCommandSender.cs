@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands.StatisticsData.Records;
-using Client.Proto;
 using Grpc.Net.Client;
 using Proto.Command.StatisticsData;
 
@@ -15,7 +14,7 @@ public class StatisticsDataCommandSender : IStatisticsDataCommandSender
         var channel = GrpcChannel.ForAddress(address);
         _client = new StatisticsDataCommandProtoService.StatisticsDataCommandProtoServiceClient(channel);
     }
-    
+
     public async Task<bool> Send(ClientChangeTagSelectionCommand command)
     {
         var response = await _client.ChangeTagSelectionAsync(command.ToProto());

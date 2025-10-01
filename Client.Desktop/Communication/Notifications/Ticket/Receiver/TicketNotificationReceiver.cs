@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 using Client.Desktop.Communication.Notifications.Ticket.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
@@ -17,12 +16,18 @@ public class TicketNotificationReceiver(
     IGrpcUrlBuilder grpcUrlBuilder,
     ITraceCollector tracer) : ILocalTicketNotificationPublisher, IStreamClient
 {
+    public event Func<ClientTicketDataUpdatedNotification, Task>? TicketDataUpdatedNotificationReceived;
+
+    public event Func<ClientTicketDocumentationUpdatedNotification, Task>?
+        TicketDocumentationUpdatedNotificationReceived;
+
+    public event Func<NewTicketMessage, Task>? NewTicketNotificationReceived;
+
     public async Task StartListening(CancellationToken cancellationToken)
     {
         var attempt = 0;
 
         while (!cancellationToken.IsCancellationRequested)
-        {
             try
             {
                 using var channel = GrpcChannel.ForAddress(grpcUrlBuilder
@@ -68,7 +73,6 @@ public class TicketNotificationReceiver(
                     return;
                 }
             }
-        }
     }
 
     private async Task HandleNotificationReceived(TicketNotification notification)
@@ -85,9 +89,7 @@ public class TicketNotificationReceiver(
                     n);
 
                 if (NewTicketNotificationReceived == null)
-                {
                     throw new InvalidOperationException("New ticket received but no forwarding receiver is set");
-                }
 
                 await NewTicketNotificationReceived.Invoke(n.ToNewEntityMessage());
 
@@ -103,10 +105,8 @@ public class TicketNotificationReceiver(
                     n);
 
                 if (TicketDataUpdatedNotificationReceived == null)
-                {
                     throw new InvalidOperationException(
                         "Ticket data update received but no forwarding receiver is set");
-                }
 
                 await TicketDataUpdatedNotificationReceived.Invoke(n.ToClientNotification());
 
@@ -122,10 +122,8 @@ public class TicketNotificationReceiver(
                     n);
 
                 if (TicketDocumentationUpdatedNotificationReceived == null)
-                {
                     throw new InvalidOperationException(
                         "Ticket documentation update received but no forwarding receiver is set");
-                }
 
                 await TicketDocumentationUpdatedNotificationReceived.Invoke(n.ToClientNotification());
 
@@ -135,11 +133,4 @@ public class TicketNotificationReceiver(
                 break;
         }
     }
-
-    public event Func<ClientTicketDataUpdatedNotification, Task>? TicketDataUpdatedNotificationReceived;
-
-    public event Func<ClientTicketDocumentationUpdatedNotification, Task>?
-        TicketDocumentationUpdatedNotificationReceived;
-
-    public event Func<NewTicketMessage, Task>? NewTicketNotificationReceived;
 }

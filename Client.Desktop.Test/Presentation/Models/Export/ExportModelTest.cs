@@ -73,5 +73,4 @@ public class ExportModelTest
         Assert.That(fixture.Instance.WorkDays, Has.Count.EqualTo(1));
         Assert.That(isExportedSuccessful, Is.False);
     }
-
 }

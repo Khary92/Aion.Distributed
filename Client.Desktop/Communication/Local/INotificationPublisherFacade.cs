@@ -1,5 +1,4 @@
-﻿using Client.Desktop.Communication.Local.LocalEvents.Publisher;
-using Client.Desktop.Communication.Notifications.Client.Receiver;
+﻿using Client.Desktop.Communication.Notifications.Client.Receiver;
 using Client.Desktop.Communication.Notifications.Note.Receiver;
 using Client.Desktop.Communication.Notifications.NoteType.Receiver;
 using Client.Desktop.Communication.Notifications.Sprint.Receiver;

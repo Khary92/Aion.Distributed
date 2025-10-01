@@ -14,7 +14,9 @@ using Microsoft.Extensions.Options;
 
 namespace Core.Persistence.DbContext;
 
-public sealed class AppDbContext(DbContextOptions<AppDbContext> options, IOptions<DatabaseSettings> databaseConfiguration)
+public sealed class AppDbContext(
+    DbContextOptions<AppDbContext> options,
+    IOptions<DatabaseSettings> databaseConfiguration)
     : Microsoft.EntityFrameworkCore.DbContext(options)
 {
     public DbSet<TicketEvent> TicketEvents { get; set; } = null!;

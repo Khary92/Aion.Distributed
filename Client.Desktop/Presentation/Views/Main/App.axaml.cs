@@ -1,7 +1,6 @@
 using System;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Client.Desktop.Lifecycle.Shutdown;
 using Client.Desktop.Lifecycle.Startup.Scheduler;

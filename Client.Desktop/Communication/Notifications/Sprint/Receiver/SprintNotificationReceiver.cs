@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 using Client.Desktop.Communication.Notifications.Sprint.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
@@ -17,12 +16,19 @@ public class SprintNotificationReceiver(
     IGrpcUrlBuilder grpcUrlBuilder,
     ITraceCollector tracer) : ILocalSprintNotificationPublisher, IStreamClient
 {
+    public event Func<ClientSprintActiveStatusSetNotification, Task>? ClientSprintActiveStatusSetNotificationReceived;
+    public event Func<ClientSprintDataUpdatedNotification, Task>? ClientSprintDataUpdatedNotificationReceived;
+
+    public event Func<ClientTicketAddedToActiveSprintNotification, Task>?
+        ClientTicketAddedToActiveSprintNotificationReceived;
+
+    public event Func<NewSprintMessage, Task>? NewSprintMessageReceived;
+
     public async Task StartListening(CancellationToken cancellationToken)
     {
         var attempt = 0;
 
         while (!cancellationToken.IsCancellationRequested)
-        {
             try
             {
                 using var channel = GrpcChannel.ForAddress(grpcUrlBuilder
@@ -68,7 +74,6 @@ public class SprintNotificationReceiver(
                     return;
                 }
             }
-        }
     }
 
     private async Task HandleNotificationReceived(SprintNotification notification)
@@ -84,13 +89,11 @@ public class SprintNotificationReceiver(
                     n);
 
                 if (NewSprintMessageReceived == null)
-                {
                     throw new InvalidOperationException(
                         "Ticket data update received but no forwarding receiver is set");
-                }
 
                 await NewSprintMessageReceived.Invoke(n.ToNewEntityMessage());
-                
+
                 break;
             }
             case SprintNotification.NotificationOneofCase.SprintActiveStatusSet:
@@ -102,13 +105,11 @@ public class SprintNotificationReceiver(
                     n);
 
                 if (ClientSprintActiveStatusSetNotificationReceived == null)
-                {
                     throw new InvalidOperationException(
                         "Ticket data update received but no forwarding receiver is set");
-                }
 
                 await ClientSprintActiveStatusSetNotificationReceived.Invoke(n.ToClientNotification());
-                
+
                 break;
             }
             case SprintNotification.NotificationOneofCase.SprintDataUpdated:
@@ -120,13 +121,11 @@ public class SprintNotificationReceiver(
                     n);
 
                 if (ClientSprintDataUpdatedNotificationReceived == null)
-                {
                     throw new InvalidOperationException(
                         "Ticket data update received but no forwarding receiver is set");
-                }
 
                 await ClientSprintDataUpdatedNotificationReceived.Invoke(n.ToClientNotification());
-                
+
                 break;
             }
             case SprintNotification.NotificationOneofCase.TicketAddedToActiveSprint:
@@ -138,22 +137,15 @@ public class SprintNotificationReceiver(
                     n);
 
                 if (ClientTicketAddedToActiveSprintNotificationReceived == null)
-                {
                     throw new InvalidOperationException(
                         "Ticket data update received but no forwarding receiver is set");
-                }
 
                 await ClientTicketAddedToActiveSprintNotificationReceived.Invoke(n.ToClientNotification());
-                
+
                 break;
             }
             case SprintNotification.NotificationOneofCase.None:
                 break;
         }
     }
-
-    public event Func<ClientSprintActiveStatusSetNotification, Task>? ClientSprintActiveStatusSetNotificationReceived;
-    public event Func<ClientSprintDataUpdatedNotification, Task>? ClientSprintDataUpdatedNotificationReceived;
-    public event Func<ClientTicketAddedToActiveSprintNotification, Task>? ClientTicketAddedToActiveSprintNotificationReceived;
-    public event Func<NewSprintMessage, Task>? NewSprintMessageReceived;
 }

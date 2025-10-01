@@ -21,7 +21,7 @@ public static class Program
             services.AddPresentationServices();
             services.AddTracingServices();
         });
-        
+
         var host = hostBuilder.Build();
 
         await host.StartAsync();

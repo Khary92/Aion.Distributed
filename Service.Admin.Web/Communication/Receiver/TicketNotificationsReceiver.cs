@@ -1,5 +1,4 @@
-﻿using Global.Settings.Types;
-using Global.Settings.UrlResolver;
+﻿using Global.Settings.UrlResolver;
 using Grpc.Core;
 using Grpc.Net.Client;
 using Proto.Notifications.Ticket;
@@ -34,7 +33,7 @@ public class TicketNotificationsReceiver(
                     .To(ResolvingServices.Server)
                     .BuildAddress(),
                 channelOptions);
-        
+
         var client = new TicketNotificationService.TicketNotificationServiceClient(channel);
 
         while (!stoppingToken.IsCancellationRequested)

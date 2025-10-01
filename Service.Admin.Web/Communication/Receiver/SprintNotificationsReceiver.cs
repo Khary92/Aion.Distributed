@@ -1,5 +1,4 @@
-﻿using Global.Settings.Types;
-using Global.Settings.UrlResolver;
+﻿using Global.Settings.UrlResolver;
 using Grpc.Core;
 using Grpc.Net.Client;
 using Proto.Notifications.Sprint;
@@ -10,7 +9,10 @@ using SubscribeRequest = Proto.Notifications.Sprint.SubscribeRequest;
 
 namespace Service.Admin.Web.Communication.Receiver;
 
-public class SprintNotificationsReceiver(ISprintStateService sprintStateService, ITraceCollector tracer, IGrpcUrlBuilder grpcUrlBuilder)
+public class SprintNotificationsReceiver(
+    ISprintStateService sprintStateService,
+    ITraceCollector tracer,
+    IGrpcUrlBuilder grpcUrlBuilder)
 {
     public async Task SubscribeToNotifications(CancellationToken stoppingToken = default)
     {
@@ -32,7 +34,7 @@ public class SprintNotificationsReceiver(ISprintStateService sprintStateService,
                     .To(ResolvingServices.Server)
                     .BuildAddress(),
                 channelOptions);
-        
+
         var client = new SprintNotificationService.SprintNotificationServiceClient(channel);
 
         while (!stoppingToken.IsCancellationRequested)

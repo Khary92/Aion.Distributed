@@ -2,7 +2,6 @@
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.DataModels;
 using Client.Desktop.Presentation.Models.Settings;
-using Client.Desktop.Services.LocalSettings.Commands;
 using CommunityToolkit.Mvvm.Messaging;
 using Moq;
 

@@ -14,7 +14,7 @@ public static class ConfigServiceExtensions
     {
         builder.Configuration
             .SetBasePath(AppContext.BaseDirectory)
-            .AddJsonFile("settings.json", optional: false, reloadOnChange: true)
+            .AddJsonFile("settings.json", false, true)
             .AddEnvironmentVariables();
 
         builder.Services
@@ -55,7 +55,7 @@ public static class ConfigServiceExtensions
         hostBuilder.ConfigureAppConfiguration((_, config) =>
         {
             config.SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("settings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile("settings.json", false, true)
                 .AddEnvironmentVariables();
         });
 
@@ -95,7 +95,7 @@ public static class ConfigServiceExtensions
         services.AddSingleton<IGrpcDataProvider, AdminDataProvider>();
         services.AddSingleton<IGrpcDataProvider, ServerDataProvider>();
         services.AddSingleton<IGrpcDataProvider, MonitoringDataProvider>();
-        
+
         services.AddSingleton<IGrpcUrlBuilder, GrpcUrlBuilder>();
     }
 }

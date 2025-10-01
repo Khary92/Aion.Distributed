@@ -3,5 +3,4 @@
 public class GlobalSettings
 {
     public bool UseHttps { get; set; }
-    
 }

@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Avalonia.Threading;
 using Client.Desktop.Communication.Notifications.Tag.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
@@ -17,12 +16,14 @@ public class TagNotificationReceiver(
     IGrpcUrlBuilder grpcUrlBuilder,
     ITraceCollector tracer) : ILocalTagNotificationPublisher, IStreamClient
 {
+    public event Func<ClientTagUpdatedNotification, Task>? ClientTagUpdatedNotificationReceived;
+    public event Func<NewTagMessage, Task>? NewTagMessageNotificationReceived;
+
     public async Task StartListening(CancellationToken cancellationToken)
     {
         var attempt = 0;
 
         while (!cancellationToken.IsCancellationRequested)
-        {
             try
             {
                 using var channel = GrpcChannel.ForAddress(grpcUrlBuilder
@@ -68,7 +69,6 @@ public class TagNotificationReceiver(
                     return;
                 }
             }
-        }
     }
 
     private async Task HandleNotificationReceived(TagNotification notification)
@@ -85,13 +85,11 @@ public class TagNotificationReceiver(
                     n);
 
                 if (NewTagMessageNotificationReceived == null)
-                {
                     throw new InvalidOperationException(
                         "Ticket data update received but no forwarding receiver is set");
-                }
 
                 await NewTagMessageNotificationReceived.Invoke(n.ToNewEntityMessage());
-                
+
                 break;
             }
             case TagNotification.NotificationOneofCase.TagUpdated:
@@ -104,20 +102,15 @@ public class TagNotificationReceiver(
                     n);
 
                 if (ClientTagUpdatedNotificationReceived == null)
-                {
                     throw new InvalidOperationException(
                         "Ticket data update received but no forwarding receiver is set");
-                }
 
                 await ClientTagUpdatedNotificationReceived.Invoke(n.ToClientNotification());
-                
+
                 break;
             }
             case TagNotification.NotificationOneofCase.None:
                 break;
         }
     }
-
-    public event Func<ClientTagUpdatedNotification, Task>? ClientTagUpdatedNotificationReceived;
-    public event Func<NewTagMessage, Task>? NewTagMessageNotificationReceived;
 }

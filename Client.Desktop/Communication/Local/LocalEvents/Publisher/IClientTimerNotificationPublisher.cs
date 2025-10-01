@@ -8,5 +8,4 @@ public interface IClientTimerNotificationPublisher
 {
     event Func<ClientCreateSnapshotNotification, Task>? ClientCreateSnapshotNotificationReceived;
     event Func<ClientSaveDocumentationNotification, Task>? ClientSaveDocumentationNotificationReceived;
-    
 }

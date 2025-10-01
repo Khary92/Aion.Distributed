@@ -30,6 +30,9 @@ public class WorkDaysModel(
 {
     public ObservableCollection<WorkDayClientModel> WorkDays { get; } = [];
 
+    public event Func<ClientWorkDaySelectionChangedNotification, Task>?
+        ClientWorkDaySelectionChangedNotificationReceived;
+
     public InitializationType Type => InitializationType.Model;
 
     public async Task InitializeAsync()
@@ -76,16 +79,11 @@ public class WorkDaysModel(
     public async Task SetSelectedWorkday(WorkDayClientModel selectedWorkDay)
     {
         if (ClientWorkDaySelectionChangedNotificationReceived == null)
-        {
             throw new InvalidOperationException(
                 "Ticket data update received but no forwarding receiver is set");
-        }
 
         await ClientWorkDaySelectionChangedNotificationReceived.Invoke(new ClientWorkDaySelectionChangedNotification());
-      
+
         await localSettingsService.SetSelectedDate(selectedWorkDay.Date);
     }
-
-    public event Func<ClientWorkDaySelectionChangedNotification, Task>?
-        ClientWorkDaySelectionChangedNotificationReceived;
 }
