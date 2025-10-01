@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Notifications.Wrappers;
+using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
 using Client.Tracing.Tracing.Tracers;
 using Global.Settings.UrlResolver;
 using Grpc.Core;
@@ -12,7 +13,7 @@ namespace Client.Desktop.Communication.Notifications.WorkDay.Receiver;
 
 public class WorkDayNotificationReceiver(
     IGrpcUrlBuilder grpcUrlBuilder,
-    ITraceCollector tracer) : ILocalWorkDayNotificationPublisher
+    ITraceCollector tracer) : ILocalWorkDayNotificationPublisher, IStreamClient
 {
     public async Task StartListening(CancellationToken cancellationToken)
     {

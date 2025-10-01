@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using Client.Desktop.Communication.Notifications.StatisticsData.Records;
+using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
 using Client.Tracing.Tracing.Tracers;
 using Global.Settings.UrlResolver;
 using Grpc.Core;
@@ -14,7 +15,7 @@ namespace Client.Desktop.Communication.Notifications.StatisticsData.Receiver;
 
 public class StatisticsDataNotificationReceiver(
     IGrpcUrlBuilder grpcUrlBuilder,
-    ITraceCollector tracer) : ILocalStatisticsDataNotificationPublisher
+    ITraceCollector tracer) : ILocalStatisticsDataNotificationPublisher, IStreamClient
 {
     public async Task StartListening(CancellationToken cancellationToken)
     {

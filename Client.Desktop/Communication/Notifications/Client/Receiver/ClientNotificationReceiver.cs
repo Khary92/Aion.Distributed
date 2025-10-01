@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Local.LocalEvents.Records;
 using Client.Desktop.Communication.Notifications.Client.Records;
+using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
 using Client.Tracing.Tracing.Tracers;
 using Global.Settings.UrlResolver;
 using Grpc.Core;
@@ -13,7 +14,7 @@ namespace Client.Desktop.Communication.Notifications.Client.Receiver;
 
 public class ClientNotificationReceiver(
     IGrpcUrlBuilder grpcUrlBuilder,
-    ITraceCollector tracer) : ILocalClientNotificationPublisher
+    ITraceCollector tracer) : ILocalClientNotificationPublisher, IStreamClient
 {
     public async Task StartListening(CancellationToken cancellationToken)
     {

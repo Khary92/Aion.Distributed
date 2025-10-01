@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Avalonia.Threading;
 using Client.Desktop.Communication.Notifications.Ticket.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
+using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
 using Client.Tracing.Tracing.Tracers;
 using Global.Settings.UrlResolver;
 using Grpc.Core;
@@ -14,7 +15,7 @@ namespace Client.Desktop.Communication.Notifications.Ticket.Receiver;
 
 public class TicketNotificationReceiver(
     IGrpcUrlBuilder grpcUrlBuilder,
-    ITraceCollector tracer) : ILocalTicketNotificationPublisher
+    ITraceCollector tracer) : ILocalTicketNotificationPublisher, IStreamClient
 {
     public async Task StartListening(CancellationToken cancellationToken)
     {

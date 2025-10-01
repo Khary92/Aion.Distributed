@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Avalonia.Threading;
 using Client.Desktop.Communication.Notifications.TimerSettings.Records;
+using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
 using Global.Settings.UrlResolver;
 using Grpc.Core;
 using Grpc.Net.Client;
@@ -12,7 +13,7 @@ using SubscribeRequest = Proto.Notifications.TimerSettings.SubscribeRequest;
 namespace Client.Desktop.Communication.Notifications.TimerSettings.Receiver;
 
 public class TimerSettingsNotificationReceiver(
-    IGrpcUrlBuilder grpcUrlBuilder) : ILocalTimerSettingsNotificationPublisher
+    IGrpcUrlBuilder grpcUrlBuilder) : ILocalTimerSettingsNotificationPublisher, IStreamClient
 {
     public async Task StartListening(CancellationToken cancellationToken)
     {

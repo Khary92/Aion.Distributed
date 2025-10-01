@@ -9,6 +9,7 @@ using Client.Desktop.Communication.Commands.TimeSlots.Records;
 using Client.Desktop.Communication.Commands.WorkDays;
 using Client.Desktop.Communication.Local;
 using Client.Desktop.Communication.Local.LocalEvents.Publisher;
+using Client.Desktop.Communication.Notifications;
 using Client.Desktop.Communication.Notifications.Client.Receiver;
 using Client.Desktop.Communication.Notifications.Note.Receiver;
 using Client.Desktop.Communication.Notifications.NoteType.Receiver;
@@ -33,6 +34,7 @@ using Client.Desktop.Lifecycle.Shutdown;
 using Client.Desktop.Lifecycle.Startup.Scheduler;
 using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Register;
+using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
 using Client.Desktop.Lifecycle.Startup.Tasks.UnsentCommands;
 using Client.Desktop.Presentation.Factories;
 using Client.Desktop.Presentation.Models.Analysis;
@@ -53,7 +55,6 @@ using Client.Desktop.Services;
 using Client.Desktop.Services.Cache;
 using Client.Desktop.Services.Export;
 using Client.Desktop.Services.LocalSettings;
-using CommunityToolkit.Mvvm.Messaging;
 using Global.Settings.UrlResolver;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
@@ -304,51 +305,53 @@ public static class ServiceExtensions
 
     private static void AddNotificationReceivers(this IServiceCollection services)
     {
-        services.AddHostedService<ClientNotificationHostedService>();
         services.AddSingleton<ClientNotificationReceiver>();
         services.AddSingleton<ILocalClientNotificationPublisher>(sp =>
             sp.GetRequiredService<ClientNotificationReceiver>());
+        services.AddSingleton<IStreamClient>(sp => sp.GetRequiredService<ClientNotificationReceiver>());
 
-        services.AddHostedService<NoteNotificationHostedService>();
         services.AddSingleton<NoteNotificationReceiver>();
         services.AddSingleton<ILocalNoteNotificationPublisher>(sp =>
             sp.GetRequiredService<NoteNotificationReceiver>());
+        services.AddSingleton<IStreamClient>(sp => sp.GetRequiredService<NoteNotificationReceiver>());
 
-        services.AddHostedService<NoteTypeNotificationHostedService>();
         services.AddSingleton<NoteTypeNotificationReceiver>();
         services.AddSingleton<ILocalNoteTypeNotificationPublisher>(sp =>
             sp.GetRequiredService<NoteTypeNotificationReceiver>());
+        services.AddSingleton<IStreamClient>(sp => sp.GetRequiredService<NoteTypeNotificationReceiver>());
 
-        services.AddHostedService<SprintNotificationHostedService>();
         services.AddSingleton<SprintNotificationReceiver>();
         services.AddSingleton<ILocalSprintNotificationPublisher>(sp =>
             sp.GetRequiredService<SprintNotificationReceiver>());
+        services.AddSingleton<IStreamClient>(sp => sp.GetRequiredService<SprintNotificationReceiver>());
 
-        services.AddHostedService<StatisticsDataNotificationHostedService>();
         services.AddSingleton<StatisticsDataNotificationReceiver>();
         services.AddSingleton<ILocalStatisticsDataNotificationPublisher>(sp =>
             sp.GetRequiredService<StatisticsDataNotificationReceiver>());
+        services.AddSingleton<IStreamClient>(sp => sp.GetRequiredService<StatisticsDataNotificationReceiver>());
 
-        services.AddHostedService<TagNotificationHostedService>();
         services.AddSingleton<TagNotificationReceiver>();
         services.AddSingleton<ILocalTagNotificationPublisher>(sp => sp.GetRequiredService<TagNotificationReceiver>());
+        services.AddSingleton<IStreamClient>(sp => sp.GetRequiredService<TagNotificationReceiver>());
 
-        services.AddHostedService<TicketNotificationHostedService>();
         services.AddSingleton<TicketNotificationReceiver>();
         services.AddSingleton<ILocalTicketNotificationPublisher>(sp =>
             sp.GetRequiredService<TicketNotificationReceiver>());
+        services.AddSingleton<IStreamClient>(sp => sp.GetRequiredService<TicketNotificationReceiver>());
 
-        services.AddHostedService<TimerSettingsNotificationHostedService>();
         services.AddSingleton<TimerSettingsNotificationReceiver>();
         services.AddSingleton<ILocalTimerSettingsNotificationPublisher>(sp =>
             sp.GetRequiredService<TimerSettingsNotificationReceiver>());
+        services.AddSingleton<IStreamClient>(sp => sp.GetRequiredService<TimerSettingsNotificationReceiver>());
 
-        services.AddHostedService<WorkDayNotificationHostedService>();
         services.AddSingleton<WorkDayNotificationReceiver>();
         services.AddSingleton<ILocalWorkDayNotificationPublisher>(sp =>
             sp.GetRequiredService<WorkDayNotificationReceiver>());
+        services.AddSingleton<IStreamClient>(sp => sp.GetRequiredService<WorkDayNotificationReceiver>());
 
         services.AddSingleton<INotificationPublisherFacade, NotificationPublisherFacade>();
+        
+        services.AddSingleton<IStreamLifeCycleHandler, StreamLifeCycleHandler>();
     }
 
     private static void AddCommandSenders(this IServiceCollection services)
