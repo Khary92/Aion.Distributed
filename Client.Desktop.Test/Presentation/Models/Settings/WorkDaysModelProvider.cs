@@ -64,7 +64,7 @@ public static class WorkDaysModelProvider
         Mock<IRequestSender> requestSender,
         Mock<ITraceCollector> tracer, Mock<ILocalSettingsCommandSender> localSettingsCommandSender)
     {
-        var instance = new WorkDaysModel(messenger, commandSender.Object, requestSender.Object,
+        var instance = new WorkDaysModel(commandSender.Object, requestSender.Object,
             localSettingsCommandSender.Object, tracer.Object);
 
         instance.RegisterMessenger();

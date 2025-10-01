@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Client.Desktop.DataModels.Local;
 using Client.Desktop.FileSystem;
 using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
-using CommunityToolkit.Mvvm.Messaging;
 using Newtonsoft.Json;
 
 namespace Client.Desktop.Services.LocalSettings;
@@ -11,8 +10,7 @@ namespace Client.Desktop.Services.LocalSettings;
 public class LocalSettingsService(
     IFileSystemReader fileSystemReader,
     IFileSystemWriter fileSystemWriter,
-    IFileSystemWrapper fileSystemWrapper,
-    IMessenger messenger) : ILocalSettingsService, IInitializeAsync
+    IFileSystemWrapper fileSystemWrapper) : ILocalSettingsService, IInitializeAsync
 {
     private const string SettingsFileName = "localSettings.json";
 

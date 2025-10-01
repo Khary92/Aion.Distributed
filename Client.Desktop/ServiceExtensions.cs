@@ -8,6 +8,7 @@ using Client.Desktop.Communication.Commands.TimeSlots;
 using Client.Desktop.Communication.Commands.TimeSlots.Records;
 using Client.Desktop.Communication.Commands.WorkDays;
 using Client.Desktop.Communication.Local;
+using Client.Desktop.Communication.Local.LocalEvents.Publisher;
 using Client.Desktop.Communication.Notifications.Client.Receiver;
 using Client.Desktop.Communication.Notifications.Note.Receiver;
 using Client.Desktop.Communication.Notifications.NoteType.Receiver;
@@ -134,8 +135,6 @@ public static class ServiceExtensions
 
     private static void AddLocalServices(this IServiceCollection services)
     {
-        services.AddSingleton<IMessenger, WeakReferenceMessenger>();
-
         services.AddSingleton<LocalSettingsService>();
         services.AddSingleton<ILocalSettingsService>(sp => sp.GetRequiredService<LocalSettingsService>());
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<LocalSettingsService>());
@@ -147,6 +146,7 @@ public static class ServiceExtensions
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<TimerService>());
         services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<TimerService>());
         services.AddSingleton<IDisposable>(sp => sp.GetRequiredService<TimerService>());
+        services.AddSingleton<IClientTimerNotificationPublisher>(sp => sp.GetRequiredService<TimerService>());
 
         services.AddSingleton<DocumentationSynchronizer>();
         services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<DocumentationSynchronizer>());

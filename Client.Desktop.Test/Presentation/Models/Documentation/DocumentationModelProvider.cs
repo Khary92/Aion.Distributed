@@ -62,7 +62,7 @@ public static class DocumentationModelProvider
             .Setup(rs => rs.Send(It.IsAny<ClientGetNotesByTicketIdRequest>()))
             .ReturnsAsync(initialNotes);
 
-        var noteViewModel = new NoteViewModel(null!, requestSender.Object, messenger, tracer.Object)
+        var noteViewModel = new NoteViewModel(null!, requestSender.Object, tracer.Object)
         {
             Note = initialNotes.First()
         };

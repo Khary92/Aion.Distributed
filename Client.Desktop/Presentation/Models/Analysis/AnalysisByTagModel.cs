@@ -13,14 +13,12 @@ using Client.Desktop.DataModels.Decorators;
 using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Register;
 using Client.Tracing.Tracing.Tracers;
-using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using ReactiveUI;
 
 namespace Client.Desktop.Presentation.Models.Analysis;
 
 public class AnalysisByTagModel(
-    IMessenger messenger,
     IRequestSender requestSender,
     ITraceCollector tracer,
     INotificationPublisherFacade notificationPublisher)

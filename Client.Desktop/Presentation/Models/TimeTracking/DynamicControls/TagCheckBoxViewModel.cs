@@ -1,12 +1,15 @@
+using System.Threading.Tasks;
+using Avalonia.Threading;
+using Client.Desktop.Communication.Local;
 using Client.Desktop.Communication.Notifications.Tag.Records;
 using Client.Desktop.DataModels;
+using Client.Desktop.Lifecycle.Startup.Tasks.Register;
 using Client.Tracing.Tracing.Tracers;
-using CommunityToolkit.Mvvm.Messaging;
 using ReactiveUI;
 
 namespace Client.Desktop.Presentation.Models.TimeTracking.DynamicControls;
 
-public class TagCheckBoxViewModel(IMessenger messenger, ITraceCollector tracer) : ReactiveObject
+public class TagCheckBoxViewModel(ITraceCollector tracer, INotificationPublisherFacade notificationPublisher) : ReactiveObject, IMessengerRegistration
 {
     private bool _isChecked;
     private TagClientModel? _tag;
@@ -25,12 +28,20 @@ public class TagCheckBoxViewModel(IMessenger messenger, ITraceCollector tracer) 
 
     public void RegisterMessenger()
     {
-        messenger.Register<ClientTagUpdatedNotification>(this, async void (_, notification) =>
-        {
-            if (Tag == null || Tag.TagId != notification.TagId) return;
+        notificationPublisher.Tag.ClientTagUpdatedNotificationReceived += HandleClientTagUpdatedNotification;
+    }
 
-            Tag.Apply(notification);
-            await tracer.Tag.Update.ChangesApplied(GetType(), notification.TraceId);
-        });
+    public void UnregisterMessenger()
+    {
+        notificationPublisher.Tag.ClientTagUpdatedNotificationReceived -= HandleClientTagUpdatedNotification;
+    }
+
+    private async Task HandleClientTagUpdatedNotification(ClientTagUpdatedNotification notification)
+    {
+        if (Tag == null || Tag.TagId != notification.TagId) return;
+
+        await Dispatcher.UIThread.InvokeAsync(() => { Tag.Apply(notification); });
+        
+        await tracer.Tag.Update.ChangesApplied(GetType(), notification.TraceId);
     }
 }

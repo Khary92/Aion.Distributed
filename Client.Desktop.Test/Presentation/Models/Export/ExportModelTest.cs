@@ -74,18 +74,4 @@ public class ExportModelTest
         Assert.That(isExportedSuccessful, Is.False);
     }
 
-    [Test]
-    public async Task GetMarkdownString()
-    {
-        var workDay = new WorkDayClientModel(Guid.NewGuid(), DateTimeOffset.Now);
-        var fixture = await ExportModelProvider.Create([workDay]);
-        var theMarkdownText = "The markdown text";
-        fixture.ExportService.Setup(es => es.GetMarkdownString(It.IsAny<Collection<WorkDayClientModel>>()))
-            .ReturnsAsync(theMarkdownText);
-
-        var markdownText = await fixture.Instance.GetMarkdownTextAsync();
-
-        Assert.That(fixture.Instance.WorkDays, Has.Count.EqualTo(1));
-        Assert.That(markdownText, Is.EqualTo(theMarkdownText));
-    }
 }

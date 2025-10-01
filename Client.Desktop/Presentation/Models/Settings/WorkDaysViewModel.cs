@@ -1,10 +1,6 @@
-using System;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
-using Client.Desktop.Communication.Local.LocalEvents.Publisher;
-using Client.Desktop.Communication.Notifications.Client.Records;
 using Client.Desktop.DataModels;
-using CommunityToolkit.Mvvm.Messaging;
 using ReactiveUI;
 using Unit = System.Reactive.Unit;
 
@@ -18,15 +14,17 @@ public class WorkDaysViewModel : ReactiveObject
     {
         Model = workDaysModel;
 
-        LoadSelectedDateCommand = ReactiveCommand.Create(
-            () =>
-            {
-                Model.SetSelectedWorkday(SelectedWorkDay!);
-            },
-            this.WhenAnyValue(x => x.SelectedWorkDay).Any()
-        );
+        LoadSelectedDateCommand =
+            ReactiveCommand.CreateFromTask(SetSelectedWorkday, this.WhenAnyValue(x => x.SelectedWorkDay).Any());
     }
-    
+
+    private async Task SetSelectedWorkday()
+    {
+        if (_selectedWorkDay == null) return;
+
+        await Model.SetSelectedWorkday(SelectedWorkDay!);
+    }
+
     public WorkDaysModel Model { get; }
 
     public ReactiveCommand<Unit, Unit>? LoadSelectedDateCommand { get; internal set; }

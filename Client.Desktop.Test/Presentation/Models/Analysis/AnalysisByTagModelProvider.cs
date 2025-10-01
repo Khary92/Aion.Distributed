@@ -54,7 +54,7 @@ public static class AnalysisByTagModelProvider
     private static async Task<AnalysisModelFixture<AnalysisByTagModel>> CreateFixture(IMessenger messenger,
         Mock<IRequestSender> requestSender, Mock<ITraceCollector> tracer)
     {
-        var instance = new AnalysisByTagModel(messenger, requestSender.Object, tracer.Object);
+        var instance = new AnalysisByTagModel(requestSender.Object, tracer.Object);
 
         instance.RegisterMessenger();
         await instance.InitializeAsync();

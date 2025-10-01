@@ -5,7 +5,6 @@ using Avalonia.Threading;
 using Client.Desktop.Communication.Notifications.Sprint.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Tracing.Tracing.Tracers;
-using CommunityToolkit.Mvvm.Messaging;
 using Global.Settings.UrlResolver;
 using Grpc.Core;
 using Grpc.Net.Client;
@@ -15,7 +14,6 @@ namespace Client.Desktop.Communication.Notifications.Sprint.Receiver;
 
 public class SprintNotificationReceiver(
     IGrpcUrlBuilder grpcUrlBuilder,
-    IMessenger messenger,
     ITraceCollector tracer) : ILocalSprintNotificationPublisher
 {
     public async Task StartListening(CancellationToken cancellationToken)

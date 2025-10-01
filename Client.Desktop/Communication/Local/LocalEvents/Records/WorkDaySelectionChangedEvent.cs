@@ -1,3 +1,3 @@
-﻿namespace Client.Desktop.Communication.Notifications.LocalEvents;
+﻿namespace Client.Desktop.Communication.Local.LocalEvents.Records;
 
 public record WorkDaySelectionChangedEvent;

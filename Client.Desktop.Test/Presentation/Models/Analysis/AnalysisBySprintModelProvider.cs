@@ -71,7 +71,7 @@ public static class AnalysisBySprintModelProvider
     private static async Task<AnalysisModelFixture<AnalysisBySprintModel>> CreateFixture(IMessenger messenger,
         Mock<IRequestSender> requestSender, Mock<ITraceCollector> tracer)
     {
-        var instance = new AnalysisBySprintModel(messenger, requestSender.Object, tracer.Object);
+        var instance = new AnalysisBySprintModel(requestSender.Object, tracer.Object);
 
         instance.RegisterMessenger();
         await instance.InitializeAsync();

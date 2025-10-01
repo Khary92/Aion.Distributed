@@ -2,19 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.Commands.Ticket;
-using Client.Desktop.Communication.Notifications.Client.Records;
+using Client.Desktop.Communication.Local;
+using Client.Desktop.Communication.Local.LocalEvents.Publisher;
+using Client.Desktop.Communication.Local.LocalEvents.Records;
 using Client.Desktop.Communication.Notifications.Ticket.Records;
 using Client.Desktop.Lifecycle.Startup.Tasks.Register;
 using Client.Tracing.Tracing.Tracers;
-using CommunityToolkit.Mvvm.Messaging;
 
 namespace Client.Desktop.Presentation.Models.Synchronization;
 
-public class DocumentationSynchronizer(IMessenger messenger, ICommandSender commandSender, ITraceCollector tracer)
-    : IMessengerRegistration, IRecipient<ClientTicketDocumentationUpdatedNotification>,
-        IRecipient<ClientSaveDocumentationNotification>, IDocumentationSynchronizer
+public class DocumentationSynchronizer(
+    ICommandSender commandSender,
+    ITraceCollector tracer,
+    INotificationPublisherFacade notificationPublisher, IClientTimerNotificationPublisher clientTimerNotificationPublisher)
+    : IDocumentationSynchronizer, IMessengerRegistration
 {
     private readonly List<IDocumentationSynchronizationListener> _listeners = [];
 
@@ -31,26 +35,21 @@ public class DocumentationSynchronizer(IMessenger messenger, ICommandSender comm
 
     public void RegisterMessenger()
     {
-        messenger.RegisterAll(this);
+        notificationPublisher.Ticket.TicketDocumentationUpdatedNotificationReceived +=
+            HandleClientTicketDocumentationUpdatedNotification;
+        clientTimerNotificationPublisher.ClientSaveDocumentationNotificationReceived +=
+            HandleClientSaveDocumentationNotification;
     }
 
     public void UnregisterMessenger()
     {
-        messenger.UnregisterAll(this);
+        notificationPublisher.Ticket.TicketDocumentationUpdatedNotificationReceived -=
+            HandleClientTicketDocumentationUpdatedNotification;
+        clientTimerNotificationPublisher.ClientSaveDocumentationNotificationReceived -=
+            HandleClientSaveDocumentationNotification;
     }
 
-    public void Receive(ClientSaveDocumentationNotification message)
-    {
-        _ = SendCommand(message);
-    }
-
-    public void Receive(ClientTicketDocumentationUpdatedNotification message)
-    {
-        foreach (var listener in _listeners.Where(listener => listener.Ticket.TicketId == message.TicketId))
-            listener.Ticket.Apply(message);
-    }
-
-    private async Task SendCommand(ClientSaveDocumentationNotification message)
+    private async Task HandleClientSaveDocumentationNotification(ClientSaveDocumentationNotification message)
     {
         var traceId = Guid.NewGuid();
         await tracer.Ticket.ChangeDocumentation.StartUseCase(GetType(), traceId);
@@ -62,7 +61,11 @@ public class DocumentationSynchronizer(IMessenger messenger, ICommandSender comm
             .Where(t => t.IsDirty)
             .ToList();
 
-        if (dirtyTickets.Count == 0) await tracer.Ticket.ChangeDocumentation.ActionAborted(GetType(), traceId);
+        if (dirtyTickets.Count == 0)
+        {
+            await tracer.Ticket.ChangeDocumentation.ActionAborted(GetType(), traceId);
+            return;
+        }
 
         foreach (var ticket in dirtyTickets)
         {
@@ -75,5 +78,17 @@ public class DocumentationSynchronizer(IMessenger messenger, ICommandSender comm
                 clientUpdateTicketDocumentationCommand);
             await commandSender.Send(clientUpdateTicketDocumentationCommand);
         }
+    }
+
+    private async Task HandleClientTicketDocumentationUpdatedNotification(
+        ClientTicketDocumentationUpdatedNotification message)
+    {
+        await Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            foreach (var listener in _listeners.Where(listener => listener.Ticket.TicketId == message.TicketId))
+            {
+                listener.Ticket.Apply(message);
+            }
+        });
     }
 }

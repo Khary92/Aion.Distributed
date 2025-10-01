@@ -15,14 +15,12 @@ using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Register;
 using Client.Desktop.Services.LocalSettings;
 using Client.Tracing.Tracing.Tracers;
-using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using ReactiveUI;
 
 namespace Client.Desktop.Presentation.Models.Settings;
 
 public class WorkDaysModel(
-    IMessenger messenger,
     ICommandSender commandSender,
     IRequestSender requestSender,
     ILocalSettingsService localSettingsService,

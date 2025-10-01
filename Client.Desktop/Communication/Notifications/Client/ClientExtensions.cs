@@ -1,4 +1,5 @@
 ﻿using System;
+using Client.Desktop.Communication.Local.LocalEvents.Records;
 using Client.Desktop.Communication.Notifications.Client.Records;
 using Proto.Notifications.Client;
 

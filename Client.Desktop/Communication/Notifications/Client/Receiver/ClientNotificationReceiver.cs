@@ -1,9 +1,9 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Client.Desktop.Communication.Local.LocalEvents.Records;
 using Client.Desktop.Communication.Notifications.Client.Records;
 using Client.Tracing.Tracing.Tracers;
-using CommunityToolkit.Mvvm.Messaging;
 using Global.Settings.UrlResolver;
 using Grpc.Core;
 using Grpc.Net.Client;
@@ -13,7 +13,6 @@ namespace Client.Desktop.Communication.Notifications.Client.Receiver;
 
 public class ClientNotificationReceiver(
     IGrpcUrlBuilder grpcUrlBuilder,
-    IMessenger messenger,
     ITraceCollector tracer) : ILocalClientNotificationPublisher
 {
     public async Task StartListening(CancellationToken cancellationToken)

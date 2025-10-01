@@ -72,7 +72,7 @@ public static class AnalysisByTicketModelProvider
     private static async Task<AnalysisModelFixture<AnalysisByTicketModel>> CreateFixture(IMessenger messenger,
         Mock<IRequestSender> requestSender, Mock<ITraceCollector> tracer)
     {
-        var instance = new AnalysisByTicketModel(messenger, requestSender.Object, tracer.Object);
+        var instance = new AnalysisByTicketModel(requestSender.Object, tracer.Object);
 
         instance.RegisterMessenger();
         await instance.InitializeAsync();

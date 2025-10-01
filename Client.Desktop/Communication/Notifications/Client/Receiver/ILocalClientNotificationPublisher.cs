@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Client.Desktop.Communication.Local.LocalEvents.Records;
 using Client.Desktop.Communication.Notifications.Client.Records;
 using Proto.Notifications.Note;
 

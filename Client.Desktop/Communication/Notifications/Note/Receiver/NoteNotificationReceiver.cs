@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Client.Desktop.Communication.Notifications.Note.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Tracing.Tracing.Tracers;
-using CommunityToolkit.Mvvm.Messaging;
 using Global.Settings.UrlResolver;
 using Grpc.Core;
 using Grpc.Net.Client;
@@ -14,7 +13,6 @@ namespace Client.Desktop.Communication.Notifications.Note.Receiver;
 
 public class NoteNotificationReceiver(
     IGrpcUrlBuilder grpcUrlBuilder,
-    IMessenger messenger,
     ITraceCollector tracer) : ILocalNoteNotificationPublisher
 {
     public async Task StartListening(CancellationToken cancellationToken)

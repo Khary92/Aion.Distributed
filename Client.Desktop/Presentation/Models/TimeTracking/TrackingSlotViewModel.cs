@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Client.Desktop.Communication.Notifications.Client.Records;
+using Avalonia.Threading;
+using Client.Desktop.Communication.Local.LocalEvents.Publisher;
+using Client.Desktop.Communication.Local.LocalEvents.Records;
 using Client.Desktop.DataModels;
+using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
+using Client.Desktop.Lifecycle.Startup.Tasks.Register;
 using Client.Desktop.Presentation.Factories;
 using Client.Desktop.Presentation.Models.TimeTracking.DynamicControls;
 using Client.Desktop.Presentation.Views.Custom;
-using CommunityToolkit.Mvvm.Messaging;
 using ReactiveUI;
 using Unit = System.Reactive.Unit;
 
@@ -14,6 +17,7 @@ namespace Client.Desktop.Presentation.Models.TimeTracking;
 public class TrackingSlotViewModel : ReactiveObject
 {
     private readonly INoteStreamViewModelFactory _noteStreamViewModelFactory;
+    private readonly IClientTimerNotificationPublisher _clientTimerNotificationPublisher;
     private readonly IStatisticsViewModelFactory _statisticsViewModelFactory;
     private object _currentView = null!;
     private string _elapsedTimeRepresentation = null!;
@@ -24,18 +28,12 @@ public class TrackingSlotViewModel : ReactiveObject
     public TrackingSlotViewModel(TrackingSlotModel model,
         IStatisticsViewModelFactory statisticsViewModelFactory,
         INoteStreamViewModelFactory noteStreamViewModelFactory,
-        IMessenger messenger)
+        IClientTimerNotificationPublisher clientTimerNotificationPublisher)
     {
         _statisticsViewModelFactory = statisticsViewModelFactory;
         _noteStreamViewModelFactory = noteStreamViewModelFactory;
+        _clientTimerNotificationPublisher = clientTimerNotificationPublisher;
         Model = model;
-
-        messenger.Register<ClientCreateSnapshotNotification>(this, async void (_, _) =>
-        {
-            if (StatisticsViewModel == null) return;
-
-            await StatisticsViewModel.Update();
-        });
 
         ToggleTimerCommand = ReactiveCommand.Create(UpdateTimerState);
         SwitchToDocumentationViewCommand = ReactiveCommand.Create(SwitchToNoteStreamView);
@@ -77,10 +75,11 @@ public class TrackingSlotViewModel : ReactiveObject
         set => this.RaiseAndSetIfChanged(ref _elapsedTimeRepresentation, value);
     }
 
-    public void CreateSubViewModels(Guid ticketId, Guid timeSlotId, StatisticsDataClientModel statisticsDataClientModel)
+    public async Task CreateSubViewModels(Guid ticketId, Guid timeSlotId,
+        StatisticsDataClientModel statisticsDataClientModel)
     {
         NoteStreamViewModel =
-            _noteStreamViewModelFactory.Create(timeSlotId, ticketId);
+            await _noteStreamViewModelFactory.Create(timeSlotId, ticketId);
         StatisticsViewModel = _statisticsViewModelFactory.Create(statisticsDataClientModel);
 
         SwitchToNoteStreamView();
@@ -143,9 +142,17 @@ public class TrackingSlotViewModel : ReactiveObject
 
     private void OnTimerTick(object? sender, EventArgs e)
     {
+        _ = HandleTimerTick();
+    }
+
+    private async Task HandleTimerTick()
+    {
         if (!Model.TimeSlot.IsTimerRunning) return;
 
-        Model.TimeSlot.EndTime = DateTimeOffset.Now;
-        ElapsedTimeRepresentation = Model.TimeSlot.GetElapsedTime();
+        await Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            Model.TimeSlot.EndTime = DateTimeOffset.Now;
+            ElapsedTimeRepresentation = Model.TimeSlot.GetElapsedTime();
+        });
     }
 }
