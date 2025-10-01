@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands.Notes.Records;
-using Client.Proto;
 using Grpc.Net.Client;
 using Proto.Command.Notes;
 
@@ -8,8 +7,14 @@ namespace Client.Desktop.Communication.Commands.Notes;
 
 public class NoteCommandSender : INoteCommandSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
-    private readonly NoteCommandProtoService.NoteCommandProtoServiceClient _client = new(Channel);
+    private readonly NoteCommandProtoService.NoteCommandProtoServiceClient _client;
+
+    public NoteCommandSender(string address)
+    {
+        var channel = GrpcChannel.ForAddress(address);
+        _client = new NoteCommandProtoService.NoteCommandProtoServiceClient(channel);
+    }
+
 
     public async Task<bool> Send(ClientCreateNoteCommand command)
     {

@@ -1,3 +1,4 @@
+using Global.Settings.UrlResolver;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using Service.Monitoring.Communication;
@@ -15,8 +16,15 @@ public static class TracingServices
         AddSinks(services);
         AddVerifiers(services);
         AddPolicyServices(services);
+        AddReportSender(services);
+    }
 
-        services.AddSingleton<IReportSender>(_ => new ReportSender("http://admin-web:8081"));
+    private static void AddReportSender(IServiceCollection services)
+    {
+        services.AddSingleton<IReportSender>(sp => new ReportSender(sp.GetRequiredService<IGrpcUrlBuilder>()
+            .From(ResolvingServices.Monitoring)
+            .To(ResolvingServices.WebAdmin)
+            .BuildAddress()));
     }
 
     private static void AddPolicyServices(IServiceCollection services)

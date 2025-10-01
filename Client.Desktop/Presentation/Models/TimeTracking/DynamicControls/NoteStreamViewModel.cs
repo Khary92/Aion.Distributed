@@ -4,17 +4,17 @@ using System.Linq;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.Commands.Notes.Records;
+using Client.Desktop.Communication.Local;
 using Client.Desktop.Communication.Notifications.Note.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.Communication.Requests.Notes.Records;
 using Client.Desktop.DataModels;
-using Client.Desktop.DataModels.Local;
+using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
+using Client.Desktop.Lifecycle.Startup.Tasks.Register;
 using Client.Desktop.Presentation.Factories;
 using Client.Desktop.Services.LocalSettings;
-using Client.Desktop.Services.LocalSettings.Commands;
 using Client.Tracing.Tracing.Tracers;
-using CommunityToolkit.Mvvm.Messaging;
 using ReactiveUI;
 
 namespace Client.Desktop.Presentation.Models.TimeTracking.DynamicControls;
@@ -22,13 +22,12 @@ namespace Client.Desktop.Presentation.Models.TimeTracking.DynamicControls;
 public class NoteStreamViewModel(
     ICommandSender commandSender,
     IRequestSender requestSender,
-    IMessenger messenger,
+    INotificationPublisherFacade notificationPublisher,
     INoteViewFactory noteViewFactory,
     ILocalSettingsService localSettingsService,
     ITraceCollector tracer)
-    : ReactiveObject
+    : ReactiveObject, IMessengerRegistration, IInitializeAsync
 {
-    private SettingsClientModel? _settingsClient;
     private Guid _ticketId;
     private Guid _timeSlotId;
     public ObservableCollection<NoteViewModel> Notes { get; } = [];
@@ -43,6 +42,27 @@ public class NoteStreamViewModel(
     {
         get => _timeSlotId;
         set => this.RaiseAndSetIfChanged(ref _timeSlotId, value);
+    }
+
+    public InitializationType Type => InitializationType.ViewModel;
+
+    public async Task InitializeAsync()
+    {
+        var noteClientModels =
+            await requestSender.Send(new ClientGetNotesByTimeSlotIdRequest(TimeSlotId, Guid.NewGuid()));
+        foreach (var note in noteClientModels) await InsertNoteViewModel(note);
+    }
+
+    public void RegisterMessenger()
+    {
+        notificationPublisher.Note.NewNoteMessageReceived += HandleNewNoteMessage;
+        notificationPublisher.Note.ClientNoteUpdatedNotificationReceived += HandleClientNoteUpdatedNotification;
+    }
+
+    public void UnregisterMessenger()
+    {
+        notificationPublisher.Note.NewNoteMessageReceived -= HandleNewNoteMessage;
+        notificationPublisher.Note.ClientNoteUpdatedNotificationReceived -= HandleClientNoteUpdatedNotification;
     }
 
     public async Task AddNoteControl()
@@ -60,37 +80,19 @@ public class NoteStreamViewModel(
         await commandSender.Send(clientCreateNoteCommand);
     }
 
-    public void RegisterMessenger()
+    private async Task HandleNewNoteMessage(NewNoteMessage message)
     {
-        messenger.Register<SettingsClientModel>(this, async void (_, m) =>
-        {
-            _settingsClient = m;
-            await InitializeAsync();
-        });
-
-        messenger.Register<WorkDaySelectedNotification>(this, async void (_, m) =>
-        {
-            _settingsClient!.SelectedDate = m.Date;
-            await InitializeAsync();
-        });
-
-        messenger.Register<NewNoteMessage>(this,
-            async void (_, message) => { await InsertNoteViewModel(message.Note); });
-
-        messenger.Register<ClientNoteUpdatedNotification>(this, (_, notification) =>
-        {
-            var viewModel = Notes.FirstOrDefault(n => n.Note.NoteId == notification.NoteId);
-
-            if (viewModel == null) return;
-
-            viewModel.Note.Apply(notification);
-        });
+        await InsertNoteViewModel(message.Note);
     }
 
-    public async Task InitializeAsync()
+    private Task HandleClientNoteUpdatedNotification(ClientNoteUpdatedNotification notification)
     {
-        var noteDtos = await requestSender.Send(new ClientGetNotesByTimeSlotIdRequest(TimeSlotId, Guid.NewGuid()));
-        foreach (var note in noteDtos) await InsertNoteViewModel(note);
+        var viewModel = Notes.FirstOrDefault(n => n.Note.NoteId == notification.NoteId);
+
+        if (viewModel == null) return Task.CompletedTask;
+
+        viewModel.Note.Apply(notification);
+        return Task.CompletedTask;
     }
 
     private async Task InsertNoteViewModel(NoteClientModel noteClientModel)

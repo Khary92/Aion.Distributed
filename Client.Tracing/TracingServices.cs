@@ -18,7 +18,6 @@ using Client.Tracing.Tracing.Tracers.TimeSlot.UseCase;
 using Client.Tracing.Tracing.Tracers.WorkDay;
 using Client.Tracing.Tracing.Tracers.WorkDay.UseCase;
 using Microsoft.Extensions.DependencyInjection;
-using Service.Monitoring.Shared.Tracing;
 
 namespace Client.Tracing;
 
@@ -40,7 +39,6 @@ public static class TracingServices
 
     private static void AddACommonTracingServices(this IServiceCollection services)
     {
-        services.AddScoped<ITracingDataSender>(_ => new TracingDataSender("http://127.0.0.1:8082"));
         services.AddScoped<ITraceCollector, TraceCollector>();
     }
 

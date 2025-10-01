@@ -7,17 +7,13 @@ namespace Client.Desktop.FileSystem.Serializer;
 
 public class JsonReader : IFileSystemReader
 {
-    public Task<T> GetObject<T>(string filePath)
+    public async Task<T> GetObject<T>(string filePath)
     {
         try
         {
-            string jsonText;
-            using (var reader = new StreamReader(filePath))
-            {
-                jsonText = reader.ReadToEnd();
-            }
-
-            return Task.FromResult(JsonSerializer.Deserialize<T>(jsonText) ?? throw new InvalidOperationException());
+            using var reader = new StreamReader(filePath);
+            var jsonText = await reader.ReadToEndAsync();
+            return JsonSerializer.Deserialize<T>(jsonText) ?? throw new InvalidOperationException();
         }
         catch (Exception e)
         {

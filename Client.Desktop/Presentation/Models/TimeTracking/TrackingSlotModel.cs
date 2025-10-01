@@ -1,23 +1,24 @@
 using System;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands.TimeSlots.Records;
-using Client.Desktop.Communication.Notifications.Client.Records;
+using Client.Desktop.Communication.Local;
+using Client.Desktop.Communication.Local.LocalEvents.Publisher;
+using Client.Desktop.Communication.Local.LocalEvents.Records;
 using Client.Desktop.Communication.Notifications.Ticket.Records;
 using Client.Desktop.DataModels;
+using Client.Desktop.Lifecycle.Startup.Tasks.Register;
 using Client.Desktop.Services.Cache;
 using Client.Tracing.Tracing.Tracers;
-using CommunityToolkit.Mvvm.Messaging;
 using ReactiveUI;
 
 namespace Client.Desktop.Presentation.Models.TimeTracking;
 
 public class TrackingSlotModel(
-    IMessenger messenger,
     IPersistentCache<ClientSetStartTimeCommand> startTimeCache,
     IPersistentCache<ClientSetEndTimeCommand> endTimeCache,
-    ITraceCollector tracer) : ReactiveObject, IRecipient<ClientTicketDocumentationUpdatedNotification>,
-    IRecipient<ClientTicketDataUpdatedNotification>,
-    IRecipient<ClientCreateSnapshotNotification>
+    ITraceCollector tracer,
+    INotificationPublisherFacade notificationPublisher,
+    IClientTimerNotificationPublisher timerNotificationPublisher) : ReactiveObject, IMessengerRegistration
 {
     private TicketClientModel _ticket = null!;
     private TimeSlotClientModel _timeSlot = null!;
@@ -34,12 +35,29 @@ public class TrackingSlotModel(
         set => this.RaiseAndSetIfChanged(ref _timeSlot, value);
     }
 
-    public void Receive(ClientCreateSnapshotNotification message)
+    public void RegisterMessenger()
+    {
+        notificationPublisher.Ticket.TicketDocumentationUpdatedNotificationReceived +=
+            HandleClientTicketDocumentationUpdatedNotification;
+        notificationPublisher.Ticket.TicketDataUpdatedNotificationReceived += HandleClientTicketDataUpdatedNotification;
+        timerNotificationPublisher.ClientCreateSnapshotNotificationReceived += HandleClientCreateSnapshotNotification;
+    }
+
+    public void UnregisterMessenger()
+    {
+        notificationPublisher.Ticket.TicketDocumentationUpdatedNotificationReceived -=
+            HandleClientTicketDocumentationUpdatedNotification;
+        notificationPublisher.Ticket.TicketDataUpdatedNotificationReceived -= HandleClientTicketDataUpdatedNotification;
+        timerNotificationPublisher.ClientCreateSnapshotNotificationReceived -= HandleClientCreateSnapshotNotification;
+    }
+
+    private Task HandleClientCreateSnapshotNotification(ClientCreateSnapshotNotification message)
     {
         if (TimeSlot.IsEndTimeChanged())
         {
             var setEndTimeCommand =
                 new ClientSetEndTimeCommand(TimeSlot.TimeSlotId, TimeSlot.EndTime, Guid.NewGuid());
+
             endTimeCache.Store(setEndTimeCommand);
         }
 
@@ -50,27 +68,25 @@ public class TrackingSlotModel(
 
             startTimeCache.Store(setStartTimeCommand);
         }
+
+        return Task.CompletedTask;
     }
 
-    public void Receive(ClientTicketDataUpdatedNotification message)
+    private async Task HandleClientTicketDataUpdatedNotification(ClientTicketDataUpdatedNotification message)
     {
         if (Ticket.TicketId != message.TicketId) return;
 
         Ticket.Apply(message);
-        _ = tracer.Ticket.Update.ChangesApplied(GetType(), message.TraceId);
+        await tracer.Ticket.Update.ChangesApplied(GetType(), message.TraceId);
     }
 
-    public void Receive(ClientTicketDocumentationUpdatedNotification message)
+    private async Task HandleClientTicketDocumentationUpdatedNotification(
+        ClientTicketDocumentationUpdatedNotification message)
     {
         if (Ticket.TicketId != message.TicketId) return;
 
         Ticket.Apply(message);
-        _ = tracer.Ticket.ChangeDocumentation.NotificationReceived(GetType(), message.TraceId, message);
-    }
-
-    public void RegisterMessenger()
-    {
-        messenger.RegisterAll(this);
+        await tracer.Ticket.ChangeDocumentation.NotificationReceived(GetType(), message.TraceId, message);
     }
 
     public void ToggleTimerState()

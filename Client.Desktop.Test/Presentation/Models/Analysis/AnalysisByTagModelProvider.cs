@@ -6,16 +6,21 @@ using Client.Desktop.DataModels.Decorators;
 using Client.Desktop.DataModels.Decorators.Entities;
 using Client.Desktop.Presentation.Models.Analysis;
 using Client.Tracing.Tracing.Tracers;
-using CommunityToolkit.Mvvm.Messaging;
+using Global.Settings.UrlResolver;
 using Moq;
 
 namespace Client.Desktop.Test.Presentation.Models.Analysis;
 
 public static class AnalysisByTagModelProvider
 {
-    private static IMessenger CreateMessenger()
+    private static TestNotificationPublisherFacade CreateNotificationPublisherMock()
     {
-        return new WeakReferenceMessenger();
+        return new TestNotificationPublisherFacade(CreateGrpcUrlBuilderMock().Object, CreateTracerMock().Object);
+    }
+
+    private static Mock<IGrpcUrlBuilder> CreateGrpcUrlBuilderMock()
+    {
+        return new Mock<IGrpcUrlBuilder>();
     }
 
     private static Mock<ITraceCollector> CreateTracerMock()
@@ -33,12 +38,11 @@ public static class AnalysisByTagModelProvider
         return new TagClientModel(Guid.NewGuid(), "InitialTagName", true);
     }
 
-
     public static async Task<AnalysisModelFixture<AnalysisByTagModel>> Create(IReadOnlyList<TagClientModel> initialTags)
     {
-        var messenger = CreateMessenger();
         var requestSender = CreateRequestSenderMock();
         var tracer = CreateTracerMock();
+        var publisherFacade = CreateNotificationPublisherMock();
 
         requestSender
             .Setup(rs => rs.Send(It.IsAny<ClientGetAllTagsRequest>()))!
@@ -48,13 +52,15 @@ public static class AnalysisByTagModelProvider
             .Setup(rs => rs.Send(It.IsAny<ClientGetTagAnalysisById>()))!
             .ReturnsAsync(new AnalysisByTagDecorator(CreateAnalysisByTag()));
 
-        return await CreateFixture(messenger, requestSender, tracer);
+        return await CreateFixture(requestSender, tracer, publisherFacade);
     }
 
-    private static async Task<AnalysisModelFixture<AnalysisByTagModel>> CreateFixture(IMessenger messenger,
-        Mock<IRequestSender> requestSender, Mock<ITraceCollector> tracer)
+    private static async Task<AnalysisModelFixture<AnalysisByTagModel>> CreateFixture(
+        Mock<IRequestSender> requestSender,
+        Mock<ITraceCollector> tracer,
+        TestNotificationPublisherFacade publisherFacade)
     {
-        var instance = new AnalysisByTagModel(messenger, requestSender.Object, tracer.Object);
+        var instance = new AnalysisByTagModel(requestSender.Object, tracer.Object, publisherFacade);
 
         instance.RegisterMessenger();
         await instance.InitializeAsync();
@@ -65,7 +71,7 @@ public static class AnalysisByTagModelProvider
             Instance = instance,
             RequestSender = requestSender,
             Tracer = tracer,
-            Messenger = messenger
+            NotificationPublisher = publisherFacade
         };
     }
 

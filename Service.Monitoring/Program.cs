@@ -1,6 +1,9 @@
+using Global.Settings;
+using Global.Settings.Types;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Service.Monitoring;
@@ -12,6 +15,8 @@ public abstract class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.SetConfiguration();
+
         builder.Services.AddGrpc(options =>
         {
             options.EnableDetailedErrors = true;
@@ -21,19 +26,26 @@ public abstract class Program
 
         builder.Services.AddTracingServices();
 
+        var globalSettings = new GlobalSettings();
+        builder.Configuration.GetSection("GlobalSettings").Bind(globalSettings);
+
+        var monitoringSettings = new MonitoringSettings();
+        builder.Configuration.GetSection("MonitoringSettings").Bind(monitoringSettings);
+
         builder.WebHost.ConfigureKestrel(options =>
         {
-            options.ListenAnyIP(8080, o => { o.Protocols = HttpProtocols.Http2; });
+            options.ListenAnyIP(monitoringSettings.GrpcPort, listenOptions =>
+            {
+                if (globalSettings.UseHttps) listenOptions.UseHttps("/app/certs/server.pfx");
+
+                listenOptions.Protocols = HttpProtocols.Http2;
+            });
         });
 
-        // builder.Logging.AddConsole();
-        // builder.Logging.SetMinimumLevel(LogLevel.Debug);
-
         var app = builder.Build();
-
         app.UseRouting();
-
         app.AddEndPoints();
+
         await app.RunAsync();
     }
 }

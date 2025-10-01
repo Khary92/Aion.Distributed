@@ -2,8 +2,6 @@
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.DataModels;
 using Client.Desktop.Presentation.Models.Settings;
-using Client.Desktop.Services.LocalSettings.Commands;
-using CommunityToolkit.Mvvm.Messaging;
 using Moq;
 
 namespace Client.Desktop.Test.Presentation.Models.Settings;
@@ -39,7 +37,7 @@ public class WorkDaysModelTest
         var fixture = await WorkDaysModelProvider.Create([], false);
         var newWorkDay = new WorkDayClientModel(Guid.NewGuid(), DateTimeOffset.Now);
 
-        fixture.Messenger.Send(new NewWorkDayMessage(newWorkDay, Guid.NewGuid()));
+        await fixture.NotificationPublisher.WorkDay.Publish(new NewWorkDayMessage(newWorkDay, Guid.NewGuid()));
 
         Assert.That(fixture.Instance.WorkDays, Has.Count.EqualTo(1));
     }
@@ -50,8 +48,9 @@ public class WorkDaysModelTest
         var fixture = await WorkDaysModelProvider.Create([], false);
         var newWorkDay = new WorkDayClientModel(Guid.NewGuid(), DateTimeOffset.Now);
 
-        fixture.Instance.SetSelectedWorkday(newWorkDay);
+        await fixture.Instance.SetSelectedWorkday(newWorkDay);
 
-        fixture.LocalSettingsCommandSender.Verify(x => x.Send(It.IsAny<SetWorkDaySelectionCommand>()));
+
+        fixture.LocalSettingsService.Verify(x => x.SetSelectedDate(It.IsAny<DateTimeOffset>()));
     }
 }

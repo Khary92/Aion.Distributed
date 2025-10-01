@@ -16,13 +16,14 @@
         <PackageReference Include="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="9.0.6"/>
         <PackageReference Include="Microsoft.Extensions.Configuration.FileExtensions" Version="9.0.6"/>
         <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="9.0.6"/>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.6"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.9"/>
         <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4"/>
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\Core.Domain\Core.Domain.csproj"/>
         <ProjectReference Include="..\Core.Tracing\Core.Tracing.csproj"/>
+        <ProjectReference Include="..\Global.Settings\Global.Settings.csproj"/>
         <ProjectReference Include="..\Service.Monitoring.Shared\Service.Monitoring.Shared.csproj"/>
     </ItemGroup>
 

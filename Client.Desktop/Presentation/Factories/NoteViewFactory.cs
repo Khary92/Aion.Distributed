@@ -12,12 +12,9 @@ public class NoteViewFactory(IServiceProvider serviceProvider) : INoteViewFactor
     {
         var noteViewModel = serviceProvider.GetRequiredService<NoteViewModel>();
 
-        //TODO Clone
-        noteViewModel.Note = new NoteClientModel(noteClientModel.NoteId, noteClientModel.Text,
-            noteClientModel.NoteTypeId, noteClientModel.TimeSlotId,
-            noteClientModel.TimeStamp);
+        noteViewModel.Note = noteClientModel;
 
-        await noteViewModel.Initialize();
+        await noteViewModel.InitializeAsync();
         noteViewModel.RegisterMessenger();
 
         return noteViewModel;

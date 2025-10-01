@@ -15,10 +15,7 @@ public class ExportViewModel : ReactiveObject
 
         ExportCommand = ReactiveCommand.CreateFromTask(ExportFile);
 
-        Model.SelectedWorkDays.CollectionChanged += async (_, _) =>
-        {
-            Model.MarkdownText = await Model.GetMarkdownTextAsync();
-        };
+        Model.SelectedWorkDays.CollectionChanged += Model.RefreshMarkdownViewerHandler;
     }
 
     public ExportModel Model { get; }

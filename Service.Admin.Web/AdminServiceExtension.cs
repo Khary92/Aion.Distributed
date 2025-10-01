@@ -1,4 +1,5 @@
-﻿using Grpc.Core;
+﻿using Global.Settings.UrlResolver;
+using Grpc.Core;
 using Polly;
 using Service.Admin.Web.Communication.Receiver;
 using Service.Admin.Web.Communication.Receiver.Reports;
@@ -8,6 +9,7 @@ using Service.Admin.Web.Communication.Sender.Policies;
 using Service.Admin.Web.Services.Startup;
 using Service.Admin.Web.Services.State;
 using Service.Monitoring.Shared.Enums;
+using Service.Monitoring.Shared.Tracing;
 using Service.Proto.Shared.Commands.NoteTypes;
 using Service.Proto.Shared.Commands.Sprints;
 using Service.Proto.Shared.Commands.Tags;
@@ -23,16 +25,24 @@ namespace Service.Admin.Web;
 
 public static class AdminServiceExtension
 {
-    private const string ServerAddress = "http://core-service:8080";
-
     public static void AddWebServices(this IServiceCollection services)
     {
+        AddTraceSender(services);
         RegisterStateServices(services);
         AddSharedDataServices(services);
         AddControllers(services);
         AddSettingsServices(services);
         AddReceiverServices(services);
         AddPolicyServices(services);
+    }
+
+    private static void AddTraceSender(this IServiceCollection services)
+    {
+        services.AddSingleton<ITracingDataSender>(sp =>
+            new TracingDataSender(sp.GetRequiredService<IGrpcUrlBuilder>()
+                .From(ResolvingServices.WebAdmin)
+                .To(ResolvingServices.Monitoring)
+                .BuildAddress()));
     }
 
     private static void AddPolicyServices(IServiceCollection services)
@@ -138,19 +148,59 @@ public static class AdminServiceExtension
 
     private static void AddSharedDataServices(this IServiceCollection services)
     {
-        services.AddSingleton<ITicketCommandSender>(_ => new TicketCommandSender(ServerAddress));
-        services.AddSingleton<ITicketRequestSender>(_ => new TicketRequestSender(ServerAddress));
+        services.AddSingleton<ITicketCommandSender>(sp =>
+            new TicketCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
+                .From(ResolvingServices.WebAdmin)
+                .To(ResolvingServices.Server)
+                .BuildAddress()));
+        services.AddSingleton<ITicketRequestSender>(sp =>
+            new TicketRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
+                .From(ResolvingServices.WebAdmin)
+                .To(ResolvingServices.Server)
+                .BuildAddress()));
 
-        services.AddSingleton<ISprintCommandSender>(_ => new SprintCommandSender(ServerAddress));
-        services.AddSingleton<ISprintRequestSender>(_ => new SprintRequestSender(ServerAddress));
+        services.AddSingleton<ISprintCommandSender>(sp =>
+            new SprintCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
+                .From(ResolvingServices.WebAdmin)
+                .To(ResolvingServices.Server)
+                .BuildAddress()));
+        services.AddSingleton<ISprintRequestSender>(sp =>
+            new SprintRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
+                .From(ResolvingServices.WebAdmin)
+                .To(ResolvingServices.Server)
+                .BuildAddress()));
 
-        services.AddSingleton<ITagCommandSender>(_ => new TagCommandSender(ServerAddress));
-        services.AddSingleton<ITagRequestSender>(_ => new TagRequestSender(ServerAddress));
+        services.AddSingleton<ITagCommandSender>(sp =>
+            new TagCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
+                .From(ResolvingServices.WebAdmin)
+                .To(ResolvingServices.Server)
+                .BuildAddress()));
+        services.AddSingleton<ITagRequestSender>(sp =>
+            new TagRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
+                .From(ResolvingServices.WebAdmin)
+                .To(ResolvingServices.Server)
+                .BuildAddress()));
 
-        services.AddSingleton<INoteTypeCommandSender>(_ => new NoteTypeCommandSender(ServerAddress));
-        services.AddSingleton<INoteTypeRequestSender>(_ => new NoteTypeRequestSender(ServerAddress));
+        services.AddSingleton<INoteTypeCommandSender>(sp =>
+            new NoteTypeCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
+                .From(ResolvingServices.WebAdmin)
+                .To(ResolvingServices.Server)
+                .BuildAddress()));
+        services.AddSingleton<INoteTypeRequestSender>(sp =>
+            new NoteTypeRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
+                .From(ResolvingServices.WebAdmin)
+                .To(ResolvingServices.Server)
+                .BuildAddress()));
 
-        services.AddSingleton<ITimerSettingsCommandSender>(_ => new TimerSettingsCommandSender(ServerAddress));
-        services.AddSingleton<ITimerSettingsRequestSender>(_ => new TimerSettingsRequestSender(ServerAddress));
+        services.AddSingleton<ITimerSettingsCommandSender>(sp =>
+            new TimerSettingsCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
+                .From(ResolvingServices.WebAdmin)
+                .To(ResolvingServices.Server)
+                .BuildAddress()));
+        services.AddSingleton<ITimerSettingsRequestSender>(sp =>
+            new TimerSettingsRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
+                .From(ResolvingServices.WebAdmin)
+                .To(ResolvingServices.Server)
+                .BuildAddress()));
     }
 }

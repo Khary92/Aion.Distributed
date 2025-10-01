@@ -48,7 +48,7 @@ public class TimerSettingsClientModel : ReactiveObject
         return true;
     }
 
-    public bool IsSnapSveIntervalReached()
+    public bool IsSnapshotIntervalReached()
     {
         _currentSnapshotSecondsCount++;
 

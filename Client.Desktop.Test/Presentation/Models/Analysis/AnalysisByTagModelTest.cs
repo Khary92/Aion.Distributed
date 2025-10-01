@@ -2,7 +2,6 @@ using Client.Desktop.Communication.Notifications.Tag.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.DataModels;
 using Client.Desktop.Presentation.Models.Analysis;
-using CommunityToolkit.Mvvm.Messaging;
 
 namespace Client.Desktop.Test.Presentation.Models.Analysis;
 
@@ -17,7 +16,7 @@ public class AnalysisByTagModelTest
         var newTagMessage = new NewTagMessage(newTagModel, Guid.NewGuid());
 
         var fixture = await AnalysisByTagModelProvider.Create(new List<TagClientModel>());
-        fixture.Messenger.Send(newTagMessage);
+        await fixture.NotificationPublisher.Tag.Publish(newTagMessage);
 
         Assert.That(fixture.Instance.Tags, Has.Count.EqualTo(1));
     }
@@ -34,7 +33,7 @@ public class AnalysisByTagModelTest
             await AnalysisByTagModelProvider.Create(new List<TagClientModel> { newTagClientModel });
         var clientTagDataUpdateNotification = new ClientTagUpdatedNotification(tagId, changedTagName, Guid.NewGuid());
 
-        fixture.Messenger.Send(clientTagDataUpdateNotification);
+        await fixture.NotificationPublisher.Tag.Publish(clientTagDataUpdateNotification);
 
         Assert.That(fixture.Instance.Tags.First().Name, Is.EqualTo(changedTagName));
     }

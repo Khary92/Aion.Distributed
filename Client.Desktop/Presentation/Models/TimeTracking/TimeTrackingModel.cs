@@ -1,9 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Commands;
 using Client.Desktop.Communication.Commands.Client.Records;
+using Client.Desktop.Communication.Local;
+using Client.Desktop.Communication.Local.LocalEvents.Records;
 using Client.Desktop.Communication.Notifications.Client.Records;
 using Client.Desktop.Communication.Notifications.Sprint.Records;
 using Client.Desktop.Communication.Notifications.Ticket.Records;
@@ -16,26 +19,21 @@ using Client.Desktop.DataModels;
 using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Register;
 using Client.Desktop.Presentation.Factories;
-using Client.Desktop.Presentation.Models.Synchronization;
 using Client.Desktop.Services.LocalSettings;
 using Client.Tracing.Tracing.Tracers;
-using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using ReactiveUI;
 
 namespace Client.Desktop.Presentation.Models.TimeTracking;
 
 public class TimeTrackingModel(
-    IMessenger messenger,
     ICommandSender commandSender,
     IRequestSender requestSender,
-    IDocumentationSynchronizer documentationSynchronizer,
     ITrackingSlotViewModelFactory trackingSlotViewModelFactory,
     ILocalSettingsService localSettingsService,
-    ITraceCollector tracer) : ReactiveObject, IInitializeAsync, IMessengerRegistration, IRecipient<NewTicketMessage>,
-    IRecipient<ClientTicketDataUpdatedNotification>, IRecipient<ClientTicketAddedToActiveSprintNotification>,
-    IRecipient<ClientSprintSelectionChangedNotification>, IRecipient<ClientTrackingControlCreatedNotification>,
-    IRecipient<ClientWorkDaySelectionChangedNotification>
+    ITraceCollector tracer,
+    INotificationPublisherFacade notificationFacade) : ReactiveObject, IInitializeAsync, IMessengerRegistration
+
 {
     private int _currentViewModelIndex;
     private ObservableCollection<TicketClientModel> _filteredTickets = [];
@@ -80,81 +78,65 @@ public class TimeTrackingModel(
 
     public async Task InitializeAsync()
     {
-        FilteredTickets.Clear();
         var ticketsInSprint = await requestSender.Send(new ClientGetTicketsForCurrentSprintRequest());
+        var allTickets = await requestSender.Send(new ClientGetAllTicketsRequest());
+
+
+        FilteredTickets.Clear();
         FilteredTickets.AddRange(ticketsInSprint);
 
         AllTickets.Clear();
-        var allTickets = await requestSender.Send(new ClientGetAllTicketsRequest());
         AllTickets.AddRange(allTickets);
+
 
         await LoadTimeSlotViewModels();
     }
 
     public void RegisterMessenger()
     {
-        messenger.RegisterAll(this);
+        notificationFacade.Ticket.NewTicketNotificationReceived += HandleNewTicketMessage;
+        notificationFacade.Ticket.TicketDataUpdatedNotificationReceived += HandleTicketDataUpdatedNotification;
+        notificationFacade.Sprint.ClientTicketAddedToActiveSprintNotificationReceived +=
+            HandleTicketAddedToActiveSprintNotification;
+        notificationFacade.Client.ClientSprintSelectionChangedNotificationReceived +=
+            HandleTicketSprintSelectionChangedNotification;
+        notificationFacade.Client.ClientTrackingControlCreatedNotificationReceived +=
+            HandleTimeSlotControlCreatedNotification;
+        //TODO IRecipient<ClientWorkDaySelectionChangedNotification>
     }
 
     public void UnregisterMessenger()
     {
-        messenger.UnregisterAll(this);
-    }
-
-    public void Receive(ClientSprintSelectionChangedNotification message)
-    {
-        _ = HandleTicketSprintSelectionChangedNotification(message);
-    }
-
-    //TODO Fix this!
-    public void Receive(ClientTicketAddedToActiveSprintNotification message)
-    {
-        _ = InitializeAsync();
-    }
-
-    public void Receive(ClientTicketDataUpdatedNotification message)
-    {
-        var ticketClientModel = AllTickets.FirstOrDefault(tsv => tsv.TicketId == message.TicketId);
-
-        if (ticketClientModel == null)
-        {
-            _ = tracer.Ticket.Update.NoAggregateFound(GetType(), message.TraceId);
-            return;
-        }
-
-        ticketClientModel.Apply(message);
-        _ = tracer.Ticket.Update.ChangesApplied(GetType(), message.TraceId);
-    }
-
-    public void Receive(ClientTrackingControlCreatedNotification message)
-    {
-        _ = HandleTimeSlotControlCreatedNotification(message);
-    }
-
-    public void Receive(ClientWorkDaySelectionChangedNotification message)
-    {
-        _ = HandleWorkDaySelectionChangedNotification(message);
-    }
-
-    public void Receive(NewTicketMessage message)
-    {
-        _ = HandleNewTicketMessage(message);
+        notificationFacade.Ticket.NewTicketNotificationReceived -= HandleNewTicketMessage;
+        notificationFacade.Ticket.TicketDataUpdatedNotificationReceived -= HandleTicketDataUpdatedNotification;
+        notificationFacade.Sprint.ClientTicketAddedToActiveSprintNotificationReceived -=
+            HandleTicketAddedToActiveSprintNotification;
+        notificationFacade.Client.ClientSprintSelectionChangedNotificationReceived -=
+            HandleTicketSprintSelectionChangedNotification;
+        notificationFacade.Client.ClientTrackingControlCreatedNotificationReceived -=
+            HandleTimeSlotControlCreatedNotification;
     }
 
     private async Task LoadTimeSlotViewModels()
     {
-        TimeSlotViewModels.Clear();
-
         var controlDataList =
             await requestSender.Send(
                 new ClientGetTrackingControlDataRequest(localSettingsService.SelectedDate, Guid.NewGuid()));
 
+        var trackingSlotViewModels = new List<TrackingSlotViewModel>();
         foreach (var controlData in controlDataList)
         {
-            var timeSlotViewModel = await trackingSlotViewModelFactory.Create(controlData.Ticket,
-                controlData.StatisticsData, controlData.TimeSlot);
-            TimeSlotViewModels.Add(timeSlotViewModel);
+            var timeSlotViewModel = await trackingSlotViewModelFactory.Create(
+                controlData.Ticket,
+                controlData.StatisticsData,
+                controlData.TimeSlot);
+            trackingSlotViewModels.Add(timeSlotViewModel);
         }
+
+
+        TimeSlotViewModels.Clear();
+        foreach (var vm in trackingSlotViewModels)
+            TimeSlotViewModels.Add(vm);
 
         if (TimeSlotViewModels.Any())
         {
@@ -169,7 +151,6 @@ public class TimeTrackingModel(
 
         TimeSlotViewModels[CurrentViewModelIndex].ToggleTimerCommand.Execute();
         CurrentViewModelIndex -= 1;
-        SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.Ticket.Name;
     }
 
     public void ToggleNextViewModel()
@@ -198,45 +179,70 @@ public class TimeTrackingModel(
 
     private async Task HandleNewTicketMessage(NewTicketMessage message)
     {
-        AllTickets.Add(message.Ticket);
         await tracer.Ticket.Create.AggregateAdded(GetType(), message.TraceId);
 
         var currentSprint = await requestSender.Send(new ClientGetActiveSprintRequest());
 
         if (currentSprint == null) return;
 
+
         if (currentSprint.TicketIds.Contains(message.Ticket.TicketId))
             FilteredTickets.Add(message.Ticket);
     }
 
+    private async Task HandleTicketAddedToActiveSprintNotification(ClientTicketAddedToActiveSprintNotification message)
+    {
+        await InitializeAsync();
+    }
+
+    private async Task HandleTicketDataUpdatedNotification(ClientTicketDataUpdatedNotification message)
+    {
+        var ticketClientModel = AllTickets.FirstOrDefault(tsv => tsv.TicketId == message.TicketId);
+
+        if (ticketClientModel == null)
+        {
+            await tracer.Ticket.Update.NoAggregateFound(GetType(), message.TraceId);
+            return;
+        }
+
+        ticketClientModel.Apply(message);
+
+        await tracer.Ticket.Update.ChangesApplied(GetType(), message.TraceId);
+    }
+
     private async Task HandleTicketSprintSelectionChangedNotification(ClientSprintSelectionChangedNotification message)
     {
-        FilteredTickets.Clear();
         var ticketClientModels = await requestSender.Send(new ClientGetTicketsForCurrentSprintRequest());
-        FilteredTickets.Add(ticketClientModels);
+
+
+        FilteredTickets.Clear();
+        FilteredTickets.AddRange(ticketClientModels);
     }
 
     private async Task HandleTimeSlotControlCreatedNotification(ClientTrackingControlCreatedNotification message)
     {
-        TimeSlotViewModels.Add(await
-            trackingSlotViewModelFactory.Create(message.Ticket, message.StatisticsData,
-                message.TimeSlot));
+        var trackingSlotViewModel =
+            await trackingSlotViewModelFactory.Create(message.Ticket, message.StatisticsData, message.TimeSlot);
 
-        await tracer.Client.CreateTrackingControl.AggregateAdded(GetType(), message.TraceId);
 
+        TimeSlotViewModels.Add(trackingSlotViewModel);
         CurrentViewModelIndex = TimeSlotViewModels.Count - 1;
         SelectedTicketName = TimeSlotViewModels[CurrentViewModelIndex].Model.Ticket.Name;
+
+
+        await tracer.Client.CreateTrackingControl.AggregateAdded(GetType(), message.TraceId);
     }
 
     private async Task HandleWorkDaySelectionChangedNotification(ClientWorkDaySelectionChangedNotification message)
     {
-        FilteredTickets.Clear();
-
         var ticketModels = await requestSender.Send(new ClientGetAllTicketsRequest());
 
-        FilteredTickets.Add(ticketModels);
 
+        FilteredTickets.Clear();
+        FilteredTickets.AddRange(ticketModels);
         TimeSlotViewModels.Clear();
+
+
         await LoadTimeSlotViewModels();
     }
 }

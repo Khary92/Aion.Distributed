@@ -1,9 +1,8 @@
 using Client.Desktop.Communication.Commands.TimeSlots.Records;
-using Client.Desktop.Communication.Notifications.Client.Records;
+using Client.Desktop.Communication.Local.LocalEvents.Records;
 using Client.Desktop.Communication.Notifications.Ticket.Records;
 using Client.Desktop.DataModels;
 using Client.Desktop.Presentation.Models.TimeTracking;
-using CommunityToolkit.Mvvm.Messaging;
 using Moq;
 
 namespace Client.Desktop.Test.Presentation.Models.TimeTracking;
@@ -51,7 +50,7 @@ public class TrackingSlotModelTest
             new ClientTicketDocumentationUpdatedNotification(fixture.Ticket.TicketId,
                 newDocumentation, Guid.NewGuid());
 
-        fixture.Messenger.Send(clientTicketDocumentationUpdatedNotification);
+        await fixture.NotificationPublisher.Ticket.Publish(clientTicketDocumentationUpdatedNotification);
 
         Assert.That(fixture.Ticket.Documentation, Is.EqualTo(newDocumentation));
     }
@@ -66,7 +65,7 @@ public class TrackingSlotModelTest
             new ClientTicketDataUpdatedNotification(fixture.Ticket.TicketId, newName,
                 "BookingNumber", [], Guid.NewGuid());
 
-        fixture.Messenger.Send(clientTicketDataUpdatedNotification);
+        await fixture.NotificationPublisher.Ticket.Publish(clientTicketDataUpdatedNotification);
 
         Assert.That(fixture.Instance.Ticket.Ticket.Name, Is.EqualTo(newName));
     }
@@ -79,7 +78,7 @@ public class TrackingSlotModelTest
         fixture.TimeSlot.EndTime = fixture.TimeSlot.EndTime.AddHours(1);
         var clientCreateSnapshotNotification = new ClientCreateSnapshotNotification();
 
-        fixture.Messenger.Send(clientCreateSnapshotNotification);
+        await fixture.ClientTimerNotificationPublisher.Publish(clientCreateSnapshotNotification);
 
         fixture.EndTimeCache.Verify(ec => ec.Store(It.IsAny<ClientSetEndTimeCommand>()));
         fixture.StartTimeCache.Verify(ec => ec.Store(It.IsAny<ClientSetStartTimeCommand>()));

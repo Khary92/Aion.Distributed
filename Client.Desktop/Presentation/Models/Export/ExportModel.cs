@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Threading.Tasks;
+using Client.Desktop.Communication.Local;
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.Communication.Requests;
 using Client.Desktop.Communication.Requests.WorkDays.Records;
@@ -11,19 +12,18 @@ using Client.Desktop.Lifecycle.Startup.Tasks.Register;
 using Client.Desktop.Services.Export;
 using Client.Desktop.Services.LocalSettings;
 using Client.Tracing.Tracing.Tracers;
-using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
 using ReactiveUI;
 
 namespace Client.Desktop.Presentation.Models.Export;
 
 public class ExportModel(
-    IMessenger messenger,
     IRequestSender requestSender,
     IExportService exportService,
     ITraceCollector tracer,
-    ILocalSettingsService settingsService)
-    : ReactiveObject, IInitializeAsync, IMessengerRegistration, IRecipient<NewWorkDayMessage>
+    ILocalSettingsService settingsService,
+    INotificationPublisherFacade notificationPublisher)
+    : ReactiveObject, IInitializeAsync, IMessengerRegistration
 {
     private string _markdownText = string.Empty;
 
@@ -48,34 +48,29 @@ public class ExportModel(
 
     public void RegisterMessenger()
     {
-        messenger.RegisterAll(this);
+        notificationPublisher.WorkDay.NewWorkDayMessageReceived += HandleNewWorkDayMessage;
     }
 
     public void UnregisterMessenger()
     {
-        messenger.UnregisterAll(this);
+        notificationPublisher.WorkDay.NewWorkDayMessageReceived -= HandleNewWorkDayMessage;
     }
 
-    public void Receive(NewWorkDayMessage message)
+    private async Task HandleNewWorkDayMessage(NewWorkDayMessage message)
     {
         WorkDays.Add(message.WorkDay);
-        _ = tracer.WorkDay.Create.AggregateAdded(GetType(), message.TraceId);
+        await tracer.WorkDay.Create.AggregateAdded(GetType(), message.TraceId);
     }
 
     public async Task<bool> ExportFileAsync()
     {
         if (settingsService.IsExportPathValid()) return await exportService.ExportToFile(WorkDays);
-
         return false;
     }
 
-    private void RefreshMarkdownViewerHandler(object? sender, NotifyCollectionChangedEventArgs e)
+    // async void is bad but it should work for now
+    public async void RefreshMarkdownViewerHandler(object? sender, NotifyCollectionChangedEventArgs e)
     {
-        _ = GetMarkdownTextAsync();
-    }
-
-    public async Task<string> GetMarkdownTextAsync()
-    {
-        return await exportService.GetMarkdownString(SelectedWorkDays);
+        MarkdownText = await exportService.GetMarkdownString(SelectedWorkDays);
     }
 }

@@ -1,7 +1,9 @@
 using Core.Persistence.DbContext;
 using Core.Persistence.EventStores;
 using Domain.Events.Note;
+using Global.Settings.Types;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using Moq;
 
 namespace Core.Persistence.Test.EventStores;
@@ -19,15 +21,17 @@ public class NoteEventsStoreTest
             .UseInMemoryDatabase(dbName)
             .Options;
 
+        _databaseSettingsMock = new Mock<IOptions<DatabaseSettings>>();
         _dbContextFactoryMock = new Mock<IDbContextFactory<AppDbContext>>();
         _dbContextFactoryMock
             .Setup(factory => factory.CreateDbContextAsync(It.IsAny<CancellationToken>()))
-            .ReturnsAsync(() => new AppDbContext(_dbOptions));
+            .ReturnsAsync(() => new AppDbContext(_dbOptions, _databaseSettingsMock.Object));
 
         _instance = new NoteEventsStore(_dbContextFactoryMock.Object);
     }
 
     private Mock<IDbContextFactory<AppDbContext>> _dbContextFactoryMock;
+    private Mock<IOptions<DatabaseSettings>> _databaseSettingsMock;
     private DbContextOptions<AppDbContext> _dbOptions;
     private NoteEventsStore _instance;
 
@@ -49,7 +53,7 @@ public class NoteEventsStoreTest
 
         await _instance.StoreEventAsync(noteEvent);
 
-        await using var verifyContext = new AppDbContext(_dbOptions);
+        await using var verifyContext = new AppDbContext(_dbOptions, _databaseSettingsMock.Object);
         var count = await verifyContext.NoteEvents.CountAsync();
         Assert.That(count, Is.EqualTo(1));
 
@@ -75,7 +79,7 @@ public class NoteEventsStoreTest
         var e0 = new NoteEvent(Guid.NewGuid(), t1, "Created", targetEntityId, "payload-1");
         var eOther = new NoteEvent(Guid.NewGuid(), tOther, "Created", otherEntityId, "payload-x");
 
-        await using (var arrangeContext = new AppDbContext(_dbOptions))
+        await using (var arrangeContext = new AppDbContext(_dbOptions, _databaseSettingsMock.Object))
         {
             await arrangeContext.NoteEvents.AddRangeAsync(eOther, e1, e0);
             await arrangeContext.SaveChangesAsync();
@@ -102,7 +106,7 @@ public class NoteEventsStoreTest
         var e0 = new NoteEvent(Guid.NewGuid(), t1, "Created", entityA, "p1");
         var e2 = new NoteEvent(Guid.NewGuid(), t3, "Created", entityB, "p3");
 
-        await using (var arrangeContext = new AppDbContext(_dbOptions))
+        await using (var arrangeContext = new AppDbContext(_dbOptions, _databaseSettingsMock.Object))
         {
             await arrangeContext.NoteEvents.AddRangeAsync(e1, e2, e0);
             await arrangeContext.SaveChangesAsync();

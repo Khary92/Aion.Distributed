@@ -1,3 +1,5 @@
+using Global.Settings;
+using Global.Settings.Types;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Service.Admin.Tracing;
@@ -9,6 +11,7 @@ using Service.Admin.Web.Services.Startup;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.SetConfiguration();
 builder.Services.AddWebServices();
 builder.Services.AddTracingServices();
 
@@ -21,12 +24,26 @@ builder.Services.AddAntiforgery(options =>
     options.Cookie.Name = "DevAntiforgeryDisabled";
 });
 
+var globalSettings = new GlobalSettings();
+builder.Configuration.GetSection("GlobalSettings").Bind(globalSettings);
+
+var adminSettings = new AdminSettings();
+builder.Configuration.GetSection("AdminSettings").Bind(adminSettings);
+
 builder.WebHost.ConfigureKestrel(options =>
 {
-    options.ListenAnyIP(8080, o => { o.Protocols = HttpProtocols.Http1AndHttp2; });
-    options.ListenAnyIP(8081, o => { o.Protocols = HttpProtocols.Http2; });
-});
+    // Grpc Listener
+    options.ListenAnyIP(adminSettings.GrpcPort, listenOptions =>
+    {
+        if (globalSettings.UseHttps) listenOptions.UseHttps("/app/certs/server.pfx");
 
+        listenOptions.Protocols = HttpProtocols.Http2;
+    });
+
+    //Web listener
+    options.ListenAnyIP(adminSettings.DockerInternalWebPort,
+        listenOptions => { listenOptions.Protocols = HttpProtocols.Http1AndHttp2; });
+});
 
 builder.Logging.AddConsole();
 
@@ -39,17 +56,13 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
 app.UseRouting();
-
 app.UseAntiforgery();
 
 app.MapGrpcService<TicketNotificationsReceiver>();
-
 app.MapGrpcService<ReportReceiver>();
 app.MapStaticAssets();
-app.MapRazorComponents<App>()
-    .AddInteractiveServerRenderMode();
+app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
 var componentInitializer = app.Services.GetRequiredService<IComponentInitializer>();
 await componentInitializer.InitializeServicesAsync();

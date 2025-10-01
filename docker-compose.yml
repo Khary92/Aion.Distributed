@@ -14,7 +14,8 @@ services:
       - postgres
     restart: unless-stopped
     volumes:
-      - dataprotection-keys:/app/DataProtection-Keys
+      - ./Certificates:/app/certs:ro
+      - ./DataProtection-Keys:/app/DataProtection-Keys:rw
 
   monitoring-service:
     build:
@@ -25,6 +26,9 @@ services:
     environment:
       - ASPNETCORE_URLS=http://+:8080
       - TZ=Europe/Berlin
+    volumes:
+      - ./Certificates:/app/certs:ro
+      - ./DataProtection-Keys:/app/DataProtection-Keys:rw
     depends_on:
       - core-service
     restart: unless-stopped
@@ -38,16 +42,16 @@ services:
     environment:
       - ASPNETCORE_URLS=http://+:8080
       - TZ=Europe/Berlin
+    volumes:
+      - ./Certificates:/app/certs:ro
+      - ./DataProtection-Keys:/app/DataProtection-Keys:rw
     depends_on:
       - monitoring-service
       - core-service
     restart: unless-stopped
-    volumes:
-      - dataprotection-keys:/app/DataProtection-Keys
-
 
   postgres:
-    image: postgres:16
+    image: postgres:latest
     environment:
       - POSTGRES_DB=aion
       - POSTGRES_USER=aionuser
@@ -80,5 +84,3 @@ services:
 
 volumes:
   postgres_data:
-  pgadmin_data:
-  dataprotection-keys:

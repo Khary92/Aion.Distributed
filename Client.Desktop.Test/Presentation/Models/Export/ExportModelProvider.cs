@@ -5,16 +5,21 @@ using Client.Desktop.Presentation.Models.Export;
 using Client.Desktop.Services.Export;
 using Client.Desktop.Services.LocalSettings;
 using Client.Tracing.Tracing.Tracers;
-using CommunityToolkit.Mvvm.Messaging;
+using Global.Settings.UrlResolver;
 using Moq;
 
 namespace Client.Desktop.Test.Presentation.Models.Export;
 
 public static class ExportModelProvider
 {
-    private static IMessenger CreateMessenger()
+    private static TestNotificationPublisherFacade CreateNotificationPublisherMock()
     {
-        return new WeakReferenceMessenger();
+        return new TestNotificationPublisherFacade(CreateGrpcUrlBuilderMock().Object, CreateTracerMock().Object);
+    }
+
+    private static Mock<IGrpcUrlBuilder> CreateGrpcUrlBuilderMock()
+    {
+        return new Mock<IGrpcUrlBuilder>();
     }
 
     private static Mock<ITraceCollector> CreateTracerMock()
@@ -39,9 +44,9 @@ public static class ExportModelProvider
 
     public static async Task<ExportModelFixture> Create(List<WorkDayClientModel> initialWorkDays)
     {
-        var messenger = CreateMessenger();
         var requestSender = CreateRequestSenderMock();
         var tracer = CreateTracerMock();
+        var publisherFacade = CreateNotificationPublisherMock();
         var localSettingsService = CreateLocalSettingsServiceMock();
         var exportService = CreateExportServiceMock();
 
@@ -49,26 +54,28 @@ public static class ExportModelProvider
             .Setup(rs => rs.Send(It.IsAny<ClientGetAllWorkDaysRequest>()))
             .ReturnsAsync(initialWorkDays);
 
-        return await CreateFixture(messenger, requestSender, tracer, localSettingsService, exportService);
+        return await CreateFixture(requestSender, tracer, publisherFacade, localSettingsService, exportService);
     }
 
-    private static async Task<ExportModelFixture> CreateFixture(IMessenger messenger,
-        Mock<IRequestSender> requestSender, Mock<ITraceCollector> tracer,
-        Mock<ILocalSettingsService> localSettingsService, Mock<IExportService> exportService)
+    private static async Task<ExportModelFixture> CreateFixture(
+        Mock<IRequestSender> requestSender,
+        Mock<ITraceCollector> tracer,
+        TestNotificationPublisherFacade publisherFacade,
+        Mock<ILocalSettingsService> localSettingsService,
+        Mock<IExportService> exportService)
     {
-        var instance = new ExportModel(messenger, requestSender.Object, exportService.Object, tracer.Object,
-            localSettingsService.Object);
+        var instance = new ExportModel(requestSender.Object, exportService.Object, tracer.Object,
+            localSettingsService.Object, publisherFacade);
 
         instance.RegisterMessenger();
         await instance.InitializeAsync();
-
 
         return new ExportModelFixture
         {
             Instance = instance,
             RequestSender = requestSender,
             Tracer = tracer,
-            Messenger = messenger,
+            NotificationPublisher = publisherFacade,
             LocalSettingsService = localSettingsService,
             ExportService = exportService
         };
@@ -79,7 +86,7 @@ public static class ExportModelProvider
         public required ExportModel Instance { get; init; }
         public required Mock<IRequestSender> RequestSender { get; init; }
         public required Mock<ITraceCollector> Tracer { get; init; }
-        public required IMessenger Messenger { get; init; }
+        public required TestNotificationPublisherFacade NotificationPublisher { get; init; }
         public required Mock<IExportService> ExportService { get; init; }
         public required Mock<ILocalSettingsService> LocalSettingsService { get; init; }
     }

@@ -2,17 +2,22 @@
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests.Analysis.Records;
 using Client.Desktop.DataModels.Decorators;
-using Client.Proto;
 using Grpc.Net.Client;
 using Proto.Requests.AnalysisData;
 
 namespace Client.Desktop.Communication.Requests.Analysis;
 
-public class AnalysisRequestSender(IAnalysisMapper analysisMapper)
-    : IAnalysisRequestSender
+public class AnalysisRequestSender : IAnalysisRequestSender
 {
-    private static readonly GrpcChannel Channel = GrpcChannel.ForAddress(TempConnectionStatic.ServerAddress);
-    private readonly AnalysisRequestService.AnalysisRequestServiceClient _client = new(Channel);
+    private readonly IAnalysisMapper _analysisMapper;
+    private readonly AnalysisRequestService.AnalysisRequestServiceClient _client;
+
+    public AnalysisRequestSender(IAnalysisMapper analysisMapper, string address)
+    {
+        _analysisMapper = analysisMapper;
+        var channel = GrpcChannel.ForAddress(address);
+        _client = new AnalysisRequestService.AnalysisRequestServiceClient(channel);
+    }
 
     public async Task<AnalysisBySprintDecorator> Send(ClientGetSprintAnalysisById request)
     {
@@ -20,7 +25,7 @@ public class AnalysisRequestSender(IAnalysisMapper analysisMapper)
 
         if (response == null) throw new ArgumentNullException();
 
-        return analysisMapper.Create(response);
+        return _analysisMapper.Create(response);
     }
 
     public async Task<AnalysisByTicketDecorator> Send(ClientGetTicketAnalysisById request)
@@ -29,7 +34,7 @@ public class AnalysisRequestSender(IAnalysisMapper analysisMapper)
 
         if (response == null) throw new ArgumentNullException();
 
-        return analysisMapper.Create(response);
+        return _analysisMapper.Create(response);
     }
 
     public async Task<AnalysisByTagDecorator> Send(ClientGetTagAnalysisById request)
@@ -38,6 +43,6 @@ public class AnalysisRequestSender(IAnalysisMapper analysisMapper)
 
         if (response == null) throw new ArgumentNullException();
 
-        return analysisMapper.Create(response);
+        return _analysisMapper.Create(response);
     }
 }

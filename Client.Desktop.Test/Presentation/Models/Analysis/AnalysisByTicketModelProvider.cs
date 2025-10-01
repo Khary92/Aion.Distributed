@@ -6,16 +6,21 @@ using Client.Desktop.DataModels.Decorators;
 using Client.Desktop.DataModels.Decorators.Entities;
 using Client.Desktop.Presentation.Models.Analysis;
 using Client.Tracing.Tracing.Tracers;
-using CommunityToolkit.Mvvm.Messaging;
+using Global.Settings.UrlResolver;
 using Moq;
 
 namespace Client.Desktop.Test.Presentation.Models.Analysis;
 
 public static class AnalysisByTicketModelProvider
 {
-    private static IMessenger CreateMessenger()
+    private static TestNotificationPublisherFacade CreateNotificationPublisherMock()
     {
-        return new WeakReferenceMessenger();
+        return new TestNotificationPublisherFacade(CreateGrpcUrlBuilderMock().Object, CreateTracerMock().Object);
+    }
+
+    private static Mock<IGrpcUrlBuilder> CreateGrpcUrlBuilderMock()
+    {
+        return new Mock<IGrpcUrlBuilder>();
     }
 
     private static Mock<ITraceCollector> CreateTracerMock()
@@ -31,32 +36,30 @@ public static class AnalysisByTicketModelProvider
     private static TicketClientModel CreateTicketClientModel()
     {
         return new TicketClientModel(Guid.NewGuid(), "InitialTicketName", "InitialBookingNumber", "ChangeDocumentation",
-            []);
+            new List<Guid>());
     }
-
 
     public static async Task<AnalysisModelFixture<AnalysisByTicketModel>> Create(
         List<TicketClientModel?> initialTickets)
     {
-        var messenger = CreateMessenger();
         var requestSender = CreateRequestSenderMock();
         var tracer = CreateTracerMock();
+        var publisherFacade = CreateNotificationPublisherMock();
 
         requestSender
             .Setup(rs => rs.Send(It.IsAny<ClientGetAllTicketsRequest>()))!
             .ReturnsAsync(initialTickets.ToList()!);
 
-        return await CreateFixture(messenger, requestSender, tracer);
+        return await CreateFixture(requestSender, tracer, publisherFacade);
     }
-
 
     public static async Task<AnalysisModelFixture<AnalysisByTicketModel>> Create()
     {
-        var messenger = CreateMessenger();
         var requestSender = CreateRequestSenderMock();
         var tracer = CreateTracerMock();
+        var publisherFacade = CreateNotificationPublisherMock();
 
-        var sprintClientModel = CreateTicketClientModel();
+        var ticketClientModel = CreateTicketClientModel();
 
         requestSender
             .Setup(rs => rs.Send(It.IsAny<ClientGetTicketAnalysisById>()))
@@ -64,19 +67,20 @@ public static class AnalysisByTicketModelProvider
 
         requestSender
             .Setup(rs => rs.Send(It.IsAny<ClientGetAllTicketsRequest>()))
-            .ReturnsAsync([sprintClientModel]);
+            .ReturnsAsync(new List<TicketClientModel?> { ticketClientModel });
 
-        return await CreateFixture(messenger, requestSender, tracer);
+        return await CreateFixture(requestSender, tracer, publisherFacade);
     }
 
-    private static async Task<AnalysisModelFixture<AnalysisByTicketModel>> CreateFixture(IMessenger messenger,
-        Mock<IRequestSender> requestSender, Mock<ITraceCollector> tracer)
+    private static async Task<AnalysisModelFixture<AnalysisByTicketModel>> CreateFixture(
+        Mock<IRequestSender> requestSender,
+        Mock<ITraceCollector> tracer,
+        TestNotificationPublisherFacade publisherFacade)
     {
-        var instance = new AnalysisByTicketModel(messenger, requestSender.Object, tracer.Object);
+        var instance = new AnalysisByTicketModel(requestSender.Object, tracer.Object, publisherFacade);
 
         instance.RegisterMessenger();
         await instance.InitializeAsync();
-
         await instance.SetAnalysisByTicket(CreateTicketClientModel());
 
         return new AnalysisModelFixture<AnalysisByTicketModel>
@@ -84,7 +88,7 @@ public static class AnalysisByTicketModelProvider
             Instance = instance,
             RequestSender = requestSender,
             Tracer = tracer,
-            Messenger = messenger
+            NotificationPublisher = publisherFacade
         };
     }
 
@@ -99,15 +103,14 @@ public static class AnalysisByTicketModelProvider
         var timeSlotClientModel = new TimeSlotClientModel(timeSlotId, Guid.NewGuid(), Guid.NewGuid(),
             DateTimeOffset.UtcNow, DateTimeOffset.UtcNow, new List<Guid>(), false);
 
-
         return new AnalysisByTicket
         {
             TicketName = "TicketName",
             ProductiveTags = new Dictionary<string, int> { { "Productive Tag", 2 } },
             NeutralTags = new Dictionary<string, int> { { "Neutral Tag", 1 } },
             UnproductiveTags = new Dictionary<string, int> { { "Unproductive Tag", 1 } },
-            StatisticData = [statisticsDataClientModel],
-            TimeSlots = [timeSlotClientModel]
+            StatisticData = new List<StatisticsDataClientModel> { statisticsDataClientModel },
+            TimeSlots = new List<TimeSlotClientModel> { timeSlotClientModel }
         };
     }
 }

@@ -9,7 +9,6 @@ using Service.Admin.Tracing.Tracing.Ticket;
 using Service.Admin.Tracing.Tracing.Ticket.UseCase;
 using Service.Admin.Tracing.Tracing.TimerSettings;
 using Service.Admin.Tracing.Tracing.TimerSettings.UseCase;
-using Service.Monitoring.Shared.Tracing;
 
 namespace Service.Admin.Tracing;
 
@@ -23,8 +22,6 @@ public static class TracingServices
 
     private static void AddACommonTracingServices(this IServiceCollection services)
     {
-        services.AddSingleton<ITracingDataSender>(_ =>
-            new TracingDataSender("http://monitoring-service:8080"));
         services.AddSingleton<ITraceCollector, TraceCollector>();
     }
 

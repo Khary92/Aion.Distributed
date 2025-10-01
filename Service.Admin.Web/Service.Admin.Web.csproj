@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\Global.Settings\Global.Settings.csproj"/>
         <ProjectReference Include="..\Service.Admin.Proto\Service.Admin.Proto.csproj"/>
         <ProjectReference Include="..\Service.Admin.Tracing\Service.Admin.Tracing.csproj"/>
         <ProjectReference Include="..\Service.Proto.Shared\Service.Proto.Shared.csproj"/>

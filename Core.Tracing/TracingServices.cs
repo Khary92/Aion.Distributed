@@ -20,7 +20,6 @@ using Core.Server.Tracing.Tracing.Tracers.TimeSlot.UseCase;
 using Core.Server.Tracing.Tracing.Tracers.WorkDay;
 using Core.Server.Tracing.Tracing.Tracers.WorkDay.UseCase;
 using Microsoft.Extensions.DependencyInjection;
-using Service.Monitoring.Shared.Tracing;
 using CreateNoteTraceCollector = Core.Server.Tracing.Tracing.Tracers.Note.UseCase.CreateNoteTraceCollector;
 using NoteUseCaseSelector = Core.Server.Tracing.Tracing.Tracers.Note.NoteUseCaseSelector;
 
@@ -52,8 +51,6 @@ public static class TracingServices
 
     private static void AddACommonTracingServices(this IServiceCollection services)
     {
-        services.AddSingleton<ITracingDataSender>(_ =>
-            new TracingDataSender("http://monitoring-service:8080"));
         services.AddSingleton<ITraceCollector, TraceCollector>();
     }
 

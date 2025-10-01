@@ -1,7 +1,6 @@
 using System;
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
 using Client.Desktop.Lifecycle.Shutdown;
 using Client.Desktop.Lifecycle.Startup.Scheduler;
@@ -36,9 +35,7 @@ public class App(IServiceProvider serviceProvider) : Application
 
     private void TrayIconClose_OnClick(object? sender, EventArgs e)
     {
-        if (Current?.ApplicationLifetime is not IClassicDesktopStyleApplicationLifetime desktopApp) return;
-
         var shutdownHandler = serviceProvider.GetRequiredService<IShutDownHandler>();
-        shutdownHandler.Exit(desktopApp);
+        shutdownHandler.Exit();
     }
 }

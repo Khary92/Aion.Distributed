@@ -2,6 +2,7 @@ using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Client.Desktop.Communication.Local;
 using Client.Desktop.Communication.Notifications.Note.Records;
 using Client.Desktop.Communication.Notifications.NoteType.Records;
 using Client.Desktop.Communication.Notifications.Ticket.Records;
@@ -16,27 +17,24 @@ using Client.Desktop.Lifecycle.Startup.Tasks.Register;
 using Client.Desktop.Presentation.Factories;
 using Client.Desktop.Presentation.Models.TimeTracking.DynamicControls;
 using Client.Tracing.Tracing.Tracers;
-using CommunityToolkit.Mvvm.Messaging;
 using DynamicData;
+using DynamicData.Binding;
 using ReactiveUI;
 
 namespace Client.Desktop.Presentation.Models.Documentation;
 
 public class DocumentationModel(
-    IMessenger messenger,
     IRequestSender requestSender,
     INoteViewFactory noteViewFactory,
     ITypeCheckBoxViewModelFactory typeCheckBoxViewModelFactory,
-    ITraceCollector tracer)
-    : ReactiveObject, IInitializeAsync, IMessengerRegistration, IRecipient<NewTicketMessage>,
-        IRecipient<ClientTicketDataUpdatedNotification>, IRecipient<NewNoteMessage>,
-        IRecipient<ClientNoteUpdatedNotification>, IRecipient<NewNoteTypeMessage>,
-        IRecipient<ClientNoteTypeNameChangedNotification>, IRecipient<ClientNoteTypeColorChangedNotification>
+    ITraceCollector tracer,
+    INotificationPublisherFacade notificationPublisher)
+    : ReactiveObject, IInitializeAsync, IMessengerRegistration
 {
     private ObservableCollection<NoteViewModel> _allNotes = [];
     private ObservableCollection<TypeCheckBoxViewModel> _allNoteTypes = [];
     private ObservableCollection<TicketClientModel> _allTickets = [];
-    private ObservableCollection<NoteViewModel> _selectedNotes = [];
+    private ObservableCollectionExtended<NoteViewModel> _selectedNotes = [];
 
     private TicketClientModel? _selectedTicket;
 
@@ -52,7 +50,7 @@ public class DocumentationModel(
         set => this.RaiseAndSetIfChanged(ref _allNotes, value);
     }
 
-    public ObservableCollection<NoteViewModel> SelectedNotes
+    public ObservableCollectionExtended<NoteViewModel> SelectedNotes
     {
         get => _selectedNotes;
         set => this.RaiseAndSetIfChanged(ref _selectedNotes, value);
@@ -75,117 +73,106 @@ public class DocumentationModel(
     public async Task InitializeAsync()
     {
         var noteTypeModels = await requestSender.Send(new ClientGetAllNoteTypesRequest());
+        var viewModels = noteTypeModels
+            .Select(typeCheckBoxViewModelFactory.Create)
+            .ToList();
+
 
         AllNoteTypes.Clear();
+        AllNoteTypes.AddRange(viewModels);
 
-        foreach (var option in noteTypeModels)
-        {
-            var typeCheckBoxViewModel = typeCheckBoxViewModelFactory.Create(option);
 
-            AllNoteTypes.Add(typeCheckBoxViewModel);
+        var ticketClientModels = await requestSender.Send(new ClientGetAllTicketsRequest());
 
-            typeCheckBoxViewModel.WhenAnyValue(x => x.IsChecked)
-                .Subscribe(_ => FilterNotes());
-        }
 
         AllTickets.Clear();
-        AllTickets.AddRange(await requestSender.Send(new ClientGetAllTicketsRequest()));
+        AllTickets.AddRange(ticketClientModels);
 
         if (!AllTickets.Any()) return;
 
-        SelectedTicket = AllTickets[0];
+
         await UpdateNotesForSelectedTicket();
     }
 
     public void RegisterMessenger()
     {
-        messenger.RegisterAll(this);
+        notificationPublisher.Ticket.NewTicketNotificationReceived += HandleNewTicketMessage;
+        notificationPublisher.Ticket.TicketDataUpdatedNotificationReceived += HandleClientTicketDataUpdatedNotification;
+        notificationPublisher.Note.NewNoteMessageReceived += HandleNewNoteMessage;
+        notificationPublisher.Note.ClientNoteUpdatedNotificationReceived += HandleClientNoteUpdatedNotification;
+        notificationPublisher.NoteType.NewNoteTypeMessageReceived += HandleNewNoteTypeMessage;
+        notificationPublisher.NoteType.ClientNoteTypeNameChangedNotificationReceived +=
+            HandleClientNoteTypeNameChangedNotification;
+        notificationPublisher.NoteType.ClientNoteTypeColorChangedNotificationReceived +=
+            HandleClientNoteTypeColorChangedNotification;
     }
 
     public void UnregisterMessenger()
     {
-        messenger.UnregisterAll(this);
+        notificationPublisher.Ticket.NewTicketNotificationReceived -= HandleNewTicketMessage;
+        notificationPublisher.Ticket.TicketDataUpdatedNotificationReceived -= HandleClientTicketDataUpdatedNotification;
+        notificationPublisher.Note.NewNoteMessageReceived -= HandleNewNoteMessage;
+        notificationPublisher.Note.ClientNoteUpdatedNotificationReceived -= HandleClientNoteUpdatedNotification;
+        notificationPublisher.NoteType.NewNoteTypeMessageReceived -= HandleNewNoteTypeMessage;
+        notificationPublisher.NoteType.ClientNoteTypeNameChangedNotificationReceived -=
+            HandleClientNoteTypeNameChangedNotification;
+        notificationPublisher.NoteType.ClientNoteTypeColorChangedNotificationReceived -=
+            HandleClientNoteTypeColorChangedNotification;
     }
 
-    public void Receive(ClientNoteTypeColorChangedNotification message)
+    private async Task HandleClientNoteUpdatedNotification(ClientNoteUpdatedNotification message)
     {
-        _ = HandleClientNoteTypeColorChangedNotification(message);
-    }
+        await tracer.Note.Update.NotificationReceived(GetType(), message.TraceId, message);
 
-    public void Receive(ClientNoteTypeNameChangedNotification message)
-    {
-        _ = HandleClientNoteTypeNameChangedNotification(message);
-    }
+        var noteViewModel = AllNotes.FirstOrDefault(n => n.Note.NoteId == message.NoteId);
 
-    public async void Receive(ClientNoteUpdatedNotification message)
-    {
-        try
+        if (noteViewModel == null)
         {
-            await tracer.Note.Update.NotificationReceived(GetType(), message.TraceId, message);
-
-            var noteViewModel = AllNotes.FirstOrDefault(n => n.Note.NoteId == message.NoteId);
-
-            if (noteViewModel == null)
-            {
-                await tracer.Note.Update.NoAggregateFound(GetType(), message.TraceId);
-                return;
-            }
-
-            var noteType =
-                await requestSender.Send(new ClientGetNoteTypeByIdRequest(message.NoteTypeId));
-
-            noteViewModel.Note.NoteType = noteType;
-            noteViewModel.Note.Apply(message);
-
-            await tracer.Note.Update.ChangesApplied(GetType(), message.TraceId);
-            FilterNotes();
-        }
-        catch (Exception e)
-        {
-            _ = tracer.Note.Update.ExceptionOccured(GetType(), message.TraceId, e);
-        }
-    }
-
-    public void Receive(ClientTicketDataUpdatedNotification message)
-    {
-        var ticket = AllTickets.FirstOrDefault(t => t.TicketId == message.TicketId);
-
-        if (ticket is null)
-        {
-            _ = tracer.Ticket.Update.NoAggregateFound(GetType(), message.TraceId);
+            await tracer.Note.Update.NoAggregateFound(GetType(), message.TraceId);
             return;
         }
 
-        ticket.Apply(message);
-        _ = tracer.Ticket.Update.ChangesApplied(GetType(), message.TraceId);
+        var noteType =
+            await requestSender.Send(new ClientGetNoteTypeByIdRequest(message.NoteTypeId));
+
+
+        noteViewModel.Note.NoteType = noteType;
+        noteViewModel.Note.Apply(message);
+
+
+        await tracer.Note.Update.ChangesApplied(GetType(), message.TraceId);
+        FilterNotes();
     }
 
-    public async void Receive(NewNoteMessage message)
+    private async Task HandleClientTicketDataUpdatedNotification(ClientTicketDataUpdatedNotification message)
     {
-        try
-        {
-            var noteViewModel = await noteViewFactory.Create(message.Note);
+        var ticketClientModel = AllTickets.FirstOrDefault(t => t.TicketId == message.TicketId);
 
-            AllNotes.Add(noteViewModel);
-
-            await tracer.Note.Create.AggregateAdded(GetType(), message.Note.NoteTypeId);
-            FilterNotes();
-        }
-        catch (Exception exception)
+        if (ticketClientModel == null)
         {
-            _ = tracer.Note.Create.ExceptionOccured(GetType(), message.Note.NoteTypeId, exception);
+            await tracer.Ticket.Update.NoAggregateFound(GetType(), message.TraceId);
+            return;
         }
+
+        ticketClientModel.Apply(message);
+        await tracer.Ticket.Update.ChangesApplied(GetType(), message.TraceId);
     }
 
-    public void Receive(NewNoteTypeMessage message)
+    private async Task HandleNewNoteMessage(NewNoteMessage message)
     {
-        _ = HandleNewNoteTypeMessage(message);
+        var noteViewModel = await noteViewFactory.Create(message.Note);
+
+        AllNotes.Add(noteViewModel);
+
+        await tracer.Note.Create.AggregateAdded(GetType(), message.Note.NoteTypeId);
+
+        FilterNotes();
     }
 
-    public void Receive(NewTicketMessage message)
+    private async Task HandleNewTicketMessage(NewTicketMessage message)
     {
         AllTickets.Add(message.Ticket);
-        _ = tracer.Ticket.Create.AggregateAdded(GetType(), message.TraceId);
+        await tracer.Ticket.Create.AggregateAdded(GetType(), message.TraceId);
     }
 
     public async Task UpdateNotesForSelectedTicket()
@@ -197,6 +184,7 @@ public class DocumentationModel(
 
         var noteViewModels = await Task.WhenAll(noteModels.Select(noteViewFactory.Create));
 
+
         AllNotes = new ObservableCollection<NoteViewModel>(noteViewModels);
 
         FilterNotes();
@@ -204,15 +192,19 @@ public class DocumentationModel(
 
     private void FilterNotes()
     {
-        var selectedTypes = AllNoteTypes.Where(opt => opt.IsChecked).Select(opt => opt).ToHashSet();
+        var selectedTypes = AllNoteTypes
+            .Where(opt => opt.IsChecked)
+            .Select(opt => opt.NoteTypeId)
+            .ToHashSet();
 
         var filteredNotes = AllNotes
-            .Where(n => selectedTypes.Any(st => st.NoteTypeId == n.Note.NoteTypeId))
+            .Where(n => selectedTypes.Contains(n.Note.NoteTypeId))
             .OrderBy(n => n.Note.TimeStamp)
             .ToList();
 
-        SelectedNotes = new ObservableCollection<NoteViewModel>(filteredNotes);
+        SelectedNotes.Load(filteredNotes);
     }
+
 
     private async Task HandleNewNoteTypeMessage(NewNoteTypeMessage message)
     {
@@ -229,7 +221,7 @@ public class DocumentationModel(
 
         var typeCheckBoxViewModel = AllNoteTypes.FirstOrDefault(opt => opt.NoteTypeId == message.NoteTypeId);
 
-        if (typeCheckBoxViewModel is null)
+        if (typeCheckBoxViewModel == null)
         {
             await tracer.NoteType.ChangeName.NoAggregateFound(GetType(), message.TraceId);
             return;
@@ -244,7 +236,7 @@ public class DocumentationModel(
 
         var typeCheckBoxViewModel = AllNoteTypes.FirstOrDefault(opt => opt.NoteTypeId == message.NoteTypeId);
 
-        if (typeCheckBoxViewModel is null)
+        if (typeCheckBoxViewModel == null)
         {
             await tracer.NoteType.ChangeColor.NoAggregateFound(GetType(), message.TraceId);
             return;
