@@ -64,11 +64,11 @@ public static class NoteProtoExtensions
 
     public static GetNotesResponseProto ToProtoList(this List<Domain.Entities.Note> notes)
     {
-        var noteProtos = new GetNotesResponseProto();
+        var notesResponseProto = new GetNotesResponseProto();
 
-        foreach (var note in notes) noteProtos.Notes.Add(note.ToProto());
+        foreach (var note in notes) notesResponseProto.Notes.Add(note.ToProto());
 
-        return noteProtos;
+        return notesResponseProto;
     }
 
     private static NoteProto ToProto(this Domain.Entities.Note note)

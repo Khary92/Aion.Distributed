@@ -27,10 +27,7 @@ public class TrackingSlotViewModelFactory(
 
         await timeSlotViewModel.StatisticsViewModel.InitializeAsync();
         timeSlotViewModel.StatisticsViewModel.RegisterMessenger();
-
-        await timeSlotViewModel.NoteStreamViewModel.InitializeAsync();
-        timeSlotViewModel.NoteStreamViewModel.RegisterMessenger();
-
+        
         timeSlotViewModel.InitializeViewTimer(new ViewTimer());
 
         return timeSlotViewModel;

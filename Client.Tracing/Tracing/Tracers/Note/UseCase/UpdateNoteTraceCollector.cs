@@ -67,7 +67,7 @@ public class UpdateNoteTraceCollector(ITracingDataSender sender) : IUpdateNoteTr
         await sender.Send(new ServiceTraceDataCommand(
             Sorting,
             UseCase,
-            LoggingMeta.ActionRequested,
+            LoggingMeta.PropertyChanged,
             originClassType,
             traceId,
             log,

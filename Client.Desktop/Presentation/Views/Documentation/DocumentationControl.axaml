@@ -62,7 +62,7 @@
         </Border>
         <Border Grid.Column="2" Margin="10"
                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <ItemsControl ItemsSource="{Binding Model.SelectedNotes}"
+            <ItemsControl ItemsSource="{Binding Model.NotesFilteredByActiveTypes}"
                           HorizontalAlignment="Stretch"
                           VerticalAlignment="Stretch">
                 <ItemsControl.ItemTemplate>

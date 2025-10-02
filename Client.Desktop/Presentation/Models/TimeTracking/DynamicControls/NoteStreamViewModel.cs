@@ -48,8 +48,11 @@ public class NoteStreamViewModel(
 
     public async Task InitializeAsync()
     {
+        Notes.Clear();
+        
         var noteClientModels =
             await requestSender.Send(new ClientGetNotesByTimeSlotIdRequest(TimeSlotId, Guid.NewGuid()));
+        
         foreach (var note in noteClientModels) await InsertNoteViewModel(note);
     }
 
@@ -83,6 +86,7 @@ public class NoteStreamViewModel(
     private async Task HandleNewNoteMessage(NewNoteMessage message)
     {
         await InsertNoteViewModel(message.Note);
+        await tracer.Note.Create.AggregateAdded(GetType(), message.TraceId);
     }
 
     private Task HandleClientNoteUpdatedNotification(ClientNoteUpdatedNotification notification)
@@ -97,9 +101,7 @@ public class NoteStreamViewModel(
 
     private async Task InsertNoteViewModel(NoteClientModel noteClientModel)
     {
-        var noteViewModel = await noteViewFactory.Create(new NoteClientModel(noteClientModel.NoteId,
-            noteClientModel.Text, noteClientModel.NoteTypeId,
-            noteClientModel.TimeSlotId, noteClientModel.TimeStamp));
+        var noteViewModel = await noteViewFactory.Create(noteClientModel);
 
         Notes.Insert(0, noteViewModel);
     }

@@ -20,7 +20,7 @@ public class DocumentationModelTest
 
         Assert.That(fixture.Instance.AllNoteTypes, Has.Count.EqualTo(1));
         Assert.That(fixture.Instance.AllTickets, Has.Count.EqualTo(1));
-        Assert.That(fixture.Instance.AllNotes, Has.Count.EqualTo(1));
+        Assert.That(fixture.Instance.AllNotesByTicket, Has.Count.EqualTo(1));
     }
 
     [Test]
@@ -33,11 +33,11 @@ public class DocumentationModelTest
         var newNote = new NoteClientModel(Guid.NewGuid(), "NewNoteName", Guid.NewGuid(), Guid.NewGuid(),
             DateTimeOffset.Now);
 
-        await fixture.NotificationPublisher.Note.Publish(new NewNoteMessage(newNote));
+        await fixture.NotificationPublisher.Note.Publish(new NewNoteMessage(newNote, Guid.NewGuid()));
 
         Assert.That(fixture.Instance.AllNoteTypes, Has.Count.EqualTo(1));
         Assert.That(fixture.Instance.AllTickets, Has.Count.EqualTo(1));
-        Assert.That(fixture.Instance.AllNotes, Has.Count.EqualTo(2));
+        Assert.That(fixture.Instance.AllNotesByTicket, Has.Count.EqualTo(2));
     }
 
     [Test]
@@ -54,8 +54,8 @@ public class DocumentationModelTest
 
         Assert.That(fixture.Instance.AllNoteTypes, Has.Count.EqualTo(1));
         Assert.That(fixture.Instance.AllTickets, Has.Count.EqualTo(1));
-        Assert.That(fixture.Instance.AllNotes, Has.Count.EqualTo(1));
-        Assert.That(fixture.Instance.AllNotes.First().Note.Text, Is.EqualTo(newNoteText));
+        Assert.That(fixture.Instance.AllNotesByTicket, Has.Count.EqualTo(1));
+        Assert.That(fixture.Instance.AllNotesByTicket.First().Note.Text, Is.EqualTo(newNoteText));
     }
 
     [Test]
@@ -70,7 +70,7 @@ public class DocumentationModelTest
 
         Assert.That(fixture.Instance.AllNoteTypes, Has.Count.EqualTo(2));
         Assert.That(fixture.Instance.AllTickets, Has.Count.EqualTo(1));
-        Assert.That(fixture.Instance.AllNotes, Has.Count.EqualTo(1));
+        Assert.That(fixture.Instance.AllNotesByTicket, Has.Count.EqualTo(1));
     }
 
     [Test]
@@ -117,7 +117,7 @@ public class DocumentationModelTest
 
         Assert.That(fixture.Instance.AllNoteTypes, Has.Count.EqualTo(1));
         Assert.That(fixture.Instance.AllTickets, Has.Count.EqualTo(2));
-        Assert.That(fixture.Instance.AllNotes, Has.Count.EqualTo(1));
+        Assert.That(fixture.Instance.AllNotesByTicket, Has.Count.EqualTo(1));
     }
 
     [Test]
@@ -135,7 +135,7 @@ public class DocumentationModelTest
 
         Assert.That(fixture.Instance.AllNoteTypes, Has.Count.EqualTo(1));
         Assert.That(fixture.Instance.AllTickets, Has.Count.EqualTo(1));
-        Assert.That(fixture.Instance.AllNotes, Has.Count.EqualTo(1));
+        Assert.That(fixture.Instance.AllNotesByTicket, Has.Count.EqualTo(1));
         Assert.That(fixture.Instance.AllTickets.First().Name, Is.EqualTo(newTicketName));
     }
 
@@ -152,7 +152,7 @@ public class DocumentationModelTest
 
         await fixture.NotificationPublisher.Note.Publish(notification);
 
-        Assert.That(fixture.Instance.AllNotes.Count, Is.EqualTo(1));
+        Assert.That(fixture.Instance.AllNotesByTicket.Count, Is.EqualTo(1));
         Assert.That(initialData.NoteTypes, Has.Count.EqualTo(fixture.Instance.AllNoteTypes.Count));
         Assert.That(initialData.Tickets, Has.Count.EqualTo(fixture.Instance.AllTickets.Count));
     }
@@ -164,7 +164,7 @@ public class DocumentationModelTest
         var fixture =
             await DocumentationModelProvider.Create(initialData.Notes, initialData.NoteTypes, initialData.Tickets);
 
-        var beforeNotes = fixture.Instance.AllNotes.Count;
+        var beforeNotes = fixture.Instance.AllNotesByTicket.Count;
         var beforeTypes = fixture.Instance.AllNoteTypes.Count;
         var beforeTickets = fixture.Instance.AllTickets.Count;
 
@@ -173,7 +173,7 @@ public class DocumentationModelTest
 
         await fixture.NotificationPublisher.NoteType.Publish(notification);
 
-        Assert.That(fixture.Instance.AllNotes.Count, Is.EqualTo(beforeNotes));
+        Assert.That(fixture.Instance.AllNotesByTicket.Count, Is.EqualTo(beforeNotes));
         Assert.That(fixture.Instance.AllNoteTypes.Count, Is.EqualTo(beforeTypes));
         Assert.That(fixture.Instance.AllTickets.Count, Is.EqualTo(beforeTickets));
     }
@@ -185,7 +185,7 @@ public class DocumentationModelTest
         var fixture =
             await DocumentationModelProvider.Create(initialData.Notes, initialData.NoteTypes, initialData.Tickets);
 
-        var beforeNotes = fixture.Instance.AllNotes.Count;
+        var beforeNotes = fixture.Instance.AllNotesByTicket.Count;
         var beforeTypes = fixture.Instance.AllNoteTypes.Count;
         var beforeTickets = fixture.Instance.AllTickets.Count;
 
@@ -194,7 +194,7 @@ public class DocumentationModelTest
 
         await fixture.NotificationPublisher.Ticket.Publish(notification);
 
-        Assert.That(fixture.Instance.AllNotes.Count, Is.EqualTo(beforeNotes));
+        Assert.That(fixture.Instance.AllNotesByTicket.Count, Is.EqualTo(beforeNotes));
         Assert.That(fixture.Instance.AllNoteTypes.Count, Is.EqualTo(beforeTypes));
         Assert.That(fixture.Instance.AllTickets.Count, Is.EqualTo(beforeTickets));
     }

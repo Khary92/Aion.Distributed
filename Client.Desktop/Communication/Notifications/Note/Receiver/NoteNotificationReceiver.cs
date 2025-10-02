@@ -98,7 +98,7 @@ public class NoteNotificationReceiver(
                 var notificationNoteCreated = notification.NoteCreated;
 
                 await tracer.Note.Create.NotificationReceived(GetType(),
-                    Guid.Parse(notificationNoteCreated.NoteId), notificationNoteCreated);
+                    Guid.Parse(notificationNoteCreated.TraceData.TraceId), notificationNoteCreated);
 
                 await Publish(notificationNoteCreated.ToNewEntityMessage());
                 break;
@@ -108,7 +108,7 @@ public class NoteNotificationReceiver(
                 var notificationNoteUpdated = notification.NoteUpdated;
 
                 await tracer.Note.Create.NotificationReceived(GetType(),
-                    Guid.Parse(notificationNoteUpdated.NoteId), notificationNoteUpdated);
+                    Guid.Parse(notificationNoteUpdated.TraceData.TraceId), notificationNoteUpdated);
 
                 await Publish(notificationNoteUpdated.ToClientNotification());
 

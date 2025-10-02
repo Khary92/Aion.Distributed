@@ -52,10 +52,10 @@ public class NoteViewModel : ReactiveObject, IMessengerRegistration, IInitialize
 
     public async Task InitializeAsync()
     {
-        var noteTypeViewModels = await _requestSender.Send(new ClientGetAllNoteTypesRequest());
-
         NoteTypes.Clear();
-
+        
+        var noteTypeViewModels = await _requestSender.Send(new ClientGetAllNoteTypesRequest());
+        
         NoteTypes.AddRange(noteTypeViewModels);
 
         if (Note.NoteTypeId == Guid.Empty || !NoteTypes.Any()) return;
@@ -128,7 +128,7 @@ public class NoteViewModel : ReactiveObject, IMessengerRegistration, IInitialize
             Note.NoteId,
             Note.Text,
             Note.NoteType?.NoteTypeId ?? Guid.Empty, Note.TimeSlotId,
-            Guid.NewGuid()
+            traceId
         );
 
         await _tracer.Note.Update.SendingCommand(GetType(), traceId, clientUpdateNoteCommand);

@@ -14,10 +14,24 @@ public class ReportReceiver(IReportStateServiceFactory reportStateServiceFactory
         var report = new ReportRecord(DateTimeOffset.Now, request.UseCase, request.State, request.LatencyInMs,
             request.Traces.ToReportTrace());
 
-        reportStateServiceFactory.GetService(SortingType.Overview)!.AddReport(report);
+        var overviewStateService = reportStateServiceFactory.GetService(SortingType.Overview);
+
+        if (overviewStateService == null)
+        {
+            throw new Exception("Overview ReportStateService not found");
+        }
+
+        overviewStateService.AddReport(report);
 
         var sortingType = Enum.Parse<SortingType>(request.SortType);
-        reportStateServiceFactory.GetService(sortingType)!.AddReport(report);
+        var reportStateService = reportStateServiceFactory.GetService(sortingType);
+
+        if (reportStateService == null)
+        {
+            throw new Exception("ReportStateService for " + request.SortType + " not found");
+        }
+
+        reportStateService.AddReport(report);
 
         return Task.FromResult(new ResponseProto { Success = true });
     }

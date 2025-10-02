@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
@@ -14,11 +15,7 @@ public class DocumentationViewModel(DocumentationModel documentationModel) : Rea
 
     public Task InitializeAsync()
     {
-        this.WhenAnyValue(x => x.Model.SelectedTicket)
-            .Where(ticket => ticket != null)
-            .SelectMany(_ => Observable.FromAsync(Model.UpdateNotesForSelectedTicket))
-            .Subscribe();
-
+        //TODO check why i can't remove this. This is weird...
         return Task.CompletedTask;
     }
 }
