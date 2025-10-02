@@ -15,7 +15,7 @@ public class DocumentationViewModel(DocumentationModel documentationModel) : Rea
 
     public Task InitializeAsync()
     {
-        //TODO check why i can't remove this. This is weird...
+        //TODO This is required for the view to be constructed by DI services.
         return Task.CompletedTask;
     }
 }

@@ -118,7 +118,7 @@ public class TimeTrackingModelTest
             initialData.InitialStatisticsData,
             initialData.InitialTicket, initialData.InitialTimeSlot, Guid.NewGuid()));
 
-        Assert.That(fixture.Instance.TimeSlotViewModels, Has.Count.EqualTo(1));
+        Assert.That(fixture.Instance.TrackingSlotViewModels, Has.Count.EqualTo(1));
     }
 
     [Test]
@@ -144,7 +144,7 @@ public class TimeTrackingModelTest
             new ClientGetTrackingControlResponse(secondData.InitialStatisticsData, secondData.InitialTicket,
                 secondData.InitialTimeSlot)
         ]);
-
+        
         fixture.Instance.ToggleNextViewModel();
 
         Assert.That(fixture.Instance.CurrentViewModelIndex, Is.EqualTo(1));

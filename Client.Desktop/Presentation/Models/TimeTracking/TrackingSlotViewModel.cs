@@ -88,13 +88,17 @@ public class TrackingSlotViewModel : ReactiveObject
 
     private void NextState()
     {
-        //TODO
+        if (!Model.Ticket.IsReplayMode) return;
+        
+        Model.Ticket.TicketReplayProvider?.Next();
     }
 
 
     private void PreviousState()
     {
-        //TODO
+        if (!Model.Ticket.IsReplayMode) return;
+        
+        Model.Ticket.TicketReplayProvider?.Previous();
     }
 
     private void UpdateTimerState()

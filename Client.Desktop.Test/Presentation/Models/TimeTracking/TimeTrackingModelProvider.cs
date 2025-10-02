@@ -118,27 +118,30 @@ public static class TimeTrackingModelProvider
             .Setup(rs => rs.Send(It.IsAny<ClientGetAllTicketsRequest>()))
             .ReturnsAsync(initialTickets);
 
-        var timeSlotModel = new TrackingSlotModel(startTimeCache.Object, endTimeCache.Object, tracer.Object,
+        var trackingSlotModel = new TrackingSlotModel(startTimeCache.Object, endTimeCache.Object, tracer.Object,
             publisherFacade, timerNotificationPublisher)
         {
             Ticket = CreateTicketClientModel()
         };
 
-        var timeSlotViewModel = new TrackingSlotViewModel(timeSlotModel, statisticsViewModelFactory.Object,
+        trackingSlotModel.TimeSlot = new TimeSlotClientModel(Guid.NewGuid(), Guid.NewGuid(), Guid.NewGuid(),
+            DateTimeOffset.Now, DateTimeOffset.Now, [], false);
+
+        var trackingSlotViewModel = new TrackingSlotViewModel(trackingSlotModel, statisticsViewModelFactory.Object,
             noteStreamViewModelFactory.Object, timerNotificationPublisher)
         {
             NoteStreamViewModel = null,
             StatisticsViewModel = null
         };
 
-        await timeSlotViewModel.CreateSubViewModels(Guid.NewGuid(), Guid.NewGuid(), new StatisticsDataClientModel(
+        await trackingSlotViewModel.CreateSubViewModels(Guid.NewGuid(), Guid.NewGuid(), new StatisticsDataClientModel(
             Guid.NewGuid(),
             Guid.NewGuid(), new List<Guid>(), true, false, false));
 
         timeSlotViewModelFactory
             .Setup(tf => tf.Create(It.IsAny<TicketClientModel>(), It.IsAny<StatisticsDataClientModel>(),
                 It.IsAny<TimeSlotClientModel>()))
-            .ReturnsAsync(timeSlotViewModel);
+            .ReturnsAsync(trackingSlotViewModel);
 
         return await CreateFixture(publisherFacade, requestSender, commandSender, timeSlotViewModelFactory, tracer,
             localSettingsService, timerNotificationPublisher, sprintClientModel);

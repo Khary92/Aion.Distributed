@@ -96,6 +96,13 @@ public class TrackingSlotModel(
 
     public async Task ToggleReplayMode()
     {
-//TODO
+        Ticket.IsReplayMode = !Ticket.IsReplayMode;
+
+        if (!Ticket.IsReplayMode)
+        {
+            return;
+        }
+        
+        await Ticket!.TicketReplayProvider!.LoadHistory(_ticket.TicketId);
     }
 }

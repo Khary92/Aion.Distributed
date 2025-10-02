@@ -49,16 +49,15 @@ public class UpdateTicketDocuTraceCollector(ITracingDataSender sender) : IUpdate
             DateTimeOffset.Now));
     }
 
-    public async Task ActionAborted(Type originClassType, Guid traceId)
+    public async Task ActionAborted(Type originClassType, Guid traceId, string reason)
     {
-        var log = "No dirty ticket documentation found!";
         await sender.Send(new ServiceTraceDataCommand(
             Sorting,
             UseCase,
             LoggingMeta.ActionAborted,
             originClassType,
             traceId,
-            log,
+            reason,
             DateTimeOffset.Now));
     }
 

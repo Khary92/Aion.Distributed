@@ -45,7 +45,7 @@
               HorizontalAlignment="Stretch"
               VerticalAlignment="Stretch">
 
-            <Carousel ItemsSource="{Binding Model.TimeSlotViewModels}"
+            <Carousel ItemsSource="{Binding Model.TrackingSlotViewModels}"
                       SelectedIndex="{Binding Model.CurrentViewModelIndex, Mode=TwoWay}"
                       HorizontalAlignment="Stretch"
                       VerticalAlignment="Stretch">

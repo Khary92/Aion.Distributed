@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using Client.Desktop.Communication.Notifications.Ticket.Records;
+using Client.Desktop.DataModels.Decorators.Replays;
+using Client.Desktop.Presentation.Models.Replay;
 using Client.Desktop.Presentation.Models.Synchronization;
 using ReactiveUI;
 
@@ -13,6 +15,11 @@ public class TicketClientModel : ReactiveObject, IDocumentationSynchronizationLi
     private string _documentation = string.Empty;
 
     private IDocumentationSynchronizer? _documentationSynchronizer;
+    private ITicketReplayProvider? _ticketReplayProvider;
+
+    private string _previousDocumentation = string.Empty;
+    private bool _isReplayMode;
+
     private string _name = string.Empty;
     private List<Guid> _sprintIds = [];
 
@@ -38,10 +45,52 @@ public class TicketClientModel : ReactiveObject, IDocumentationSynchronizationLi
         }
     }
 
+    public ITicketReplayProvider? TicketReplayProvider
+    {
+        get => _ticketReplayProvider;
+        set
+        {
+            if (_ticketReplayProvider != null)
+                _ticketReplayProvider.DocumentationChanged -= HandleDocumentationReplayChanged;
+
+            this.RaiseAndSetIfChanged(ref _ticketReplayProvider, value);
+
+            if (_ticketReplayProvider != null)
+                _ticketReplayProvider.DocumentationChanged += HandleDocumentationReplayChanged;
+        }
+    }
+
+    private void HandleDocumentationReplayChanged(DocumentationReplay documentationReplay)
+    {
+        Documentation = documentationReplay.Documentation;
+    }
+
     public Guid TicketId
     {
         get => _ticketId;
         private init => this.RaiseAndSetIfChanged(ref _ticketId, value);
+    }
+
+    public bool IsReplayMode
+    {
+        get => _isReplayMode;
+        set
+        {
+            this.RaiseAndSetIfChanged(ref _isReplayMode, value);
+            if (value)
+            {
+                _previousDocumentation = Documentation;
+                return;
+            }
+            
+            ResetInitialDocumentation();
+        }
+    }
+
+    private void ResetInitialDocumentation()
+    {
+        Documentation = _previousDocumentation;
+        _previousDocumentation = string.Empty;
     }
 
     public string Name
@@ -69,6 +118,8 @@ public class TicketClientModel : ReactiveObject, IDocumentationSynchronizationLi
         {
             if (string.Equals(_documentation, value, StringComparison.Ordinal)) return;
             this.RaiseAndSetIfChanged(ref _documentation, value);
+            if (_isReplayMode) return;
+
             DocumentationSynchronizer?.Synchronize(_ticketId, value);
             IsDirty = true;
         }

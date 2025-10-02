@@ -14,8 +14,7 @@ public class NoteCommandSender : INoteCommandSender
         var channel = GrpcChannel.ForAddress(address);
         _client = new NoteCommandProtoService.NoteCommandProtoServiceClient(channel);
     }
-
-
+    
     public async Task<bool> Send(ClientCreateNoteCommand command)
     {
         var response = await _client.CreateNoteAsync(command.ToProto());

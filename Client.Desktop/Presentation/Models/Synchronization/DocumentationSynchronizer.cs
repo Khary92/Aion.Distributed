@@ -10,6 +10,7 @@ using Client.Desktop.Communication.Local.LocalEvents.Records;
 using Client.Desktop.Communication.Notifications.Ticket.Records;
 using Client.Desktop.Lifecycle.Startup.Tasks.Register;
 using Client.Tracing.Tracing.Tracers;
+using HtmlAgilityPack;
 
 namespace Client.Desktop.Presentation.Models.Synchronization;
 
@@ -29,6 +30,9 @@ public class DocumentationSynchronizer(
 
     public void Synchronize(Guid ticketId, string documentation)
     {
+        // There will be no synchronization in replay mode.
+        if (_listeners.Any(listener => listener.Ticket.IsReplayMode)) return;
+
         foreach (var listener in _listeners.Where(listener => listener.Ticket.TicketId == ticketId))
             listener.Ticket.Documentation = documentation;
     }
@@ -54,6 +58,13 @@ public class DocumentationSynchronizer(
         var traceId = Guid.NewGuid();
         await tracer.Ticket.ChangeDocumentation.StartUseCase(GetType(), traceId);
 
+
+        if (_listeners.Any(listener => listener.Ticket.IsReplayMode))
+        {
+            await tracer.Ticket.ChangeDocumentation.ActionAborted(GetType(), traceId, "Replay mode is active!");
+            return;
+        }
+
         var dirtyTickets = _listeners
             .Select(l => l.Ticket)
             .GroupBy(t => t.TicketId)
@@ -63,7 +74,8 @@ public class DocumentationSynchronizer(
 
         if (dirtyTickets.Count == 0)
         {
-            await tracer.Ticket.ChangeDocumentation.ActionAborted(GetType(), traceId);
+            await tracer.Ticket.ChangeDocumentation.ActionAborted(GetType(), traceId,
+                "There was no dirty ticket found!");
             return;
         }
 

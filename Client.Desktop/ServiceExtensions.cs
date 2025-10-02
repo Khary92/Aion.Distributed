@@ -40,6 +40,7 @@ using Client.Desktop.Presentation.Models.Analysis;
 using Client.Desktop.Presentation.Models.Documentation;
 using Client.Desktop.Presentation.Models.Export;
 using Client.Desktop.Presentation.Models.Main;
+using Client.Desktop.Presentation.Models.Replay;
 using Client.Desktop.Presentation.Models.Settings;
 using Client.Desktop.Presentation.Models.Synchronization;
 using Client.Desktop.Presentation.Models.TimeTracking;
@@ -151,6 +152,9 @@ public static class ServiceExtensions
         services.AddSingleton<DocumentationSynchronizer>();
         services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<DocumentationSynchronizer>());
         services.AddSingleton<IDocumentationSynchronizer>(sp => sp.GetRequiredService<DocumentationSynchronizer>());
+
+        services.AddTransient<TicketReplayProvider>();
+        services.AddTransient<ITicketReplayProvider>(sp => sp.GetRequiredService<TicketReplayProvider>());
     }
 
     private static void AddSharedDataServices(this IServiceCollection services)
