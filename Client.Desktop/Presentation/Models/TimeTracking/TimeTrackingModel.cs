@@ -153,7 +153,7 @@ public class TimeTrackingModel(
         CurrentViewModelIndex -= 1;
         SelectedTicketName = TrackingSlotViewModels[CurrentViewModelIndex].Model.Ticket.Name;
     }
-    
+
     public void ToggleNextViewModel()
     {
         if (CurrentViewModelIndex == TrackingSlotViewModels.Count - 1) return;
@@ -162,13 +162,13 @@ public class TimeTrackingModel(
         CurrentViewModelIndex += 1;
         SelectedTicketName = TrackingSlotViewModels[CurrentViewModelIndex].Model.Ticket.Name;
     }
-    
+
     private void ResetTrackingSlotState()
     {
         TrackingSlotViewModels[CurrentViewModelIndex].Model.TimeSlot.IsTimerRunning = false;
         TrackingSlotViewModels[CurrentViewModelIndex].Model.Ticket.IsReplayMode = false;
     }
-    
+
     public async Task CreateNewTimeSlotViewModel()
     {
         if (SelectedTicket == null) return;

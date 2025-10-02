@@ -24,14 +24,14 @@ public class TrackingSlotViewModelFactory(
         ticket.DocumentationSynchronizer = documentationSynchronizer;
         trackingSlotViewModel.Model.Ticket = ticket;
         trackingSlotViewModel.Model.TimeSlot = timeSlot;
-        
+
         trackingSlotViewModel.Model.RegisterMessenger();
 
         await trackingSlotViewModel.CreateSubViewModels(ticket.TicketId, timeSlot.TimeSlotId, statisticsData);
 
         await trackingSlotViewModel.StatisticsViewModel.InitializeAsync();
         trackingSlotViewModel.StatisticsViewModel.RegisterMessenger();
-        
+
         trackingSlotViewModel.InitializeViewTimer(new ViewTimer());
 
         return trackingSlotViewModel;

@@ -49,10 +49,10 @@ public class NoteStreamViewModel(
     public async Task InitializeAsync()
     {
         Notes.Clear();
-        
+
         var noteClientModels =
             await requestSender.Send(new ClientGetNotesByTimeSlotIdRequest(TimeSlotId, Guid.NewGuid()));
-        
+
         foreach (var note in noteClientModels) await InsertNoteViewModel(note);
     }
 

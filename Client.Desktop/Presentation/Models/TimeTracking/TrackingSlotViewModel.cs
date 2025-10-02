@@ -89,7 +89,7 @@ public class TrackingSlotViewModel : ReactiveObject
     private void NextState()
     {
         if (!Model.Ticket.IsReplayMode) return;
-        
+
         Model.Ticket.TicketReplayProvider?.Next();
     }
 
@@ -97,7 +97,7 @@ public class TrackingSlotViewModel : ReactiveObject
     private void PreviousState()
     {
         if (!Model.Ticket.IsReplayMode) return;
-        
+
         Model.Ticket.TicketReplayProvider?.Previous();
     }
 

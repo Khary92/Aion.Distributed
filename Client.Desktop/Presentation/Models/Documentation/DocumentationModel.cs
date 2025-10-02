@@ -82,10 +82,7 @@ public class DocumentationModel(
             .Select(typeCheckBoxViewModelFactory.Create)
             .ToList();
 
-        foreach (var viewModel in viewModels)
-        {
-            viewModel.CheckedChanged += (_, args) => FilterNotes();
-        }
+        foreach (var viewModel in viewModels) viewModel.CheckedChanged += (_, args) => FilterNotes();
 
         AllNoteTypes.Clear();
         AllNoteTypes.AddRange(viewModels);
@@ -129,10 +126,8 @@ public class DocumentationModel(
         var noteViewModel = AllNotesByTicket.FirstOrDefault(n => n.Note.NoteId == message.NoteId);
 
         if (noteViewModel == null)
-        {
             //This is a valid thing. The notes are loaded for the selected ticket only.
             return;
-        }
 
         var noteType =
             await requestSender.Send(new ClientGetNoteTypeByIdRequest(message.NoteTypeId));

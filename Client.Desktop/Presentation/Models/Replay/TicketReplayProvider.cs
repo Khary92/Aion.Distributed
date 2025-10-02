@@ -9,10 +9,9 @@ namespace Client.Desktop.Presentation.Models.Replay;
 
 public class TicketReplayProvider(IRequestSender requestSender) : ITicketReplayProvider
 {
+    private int _currentIndex;
     private List<DocumentationReplay> _documentationHistory = new();
-    private int _currentIndex = 0;
-
-
+    
     public event Action<DocumentationReplay>? DocumentationChanged;
 
     public async Task LoadHistory(Guid ticketId)
@@ -28,10 +27,7 @@ public class TicketReplayProvider(IRequestSender requestSender) : ITicketReplayP
 
         _currentIndex++;
 
-        if (DocumentationChanged != null)
-        {
-            DocumentationChanged.Invoke(_documentationHistory[_currentIndex]);
-        }
+        if (DocumentationChanged != null) DocumentationChanged.Invoke(_documentationHistory[_currentIndex]);
     }
 
     public void Previous()
@@ -40,9 +36,6 @@ public class TicketReplayProvider(IRequestSender requestSender) : ITicketReplayP
 
         _currentIndex--;
 
-        if (DocumentationChanged != null)
-        {
-            DocumentationChanged.Invoke(_documentationHistory[_currentIndex]);
-        }
+        if (DocumentationChanged != null) DocumentationChanged.Invoke(_documentationHistory[_currentIndex]);
     }
 }

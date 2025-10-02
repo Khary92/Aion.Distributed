@@ -144,7 +144,7 @@ public class TimeTrackingModelTest
             new ClientGetTrackingControlResponse(secondData.InitialStatisticsData, secondData.InitialTicket,
                 secondData.InitialTimeSlot)
         ]);
-        
+
         fixture.Instance.ToggleNextViewModel();
 
         Assert.That(fixture.Instance.CurrentViewModelIndex, Is.EqualTo(1));

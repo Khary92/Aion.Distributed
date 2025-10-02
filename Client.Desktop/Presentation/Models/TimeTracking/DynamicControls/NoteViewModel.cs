@@ -53,9 +53,9 @@ public class NoteViewModel : ReactiveObject, IMessengerRegistration, IInitialize
     public async Task InitializeAsync()
     {
         NoteTypes.Clear();
-        
+
         var noteTypeViewModels = await _requestSender.Send(new ClientGetAllNoteTypesRequest());
-        
+
         NoteTypes.AddRange(noteTypeViewModels);
 
         if (Note.NoteTypeId == Guid.Empty || !NoteTypes.Any()) return;

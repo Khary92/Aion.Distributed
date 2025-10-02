@@ -16,10 +16,7 @@ public class ReportReceiver(IReportStateServiceFactory reportStateServiceFactory
 
         var overviewStateService = reportStateServiceFactory.GetService(SortingType.Overview);
 
-        if (overviewStateService == null)
-        {
-            throw new Exception("Overview ReportStateService not found");
-        }
+        if (overviewStateService == null) throw new Exception("Overview ReportStateService not found");
 
         overviewStateService.AddReport(report);
 
@@ -27,9 +24,7 @@ public class ReportReceiver(IReportStateServiceFactory reportStateServiceFactory
         var reportStateService = reportStateServiceFactory.GetService(sortingType);
 
         if (reportStateService == null)
-        {
             throw new Exception("ReportStateService for " + request.SortType + " not found");
-        }
 
         reportStateService.AddReport(report);
 

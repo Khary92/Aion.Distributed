@@ -10,7 +10,6 @@ using Client.Desktop.Communication.Local.LocalEvents.Records;
 using Client.Desktop.Communication.Notifications.Ticket.Records;
 using Client.Desktop.Lifecycle.Startup.Tasks.Register;
 using Client.Tracing.Tracing.Tracers;
-using HtmlAgilityPack;
 
 namespace Client.Desktop.Presentation.Models.Synchronization;
 

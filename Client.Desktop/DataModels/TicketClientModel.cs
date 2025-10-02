@@ -15,13 +15,13 @@ public class TicketClientModel : ReactiveObject, IDocumentationSynchronizationLi
     private string _documentation = string.Empty;
 
     private IDocumentationSynchronizer? _documentationSynchronizer;
-    private ITicketReplayProvider? _ticketReplayProvider;
-
-    private string _previousDocumentation = string.Empty;
     private bool _isReplayMode;
 
     private string _name = string.Empty;
+
+    private string _previousDocumentation = string.Empty;
     private List<Guid> _sprintIds = [];
+    private ITicketReplayProvider? _ticketReplayProvider;
 
     public TicketClientModel(Guid ticketId, string name, string bookingNumber, string documentation,
         List<Guid> sprintIds)
@@ -60,11 +60,6 @@ public class TicketClientModel : ReactiveObject, IDocumentationSynchronizationLi
         }
     }
 
-    private void HandleDocumentationReplayChanged(DocumentationReplay documentationReplay)
-    {
-        Documentation = documentationReplay.Documentation;
-    }
-
     public Guid TicketId
     {
         get => _ticketId;
@@ -82,15 +77,9 @@ public class TicketClientModel : ReactiveObject, IDocumentationSynchronizationLi
                 _previousDocumentation = Documentation;
                 return;
             }
-            
+
             ResetInitialDocumentation();
         }
-    }
-
-    private void ResetInitialDocumentation()
-    {
-        Documentation = _previousDocumentation;
-        _previousDocumentation = string.Empty;
     }
 
     public string Name
@@ -126,6 +115,17 @@ public class TicketClientModel : ReactiveObject, IDocumentationSynchronizationLi
     }
 
     public TicketClientModel Ticket => this;
+
+    private void HandleDocumentationReplayChanged(DocumentationReplay documentationReplay)
+    {
+        Documentation = documentationReplay.Documentation;
+    }
+
+    private void ResetInitialDocumentation()
+    {
+        Documentation = _previousDocumentation;
+        _previousDocumentation = string.Empty;
+    }
 
     public void Apply(ClientTicketDataUpdatedNotification notification)
     {

@@ -98,11 +98,8 @@ public class TrackingSlotModel(
     {
         Ticket.IsReplayMode = !Ticket.IsReplayMode;
 
-        if (!Ticket.IsReplayMode)
-        {
-            return;
-        }
-        
+        if (!Ticket.IsReplayMode) return;
+
         await Ticket!.TicketReplayProvider!.LoadHistory(_ticket.TicketId);
     }
 }
