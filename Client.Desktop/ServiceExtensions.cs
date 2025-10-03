@@ -75,53 +75,15 @@ public static class ServiceExtensions
 {
     public static void AddPresentationServices(this IServiceCollection services)
     {
-        AddTraceSender(services);
-        AddPolicyServices(services);
         AddSchedulerServices(services);
         AddLocalServices(services);
-        AddSharedDataServices(services);
         AddSynchronizationServices(services);
         AddViews(services);
         AddModels(services);
         AddViewFactories(services);
-        AddNotificationReceivers(services);
-        AddRequestSenders(services);
-        AddCommandSenders(services);
         AddFileSystemServices(services);
     }
-
-    private static void AddTraceSender(this IServiceCollection services)
-    {
-        services.AddScoped<ITracingDataSender>(sp =>
-            new TracingDataSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Monitoring)
-                .BuildAddress()));
-    }
-
-    private static void AddPolicyServices(IServiceCollection services)
-    {
-        services.AddSingleton(
-            new CommandRetryPolicy(Policy
-                .Handle<Exception>()
-                .WaitAndRetryAsync(3, retryAttempt =>
-                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)))
-                .WrapAsync(Policy
-                    .Handle<Exception>()
-                    .CircuitBreakerAsync(2, TimeSpan.FromSeconds(30))))
-        );
-
-        services.AddSingleton(
-            new RequestRetryPolicy(Policy
-                .Handle<Exception>()
-                .WaitAndRetryAsync(3, retryAttempt =>
-                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)))
-                .WrapAsync(Policy
-                    .Handle<Exception>()
-                    .CircuitBreakerAsync(2, TimeSpan.FromSeconds(30))))
-        );
-    }
-
+    
     private static void AddSchedulerServices(this IServiceCollection services)
     {
         services.AddSingleton<CancellationTokenSource>();
@@ -155,59 +117,6 @@ public static class ServiceExtensions
 
         services.AddTransient<TicketReplayProvider>();
         services.AddTransient<ITicketReplayProvider>(sp => sp.GetRequiredService<TicketReplayProvider>());
-    }
-
-    private static void AddSharedDataServices(this IServiceCollection services)
-    {
-        services.AddScoped<ITicketCommandSender>(sp =>
-            new TicketCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
-        services.AddScoped<ITicketRequestSender>(sp =>
-            new TicketRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
-
-        services.AddScoped<ISprintCommandSender>(sp =>
-            new SprintCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
-        services.AddScoped<ISprintRequestSender>(sp =>
-            new SprintRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
-
-        services.AddScoped<ITagCommandSender>(sp =>
-            new TagCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
-        services.AddScoped<ITagRequestSender>(sp =>
-            new TagRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
-
-        services.AddScoped<INoteTypeCommandSender>(sp =>
-            new NoteTypeCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
-        services.AddScoped<INoteTypeRequestSender>(sp =>
-            new NoteTypeRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
-
-        services.AddScoped<ITimerSettingsRequestSender>(sp =>
-            new TimerSettingsRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
     }
 
     private static void AddFileSystemServices(this IServiceCollection services)
@@ -304,131 +213,5 @@ public static class ServiceExtensions
         services.AddTransient<StatisticsViewModel>();
 
         services.AddSingleton<ITrackingSlotViewModelFactory, TrackingSlotViewModelFactory>();
-    }
-
-    private static void AddNotificationReceivers(this IServiceCollection services)
-    {
-        services.AddSingleton<ClientNotificationReceiver>();
-        services.AddSingleton<ILocalClientNotificationPublisher>(sp =>
-            sp.GetRequiredService<ClientNotificationReceiver>());
-        services.AddSingleton<IStreamClient>(sp => sp.GetRequiredService<ClientNotificationReceiver>());
-
-        services.AddSingleton<NoteNotificationReceiver>();
-        services.AddSingleton<ILocalNoteNotificationPublisher>(sp =>
-            sp.GetRequiredService<NoteNotificationReceiver>());
-        services.AddSingleton<IStreamClient>(sp => sp.GetRequiredService<NoteNotificationReceiver>());
-
-        services.AddSingleton<NoteTypeNotificationReceiver>();
-        services.AddSingleton<ILocalNoteTypeNotificationPublisher>(sp =>
-            sp.GetRequiredService<NoteTypeNotificationReceiver>());
-        services.AddSingleton<IStreamClient>(sp => sp.GetRequiredService<NoteTypeNotificationReceiver>());
-
-        services.AddSingleton<SprintNotificationReceiver>();
-        services.AddSingleton<ILocalSprintNotificationPublisher>(sp =>
-            sp.GetRequiredService<SprintNotificationReceiver>());
-        services.AddSingleton<IStreamClient>(sp => sp.GetRequiredService<SprintNotificationReceiver>());
-
-        services.AddSingleton<StatisticsDataNotificationReceiver>();
-        services.AddSingleton<ILocalStatisticsDataNotificationPublisher>(sp =>
-            sp.GetRequiredService<StatisticsDataNotificationReceiver>());
-        services.AddSingleton<IStreamClient>(sp => sp.GetRequiredService<StatisticsDataNotificationReceiver>());
-
-        services.AddSingleton<TagNotificationReceiver>();
-        services.AddSingleton<ILocalTagNotificationPublisher>(sp => sp.GetRequiredService<TagNotificationReceiver>());
-        services.AddSingleton<IStreamClient>(sp => sp.GetRequiredService<TagNotificationReceiver>());
-
-        services.AddSingleton<TicketNotificationReceiver>();
-        services.AddSingleton<ILocalTicketNotificationPublisher>(sp =>
-            sp.GetRequiredService<TicketNotificationReceiver>());
-        services.AddSingleton<IStreamClient>(sp => sp.GetRequiredService<TicketNotificationReceiver>());
-
-        services.AddSingleton<TimerSettingsNotificationReceiver>();
-        services.AddSingleton<ILocalTimerSettingsNotificationPublisher>(sp =>
-            sp.GetRequiredService<TimerSettingsNotificationReceiver>());
-        services.AddSingleton<IStreamClient>(sp => sp.GetRequiredService<TimerSettingsNotificationReceiver>());
-
-        services.AddSingleton<WorkDayNotificationReceiver>();
-        services.AddSingleton<ILocalWorkDayNotificationPublisher>(sp =>
-            sp.GetRequiredService<WorkDayNotificationReceiver>());
-        services.AddSingleton<IStreamClient>(sp => sp.GetRequiredService<WorkDayNotificationReceiver>());
-
-        services.AddSingleton<INotificationPublisherFacade, NotificationPublisherFacade>();
-
-        services.AddSingleton<IStreamLifeCycleHandler, StreamLifeCycleHandler>();
-    }
-
-    private static void AddCommandSenders(this IServiceCollection services)
-    {
-        services.AddScoped<ICommandSender, CommandSender>();
-
-        services.AddScoped<INoteCommandSender>(sp =>
-            new NoteCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
-        services.AddScoped<IStatisticsDataCommandSender>(sp =>
-            new StatisticsDataCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
-        services.AddScoped<ITimeSlotCommandSender>(sp =>
-            new TimeSlotCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
-        services.AddScoped<IClientCommandSender>(sp =>
-            new ClientCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
-        services.AddScoped<IWorkDayCommandSender>(sp =>
-            new WorkDayCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
-    }
-
-    private static void AddRequestSenders(this IServiceCollection services)
-    {
-        services.AddScoped<IRequestSender, RequestSender>();
-
-        services.AddScoped<INotesRequestSender>(sp =>
-            new NotesRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
-        services.AddScoped<ITimeSlotRequestSender>(sp =>
-            new TimeSlotRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
-        services.AddScoped<IWorkDayRequestSender>(sp =>
-            new WorkDayRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
-        services.AddScoped<ITicketReplayRequestSender>(sp =>
-            new TicketReplayRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
-        services.AddScoped<IClientRequestSender>(sp =>
-            new ClientRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
-        services.AddScoped<IStatisticsDataRequestSender>(sp =>
-            new StatisticsDataRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
-        services.AddScoped<IAnalysisRequestSender>(sp =>
-            new AnalysisRequestSender(sp.GetRequiredService<IAnalysisMapper>(),
-                sp.GetRequiredService<IGrpcUrlBuilder>()
-                    .From(ResolvingServices.Client)
-                    .To(ResolvingServices.Server)
-                    .BuildAddress()));
-
-        services.AddScoped<IAnalysisMapper, AnalysisMapper>();
     }
 }

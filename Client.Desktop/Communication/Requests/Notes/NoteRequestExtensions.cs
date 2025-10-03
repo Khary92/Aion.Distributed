@@ -42,7 +42,7 @@ public static class NoteRequestExtensions
 
     private static NoteClientModel ToClientModel(this NoteProto proto)
     {
-        return new NoteClientModel(Guid.Parse(proto.NoteId), proto.Text,
-            Guid.Parse(proto.NoteTypeId), Guid.Parse(proto.TimeSlotId), proto.TimeStamp.ToDateTimeOffset());
+        return new NoteClientModel(Guid.Parse(proto.NoteId), proto.Text, Guid.Parse(proto.NoteTypeId),
+            Guid.Parse(proto.TimeSlotId), Guid.Parse(proto.TicketId), proto.TimeStamp.ToDateTimeOffset());
     }
 }

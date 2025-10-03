@@ -1,3 +1,4 @@
+using Client.Tracing.Mock;
 using Client.Tracing.Tracing.Tracers;
 using Client.Tracing.Tracing.Tracers.Client;
 using Client.Tracing.Tracing.Tracers.Client.UseCase;
@@ -23,8 +24,14 @@ namespace Client.Tracing;
 
 public static class TracingServices
 {
-    public static void AddTracingServices(this IServiceCollection services)
+    public static void AddTracingServices(this IServiceCollection services, bool isMock = false)
     {
+        if (isMock)
+        {
+            services.AddScoped<ITraceCollector, DummyTracer>();
+            return;
+        }
+        
         AddACommonTracingServices(services);
         AddNoteTracingServices(services);
         AddNoteTypeTracingServices(services);

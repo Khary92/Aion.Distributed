@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.ReactiveUI;
@@ -14,12 +15,16 @@ public static class Program
     [STAThread]
     public static async Task Main(string[] args)
     {
+        bool isMockMode = args.Contains("--mock");
+
         var hostBuilder = Host.CreateDefaultBuilder(args);
         hostBuilder.SetConfiguration();
+        
         hostBuilder.ConfigureServices((_, services) =>
         {
             services.AddPresentationServices();
-            services.AddTracingServices();
+            services.AddCommunicationServices(isMockMode);
+            services.AddTracingServices(isMockMode);
         });
 
         var host = hostBuilder.Build();
