@@ -32,12 +32,12 @@ public class GrpcUrlBuilder : IGrpcUrlBuilder
 
     public string BuildAddress()
     {
-        if (_from is null) throw new ArgumentException("From service ist null.");
-        if (_to is null) throw new ArgumentException("To service ist null.");
-        if (_from == _to) throw new ArgumentException("From und To dürfen nicht gleich sein.");
+        if (_from is null) throw new ArgumentException("From service is null.");
+        if (_to is null) throw new ArgumentException("To service is null.");
+        if (_from == _to) throw new ArgumentException("From and To may not be the same.");
 
         if (!_serviceData.TryGetValue(_to.Value, out var target))
-            throw new InvalidOperationException($"Kein DataProvider für '{_to}'.");
+            throw new InvalidOperationException($"No data provider for '{_to}'.");
 
         if (_from == ResolvingServices.Client)
         {
@@ -46,13 +46,13 @@ public class GrpcUrlBuilder : IGrpcUrlBuilder
         }
 
         if (!_serviceData.TryGetValue(_from.Value, out var origin))
-            throw new InvalidOperationException($"Kein DataProvider für '{_from}'.");
+            throw new InvalidOperationException($"No data provider for '{_from}'.");
 
 
         if (origin.IsRunningInDocker && target.IsRunningInDocker)
             return ConcatenateData(target.HostName, target.GrpcPort);
 
-        throw new NotImplementedException($"Konstellation From={_from} To={_to} wird noch nicht unterstützt.");
+        throw new NotImplementedException($"Sending messages From={_from} To={_to} is not supported yet.");
     }
 
     private string ConcatenateData(string host, int port)
