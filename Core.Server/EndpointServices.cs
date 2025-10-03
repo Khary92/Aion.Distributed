@@ -10,18 +10,6 @@ using Core.Server.Communication.Endpoints.TicketReplay;
 using Core.Server.Communication.Endpoints.TimerSettings;
 using Core.Server.Communication.Endpoints.TimeSlot;
 using Core.Server.Communication.Endpoints.WorkDay;
-using Core.Server.Communication.Mocks.Analysis;
-using Core.Server.Communication.Mocks.Client;
-using Core.Server.Communication.Mocks.Note;
-using Core.Server.Communication.Mocks.NoteType;
-using Core.Server.Communication.Mocks.Sprint;
-using Core.Server.Communication.Mocks.StatisticsData;
-using Core.Server.Communication.Mocks.Tag;
-using Core.Server.Communication.Mocks.Ticket;
-using Core.Server.Communication.Mocks.TimerSettings;
-using Core.Server.Communication.Mocks.TimeSlot;
-using Core.Server.Communication.Mocks.TraceReport;
-using Core.Server.Communication.Mocks.WorkDay;
 
 namespace Core.Server;
 
@@ -76,33 +64,5 @@ public static class EndpointServices
         app.MapGrpcService<TimeSlotNotificationService>();
         app.MapGrpcService<UseCaseNotificationService>();
         app.MapGrpcService<WorkDayNotificationService>();
-    }
-
-    public static void AddMockingEndpoints(this WebApplication app)
-    {
-        app.MapGrpcService<MockNoteCommandReceiver>();
-        app.MapGrpcService<MockNoteTypeCommandService>();
-        app.MapGrpcService<MockSprintCommandService>();
-        app.MapGrpcService<MockStatisticsDataCommandService>();
-        app.MapGrpcService<MockTagCommandService>();
-        app.MapGrpcService<MockTicketCommandService>();
-        app.MapGrpcService<MockTimerSettingsCommandService>();
-        app.MapGrpcService<MockTimeSlotCommandService>();
-        app.MapGrpcService<MockTraceReportCommandService>();
-        app.MapGrpcService<MockClientCommandService>();
-        app.MapGrpcService<MockWorkDayCommandService>();
-
-        app.MapGrpcService<NoteRequestReceiver>();
-        app.MapGrpcService<MockNoteTypeRequestService>();
-        app.MapGrpcService<MockNoteRequestReceiver>();
-        app.MapGrpcService<MockSprintRequestService>();
-        app.MapGrpcService<MockStatisticsDataRequestService>();
-        app.MapGrpcService<MockTagRequestService>();
-        app.MapGrpcService<MockTicketRequestService>();
-        app.MapGrpcService<MockTimerSettingsRequestService>();
-        app.MapGrpcService<MockTimeSlotRequestService>();
-        app.MapGrpcService<MockWorkDayRequestService>();
-        app.MapGrpcService<MockClientRequestService>();
-        app.MapGrpcService<MockAnalysisRequestService>();
     }
 }

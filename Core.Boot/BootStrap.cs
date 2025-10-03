@@ -33,31 +33,12 @@ public static class BootStrap
         builder.Services.AddDataProtection()
             .PersistKeysToFileSystem(new DirectoryInfo("/app/.aspnet/DataProtection-Keys"));
 
-        var globalSettings = new GlobalSettings();
-        builder.Configuration.GetSection("GlobalSettings").Bind(globalSettings);
-
-        var serverSettings = new ServerSettings();
-        builder.Configuration.GetSection("ServerSettings").Bind(serverSettings);
-
-        builder.WebHost.ConfigureKestrel(options =>
-        {
-            options.ListenAnyIP(serverSettings.GrpcPort, listenOptions =>
-            {
-                if (globalSettings.UseHttps)
-                    listenOptions.UseHttps("/app/certs/server.pfx");
-                //TODO FIX ELSE!
-                else
-                    AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
-
-                listenOptions.Protocols = HttpProtocols.Http2;
-            });
-        });
+        SetupKestrel(builder);
 
         builder.Logging.AddConsole();
         builder.Logging.SetMinimumLevel(LogLevel.Debug);
 
         var app = builder.Build();
-        app.UseRouting();
 
         using (var scope = app.Services.CreateScope())
         {
@@ -68,10 +49,37 @@ public static class BootStrap
         }
 
         app.AddEndPoints();
+        app.UseRouting();
 
         await app.RunAsync();
     }
 
+    private static void SetupKestrel(WebApplicationBuilder builder)
+    {
+        var globalSettings = new GlobalSettings();
+        builder.Configuration.GetSection("GlobalSettings").Bind(globalSettings);
+
+        var serverSettings = new ServerSettings();
+        builder.Configuration.GetSection("ServerSettings").Bind(serverSettings);
+
+        builder.WebHost.ConfigureKestrel(options =>
+        {
+            options.ListenAnyIP(serverSettings.GrpcPort, listenOptions =>
+            {
+                listenOptions.Protocols = HttpProtocols.Http2;
+                
+                if (globalSettings.UseHttps)
+                {
+                    listenOptions.UseHttps("/app/certs/server.pfx");
+                    return;
+                }
+                
+                AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+            
+            });
+        });
+    }
+    
     private static async Task SeedAsync(AppDbContext db)
     {
         if (db.TimerSettingsEvents.Any()) return;
