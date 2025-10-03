@@ -12,7 +12,7 @@ public class MockTicketRequestSender(MockDataService mockDataService) : ITicketR
 {
     public Task<TicketListProto> Send(GetAllTicketsRequestProto request)
     {
-        var result = new TicketListProto()
+        var result = new TicketListProto
         {
             Tickets = { mockDataService.Tickets.Select(ConvertToProto).ToList() }
         };
@@ -26,7 +26,7 @@ public class MockTicketRequestSender(MockDataService mockDataService) : ITicketR
 
         if (currentSprint == null) return Task.FromResult(new TicketListProto());
 
-        var result = new TicketListProto()
+        var result = new TicketListProto
         {
             Tickets =
             {
@@ -41,7 +41,7 @@ public class MockTicketRequestSender(MockDataService mockDataService) : ITicketR
     //TODO this needs to be reimplemented. This is a convenience feature for the web frontend. This is not required here.
     public Task<TicketListProto> Send(GetTicketsWithShowAllSwitchRequestProto request)
     {
-        var result = new TicketListProto()
+        var result = new TicketListProto
         {
             Tickets = { mockDataService.Tickets.Select(ConvertToProto).ToList() }
         };
@@ -57,7 +57,7 @@ public class MockTicketRequestSender(MockDataService mockDataService) : ITicketR
 
     private static TicketProto ConvertToProto(TicketClientModel ticketClientModel)
     {
-        return new TicketProto()
+        return new TicketProto
         {
             TicketId = ticketClientModel.TicketId.ToString(),
             Name = ticketClientModel.Name,

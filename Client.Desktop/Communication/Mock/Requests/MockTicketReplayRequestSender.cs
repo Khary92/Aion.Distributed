@@ -10,6 +10,6 @@ public class MockTicketReplayRequestSender(MockDataService mockDataService) : IT
 {
     public Task<List<DocumentationReplay>> Send(ClientGetTicketReplaysByIdRequest request)
     {
-        return Task.FromResult(MockDataService.DocumentationReplays);
+        return Task.FromResult(mockDataService.DocumentationReplays);
     }
 }

@@ -11,7 +11,7 @@ public class TicketReplayProvider(IRequestSender requestSender) : ITicketReplayP
 {
     private int _currentIndex;
     private List<DocumentationReplay> _documentationHistory = new();
-    
+
     public event Action<DocumentationReplay>? DocumentationChanged;
 
     public async Task LoadHistory(Guid ticketId)

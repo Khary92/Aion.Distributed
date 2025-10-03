@@ -31,7 +31,7 @@ public static class TracingServices
             services.AddScoped<ITraceCollector, DummyTracer>();
             return;
         }
-        
+
         AddACommonTracingServices(services);
         AddNoteTracingServices(services);
         AddNoteTypeTracingServices(services);

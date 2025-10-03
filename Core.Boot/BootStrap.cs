@@ -67,19 +67,18 @@ public static class BootStrap
             options.ListenAnyIP(serverSettings.GrpcPort, listenOptions =>
             {
                 listenOptions.Protocols = HttpProtocols.Http2;
-                
+
                 if (globalSettings.UseHttps)
                 {
                     listenOptions.UseHttps("/app/certs/server.pfx");
                     return;
                 }
-                
+
                 AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
-            
             });
         });
     }
-    
+
     private static async Task SeedAsync(AppDbContext db)
     {
         if (db.TimerSettingsEvents.Any()) return;

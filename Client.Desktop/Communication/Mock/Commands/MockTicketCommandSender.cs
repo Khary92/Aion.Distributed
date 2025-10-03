@@ -14,8 +14,8 @@ namespace Client.Desktop.Communication.Mock.Commands;
 public class MockTicketCommandSender
     : ITicketCommandSender, ILocalTicketNotificationPublisher, IStreamClient
 {
-    private readonly ConcurrentQueue<UpdateTicketDocumentationCommandProto> _updateDocQueue = new();
     private readonly TimeSpan _responseDelay = TimeSpan.FromMilliseconds(50);
+    private readonly ConcurrentQueue<UpdateTicketDocumentationCommandProto> _updateDocQueue = new();
 
     public event Func<ClientTicketDataUpdatedNotification, Task>? TicketDataUpdatedNotificationReceived;
 
@@ -23,24 +23,6 @@ public class MockTicketCommandSender
         TicketDocumentationUpdatedNotificationReceived;
 
     public event Func<NewTicketMessage, Task>? NewTicketNotificationReceived;
-
-    public Task<bool> Send(CreateTicketCommandProto command)
-    {
-        // The client does not manage these kinds of events
-        throw new NotImplementedException();
-    }
-
-    public Task<bool> Send(UpdateTicketDataCommandProto command)
-    {
-        // The client does not manage these kinds of events
-        throw new NotImplementedException();
-    }
-
-    public Task<bool> Send(UpdateTicketDocumentationCommandProto command)
-    {
-        _updateDocQueue.Enqueue(command);
-        return Task.FromResult(true);
-    }
 
     public Task Publish(NewTicketMessage message)
     {
@@ -79,5 +61,23 @@ public class MockTicketCommandSender
             if (_updateDocQueue.IsEmpty)
                 await Task.Delay(50, cancellationToken);
         }
+    }
+
+    public Task<bool> Send(CreateTicketCommandProto command)
+    {
+        // The client does not manage these kinds of events
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> Send(UpdateTicketDataCommandProto command)
+    {
+        // The client does not manage these kinds of events
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> Send(UpdateTicketDocumentationCommandProto command)
+    {
+        _updateDocQueue.Enqueue(command);
+        return Task.FromResult(true);
     }
 }

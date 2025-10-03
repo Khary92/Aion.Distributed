@@ -15,17 +15,17 @@ namespace Client.Desktop.Communication.Mock.Commands;
 public class MockClientCommandSender(MockDataService mockDataService)
     : IClientCommandSender, ILocalClientNotificationPublisher, IStreamClient
 {
-    private readonly ConcurrentQueue<ClientCreateTrackingControlCommand> _trackingControlQueue = new();
     private readonly TimeSpan _responseDelay = TimeSpan.FromMilliseconds(50);
-
-    public event Func<ClientSprintSelectionChangedNotification, Task>? ClientSprintSelectionChangedNotificationReceived;
-    public event Func<ClientTrackingControlCreatedNotification, Task>? ClientTrackingControlCreatedNotificationReceived;
+    private readonly ConcurrentQueue<ClientCreateTrackingControlCommand> _trackingControlQueue = new();
 
     public Task<bool> Send(ClientCreateTrackingControlCommand command)
     {
         _trackingControlQueue.Enqueue(command);
         return Task.FromResult(true);
     }
+
+    public event Func<ClientSprintSelectionChangedNotification, Task>? ClientSprintSelectionChangedNotificationReceived;
+    public event Func<ClientTrackingControlCreatedNotification, Task>? ClientTrackingControlCreatedNotificationReceived;
 
     public async Task Publish(ClientTrackingControlCreatedNotification notification)
     {

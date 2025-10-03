@@ -17,7 +17,7 @@ public class MockSprintRequestSender(MockDataService mockDataService) : ISprintR
 
     public Task<SprintListProto> Send(GetAllSprintsRequestProto request)
     {
-        var result = new SprintListProto()
+        var result = new SprintListProto
         {
             Sprints = { mockDataService.Sprints.Select(ConvertToProto).ToList() }
         };
@@ -27,7 +27,7 @@ public class MockSprintRequestSender(MockDataService mockDataService) : ISprintR
 
     private static SprintProto ConvertToProto(SprintClientModel sprintClientModel)
     {
-        return new SprintProto()
+        return new SprintProto
         {
             SprintId = sprintClientModel.SprintId.ToString(),
             TicketIds = { sprintClientModel.TicketIds.Select(id => id.ToString()).ToList() },

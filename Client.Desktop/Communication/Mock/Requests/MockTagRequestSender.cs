@@ -11,7 +11,7 @@ public class MockTagRequestSender(MockDataService mockDataService) : ITagRequest
 {
     public Task<TagListProto> Send(GetAllTagsRequestProto request)
     {
-        var result = new TagListProto()
+        var result = new TagListProto
         {
             Tags = { mockDataService.Tags.Select(ConvertToProto) }
         };
@@ -26,7 +26,7 @@ public class MockTagRequestSender(MockDataService mockDataService) : ITagRequest
 
     public Task<TagListProto> Send(GetTagsByIdsRequestProto request)
     {
-        var result = new TagListProto()
+        var result = new TagListProto
         {
             Tags =
             {
@@ -39,11 +39,11 @@ public class MockTagRequestSender(MockDataService mockDataService) : ITagRequest
 
     private static TagProto ConvertToProto(TagClientModel tagClientModel)
     {
-        return new TagProto()
+        return new TagProto
         {
             TagId = tagClientModel.TagId.ToString(),
             Name = tagClientModel.Name,
-            IsSelected = tagClientModel.IsSelected,
+            IsSelected = tagClientModel.IsSelected
         };
     }
 }

@@ -11,10 +11,11 @@ public class NoteClientModel : ReactiveObject
     private NoteTypeClientModel? _noteType;
     private Guid _noteTypeId;
     private string _text = string.Empty;
-    private Guid _timeSlotId;
     private Guid _ticketId;
+    private Guid _timeSlotId;
 
-    public NoteClientModel(Guid noteId, string text, Guid noteTypeId, Guid timeSlotId, Guid ticketId, DateTimeOffset timeStamp)
+    public NoteClientModel(Guid noteId, string text, Guid noteTypeId, Guid timeSlotId, Guid ticketId,
+        DateTimeOffset timeStamp)
     {
         NoteId = noteId;
         Text = text;
@@ -53,7 +54,7 @@ public class NoteClientModel : ReactiveObject
         get => _noteTypeId;
         private set => this.RaiseAndSetIfChanged(ref _noteTypeId, value);
     }
-    
+
     public Guid TicketId
     {
         get => _ticketId;

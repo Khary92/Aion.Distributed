@@ -13,22 +13,10 @@ namespace Client.Desktop.Communication.Mock.Commands;
 public class MockStatisticsDataCommandSender : IStatisticsDataCommandSender, ILocalStatisticsDataNotificationPublisher,
     IStreamClient
 {
-    private readonly ConcurrentQueue<ClientChangeTagSelectionCommand> _tagSelectionQueue = new();
     private readonly ConcurrentQueue<ClientChangeProductivityCommand> _productivityQueue = new();
 
     private readonly TimeSpan _responseDelay = TimeSpan.FromMilliseconds(50);
-
-    public Task<bool> Send(ClientChangeTagSelectionCommand command)
-    {
-        _tagSelectionQueue.Enqueue(command);
-        return Task.FromResult(true);
-    }
-
-    public Task<bool> Send(ClientChangeProductivityCommand command)
-    {
-        _productivityQueue.Enqueue(command);
-        return Task.FromResult(true);
-    }
+    private readonly ConcurrentQueue<ClientChangeTagSelectionCommand> _tagSelectionQueue = new();
 
     public event Func<ClientChangeProductivityNotification, Task>? ClientChangeProductivityNotificationReceived;
     public event Func<ClientChangeTagSelectionNotification, Task>? ClientChangeTagSelectionNotificationReceived;
@@ -43,6 +31,18 @@ public class MockStatisticsDataCommandSender : IStatisticsDataCommandSender, ILo
     {
         if (ClientChangeTagSelectionNotificationReceived is { } handler)
             await handler(notification);
+    }
+
+    public Task<bool> Send(ClientChangeTagSelectionCommand command)
+    {
+        _tagSelectionQueue.Enqueue(command);
+        return Task.FromResult(true);
+    }
+
+    public Task<bool> Send(ClientChangeProductivityCommand command)
+    {
+        _productivityQueue.Enqueue(command);
+        return Task.FromResult(true);
     }
 
     public async Task StartListening(CancellationToken cancellationToken)
@@ -65,10 +65,7 @@ public class MockStatisticsDataCommandSender : IStatisticsDataCommandSender, ILo
                 await Publish(notification);
             }
 
-            if (_tagSelectionQueue.IsEmpty && _productivityQueue.IsEmpty)
-            {
-                await Task.Delay(50, cancellationToken);
-            }
+            if (_tagSelectionQueue.IsEmpty && _productivityQueue.IsEmpty) await Task.Delay(50, cancellationToken);
         }
     }
 }

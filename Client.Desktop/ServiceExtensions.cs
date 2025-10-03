@@ -1,39 +1,13 @@
 using System;
 using System.Threading;
-using Client.Desktop.Communication.Commands;
-using Client.Desktop.Communication.Commands.Client;
-using Client.Desktop.Communication.Commands.Notes;
-using Client.Desktop.Communication.Commands.StatisticsData;
-using Client.Desktop.Communication.Commands.TimeSlots;
 using Client.Desktop.Communication.Commands.TimeSlots.Records;
-using Client.Desktop.Communication.Commands.WorkDays;
-using Client.Desktop.Communication.Local;
 using Client.Desktop.Communication.Local.LocalEvents.Publisher;
-using Client.Desktop.Communication.Notifications.Client.Receiver;
-using Client.Desktop.Communication.Notifications.Note.Receiver;
-using Client.Desktop.Communication.Notifications.NoteType.Receiver;
-using Client.Desktop.Communication.Notifications.Sprint.Receiver;
-using Client.Desktop.Communication.Notifications.StatisticsData.Receiver;
-using Client.Desktop.Communication.Notifications.Tag.Receiver;
-using Client.Desktop.Communication.Notifications.Ticket.Receiver;
-using Client.Desktop.Communication.Notifications.TimerSettings.Receiver;
-using Client.Desktop.Communication.Notifications.WorkDay.Receiver;
-using Client.Desktop.Communication.Policies;
-using Client.Desktop.Communication.Requests;
-using Client.Desktop.Communication.Requests.Analysis;
-using Client.Desktop.Communication.Requests.Client;
-using Client.Desktop.Communication.Requests.Notes;
-using Client.Desktop.Communication.Requests.Replays;
-using Client.Desktop.Communication.Requests.StatisticsData;
-using Client.Desktop.Communication.Requests.TimeSlots;
-using Client.Desktop.Communication.Requests.WorkDays;
 using Client.Desktop.FileSystem;
 using Client.Desktop.FileSystem.Serializer;
 using Client.Desktop.Lifecycle.Shutdown;
 using Client.Desktop.Lifecycle.Startup.Scheduler;
 using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Register;
-using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
 using Client.Desktop.Lifecycle.Startup.Tasks.UnsentCommands;
 using Client.Desktop.Presentation.Factories;
 using Client.Desktop.Presentation.Models.Analysis;
@@ -55,19 +29,7 @@ using Client.Desktop.Services;
 using Client.Desktop.Services.Cache;
 using Client.Desktop.Services.Export;
 using Client.Desktop.Services.LocalSettings;
-using Global.Settings.UrlResolver;
 using Microsoft.Extensions.DependencyInjection;
-using Polly;
-using Service.Monitoring.Shared.Tracing;
-using Service.Proto.Shared.Commands.NoteTypes;
-using Service.Proto.Shared.Commands.Sprints;
-using Service.Proto.Shared.Commands.Tags;
-using Service.Proto.Shared.Commands.Tickets;
-using Service.Proto.Shared.Requests.NoteTypes;
-using Service.Proto.Shared.Requests.Sprints;
-using Service.Proto.Shared.Requests.Tags;
-using Service.Proto.Shared.Requests.Tickets;
-using Service.Proto.Shared.Requests.TimerSettings;
 
 namespace Client.Desktop;
 
@@ -83,7 +45,7 @@ public static class ServiceExtensions
         AddViewFactories(services);
         AddFileSystemServices(services);
     }
-    
+
     private static void AddSchedulerServices(this IServiceCollection services)
     {
         services.AddSingleton<CancellationTokenSource>();

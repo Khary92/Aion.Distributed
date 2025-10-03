@@ -9,13 +9,13 @@ public class MockTimerSettingsRequestSender(MockDataService mockDataService) : I
 {
     public Task<TimerSettingsProto> Send(GetTimerSettingsRequestProto request)
     {
-        var result = new TimerSettingsProto()
+        var result = new TimerSettingsProto
         {
             TimerSettingsId = mockDataService.TimerSettings.TimerSettingsId.ToString(),
             DocumentationSaveInterval = mockDataService.TimerSettings.DocumentationSaveInterval,
             SnapshotSaveInterval = mockDataService.TimerSettings.SnapshotSaveInterval
         };
-        
+
         return Task.FromResult(result);
     }
 

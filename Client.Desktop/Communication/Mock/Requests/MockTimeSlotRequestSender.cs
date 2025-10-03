@@ -16,6 +16,6 @@ public class MockTimeSlotRequestSender(MockDataService mockDataService) : ITimeS
 
     public Task<List<TimeSlotClientModel>> Send(ClientGetTimeSlotsForWorkDayIdRequest request)
     {
-        return Task.FromResult(mockDataService.TimeSlots.Where(ts => ts.WorkDayId == request.WorkDayId).ToList());   
+        return Task.FromResult(mockDataService.TimeSlots.Where(ts => ts.WorkDayId == request.WorkDayId).ToList());
     }
 }

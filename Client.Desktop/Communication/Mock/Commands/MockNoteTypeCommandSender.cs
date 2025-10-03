@@ -17,24 +17,6 @@ public class MockNoteTypeCommandSender
     public event Func<ClientNoteTypeNameChangedNotification, Task>? ClientNoteTypeNameChangedNotificationReceived;
     public event Func<NewNoteTypeMessage, Task>? NewNoteTypeMessageReceived;
 
-    public Task<bool> Send(CreateNoteTypeCommandProto command)
-    {
-        // Do nothing. The client does not manage these kinds of events
-        throw new NotImplementedException();
-    }
-
-    public Task<bool> Send(ChangeNoteTypeNameCommandProto command)
-    {
-        // Do nothing. The client does not manage these kinds of events
-        throw new NotImplementedException();
-    }
-
-    public Task<bool> Send(ChangeNoteTypeColorCommandProto command)
-    {
-        // Do nothing. The client does not manage these kinds of events
-        throw new NotImplementedException();
-    }
-
     public Task Publish(ClientNoteTypeNameChangedNotification notification)
     {
         // Do nothing. The client does not manage these kinds of events
@@ -48,6 +30,24 @@ public class MockNoteTypeCommandSender
     }
 
     public Task Publish(NewNoteTypeMessage message)
+    {
+        // Do nothing. The client does not manage these kinds of events
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> Send(CreateNoteTypeCommandProto command)
+    {
+        // Do nothing. The client does not manage these kinds of events
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> Send(ChangeNoteTypeNameCommandProto command)
+    {
+        // Do nothing. The client does not manage these kinds of events
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> Send(ChangeNoteTypeColorCommandProto command)
     {
         // Do nothing. The client does not manage these kinds of events
         throw new NotImplementedException();

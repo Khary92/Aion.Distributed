@@ -15,23 +15,11 @@ namespace Client.Desktop.Communication.Mock.Commands;
 public class MockNoteCommandSender : INoteCommandSender, ILocalNoteNotificationPublisher, IStreamClient
 {
     private readonly ConcurrentQueue<ClientCreateNoteCommand> _newNoteQueue = new();
-    private readonly ConcurrentQueue<ClientUpdateNoteCommand> _updateNoteQueue = new();
     private readonly TimeSpan _responseDelay = TimeSpan.FromMilliseconds(50);
+    private readonly ConcurrentQueue<ClientUpdateNoteCommand> _updateNoteQueue = new();
 
     public event Func<NewNoteMessage, Task>? NewNoteMessageReceived;
     public event Func<ClientNoteUpdatedNotification, Task>? ClientNoteUpdatedNotificationReceived;
-
-    public Task<bool> Send(ClientCreateNoteCommand command)
-    {
-        _newNoteQueue.Enqueue(command);
-        return Task.FromResult(true);
-    }
-
-    public Task<bool> Send(ClientUpdateNoteCommand command)
-    {
-        _updateNoteQueue.Enqueue(command);
-        return Task.FromResult(true);
-    }
 
     public async Task Publish(NewNoteMessage message)
     {
@@ -43,6 +31,18 @@ public class MockNoteCommandSender : INoteCommandSender, ILocalNoteNotificationP
     {
         if (ClientNoteUpdatedNotificationReceived is { } handler)
             await handler(notification);
+    }
+
+    public Task<bool> Send(ClientCreateNoteCommand command)
+    {
+        _newNoteQueue.Enqueue(command);
+        return Task.FromResult(true);
+    }
+
+    public Task<bool> Send(ClientUpdateNoteCommand command)
+    {
+        _updateNoteQueue.Enqueue(command);
+        return Task.FromResult(true);
     }
 
     public async Task StartListening(CancellationToken cancellationToken)
@@ -79,10 +79,7 @@ public class MockNoteCommandSender : INoteCommandSender, ILocalNoteNotificationP
                 await Publish(notification);
             }
 
-            if (_newNoteQueue.IsEmpty && _updateNoteQueue.IsEmpty)
-            {
-                await Task.Delay(50, cancellationToken);
-            }
+            if (_newNoteQueue.IsEmpty && _updateNoteQueue.IsEmpty) await Task.Delay(50, cancellationToken);
         }
     }
 }

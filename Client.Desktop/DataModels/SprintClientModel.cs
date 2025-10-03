@@ -10,11 +10,11 @@ namespace Client.Desktop.DataModels;
 public class SprintClientModel : ReactiveObject
 {
     private readonly Guid _sprintId;
-    private readonly List<Guid> _ticketIds = [];
     private DateTimeOffset _endTime;
     private bool _isActive;
     private string _name = string.Empty;
     private DateTimeOffset _startTime;
+    private List<Guid> _ticketIds = [];
 
     public SprintClientModel(Guid sprintId, string name, bool isActive, DateTimeOffset startTime,
         DateTimeOffset endTime,
@@ -74,7 +74,7 @@ public class SprintClientModel : ReactiveObject
     public List<Guid> TicketIds
     {
         get => _ticketIds;
-        private init => this.RaiseAndSetIfChanged(ref _ticketIds, value);
+        set => this.RaiseAndSetIfChanged(ref _ticketIds, value);
     }
 
     public void Apply(ClientSprintDataUpdatedNotification notification)

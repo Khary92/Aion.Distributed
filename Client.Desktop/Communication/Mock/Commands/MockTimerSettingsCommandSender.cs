@@ -9,28 +9,15 @@ using Service.Proto.Shared.Commands.TimerSettings;
 
 namespace Client.Desktop.Communication.Mock.Commands;
 
-public class MockTimerSettingsCommandSender : ITimerSettingsCommandSender, ILocalTimerSettingsNotificationPublisher, IStreamClient
+public class MockTimerSettingsCommandSender : ITimerSettingsCommandSender, ILocalTimerSettingsNotificationPublisher,
+    IStreamClient
 {
-    public Task<bool> Send(CreateTimerSettingsCommandProto command)
-    {
-        // Do nothing. The client does not manage these kinds of events
-        throw new NotImplementedException();
-    }
+    public event Func<ClientDocuTimerSaveIntervalChangedNotification, Task>?
+        ClientDocuTimerSaveIntervalChangedNotificationReceived;
 
-    public Task<bool> Send(ChangeSnapshotSaveIntervalCommandProto command)
-    {
-        // Do nothing. The client does not manage these kinds of events
-        throw new NotImplementedException();
-    }
+    public event Func<ClientSnapshotSaveIntervalChangedNotification, Task>?
+        ClientSnapshotSaveIntervalChangedNotificationReceived;
 
-    public Task<bool> Send(ChangeDocuTimerSaveIntervalCommandProto command)
-    {
-        // Do nothing. The client does not manage these kinds of events
-        throw new NotImplementedException();
-    }
-
-    public event Func<ClientDocuTimerSaveIntervalChangedNotification, Task>? ClientDocuTimerSaveIntervalChangedNotificationReceived;
-    public event Func<ClientSnapshotSaveIntervalChangedNotification, Task>? ClientSnapshotSaveIntervalChangedNotificationReceived;
     public Task Publish(ClientDocuTimerSaveIntervalChangedNotification notification)
     {
         // Do nothing. The client does not manage these kinds of events
@@ -47,5 +34,23 @@ public class MockTimerSettingsCommandSender : ITimerSettingsCommandSender, ILoca
     {
         // Do nothing. The client does not manage these kinds of events
         return Task.CompletedTask;
+    }
+
+    public Task<bool> Send(CreateTimerSettingsCommandProto command)
+    {
+        // Do nothing. The client does not manage these kinds of events
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> Send(ChangeSnapshotSaveIntervalCommandProto command)
+    {
+        // Do nothing. The client does not manage these kinds of events
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> Send(ChangeDocuTimerSaveIntervalCommandProto command)
+    {
+        // Do nothing. The client does not manage these kinds of events
+        throw new NotImplementedException();
     }
 }

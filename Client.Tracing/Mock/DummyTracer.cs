@@ -110,80 +110,70 @@ public class DummyTracer : ITraceCollector
         ISetStartTimeTraceCollector,
         ICreateTrackingControlCollector
     {
-        Task IUpdateTicketDocuTraceCollector.StartUseCase(Type originClassType, Guid traceId)
+        Task IChangeNoteTypeColorTraceCollector.NoAggregateFound(Type originClassType, Guid traceId)
         {
             //Maybe add some logging if needed
             return Task.CompletedTask;
         }
 
-        Task ICreateTrackingControlCollector.SendingCommand(Type originClassType, Guid traceId, object command)
+        Task IChangeNoteTypeColorTraceCollector.ChangesApplied(Type originClassType, Guid traceId)
         {
             //Maybe add some logging if needed
             return Task.CompletedTask;
         }
 
-        Task ICreateTrackingControlCollector.NotificationReceived(Type originClassType, Guid traceId,
+        Task IChangeNoteTypeColorTraceCollector.NotificationReceived(Type originClassType, Guid traceId,
             object notification)
         {
             //Maybe add some logging if needed
             return Task.CompletedTask;
         }
 
-        Task ICreateTrackingControlCollector.AggregateAdded(Type originClassType, Guid traceId)
+        Task IChangeNoteTypeNameTraceCollector.NoAggregateFound(Type originClassType, Guid traceId)
         {
             //Maybe add some logging if needed
             return Task.CompletedTask;
         }
 
-        Task ICreateTrackingControlCollector.ExceptionOccured(Type originClassType, Guid traceId, Exception exception)
+        Task IChangeNoteTypeNameTraceCollector.ChangesApplied(Type originClassType, Guid traceId)
         {
             //Maybe add some logging if needed
             return Task.CompletedTask;
         }
 
-        Task ICreateTrackingControlCollector.StartUseCase(Type originClassType, Guid traceId)
+        Task IChangeNoteTypeNameTraceCollector.NotificationReceived(Type originClassType, Guid traceId,
+            object notification)
         {
             //Maybe add some logging if needed
             return Task.CompletedTask;
         }
 
-        Task ISetStartTimeTraceCollector.SendingCommand(Type originClassType, Guid traceId, object command)
+        Task IChangeProductivityTraceCollector.SendingCommand(Type originClassType, Guid traceId, object command)
         {
             //Maybe add some logging if needed
             return Task.CompletedTask;
         }
 
-        Task ISetStartTimeTraceCollector.CacheIsEmpty(Type originClassType, Guid traceId)
+        Task IChangeProductivityTraceCollector.NotificationReceived(Type originClassType, Guid traceId,
+            object notification)
         {
             //Maybe add some logging if needed
             return Task.CompletedTask;
         }
 
-        Task ISetStartTimeTraceCollector.StartUseCase(Type originClassType, Guid traceId)
+        Task IChangeProductivityTraceCollector.NoAggregateFound(Type originClassType, Guid traceId)
         {
             //Maybe add some logging if needed
             return Task.CompletedTask;
         }
 
-        Task ISetEndTimeTraceCollector.SendingCommand(Type originClassType, Guid traceId, object command)
+        Task IChangeProductivityTraceCollector.ChangesApplied(Type originClassType, Guid traceId)
         {
             //Maybe add some logging if needed
             return Task.CompletedTask;
         }
 
-        Task ISetEndTimeTraceCollector.CacheIsEmpty(Type originClassType, Guid traceId)
-        {
-            //Maybe add some logging if needed
-            return Task.CompletedTask;
-        }
-
-        public Task FlushingCacheFailed(Type originClassType, Guid traceId, string filePath)
-        {
-            //Maybe add some logging if needed
-            return Task.CompletedTask;
-        }
-
-        Task ISetEndTimeTraceCollector.StartUseCase(Type originClassType, Guid traceId)
+        Task IChangeProductivityTraceCollector.StartUseCase(Type originClassType, Guid traceId)
         {
             //Maybe add some logging if needed
             return Task.CompletedTask;
@@ -226,32 +216,110 @@ public class DummyTracer : ITraceCollector
             return Task.CompletedTask;
         }
 
-        Task IChangeProductivityTraceCollector.SendingCommand(Type originClassType, Guid traceId, object command)
+        Task ICreateNoteTraceCollector.SendingCommand(Type originClassType, Guid traceId, object command)
         {
             //Maybe add some logging if needed
             return Task.CompletedTask;
         }
 
-        Task IChangeProductivityTraceCollector.NotificationReceived(Type originClassType, Guid traceId,
+        Task ICreateNoteTraceCollector.NotificationReceived(Type originClassType, Guid traceId, object notification)
+        {
+            //Maybe add some logging if needed
+            return Task.CompletedTask;
+        }
+
+        Task ICreateNoteTraceCollector.AggregateAdded(Type originClassType, Guid traceId)
+        {
+            //Maybe add some logging if needed
+            return Task.CompletedTask;
+        }
+
+        Task ICreateNoteTraceCollector.ExceptionOccured(Type originClassType, Guid traceId, Exception exception)
+        {
+            //Maybe add some logging if needed
+            return Task.CompletedTask;
+        }
+
+        Task ICreateNoteTraceCollector.StartUseCase(Type originClassType, Guid traceId)
+        {
+            //Maybe add some logging if needed
+            return Task.CompletedTask;
+        }
+
+        Task ICreateNoteTypeTraceCollector.NotificationReceived(Type originClassType, Guid traceId, object notification)
+        {
+            //Maybe add some logging if needed
+            return Task.CompletedTask;
+        }
+
+        Task ICreateNoteTypeTraceCollector.AggregateAdded(Type originClassType, Guid traceId)
+        {
+            //Maybe add some logging if needed
+            return Task.CompletedTask;
+        }
+
+        Task ICreateSprintTraceCollector.AggregateAdded(Type originClassType, Guid traceId)
+        {
+            //Maybe add some logging if needed
+            return Task.CompletedTask;
+        }
+
+        Task ICreateSprintTraceCollector.NotificationReceived(Type originClassType, Guid traceId, object notification)
+        {
+            //Maybe add some logging if needed
+            return Task.CompletedTask;
+        }
+
+        Task ICreateTagTraceCollector.AggregateAdded(Type originClassType, Guid traceId)
+        {
+            //Maybe add some logging if needed
+            return Task.CompletedTask;
+        }
+
+        Task ICreateTagTraceCollector.NotificationReceived(Type originClassType, Guid traceId, object notification)
+        {
+            //Maybe add some logging if needed
+            return Task.CompletedTask;
+        }
+
+        Task ICreateTicketUseCaseCollector.NotificationReceived(Type originClassType, Guid traceId, object notification)
+        {
+            //Maybe add some logging if needed
+            return Task.CompletedTask;
+        }
+
+        Task ICreateTicketUseCaseCollector.AggregateAdded(Type originClassType, Guid traceId)
+        {
+            //Maybe add some logging if needed
+            return Task.CompletedTask;
+        }
+
+        Task ICreateTrackingControlCollector.SendingCommand(Type originClassType, Guid traceId, object command)
+        {
+            //Maybe add some logging if needed
+            return Task.CompletedTask;
+        }
+
+        Task ICreateTrackingControlCollector.NotificationReceived(Type originClassType, Guid traceId,
             object notification)
         {
             //Maybe add some logging if needed
             return Task.CompletedTask;
         }
 
-        Task IChangeProductivityTraceCollector.NoAggregateFound(Type originClassType, Guid traceId)
+        Task ICreateTrackingControlCollector.AggregateAdded(Type originClassType, Guid traceId)
         {
             //Maybe add some logging if needed
             return Task.CompletedTask;
         }
 
-        Task IChangeProductivityTraceCollector.ChangesApplied(Type originClassType, Guid traceId)
+        Task ICreateTrackingControlCollector.ExceptionOccured(Type originClassType, Guid traceId, Exception exception)
         {
             //Maybe add some logging if needed
             return Task.CompletedTask;
         }
 
-        Task IChangeProductivityTraceCollector.StartUseCase(Type originClassType, Guid traceId)
+        Task ICreateTrackingControlCollector.StartUseCase(Type originClassType, Guid traceId)
         {
             //Maybe add some logging if needed
             return Task.CompletedTask;
@@ -282,6 +350,84 @@ public class DummyTracer : ITraceCollector
         }
 
         Task ICreateWorkDayTraceCollector.StartUseCase(Type originClassType, Guid traceId)
+        {
+            //Maybe add some logging if needed
+            return Task.CompletedTask;
+        }
+
+        Task ISetEndTimeTraceCollector.SendingCommand(Type originClassType, Guid traceId, object command)
+        {
+            //Maybe add some logging if needed
+            return Task.CompletedTask;
+        }
+
+        Task ISetEndTimeTraceCollector.CacheIsEmpty(Type originClassType, Guid traceId)
+        {
+            //Maybe add some logging if needed
+            return Task.CompletedTask;
+        }
+
+        public Task FlushingCacheFailed(Type originClassType, Guid traceId, string filePath)
+        {
+            //Maybe add some logging if needed
+            return Task.CompletedTask;
+        }
+
+        Task ISetEndTimeTraceCollector.StartUseCase(Type originClassType, Guid traceId)
+        {
+            //Maybe add some logging if needed
+            return Task.CompletedTask;
+        }
+
+        Task ISetStartTimeTraceCollector.SendingCommand(Type originClassType, Guid traceId, object command)
+        {
+            //Maybe add some logging if needed
+            return Task.CompletedTask;
+        }
+
+        Task ISetStartTimeTraceCollector.CacheIsEmpty(Type originClassType, Guid traceId)
+        {
+            //Maybe add some logging if needed
+            return Task.CompletedTask;
+        }
+
+        Task ISetStartTimeTraceCollector.StartUseCase(Type originClassType, Guid traceId)
+        {
+            //Maybe add some logging if needed
+            return Task.CompletedTask;
+        }
+
+        Task ISprintActiveStatusCollector.NoAggregateFound(Type originClassType, Guid traceId)
+        {
+            //Maybe add some logging if needed
+            return Task.CompletedTask;
+        }
+
+        Task ISprintActiveStatusCollector.ChangesApplied(Type originClassType, Guid traceId)
+        {
+            //Maybe add some logging if needed
+            return Task.CompletedTask;
+        }
+
+        Task ISprintActiveStatusCollector.NotificationReceived(Type originClassType, Guid traceId, object notification)
+        {
+            //Maybe add some logging if needed
+            return Task.CompletedTask;
+        }
+
+        Task ITicketAddedToSprintCollector.NoAggregateFound(Type originClassType, Guid traceId)
+        {
+            //Maybe add some logging if needed
+            return Task.CompletedTask;
+        }
+
+        Task ITicketAddedToSprintCollector.ChangesApplied(Type originClassType, Guid traceId)
+        {
+            //Maybe add some logging if needed
+            return Task.CompletedTask;
+        }
+
+        Task ITicketAddedToSprintCollector.NotificationReceived(Type originClassType, Guid traceId, object notification)
         {
             //Maybe add some logging if needed
             return Task.CompletedTask;
@@ -323,43 +469,19 @@ public class DummyTracer : ITraceCollector
             return Task.CompletedTask;
         }
 
-        Task ICreateNoteTraceCollector.SendingCommand(Type originClassType, Guid traceId, object command)
+        Task IUpdateSprintCollector.NoAggregateFound(Type originClassType, Guid traceId)
         {
             //Maybe add some logging if needed
             return Task.CompletedTask;
         }
 
-        Task ICreateNoteTraceCollector.NotificationReceived(Type originClassType, Guid traceId, object notification)
+        Task IUpdateSprintCollector.ChangesApplied(Type originClassType, Guid traceId)
         {
             //Maybe add some logging if needed
             return Task.CompletedTask;
         }
 
-        Task ICreateNoteTraceCollector.AggregateAdded(Type originClassType, Guid traceId)
-        {
-            //Maybe add some logging if needed
-            return Task.CompletedTask;
-        }
-
-        Task ICreateNoteTraceCollector.ExceptionOccured(Type originClassType, Guid traceId, Exception exception)
-        {
-            //Maybe add some logging if needed
-            return Task.CompletedTask;
-        }
-
-        Task ICreateNoteTraceCollector.StartUseCase(Type originClassType, Guid traceId)
-        {
-            //Maybe add some logging if needed
-            return Task.CompletedTask;
-        }
-
-        Task IUpdateTicketDocuTraceCollector.SendingCommand(Type originClassType, Guid traceId, object command)
-        {
-            //Maybe add some logging if needed
-            return Task.CompletedTask;
-        }
-
-        Task ICreateNoteTypeTraceCollector.NotificationReceived(Type originClassType, Guid traceId, object notification)
+        Task IUpdateSprintCollector.NotificationReceived(Type originClassType, Guid traceId, object notification)
         {
             //Maybe add some logging if needed
             return Task.CompletedTask;
@@ -377,159 +499,25 @@ public class DummyTracer : ITraceCollector
             return Task.CompletedTask;
         }
 
-        Task ICreateTagTraceCollector.AggregateAdded(Type originClassType, Guid traceId)
-        {
-            //Maybe add some logging if needed
-            return Task.CompletedTask;
-        }
-
         Task IUpdateTagTraceCollector.NotificationReceived(Type originClassType, Guid traceId, object notification)
         {
             //Maybe add some logging if needed
             return Task.CompletedTask;
         }
 
-        Task ITicketAddedToSprintCollector.NoAggregateFound(Type originClassType, Guid traceId)
+        Task IUpdateTicketDocuTraceCollector.StartUseCase(Type originClassType, Guid traceId)
         {
             //Maybe add some logging if needed
             return Task.CompletedTask;
         }
 
-        Task ITicketAddedToSprintCollector.ChangesApplied(Type originClassType, Guid traceId)
-        {
-            //Maybe add some logging if needed
-            return Task.CompletedTask;
-        }
-
-        Task ITicketAddedToSprintCollector.NotificationReceived(Type originClassType, Guid traceId, object notification)
-        {
-            //Maybe add some logging if needed
-            return Task.CompletedTask;
-        }
-
-        Task ISprintActiveStatusCollector.NoAggregateFound(Type originClassType, Guid traceId)
-        {
-            //Maybe add some logging if needed
-            return Task.CompletedTask;
-        }
-
-        Task ISprintActiveStatusCollector.ChangesApplied(Type originClassType, Guid traceId)
-        {
-            //Maybe add some logging if needed
-            return Task.CompletedTask;
-        }
-
-        Task ISprintActiveStatusCollector.NotificationReceived(Type originClassType, Guid traceId, object notification)
-        {
-            //Maybe add some logging if needed
-            return Task.CompletedTask;
-        }
-
-        Task IUpdateSprintCollector.NoAggregateFound(Type originClassType, Guid traceId)
-        {
-            //Maybe add some logging if needed
-            return Task.CompletedTask;
-        }
-
-        Task IUpdateSprintCollector.ChangesApplied(Type originClassType, Guid traceId)
-        {
-            //Maybe add some logging if needed
-            return Task.CompletedTask;
-        }
-
-        Task ICreateTagTraceCollector.NotificationReceived(Type originClassType, Guid traceId, object notification)
-        {
-            //Maybe add some logging if needed
-            return Task.CompletedTask;
-        }
-
-        Task ICreateSprintTraceCollector.AggregateAdded(Type originClassType, Guid traceId)
-        {
-            //Maybe add some logging if needed
-            return Task.CompletedTask;
-        }
-
-        Task IUpdateSprintCollector.NotificationReceived(Type originClassType, Guid traceId, object notification)
-        {
-            //Maybe add some logging if needed
-            return Task.CompletedTask;
-        }
-
-        Task IChangeNoteTypeNameTraceCollector.NoAggregateFound(Type originClassType, Guid traceId)
-        {
-            //Maybe add some logging if needed
-            return Task.CompletedTask;
-        }
-
-        Task IChangeNoteTypeNameTraceCollector.ChangesApplied(Type originClassType, Guid traceId)
-        {
-            //Maybe add some logging if needed
-            return Task.CompletedTask;
-        }
-
-        Task IChangeNoteTypeNameTraceCollector.NotificationReceived(Type originClassType, Guid traceId,
-            object notification)
-        {
-            //Maybe add some logging if needed
-            return Task.CompletedTask;
-        }
-
-        Task IChangeNoteTypeColorTraceCollector.NoAggregateFound(Type originClassType, Guid traceId)
-        {
-            //Maybe add some logging if needed
-            return Task.CompletedTask;
-        }
-
-        Task IChangeNoteTypeColorTraceCollector.ChangesApplied(Type originClassType, Guid traceId)
-        {
-            //Maybe add some logging if needed
-            return Task.CompletedTask;
-        }
-
-        Task ICreateSprintTraceCollector.NotificationReceived(Type originClassType, Guid traceId, object notification)
-        {
-            //Maybe add some logging if needed
-            return Task.CompletedTask;
-        }
-
-        Task ICreateNoteTypeTraceCollector.AggregateAdded(Type originClassType, Guid traceId)
+        Task IUpdateTicketDocuTraceCollector.SendingCommand(Type originClassType, Guid traceId, object command)
         {
             //Maybe add some logging if needed
             return Task.CompletedTask;
         }
 
         Task IUpdateTicketDocuTraceCollector.AggregateAdded(Type originClassType, Guid traceId)
-        {
-            //Maybe add some logging if needed
-            return Task.CompletedTask;
-        }
-
-        Task ICreateTicketUseCaseCollector.NotificationReceived(Type originClassType, Guid traceId, object notification)
-        {
-            //Maybe add some logging if needed
-            return Task.CompletedTask;
-        }
-
-        Task IChangeNoteTypeColorTraceCollector.NotificationReceived(Type originClassType, Guid traceId,
-            object notification)
-        {
-            //Maybe add some logging if needed
-            return Task.CompletedTask;
-        }
-
-        Task IUpdateTicketTraceCollector.NoAggregateFound(Type originClassType, Guid traceId)
-        {
-            //Maybe add some logging if needed
-            return Task.CompletedTask;
-        }
-
-        Task IUpdateTicketTraceCollector.ChangesApplied(Type originClassType, Guid traceId)
-        {
-            //Maybe add some logging if needed
-            return Task.CompletedTask;
-        }
-
-        Task ICreateTicketUseCaseCollector.AggregateAdded(Type originClassType, Guid traceId)
         {
             //Maybe add some logging if needed
             return Task.CompletedTask;
@@ -543,6 +531,18 @@ public class DummyTracer : ITraceCollector
         }
 
         public Task ActionAborted(Type originClassType, Guid traceId, string reason)
+        {
+            //Maybe add some logging if needed
+            return Task.CompletedTask;
+        }
+
+        Task IUpdateTicketTraceCollector.NoAggregateFound(Type originClassType, Guid traceId)
+        {
+            //Maybe add some logging if needed
+            return Task.CompletedTask;
+        }
+
+        Task IUpdateTicketTraceCollector.ChangesApplied(Type originClassType, Guid traceId)
         {
             //Maybe add some logging if needed
             return Task.CompletedTask;

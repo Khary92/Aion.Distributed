@@ -11,12 +11,12 @@ public class MockWorkDayRequestSender(MockDataService mockDataService) : IWorkDa
 {
     public Task<List<WorkDayClientModel>> Send(ClientGetAllWorkDaysRequest request)
     {
-        return Task.FromResult(mockDataService.WorkDays);   
+        return Task.FromResult(mockDataService.WorkDays);
     }
 
     public Task<WorkDayClientModel> Send(ClientGetSelectedWorkDayRequest request)
     {
-        return Task.FromResult(mockDataService.WorkDays.Find(wd => wd.WorkDayId == request.WorkDayId))!;  
+        return Task.FromResult(mockDataService.WorkDays.Find(wd => wd.WorkDayId == request.WorkDayId))!;
     }
 
     public Task<WorkDayClientModel> Send(ClientGetWorkDayByDateRequest request)

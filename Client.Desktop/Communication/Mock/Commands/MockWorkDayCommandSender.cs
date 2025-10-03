@@ -13,16 +13,10 @@ namespace Client.Desktop.Communication.Mock.Commands;
 
 public class MockWorkDayCommandSender : IWorkDayCommandSender, ILocalWorkDayNotificationPublisher, IStreamClient
 {
-    private readonly ConcurrentQueue<ClientCreateWorkDayCommand> _workDayQueue = new();
     private readonly TimeSpan _responseDelay = TimeSpan.FromMilliseconds(50);
+    private readonly ConcurrentQueue<ClientCreateWorkDayCommand> _workDayQueue = new();
 
     public event Func<NewWorkDayMessage, Task>? NewWorkDayMessageReceived;
-
-    public Task<bool> Send(ClientCreateWorkDayCommand command)
-    {
-        _workDayQueue.Enqueue(command);
-        return Task.FromResult(true);
-    }
 
     public async Task Publish(NewWorkDayMessage message)
     {
@@ -46,5 +40,11 @@ public class MockWorkDayCommandSender : IWorkDayCommandSender, ILocalWorkDayNoti
             if (_workDayQueue.IsEmpty)
                 await Task.Delay(50, cancellationToken);
         }
+    }
+
+    public Task<bool> Send(ClientCreateWorkDayCommand command)
+    {
+        _workDayQueue.Enqueue(command);
+        return Task.FromResult(true);
     }
 }

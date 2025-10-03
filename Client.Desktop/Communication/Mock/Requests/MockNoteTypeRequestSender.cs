@@ -13,7 +13,7 @@ public class MockNoteTypeRequestSender(MockDataService mockDataService) : INoteT
     {
         var protoData = mockDataService.NoteTypes.Select(ConvertToProto).ToList();
 
-        var result = new GetAllNoteTypesResponseProto()
+        var result = new GetAllNoteTypesResponseProto
         {
             NoteTypes = { protoData }
         };
@@ -28,7 +28,7 @@ public class MockNoteTypeRequestSender(MockDataService mockDataService) : INoteT
 
     private static NoteTypeProto ConvertToProto(NoteTypeClientModel noteTypeClientModel)
     {
-        return new NoteTypeProto()
+        return new NoteTypeProto
         {
             NoteTypeId = noteTypeClientModel.NoteTypeId.ToString(),
             Name = noteTypeClientModel.Name,

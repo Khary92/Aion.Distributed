@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices.ComTypes;
 using System.Threading;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Notifications.Tag.Receiver;
@@ -13,20 +12,9 @@ namespace Client.Desktop.Communication.Mock.Commands;
 
 public class MockTagCommandSender : ITagCommandSender, ILocalTagNotificationPublisher, IStreamClient
 {
-    public Task<bool> Send(CreateTagCommandProto command)
-    {
-        // Do nothing. The client does not manage these kinds of events
-        throw new NotImplementedException();
-    }
-
-    public Task<bool> Send(UpdateTagCommandProto command)
-    {
-        // Do nothing. The client does not manage these kinds of events
-        throw new NotImplementedException();
-    }
-
     public event Func<ClientTagUpdatedNotification, Task>? ClientTagUpdatedNotificationReceived;
     public event Func<NewTagMessage, Task>? NewTagMessageNotificationReceived;
+
     public Task Publish(NewTagMessage message)
     {
         // Do nothing. The client does not manage these kinds of events
@@ -43,5 +31,17 @@ public class MockTagCommandSender : ITagCommandSender, ILocalTagNotificationPubl
     {
         // Do nothing. The client does not manage these kinds of events
         return Task.CompletedTask;
+    }
+
+    public Task<bool> Send(CreateTagCommandProto command)
+    {
+        // Do nothing. The client does not manage these kinds of events
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> Send(UpdateTagCommandProto command)
+    {
+        // Do nothing. The client does not manage these kinds of events
+        throw new NotImplementedException();
     }
 }

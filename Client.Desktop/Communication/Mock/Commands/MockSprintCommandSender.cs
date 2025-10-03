@@ -12,34 +12,14 @@ namespace Client.Desktop.Communication.Mock.Commands;
 
 public class MockSprintCommandSender : ISprintCommandSender, ILocalSprintNotificationPublisher, IStreamClient
 {
-    public Task<bool> Send(CreateSprintCommandProto command)
-    {
-        // Do nothing. The client does not manage these kinds of events
-        throw new NotImplementedException();
-    }
-
-    public Task<bool> Send(AddTicketToActiveSprintCommandProto command)
-    {
-        // Do nothing. The client does not manage these kinds of events
-        throw new NotImplementedException();
-    }
-
-    public Task<bool> Send(SetSprintActiveStatusCommandProto command)
-    {
-        // Do nothing. The client does not manage these kinds of events
-        throw new NotImplementedException();
-    }
-
-    public Task<bool> Send(UpdateSprintDataCommandProto command)
-    {
-        // Do nothing. The client does not manage these kinds of events
-        throw new NotImplementedException();
-    }
-
     public event Func<ClientSprintActiveStatusSetNotification, Task>? ClientSprintActiveStatusSetNotificationReceived;
     public event Func<ClientSprintDataUpdatedNotification, Task>? ClientSprintDataUpdatedNotificationReceived;
-    public event Func<ClientTicketAddedToActiveSprintNotification, Task>? ClientTicketAddedToActiveSprintNotificationReceived;
+
+    public event Func<ClientTicketAddedToActiveSprintNotification, Task>?
+        ClientTicketAddedToActiveSprintNotificationReceived;
+
     public event Func<NewSprintMessage, Task>? NewSprintMessageReceived;
+
     public Task Publish(NewSprintMessage message)
     {
         // Do nothing. The client does not manage these kinds of events
@@ -64,9 +44,33 @@ public class MockSprintCommandSender : ISprintCommandSender, ILocalSprintNotific
         throw new NotImplementedException();
     }
 
+    public Task<bool> Send(CreateSprintCommandProto command)
+    {
+        // Do nothing. The client does not manage these kinds of events
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> Send(AddTicketToActiveSprintCommandProto command)
+    {
+        // Do nothing. The client does not manage these kinds of events
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> Send(SetSprintActiveStatusCommandProto command)
+    {
+        // Do nothing. The client does not manage these kinds of events
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> Send(UpdateSprintDataCommandProto command)
+    {
+        // Do nothing. The client does not manage these kinds of events
+        throw new NotImplementedException();
+    }
+
     public Task StartListening(CancellationToken cancellationToken)
     {
         // Do nothing. The client does not manage these kinds of events
-       return Task.CompletedTask;
+        return Task.CompletedTask;
     }
 }

@@ -15,11 +15,11 @@ public static class Program
     [STAThread]
     public static async Task Main(string[] args)
     {
-        bool isMockMode = args.Contains("--mock");
+        var isMockMode = args.Contains("--mock");
 
         var hostBuilder = Host.CreateDefaultBuilder(args);
         hostBuilder.SetConfiguration();
-        
+
         hostBuilder.ConfigureServices((_, services) =>
         {
             services.AddPresentationServices();
