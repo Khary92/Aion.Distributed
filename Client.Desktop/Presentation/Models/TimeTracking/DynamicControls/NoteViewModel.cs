@@ -69,6 +69,8 @@ public class NoteViewModel : ReactiveObject, IMessengerRegistration, IInitialize
         _notificationPublisher.NoteType.NewNoteTypeMessageReceived += HandleNewNoteTypeMessage;
         _notificationPublisher.NoteType.ClientNoteTypeColorChangedNotificationReceived +=
             HandleClientNoteTypeColorChangedNotification;
+        _notificationPublisher.NoteType.ClientNoteTypeNameChangedNotificationReceived +=
+            HandleClientNoteTypeNameChangedNotification;
     }
 
     public void UnregisterMessenger()
@@ -77,6 +79,8 @@ public class NoteViewModel : ReactiveObject, IMessengerRegistration, IInitialize
         _notificationPublisher.NoteType.NewNoteTypeMessageReceived -= HandleNewNoteTypeMessage;
         _notificationPublisher.NoteType.ClientNoteTypeColorChangedNotificationReceived -=
             HandleClientNoteTypeColorChangedNotification;
+        _notificationPublisher.NoteType.ClientNoteTypeNameChangedNotificationReceived -=
+            HandleClientNoteTypeNameChangedNotification;
     }
 
     private async Task HandleClientNoteTypeNameChangedNotification(ClientNoteTypeNameChangedNotification notification)

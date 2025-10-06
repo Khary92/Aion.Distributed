@@ -1,0 +1,47 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:data="clr-namespace:Client.Desktop.Presentation.Models.Mock"
+             x:DataType="data:ServerTicketDataViewModel"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Client.Desktop.Presentation.Views.Mock.ServerTicketsDataControl">
+
+    <Grid ColumnDefinitions="*, *">
+        <Grid Grid.Column="0" RowDefinitions="1*, 3*">
+            <TextBlock Grid.Row="0" Grid.Column="0"
+                       FontSize="{StaticResource FontSizeExtraLarge}"
+                       Text="Tickets" VerticalAlignment="Center" />
+            <Grid Grid.Row="1" VerticalAlignment="Center" RowDefinitions="*,*,*,*,*">
+                <Label Grid.Row="0" Content="Ticket name" />
+                <TextBox Grid.Row="1" Text="{Binding NewTicketName}" />
+                <Label Grid.Row="2" Content="Booking number" />
+                <TextBox Grid.Row="3" Text="{Binding NewTicketBookingNumber}" />
+                <StackPanel Grid.Row="4" Orientation="Horizontal">
+                    <Button Name="SaveTicketCommand" Content="Save"
+                            IsEnabled="{Binding CreateTicketCommand.CanExecute, Mode=OneWay}"
+                            Command="{Binding CreateTicketCommand}" />
+                    <Button Name="EditSprintButton" Content="{Binding EditButtonText}"
+                            IsEnabled="{Binding SelectedItem, ElementName=DataGridTickets, Converter={StaticResource NullToBoolConverter}}"
+                            Command="{Binding EditTicketCommand}" />
+                    <Button Name="SetSprintActiveButton" Content="Add to sprint"
+                            IsEnabled="{Binding SelectedItem, ElementName=DataGridTickets, Converter={StaticResource NullToBoolConverter}}"
+                            Command="{Binding AddTicketToCurrentSprintCommand}" />
+                </StackPanel>
+            </Grid>
+        </Grid>
+        <DataGrid Grid.Column="1" Name="DataGridTickets"
+                  ItemsSource="{Binding DataModel.Tickets}"
+                  SelectedItem="{Binding SelectedTicket, Mode=TwoWay}"
+                  IsReadOnly="True"
+                  GridLinesVisibility="All">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Width="*"
+                                    Binding="{Binding Name}" />
+                <DataGridTextColumn Header="Booking number" Width="*"
+                                    Binding="{Binding BookingNumber}" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+
+</UserControl>

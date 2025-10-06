@@ -80,8 +80,7 @@ public class TimeTrackingModel(
     {
         var ticketsInSprint = await requestSender.Send(new ClientGetTicketsForCurrentSprintRequest());
         var allTickets = await requestSender.Send(new ClientGetAllTicketsRequest());
-
-
+        
         FilteredTickets.Clear();
         FilteredTickets.AddRange(ticketsInSprint);
 
@@ -186,6 +185,8 @@ public class TimeTrackingModel(
 
     private async Task HandleNewTicketMessage(NewTicketMessage message)
     {
+        AllTickets.Add(message.Ticket);
+        
         await tracer.Ticket.Create.AggregateAdded(GetType(), message.TraceId);
 
         var currentSprint = await requestSender.Send(new ClientGetActiveSprintRequest());

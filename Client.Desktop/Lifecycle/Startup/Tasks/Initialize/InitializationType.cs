@@ -4,5 +4,6 @@ public enum InitializationType
 {
     Model,
     ViewModel,
-    Service
+    Service,
+    MockServices
 }

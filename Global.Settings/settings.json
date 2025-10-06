@@ -15,14 +15,14 @@
     "HostName": "core-service",
     "GrpcPort": 8080,
     "DockerGrpcPort": 8081,
-    "DockerHostName": "localhost",
+    "DockerHostName": "192.168.10.160",
     "IsRunningInDocker": true
   },
   "MonitoringSettings": {
     "HostName": "monitoring-service",
     "GrpcPort": 8080,
     "DockerGrpcPort": 8082,
-    "DockerHostName": "localhost",
+    "DockerHostName": "192.168.10.160",
     "IsRunningInDocker": true
   },
   "DatabaseSettings": {

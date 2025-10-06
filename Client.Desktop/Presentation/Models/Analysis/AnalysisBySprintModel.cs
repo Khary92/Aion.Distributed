@@ -28,7 +28,13 @@ public class AnalysisBySprintModel(
 
     private AnalysisBySprintDecorator? _analysisBySprint;
 
-    public ObservableCollection<SprintClientModel> Sprints { get; } = [];
+    private ObservableCollection<SprintClientModel> _sprints = [];
+
+    public ObservableCollection<SprintClientModel> Sprints
+    {
+        get => _sprints;
+        set => this.RaiseAndSetIfChanged(ref _sprints, value);
+    }
 
     public AnalysisBySprintDecorator? AnalysisBySprint
     {

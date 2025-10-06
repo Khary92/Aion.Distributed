@@ -11,6 +11,7 @@ public class AsyncInitializeTask(IEnumerable<IInitializeAsync> initializeCompone
 {
     private readonly List<InitializationType> _order =
     [
+        InitializationType.MockServices,
         InitializationType.Model,
         InitializationType.Service,
         InitializationType.ViewModel

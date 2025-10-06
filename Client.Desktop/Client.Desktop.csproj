@@ -47,8 +47,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Communication\Mock\Publishers\"/>
         <Folder Include="Lifecycle\Startup\Tasks\"/>
+        <Folder Include="Presentation\Models\Mock\" />
         <Folder Include="Presentation\Views\"/>
     </ItemGroup>
 

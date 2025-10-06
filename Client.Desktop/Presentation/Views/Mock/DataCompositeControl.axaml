@@ -1,0 +1,52 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:sprintData="clr-namespace:Client.Desktop.Presentation.Models.Mock"
+        xmlns:mock="clr-namespace:Client.Desktop.Presentation.Views.Mock"
+        x:Class="Client.Desktop.Presentation.Views.Mock.DataCompositeControl"
+        x:DataType="sprintData:DataCompositeViewModel"
+        x:Name="DebuggerWindow"
+        Title="Debugger"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450">
+    
+    <TabControl>
+        <TabItem Header="Sprint">
+            <Grid RowDefinitions="1*,1*" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <mock:ServerTicketsDataControl
+                    Grid.Row="0" HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    DataContext="{Binding ServerTicketDataViewModel}" />
+
+                <mock:ServerSprintsDataControl
+                    Grid.Row="1"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    DataContext="{Binding ServerSprintDataViewModel}" />
+            </Grid>
+        </TabItem>
+
+        <TabItem Header="Meta Data">
+            <Grid RowDefinitions="1*, 1*">
+                <mock:ServerTagsDataControl
+                    Grid.Row="0"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    DataContext="{Binding ServerTagDataViewModel}" />
+
+                <mock:ServerNoteTypeDataControl
+                    Grid.Row="1"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    DataContext="{Binding ServerNoteTypeDataViewModel}" />
+            </Grid>
+        </TabItem>
+        <TabItem Header="Traced Logs">
+        </TabItem>
+        <TabItem Header="Server Settings">
+        </TabItem>
+        <TabItem Header="Seed Settings">
+        </TabItem>
+    </TabControl>
+
+</Window>

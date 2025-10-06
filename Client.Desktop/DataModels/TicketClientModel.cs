@@ -97,7 +97,7 @@ public class TicketClientModel : ReactiveObject, IDocumentationSynchronizationLi
     public List<Guid> SprintIds
     {
         get => _sprintIds;
-        private set => this.RaiseAndSetIfChanged(ref _sprintIds, value);
+        set => this.RaiseAndSetIfChanged(ref _sprintIds, value);
     }
 
     public string Documentation
