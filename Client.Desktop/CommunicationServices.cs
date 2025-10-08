@@ -47,6 +47,7 @@ using Service.Proto.Shared.Requests.Sprints;
 using Service.Proto.Shared.Requests.Tags;
 using Service.Proto.Shared.Requests.Tickets;
 using Service.Proto.Shared.Requests.TimerSettings;
+using DebugWindow = Client.Desktop.Presentation.Views.Mock.DebugWindow;
 
 namespace Client.Desktop;
 
@@ -68,6 +69,7 @@ public static class CommunicationServices
 
         if (isMock)
         {
+            AddMockSeedingServices(services);
             AddMockedClientServerServices(services);
             AddMockedRequestSenders(services);
             AddMockedServerServices(services);
@@ -81,11 +83,16 @@ public static class CommunicationServices
         AddCommandSenders(services);
     }
 
+    private static void AddMockSeedingServices(this IServiceCollection services)
+    {
+        services.AddSingleton<IMockSeederFactory, MockSeederFactory>();
+    }
+
     private static void AddMockedServerServices(this IServiceCollection services)
     {
         services.AddScoped<MockDataService>();
 
-        services.AddSingleton<DataCompositeViewModel>();
+        services.AddSingleton<Presentation.Models.Mock.DebugWindow>();
 
         services.AddSingleton<ServerNoteTypeDataViewModel>();
         services.AddSingleton<ServerNoteTypeDataModel>();
@@ -99,7 +106,7 @@ public static class CommunicationServices
         services.AddSingleton<ServerTicketDataViewModel>();
         services.AddSingleton<ServerTicketDataModel>();
 
-        services.AddSingleton<DataCompositeControl>();
+        services.AddSingleton<DebugWindow>();
         services.AddScoped<ServerNoteTypeDataControl>();
         services.AddScoped<ServerSprintsDataControl>();
         services.AddScoped<ServerTagsDataControl>();

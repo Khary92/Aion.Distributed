@@ -1,6 +1,6 @@
 namespace Client.Desktop.Presentation.Models.Mock;
 
-public class DataCompositeViewModel(
+public class DebugWindow(
     ServerSprintDataViewModel serverSprintDataViewModel,
     ServerTicketDataViewModel serverTicketDataViewModel,
     ServerTagDataViewModel serverTagDataViewModel,

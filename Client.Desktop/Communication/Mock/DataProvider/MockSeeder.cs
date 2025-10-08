@@ -6,7 +6,7 @@ using Client.Desktop.DataModels.Decorators.Replays;
 
 namespace Client.Desktop.Communication.Mock.DataProvider;
 
-public class MockSeeder
+public class MockSeeder : IMockSeeder
 {
     private static readonly Random Rand = new();
     private readonly List<Guid> _notesGuids = [];

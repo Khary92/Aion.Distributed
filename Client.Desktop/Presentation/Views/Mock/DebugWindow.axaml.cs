@@ -3,15 +3,15 @@ using Client.Desktop.Presentation.Models.Mock;
 
 namespace Client.Desktop.Presentation.Views.Mock;
 
-public partial class DataCompositeControl : Window
+public partial class DebugWindow : Window
 {
-    public DataCompositeControl(DataCompositeViewModel viewModel)
+    public DebugWindow(Models.Mock.DebugWindow viewModel)
     {
         InitializeComponent();
         DataContext = viewModel;
     }
 
-    public DataCompositeControl()
+    public DebugWindow()
     {
         InitializeComponent();
     }

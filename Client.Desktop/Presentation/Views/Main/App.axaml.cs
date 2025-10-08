@@ -21,7 +21,7 @@ public class App(IServiceProvider serviceProvider) : Application
         var mockSettingsService = serviceProvider.GetRequiredService<IMockSettingsService>();
         if (mockSettingsService.IsMockingModeActive)
         {
-            var debugWindow = serviceProvider.GetRequiredService<DataCompositeControl>();
+            var debugWindow = serviceProvider.GetRequiredService<DebugWindow>();
             debugWindow.Show();
         }
         

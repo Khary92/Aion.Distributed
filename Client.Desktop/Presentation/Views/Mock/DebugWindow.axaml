@@ -4,8 +4,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:sprintData="clr-namespace:Client.Desktop.Presentation.Models.Mock"
         xmlns:mock="clr-namespace:Client.Desktop.Presentation.Views.Mock"
-        x:Class="Client.Desktop.Presentation.Views.Mock.DataCompositeControl"
-        x:DataType="sprintData:DataCompositeViewModel"
+        x:Class="Client.Desktop.Presentation.Views.Mock.DebugWindow"
+        x:DataType="sprintData:DebugWindow"
         x:Name="DebuggerWindow"
         Title="Debugger"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450">

@@ -23,10 +23,10 @@ public class MockDataService
     private const int MinimumAmountOfCheckedTagsPerTimeSlot = 2;
     private const int MaximumAmountOfCheckedTagsPerTimeSlot = 7;
 
-    public MockDataService()
+    public MockDataService(IMockSeederFactory mockSeederFactory)
     {
-        var mockSeeder = new MockSeeder();
-        mockSeeder.Seed(new MockSetup(WorkDayCount, TrackingSlotsCount, SprintCount, TicketCount, TagCount,
+        var mockSeeder = mockSeederFactory.Create(new MockSetup(WorkDayCount, TrackingSlotsCount, SprintCount,
+            TicketCount, TagCount,
             NoteCount, NoteTypeCount, AmountOfReplayDocumentation,
             new MockRanges(MinimumAmountOfNotesPerTimeSlot, MaximumAmountOfNotesPerTimeSlot),
             new MockRanges(MinimumAmountOfCheckedTagsPerTimeSlot, MaximumAmountOfCheckedTagsPerTimeSlot)));
