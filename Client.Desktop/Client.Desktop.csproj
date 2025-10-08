@@ -48,7 +48,6 @@
 
     <ItemGroup>
         <Folder Include="Lifecycle\Startup\Tasks\"/>
-        <Folder Include="Presentation\Models\Mock\" />
         <Folder Include="Presentation\Views\"/>
     </ItemGroup>
 
@@ -63,7 +62,6 @@
         <AdditionalFiles Include="Presentation\Views\Documentation\TypeCheckBoxControl.axaml"/>
         <AdditionalFiles Include="Presentation\Views\Export\ExportControl.axaml"/>
         <AdditionalFiles Include="Presentation\Views\Main\App.axaml"/>
-        <AdditionalFiles Include="Presentation\Views\Main\ContentWrapper.axaml"/>
         <AdditionalFiles Include="Presentation\Views\Setting\SettingsCompositeControl.axaml"/>
         <AdditionalFiles Include="Presentation\Views\Setting\SettingsControl.axaml"/>
         <AdditionalFiles Include="Presentation\Views\Setting\WorkDaysControl.axaml"/>

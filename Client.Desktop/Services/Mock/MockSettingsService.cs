@@ -14,14 +14,6 @@ public class MockSettingsService(
 {
     private const string SettingsFileName = "MockSettings.json";
 
-    public MockSettings Settings { get; private set; } = new(false);
-    public bool IsMockingModeActive { get; set; }
-
-    public async Task SaveSettings(MockSettings changedSettings)
-    {
-        await writer.Write(JsonSerializer.Serialize(changedSettings), SettingsFileName);
-    }
-
     public InitializationType Type => InitializationType.MockServices;
 
     public async Task InitializeAsync()
@@ -34,5 +26,13 @@ public class MockSettingsService(
         }
 
         await SaveSettings(Settings);
+    }
+
+    public MockSettings Settings { get; private set; } = new(false);
+    public bool IsMockingModeActive { get; set; }
+
+    public async Task SaveSettings(MockSettings changedSettings)
+    {
+        await writer.Write(JsonSerializer.Serialize(changedSettings), SettingsFileName);
     }
 }

@@ -68,7 +68,7 @@ public class SprintClientModel : ReactiveObject
     public bool IsActive
     {
         get => _isActive;
-        private set => this.RaiseAndSetIfChanged(ref _isActive, value);
+        set => this.RaiseAndSetIfChanged(ref _isActive, value);
     }
 
     public List<Guid> TicketIds

@@ -24,6 +24,11 @@ namespace Client.Desktop.Presentation.Models.Mock;
 public class ServerNoteTypeDataModel(MockDataService mockDataService) : ReactiveObject, IInitializeAsync,
     INoteTypeCommandSender, INoteTypeRequestSender, ILocalNoteTypeNotificationPublisher, IStreamClient
 {
+    private readonly ConcurrentQueue<CreateNoteTypeCommandProto> _createQueue = new();
+
+    private readonly TimeSpan _responseDelay = TimeSpan.FromMilliseconds(50);
+    private readonly ConcurrentQueue<ChangeNoteTypeColorCommandProto> _updateColorQueue = new();
+    private readonly ConcurrentQueue<ChangeNoteTypeNameCommandProto> _updateNameQueue = new();
     private ObservableCollection<NoteTypeClientModel> _noteTypes = [];
 
     public ObservableCollection<NoteTypeClientModel> NoteTypes
@@ -32,70 +37,13 @@ public class ServerNoteTypeDataModel(MockDataService mockDataService) : Reactive
         set => this.RaiseAndSetIfChanged(ref _noteTypes, value);
     }
 
-    public InitializationType Type => InitializationType.MockServices;
+    public InitializationType Type => InitializationType.MockModels;
 
     public Task InitializeAsync()
     {
         NoteTypes.Clear();
         NoteTypes = new ObservableCollection<NoteTypeClientModel>(mockDataService.NoteTypes);
         return Task.CompletedTask;
-    }
-
-    private readonly TimeSpan _responseDelay = TimeSpan.FromMilliseconds(50);
-    private readonly ConcurrentQueue<CreateNoteTypeCommandProto> _createQueue = new();
-    private readonly ConcurrentQueue<ChangeNoteTypeNameCommandProto> _updateNameQueue = new();
-    private readonly ConcurrentQueue<ChangeNoteTypeColorCommandProto> _updateColorQueue = new();
-
-    public Task<bool> Send(CreateNoteTypeCommandProto command)
-    {
-        _createQueue.Enqueue(command);
-        return Task.FromResult(true);
-    }
-
-    public Task<bool> Send(ChangeNoteTypeNameCommandProto command)
-    {
-        _updateNameQueue.Enqueue(command);
-        return Task.FromResult(true);
-    }
-
-    public Task<bool> Send(ChangeNoteTypeColorCommandProto command)
-    {
-        _updateColorQueue.Enqueue(command);
-        return Task.FromResult(true);
-    }
-
-    public Task<GetAllNoteTypesResponseProto> Send(GetAllNoteTypesRequestProto request)
-    {
-        var list = new GetAllNoteTypesResponseProto();
-
-        foreach (var noteType in NoteTypes)
-        {
-            list.NoteTypes.Add(new NoteTypeProto()
-            {
-                NoteTypeId = noteType.NoteTypeId.ToString(),
-                Name = noteType.Name,
-                Color = noteType.Color
-            });
-        }
-
-        return Task.FromResult(list);
-    }
-
-
-    public Task<NoteTypeProto> Send(GetNoteTypeByIdRequestProto request)
-    {
-        var noteType = NoteTypes.FirstOrDefault(nt => nt.NoteTypeId == Guid.Parse(request.NoteTypeId));
-
-        if (noteType == null) throw new Exception("Note type not found");
-
-        var result = new NoteTypeProto()
-        {
-            NoteTypeId = noteType.NoteTypeId.ToString(),
-            Name = noteType.Name,
-            Color = noteType.Color
-        };
-
-        return Task.FromResult(result);
     }
 
     public event Func<ClientNoteTypeColorChangedNotification, Task>? ClientNoteTypeColorChangedNotificationReceived;
@@ -121,6 +69,56 @@ public class ServerNoteTypeDataModel(MockDataService mockDataService) : Reactive
         if (ClientNoteTypeNameChangedNotificationReceived is { } handler)
             return handler(notification);
         return Task.CompletedTask;
+    }
+
+    public Task<bool> Send(CreateNoteTypeCommandProto command)
+    {
+        _createQueue.Enqueue(command);
+        return Task.FromResult(true);
+    }
+
+    public Task<bool> Send(ChangeNoteTypeNameCommandProto command)
+    {
+        _updateNameQueue.Enqueue(command);
+        return Task.FromResult(true);
+    }
+
+    public Task<bool> Send(ChangeNoteTypeColorCommandProto command)
+    {
+        _updateColorQueue.Enqueue(command);
+        return Task.FromResult(true);
+    }
+
+    public Task<GetAllNoteTypesResponseProto> Send(GetAllNoteTypesRequestProto request)
+    {
+        var list = new GetAllNoteTypesResponseProto();
+
+        foreach (var noteType in NoteTypes)
+            list.NoteTypes.Add(new NoteTypeProto
+            {
+                NoteTypeId = noteType.NoteTypeId.ToString(),
+                Name = noteType.Name,
+                Color = noteType.Color
+            });
+
+        return Task.FromResult(list);
+    }
+
+
+    public Task<NoteTypeProto> Send(GetNoteTypeByIdRequestProto request)
+    {
+        var noteType = NoteTypes.FirstOrDefault(nt => nt.NoteTypeId == Guid.Parse(request.NoteTypeId));
+
+        if (noteType == null) throw new Exception("Note type not found");
+
+        var result = new NoteTypeProto
+        {
+            NoteTypeId = noteType.NoteTypeId.ToString(),
+            Name = noteType.Name,
+            Color = noteType.Color
+        };
+
+        return Task.FromResult(result);
     }
 
     public async Task StartListening(CancellationToken cancellationToken)

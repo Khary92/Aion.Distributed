@@ -7,7 +7,7 @@ public class MockSeederFactory : IMockSeederFactory
     public IMockSeeder Create(MockSetup setup)
     {
         var mockSeeder = new MockSeeder();
-        mockSeeder.Seed(setup);
+        //mockSeeder.Seed(setup);
         return mockSeeder;
     }
 }

@@ -9,7 +9,7 @@
         x:Name="DebuggerWindow"
         Title="Debugger"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450">
-    
+
     <TabControl>
         <TabItem Header="Sprint">
             <Grid RowDefinitions="1*,1*" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -42,11 +42,13 @@
             </Grid>
         </TabItem>
         <TabItem Header="Traced Logs">
+            <mock:ServerLogControl
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                DataContext="{Binding ServerLogViewModel}" />
         </TabItem>
-        <TabItem Header="Server Settings">
-        </TabItem>
-        <TabItem Header="Seed Settings">
-        </TabItem>
+        <TabItem Header="Server Settings" />
+        <TabItem Header="Seed Settings" />
     </TabControl>
 
 </Window>

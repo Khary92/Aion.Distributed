@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Client.Desktop.Communication.Mock.DataProvider;
 using Client.Desktop.Communication.Requests.Client.Records;
 using Client.Desktop.DataModels;
 using Client.Desktop.DataModels.Decorators.Replays;
+using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 
 namespace Client.Desktop.Communication.Mock;
 
-public class MockDataService
+public class MockDataService(IMockSeederFactory mockSeederFactory) : IInitializeAsync
 {
     private const int WorkDayCount = 1;
     private const int TrackingSlotsCount = 12;
@@ -23,7 +25,34 @@ public class MockDataService
     private const int MinimumAmountOfCheckedTagsPerTimeSlot = 2;
     private const int MaximumAmountOfCheckedTagsPerTimeSlot = 7;
 
-    public MockDataService(IMockSeederFactory mockSeederFactory)
+
+    public bool IsTimerSettingsExisting => true;
+
+    public TimerSettingsClientModel TimerSettings => new(Guid.NewGuid(), 30, 30);
+
+    public List<TicketClientModel> Tickets { get; set; } = [];
+
+    public List<StatisticsDataClientModel> StatisticsData { get; set; } = [];
+
+    public List<TimeSlotClientModel> TimeSlots { get; set; } = [];
+
+    public List<WorkDayClientModel> WorkDays { get; set; } = [];
+
+    public List<NoteClientModel> Notes { get; set; } = [];
+
+    public List<NoteTypeClientModel> NoteTypes { get; set; } = [];
+
+    public List<SprintClientModel> Sprints { get; set; } = [];
+
+    public List<TagClientModel> Tags { get; set; } = [];
+
+    public List<DocumentationReplay> DocumentationReplays { get; set; } = [];
+
+    public List<ClientGetTrackingControlResponse> ClientGetTrackingControlResponse { get; set; } = [];
+
+    public InitializationType Type => InitializationType.MockServices;
+
+    public Task InitializeAsync()
     {
         var mockSeeder = mockSeederFactory.Create(new MockSetup(WorkDayCount, TrackingSlotsCount, SprintCount,
             TicketCount, TagCount,
@@ -40,29 +69,8 @@ public class MockDataService
         Sprints = mockSeeder.Sprints;
         Tags = mockSeeder.Tags;
         DocumentationReplays = mockSeeder.DocumentationReplays;
+        return Task.CompletedTask;
     }
-
-    public bool IsTimerSettingsExisting => true;
-
-    public TimerSettingsClientModel TimerSettings => new(Guid.NewGuid(), 30, 30);
-
-    public List<TicketClientModel> Tickets { get; set; }
-
-    public List<StatisticsDataClientModel> StatisticsData { get; set; }
-
-    public List<TimeSlotClientModel> TimeSlots { get; set; }
-
-    public List<WorkDayClientModel> WorkDays { get; set; }
-
-    public List<NoteClientModel> Notes { get; set; }
-
-    public List<NoteTypeClientModel> NoteTypes { get; set; }
-
-    public List<SprintClientModel> Sprints { get; set; }
-
-    public List<TagClientModel> Tags { get; set; }
-
-    public List<DocumentationReplay> DocumentationReplays { get; set; }
 
     public List<ClientGetTrackingControlResponse> GetInitialClientGetTrackingControlResponses()
     {

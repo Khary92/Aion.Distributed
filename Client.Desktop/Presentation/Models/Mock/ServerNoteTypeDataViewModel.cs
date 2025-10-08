@@ -79,12 +79,12 @@ public class ServerNoteTypeDataViewModel : ReactiveObject
     {
         if (!IsEditMode)
         {
-            var createCommand = new CreateNoteTypeCommandProto()
+            var createCommand = new CreateNoteTypeCommandProto
             {
                 NoteTypeId = Guid.NewGuid().ToString(),
                 Color = SelectedColor.ToString(),
                 Name = _nameInputFieldText,
-                TraceData = new TraceDataProto()
+                TraceData = new TraceDataProto
                 {
                     TraceId = Guid.NewGuid().ToString()
                 }
@@ -101,30 +101,26 @@ public class ServerNoteTypeDataViewModel : ReactiveObject
         SelectedNoteType.Color = SelectedColor.ToString();
 
         if (SelectedNoteType.IsColorChanged())
-        {
-            await Model.Send(new ChangeNoteTypeColorCommandProto()
+            await Model.Send(new ChangeNoteTypeColorCommandProto
             {
                 NoteTypeId = SelectedNoteType.NoteTypeId.ToString(),
                 Color = _selectedColor.ToString(),
-                TraceData = new TraceDataProto()
+                TraceData = new TraceDataProto
                 {
                     TraceId = Guid.NewGuid().ToString()
                 }
             });
-        }
 
         if (SelectedNoteType.IsNameChanged())
-        {
-            await Model.Send(new ChangeNoteTypeNameCommandProto()
+            await Model.Send(new ChangeNoteTypeNameCommandProto
             {
                 NoteTypeId = SelectedNoteType.NoteTypeId.ToString(),
                 Name = SelectedNoteType.Name,
-                TraceData = new TraceDataProto()
+                TraceData = new TraceDataProto
                 {
                     TraceId = Guid.NewGuid().ToString()
                 }
             });
-        }
 
         ToggleTagEditMode();
         ResetData();

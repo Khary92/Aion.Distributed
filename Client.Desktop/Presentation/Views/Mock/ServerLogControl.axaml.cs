@@ -3,9 +3,9 @@ using Client.Desktop.Presentation.Models.Mock;
 
 namespace Client.Desktop.Presentation.Views.Mock;
 
-public partial class ServerSprintsDataControl : ReactiveUserControl<ServerSprintDataViewModel>
+public partial class ServerLogControl : ReactiveUserControl<ServerLogViewModel>
 {
-    public ServerSprintsDataControl()
+    public ServerLogControl()
     {
         InitializeComponent();
     }

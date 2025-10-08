@@ -4,10 +4,12 @@ public class DebugWindow(
     ServerSprintDataViewModel serverSprintDataViewModel,
     ServerTicketDataViewModel serverTicketDataViewModel,
     ServerTagDataViewModel serverTagDataViewModel,
-    ServerNoteTypeDataViewModel serverNoteTypeDataViewModel)
+    ServerNoteTypeDataViewModel serverNoteTypeDataViewModel,
+    ServerLogViewModel serverLogViewModel)
 {
     public ServerSprintDataViewModel ServerSprintDataViewModel { get; } = serverSprintDataViewModel;
     public ServerTicketDataViewModel ServerTicketDataViewModel { get; } = serverTicketDataViewModel;
     public ServerTagDataViewModel ServerTagDataViewModel { get; } = serverTagDataViewModel;
     public ServerNoteTypeDataViewModel ServerNoteTypeDataViewModel { get; } = serverNoteTypeDataViewModel;
+    public ServerLogViewModel ServerLogViewModel { get; } = serverLogViewModel;
 }

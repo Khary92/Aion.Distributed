@@ -8,6 +8,7 @@ using Client.Desktop.Communication.Commands.Client.Records;
 using Client.Desktop.Communication.Local.LocalEvents.Records;
 using Client.Desktop.Communication.Notifications.Client.Receiver;
 using Client.Desktop.Communication.Notifications.Client.Records;
+using Client.Desktop.DataModels;
 using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
 
 namespace Client.Desktop.Communication.Mock.Commands;
@@ -44,10 +45,19 @@ public class MockClientCommandSender(MockDataService mockDataService)
         {
             while (_trackingControlQueue.TryDequeue(out var command))
             {
+                var currentWorkDay = mockDataService.WorkDays.First();
+                var newTimeSlot = new TimeSlotClientModel(Guid.NewGuid(), currentWorkDay.WorkDayId, command.TicketId,
+                    DateTimeOffset.Now, DateTimeOffset.Now, [], false);
+                var newStaticstdata =
+                    new StatisticsDataClientModel(Guid.NewGuid(), newTimeSlot.TimeSlotId, [], true, false, false);
+
+                mockDataService.TimeSlots.Add(newTimeSlot);
+                mockDataService.StatisticsData.Add(newStaticstdata);
+
                 var notification = new ClientTrackingControlCreatedNotification(
-                    mockDataService.StatisticsData.First(),
-                    mockDataService.Tickets.First(),
-                    mockDataService.TimeSlots.First(),
+                    newStaticstdata,
+                    mockDataService.Tickets.First(t => t.TicketId == command.TicketId),
+                    newTimeSlot,
                     Guid.NewGuid()
                 );
 

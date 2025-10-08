@@ -11,7 +11,8 @@ using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
 
 namespace Client.Desktop.Communication.Mock.Commands;
 
-public class MockWorkDayCommandSender : IWorkDayCommandSender, ILocalWorkDayNotificationPublisher, IStreamClient
+public class MockWorkDayCommandSender(MockDataService mockDataService)
+    : IWorkDayCommandSender, ILocalWorkDayNotificationPublisher, IStreamClient
 {
     private readonly TimeSpan _responseDelay = TimeSpan.FromMilliseconds(50);
     private readonly ConcurrentQueue<ClientCreateWorkDayCommand> _workDayQueue = new();
@@ -32,6 +33,8 @@ public class MockWorkDayCommandSender : IWorkDayCommandSender, ILocalWorkDayNoti
             {
                 var workDay = new WorkDayClientModel(command.WorkDayId, command.Date);
                 var message = new NewWorkDayMessage(workDay, command.TraceId);
+
+                mockDataService.WorkDays.Add(workDay);
 
                 await Task.Delay(_responseDelay, cancellationToken);
                 await Publish(message);

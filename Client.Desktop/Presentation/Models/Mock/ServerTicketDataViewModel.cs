@@ -3,6 +3,7 @@ using System.Reactive.Linq;
 using System.Threading.Tasks;
 using Client.Desktop.DataModels;
 using Client.Proto;
+using Proto.Command.Sprints;
 using Proto.Command.Tickets;
 using Proto.DTO.TraceData;
 using ReactiveUI;
@@ -12,6 +13,7 @@ namespace Client.Desktop.Presentation.Models.Mock;
 
 public class ServerTicketDataViewModel : ReactiveObject
 {
+    private readonly ServerSprintDataModel _sprintDataModel;
     private string _editButtonText = string.Empty;
 
     private bool _isEditMode;
@@ -22,8 +24,9 @@ public class ServerTicketDataViewModel : ReactiveObject
 
     private TicketClientModel? _selectedTicket;
 
-    public ServerTicketDataViewModel(ServerTicketDataModel serverTicketDataModel)
+    public ServerTicketDataViewModel(ServerTicketDataModel serverTicketDataModel, ServerSprintDataModel sprintDataModel)
     {
+        _sprintDataModel = sprintDataModel;
         DataModel = serverTicketDataModel;
 
         EditTicketCommand = ReactiveCommand.Create(ToggleTagEditMode);
@@ -96,7 +99,17 @@ public class ServerTicketDataViewModel : ReactiveObject
 
     private async Task AddTicketToActiveSprint()
     {
-        // TODO This is not done here...
+        if (SelectedTicket is null) return;
+
+        await _sprintDataModel.Send(new AddTicketToActiveSprintCommandProto
+        {
+            TicketId = SelectedTicket.TicketId.ToString(),
+            TraceData = new TraceDataProto
+            {
+                TraceId = Guid.NewGuid().ToString()
+            }
+        });
+
         ResetData();
     }
 
@@ -104,13 +117,13 @@ public class ServerTicketDataViewModel : ReactiveObject
     {
         if (IsEditMode)
         {
-            await DataModel.Send(new UpdateTicketDataCommandProto()
+            await DataModel.Send(new UpdateTicketDataCommandProto
             {
                 TicketId = SelectedTicket!.TicketId.ToString(),
                 Name = NewTicketName,
                 BookingNumber = NewTicketBookingNumber,
                 SprintIds = { SelectedTicket!.SprintIds.ToRepeatedField() },
-                TraceData = new TraceDataProto()
+                TraceData = new TraceDataProto
                 {
                     TraceId = Guid.NewGuid().ToString()
                 }
@@ -120,13 +133,12 @@ public class ServerTicketDataViewModel : ReactiveObject
             return;
         }
 
-        await DataModel.Send(new CreateTicketCommandProto()
+        await DataModel.Send(new CreateTicketCommandProto
         {
             TicketId = Guid.NewGuid().ToString(),
             Name = NewTicketName,
             BookingNumber = NewTicketBookingNumber,
-            SprintIds = { },
-            TraceData = new TraceDataProto()
+            TraceData = new TraceDataProto
             {
                 TraceId = Guid.NewGuid().ToString()
             }

@@ -27,6 +27,11 @@ public class ServerTicketDataModel(MockDataService mockDataService)
     : ReactiveObject, IInitializeAsync, ITicketCommandSender,
         ITicketRequestSender, ILocalTicketNotificationPublisher, IStreamClient
 {
+    private readonly ConcurrentQueue<CreateTicketCommandProto> _createQueue = new();
+
+    private readonly TimeSpan _responseDelay = TimeSpan.FromMilliseconds(50);
+    private readonly ConcurrentQueue<UpdateTicketDataCommandProto> _updateDataQueue = new();
+    private readonly ConcurrentQueue<UpdateTicketDocumentationCommandProto> _updateDocQueue = new();
     private ObservableCollection<TicketClientModel> _tickets = [];
 
     public ObservableCollection<TicketClientModel> Tickets
@@ -35,97 +40,12 @@ public class ServerTicketDataModel(MockDataService mockDataService)
         set => this.RaiseAndSetIfChanged(ref _tickets, value);
     }
 
-    public InitializationType Type => InitializationType.MockServices;
+    public InitializationType Type => InitializationType.MockModels;
 
     public Task InitializeAsync()
     {
         Tickets = new ObservableCollection<TicketClientModel>(mockDataService.Tickets);
         return Task.CompletedTask;
-    }
-
-    public Task<bool> Send(CreateTicketCommandProto command)
-    {
-        _createQueue.Enqueue(command);
-        return Task.FromResult(true);
-    }
-
-    public Task<bool> Send(UpdateTicketDataCommandProto command)
-    {
-         _updateDataQueue.Enqueue(command);
-        return Task.FromResult(true);
-    }
-
-    public Task<bool> Send(UpdateTicketDocumentationCommandProto command)
-    {
-        _updateDocQueue.Enqueue(command);
-        return Task.FromResult(true);
-    }
-
-    public Task<TicketListProto> Send(GetAllTicketsRequestProto request)
-    {
-        var list = new TicketListProto();
-
-        foreach (var ticket in Tickets)
-        {
-            list.Tickets.Add(new TicketProto()
-            {
-                TicketId = ticket.TicketId.ToString(),
-                BookingNumber = ticket.BookingNumber,
-                Documentation = ticket.Documentation,
-                Name = ticket.Name,
-                SprintIds = { ticket.SprintIds.ToRepeatedField() }
-            });
-        }
-
-        return Task.FromResult(list);
-    }
-
-    public Task<TicketListProto> Send(GetTicketsForCurrentSprintRequestProto request)
-    {
-        var list = new TicketListProto();
-
-        // TODO add current sprint
-
-        foreach (var ticket in Tickets.Where(t => t.SprintIds.Contains(Empty)))
-        {
-            list.Tickets.Add(new TicketProto()
-            {
-                TicketId = ticket.TicketId.ToString(),
-                BookingNumber = ticket.BookingNumber,
-                Documentation = ticket.Documentation,
-                Name = ticket.Name,
-                SprintIds = { ticket.SprintIds.ToRepeatedField() }
-            });
-        }
-
-        return Task.FromResult(list);
-    }
-
-    public Task<TicketListProto> Send(GetTicketsWithShowAllSwitchRequestProto request)
-    {
-        // TODO this is not needed anymore.
-        throw new NotImplementedException();
-    }
-
-    public Task<TicketProto> Send(GetTicketByIdRequestProto request)
-    {
-        var ticket = Tickets.FirstOrDefault(t => t.TicketId == Parse(request.TicketId));
-
-        if (ticket == null)
-        {
-            throw new Exception("Ticket not found");
-        }
-
-        var result = new TicketProto()
-        {
-            TicketId = ticket.TicketId.ToString(),
-            BookingNumber = ticket.BookingNumber,
-            Documentation = ticket.Documentation,
-            Name = ticket.Name,
-            SprintIds = { ticket.SprintIds.ToRepeatedField() }
-        };
-
-        return Task.FromResult(result);
     }
 
     public event Func<ClientTicketDataUpdatedNotification, Task>? TicketDataUpdatedNotificationReceived;
@@ -153,11 +73,6 @@ public class ServerTicketDataModel(MockDataService mockDataService)
             await handler(notification);
     }
 
-    private readonly TimeSpan _responseDelay = TimeSpan.FromMilliseconds(50);
-    private readonly ConcurrentQueue<CreateTicketCommandProto> _createQueue = new();
-    private readonly ConcurrentQueue<UpdateTicketDocumentationCommandProto> _updateDocQueue = new();
-    private readonly ConcurrentQueue<UpdateTicketDataCommandProto> _updateDataQueue = new();
-
     public async Task StartListening(CancellationToken cancellationToken)
     {
         while (!cancellationToken.IsCancellationRequested)
@@ -169,6 +84,10 @@ public class ServerTicketDataModel(MockDataService mockDataService)
                     updateDocCmd.Documentation,
                     Parse(updateDocCmd.TraceData.TraceId)
                 );
+
+                var mockDataTicket =
+                    mockDataService.Tickets.FirstOrDefault(t => t.TicketId == Parse(updateDocCmd.TicketId));
+                mockDataTicket?.Apply(notification);
 
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
@@ -189,6 +108,8 @@ public class ServerTicketDataModel(MockDataService mockDataService)
                     Parse(createCmd.TraceData.TraceId)
                 );
 
+                mockDataService.Tickets.Add(message.Ticket);
+
                 await Dispatcher.UIThread.InvokeAsync(() => Tickets.Add(message.Ticket));
 
                 await Task.Delay(_responseDelay, cancellationToken);
@@ -202,6 +123,12 @@ public class ServerTicketDataModel(MockDataService mockDataService)
                     updateTicketDataCommandProto.Name, updateTicketDataCommandProto.BookingNumber,
                     updateTicketDataCommandProto.SprintIds.Select(Parse).ToList(),
                     Parse(updateTicketDataCommandProto.TraceData.TraceId));
+
+                var mockDataTicket =
+                    mockDataService.Tickets.FirstOrDefault(t =>
+                        t.TicketId == Parse(updateTicketDataCommandProto.TicketId));
+
+                mockDataTicket?.Apply(ticketDataUpdateNotification);
 
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
@@ -217,5 +144,84 @@ public class ServerTicketDataModel(MockDataService mockDataService)
             if (_updateDocQueue.IsEmpty && _createQueue.IsEmpty && _updateDataQueue.IsEmpty)
                 await Task.Delay(50, cancellationToken);
         }
+    }
+
+    public Task<bool> Send(CreateTicketCommandProto command)
+    {
+        _createQueue.Enqueue(command);
+        return Task.FromResult(true);
+    }
+
+    public Task<bool> Send(UpdateTicketDataCommandProto command)
+    {
+        _updateDataQueue.Enqueue(command);
+        return Task.FromResult(true);
+    }
+
+    public Task<bool> Send(UpdateTicketDocumentationCommandProto command)
+    {
+        _updateDocQueue.Enqueue(command);
+        return Task.FromResult(true);
+    }
+
+    public Task<TicketListProto> Send(GetAllTicketsRequestProto request)
+    {
+        var list = new TicketListProto();
+
+        foreach (var ticket in Tickets)
+            list.Tickets.Add(new TicketProto
+            {
+                TicketId = ticket.TicketId.ToString(),
+                BookingNumber = ticket.BookingNumber,
+                Documentation = ticket.Documentation,
+                Name = ticket.Name,
+                SprintIds = { ticket.SprintIds.ToRepeatedField() }
+            });
+
+        return Task.FromResult(list);
+    }
+
+    public Task<TicketListProto> Send(GetTicketsForCurrentSprintRequestProto request)
+    {
+        var list = new TicketListProto();
+
+        var activeSprint = mockDataService.Sprints.FirstOrDefault(s => s.IsActive);
+        if (activeSprint == null) return Task.FromResult(list);
+
+        foreach (var ticket in Tickets.Where(t => t.SprintIds.Contains(activeSprint.SprintId)))
+            list.Tickets.Add(new TicketProto
+            {
+                TicketId = ticket.TicketId.ToString(),
+                BookingNumber = ticket.BookingNumber,
+                Documentation = ticket.Documentation,
+                Name = ticket.Name,
+                SprintIds = { ticket.SprintIds.ToRepeatedField() }
+            });
+
+        return Task.FromResult(list);
+    }
+
+    public Task<TicketListProto> Send(GetTicketsWithShowAllSwitchRequestProto request)
+    {
+        // TODO this is not needed anymore.
+        throw new NotImplementedException();
+    }
+
+    public Task<TicketProto> Send(GetTicketByIdRequestProto request)
+    {
+        var ticket = Tickets.FirstOrDefault(t => t.TicketId == Parse(request.TicketId));
+
+        if (ticket == null) throw new Exception("Ticket not found");
+
+        var result = new TicketProto
+        {
+            TicketId = ticket.TicketId.ToString(),
+            BookingNumber = ticket.BookingNumber,
+            Documentation = ticket.Documentation,
+            Name = ticket.Name,
+            SprintIds = { ticket.SprintIds.ToRepeatedField() }
+        };
+
+        return Task.FromResult(result);
     }
 }

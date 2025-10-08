@@ -23,9 +23,16 @@ using Service.Proto.Shared.Requests.Sprints;
 
 namespace Client.Desktop.Presentation.Models.Mock;
 
-public class ServerSprintDataModel(MockDataService mockDataService) : ReactiveObject, IInitializeAsync, ISprintCommandSender,
+public class ServerSprintDataModel(MockDataService mockDataService) : ReactiveObject, IInitializeAsync,
+    ISprintCommandSender,
     ISprintRequestSender, ILocalSprintNotificationPublisher, IStreamClient
 {
+    private readonly ConcurrentQueue<AddTicketToActiveSprintCommandProto> _addTicketToSprintQueue = new();
+    private readonly ConcurrentQueue<CreateSprintCommandProto> _createQueue = new();
+
+    private readonly TimeSpan _responseDelay = TimeSpan.FromMilliseconds(50);
+    private readonly ConcurrentQueue<SetSprintActiveStatusCommandProto> _sendActiveStatusQueue = new();
+    private readonly ConcurrentQueue<UpdateSprintDataCommandProto> _updateDataQueue = new();
     private ObservableCollection<SprintClientModel> _sprints = [];
 
     public ObservableCollection<SprintClientModel> Sprints
@@ -33,80 +40,14 @@ public class ServerSprintDataModel(MockDataService mockDataService) : ReactiveOb
         get => _sprints;
         set => this.RaiseAndSetIfChanged(ref _sprints, value);
     }
-    
-    public InitializationType Type => InitializationType.MockServices;
+
+    public InitializationType Type => InitializationType.MockModels;
 
     public Task InitializeAsync()
     {
         Sprints.Clear();
         Sprints = new ObservableCollection<SprintClientModel>(mockDataService.Sprints);
         return Task.CompletedTask;
-    }
-
-    public Task<bool> Send(CreateSprintCommandProto command)
-    {
-        _createQueue.Enqueue(command);
-        return Task.FromResult(true);
-    }
-
-    public Task<bool> Send(AddTicketToActiveSprintCommandProto command)
-    {
-        _addTicketToSprintQueue.Enqueue(command);
-        return Task.FromResult(true);
-    }
-
-    public Task<bool> Send(SetSprintActiveStatusCommandProto command)
-    {
-        _sendActiveStatusQueue.Enqueue(command);
-        return Task.FromResult(true);
-    }
-
-    public Task<bool> Send(UpdateSprintDataCommandProto command)
-    {
-        _updateDataQueue.Enqueue(command);
-        return Task.FromResult(true);
-    }
-
-    public Task<SprintProto?> Send(GetActiveSprintRequestProto request)
-    {
-        var activeSprint = Sprints.FirstOrDefault(s => s.IsActive);
-
-        if (activeSprint == null)
-        {
-            return Task.FromResult<SprintProto?>(null);
-        }
-
-        var result = new SprintProto()
-        {
-            SprintId = activeSprint.SprintId.ToString(),
-            Name = activeSprint.Name,
-            Start = Timestamp.FromDateTimeOffset(activeSprint.StartTime),
-            End = Timestamp.FromDateTimeOffset(activeSprint.EndTime),
-            IsActive = activeSprint.IsActive,
-            TicketIds = { activeSprint.TicketIds.ToRepeatedField() }
-        };
-
-        return Task.FromResult(result)!;
-    }
-
-    public Task<SprintListProto> Send(GetAllSprintsRequestProto request)
-    {
-        var list = new SprintListProto();
-
-        foreach (var sprint in Sprints)
-        {
-            list.Sprints.Add(new SprintProto()
-            {
-                SprintId = sprint.SprintId.ToString(),
-                Name = sprint.Name,
-                Start = Timestamp.FromDateTimeOffset(sprint.StartTime),
-                End = Timestamp.FromDateTimeOffset(sprint.EndTime),
-                IsActive = sprint.IsActive,
-                TicketIds = { sprint.TicketIds.ToRepeatedField() }
-            });
-        }
-
-        return Task.FromResult(list);
     }
 
     public event Func<ClientSprintActiveStatusSetNotification, Task>? ClientSprintActiveStatusSetNotificationReceived;
@@ -141,11 +82,66 @@ public class ServerSprintDataModel(MockDataService mockDataService) : ReactiveOb
             await handler(notification);
     }
 
-    private readonly TimeSpan _responseDelay = TimeSpan.FromMilliseconds(50);
-    private readonly ConcurrentQueue<CreateSprintCommandProto> _createQueue = new();
-    private readonly ConcurrentQueue<UpdateSprintDataCommandProto> _updateDataQueue = new();
-    private readonly ConcurrentQueue<AddTicketToActiveSprintCommandProto> _addTicketToSprintQueue = new();
-    private readonly ConcurrentQueue<SetSprintActiveStatusCommandProto> _sendActiveStatusQueue = new();
+    public Task<bool> Send(CreateSprintCommandProto command)
+    {
+        _createQueue.Enqueue(command);
+        return Task.FromResult(true);
+    }
+
+    public Task<bool> Send(AddTicketToActiveSprintCommandProto command)
+    {
+        _addTicketToSprintQueue.Enqueue(command);
+        return Task.FromResult(true);
+    }
+
+    public Task<bool> Send(SetSprintActiveStatusCommandProto command)
+    {
+        _sendActiveStatusQueue.Enqueue(command);
+        return Task.FromResult(true);
+    }
+
+    public Task<bool> Send(UpdateSprintDataCommandProto command)
+    {
+        _updateDataQueue.Enqueue(command);
+        return Task.FromResult(true);
+    }
+
+    public Task<SprintProto?> Send(GetActiveSprintRequestProto request)
+    {
+        var activeSprint = Sprints.FirstOrDefault(s => s.IsActive);
+
+        if (activeSprint == null) return Task.FromResult<SprintProto?>(null);
+
+        var result = new SprintProto
+        {
+            SprintId = activeSprint.SprintId.ToString(),
+            Name = activeSprint.Name,
+            Start = Timestamp.FromDateTimeOffset(activeSprint.StartTime),
+            End = Timestamp.FromDateTimeOffset(activeSprint.EndTime),
+            IsActive = activeSprint.IsActive,
+            TicketIds = { activeSprint.TicketIds.ToRepeatedField() }
+        };
+
+        return Task.FromResult(result)!;
+    }
+
+    public Task<SprintListProto> Send(GetAllSprintsRequestProto request)
+    {
+        var list = new SprintListProto();
+
+        foreach (var sprint in Sprints)
+            list.Sprints.Add(new SprintProto
+            {
+                SprintId = sprint.SprintId.ToString(),
+                Name = sprint.Name,
+                Start = Timestamp.FromDateTimeOffset(sprint.StartTime),
+                End = Timestamp.FromDateTimeOffset(sprint.EndTime),
+                IsActive = sprint.IsActive,
+                TicketIds = { sprint.TicketIds.ToRepeatedField() }
+            });
+
+        return Task.FromResult(list);
+    }
 
     public async Task StartListening(CancellationToken cancellationToken)
     {
@@ -157,6 +153,8 @@ public class ServerSprintDataModel(MockDataService mockDataService) : ReactiveOb
                     new NewSprintMessage(new SprintClientModel(Guid.Parse(createCmd.SprintId), createCmd.Name,
                         createCmd.IsActive, createCmd.StartTime.ToDateTimeOffset(),
                         createCmd.EndTime.ToDateTimeOffset(), []), Guid.NewGuid());
+
+                mockDataService.Sprints.Add(notification.Sprint);
 
                 await Dispatcher.UIThread.InvokeAsync(() => { Sprints.Add(notification.Sprint); });
 
@@ -172,6 +170,10 @@ public class ServerSprintDataModel(MockDataService mockDataService) : ReactiveOb
                     Guid.Parse(updateCmd.TraceData.TraceId)
                 );
 
+                var mockDataSprint =
+                    mockDataService.Sprints.FirstOrDefault(s => s.SprintId == Guid.Parse(updateCmd.SprintId));
+                mockDataSprint?.Apply(notification);
+
                 await Dispatcher.UIThread.InvokeAsync(() =>
                 {
                     var sprint = Sprints.FirstOrDefault(s => s.SprintId == Guid.Parse(updateCmd.SprintId));
@@ -185,6 +187,27 @@ public class ServerSprintDataModel(MockDataService mockDataService) : ReactiveOb
             while (_addTicketToSprintQueue.TryDequeue(out var activeSprintCmd))
             {
                 var notification = new ClientTicketAddedToActiveSprintNotification();
+
+                await Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    foreach (var sprint in Sprints)
+                    {
+                        if (!sprint.IsActive) continue;
+
+                        var mockedDataSprint = mockDataService.Sprints.First(s => s.SprintId == sprint.SprintId);
+                        var mockedDataTicket =
+                            mockDataService.Tickets.First(t => t.TicketId == Guid.Parse(activeSprintCmd.TicketId));
+
+                        mockedDataSprint.TicketIds.Add(mockedDataTicket.TicketId);
+                        mockedDataTicket.SprintIds.Add(mockedDataSprint.SprintId);
+
+                        var ticket =
+                            mockDataService.Tickets.First(t => t.TicketId == Guid.Parse(activeSprintCmd.TicketId));
+                        ticket.SprintIds.Add(sprint.SprintId);
+                        sprint.TicketIds.Add(ticket.TicketId);
+                    }
+                });
+
                 await Task.Delay(_responseDelay, cancellationToken);
                 await Publish(notification);
             }
@@ -192,6 +215,26 @@ public class ServerSprintDataModel(MockDataService mockDataService) : ReactiveOb
             while (_sendActiveStatusQueue.TryDequeue(out var activeStatusCmd))
             {
                 var notification = new ClientSprintActiveStatusSetNotification();
+
+                await Dispatcher.UIThread.InvokeAsync(() =>
+                {
+                    foreach (var sprint in Sprints)
+                    {
+                        var mockedDataSprint =
+                            mockDataService.Sprints.FirstOrDefault(s => s.SprintId == sprint.SprintId);
+
+                        if (sprint.SprintId != Guid.Parse(activeStatusCmd.SprintId))
+                        {
+                            if (mockedDataSprint != null) mockedDataSprint.IsActive = false;
+                            sprint.IsActive = false;
+                            continue;
+                        }
+
+                        if (mockedDataSprint != null) mockedDataSprint.IsActive = activeStatusCmd.IsActive;
+                        sprint.IsActive = activeStatusCmd.IsActive;
+                    }
+                });
+
                 await Task.Delay(_responseDelay, cancellationToken);
                 await Publish(notification);
             }

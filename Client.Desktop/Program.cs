@@ -23,8 +23,8 @@ public static class Program
         hostBuilder.ConfigureServices((_, services) =>
         {
             services.AddPresentationServices();
+            services.AddTracingServices();
             services.AddCommunicationServices(isMockMode);
-            services.AddTracingServices(isMockMode);
         });
 
         var host = hostBuilder.Build();

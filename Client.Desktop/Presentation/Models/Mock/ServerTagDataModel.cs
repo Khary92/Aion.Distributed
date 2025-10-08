@@ -25,6 +25,10 @@ namespace Client.Desktop.Presentation.Models.Mock;
 public class ServerTagDataModel(MockDataService mockDataService) : ReactiveObject, IInitializeAsync, ITagCommandSender,
     ITagRequestSender, ILocalTagNotificationPublisher, IStreamClient
 {
+    private readonly ConcurrentQueue<CreateTagCommandProto> _createQueue = new();
+
+    private readonly TimeSpan _responseDelay = TimeSpan.FromMilliseconds(50);
+    private readonly ConcurrentQueue<UpdateTagCommandProto> _updateQueue = new();
     private ObservableCollection<TagClientModel> _tags = [];
 
     public ObservableCollection<TagClientModel> Tags
@@ -33,114 +37,13 @@ public class ServerTagDataModel(MockDataService mockDataService) : ReactiveObjec
         set => this.RaiseAndSetIfChanged(ref _tags, value);
     }
 
-    public InitializationType Type => InitializationType.MockServices;
+    public InitializationType Type => InitializationType.MockModels;
 
     public Task InitializeAsync()
     {
         Tags.Clear();
         Tags = new ObservableCollection<TagClientModel>(mockDataService.Tags);
         return Task.CompletedTask;
-    }
-
-    public async Task PersistTagAsync(string tagName, TagClientModel? selectedTag, bool isEditMode)
-    {
-        if (isEditMode && selectedTag != null)
-        {
-            var updateCommand = new UpdateTagCommandProto()
-            {
-                TagId = selectedTag.TagId.ToString(),
-                Name = tagName,
-                TraceData = new TraceDataProto()
-                {
-                    TraceId = Guid.NewGuid().ToString()
-                }
-            };
-
-            await Send(updateCommand);
-            return;
-        }
-
-        var createCommand = new CreateTagCommandProto()
-        {
-            TagId = Guid.NewGuid().ToString(),
-            Name = tagName,
-            TraceData = new TraceDataProto()
-            {
-                TraceId = Guid.NewGuid().ToString()
-            }
-        };
-
-        await Send(createCommand);
-    }
-
-    private readonly TimeSpan _responseDelay = TimeSpan.FromMilliseconds(50);
-
-    private readonly ConcurrentQueue<CreateTagCommandProto> _createQueue = new();
-    private readonly ConcurrentQueue<UpdateTagCommandProto> _updateQueue = new();
-
-
-    public Task<bool> Send(CreateTagCommandProto command)
-    {
-        _createQueue.Enqueue(command);
-        return Task.FromResult(true);
-    }
-
-    public Task<bool> Send(UpdateTagCommandProto command)
-    {
-        _updateQueue.Enqueue(command);
-        return Task.FromResult(true);
-    }
-
-    public Task<TagListProto> Send(GetAllTagsRequestProto request)
-    {
-        var list = new TagListProto();
-
-        foreach (var tag in Tags)
-        {
-            list.Tags.Add(new TagProto()
-            {
-                TagId = tag.TagId.ToString(),
-                Name = tag.Name,
-                IsSelected = tag.IsSelected
-            });
-        }
-
-        return Task.FromResult(list);
-    }
-
-    public Task<TagProto> Send(GetTagByIdRequestProto request)
-    {
-        var tag = Tags.FirstOrDefault(t => t.TagId == Guid.Parse(request.TagId));
-
-        if (tag == null) return Task.FromResult<TagProto>(null!);
-
-        var result = new TagProto()
-        {
-            TagId = tag.TagId.ToString(),
-            Name = tag.Name,
-            IsSelected = tag.IsSelected
-        };
-
-        return Task.FromResult(result);
-    }
-
-    public Task<TagListProto> Send(GetTagsByIdsRequestProto request)
-    {
-        var list = new TagListProto();
-
-        foreach (var tag in Tags)
-        {
-            if (!request.TagIds.Contains(tag.TagId.ToString())) continue;
-
-            list.Tags.Add(new TagProto()
-            {
-                TagId = tag.TagId.ToString(),
-                Name = tag.Name,
-                IsSelected = tag.IsSelected
-            });
-        }
-
-        return Task.FromResult(list);
     }
 
     public event Func<ClientTagUpdatedNotification, Task>? ClientTagUpdatedNotificationReceived;
@@ -195,5 +98,99 @@ public class ServerTagDataModel(MockDataService mockDataService) : ReactiveObjec
             if (_updateQueue.IsEmpty && _createQueue.IsEmpty)
                 await Task.Delay(50, cancellationToken);
         }
+    }
+
+
+    public Task<bool> Send(CreateTagCommandProto command)
+    {
+        _createQueue.Enqueue(command);
+        return Task.FromResult(true);
+    }
+
+    public Task<bool> Send(UpdateTagCommandProto command)
+    {
+        _updateQueue.Enqueue(command);
+        return Task.FromResult(true);
+    }
+
+    public Task<TagListProto> Send(GetAllTagsRequestProto request)
+    {
+        var list = new TagListProto();
+
+        foreach (var tag in Tags)
+            list.Tags.Add(new TagProto
+            {
+                TagId = tag.TagId.ToString(),
+                Name = tag.Name,
+                IsSelected = tag.IsSelected
+            });
+
+        return Task.FromResult(list);
+    }
+
+    public Task<TagProto> Send(GetTagByIdRequestProto request)
+    {
+        var tag = Tags.FirstOrDefault(t => t.TagId == Guid.Parse(request.TagId));
+
+        if (tag == null) return Task.FromResult<TagProto>(null!);
+
+        var result = new TagProto
+        {
+            TagId = tag.TagId.ToString(),
+            Name = tag.Name,
+            IsSelected = tag.IsSelected
+        };
+
+        return Task.FromResult(result);
+    }
+
+    public Task<TagListProto> Send(GetTagsByIdsRequestProto request)
+    {
+        var list = new TagListProto();
+
+        foreach (var tag in Tags)
+        {
+            if (!request.TagIds.Contains(tag.TagId.ToString())) continue;
+
+            list.Tags.Add(new TagProto
+            {
+                TagId = tag.TagId.ToString(),
+                Name = tag.Name,
+                IsSelected = tag.IsSelected
+            });
+        }
+
+        return Task.FromResult(list);
+    }
+
+    public async Task PersistTagAsync(string tagName, TagClientModel? selectedTag, bool isEditMode)
+    {
+        if (isEditMode && selectedTag != null)
+        {
+            var updateCommand = new UpdateTagCommandProto
+            {
+                TagId = selectedTag.TagId.ToString(),
+                Name = tagName,
+                TraceData = new TraceDataProto
+                {
+                    TraceId = Guid.NewGuid().ToString()
+                }
+            };
+
+            await Send(updateCommand);
+            return;
+        }
+
+        var createCommand = new CreateTagCommandProto
+        {
+            TagId = Guid.NewGuid().ToString(),
+            Name = tagName,
+            TraceData = new TraceDataProto
+            {
+                TraceId = Guid.NewGuid().ToString()
+            }
+        };
+
+        await Send(createCommand);
     }
 }

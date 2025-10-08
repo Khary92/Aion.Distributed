@@ -17,14 +17,14 @@ public class App(IServiceProvider serviceProvider) : Application
         var contentWrapper = serviceProvider.GetRequiredService<MainWindow>();
         contentWrapper.WindowState = WindowState.Maximized;
         contentWrapper.Show();
-        
+
         var mockSettingsService = serviceProvider.GetRequiredService<IMockSettingsService>();
         if (mockSettingsService.IsMockingModeActive)
         {
             var debugWindow = serviceProvider.GetRequiredService<DebugWindow>();
             debugWindow.Show();
         }
-        
+
         _ = serviceProvider.GetRequiredService<IStartupScheduler>().Execute();
 
         base.OnFrameworkInitializationCompleted();

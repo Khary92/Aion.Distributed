@@ -80,13 +80,12 @@ public class TimeTrackingModel(
     {
         var ticketsInSprint = await requestSender.Send(new ClientGetTicketsForCurrentSprintRequest());
         var allTickets = await requestSender.Send(new ClientGetAllTicketsRequest());
-        
+
         FilteredTickets.Clear();
         FilteredTickets.AddRange(ticketsInSprint);
 
         AllTickets.Clear();
         AllTickets.AddRange(allTickets);
-
 
         await LoadTimeSlotViewModels();
     }
@@ -131,7 +130,6 @@ public class TimeTrackingModel(
                 controlData.TimeSlot);
             trackingSlotViewModels.Add(timeSlotViewModel);
         }
-
 
         TrackingSlotViewModels.Clear();
         foreach (var vm in trackingSlotViewModels)
@@ -186,7 +184,7 @@ public class TimeTrackingModel(
     private async Task HandleNewTicketMessage(NewTicketMessage message)
     {
         AllTickets.Add(message.Ticket);
-        
+
         await tracer.Ticket.Create.AggregateAdded(GetType(), message.TraceId);
 
         var currentSprint = await requestSender.Send(new ClientGetActiveSprintRequest());

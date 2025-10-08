@@ -115,11 +115,11 @@ public class ServerSprintDataViewModel : ReactiveObject
 
     private async Task SetSelectedSprintActive()
     {
-        await DataModel.Send(new SetSprintActiveStatusCommandProto()
+        await DataModel.Send(new SetSprintActiveStatusCommandProto
         {
             SprintId = SelectedSprint!.SprintId.ToString(),
             IsActive = !SelectedSprint.IsActive,
-            TraceData = new TraceDataProto()
+            TraceData = new TraceDataProto
             {
                 TraceId = Guid.NewGuid().ToString()
             }
@@ -130,35 +130,35 @@ public class ServerSprintDataViewModel : ReactiveObject
     {
         if (IsEditMode)
         {
-            var updateSprintDataCommand = new UpdateSprintDataCommandProto()
+            var updateSprintDataCommand = new UpdateSprintDataCommandProto
             {
                 SprintId = SelectedSprint.SprintId.ToString(),
                 Name = NewSprintName,
                 EndTime = Timestamp.FromDateTimeOffset(EndTime),
                 StartTime = Timestamp.FromDateTimeOffset(StartTime),
-                TraceData = new TraceDataProto()
+                TraceData = new TraceDataProto
                 {
                     TraceId = Guid.NewGuid().ToString()
                 }
             };
-            
+
             await DataModel.Send(updateSprintDataCommand);
             ResetData();
             return;
         }
 
-        var createSprintCommand = new CreateSprintCommandProto()
+        var createSprintCommand = new CreateSprintCommandProto
         {
             SprintId = Guid.NewGuid().ToString(),
             Name = NewSprintName,
             EndTime = Timestamp.FromDateTimeOffset(EndTime),
             StartTime = Timestamp.FromDateTimeOffset(StartTime),
-            TraceData = new TraceDataProto()
+            TraceData = new TraceDataProto
             {
                 TraceId = Guid.NewGuid().ToString()
             }
         };
-        
+
         await DataModel.Send(createSprintCommand);
         ResetData();
     }

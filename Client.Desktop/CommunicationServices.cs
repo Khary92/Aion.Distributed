@@ -9,6 +9,7 @@ using Client.Desktop.Communication.Local;
 using Client.Desktop.Communication.Mock;
 using Client.Desktop.Communication.Mock.Commands;
 using Client.Desktop.Communication.Mock.Requests;
+using Client.Desktop.Communication.Mock.Tracer;
 using Client.Desktop.Communication.Notifications.Client.Receiver;
 using Client.Desktop.Communication.Notifications.Note.Receiver;
 using Client.Desktop.Communication.Notifications.NoteType.Receiver;
@@ -29,6 +30,7 @@ using Client.Desktop.Communication.Requests.TimeSlots;
 using Client.Desktop.Communication.Requests.WorkDays;
 using Client.Desktop.FileSystem;
 using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
+using Client.Desktop.Lifecycle.Startup.Tasks.Register;
 using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
 using Client.Desktop.Presentation.Models.Mock;
 using Client.Desktop.Presentation.Views.Mock;
@@ -69,6 +71,7 @@ public static class CommunicationServices
 
         if (isMock)
         {
+            AddMockTraceSender(services);
             AddMockSeedingServices(services);
             AddMockedClientServerServices(services);
             AddMockedRequestSenders(services);
@@ -83,6 +86,13 @@ public static class CommunicationServices
         AddCommandSenders(services);
     }
 
+    private static void AddMockTraceSender(this IServiceCollection services)
+    {
+        services.AddScoped<MockLogger>();
+        services.AddScoped<ITracingDataSender>(sp => sp.GetRequiredService<MockLogger>());
+        services.AddScoped<IMockTraceDataPublisher>(sp => sp.GetRequiredService<MockLogger>());
+    }
+
     private static void AddMockSeedingServices(this IServiceCollection services)
     {
         services.AddSingleton<IMockSeederFactory, MockSeederFactory>();
@@ -90,7 +100,12 @@ public static class CommunicationServices
 
     private static void AddMockedServerServices(this IServiceCollection services)
     {
+        services.AddScoped<ServerLogModel>();
+        services.AddScoped<IMessengerRegistration>(sp => sp.GetRequiredService<ServerLogModel>());
+        services.AddScoped<ServerLogViewModel>();
+
         services.AddScoped<MockDataService>();
+        services.AddScoped<IInitializeAsync>(sp => sp.GetRequiredService<MockDataService>());
 
         services.AddSingleton<Presentation.Models.Mock.DebugWindow>();
 
@@ -239,6 +254,7 @@ public static class CommunicationServices
                 .From(ResolvingServices.Client)
                 .To(ResolvingServices.Server)
                 .BuildAddress()));
+
         services.AddScoped<INoteTypeRequestSender>(sp =>
             new NoteTypeRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
                 .From(ResolvingServices.Client)
