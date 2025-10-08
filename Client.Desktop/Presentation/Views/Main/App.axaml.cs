@@ -5,6 +5,7 @@ using Avalonia.Markup.Xaml;
 using Client.Desktop.Lifecycle.Shutdown;
 using Client.Desktop.Lifecycle.Startup.Scheduler;
 using Client.Desktop.Presentation.Views.Mock;
+using Client.Desktop.Services.Mock;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Client.Desktop.Presentation.Views.Main;
@@ -16,10 +17,14 @@ public class App(IServiceProvider serviceProvider) : Application
         var contentWrapper = serviceProvider.GetRequiredService<ContentWrapper>();
         contentWrapper.WindowState = WindowState.Maximized;
         contentWrapper.Show();
-
-        var debugWindow = serviceProvider.GetRequiredService<DataCompositeControl>();
-        debugWindow.Show();
-
+        
+        var mockSettingsService = serviceProvider.GetRequiredService<IMockSettingsService>();
+        if (mockSettingsService.IsMockingModeActive)
+        {
+            var debugWindow = serviceProvider.GetRequiredService<DataCompositeControl>();
+            debugWindow.Show();
+        }
+        
         _ = serviceProvider.GetRequiredService<IStartupScheduler>().Execute();
 
         base.OnFrameworkInitializationCompleted();

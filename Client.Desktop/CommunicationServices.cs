@@ -27,10 +27,12 @@ using Client.Desktop.Communication.Requests.Replays;
 using Client.Desktop.Communication.Requests.StatisticsData;
 using Client.Desktop.Communication.Requests.TimeSlots;
 using Client.Desktop.Communication.Requests.WorkDays;
+using Client.Desktop.FileSystem;
 using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
 using Client.Desktop.Presentation.Models.Mock;
 using Client.Desktop.Presentation.Views.Mock;
+using Client.Desktop.Services.Mock;
 using Global.Settings.UrlResolver;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
@@ -54,6 +56,15 @@ public static class CommunicationServices
     {
         AddPolicyServices(services);
         services.AddSingleton<IStreamLifeCycleHandler, StreamLifeCycleHandler>();
+
+        services.AddScoped<IMockSettingsService>(sp => new MockSettingsService(
+            sp.GetRequiredService<IFileSystemWriter>(),
+            sp.GetRequiredService<IFileSystemReader>(),
+            sp.GetRequiredService<IFileSystemWrapper>()
+        )
+        {
+            IsMockingModeActive = isMock
+        });
 
         if (isMock)
         {
@@ -120,7 +131,7 @@ public static class CommunicationServices
         services.AddScoped<INoteCommandSender>(sp => sp.GetRequiredService<MockNoteCommandSender>());
         services.AddScoped<ILocalNoteNotificationPublisher>(sp => sp.GetRequiredService<MockNoteCommandSender>());
         services.AddScoped<IStreamClient>(sp => sp.GetRequiredService<MockNoteCommandSender>());
-        
+
         services.AddScoped<MockTimerSettingsCommandSender>();
         services.AddScoped<ITimerSettingsCommandSender>(sp => sp.GetRequiredService<MockTimerSettingsCommandSender>());
         services.AddScoped<ILocalTimerSettingsNotificationPublisher>(sp =>
@@ -146,25 +157,25 @@ public static class CommunicationServices
         services.AddScoped<IWorkDayCommandSender>(sp => sp.GetRequiredService<MockWorkDayCommandSender>());
         services.AddScoped<ILocalWorkDayNotificationPublisher>(sp => sp.GetRequiredService<MockWorkDayCommandSender>());
         services.AddScoped<IStreamClient>(sp => sp.GetRequiredService<MockWorkDayCommandSender>());
-        
+
         services.AddScoped<INoteTypeCommandSender>(sp => sp.GetRequiredService<ServerNoteTypeDataModel>());
         services.AddScoped<ILocalNoteTypeNotificationPublisher>(sp => sp.GetRequiredService<ServerNoteTypeDataModel>());
         services.AddScoped<IStreamClient>(sp => sp.GetRequiredService<ServerNoteTypeDataModel>());
         services.AddScoped<INoteTypeRequestSender>(sp => sp.GetRequiredService<ServerNoteTypeDataModel>());
         services.AddScoped<IInitializeAsync>(sp => sp.GetRequiredService<ServerNoteTypeDataModel>());
-        
+
         services.AddScoped<ITagCommandSender>(sp => sp.GetRequiredService<ServerTagDataModel>());
         services.AddScoped<ILocalTagNotificationPublisher>(sp => sp.GetRequiredService<ServerTagDataModel>());
         services.AddScoped<IStreamClient>(sp => sp.GetRequiredService<ServerTagDataModel>());
         services.AddScoped<ITagRequestSender>(sp => sp.GetRequiredService<ServerTagDataModel>());
         services.AddScoped<IInitializeAsync>(sp => sp.GetRequiredService<ServerTagDataModel>());
-        
+
         services.AddScoped<ITicketCommandSender>(sp => sp.GetRequiredService<ServerTicketDataModel>());
         services.AddScoped<ILocalTicketNotificationPublisher>(sp => sp.GetRequiredService<ServerTicketDataModel>());
         services.AddScoped<IStreamClient>(sp => sp.GetRequiredService<ServerTicketDataModel>());
         services.AddScoped<ITicketRequestSender>(sp => sp.GetRequiredService<ServerTicketDataModel>());
         services.AddScoped<IInitializeAsync>(sp => sp.GetRequiredService<ServerTicketDataModel>());
-        
+
         services.AddScoped<ISprintCommandSender>(sp => sp.GetRequiredService<ServerSprintDataModel>());
         services.AddScoped<ILocalSprintNotificationPublisher>(sp => sp.GetRequiredService<ServerSprintDataModel>());
         services.AddScoped<IStreamClient>(sp => sp.GetRequiredService<ServerSprintDataModel>());
