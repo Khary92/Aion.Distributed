@@ -96,7 +96,7 @@ public static class ServiceExtensions
 
     private static void AddViews(this IServiceCollection services)
     {
-        services.AddSingleton<ContentWrapper>();
+        services.AddSingleton<MainWindow>();
         services.AddSingleton<SettingsCompositeControl>();
         services.AddSingleton<TrackingWrapperControl>();
         services.AddSingleton<DocumentationControl>();
@@ -115,7 +115,7 @@ public static class ServiceExtensions
         services.AddSingleton<AnalysisBySprintViewModel>();
 
         services.AddSingleton<AnalysisControlWrapperViewModel>();
-        services.AddSingleton<ContentWrapperViewModel>();
+        services.AddSingleton<MainWindowViewModel>();
         services.AddSingleton<SettingsCompositeViewModel>();
 
         services.AddSingleton<WorkDaysViewModel>();

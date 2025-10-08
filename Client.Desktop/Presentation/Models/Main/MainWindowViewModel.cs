@@ -11,7 +11,7 @@ using Unit = System.Reactive.Unit;
 
 namespace Client.Desktop.Presentation.Models.Main;
 
-public class ContentWrapperViewModel : ReactiveObject
+public class MainWindowViewModel : ReactiveObject
 {
     private const int ZeroConstant = 0;
     private const int MenuTransitionDelay = 250;
@@ -23,7 +23,7 @@ public class ContentWrapperViewModel : ReactiveObject
 
     private int _menuWidth;
 
-    public ContentWrapperViewModel(SettingsCompositeControl settingsCompositeControl,
+    public MainWindowViewModel(SettingsCompositeControl settingsCompositeControl,
         TrackingWrapperControl timeTrackingControl, ExportControl exportControl,
         AnalysisControlWrapper analysisControlWrapper, DocumentationControl documentationControl)
     {

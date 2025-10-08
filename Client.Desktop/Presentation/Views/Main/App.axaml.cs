@@ -14,7 +14,7 @@ public class App(IServiceProvider serviceProvider) : Application
 {
     public override void OnFrameworkInitializationCompleted()
     {
-        var contentWrapper = serviceProvider.GetRequiredService<ContentWrapper>();
+        var contentWrapper = serviceProvider.GetRequiredService<MainWindow>();
         contentWrapper.WindowState = WindowState.Maximized;
         contentWrapper.Show();
         
@@ -37,7 +37,7 @@ public class App(IServiceProvider serviceProvider) : Application
 
     private void TrayIconMaximize_OnClick(object? sender, EventArgs e)
     {
-        var contentWrapper = serviceProvider.GetRequiredService<ContentWrapper>();
+        var contentWrapper = serviceProvider.GetRequiredService<MainWindow>();
         contentWrapper.Show();
         contentWrapper.WindowState = WindowState.Maximized;
     }

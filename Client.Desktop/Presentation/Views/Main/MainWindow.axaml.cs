@@ -13,19 +13,19 @@ using MsBox.Avalonia.Enums;
 
 namespace Client.Desktop.Presentation.Views.Main;
 
-public partial class ContentWrapper : Window
+public partial class MainWindow : Window
 {
     private readonly IHost _host;
     private readonly IShutDownHandler _shutDownHandler;
 
-    public ContentWrapper()
+    public MainWindow()
     {
         InitializeComponent();
         _shutDownHandler = null!;
         _host = null!;
     }
 
-    public ContentWrapper(ContentWrapperViewModel viewModel, IShutDownHandler shutDownHandler, IHost host)
+    public MainWindow(MainWindowViewModel viewModel, IShutDownHandler shutDownHandler, IHost host)
     {
         _shutDownHandler = shutDownHandler;
         _host = host;
