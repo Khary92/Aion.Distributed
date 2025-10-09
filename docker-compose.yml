@@ -51,7 +51,7 @@ services:
     restart: unless-stopped
 
   postgres:
-    image: postgres:latest
+    image: postgres:16.4
     environment:
       - POSTGRES_DB=aion
       - POSTGRES_USER=aionuser
