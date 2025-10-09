@@ -13,9 +13,6 @@ namespace Client.Desktop.Communication.Mock;
 public class MockDataService(IMockSeederFactory mockSeederFactory, IMockSeedSetupService setupService)
     : IInitializeAsync
 {
-
-
-
     public bool IsTimerSettingsExisting => true;
 
     public TimerSettingsClientModel TimerSettings => new(Guid.NewGuid(), 30, 30);
@@ -45,7 +42,7 @@ public class MockDataService(IMockSeederFactory mockSeederFactory, IMockSeedSetu
     public async Task InitializeAsync()
     {
         var mockSeeder = mockSeederFactory.Create(await setupService.ReadSetupFromFile());
-        
+
         StatisticsData = mockSeeder.StatisticsData;
         TimeSlots = mockSeeder.TimeSlots;
         Tickets = mockSeeder.Tickets;

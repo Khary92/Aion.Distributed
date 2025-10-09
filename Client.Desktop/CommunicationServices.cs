@@ -102,10 +102,14 @@ public static class CommunicationServices
     {
         services.AddScoped<MockSeedSetupService>();
         services.AddScoped<IMockSeedSetupService>(sp => sp.GetRequiredService<MockSeedSetupService>());
-        
+
         services.AddScoped<ServerLogModel>();
         services.AddScoped<IMessengerRegistration>(sp => sp.GetRequiredService<ServerLogModel>());
         services.AddScoped<ServerLogViewModel>();
+
+        services.AddScoped<ServerSeedSettingsModel>();
+        services.AddScoped<IInitializeAsync>(sp => sp.GetRequiredService<ServerSeedSettingsModel>());
+        services.AddScoped<ServerSeedSettingsViewModel>();
 
         services.AddScoped<MockDataService>();
         services.AddScoped<IInitializeAsync>(sp => sp.GetRequiredService<MockDataService>());

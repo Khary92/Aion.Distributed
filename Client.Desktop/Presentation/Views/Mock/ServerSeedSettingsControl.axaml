@@ -1,0 +1,80 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:mockSetup="clr-namespace:Client.Desktop.Presentation.Models.Mock"
+             x:DataType="mockSetup:ServerSeedSettingsViewModel"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="Client.Desktop.Presentation.Views.Mock.ServerSeedSettingsControl">
+
+    <ScrollViewer>
+        <StackPanel Margin="20" Spacing="10">
+            <TextBlock Text="Server Seed Settings" FontSize="20" FontWeight="Bold" Margin="0,0,0,10" />
+
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <TextBlock Text="Work Days:" Width="180" />
+                <TextBox Text="{Binding Model.WorkDayCount, Mode=TwoWay}" Width="100" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <TextBlock Text="Tracking Slots:" Width="180" />
+                <TextBox Text="{Binding Model.TrackingSlotsCount, Mode=TwoWay}" Width="100" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <TextBlock Text="Sprints:" Width="180" />
+                <TextBox Text="{Binding Model.SprintCount, Mode=TwoWay}" Width="100" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <TextBlock Text="Tickets:" Width="180" />
+                <TextBox Text="{Binding Model.TicketCount, Mode=TwoWay}" Width="100" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <TextBlock Text="Tags:" Width="180" />
+                <TextBox Text="{Binding Model.TagCount, Mode=TwoWay}" Width="100" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <TextBlock Text="Notes:" Width="180" />
+                <TextBox Text="{Binding Model.NoteCount, Mode=TwoWay}" Width="100" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <TextBlock Text="Note Types:" Width="180" />
+                <TextBox Text="{Binding Model.NoteTypeCount, Mode=TwoWay}" Width="100" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <TextBlock Text="Replay Docs:" Width="180" />
+                <TextBox Text="{Binding Model.AmountOfReplayDocumentation, Mode=TwoWay}" Width="100" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <TextBlock Text="Min Notes/Slot:" Width="180" />
+                <TextBox Text="{Binding Model.MinimumAmountOfNotesPerTimeSlot, Mode=TwoWay}" Width="100" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <TextBlock Text="Max Notes/Slot:" Width="180" />
+                <TextBox Text="{Binding Model.MaximumAmountOfNotesPerTimeSlot, Mode=TwoWay}" Width="100" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <TextBlock Text="Min Checked Tags/Slot:" Width="180" />
+                <TextBox Text="{Binding Model.MinimumAmountOfCheckedTagsPerTimeSlot, Mode=TwoWay}" Width="100" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="10">
+                <TextBlock Text="Max Checked Tags/Slot:" Width="180" />
+                <TextBox Text="{Binding Model.MaximumAmountOfCheckedTagsPerTimeSlot, Mode=TwoWay}" Width="100" />
+            </StackPanel>
+
+            <StackPanel Orientation="Horizontal" Spacing="20" Margin="0,20,0,0">
+                <Button Content="Save" Command="{Binding SaveSetupCommand}" Width="120" />
+                <Button Content="Reseed" Command="{Binding ReseedCommand}" Width="120" />
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

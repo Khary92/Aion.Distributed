@@ -48,7 +48,12 @@
                 DataContext="{Binding ServerLogViewModel}" />
         </TabItem>
         <TabItem Header="Server Settings" />
-        <TabItem Header="Seed Settings" />
+        <TabItem Header="Seed Settings">
+            <mock:ServerSeedSettingsControl
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                DataContext="{Binding ServerSeedSettingsViewModel}" />
+        </TabItem>
     </TabControl>
 
 </Window>

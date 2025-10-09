@@ -17,7 +17,7 @@ public class MockSeedSetupService(
     private const int WorkDayCount = 1;
     private const int TrackingSlotsCount = 12;
     private const int SprintCount = 2;
-    private const int TicketCount = 100;
+    private const int TicketCount = 10;
     private const int TagCount = 7;
     private const int NoteCount = 30;
     private const int NoteTypeCount = 3;
@@ -30,15 +30,13 @@ public class MockSeedSetupService(
     public async Task<MockSetup> ReadSetupFromFile()
     {
         if (fileSystemWrapper.IsFileExisting(SettingsFileName))
-        {
             return await fileSystemReader.GetObject<MockSetup>(SettingsFileName);
-        }
 
         var mockSetup = new MockSetup(WorkDayCount, TrackingSlotsCount, SprintCount, TicketCount, TagCount, NoteCount,
             NoteTypeCount, AmountOfReplayDocumentation,
             new MockRanges(MinimumAmountOfNotesPerTimeSlot, MaximumAmountOfNotesPerTimeSlot),
             new MockRanges(MinimumAmountOfCheckedTagsPerTimeSlot, MaximumAmountOfCheckedTagsPerTimeSlot));
-        
+
         await SaveSettings(mockSetup);
         return mockSetup;
     }
