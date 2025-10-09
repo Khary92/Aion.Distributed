@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Client.Desktop.FileSystem.Serializer;
 
-public class JsonReader(IDeserializer deserializer) : IFileSystemReader
+public class JsonReader(ISerializationService serializationService) : IFileSystemReader
 {
     public async Task<T> GetObject<T>(string filePath)
     {
@@ -12,7 +12,7 @@ public class JsonReader(IDeserializer deserializer) : IFileSystemReader
         {
             using var reader = new StreamReader(filePath);
             var jsonText = await reader.ReadToEndAsync();
-            return deserializer.Deserialize<T>(jsonText);
+            return serializationService.Deserialize<T>(jsonText);
         }
         catch (Exception e)
         {

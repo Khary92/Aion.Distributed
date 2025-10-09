@@ -2,28 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Client.Desktop.Communication.Mock.DataProvider;
 using Client.Desktop.Communication.Requests.Client.Records;
 using Client.Desktop.DataModels;
 using Client.Desktop.DataModels.Decorators.Replays;
 using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
+using Client.Desktop.Services.Mock;
 
 namespace Client.Desktop.Communication.Mock;
 
-public class MockDataService(IMockSeederFactory mockSeederFactory) : IInitializeAsync
+public class MockDataService(IMockSeederFactory mockSeederFactory, IMockSeedSetupService setupService)
+    : IInitializeAsync
 {
-    private const int WorkDayCount = 1;
-    private const int TrackingSlotsCount = 12;
-    private const int SprintCount = 2;
-    private const int TicketCount = 4;
-    private const int TagCount = 7;
-    private const int NoteCount = 30;
-    private const int NoteTypeCount = 3;
-    private const int AmountOfReplayDocumentation = 5;
-    private const int MinimumAmountOfNotesPerTimeSlot = 3;
-    private const int MaximumAmountOfNotesPerTimeSlot = 7;
-    private const int MinimumAmountOfCheckedTagsPerTimeSlot = 2;
-    private const int MaximumAmountOfCheckedTagsPerTimeSlot = 7;
+
 
 
     public bool IsTimerSettingsExisting => true;
@@ -52,14 +42,10 @@ public class MockDataService(IMockSeederFactory mockSeederFactory) : IInitialize
 
     public InitializationType Type => InitializationType.MockServices;
 
-    public Task InitializeAsync()
+    public async Task InitializeAsync()
     {
-        var mockSeeder = mockSeederFactory.Create(new MockSetup(WorkDayCount, TrackingSlotsCount, SprintCount,
-            TicketCount, TagCount,
-            NoteCount, NoteTypeCount, AmountOfReplayDocumentation,
-            new MockRanges(MinimumAmountOfNotesPerTimeSlot, MaximumAmountOfNotesPerTimeSlot),
-            new MockRanges(MinimumAmountOfCheckedTagsPerTimeSlot, MaximumAmountOfCheckedTagsPerTimeSlot)));
-
+        var mockSeeder = mockSeederFactory.Create(await setupService.ReadSetupFromFile());
+        
         StatisticsData = mockSeeder.StatisticsData;
         TimeSlots = mockSeeder.TimeSlots;
         Tickets = mockSeeder.Tickets;
@@ -69,7 +55,6 @@ public class MockDataService(IMockSeederFactory mockSeederFactory) : IInitialize
         Sprints = mockSeeder.Sprints;
         Tags = mockSeeder.Tags;
         DocumentationReplays = mockSeeder.DocumentationReplays;
-        return Task.CompletedTask;
     }
 
     public List<ClientGetTrackingControlResponse> GetInitialClientGetTrackingControlResponses()

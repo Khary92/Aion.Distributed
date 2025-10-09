@@ -100,6 +100,9 @@ public static class CommunicationServices
 
     private static void AddMockedServerServices(this IServiceCollection services)
     {
+        services.AddScoped<MockSeedSetupService>();
+        services.AddScoped<IMockSeedSetupService>(sp => sp.GetRequiredService<MockSeedSetupService>());
+        
         services.AddScoped<ServerLogModel>();
         services.AddScoped<IMessengerRegistration>(sp => sp.GetRequiredService<ServerLogModel>());
         services.AddScoped<ServerLogViewModel>();

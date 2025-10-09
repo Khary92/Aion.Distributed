@@ -83,7 +83,7 @@ public static class ServiceExtensions
 
     private static void AddFileSystemServices(this IServiceCollection services)
     {
-        services.AddSingleton<IDeserializer, Deserializer>();
+        services.AddSingleton<ISerializationService, SerializationService>();
         services.AddSingleton<IFileSystemReader, JsonReader>();
         services.AddSingleton<IFileSystemWriter, FileSystemWriter>();
         services.AddSingleton<IFileSystemWrapper, FileSystemWrapper>();
