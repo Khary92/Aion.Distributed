@@ -45,18 +45,11 @@ public class AsyncInitializeTask(
 
     public async Task Execute()
     {
-        try
-        {
-            ValidateInitializationComponents();
+        ValidateInitializationComponents();
 
-            foreach (var type in GetOrder())
-            {
-                await InitializeComponentsOfType(type);
-            }
-        }
-        catch (Exception ex)
+        foreach (var type in GetOrder())
         {
-            throw new InitializationException("Failed to initialize services", ex);
+            await InitializeComponentsOfType(type);
         }
     }
 
@@ -68,7 +61,7 @@ public class AsyncInitializeTask(
             throw new ConstraintException(
                 $"Missing initialization components for types: {string.Join(", ", missingTypes)}");
 
-        var unexpectedTypes = LoadingStrategy.Keys.Except(_order).ToList();
+        var unexpectedTypes = LoadingStrategy.Keys.Except(GetOrder()).ToList();
         if (unexpectedTypes.Any())
             throw new ConstraintException(
                 $"Unexpected initialization component types found: {string.Join(", ", unexpectedTypes)}");
