@@ -4,15 +4,25 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Client.Desktop.Lifecycle.Startup.Scheduler;
+using Client.Desktop.Services.Mock;
 
 namespace Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 
-public class AsyncInitializeTask(IEnumerable<IInitializeAsync> initializeComponents) : IStartupTask
+public class AsyncInitializeTask(
+    IEnumerable<IInitializeAsync> initializeComponents,
+    IMockSettingsService mockSettingsService) : IStartupTask
 {
-    private readonly List<InitializationType> _order =
+    private readonly List<InitializationType> _mockedOrder =
     [
         InitializationType.MockServices,
         InitializationType.MockModels,
+        InitializationType.Model,
+        InitializationType.Service,
+        InitializationType.ViewModel
+    ];
+
+    private readonly List<InitializationType> _order =
+    [
         InitializationType.Model,
         InitializationType.Service,
         InitializationType.ViewModel
@@ -28,13 +38,21 @@ public class AsyncInitializeTask(IEnumerable<IInitializeAsync> initializeCompone
 
     public StartupTask StartupTask => StartupTask.AsyncInitialize;
 
+    private List<InitializationType> GetOrder()
+    {
+        return mockSettingsService.IsMockingModeActive ? _mockedOrder : _order;
+    }
+
     public async Task Execute()
     {
         try
         {
             ValidateInitializationComponents();
 
-            foreach (var type in _order) await InitializeComponentsOfType(type);
+            foreach (var type in GetOrder())
+            {
+                await InitializeComponentsOfType(type);
+            }
         }
         catch (Exception ex)
         {
@@ -44,7 +62,8 @@ public class AsyncInitializeTask(IEnumerable<IInitializeAsync> initializeCompone
 
     private void ValidateInitializationComponents()
     {
-        var missingTypes = _order.Except(LoadingStrategy.Keys).ToList();
+        var missingTypes = GetOrder().Except(LoadingStrategy.Keys).ToList();
+
         if (missingTypes.Any())
             throw new ConstraintException(
                 $"Missing initialization components for types: {string.Join(", ", missingTypes)}");
