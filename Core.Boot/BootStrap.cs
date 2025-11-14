@@ -29,10 +29,11 @@ public static class BootStrap
         builder.Services.AddCoreServices();
         builder.Services.AddInfrastructureServices();
         builder.Services.AddTracingServices();
-
+        
         builder.Services.AddDataProtection()
-            .PersistKeysToFileSystem(new DirectoryInfo("/app/.aspnet/DataProtection-Keys"));
-
+            .PersistKeysToFileSystem(new DirectoryInfo("/app/DataProtection-Keys"))
+            .SetApplicationName("AionDistributed");
+        
         SetupKestrel(builder);
 
         builder.Logging.AddConsole();

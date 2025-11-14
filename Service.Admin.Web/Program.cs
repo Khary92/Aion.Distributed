@@ -47,6 +47,9 @@ builder.WebHost.ConfigureKestrel(options =>
 
 builder.Logging.AddConsole();
 
+builder.Services.AddDataProtection()
+    .PersistKeysToFileSystem(new DirectoryInfo("/app/DataProtection-Keys"))
+    .SetApplicationName("AionDistributed");
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())

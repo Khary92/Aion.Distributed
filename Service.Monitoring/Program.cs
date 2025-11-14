@@ -1,6 +1,7 @@
 using Global.Settings;
 using Global.Settings.Types;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
@@ -41,7 +42,10 @@ public abstract class Program
                 listenOptions.Protocols = HttpProtocols.Http2;
             });
         });
-
+        builder.Services.AddDataProtection()
+            .PersistKeysToFileSystem(new DirectoryInfo("/app/DataProtection-Keys"))
+            .SetApplicationName("AionDistributed");
+        
         var app = builder.Build();
         app.UseRouting();
         app.AddEndPoints();
