@@ -2,16 +2,17 @@
 FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
 
 ARG APP_UID=1000
-ENV APP_UID=$APP_UID
+ARG APP_GID=1000
 
-# Benutzer anlegen
-RUN adduser --disabled-password --gecos "" --uid $APP_UID appuser
+RUN groupadd -g $APP_GID appgroup \
+ && adduser --disabled-password --gecos "" --uid $APP_UID --gid $APP_GID appuser
 
-# Verzeichnis vorbereiten mit korrekten Rechten
-RUN mkdir -p /app/DataProtection-Keys && chown -R $APP_UID /app/DataProtection-Keys
+RUN mkdir -p /app/DataProtection-Keys \
+ && chown -R $APP_UID:$APP_GID /app/DataProtection-Keys
 
-USER $APP_UID
+USER appuser
 WORKDIR /app
+
 
 # STAGE: Build
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build

@@ -7,4 +7,5 @@ public interface IMockSeedSetupService
 {
     Task<MockSetup> ReadSetupFromFile();
     Task SaveSettings(MockSetup changedSettings);
+    bool IsClearSetup { get; set; }
 }

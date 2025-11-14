@@ -47,7 +47,6 @@
                 VerticalAlignment="Stretch"
                 DataContext="{Binding ServerLogViewModel}" />
         </TabItem>
-        <TabItem Header="Server Settings" />
         <TabItem Header="Seed Settings">
             <mock:ServerSeedSettingsControl
                 HorizontalAlignment="Stretch"

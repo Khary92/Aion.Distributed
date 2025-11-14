@@ -29,6 +29,9 @@ public class MockSeedSetupService(
 
     public async Task<MockSetup> ReadSetupFromFile()
     {
+        if (IsClearSetup)
+            return new MockSetup(1, 0, 0, 0, 0, 0, 0, 0, new MockRanges(0, 0), new MockRanges(0, 0));
+
         if (fileSystemWrapper.IsFileExisting(SettingsFileName))
             return await fileSystemReader.GetObject<MockSetup>(SettingsFileName);
 
@@ -45,4 +48,6 @@ public class MockSeedSetupService(
     {
         await fileSystemWriter.Write(serializationService.Serialize(changedSettings), SettingsFileName);
     }
+
+    public bool IsClearSetup { get; set; }
 }

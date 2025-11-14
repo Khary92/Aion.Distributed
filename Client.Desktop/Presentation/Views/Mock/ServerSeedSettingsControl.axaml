@@ -8,73 +8,83 @@
              x:Class="Client.Desktop.Presentation.Views.Mock.ServerSeedSettingsControl">
 
     <ScrollViewer>
-        <StackPanel Margin="20" Spacing="10">
+        <Grid ColumnDefinitions="*,*" Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
             <TextBlock Text="Server Seed Settings" FontSize="20" FontWeight="Bold" Margin="0,0,0,10" />
 
-            <StackPanel Orientation="Horizontal" Spacing="10">
+            <StackPanel Grid.Column="0"  Grid.Row="0" Orientation="Horizontal" Spacing="10">
                 <TextBlock Text="Work Days:" Width="180" />
                 <TextBox Text="{Binding Model.WorkDayCount, Mode=TwoWay}" Width="100" />
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Spacing="10">
+            <StackPanel Grid.Column="0"  Grid.Row="1" Orientation="Horizontal" Spacing="10">
                 <TextBlock Text="Tracking Slots:" Width="180" />
                 <TextBox Text="{Binding Model.TrackingSlotsCount, Mode=TwoWay}" Width="100" />
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Spacing="10">
+            <StackPanel Grid.Column="0" Grid.Row="2" Orientation="Horizontal" Spacing="10">
                 <TextBlock Text="Sprints:" Width="180" />
                 <TextBox Text="{Binding Model.SprintCount, Mode=TwoWay}" Width="100" />
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Spacing="10">
+            <StackPanel Grid.Column="0" Grid.Row="3" Orientation="Horizontal" Spacing="10">
                 <TextBlock Text="Tickets:" Width="180" />
                 <TextBox Text="{Binding Model.TicketCount, Mode=TwoWay}" Width="100" />
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Spacing="10">
+            <StackPanel Grid.Column="0" Grid.Row="4" Orientation="Horizontal" Spacing="10">
                 <TextBlock Text="Tags:" Width="180" />
                 <TextBox Text="{Binding Model.TagCount, Mode=TwoWay}" Width="100" />
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Spacing="10">
+            <StackPanel Grid.Column="0" Grid.Row="5" Orientation="Horizontal" Spacing="10">
                 <TextBlock Text="Notes:" Width="180" />
                 <TextBox Text="{Binding Model.NoteCount, Mode=TwoWay}" Width="100" />
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Spacing="10">
+            <StackPanel Grid.Column="0" Grid.Row="0" Orientation="Horizontal" Spacing="10">
                 <TextBlock Text="Note Types:" Width="180" />
                 <TextBox Text="{Binding Model.NoteTypeCount, Mode=TwoWay}" Width="100" />
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Spacing="10">
+            <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" Spacing="10">
                 <TextBlock Text="Replay Docs:" Width="180" />
                 <TextBox Text="{Binding Model.AmountOfReplayDocumentation, Mode=TwoWay}" Width="100" />
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Spacing="10">
+            <StackPanel Grid.Column="1" Grid.Row="2" Orientation="Horizontal" Spacing="10">
                 <TextBlock Text="Min Notes/Slot:" Width="180" />
                 <TextBox Text="{Binding Model.MinimumAmountOfNotesPerTimeSlot, Mode=TwoWay}" Width="100" />
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Spacing="10">
+            <StackPanel Grid.Column="1" Grid.Row="3" Orientation="Horizontal" Spacing="10">
                 <TextBlock Text="Max Notes/Slot:" Width="180" />
                 <TextBox Text="{Binding Model.MaximumAmountOfNotesPerTimeSlot, Mode=TwoWay}" Width="100" />
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Spacing="10">
+            <StackPanel Grid.Column="1" Grid.Row="4" Orientation="Horizontal" Spacing="10">
                 <TextBlock Text="Min Checked Tags/Slot:" Width="180" />
                 <TextBox Text="{Binding Model.MinimumAmountOfCheckedTagsPerTimeSlot, Mode=TwoWay}" Width="100" />
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Spacing="10">
+            <StackPanel Grid.Column="1" Grid.Row="5" Orientation="Horizontal" Spacing="10">
                 <TextBlock Text="Max Checked Tags/Slot:" Width="180" />
                 <TextBox Text="{Binding Model.MaximumAmountOfCheckedTagsPerTimeSlot, Mode=TwoWay}" Width="100" />
             </StackPanel>
 
-            <StackPanel Orientation="Horizontal" Spacing="20" Margin="0,20,0,0">
+            <StackPanel Grid.Column="0" Grid.Row="6" Orientation="Horizontal" Spacing="20" Margin="0,20,0,0">
                 <Button Content="Save" Command="{Binding SaveSetupCommand}" Width="120" />
                 <Button Content="Reseed" Command="{Binding ReseedCommand}" Width="120" />
+                <Button Content="Clear" Command="{Binding ClearCommand}" Width="120" />
             </StackPanel>
-        </StackPanel>
+        </Grid>
     </ScrollViewer>
 </UserControl>
