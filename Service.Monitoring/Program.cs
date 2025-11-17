@@ -42,9 +42,10 @@ public abstract class Program
                 listenOptions.Protocols = HttpProtocols.Http2;
             });
         });
+        
         builder.Services.AddDataProtection()
             .PersistKeysToFileSystem(new DirectoryInfo("/app/DataProtection-Keys"))
-            .SetApplicationName("AionDistributed");
+            .SetApplicationName("Aion");
         
         var app = builder.Build();
         app.UseRouting();

@@ -49,7 +49,8 @@ builder.Logging.AddConsole();
 
 builder.Services.AddDataProtection()
     .PersistKeysToFileSystem(new DirectoryInfo("/app/DataProtection-Keys"))
-    .SetApplicationName("AionDistributed");
+    .SetApplicationName("Aion");
+
 var app = builder.Build();
 
 if (!app.Environment.IsDevelopment())

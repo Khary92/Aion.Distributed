@@ -15,7 +15,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./Certificates:/app/certs:ro
-      - data_protection_keys:/app/DataProtection-Keys:rw
+      - ./DataProtection-Keys:/app/DataProtection-Keys:rw
 
   monitoring-service:
     build:
@@ -28,7 +28,7 @@ services:
       - TZ=Europe/Berlin
     volumes:
       - ./Certificates:/app/certs:ro
-      - data_protection_keys:/app/DataProtection-Keys:rw
+      - ./DataProtection-Keys:/app/DataProtection-Keys:rw
     depends_on:
       - core-service
     restart: unless-stopped
@@ -44,7 +44,7 @@ services:
       - TZ=Europe/Berlin
     volumes:
       - ./Certificates:/app/certs:ro
-      - data_protection_keys:/app/DataProtection-Keys:rw
+      - ./DataProtection-Keys:/app/DataProtection-Keys:rw
     depends_on:
       - monitoring-service
       - core-service

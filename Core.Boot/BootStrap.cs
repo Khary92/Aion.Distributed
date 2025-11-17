@@ -32,7 +32,7 @@ public static class BootStrap
         
         builder.Services.AddDataProtection()
             .PersistKeysToFileSystem(new DirectoryInfo("/app/DataProtection-Keys"))
-            .SetApplicationName("AionDistributed");
+            .SetApplicationName("Aion");
         
         SetupKestrel(builder);
 
