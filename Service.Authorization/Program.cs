@@ -1,10 +1,12 @@
 // Program.cs
+
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
+using Service.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRouting();
@@ -214,33 +216,36 @@ bool VerifyPkce(string storedChallenge, string? method, string verifier) {
     }
 }
 
-record Client {
-    public string ClientId { get; init; } = default!;
-    public string[] RedirectUris { get; init; } = Array.Empty<string>();
-    public bool RequirePkce { get; init; } = false;
-    public string[] AllowedScopes { get; init; } = Array.Empty<string>();
-}
+namespace Service.Authorization
+{
+    record Client {
+        public string ClientId { get; init; } = default!;
+        public string[] RedirectUris { get; init; } = Array.Empty<string>();
+        public bool RequirePkce { get; init; } = false;
+        public string[] AllowedScopes { get; init; } = Array.Empty<string>();
+    }
 
-record User {
-    public string UserId { get; init; } = default!;
-    public string Password { get; init; } = default!;
-    public string? Name { get; init; }
-}
+    record User {
+        public string UserId { get; init; } = default!;
+        public string Password { get; init; } = default!;
+        public string? Name { get; init; }
+    }
 
-record AuthorizationCode {
-    public string Code { get; init; } = default!;
-    public string ClientId { get; init; } = default!;
-    public string RedirectUri { get; init; } = default!;
-    public string UserId { get; init; } = default!;
-    public string CodeChallenge { get; init; } = default!;
-    public string CodeChallengeMethod { get; init; } = default!;
-    public string[] Scopes { get; init; } = Array.Empty<string>();
-    public DateTime Expiry { get; init; }
-}
+    record AuthorizationCode {
+        public string Code { get; init; } = default!;
+        public string ClientId { get; init; } = default!;
+        public string RedirectUri { get; init; } = default!;
+        public string UserId { get; init; } = default!;
+        public string CodeChallenge { get; init; } = default!;
+        public string CodeChallengeMethod { get; init; } = default!;
+        public string[] Scopes { get; init; } = Array.Empty<string>();
+        public DateTime Expiry { get; init; }
+    }
 
-record RefreshToken {
-    public string Token { get; init; } = default!;
-    public string ClientId { get; init; } = default!;
-    public string UserId { get; init; } = default!;
-    public DateTime Expiry { get; init; }
+    record RefreshToken {
+        public string Token { get; init; } = default!;
+        public string ClientId { get; init; } = default!;
+        public string UserId { get; init; } = default!;
+        public DateTime Expiry { get; init; }
+    }
 }

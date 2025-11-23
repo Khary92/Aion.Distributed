@@ -9,7 +9,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Global.Settings\Global.Settings.csproj"/>
+        <ProjectReference Include="..\Service.Global.Settings\Service.Global.Settings.csproj" />
         <ProjectReference Include="..\Service.Admin.Proto\Service.Admin.Proto.csproj"/>
         <ProjectReference Include="..\Service.Monitoring.Shared\Service.Monitoring.Shared.csproj"/>
     </ItemGroup>
