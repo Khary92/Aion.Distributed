@@ -39,7 +39,7 @@ var signingCredentials = new SigningCredentials(rsaKey, SecurityAlgorithms.RsaSh
 string CreateJwt(string subject, IEnumerable<Claim> claims, TimeSpan validFor) {
     var now = DateTime.UtcNow;
     var jwt = new JwtSecurityToken(
-        issuer: "https://localhost:5001",
+        issuer: "http://localhost:5001",
         audience: "api",
         claims: claims,
         notBefore: now,
@@ -185,7 +185,7 @@ app.MapGet("/userinfo", (HttpRequest req) =>
     try {
         var principal = handler.ValidateToken(token, new TokenValidationParameters {
             ValidateIssuer = true,
-            ValidIssuer = "https://localhost:5001",
+            ValidIssuer = "http://localhost:5001",
             ValidateAudience = true,
             ValidAudience = "api",
             IssuerSigningKey = rsaKey,
@@ -199,7 +199,7 @@ app.MapGet("/userinfo", (HttpRequest req) =>
     }
 });
 
-app.Run("https://localhost:5001");
+app.Run("http://localhost:5001");
 
 // ---------- helper types & functions ----------
 bool VerifyPkce(string storedChallenge, string? method, string verifier) {
