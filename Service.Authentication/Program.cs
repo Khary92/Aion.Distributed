@@ -199,7 +199,7 @@ app.MapGet("/userinfo", (HttpRequest req) =>
     }
 });
 
-app.Run("http://localhost:5001");
+app.Run("http://0.0.0.0:5001");
 
 // ---------- helper types & functions ----------
 bool VerifyPkce(string storedChallenge, string? method, string verifier) {

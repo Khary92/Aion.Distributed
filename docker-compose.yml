@@ -5,7 +5,6 @@ services:
       context: .
       dockerfile: ./Service.Authentication/Dockerfile
     expose:
-      - "5002"
       - "5001"
     environment:
       - TZ=Europe/Berlin

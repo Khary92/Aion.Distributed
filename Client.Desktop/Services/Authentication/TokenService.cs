@@ -51,7 +51,7 @@ public class TokenService : ITokenService
             ["login_pass"] = pass
         };
 
-        var uri = "https://localhost:5001/authorize?" +
+        var uri = "https://auth.hiegert.eu/authorize?" +
                   string.Join("&", query.Select(kv => $"{kv.Key}={Uri.EscapeDataString(kv.Value)}"));
 
         var resp = await _client.GetAsync(uri);
