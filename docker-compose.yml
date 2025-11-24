@@ -1,5 +1,16 @@
 ﻿version: '3.8'
 services:
+  authentication-service:
+    build:
+      context: .
+      dockerfile: ./Service.Authentication/Dockerfile
+    expose:
+      - "5002"
+      - "5001"
+    environment:
+      - TZ=Europe/Berlin
+    restart: unless-stopped
+  
   core-service:
     build:
       context: .

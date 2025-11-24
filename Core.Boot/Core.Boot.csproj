@@ -15,11 +15,11 @@
         <ProjectReference Include="..\Core.Domain\Core.Domain.csproj"/>
         <ProjectReference Include="..\Core.Persistence\Core.Persistence.csproj"/>
         <ProjectReference Include="..\Core.Server\Core.Server.csproj"/>
-        <ProjectReference Include="..\Service.Global.Settings\Service.Global.Settings.csproj" />
+        <ProjectReference Include="..\Service.Global.Settings\Service.Global.Settings.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="..\Global.Settings\settings.json">
+        <None Update="..\Service.Global.Settings\settings.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>
