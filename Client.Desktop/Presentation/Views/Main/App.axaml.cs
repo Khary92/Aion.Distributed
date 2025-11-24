@@ -14,9 +14,9 @@ public class App(IServiceProvider serviceProvider) : Application
 {
     public override void OnFrameworkInitializationCompleted()
     {
-        var contentWrapper = serviceProvider.GetRequiredService<MainWindow>();
-        contentWrapper.WindowState = WindowState.Maximized;
-        contentWrapper.Show();
+        var mainWindow = serviceProvider.GetRequiredService<MainWindow>();
+        mainWindow.WindowState = WindowState.Maximized;
+        mainWindow.Show();
 
         var mockSettingsService = serviceProvider.GetRequiredService<IMockSettingsService>();
         if (mockSettingsService.IsMockingModeActive)
@@ -24,7 +24,7 @@ public class App(IServiceProvider serviceProvider) : Application
             var debugWindow = serviceProvider.GetRequiredService<DebugWindow>();
             debugWindow.Show();
         }
-
+        
         _ = serviceProvider.GetRequiredService<IStartupScheduler>().Execute();
 
         base.OnFrameworkInitializationCompleted();

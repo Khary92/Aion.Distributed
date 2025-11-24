@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Avalonia.Controls;
 using Client.Desktop.Presentation.Views.Analysis;
+using Client.Desktop.Presentation.Views.Authentication;
 using Client.Desktop.Presentation.Views.Documentation;
 using Client.Desktop.Presentation.Views.Export;
 using Client.Desktop.Presentation.Views.Setting;
@@ -25,7 +26,8 @@ public class MainWindowViewModel : ReactiveObject
 
     public MainWindowViewModel(SettingsCompositeControl settingsCompositeControl,
         TrackingWrapperControl timeTrackingControl, ExportControl exportControl,
-        AnalysisControlWrapper analysisControlWrapper, DocumentationControl documentationControl)
+        AnalysisControlWrapper analysisControlWrapper, DocumentationControl documentationControl,
+        AuthenticationControl authenticationControl)
     {
         OnSettingsClickCommand = ReactiveCommand.CreateFromTask(async () =>
         {
@@ -69,7 +71,7 @@ public class MainWindowViewModel : ReactiveObject
 
         ToggleSidePanelCommand = ReactiveCommand.Create(ToggleMenu);
 
-        _currentControl = timeTrackingControl;
+        _currentControl = authenticationControl;
     }
 
     public Control CurrentControl

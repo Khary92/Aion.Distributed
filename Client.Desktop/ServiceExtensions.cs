@@ -11,6 +11,7 @@ using Client.Desktop.Lifecycle.Startup.Tasks.Register;
 using Client.Desktop.Lifecycle.Startup.Tasks.UnsentCommands;
 using Client.Desktop.Presentation.Factories;
 using Client.Desktop.Presentation.Models.Analysis;
+using Client.Desktop.Presentation.Models.Authentication;
 using Client.Desktop.Presentation.Models.Documentation;
 using Client.Desktop.Presentation.Models.Export;
 using Client.Desktop.Presentation.Models.Main;
@@ -20,6 +21,7 @@ using Client.Desktop.Presentation.Models.Synchronization;
 using Client.Desktop.Presentation.Models.TimeTracking;
 using Client.Desktop.Presentation.Models.TimeTracking.DynamicControls;
 using Client.Desktop.Presentation.Views.Analysis;
+using Client.Desktop.Presentation.Views.Authentication;
 using Client.Desktop.Presentation.Views.Documentation;
 using Client.Desktop.Presentation.Views.Export;
 using Client.Desktop.Presentation.Views.Main;
@@ -98,6 +100,7 @@ public static class ServiceExtensions
     private static void AddViews(this IServiceCollection services)
     {
         services.AddSingleton<MainWindow>();
+        services.AddSingleton<AuthenticationControl>();
         services.AddSingleton<SettingsCompositeControl>();
         services.AddSingleton<TrackingWrapperControl>();
         services.AddSingleton<DocumentationControl>();
@@ -107,6 +110,8 @@ public static class ServiceExtensions
 
     private static void AddModels(this IServiceCollection services)
     {
+        services.AddTransient<AuthenticationViewModel>();
+        
         services.AddTransient<TypeCheckBoxViewModel>();
         services.AddTransient<TrackingSlotViewModel>();
         services.AddTransient<TrackingSlotModel>();
@@ -114,7 +119,7 @@ public static class ServiceExtensions
         services.AddSingleton<AnalysisByTagViewModel>();
         services.AddSingleton<AnalysisByTicketViewModel>();
         services.AddSingleton<AnalysisBySprintViewModel>();
-
+        
         services.AddSingleton<AnalysisControlWrapperViewModel>();
         services.AddSingleton<MainWindowViewModel>();
         services.AddSingleton<SettingsCompositeViewModel>();

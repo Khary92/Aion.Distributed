@@ -58,8 +58,7 @@ public partial class MainWindow : Window
         });
 
         var result = await messageBoxStandard.ShowAsync();
-
-
+        
         if (result == ButtonResult.Yes &&
             Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopApp)
         {

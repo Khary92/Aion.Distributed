@@ -42,7 +42,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Admin.Web.Test", "S
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Global.Settings", "Service.Global.Settings\Service.Global.Settings.csproj", "{B79371F4-6444-4E1B-B980-233A0DE5CB1C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Authorization", "Service.Authorization\Service.Authorization.csproj", "{66FFF78A-264E-4715-89D1-6387197A1779}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Authentication", "Service.Authentication\Service.Authentication.csproj", "{66FFF78A-264E-4715-89D1-6387197A1779}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
