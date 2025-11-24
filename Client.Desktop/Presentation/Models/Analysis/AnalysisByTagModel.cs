@@ -21,7 +21,7 @@ public class AnalysisByTagModel(
     IRequestSender requestSender,
     ITraceCollector tracer,
     INotificationPublisherFacade notificationPublisher)
-    : ReactiveObject, IInitializeAsync, IMessengerRegistration
+    : ReactiveObject, IInitializeAsync, IEventRegistration
 {
     private AnalysisByTagDecorator? _analysisByTag;
 

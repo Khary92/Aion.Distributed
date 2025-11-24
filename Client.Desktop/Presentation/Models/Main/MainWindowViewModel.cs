@@ -1,24 +1,29 @@
 using System.Threading.Tasks;
 using Avalonia.Controls;
+using Client.Desktop.Lifecycle.Startup.Tasks.Register;
 using Client.Desktop.Presentation.Views.Analysis;
 using Client.Desktop.Presentation.Views.Authentication;
 using Client.Desktop.Presentation.Views.Documentation;
 using Client.Desktop.Presentation.Views.Export;
 using Client.Desktop.Presentation.Views.Setting;
 using Client.Desktop.Presentation.Views.Tracking;
+using Client.Desktop.Services.Authentication;
 using ReactiveUI;
 using Unit = System.Reactive.Unit;
 
 
 namespace Client.Desktop.Presentation.Models.Main;
 
-public class MainWindowViewModel : ReactiveObject
+public class MainWindowViewModel : ReactiveObject, IEventRegistration
 {
     private const int ZeroConstant = 0;
     private const int MenuTransitionDelay = 250;
     private const int MaxMenuWidth = 200;
 
+    private readonly TrackingWrapperControl _timeTrackingControl;
     private Control _currentControl;
+    private readonly ITokenService _tokenService;
+    private bool _isAuthenticated;
 
     private bool _isMenuOpen;
 
@@ -27,7 +32,7 @@ public class MainWindowViewModel : ReactiveObject
     public MainWindowViewModel(SettingsCompositeControl settingsCompositeControl,
         TrackingWrapperControl timeTrackingControl, ExportControl exportControl,
         AnalysisControlWrapper analysisControlWrapper, DocumentationControl documentationControl,
-        AuthenticationControl authenticationControl)
+        AuthenticationControl authenticationControl, ITokenService tokenService)
     {
         OnSettingsClickCommand = ReactiveCommand.CreateFromTask(async () =>
         {
@@ -71,13 +76,21 @@ public class MainWindowViewModel : ReactiveObject
 
         ToggleSidePanelCommand = ReactiveCommand.Create(ToggleMenu);
 
+        _timeTrackingControl = timeTrackingControl;
         _currentControl = authenticationControl;
+        _tokenService = tokenService;
     }
 
     public Control CurrentControl
     {
         get => _currentControl;
         set => this.RaiseAndSetIfChanged(ref _currentControl, value);
+    }
+
+    public bool IsAuthenticated
+    {
+        get => _isAuthenticated;
+        set => this.RaiseAndSetIfChanged(ref _isAuthenticated, value);
     }
 
     public bool IsMenuOpen
@@ -103,5 +116,28 @@ public class MainWindowViewModel : ReactiveObject
     {
         IsMenuOpen = !IsMenuOpen;
         MenuWidth = IsMenuOpen ? MaxMenuWidth : ZeroConstant;
+    }
+
+    public void RegisterMessenger()
+    {
+        _tokenService.Authenticated += LoggedIn;
+    }
+
+    private Task LoggedIn(string token)
+    {
+        IsAuthenticated = !string.IsNullOrEmpty(token);
+
+        if (!IsAuthenticated)
+        {
+            return Task.CompletedTask;
+        }
+
+        CurrentControl = _timeTrackingControl;
+        return Task.CompletedTask;
+    }
+
+    public void UnregisterMessenger()
+    {
+        _tokenService.Authenticated -= LoggedIn;
     }
 }

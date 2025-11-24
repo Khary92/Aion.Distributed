@@ -20,7 +20,7 @@ using Unit = System.Reactive.Unit;
 
 namespace Client.Desktop.Presentation.Models.TimeTracking.DynamicControls;
 
-public class NoteViewModel : ReactiveObject, IMessengerRegistration, IInitializeAsync
+public class NoteViewModel : ReactiveObject, IEventRegistration, IInitializeAsync
 {
     private readonly ICommandSender _commandSender;
     private readonly INotificationPublisherFacade _notificationPublisher;

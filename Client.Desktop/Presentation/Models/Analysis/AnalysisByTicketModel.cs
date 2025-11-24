@@ -22,7 +22,7 @@ public class AnalysisByTicketModel(
     IRequestSender requestSender,
     ITraceCollector tracer,
     INotificationPublisherFacade notificationPublisher)
-    : ReactiveObject, IInitializeAsync, IMessengerRegistration
+    : ReactiveObject, IInitializeAsync, IEventRegistration
 {
     private const int AmountOfTagsShown = 3;
 

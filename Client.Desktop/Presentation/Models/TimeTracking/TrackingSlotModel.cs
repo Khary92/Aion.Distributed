@@ -18,7 +18,7 @@ public class TrackingSlotModel(
     IPersistentCache<ClientSetEndTimeCommand> endTimeCache,
     ITraceCollector tracer,
     INotificationPublisherFacade notificationPublisher,
-    IClientTimerNotificationPublisher timerNotificationPublisher) : ReactiveObject, IMessengerRegistration
+    IClientTimerNotificationPublisher timerNotificationPublisher) : ReactiveObject, IEventRegistration
 {
     private TicketClientModel _ticket = null!;
     private TimeSlotClientModel _timeSlot = null!;

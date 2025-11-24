@@ -1,6 +1,6 @@
 namespace Client.Desktop.Lifecycle.Startup.Tasks.Register;
 
-public interface IMessengerRegistration
+public interface IEventRegistration
 {
     void RegisterMessenger();
     public void UnregisterMessenger();

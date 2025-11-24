@@ -9,7 +9,7 @@ using ReactiveUI;
 namespace Client.Desktop.Presentation.Models.TimeTracking.DynamicControls;
 
 public class TagCheckBoxViewModel(ITraceCollector tracer, INotificationPublisherFacade notificationPublisher)
-    : ReactiveObject, IMessengerRegistration
+    : ReactiveObject, IEventRegistration
 {
     private bool _isChecked;
     private TagClientModel? _tag;

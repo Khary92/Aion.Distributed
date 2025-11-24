@@ -104,7 +104,7 @@ public static class CommunicationServices
         services.AddScoped<IMockSeedSetupService>(sp => sp.GetRequiredService<MockSeedSetupService>());
 
         services.AddScoped<ServerLogModel>();
-        services.AddScoped<IMessengerRegistration>(sp => sp.GetRequiredService<ServerLogModel>());
+        services.AddScoped<IEventRegistration>(sp => sp.GetRequiredService<ServerLogModel>());
         services.AddScoped<ServerLogViewModel>();
 
         services.AddScoped<ServerSeedSettingsModel>();

@@ -15,7 +15,7 @@ using Timer = System.Timers.Timer;
 namespace Client.Desktop.Services;
 
 public class TimerService(IRequestSender requestSender, INotificationPublisherFacade publisherFacade)
-    : IDisposable, IMessengerRegistration, IInitializeAsync, IClientTimerNotificationPublisher
+    : IDisposable, IEventRegistration, IInitializeAsync, IClientTimerNotificationPublisher
 {
     private readonly Timer _timer = new(1000);
 

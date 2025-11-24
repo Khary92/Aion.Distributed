@@ -32,7 +32,7 @@ public class TimeTrackingModel(
     ITrackingSlotViewModelFactory trackingSlotViewModelFactory,
     ILocalSettingsService localSettingsService,
     ITraceCollector tracer,
-    INotificationPublisherFacade notificationFacade) : ReactiveObject, IInitializeAsync, IMessengerRegistration
+    INotificationPublisherFacade notificationFacade) : ReactiveObject, IInitializeAsync, IEventRegistration
 
 {
     private int _currentViewModelIndex;

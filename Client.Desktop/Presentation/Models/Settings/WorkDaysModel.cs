@@ -24,7 +24,7 @@ public class WorkDaysModel(
     IRequestSender requestSender,
     ILocalSettingsService localSettingsService,
     ITraceCollector tracer,
-    INotificationPublisherFacade notificationPublisher) : ReactiveObject, IInitializeAsync, IMessengerRegistration,
+    INotificationPublisherFacade notificationPublisher) : ReactiveObject, IInitializeAsync, IEventRegistration,
     IClientWorkDaySelectionChangedNotificationPublisher
 {
     public ObservableCollection<WorkDayClientModel> WorkDays { get; } = [];

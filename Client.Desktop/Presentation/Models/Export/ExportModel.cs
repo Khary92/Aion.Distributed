@@ -23,7 +23,7 @@ public class ExportModel(
     ITraceCollector tracer,
     ILocalSettingsService settingsService,
     INotificationPublisherFacade notificationPublisher)
-    : ReactiveObject, IInitializeAsync, IMessengerRegistration
+    : ReactiveObject, IInitializeAsync, IEventRegistration
 {
     private string _markdownText = string.Empty;
 

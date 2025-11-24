@@ -22,7 +22,7 @@ public class AnalysisBySprintModel(
     IRequestSender requestSender,
     ITraceCollector tracer,
     INotificationPublisherFacade notificationPublisher)
-    : ReactiveObject, IMessengerRegistration, IInitializeAsync
+    : ReactiveObject, IEventRegistration, IInitializeAsync
 {
     private const int AmountOfTagsShown = 3;
 

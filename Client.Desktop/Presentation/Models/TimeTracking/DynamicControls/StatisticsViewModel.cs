@@ -28,7 +28,7 @@ public class StatisticsViewModel(
     ITraceCollector tracer,
     INotificationPublisherFacade notificationPublisher,
     IClientTimerNotificationPublisher clientTimerNotificationPublisher)
-    : ReactiveObject, IInitializeAsync, IMessengerRegistration
+    : ReactiveObject, IInitializeAsync, IEventRegistration
 {
     private ObservableCollection<TagCheckBoxViewModel> _availableTags = [];
     private StatisticsDataClientModel? _statisticsData;

@@ -26,7 +26,7 @@ public class NoteStreamViewModel(
     INoteViewFactory noteViewFactory,
     ILocalSettingsService localSettingsService,
     ITraceCollector tracer)
-    : ReactiveObject, IMessengerRegistration, IInitializeAsync
+    : ReactiveObject, IEventRegistration, IInitializeAsync
 {
     private Guid _ticketId;
     private Guid _timeSlotId;

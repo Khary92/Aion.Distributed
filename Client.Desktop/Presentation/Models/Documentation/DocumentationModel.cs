@@ -29,7 +29,7 @@ public class DocumentationModel(
     ITypeCheckBoxViewModelFactory typeCheckBoxViewModelFactory,
     ITraceCollector tracer,
     INotificationPublisherFacade notificationPublisher)
-    : ReactiveObject, IInitializeAsync, IMessengerRegistration
+    : ReactiveObject, IInitializeAsync, IEventRegistration
 {
     private ObservableCollection<NoteViewModel> _allNotesByTicket = [];
     private ObservableCollection<TypeCheckBoxViewModel> _allNoteTypes = [];
