@@ -37,16 +37,19 @@ public abstract class Program
         {
             options.ListenAnyIP(monitoringSettings.GrpcPort, listenOptions =>
             {
-                if (globalSettings.UseHttps) listenOptions.UseHttps("/app/certs/server.pfx");
+                if (globalSettings.UseHttps)
+                {
+                    listenOptions.UseHttps("/certs/fullchain.pem", "/certs/privkey.pem");
+                }
 
                 listenOptions.Protocols = HttpProtocols.Http2;
             });
         });
-        
+
         builder.Services.AddDataProtection()
             .PersistKeysToFileSystem(new DirectoryInfo("/app/DataProtection-Keys"))
             .SetApplicationName("Aion");
-        
+
         var app = builder.Build();
         app.UseRouting();
         app.AddEndPoints();

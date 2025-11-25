@@ -24,7 +24,7 @@ services:
       - postgres
     restart: unless-stopped
     volumes:
-      - ./Certificates:/app/certs:ro
+      - /var/lib/docker/volumes/npm_npm-ssl/_data/live/npm-9:/certs:ro
       - ./DataProtection-Keys:/app/DataProtection-Keys:rw
 
   monitoring-service:
@@ -37,7 +37,7 @@ services:
       - ASPNETCORE_URLS=http://+:8080
       - TZ=Europe/Berlin
     volumes:
-      - ./Certificates:/app/certs:ro
+      - /var/lib/docker/volumes/npm_npm-ssl/_data/live/npm-9:/certs:ro
       - ./DataProtection-Keys:/app/DataProtection-Keys:rw
     depends_on:
       - core-service
@@ -53,7 +53,7 @@ services:
       - ASPNETCORE_URLS=http://+:8080
       - TZ=Europe/Berlin
     volumes:
-      - ./Certificates:/app/certs:ro
+      - /var/lib/docker/volumes/npm_npm-ssl/_data/live/npm-9:/certs:ro
       - ./DataProtection-Keys:/app/DataProtection-Keys:rw
     depends_on:
       - monitoring-service

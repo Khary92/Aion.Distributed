@@ -35,7 +35,10 @@ builder.WebHost.ConfigureKestrel(options =>
     // Grpc Listener
     options.ListenAnyIP(adminSettings.GrpcPort, listenOptions =>
     {
-        if (globalSettings.UseHttps) listenOptions.UseHttps("/app/certs/server.pfx");
+        if (globalSettings.UseHttps)
+        {
+            listenOptions.UseHttps("/certs/fullchain.pem", "/certs/privkey.pem");
+        }
 
         listenOptions.Protocols = HttpProtocols.Http2;
     });

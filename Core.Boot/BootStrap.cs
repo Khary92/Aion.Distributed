@@ -71,7 +71,7 @@ public static class BootStrap
 
                 if (globalSettings.UseHttps)
                 {
-                    listenOptions.UseHttps("/app/certs/server.pfx");
+                    listenOptions.UseHttps("/certs/fullchain.pem", "/certs/privkey.pem");
                     return;
                 }
 
