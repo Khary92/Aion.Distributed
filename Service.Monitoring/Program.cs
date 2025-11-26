@@ -43,8 +43,8 @@ public abstract class Program
                     listenOptions.UseHttps(httpsOptions =>
                     {
                         var cert = X509Certificate2.CreateFromPemFile(
-                            "/certs/fullchain.pem",
-                            "/certs/privkey.pem"
+                            "/certs/fullchain1.pem",
+                            "/certs/privkey1.pem"
                         );
 
                         httpsOptions.ServerCertificate = cert;
