@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Security.Cryptography.X509Certificates;
+using System.Text.Json;
 using Core.Persistence;
 using Core.Persistence.DbContext;
 using Core.Server;
@@ -71,8 +72,15 @@ public static class BootStrap
 
                 if (globalSettings.UseHttps)
                 {
-                    listenOptions.UseHttps("/certs/fullchain.pem", "/certs/privkey.pem");
-                    return;
+                    listenOptions.UseHttps(httpsOptions =>
+                    {
+                        var cert = X509Certificate2.CreateFromPemFile(
+                            "/certs/fullchain.pem",
+                            "/certs/privkey.pem"
+                        );
+
+                        httpsOptions.ServerCertificate = cert;
+                    });
                 }
 
                 AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);

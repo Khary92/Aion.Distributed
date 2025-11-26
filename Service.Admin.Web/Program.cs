@@ -1,3 +1,4 @@
+using System.Security.Cryptography.X509Certificates;
 using Global.Settings;
 using Global.Settings.Types;
 using Microsoft.AspNetCore.DataProtection;
@@ -37,7 +38,15 @@ builder.WebHost.ConfigureKestrel(options =>
     {
         if (globalSettings.UseHttps)
         {
-            listenOptions.UseHttps("/certs/fullchain.pem", "/certs/privkey.pem");
+            listenOptions.UseHttps(httpsOptions =>
+            {
+                var cert = X509Certificate2.CreateFromPemFile(
+                    "/certs/fullchain.pem",
+                    "/certs/privkey.pem"
+                );
+
+                httpsOptions.ServerCertificate = cert;
+            });
         }
 
         listenOptions.Protocols = HttpProtocols.Http2;
