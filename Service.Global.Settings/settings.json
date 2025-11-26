@@ -4,7 +4,7 @@
   },
   "AdminSettings": {
     "HostName": "admin-web",
-    "GrpcPort": 8081,
+    "GrpcPort": 5001,
     "DockerGrpcPort": 8080,
     "DockerHostName": "localhost",
     "IsRunningInDocker": true,
@@ -13,14 +13,14 @@
   },
   "ServerSettings": {
     "HostName": "core-service",
-    "GrpcPort": 8080,
+    "GrpcPort": 5002,
     "DockerGrpcPort": 8081,
     "DockerHostName": "localhost",
     "IsRunningInDocker": true
   },
   "MonitoringSettings": {
     "HostName": "monitoring-service",
-    "GrpcPort": 8080,
+    "GrpcPort": 5003,
     "DockerGrpcPort": 8082,
     "DockerHostName": "localhost",
     "IsRunningInDocker": true
