@@ -5,7 +5,7 @@ using Client.Desktop.Communication.Notifications.Tag.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
 using Client.Tracing.Tracing.Tracers;
-using Global.Settings.UrlResolver;
+using Global.Settings;
 using Grpc.Core;
 using Grpc.Net.Client;
 using Proto.Notifications.Tag;
@@ -13,7 +13,7 @@ using Proto.Notifications.Tag;
 namespace Client.Desktop.Communication.Notifications.Tag.Receiver;
 
 public class TagNotificationReceiver(
-    IGrpcUrlBuilder grpcUrlBuilder,
+    IGrpcUrlService grpcUrlBuilder,
     ITraceCollector tracer) : ILocalTagNotificationPublisher, IStreamClient
 {
     public event Func<ClientTagUpdatedNotification, Task>? ClientTagUpdatedNotificationReceived;
@@ -45,10 +45,7 @@ public class TagNotificationReceiver(
         while (!cancellationToken.IsCancellationRequested)
             try
             {
-                using var channel = GrpcChannel.ForAddress(grpcUrlBuilder
-                    .From(ResolvingServices.Client)
-                    .To(ResolvingServices.Server)
-                    .BuildAddress());
+                using var channel = GrpcChannel.ForAddress(grpcUrlBuilder.ClientToServerUrl);
 
                 var client = new TagNotificationService.TagNotificationServiceClient(channel);
                 using var call =

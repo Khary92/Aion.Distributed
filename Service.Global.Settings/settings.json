@@ -1,29 +1,22 @@
 ﻿{
   "GlobalSettings": {
-    "UseHttps": true
+    "ExternalHostName": "hiegert.eu"
   },
   "AdminSettings": {
-    "HostName": "admin-web",
-    "GrpcPort": 5001,
-    "DockerGrpcPort": 8080,
-    "DockerHostName": "localhost",
-    "IsRunningInDocker": true,
-    "DockerInternalWebPort": 8080,
+    "InternalHostName": "admin-web",
+    "SecureExternalGrpcPort": 5001,
+    "InternalGrpcPort": 8080,
     "ExposedWebPort": 5000
   },
   "ServerSettings": {
-    "HostName": "core-service",
-    "GrpcPort": 5002,
-    "DockerGrpcPort": 8081,
-    "DockerHostName": "localhost",
-    "IsRunningInDocker": true
+    "InternalHostName": "core-service",
+    "SecureExternalGrpcPort": 5002,
+    "InternalGrpcPort": 8081
   },
   "MonitoringSettings": {
-    "HostName": "monitoring-service",
-    "GrpcPort": 5003,
-    "DockerGrpcPort": 8082,
-    "DockerHostName": "localhost",
-    "IsRunningInDocker": true
+    "InternalHostName": "monitoring-service",
+    "SecureExternalGrpcPort": 5003,
+    "InternalGrpcPort": 8082
   },
   "DatabaseSettings": {
     "ConnectionString": "Host=postgres;Database=aion;Username=aionuser;Password=aionpass"

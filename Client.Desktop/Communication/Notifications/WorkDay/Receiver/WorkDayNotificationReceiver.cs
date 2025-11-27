@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
 using Client.Tracing.Tracing.Tracers;
-using Global.Settings.UrlResolver;
+using Global.Settings;
 using Grpc.Core;
 using Grpc.Net.Client;
 using Proto.Notifications.WorkDay;
@@ -12,7 +12,7 @@ using Proto.Notifications.WorkDay;
 namespace Client.Desktop.Communication.Notifications.WorkDay.Receiver;
 
 public class WorkDayNotificationReceiver(
-    IGrpcUrlBuilder grpcUrlBuilder,
+    IGrpcUrlService grpcUrlBuilder,
     ITraceCollector tracer) : ILocalWorkDayNotificationPublisher, IStreamClient
 {
     public event Func<NewWorkDayMessage, Task>? NewWorkDayMessageReceived;
@@ -33,10 +33,7 @@ public class WorkDayNotificationReceiver(
         while (!cancellationToken.IsCancellationRequested)
             try
             {
-                using var channel = GrpcChannel.ForAddress(grpcUrlBuilder
-                    .From(ResolvingServices.Client)
-                    .To(ResolvingServices.Server)
-                    .BuildAddress());
+                using var channel = GrpcChannel.ForAddress(grpcUrlBuilder.ClientToServerUrl);
 
                 var client = new WorkDayNotificationService.WorkDayNotificationServiceClient(channel);
                 using var call =

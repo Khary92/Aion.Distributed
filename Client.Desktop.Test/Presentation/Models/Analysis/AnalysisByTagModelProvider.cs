@@ -6,7 +6,7 @@ using Client.Desktop.DataModels.Decorators;
 using Client.Desktop.DataModels.Decorators.Entities;
 using Client.Desktop.Presentation.Models.Analysis;
 using Client.Tracing.Tracing.Tracers;
-using Global.Settings.UrlResolver;
+using Global.Settings;
 using Moq;
 
 namespace Client.Desktop.Test.Presentation.Models.Analysis;
@@ -18,9 +18,9 @@ public static class AnalysisByTagModelProvider
         return new TestNotificationPublisherFacade(CreateGrpcUrlBuilderMock().Object, CreateTracerMock().Object);
     }
 
-    private static Mock<IGrpcUrlBuilder> CreateGrpcUrlBuilderMock()
+    private static Mock<IGrpcUrlService> CreateGrpcUrlBuilderMock()
     {
-        return new Mock<IGrpcUrlBuilder>();
+        return new Mock<IGrpcUrlService>();
     }
 
     private static Mock<ITraceCollector> CreateTracerMock()

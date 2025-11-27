@@ -1,6 +1,6 @@
-﻿namespace Global.Settings.Types;
+namespace Global.Settings.Types;
 
 public class GlobalSettings
 {
-    public bool UseHttps { get; set; }
+    public string ExternalHostName { get; set; } = SettingsDefaultValues.String;
 }

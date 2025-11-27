@@ -1,6 +1,4 @@
 ﻿using Global.Settings.Types;
-using Global.Settings.UrlResolver;
-using Global.Settings.UrlResolver.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -92,10 +90,6 @@ public static class ConfigServiceExtensions
 
     private static void AddUrlBuilder(this IServiceCollection services)
     {
-        services.AddSingleton<IGrpcDataProvider, AdminDataProvider>();
-        services.AddSingleton<IGrpcDataProvider, ServerDataProvider>();
-        services.AddSingleton<IGrpcDataProvider, MonitoringDataProvider>();
-
-        services.AddSingleton<IGrpcUrlBuilder, GrpcUrlBuilder>();
+        services.AddSingleton<IGrpcUrlService, GrpcUrlService>();
     }
 }

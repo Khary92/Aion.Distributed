@@ -25,36 +25,39 @@ builder.Services.AddAntiforgery(options =>
     options.Cookie.Name = "DevAntiforgeryDisabled";
 });
 
-var globalSettings = new GlobalSettings();
-builder.Configuration.GetSection("GlobalSettings").Bind(globalSettings);
-
 var adminSettings = new AdminSettings();
 builder.Configuration.GetSection("AdminSettings").Bind(adminSettings);
 
 builder.WebHost.ConfigureKestrel(options =>
 {
-    // Grpc Listener
-    options.ListenAnyIP(adminSettings.GrpcPort, listenOptions =>
+    // Internal Grpc Listener (HTTP/2, no TLS)
+    options.ListenAnyIP(adminSettings.InternalGrpcPort, listenOptions =>
     {
-        if (globalSettings.UseHttps)
-        {
-            listenOptions.UseHttps(httpsOptions =>
-            {
-                var cert = X509Certificate2.CreateFromPemFile(
-                    "/certs/fullchain1.pem",
-                    "/certs/privkey1.pem"
-                );
+        listenOptions.Protocols = HttpProtocols.Http2;
+        AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+    });
 
-                httpsOptions.ServerCertificate = cert;
-            });
-        }
+    // External Secure Grpc Listener (HTTPS)
+    options.ListenAnyIP(adminSettings.SecureExternalGrpcPort, listenOptions =>
+    {
+        listenOptions.UseHttps(httpsOptions =>
+        {
+            var cert = X509Certificate2.CreateFromPemFile(
+                "/certs/fullchain1.pem",
+                "/certs/privkey1.pem"
+            );
+
+            httpsOptions.ServerCertificate = cert;
+        });
 
         listenOptions.Protocols = HttpProtocols.Http2;
     });
 
-    //Web listener
-    options.ListenAnyIP(adminSettings.DockerInternalWebPort,
-        listenOptions => { listenOptions.Protocols = HttpProtocols.Http1AndHttp2; });
+    // Web listener
+    options.ListenAnyIP(adminSettings.ExposedWebPort, listenOptions =>
+    {
+        listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
+    });
 });
 
 builder.Logging.AddConsole();

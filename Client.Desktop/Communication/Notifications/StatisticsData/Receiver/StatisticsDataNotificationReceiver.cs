@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Client.Desktop.Communication.Notifications.StatisticsData.Records;
 using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
 using Client.Tracing.Tracing.Tracers;
-using Global.Settings.UrlResolver;
+using Global.Settings;
 using Grpc.Core;
 using Grpc.Net.Client;
 using Proto.Notifications.StatisticsData;
@@ -13,7 +13,7 @@ using SubscribeRequest = Proto.Notifications.StatisticsData.SubscribeRequest;
 namespace Client.Desktop.Communication.Notifications.StatisticsData.Receiver;
 
 public class StatisticsDataNotificationReceiver(
-    IGrpcUrlBuilder grpcUrlBuilder,
+    IGrpcUrlService grpcUrlBuilder,
     ITraceCollector tracer) : ILocalStatisticsDataNotificationPublisher, IStreamClient
 {
     public event Func<ClientChangeProductivityNotification, Task>? ClientChangeProductivityNotificationReceived;
@@ -44,10 +44,7 @@ public class StatisticsDataNotificationReceiver(
         while (!cancellationToken.IsCancellationRequested)
             try
             {
-                using var channel = GrpcChannel.ForAddress(grpcUrlBuilder
-                    .From(ResolvingServices.Client)
-                    .To(ResolvingServices.Server)
-                    .BuildAddress());
+                using var channel = GrpcChannel.ForAddress(grpcUrlBuilder.ClientToServerUrl);
 
                 var client = new StatisticsDataNotificationService.StatisticsDataNotificationServiceClient(channel);
                 using var call =

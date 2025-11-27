@@ -5,7 +5,7 @@ using Client.Desktop.Communication.Local.LocalEvents.Records;
 using Client.Desktop.Communication.Notifications.Client.Records;
 using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
 using Client.Tracing.Tracing.Tracers;
-using Global.Settings.UrlResolver;
+using Global.Settings;
 using Grpc.Core;
 using Grpc.Net.Client;
 using Proto.Notifications.Client;
@@ -13,7 +13,7 @@ using Proto.Notifications.Client;
 namespace Client.Desktop.Communication.Notifications.Client.Receiver;
 
 public class ClientNotificationReceiver(
-    IGrpcUrlBuilder grpcUrlBuilder,
+    IGrpcUrlService grpcUrlBuilder,
     ITraceCollector tracer) : ILocalClientNotificationPublisher, IStreamClient
 {
     public event Func<ClientSprintSelectionChangedNotification, Task>? ClientSprintSelectionChangedNotificationReceived;
@@ -44,10 +44,7 @@ public class ClientNotificationReceiver(
         while (!cancellationToken.IsCancellationRequested)
             try
             {
-                using var channel = GrpcChannel.ForAddress(grpcUrlBuilder
-                    .From(ResolvingServices.Client)
-                    .To(ResolvingServices.Server)
-                    .BuildAddress());
+                using var channel = GrpcChannel.ForAddress(grpcUrlBuilder.ClientToServerUrl);
 
                 var client = new ClientNotificationService.ClientNotificationServiceClient(channel);
                 using var call =

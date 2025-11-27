@@ -9,11 +9,11 @@ using Client.Desktop.Communication.Notifications.Ticket.Receiver;
 using Client.Desktop.Communication.Notifications.TimerSettings.Receiver;
 using Client.Desktop.Communication.Notifications.WorkDay.Receiver;
 using Client.Tracing.Tracing.Tracers;
-using Global.Settings.UrlResolver;
+using Global.Settings;
 
 namespace Client.Desktop.Test;
 
-public class TestNotificationPublisherFacade(IGrpcUrlBuilder urlBuilder, ITraceCollector traceCollector)
+public class TestNotificationPublisherFacade(IGrpcUrlService urlBuilder, ITraceCollector traceCollector)
     : INotificationPublisherFacade
 {
     public ClientNotificationReceiver Client { get; } = new(urlBuilder, traceCollector);

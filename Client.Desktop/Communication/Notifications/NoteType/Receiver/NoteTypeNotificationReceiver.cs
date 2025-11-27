@@ -5,7 +5,7 @@ using Client.Desktop.Communication.Notifications.NoteType.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
 using Client.Tracing.Tracing.Tracers;
-using Global.Settings.UrlResolver;
+using Global.Settings;
 using Grpc.Core;
 using Grpc.Net.Client;
 using Proto.Notifications.NoteType;
@@ -13,7 +13,7 @@ using Proto.Notifications.NoteType;
 namespace Client.Desktop.Communication.Notifications.NoteType.Receiver;
 
 public class NoteTypeNotificationReceiver(
-    IGrpcUrlBuilder grpcUrlBuilder,
+    IGrpcUrlService grpcUrlBuilder,
     ITraceCollector tracer) : ILocalNoteTypeNotificationPublisher, IStreamClient
 {
     public event Func<ClientNoteTypeColorChangedNotification, Task>? ClientNoteTypeColorChangedNotificationReceived;
@@ -55,10 +55,7 @@ public class NoteTypeNotificationReceiver(
         while (!cancellationToken.IsCancellationRequested)
             try
             {
-                using var channel = GrpcChannel.ForAddress(grpcUrlBuilder
-                    .From(ResolvingServices.Client)
-                    .To(ResolvingServices.Server)
-                    .BuildAddress());
+                using var channel = GrpcChannel.ForAddress(grpcUrlBuilder.ClientToServerUrl);
 
                 var client = new NoteTypeProtoNotificationService.NoteTypeProtoNotificationServiceClient(channel);
                 using var call =

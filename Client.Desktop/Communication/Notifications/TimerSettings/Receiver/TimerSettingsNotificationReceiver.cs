@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Notifications.TimerSettings.Records;
 using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
-using Global.Settings.UrlResolver;
+using Global.Settings;
 using Grpc.Core;
 using Grpc.Net.Client;
 using Proto.Notifications.TimerSettings;
@@ -12,7 +12,7 @@ using SubscribeRequest = Proto.Notifications.TimerSettings.SubscribeRequest;
 namespace Client.Desktop.Communication.Notifications.TimerSettings.Receiver;
 
 public class TimerSettingsNotificationReceiver(
-    IGrpcUrlBuilder grpcUrlBuilder) : ILocalTimerSettingsNotificationPublisher, IStreamClient
+    IGrpcUrlService grpcUrlBuilder) : ILocalTimerSettingsNotificationPublisher, IStreamClient
 {
     public event Func<ClientDocuTimerSaveIntervalChangedNotification, Task>?
         ClientDocuTimerSaveIntervalChangedNotificationReceived;
@@ -45,10 +45,7 @@ public class TimerSettingsNotificationReceiver(
         while (!cancellationToken.IsCancellationRequested)
             try
             {
-                using var channel = GrpcChannel.ForAddress(grpcUrlBuilder
-                    .From(ResolvingServices.Client)
-                    .To(ResolvingServices.Server)
-                    .BuildAddress());
+                using var channel = GrpcChannel.ForAddress(grpcUrlBuilder.ClientToServerUrl);
 
                 var client = new TimerSettingsNotificationService.TimerSettingsNotificationServiceClient(channel);
                 using var call =

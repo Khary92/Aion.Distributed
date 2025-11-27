@@ -35,7 +35,7 @@ using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
 using Client.Desktop.Presentation.Models.Mock;
 using Client.Desktop.Presentation.Views.Mock;
 using Client.Desktop.Services.Mock;
-using Global.Settings.UrlResolver;
+using Global.Settings;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using Service.Monitoring.Shared.Tracing;
@@ -215,64 +215,34 @@ public static class CommunicationServices
     private static void AddTraceSender(this IServiceCollection services)
     {
         services.AddScoped<ITracingDataSender>(sp =>
-            new TracingDataSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Monitoring)
-                .BuildAddress()));
+            new TracingDataSender(sp.GetRequiredService<IGrpcUrlService>().ClientToMonitoringUrl));
     }
 
     private static void AddSharedDataServices(this IServiceCollection services)
     {
         services.AddScoped<ITicketCommandSender>(sp =>
-            new TicketCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new TicketCommandSender(sp.GetRequiredService<IGrpcUrlService>().ClientToServerUrl));
         services.AddScoped<ITicketRequestSender>(sp =>
-            new TicketRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new TicketRequestSender(sp.GetRequiredService<IGrpcUrlService>().ClientToServerUrl));
 
         services.AddScoped<ISprintCommandSender>(sp =>
-            new SprintCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new SprintCommandSender(sp.GetRequiredService<IGrpcUrlService>().ClientToServerUrl));
         services.AddScoped<ISprintRequestSender>(sp =>
-            new SprintRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new SprintRequestSender(sp.GetRequiredService<IGrpcUrlService>().ClientToServerUrl));
 
         services.AddScoped<ITagCommandSender>(sp =>
-            new TagCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new TagCommandSender(sp.GetRequiredService<IGrpcUrlService>().ClientToServerUrl));
         services.AddScoped<ITagRequestSender>(sp =>
-            new TagRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new TagRequestSender(sp.GetRequiredService<IGrpcUrlService>().ClientToServerUrl));
 
         services.AddScoped<INoteTypeCommandSender>(sp =>
-            new NoteTypeCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new NoteTypeCommandSender(sp.GetRequiredService<IGrpcUrlService>().ClientToServerUrl));
 
         services.AddScoped<INoteTypeRequestSender>(sp =>
-            new NoteTypeRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new NoteTypeRequestSender(sp.GetRequiredService<IGrpcUrlService>().ClientToServerUrl));
 
         services.AddScoped<ITimerSettingsRequestSender>(sp =>
-            new TimerSettingsRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new TimerSettingsRequestSender(sp.GetRequiredService<IGrpcUrlService>().ClientToServerUrl));
     }
 
     private static void AddPolicyServices(IServiceCollection services)
@@ -352,30 +322,15 @@ public static class CommunicationServices
         services.AddScoped<ICommandSender, CommandSender>();
 
         services.AddScoped<INoteCommandSender>(sp =>
-            new NoteCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new NoteCommandSender(sp.GetRequiredService<IGrpcUrlService>().ClientToServerUrl));
         services.AddScoped<IStatisticsDataCommandSender>(sp =>
-            new StatisticsDataCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new StatisticsDataCommandSender(sp.GetRequiredService<IGrpcUrlService>().ClientToServerUrl));
         services.AddScoped<ITimeSlotCommandSender>(sp =>
-            new TimeSlotCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new TimeSlotCommandSender(sp.GetRequiredService<IGrpcUrlService>().ClientToServerUrl));
         services.AddScoped<IClientCommandSender>(sp =>
-            new ClientCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new ClientCommandSender(sp.GetRequiredService<IGrpcUrlService>().ClientToServerUrl));
         services.AddScoped<IWorkDayCommandSender>(sp =>
-            new WorkDayCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new WorkDayCommandSender(sp.GetRequiredService<IGrpcUrlService>().ClientToServerUrl));
     }
 
     private static void AddRequestSenders(this IServiceCollection services)
@@ -383,41 +338,20 @@ public static class CommunicationServices
         services.AddScoped<IRequestSender, RequestSender>();
 
         services.AddScoped<INotesRequestSender>(sp =>
-            new NotesRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new NotesRequestSender(sp.GetRequiredService<IGrpcUrlService>().ClientToServerUrl));
         services.AddScoped<ITimeSlotRequestSender>(sp =>
-            new TimeSlotRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new TimeSlotRequestSender(sp.GetRequiredService<IGrpcUrlService>().ClientToServerUrl));
         services.AddScoped<IWorkDayRequestSender>(sp =>
-            new WorkDayRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new WorkDayRequestSender(sp.GetRequiredService<IGrpcUrlService>().ClientToServerUrl));
         services.AddScoped<ITicketReplayRequestSender>(sp =>
-            new TicketReplayRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new TicketReplayRequestSender(sp.GetRequiredService<IGrpcUrlService>().ClientToServerUrl));
         services.AddScoped<IClientRequestSender>(sp =>
-            new ClientRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new ClientRequestSender(sp.GetRequiredService<IGrpcUrlService>().ClientToServerUrl));
         services.AddScoped<IStatisticsDataRequestSender>(sp =>
-            new StatisticsDataRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Client)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new StatisticsDataRequestSender(sp.GetRequiredService<IGrpcUrlService>().ClientToServerUrl));
         services.AddScoped<IAnalysisRequestSender>(sp =>
             new AnalysisRequestSender(sp.GetRequiredService<IAnalysisMapper>(),
-                sp.GetRequiredService<IGrpcUrlBuilder>()
-                    .From(ResolvingServices.Client)
-                    .To(ResolvingServices.Server)
-                    .BuildAddress()));
+                sp.GetRequiredService<IGrpcUrlService>().ClientToServerUrl));
 
         services.AddScoped<IAnalysisMapper, AnalysisMapper>();
     }

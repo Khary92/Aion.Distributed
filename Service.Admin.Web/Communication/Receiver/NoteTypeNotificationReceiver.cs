@@ -1,4 +1,4 @@
-﻿using Global.Settings.UrlResolver;
+﻿using Global.Settings;
 using Grpc.Core;
 using Grpc.Net.Client;
 using Proto.Notifications.NoteType;
@@ -11,7 +11,7 @@ namespace Service.Admin.Web.Communication.Receiver;
 public class NoteTypeNotificationReceiver(
     INoteTypeStateService noteTypeStateService,
     ITraceCollector tracer,
-    IGrpcUrlBuilder grpcUrlBuilder)
+    IGrpcUrlService grpcUrlBuilder)
 {
     public async Task SubscribeToNotifications(CancellationToken stoppingToken = default)
     {
@@ -28,10 +28,7 @@ public class NoteTypeNotificationReceiver(
 
         var channel =
             GrpcChannel.ForAddress(
-                grpcUrlBuilder
-                    .From(ResolvingServices.WebAdmin)
-                    .To(ResolvingServices.Server)
-                    .BuildAddress(),
+                grpcUrlBuilder.InternalToServerUrl,
                 channelOptions);
 
         var client = new NoteTypeProtoNotificationService.NoteTypeProtoNotificationServiceClient(channel);

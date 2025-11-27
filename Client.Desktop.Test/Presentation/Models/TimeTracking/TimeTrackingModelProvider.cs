@@ -11,7 +11,7 @@ using Client.Desktop.Presentation.Models.TimeTracking;
 using Client.Desktop.Services.Cache;
 using Client.Desktop.Services.LocalSettings;
 using Client.Tracing.Tracing.Tracers;
-using Global.Settings.UrlResolver;
+using Global.Settings;
 using Moq;
 
 namespace Client.Desktop.Test.Presentation.Models.TimeTracking;
@@ -28,9 +28,9 @@ public static class TimeTrackingModelProvider
         return new TestTimerSettingsPublisher();
     }
 
-    private static Mock<IGrpcUrlBuilder> CreateGrpcUrlBuilderMock()
+    private static Mock<IGrpcUrlService> CreateGrpcUrlBuilderMock()
     {
-        return new Mock<IGrpcUrlBuilder>();
+        return new Mock<IGrpcUrlService>();
     }
 
     private static Mock<ITraceCollector> CreateTracerMock()

@@ -1,4 +1,4 @@
-﻿using Global.Settings.UrlResolver;
+﻿using Global.Settings;
 using Grpc.Core;
 using Grpc.Net.Client;
 using Proto.Notifications.TimerSettings;
@@ -12,7 +12,7 @@ namespace Service.Admin.Web.Communication.Receiver;
 public class TimerSettingsNotificationsReceiver(
     ITimerSettingsStateService timerSettingsStateService,
     ITraceCollector tracer,
-    IGrpcUrlBuilder grpcUrlBuilder)
+    IGrpcUrlService grpcUrlBuilder)
 {
     public async Task SubscribeToNotifications(CancellationToken stoppingToken = default)
     {
@@ -29,10 +29,7 @@ public class TimerSettingsNotificationsReceiver(
 
         var channel =
             GrpcChannel.ForAddress(
-                grpcUrlBuilder
-                    .From(ResolvingServices.WebAdmin)
-                    .To(ResolvingServices.Server)
-                    .BuildAddress(),
+                grpcUrlBuilder.InternalToServerUrl,
                 channelOptions);
 
         var client = new TimerSettingsNotificationService.TimerSettingsNotificationServiceClient(channel);

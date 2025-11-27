@@ -30,7 +30,7 @@ using Core.Server.Translators.Commands.Tickets;
 using Core.Server.Translators.Commands.TimerSettings;
 using Core.Server.Translators.Commands.TimeSlots;
 using Core.Server.Translators.Commands.WorkDays;
-using Global.Settings.UrlResolver;
+using Global.Settings;
 using Service.Monitoring.Shared.Tracing;
 
 namespace Core.Server;
@@ -51,10 +51,7 @@ public static class CoreServices
     private static void AddTraceSender(this IServiceCollection services)
     {
         services.AddSingleton<ITracingDataSender>(sp =>
-            new TracingDataSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.Server)
-                .To(ResolvingServices.Monitoring)
-                .BuildAddress()));
+            new TracingDataSender(sp.GetRequiredService<IGrpcUrlService>().ClientToMonitoringUrl));
     }
 
     private static void AddCommonServices(this IServiceCollection services)

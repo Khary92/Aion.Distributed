@@ -28,28 +28,31 @@ public abstract class Program
 
         builder.Services.AddTracingServices();
 
-        var globalSettings = new GlobalSettings();
-        builder.Configuration.GetSection("GlobalSettings").Bind(globalSettings);
 
         var monitoringSettings = new MonitoringSettings();
         builder.Configuration.GetSection("MonitoringSettings").Bind(monitoringSettings);
 
         builder.WebHost.ConfigureKestrel(options =>
         {
-            options.ListenAnyIP(monitoringSettings.GrpcPort, listenOptions =>
+            // Internal GRPC listener (HTTP/2, no TLS)
+            options.ListenAnyIP(monitoringSettings.InternalGrpcPort, listenOptions =>
             {
-                if (globalSettings.UseHttps)
-                {
-                    listenOptions.UseHttps(httpsOptions =>
-                    {
-                        var cert = X509Certificate2.CreateFromPemFile(
-                            "/certs/fullchain1.pem",
-                            "/certs/privkey1.pem"
-                        );
+                listenOptions.Protocols = HttpProtocols.Http2;
+                AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+            });
 
-                        httpsOptions.ServerCertificate = cert;
-                    });
-                }
+            // External GRPC listener (HTTPS + HTTP/2)
+            options.ListenAnyIP(monitoringSettings.SecureExternalGrpcPort, listenOptions =>
+            {
+                listenOptions.UseHttps(httpsOptions =>
+                {
+                    var cert = X509Certificate2.CreateFromPemFile(
+                        "/certs/fullchain1.pem",
+                        "/certs/privkey1.pem"
+                    );
+
+                    httpsOptions.ServerCertificate = cert;
+                });
 
                 listenOptions.Protocols = HttpProtocols.Http2;
             });

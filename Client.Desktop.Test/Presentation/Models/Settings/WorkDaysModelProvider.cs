@@ -5,7 +5,7 @@ using Client.Desktop.DataModels;
 using Client.Desktop.Presentation.Models.Settings;
 using Client.Desktop.Services.LocalSettings;
 using Client.Tracing.Tracing.Tracers;
-using Global.Settings.UrlResolver;
+using Global.Settings;
 using Moq;
 
 namespace Client.Desktop.Test.Presentation.Models.Settings;
@@ -17,9 +17,9 @@ public static class WorkDaysModelProvider
         return new TestNotificationPublisherFacade(CreateGrpcUrlBuilderMock().Object, CreateTracerMock().Object);
     }
 
-    private static Mock<IGrpcUrlBuilder> CreateGrpcUrlBuilderMock()
+    private static Mock<IGrpcUrlService> CreateGrpcUrlBuilderMock()
     {
-        return new Mock<IGrpcUrlBuilder>();
+        return new Mock<IGrpcUrlService>();
     }
 
     private static Mock<ITraceCollector> CreateTracerMock()

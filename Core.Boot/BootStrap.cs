@@ -30,11 +30,11 @@ public static class BootStrap
         builder.Services.AddCoreServices();
         builder.Services.AddInfrastructureServices();
         builder.Services.AddTracingServices();
-        
+
         builder.Services.AddDataProtection()
             .PersistKeysToFileSystem(new DirectoryInfo("/app/DataProtection-Keys"))
             .SetApplicationName("Aion");
-        
+
         SetupKestrel(builder);
 
         builder.Logging.AddConsole();
@@ -58,32 +58,32 @@ public static class BootStrap
 
     private static void SetupKestrel(WebApplicationBuilder builder)
     {
-        var globalSettings = new GlobalSettings();
-        builder.Configuration.GetSection("GlobalSettings").Bind(globalSettings);
-
         var serverSettings = new ServerSettings();
         builder.Configuration.GetSection("ServerSettings").Bind(serverSettings);
 
         builder.WebHost.ConfigureKestrel(options =>
         {
-            options.ListenAnyIP(serverSettings.GrpcPort, listenOptions =>
+            // Internal GRPC listener (HTTP/2, no TLS)
+            options.ListenAnyIP(serverSettings.InternalGrpcPort, listenOptions =>
+            {
+                listenOptions.Protocols = HttpProtocols.Http2;
+                AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+            });
+
+            // External GRPC listener (HTTPS + HTTP/2)
+            options.ListenAnyIP(serverSettings.SecureExternalGrpcPort, listenOptions =>
             {
                 listenOptions.Protocols = HttpProtocols.Http2;
 
-                if (globalSettings.UseHttps)
+                listenOptions.UseHttps(httpsOptions =>
                 {
-                    listenOptions.UseHttps(httpsOptions =>
-                    {
-                        var cert = X509Certificate2.CreateFromPemFile(
-                            "/certs/fullchain1.pem",
-                            "/certs/privkey1.pem"
-                        );
+                    var cert = X509Certificate2.CreateFromPemFile(
+                        "/certs/fullchain1.pem",
+                        "/certs/privkey1.pem"
+                    );
 
-                        httpsOptions.ServerCertificate = cert;
-                    });
-                }
-
-                AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+                    httpsOptions.ServerCertificate = cert;
+                });
             });
         });
     }

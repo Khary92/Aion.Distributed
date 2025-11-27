@@ -1,4 +1,4 @@
-using Global.Settings.UrlResolver;
+using Global.Settings;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using Service.Monitoring.Communication;
@@ -21,10 +21,8 @@ public static class TracingServices
 
     private static void AddReportSender(IServiceCollection services)
     {
-        services.AddSingleton<IReportSender>(sp => new ReportSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-            .From(ResolvingServices.Monitoring)
-            .To(ResolvingServices.WebAdmin)
-            .BuildAddress()));
+        services.AddSingleton<IReportSender>(sp =>
+            new ReportSender(sp.GetRequiredService<IGrpcUrlService>().InternalToAdminUrl));
     }
 
     private static void AddPolicyServices(IServiceCollection services)

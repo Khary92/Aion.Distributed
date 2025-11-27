@@ -1,4 +1,4 @@
-﻿using Global.Settings.UrlResolver;
+﻿using Global.Settings;
 using Grpc.Core;
 using Polly;
 using Service.Admin.Web.Communication.Receiver;
@@ -39,10 +39,7 @@ public static class AdminServiceExtension
     private static void AddTraceSender(this IServiceCollection services)
     {
         services.AddSingleton<ITracingDataSender>(sp =>
-            new TracingDataSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.WebAdmin)
-                .To(ResolvingServices.Monitoring)
-                .BuildAddress()));
+            new TracingDataSender(sp.GetRequiredService<IGrpcUrlService>().InternalToMonitoringUrl));
     }
 
     private static void AddPolicyServices(IServiceCollection services)
@@ -149,58 +146,28 @@ public static class AdminServiceExtension
     private static void AddSharedDataServices(this IServiceCollection services)
     {
         services.AddSingleton<ITicketCommandSender>(sp =>
-            new TicketCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.WebAdmin)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new TicketCommandSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl));
         services.AddSingleton<ITicketRequestSender>(sp =>
-            new TicketRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.WebAdmin)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new TicketRequestSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl));
 
         services.AddSingleton<ISprintCommandSender>(sp =>
-            new SprintCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.WebAdmin)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new SprintCommandSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl));
         services.AddSingleton<ISprintRequestSender>(sp =>
-            new SprintRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.WebAdmin)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new SprintRequestSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl));
 
         services.AddSingleton<ITagCommandSender>(sp =>
-            new TagCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.WebAdmin)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new TagCommandSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl));
         services.AddSingleton<ITagRequestSender>(sp =>
-            new TagRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.WebAdmin)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new TagRequestSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl));
 
         services.AddSingleton<INoteTypeCommandSender>(sp =>
-            new NoteTypeCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.WebAdmin)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new NoteTypeCommandSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl));
         services.AddSingleton<INoteTypeRequestSender>(sp =>
-            new NoteTypeRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.WebAdmin)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new NoteTypeRequestSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl));
 
         services.AddSingleton<ITimerSettingsCommandSender>(sp =>
-            new TimerSettingsCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.WebAdmin)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new TimerSettingsCommandSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl));
         services.AddSingleton<ITimerSettingsRequestSender>(sp =>
-            new TimerSettingsRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.WebAdmin)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new TimerSettingsRequestSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl));
     }
 }
