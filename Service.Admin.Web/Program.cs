@@ -36,23 +36,7 @@ builder.WebHost.ConfigureKestrel(options =>
         listenOptions.Protocols = HttpProtocols.Http2;
         AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
     });
-
-    // External Secure Grpc Listener (HTTPS)
-    options.ListenAnyIP(adminSettings.SecureExternalGrpcPort, listenOptions =>
-    {
-        listenOptions.UseHttps(httpsOptions =>
-        {
-            var cert = X509Certificate2.CreateFromPemFile(
-                "/certs/fullchain1.pem",
-                "/certs/privkey1.pem"
-            );
-
-            httpsOptions.ServerCertificate = cert;
-        });
-
-        listenOptions.Protocols = HttpProtocols.Http2;
-    });
-
+    
     // Web listener
     options.ListenAnyIP(adminSettings.ExposedWebPort, listenOptions =>
     {

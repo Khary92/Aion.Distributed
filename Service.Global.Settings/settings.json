@@ -4,19 +4,18 @@
   },
   "AdminSettings": {
     "InternalHostName": "admin-web",
-    "SecureExternalGrpcPort": 5001,
-    "InternalGrpcPort": 8080,
-    "ExposedWebPort": 5000
+    "InternalGrpcPort": 8081,
+    "ExposedWebPort": 8080
   },
   "ServerSettings": {
     "InternalHostName": "core-service",
     "SecureExternalGrpcPort": 5002,
-    "InternalGrpcPort": 8081
+    "InternalGrpcPort": 8082
   },
   "MonitoringSettings": {
     "InternalHostName": "monitoring-service",
     "SecureExternalGrpcPort": 5003,
-    "InternalGrpcPort": 8082
+    "InternalGrpcPort": 8083
   },
   "DatabaseSettings": {
     "ConnectionString": "Host=postgres;Database=aion;Username=aionuser;Password=aionpass"
