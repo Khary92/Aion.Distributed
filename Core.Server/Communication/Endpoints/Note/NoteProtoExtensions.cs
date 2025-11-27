@@ -28,6 +28,7 @@ public static class NoteProtoExtensions
                 Text = proto.Text,
                 NoteTypeId = proto.NoteTypeId.ToString(),
                 TimeSlotId = proto.TimeSlotId.ToString(),
+                TicketId = proto.TicketId.ToString(),
                 TimeStamp = proto.TimeStamp.ToTimestamp(),
                 TraceData = new TraceDataProto
                 {

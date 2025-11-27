@@ -75,7 +75,7 @@ public class TokenService : ITokenService
         };
 
         var tokenResp = await _client.PostAsync(
-            "https://localhost:5001/token",
+            "https://auth.hiegert.eu/token",
             new FormUrlEncodedContent(tokenReq));
 
         var json = await tokenResp.Content.ReadAsStringAsync();
