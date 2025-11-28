@@ -1,8 +1,18 @@
 ﻿using Global.Settings;
 using Grpc.Core;
 using Polly;
+using Service.Admin.Web.Communication.Commands.NoteTypes;
+using Service.Admin.Web.Communication.Commands.Sprints;
+using Service.Admin.Web.Communication.Commands.Tags;
+using Service.Admin.Web.Communication.Commands.Tickets;
+using Service.Admin.Web.Communication.Commands.TimerSettings;
 using Service.Admin.Web.Communication.Receiver;
 using Service.Admin.Web.Communication.Receiver.Reports;
+using Service.Admin.Web.Communication.Requests.NoteTypes;
+using Service.Admin.Web.Communication.Requests.Sprints;
+using Service.Admin.Web.Communication.Requests.Tags;
+using Service.Admin.Web.Communication.Requests.Tickets;
+using Service.Admin.Web.Communication.Requests.TimerSettings;
 using Service.Admin.Web.Communication.Sender;
 using Service.Admin.Web.Communication.Sender.Common;
 using Service.Admin.Web.Communication.Sender.Policies;
@@ -10,16 +20,6 @@ using Service.Admin.Web.Services.Startup;
 using Service.Admin.Web.Services.State;
 using Service.Monitoring.Shared.Enums;
 using Service.Monitoring.Shared.Tracing;
-using Service.Proto.Shared.Commands.NoteTypes;
-using Service.Proto.Shared.Commands.Sprints;
-using Service.Proto.Shared.Commands.Tags;
-using Service.Proto.Shared.Commands.Tickets;
-using Service.Proto.Shared.Commands.TimerSettings;
-using Service.Proto.Shared.Requests.NoteTypes;
-using Service.Proto.Shared.Requests.Sprints;
-using Service.Proto.Shared.Requests.Tags;
-using Service.Proto.Shared.Requests.Tickets;
-using Service.Proto.Shared.Requests.TimerSettings;
 
 namespace Service.Admin.Web;
 

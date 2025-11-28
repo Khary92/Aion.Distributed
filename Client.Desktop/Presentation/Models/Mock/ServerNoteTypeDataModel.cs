@@ -16,13 +16,12 @@ using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
 using Proto.Command.NoteTypes;
 using Proto.Requests.NoteTypes;
 using ReactiveUI;
-using Service.Proto.Shared.Commands.NoteTypes;
 using INoteTypeRequestSender = Client.Desktop.Communication.Requests.NoteType.INoteTypeRequestSender;
 
 namespace Client.Desktop.Presentation.Models.Mock;
 
 public class ServerNoteTypeDataModel(MockDataService mockDataService) : ReactiveObject, IInitializeAsync,
-    INoteTypeCommandSender, INoteTypeRequestSender, ILocalNoteTypeNotificationPublisher, IStreamClient
+    INoteTypeRequestSender, ILocalNoteTypeNotificationPublisher, IStreamClient
 {
     private readonly ConcurrentQueue<CreateNoteTypeCommandProto> _createQueue = new();
 

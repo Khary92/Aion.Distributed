@@ -17,12 +17,11 @@ using Proto.Command.Tags;
 using Proto.DTO.TraceData;
 using Proto.Requests.Tags;
 using ReactiveUI;
-using Service.Proto.Shared.Commands.Tags;
 using ITagRequestSender = Client.Desktop.Communication.Requests.Tag.ITagRequestSender;
 
 namespace Client.Desktop.Presentation.Models.Mock;
 
-public class ServerTagDataModel(MockDataService mockDataService) : ReactiveObject, IInitializeAsync, ITagCommandSender,
+public class ServerTagDataModel(MockDataService mockDataService) : ReactiveObject, IInitializeAsync,
     ITagRequestSender, ILocalTagNotificationPublisher, IStreamClient
 {
     private readonly ConcurrentQueue<CreateTagCommandProto> _createQueue = new();

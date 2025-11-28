@@ -44,4 +44,9 @@
         </Reference>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Communication\Commands\" />
+      <Folder Include="Communication\Requests\" />
+    </ItemGroup>
+
 </Project>

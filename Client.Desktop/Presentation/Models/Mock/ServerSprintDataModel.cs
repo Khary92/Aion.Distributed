@@ -16,13 +16,11 @@ using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
 using Proto.Command.Sprints;
 using Proto.Requests.Sprints;
 using ReactiveUI;
-using Service.Proto.Shared.Commands.Sprints;
 using ISprintRequestSender = Client.Desktop.Communication.Requests.Sprint.ISprintRequestSender;
 
 namespace Client.Desktop.Presentation.Models.Mock;
 
 public class ServerSprintDataModel(MockDataService mockDataService) : ReactiveObject, IInitializeAsync,
-    ISprintCommandSender,
     ISprintRequestSender, ILocalSprintNotificationPublisher, IStreamClient
 {
     private readonly ConcurrentQueue<AddTicketToActiveSprintCommandProto> _addTicketToSprintQueue = new();
