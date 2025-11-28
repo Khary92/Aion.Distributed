@@ -1,4 +1,5 @@
 ﻿using System.Security.Cryptography.X509Certificates;
+using System.Text;
 using System.Text.Json;
 using Core.Persistence;
 using Core.Persistence.DbContext;
@@ -7,9 +8,11 @@ using Core.Server.Tracing;
 using Domain.Events.TimerSettings;
 using Global.Settings;
 using Global.Settings.Types;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Core.Boot;
 
@@ -25,6 +28,37 @@ public static class BootStrap
             options.MaxReceiveMessageSize = 2 * 1024 * 1024;
             options.MaxSendMessageSize = 2 * 1024 * 1024;
         });
+        
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = "your-issuer",
+                    ValidateAudience = true,
+                    ValidAudience = "your-audience",
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey("super-secret-key"u8.ToArray()),
+                    ValidateLifetime = true,
+                };
+
+                // Optional: support access_token in querystring for gRPC-Web or web clients
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        // if header is missing, allow token via ?access_token=... (useful for gRPC-web)
+                        if (string.IsNullOrEmpty(context.Request.Headers["Authorization"]))
+                        {
+                            if (context.Request.Query.TryGetValue("access_token", out var t))
+                                context.Token = t;
+                        }
+
+                        return Task.CompletedTask;
+                    }
+                };
+            });
 
         builder.SetConfiguration();
         builder.Services.AddCoreServices();

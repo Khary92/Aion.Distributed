@@ -20,17 +20,19 @@ public class TokenService : ITokenService
                 HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
         });
 
-    public event Func<string, Task>? Authenticated;
-
     private string _accessToken = "";
-    private string _refreshToken = "";
     private DateTime _expiry;
+    private string _refreshToken = "";
+
+    public event Func<string, Task>? Authenticated;
 
     public async Task Login(string user, string pass)
     {
         // PKCE minimal
-        string RandomStr(int len = 32) =>
-            WebEncoders.Base64UrlEncode(RandomNumberGenerator.GetBytes(len));
+        string RandomStr(int len = 32)
+        {
+            return WebEncoders.Base64UrlEncode(RandomNumberGenerator.GetBytes(len));
+        }
 
         var verifier = RandomStr();
         using var sha = SHA256.Create();
@@ -85,10 +87,7 @@ public class TokenService : ITokenService
         _refreshToken = data.refresh_token;
         _expiry = DateTime.UtcNow.AddSeconds(data.expires_in);
 
-        if (Authenticated == null)
-        {
-            throw new InvalidOperationException("No forwarding receiver set");
-        }
+        if (Authenticated == null) throw new InvalidOperationException("No forwarding receiver set");
 
         //await startupScheduler.Execute();
         await Authenticated.Invoke(_accessToken);

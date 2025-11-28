@@ -33,16 +33,6 @@ public class AnalysisByTagModel(
         private set => this.RaiseAndSetIfChanged(ref _analysisByTag, value);
     }
 
-    public InitializationType Type => InitializationType.Model;
-
-    public async Task InitializeAsync()
-    {
-        var tagClientModels = await requestSender.Send(new ClientGetAllTagsRequest());
-
-        Tags.Clear();
-        Tags.AddRange(tagClientModels);
-    }
-
     public void RegisterMessenger()
     {
         notificationPublisher.Tag.NewTagMessageNotificationReceived += HandleNewTagMessage;
@@ -53,6 +43,16 @@ public class AnalysisByTagModel(
     {
         notificationPublisher.Tag.NewTagMessageNotificationReceived -= HandleNewTagMessage;
         notificationPublisher.Tag.ClientTagUpdatedNotificationReceived -= HandleClientTagUpdatedNotification;
+    }
+
+    public InitializationType Type => InitializationType.Model;
+
+    public async Task InitializeAsync()
+    {
+        var tagClientModels = await requestSender.Send(new ClientGetAllTagsRequest());
+
+        Tags.Clear();
+        Tags.AddRange(tagClientModels);
     }
 
     private async Task HandleClientTagUpdatedNotification(ClientTagUpdatedNotification message)

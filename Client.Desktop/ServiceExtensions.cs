@@ -69,7 +69,7 @@ public static class ServiceExtensions
     private static void AddLocalServices(this IServiceCollection services)
     {
         services.AddSingleton<AuthInterceptor>();
-        
+
         services.AddSingleton<LocalSettingsService>();
         services.AddSingleton<ILocalSettingsService>(sp => sp.GetRequiredService<LocalSettingsService>());
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<LocalSettingsService>());

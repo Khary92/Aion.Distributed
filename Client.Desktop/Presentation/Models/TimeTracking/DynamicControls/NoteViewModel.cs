@@ -48,21 +48,6 @@ public class NoteViewModel : ReactiveObject, IEventRegistration, IInitializeAsyn
     public ReactiveCommand<Unit, Unit> SetPreviousTypeCommand { get; }
     public ReactiveCommand<Unit, Unit> UpdateNoteCommand { get; }
 
-    public InitializationType Type => InitializationType.ViewModel;
-
-    public async Task InitializeAsync()
-    {
-        NoteTypes.Clear();
-
-        var noteTypeViewModels = await _requestSender.Send(new ClientGetAllNoteTypesRequest());
-
-        NoteTypes.AddRange(noteTypeViewModels);
-
-        if (Note.NoteTypeId == Guid.Empty || !NoteTypes.Any()) return;
-
-        Note.NoteType = NoteTypes.FirstOrDefault(nt => nt.NoteTypeId == Note.NoteTypeId);
-    }
-
     public void RegisterMessenger()
     {
         _notificationPublisher.Note.ClientNoteUpdatedNotificationReceived += HandleClientNoteUpdatedNotification;
@@ -81,6 +66,21 @@ public class NoteViewModel : ReactiveObject, IEventRegistration, IInitializeAsyn
             HandleClientNoteTypeColorChangedNotification;
         _notificationPublisher.NoteType.ClientNoteTypeNameChangedNotificationReceived -=
             HandleClientNoteTypeNameChangedNotification;
+    }
+
+    public InitializationType Type => InitializationType.ViewModel;
+
+    public async Task InitializeAsync()
+    {
+        NoteTypes.Clear();
+
+        var noteTypeViewModels = await _requestSender.Send(new ClientGetAllNoteTypesRequest());
+
+        NoteTypes.AddRange(noteTypeViewModels);
+
+        if (Note.NoteTypeId == Guid.Empty || !NoteTypes.Any()) return;
+
+        Note.NoteType = NoteTypes.FirstOrDefault(nt => nt.NoteTypeId == Note.NoteTypeId);
     }
 
     private async Task HandleClientNoteTypeNameChangedNotification(ClientNoteTypeNameChangedNotification notification)

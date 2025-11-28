@@ -32,6 +32,16 @@ public class WorkDaysModel(
     public event Func<ClientWorkDaySelectionChangedNotification, Task>?
         ClientWorkDaySelectionChangedNotificationReceived;
 
+    public void RegisterMessenger()
+    {
+        notificationPublisher.WorkDay.NewWorkDayMessageReceived += HandleNewWorkDayMessage;
+    }
+
+    public void UnregisterMessenger()
+    {
+        notificationPublisher.WorkDay.NewWorkDayMessageReceived -= HandleNewWorkDayMessage;
+    }
+
     public InitializationType Type => InitializationType.Model;
 
     public async Task InitializeAsync()
@@ -53,16 +63,6 @@ public class WorkDaysModel(
             new ClientCreateWorkDayCommand(Guid.NewGuid(), DateTimeOffset.Now, traceId);
         await tracer.WorkDay.Create.SendingCommand(GetType(), traceId, clientCreateWorkDayCommand);
         await commandSender.Send(clientCreateWorkDayCommand);
-    }
-
-    public void RegisterMessenger()
-    {
-        notificationPublisher.WorkDay.NewWorkDayMessageReceived += HandleNewWorkDayMessage;
-    }
-
-    public void UnregisterMessenger()
-    {
-        notificationPublisher.WorkDay.NewWorkDayMessageReceived -= HandleNewWorkDayMessage;
     }
 
     private async Task HandleNewWorkDayMessage(NewWorkDayMessage message)

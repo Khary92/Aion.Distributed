@@ -1,66 +1,78 @@
+using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
 
 namespace Client.Desktop.Services.Authentication;
 
-public class AuthInterceptor : Interceptor
+public class AuthInterceptor(Func<Task<string>> getToken) : Interceptor
 {
-    private readonly ITokenService _tokenService;
-
-    public AuthInterceptor(ITokenService tokenService)
+    private async Task<Metadata> AddAuthorizationHeaderAsync(Metadata? headers)
     {
-        _tokenService = tokenService;
+        headers ??= new Metadata();
+        var token = await getToken();
+
+        if (!string.IsNullOrWhiteSpace(token))
+        {
+            // Remove old header if it exists (e.g., after refresh)
+            var existing = headers.FirstOrDefault(h => h.Key == "authorization");
+            if (existing != null)
+                headers.Remove(existing);
+
+            headers.Add("authorization", $"Bearer {token}");
+        }
+
+        return headers;
     }
 
+    // --------- Unary RPC ---------
     public override AsyncUnaryCall<TResponse> AsyncUnaryCall<TRequest, TResponse>(
         TRequest request,
         ClientInterceptorContext<TRequest, TResponse> context,
         AsyncUnaryCallContinuation<TRequest, TResponse> continuation)
     {
-        // Erstelle einen Task, der zuerst den Token holt und dann den echten Call startet
-        var callTask = CreateCallWithTokenAsync(request, context, continuation);
-
-        // Wrappe den echten Call in die Microsoft-Template-Struktur
-        return new AsyncUnaryCall<TResponse>(
-            HandleResponse(callTask),
-            callTask.ContinueWith(t => t.Result.ResponseHeadersAsync).Unwrap(),
-            () => callTask.Result.GetStatus(),
-            () => callTask.Result.GetTrailers(),
-            () => callTask.Result.Dispose()
-        );
+        var newCtx = ContextWithAuthAsync(context).GetAwaiter().GetResult();
+        return base.AsyncUnaryCall(request, newCtx, continuation);
     }
 
-    private async Task<AsyncUnaryCall<TResponse>> CreateCallWithTokenAsync<TRequest, TResponse>(
+    // --------- Server Streaming ---------
+    public override AsyncServerStreamingCall<TResponse> AsyncServerStreamingCall<TRequest, TResponse>(
         TRequest request,
         ClientInterceptorContext<TRequest, TResponse> context,
-        AsyncUnaryCallContinuation<TRequest, TResponse> continuation)
+        AsyncServerStreamingCallContinuation<TRequest, TResponse> continuation)
+    {
+        var newCtx = ContextWithAuthAsync(context).GetAwaiter().GetResult();
+        return base.AsyncServerStreamingCall(request, newCtx, continuation);
+    }
+
+    // --------- Client Streaming ---------
+    public override AsyncClientStreamingCall<TRequest, TResponse> AsyncClientStreamingCall<TRequest, TResponse>(
+        ClientInterceptorContext<TRequest, TResponse> context,
+        AsyncClientStreamingCallContinuation<TRequest, TResponse> continuation)
+    {
+        var newCtx = ContextWithAuthAsync(context).GetAwaiter().GetResult();
+        return base.AsyncClientStreamingCall(newCtx, continuation);
+    }
+
+    // --------- Duplex Streaming ---------
+    public override AsyncDuplexStreamingCall<TRequest, TResponse> AsyncDuplexStreamingCall<TRequest, TResponse>(
+        ClientInterceptorContext<TRequest, TResponse> context,
+        AsyncDuplexStreamingCallContinuation<TRequest, TResponse> continuation)
+    {
+        var newCtx = ContextWithAuthAsync(context).GetAwaiter().GetResult();
+        return base.AsyncDuplexStreamingCall(newCtx, continuation);
+    }
+
+    // --------- Helper: build new context with JWT ---------
+    private async Task<ClientInterceptorContext<TRequest, TResponse>> ContextWithAuthAsync<TRequest, TResponse>(
+        ClientInterceptorContext<TRequest, TResponse> context)
         where TRequest : class
         where TResponse : class
     {
-        // asynchron den aktuellen Token holen
-        var token = await _tokenService.GetToken();
+        var headers = await AddAuthorizationHeaderAsync(context.Options.Headers);
+        var options = context.Options.WithHeaders(headers);
 
-        // Header vorbereiten
-        var headers = context.Options.Headers ?? new Metadata();
-        if (!string.IsNullOrWhiteSpace(token))
-            headers.Add("Authorization", $"Bearer {token}");
-
-        // neuen Kontext mit Header erstellen
-        var newContext = new ClientInterceptorContext<TRequest, TResponse>(
-            context.Method,
-            context.Host,
-            context.Options.WithHeaders(headers)
-        );
-
-        // den echten RPC-Call starten
-        return continuation(request, newContext);
-    }
-
-    private async Task<TResponse> HandleResponse<TResponse>(Task<AsyncUnaryCall<TResponse>> callTask)
-        where TResponse : class
-    {
-        var call = await callTask;
-        return await call.ResponseAsync;
+        return new ClientInterceptorContext<TRequest, TResponse>(context.Method, context.Host, options);
     }
 }

@@ -5,7 +5,7 @@ namespace Client.Desktop.Services.Mock;
 
 public interface IMockSeedSetupService
 {
+    bool IsClearSetup { get; set; }
     Task<MockSetup> ReadSetupFromFile();
     Task SaveSettings(MockSetup changedSettings);
-    bool IsClearSetup { get; set; }
 }

@@ -1,11 +1,11 @@
 using System;
 using System.Threading.Tasks;
 using Service.Monitoring.Shared;
-using Service.Monitoring.Shared.Tracing;
+using Tracing_ITracingDataSender = Client.Tracing.ITracingDataSender;
 
 namespace Client.Desktop.Communication.Mock.Tracer;
 
-public class MockLogger : ITracingDataSender, IMockTraceDataPublisher
+public class MockLogger : Tracing_ITracingDataSender, IMockTraceDataPublisher
 {
     public event Func<ServiceTraceDataCommand, Task>? LogReceived;
 

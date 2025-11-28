@@ -74,22 +74,6 @@ public class TimeTrackingModel(
 
     private ObservableCollection<TicketClientModel> AllTickets { get; } = [];
 
-    public InitializationType Type => InitializationType.Model;
-
-    public async Task InitializeAsync()
-    {
-        var ticketsInSprint = await requestSender.Send(new ClientGetTicketsForCurrentSprintRequest());
-        var allTickets = await requestSender.Send(new ClientGetAllTicketsRequest());
-
-        FilteredTickets.Clear();
-        FilteredTickets.AddRange(ticketsInSprint);
-
-        AllTickets.Clear();
-        AllTickets.AddRange(allTickets);
-
-        await LoadTimeSlotViewModels();
-    }
-
     public void RegisterMessenger()
     {
         notificationFacade.Ticket.NewTicketNotificationReceived += HandleNewTicketMessage;
@@ -113,6 +97,22 @@ public class TimeTrackingModel(
             HandleTicketSprintSelectionChangedNotification;
         notificationFacade.Client.ClientTrackingControlCreatedNotificationReceived -=
             HandleTimeSlotControlCreatedNotification;
+    }
+
+    public InitializationType Type => InitializationType.Model;
+
+    public async Task InitializeAsync()
+    {
+        var ticketsInSprint = await requestSender.Send(new ClientGetTicketsForCurrentSprintRequest());
+        var allTickets = await requestSender.Send(new ClientGetAllTicketsRequest());
+
+        FilteredTickets.Clear();
+        FilteredTickets.AddRange(ticketsInSprint);
+
+        AllTickets.Clear();
+        AllTickets.AddRange(allTickets);
+
+        await LoadTimeSlotViewModels();
     }
 
     private async Task LoadTimeSlotViewModels()

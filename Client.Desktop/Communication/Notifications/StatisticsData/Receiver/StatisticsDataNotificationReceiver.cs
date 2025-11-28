@@ -2,10 +2,13 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Notifications.StatisticsData.Records;
+using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
+using Client.Desktop.Services.Authentication;
 using Client.Tracing.Tracing.Tracers;
 using Global.Settings;
 using Grpc.Core;
+using Grpc.Core.Interceptors;
 using Grpc.Net.Client;
 using Proto.Notifications.StatisticsData;
 using SubscribeRequest = Proto.Notifications.StatisticsData.SubscribeRequest;
@@ -14,8 +17,23 @@ namespace Client.Desktop.Communication.Notifications.StatisticsData.Receiver;
 
 public class StatisticsDataNotificationReceiver(
     IGrpcUrlService grpcUrlBuilder,
-    ITraceCollector tracer) : ILocalStatisticsDataNotificationPublisher, IStreamClient
+    ITraceCollector tracer,
+    ITokenService tokenService) : ILocalStatisticsDataNotificationPublisher, IStreamClient, IInitializeAsync
 {
+    private StatisticsDataNotificationService.StatisticsDataNotificationServiceClient? _client;
+
+    public InitializationType Type => InitializationType.AuthToken;
+
+    public async Task InitializeAsync()
+    {
+        var channel = GrpcChannel.ForAddress(grpcUrlBuilder.ClientToServerUrl);
+        var tokenProvider = new Func<Task<string>>(tokenService.GetToken);
+        var callInvoker = channel.Intercept(new AuthInterceptor(tokenProvider));
+        _client = new StatisticsDataNotificationService.StatisticsDataNotificationServiceClient(callInvoker);
+
+        await Task.CompletedTask;
+    }
+
     public event Func<ClientChangeProductivityNotification, Task>? ClientChangeProductivityNotificationReceived;
     public event Func<ClientChangeTagSelectionNotification, Task>? ClientChangeTagSelectionNotificationReceived;
 
@@ -44,11 +62,11 @@ public class StatisticsDataNotificationReceiver(
         while (!cancellationToken.IsCancellationRequested)
             try
             {
-                using var channel = GrpcChannel.ForAddress(grpcUrlBuilder.ClientToServerUrl);
+                if (_client is null)
+                    throw new InvalidOperationException("Client is not initialized");
 
-                var client = new StatisticsDataNotificationService.StatisticsDataNotificationServiceClient(channel);
                 using var call =
-                    client.SubscribeStatisticsDataNotifications(new SubscribeRequest(),
+                    _client.SubscribeStatisticsDataNotifications(new SubscribeRequest(),
                         cancellationToken: cancellationToken);
 
                 attempt = 0;

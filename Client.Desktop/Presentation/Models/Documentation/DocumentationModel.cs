@@ -72,27 +72,6 @@ public class DocumentationModel(
         }
     }
 
-    public InitializationType Type => InitializationType.Model;
-
-    public async Task InitializeAsync()
-    {
-        var noteTypeModels = await requestSender.Send(new ClientGetAllNoteTypesRequest());
-
-        var viewModels = noteTypeModels
-            .Select(typeCheckBoxViewModelFactory.Create)
-            .ToList();
-
-        foreach (var viewModel in viewModels) viewModel.CheckedChanged += (_, args) => FilterNotes();
-
-        AllNoteTypes.Clear();
-        AllNoteTypes.AddRange(viewModels);
-
-        var ticketClientModels = await requestSender.Send(new ClientGetAllTicketsRequest());
-
-        AllTickets.Clear();
-        AllTickets.AddRange(ticketClientModels);
-    }
-
     public void RegisterMessenger()
     {
         notificationPublisher.Ticket.NewTicketNotificationReceived += HandleNewTicketMessage;
@@ -117,6 +96,27 @@ public class DocumentationModel(
             HandleClientNoteTypeNameChangedNotification;
         notificationPublisher.NoteType.ClientNoteTypeColorChangedNotificationReceived -=
             HandleClientNoteTypeColorChangedNotification;
+    }
+
+    public InitializationType Type => InitializationType.Model;
+
+    public async Task InitializeAsync()
+    {
+        var noteTypeModels = await requestSender.Send(new ClientGetAllNoteTypesRequest());
+
+        var viewModels = noteTypeModels
+            .Select(typeCheckBoxViewModelFactory.Create)
+            .ToList();
+
+        foreach (var viewModel in viewModels) viewModel.CheckedChanged += (_, args) => FilterNotes();
+
+        AllNoteTypes.Clear();
+        AllNoteTypes.AddRange(viewModels);
+
+        var ticketClientModels = await requestSender.Send(new ClientGetAllTicketsRequest());
+
+        AllTickets.Clear();
+        AllTickets.AddRange(ticketClientModels);
     }
 
     private async Task HandleClientNoteUpdatedNotification(ClientNoteUpdatedNotification message)

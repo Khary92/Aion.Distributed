@@ -3,10 +3,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Notifications.NoteType.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
+using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
+using Client.Desktop.Services.Authentication;
 using Client.Tracing.Tracing.Tracers;
 using Global.Settings;
 using Grpc.Core;
+using Grpc.Core.Interceptors;
 using Grpc.Net.Client;
 using Proto.Notifications.NoteType;
 
@@ -14,8 +17,23 @@ namespace Client.Desktop.Communication.Notifications.NoteType.Receiver;
 
 public class NoteTypeNotificationReceiver(
     IGrpcUrlService grpcUrlBuilder,
-    ITraceCollector tracer) : ILocalNoteTypeNotificationPublisher, IStreamClient
+    ITraceCollector tracer,
+    ITokenService tokenService) : ILocalNoteTypeNotificationPublisher, IStreamClient, IInitializeAsync
 {
+    private NoteTypeProtoNotificationService.NoteTypeProtoNotificationServiceClient? _client;
+
+    public InitializationType Type => InitializationType.AuthToken;
+
+    public async Task InitializeAsync()
+    {
+        var channel = GrpcChannel.ForAddress(grpcUrlBuilder.ClientToServerUrl);
+        var tokenProvider = new Func<Task<string>>(tokenService.GetToken);
+        var callInvoker = channel.Intercept(new AuthInterceptor(tokenProvider));
+        _client = new NoteTypeProtoNotificationService.NoteTypeProtoNotificationServiceClient(callInvoker);
+
+        await Task.CompletedTask;
+    }
+
     public event Func<ClientNoteTypeColorChangedNotification, Task>? ClientNoteTypeColorChangedNotificationReceived;
     public event Func<ClientNoteTypeNameChangedNotification, Task>? ClientNoteTypeNameChangedNotificationReceived;
     public event Func<NewNoteTypeMessage, Task>? NewNoteTypeMessageReceived;
@@ -55,11 +73,11 @@ public class NoteTypeNotificationReceiver(
         while (!cancellationToken.IsCancellationRequested)
             try
             {
-                using var channel = GrpcChannel.ForAddress(grpcUrlBuilder.ClientToServerUrl);
+                if (_client == null)
+                    throw new InvalidOperationException("Client is not initialized");
 
-                var client = new NoteTypeProtoNotificationService.NoteTypeProtoNotificationServiceClient(channel);
                 using var call =
-                    client.SubscribeNoteNotifications(new SubscribeRequest(), cancellationToken: cancellationToken);
+                    _client.SubscribeNoteNotifications(new SubscribeRequest(), cancellationToken: cancellationToken);
 
                 attempt = 0;
 

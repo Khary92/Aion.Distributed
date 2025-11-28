@@ -16,6 +16,7 @@ public class AsyncInitializeTask(
     [
         InitializationType.MockServices,
         InitializationType.MockModels,
+        InitializationType.AuthToken,
         InitializationType.Model,
         InitializationType.Service,
         InitializationType.ViewModel
@@ -23,6 +24,7 @@ public class AsyncInitializeTask(
 
     private readonly List<InitializationType> _order =
     [
+        InitializationType.AuthToken,
         InitializationType.Model,
         InitializationType.Service,
         InitializationType.ViewModel
@@ -38,19 +40,16 @@ public class AsyncInitializeTask(
 
     public StartupTask StartupTask => StartupTask.AsyncInitialize;
 
-    private List<InitializationType> GetOrder()
-    {
-        return mockSettingsService.IsMockingModeActive ? _mockedOrder : _order;
-    }
-
     public async Task Execute()
     {
         ValidateInitializationComponents();
 
-        foreach (var type in GetOrder())
-        {
-            await InitializeComponentsOfType(type);
-        }
+        foreach (var type in GetOrder()) await InitializeComponentsOfType(type);
+    }
+
+    private List<InitializationType> GetOrder()
+    {
+        return mockSettingsService.IsMockingModeActive ? _mockedOrder : _order;
     }
 
     private void ValidateInitializationComponents()

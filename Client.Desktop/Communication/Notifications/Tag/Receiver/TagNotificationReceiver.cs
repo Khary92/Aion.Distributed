@@ -3,10 +3,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Notifications.Tag.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
+using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
+using Client.Desktop.Services.Authentication;
 using Client.Tracing.Tracing.Tracers;
 using Global.Settings;
 using Grpc.Core;
+using Grpc.Core.Interceptors;
 using Grpc.Net.Client;
 using Proto.Notifications.Tag;
 
@@ -14,8 +17,23 @@ namespace Client.Desktop.Communication.Notifications.Tag.Receiver;
 
 public class TagNotificationReceiver(
     IGrpcUrlService grpcUrlBuilder,
-    ITraceCollector tracer) : ILocalTagNotificationPublisher, IStreamClient
+    ITraceCollector tracer,
+    ITokenService tokenService) : ILocalTagNotificationPublisher, IStreamClient, IInitializeAsync
 {
+    private TagNotificationService.TagNotificationServiceClient? _client;
+
+    public InitializationType Type => InitializationType.AuthToken;
+
+    public async Task InitializeAsync()
+    {
+        var channel = GrpcChannel.ForAddress(grpcUrlBuilder.ClientToServerUrl);
+        var tokenProvider = new Func<Task<string>>(tokenService.GetToken);
+        var callInvoker = channel.Intercept(new AuthInterceptor(tokenProvider));
+        _client = new TagNotificationService.TagNotificationServiceClient(callInvoker);
+
+        await Task.CompletedTask;
+    }
+
     public event Func<ClientTagUpdatedNotification, Task>? ClientTagUpdatedNotificationReceived;
     public event Func<NewTagMessage, Task>? NewTagMessageNotificationReceived;
 
@@ -45,11 +63,12 @@ public class TagNotificationReceiver(
         while (!cancellationToken.IsCancellationRequested)
             try
             {
-                using var channel = GrpcChannel.ForAddress(grpcUrlBuilder.ClientToServerUrl);
+                if (_client == null)
+                    throw new InvalidOperationException("Client is not initialized");
 
-                var client = new TagNotificationService.TagNotificationServiceClient(channel);
+
                 using var call =
-                    client.SubscribeTagNotifications(new SubscribeRequest(), cancellationToken: cancellationToken);
+                    _client.SubscribeTagNotifications(new SubscribeRequest(), cancellationToken: cancellationToken);
 
                 attempt = 0;
 

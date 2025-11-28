@@ -3,10 +3,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Local.LocalEvents.Records;
 using Client.Desktop.Communication.Notifications.Client.Records;
+using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
+using Client.Desktop.Services.Authentication;
 using Client.Tracing.Tracing.Tracers;
 using Global.Settings;
 using Grpc.Core;
+using Grpc.Core.Interceptors;
 using Grpc.Net.Client;
 using Proto.Notifications.Client;
 
@@ -14,8 +17,23 @@ namespace Client.Desktop.Communication.Notifications.Client.Receiver;
 
 public class ClientNotificationReceiver(
     IGrpcUrlService grpcUrlBuilder,
-    ITraceCollector tracer) : ILocalClientNotificationPublisher, IStreamClient
+    ITraceCollector tracer,
+    ITokenService tokenService) : ILocalClientNotificationPublisher, IStreamClient, IInitializeAsync
 {
+    private ClientNotificationService.ClientNotificationServiceClient? _client;
+
+    public InitializationType Type => InitializationType.AuthToken;
+
+    public async Task InitializeAsync()
+    {
+        var channel = GrpcChannel.ForAddress(grpcUrlBuilder.ClientToServerUrl);
+        var tokenProvider = new Func<Task<string>>(tokenService.GetToken);
+        var callInvoker = channel.Intercept(new AuthInterceptor(tokenProvider));
+        _client = new ClientNotificationService.ClientNotificationServiceClient(callInvoker);
+
+        await Task.CompletedTask;
+    }
+
     public event Func<ClientSprintSelectionChangedNotification, Task>? ClientSprintSelectionChangedNotificationReceived;
     public event Func<ClientTrackingControlCreatedNotification, Task>? ClientTrackingControlCreatedNotificationReceived;
 
@@ -44,11 +62,11 @@ public class ClientNotificationReceiver(
         while (!cancellationToken.IsCancellationRequested)
             try
             {
-                using var channel = GrpcChannel.ForAddress(grpcUrlBuilder.ClientToServerUrl);
+                if (_client == null)
+                    throw new InvalidOperationException("Client is not initialized");
 
-                var client = new ClientNotificationService.ClientNotificationServiceClient(channel);
                 using var call =
-                    client.SubscribeClientNotifications(new SubscribeRequest(), cancellationToken: cancellationToken);
+                    _client.SubscribeClientNotifications(new SubscribeRequest(), cancellationToken: cancellationToken);
 
                 attempt = 0;
 

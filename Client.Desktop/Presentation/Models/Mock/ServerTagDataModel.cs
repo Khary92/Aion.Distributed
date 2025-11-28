@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
@@ -13,12 +14,11 @@ using Client.Desktop.DataModels;
 using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
 using Proto.Command.Tags;
-using Proto.DTO.Tag;
 using Proto.DTO.TraceData;
 using Proto.Requests.Tags;
 using ReactiveUI;
 using Service.Proto.Shared.Commands.Tags;
-using Service.Proto.Shared.Requests.Tags;
+using ITagRequestSender = Client.Desktop.Communication.Requests.Tag.ITagRequestSender;
 
 namespace Client.Desktop.Presentation.Models.Mock;
 
@@ -113,51 +113,33 @@ public class ServerTagDataModel(MockDataService mockDataService) : ReactiveObjec
         return Task.FromResult(true);
     }
 
-    public Task<TagListProto> Send(GetAllTagsRequestProto request)
+    public Task<List<TagClientModel>> Send(GetAllTagsRequestProto request)
     {
-        var list = new TagListProto();
+        var list = new List<TagClientModel>();
 
         foreach (var tag in Tags)
-            list.Tags.Add(new TagProto
-            {
-                TagId = tag.TagId.ToString(),
-                Name = tag.Name,
-                IsSelected = tag.IsSelected
-            });
+            list.Add(new TagClientModel(tag.TagId, tag.Name, tag.IsSelected));
 
         return Task.FromResult(list);
     }
 
-    public Task<TagProto> Send(GetTagByIdRequestProto request)
+    public Task<TagClientModel> Send(GetTagByIdRequestProto request)
     {
         var tag = Tags.FirstOrDefault(t => t.TagId == Guid.Parse(request.TagId));
 
-        if (tag == null) return Task.FromResult<TagProto>(null!);
-
-        var result = new TagProto
-        {
-            TagId = tag.TagId.ToString(),
-            Name = tag.Name,
-            IsSelected = tag.IsSelected
-        };
-
-        return Task.FromResult(result);
+        if (tag == null) return Task.FromResult<TagClientModel>(null!);
+        return Task.FromResult(new TagClientModel(tag.TagId, tag.Name, tag.IsSelected));
     }
 
-    public Task<TagListProto> Send(GetTagsByIdsRequestProto request)
+    public Task<List<TagClientModel>> Send(GetTagsByIdsRequestProto request)
     {
-        var list = new TagListProto();
+        var list = new List<TagClientModel>();
 
         foreach (var tag in Tags)
         {
             if (!request.TagIds.Contains(tag.TagId.ToString())) continue;
 
-            list.Tags.Add(new TagProto
-            {
-                TagId = tag.TagId.ToString(),
-                Name = tag.Name,
-                IsSelected = tag.IsSelected
-            });
+            list.Add(new TagClientModel(tag.TagId, tag.Name, tag.IsSelected));
         }
 
         return Task.FromResult(list);

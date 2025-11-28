@@ -36,16 +36,6 @@ public class ExportModel(
         set => this.RaiseAndSetIfChanged(ref _markdownText, value);
     }
 
-    public InitializationType Type => InitializationType.Model;
-
-    public async Task InitializeAsync()
-    {
-        SelectedWorkDays.CollectionChanged += RefreshMarkdownViewerHandler;
-
-        WorkDays.Clear();
-        WorkDays.AddRange(await requestSender.Send(new ClientGetAllWorkDaysRequest(Guid.NewGuid())));
-    }
-
     public void RegisterMessenger()
     {
         notificationPublisher.WorkDay.NewWorkDayMessageReceived += HandleNewWorkDayMessage;
@@ -54,6 +44,16 @@ public class ExportModel(
     public void UnregisterMessenger()
     {
         notificationPublisher.WorkDay.NewWorkDayMessageReceived -= HandleNewWorkDayMessage;
+    }
+
+    public InitializationType Type => InitializationType.Model;
+
+    public async Task InitializeAsync()
+    {
+        SelectedWorkDays.CollectionChanged += RefreshMarkdownViewerHandler;
+
+        WorkDays.Clear();
+        WorkDays.AddRange(await requestSender.Send(new ClientGetAllWorkDaysRequest(Guid.NewGuid())));
     }
 
     private async Task HandleNewWorkDayMessage(NewWorkDayMessage message)

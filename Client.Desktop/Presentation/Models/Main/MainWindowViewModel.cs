@@ -21,8 +21,8 @@ public class MainWindowViewModel : ReactiveObject, IEventRegistration
     private const int MaxMenuWidth = 200;
 
     private readonly TrackingWrapperControl _timeTrackingControl;
-    private Control _currentControl;
     private readonly ITokenService _tokenService;
+    private Control _currentControl;
     private bool _isAuthenticated;
 
     private bool _isMenuOpen;
@@ -112,32 +112,29 @@ public class MainWindowViewModel : ReactiveObject, IEventRegistration
     public ReactiveCommand<Unit, Unit> ToggleSidePanelCommand { get; }
     public ReactiveCommand<Unit, Unit> OnDocumentationClickCommand { get; }
 
+    public void RegisterMessenger()
+    {
+        _tokenService.Authenticated += LoggedIn;
+    }
+
+    public void UnregisterMessenger()
+    {
+        _tokenService.Authenticated -= LoggedIn;
+    }
+
     private void ToggleMenu()
     {
         IsMenuOpen = !IsMenuOpen;
         MenuWidth = IsMenuOpen ? MaxMenuWidth : ZeroConstant;
     }
 
-    public void RegisterMessenger()
-    {
-        _tokenService.Authenticated += LoggedIn;
-    }
-
     private Task LoggedIn(string token)
     {
         IsAuthenticated = !string.IsNullOrEmpty(token);
 
-        if (!IsAuthenticated)
-        {
-            return Task.CompletedTask;
-        }
+        if (!IsAuthenticated) return Task.CompletedTask;
 
         CurrentControl = _timeTrackingControl;
         return Task.CompletedTask;
-    }
-
-    public void UnregisterMessenger()
-    {
-        _tokenService.Authenticated -= LoggedIn;
     }
 }

@@ -42,14 +42,6 @@ public class AnalysisBySprintModel(
         private set => this.RaiseAndSetIfChanged(ref _analysisBySprint, value);
     }
 
-    public InitializationType Type => InitializationType.Model;
-
-    public async Task InitializeAsync()
-    {
-        Sprints.Clear();
-        Sprints!.AddRange(await requestSender.Send(new ClientGetAllSprintsRequest()));
-    }
-
     public void RegisterMessenger()
     {
         notificationPublisher.Sprint.NewSprintMessageReceived += HandleNewSprintMessage;
@@ -62,6 +54,14 @@ public class AnalysisBySprintModel(
         notificationPublisher.Sprint.NewSprintMessageReceived -= HandleNewSprintMessage;
         notificationPublisher.Sprint.ClientSprintDataUpdatedNotificationReceived -=
             HandleClientSprintDataUpdatedNotification;
+    }
+
+    public InitializationType Type => InitializationType.Model;
+
+    public async Task InitializeAsync()
+    {
+        Sprints.Clear();
+        Sprints!.AddRange(await requestSender.Send(new ClientGetAllSprintsRequest()));
     }
 
     private async Task HandleNewSprintMessage(NewSprintMessage message)

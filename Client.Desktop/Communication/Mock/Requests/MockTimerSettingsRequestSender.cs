@@ -1,20 +1,17 @@
 ﻿using System.Threading.Tasks;
-using Proto.DTO.TimerSettings;
+using Client.Desktop.DataModels;
 using Proto.Requests.TimerSettings;
-using Service.Proto.Shared.Requests.TimerSettings;
+using ITimerSettingsRequestSender = Client.Desktop.Communication.Requests.Timer.ITimerSettingsRequestSender;
 
 namespace Client.Desktop.Communication.Mock.Requests;
 
 public class MockTimerSettingsRequestSender(MockDataService mockDataService) : ITimerSettingsRequestSender
 {
-    public Task<TimerSettingsProto> Send(GetTimerSettingsRequestProto request)
+    public Task<TimerSettingsClientModel> Send(GetTimerSettingsRequestProto request)
     {
-        var result = new TimerSettingsProto
-        {
-            TimerSettingsId = mockDataService.TimerSettings.TimerSettingsId.ToString(),
-            DocumentationSaveInterval = mockDataService.TimerSettings.DocumentationSaveInterval,
-            SnapshotSaveInterval = mockDataService.TimerSettings.SnapshotSaveInterval
-        };
+        var result = new TimerSettingsClientModel(mockDataService.TimerSettings.TimerSettingsId,
+            mockDataService.TimerSettings.DocumentationSaveInterval,
+            mockDataService.TimerSettings.SnapshotSaveInterval);
 
         return Task.FromResult(result);
     }
