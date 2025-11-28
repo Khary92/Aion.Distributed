@@ -81,21 +81,6 @@ services:
       timeout: 5s
       retries: 5
 
-  pgadmin:
-    image: dpage/pgadmin4
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
-      - PGADMIN_DEFAULT_PASSWORD=admin
-      - PGADMIN_CONFIG_SERVER_MODE=False
-      - TZ=Europe/Berlin
-    expose:
-      - "80"
-    depends_on:
-      - postgres
-    volumes:
-      - ./servers.json:/pgadmin4/servers.json:ro
-    restart: unless-stopped
-
 volumes:
   postgres_data:
   data_protection_keys:
