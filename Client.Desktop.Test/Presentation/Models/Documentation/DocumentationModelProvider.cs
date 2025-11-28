@@ -6,6 +6,7 @@ using Client.Desktop.DataModels;
 using Client.Desktop.Presentation.Factories;
 using Client.Desktop.Presentation.Models.Documentation;
 using Client.Desktop.Presentation.Models.TimeTracking.DynamicControls;
+using Client.Desktop.Services.Authentication;
 using Client.Tracing.Tracing.Tracers;
 using Global.Settings;
 using Moq;
@@ -16,12 +17,18 @@ public static class DocumentationModelProvider
 {
     private static TestNotificationPublisherFacade CreateNotificationPublisherMock()
     {
-        return new TestNotificationPublisherFacade(CreateGrpcUrlBuilderMock().Object, CreateTracerMock().Object);
+        return new TestNotificationPublisherFacade(CreateGrpcUrlBuilderMock().Object, CreateTracerMock().Object,
+            CreateTokenServiceMock().Object);
     }
 
     private static Mock<IGrpcUrlService> CreateGrpcUrlBuilderMock()
     {
         return new Mock<IGrpcUrlService>();
+    }
+
+    private static Mock<ITokenService> CreateTokenServiceMock()
+    {
+        return new Mock<ITokenService>();
     }
 
     private static Mock<ITraceCollector> CreateTracerMock()

@@ -6,6 +6,7 @@ using Client.Desktop.DataModels;
 using Client.Desktop.DataModels.Decorators.Replays;
 using Client.Desktop.Presentation.Models.Synchronization;
 using Client.Desktop.Presentation.Models.TimeTracking;
+using Client.Desktop.Services.Authentication;
 using Client.Desktop.Services.Cache;
 using Client.Tracing.Tracing.Tracers;
 using Global.Settings;
@@ -17,7 +18,8 @@ public static class TrackingSlotModelProvider
 {
     private static TestNotificationPublisherFacade CreateNotificationPublisherMock()
     {
-        return new TestNotificationPublisherFacade(CreateGrpcUrlBuilderMock().Object, CreateTracerMock().Object);
+        return new TestNotificationPublisherFacade(CreateGrpcUrlBuilderMock().Object, CreateTracerMock().Object,
+            CreateTokenServiceMock().Object);
     }
 
     private static IClientTimerNotificationPublisher CreateClientTimerNotificationPublisherMock()
@@ -28,6 +30,11 @@ public static class TrackingSlotModelProvider
     private static Mock<IGrpcUrlService> CreateGrpcUrlBuilderMock()
     {
         return new Mock<IGrpcUrlService>();
+    }
+
+    private static Mock<ITokenService> CreateTokenServiceMock()
+    {
+        return new Mock<ITokenService>();
     }
 
     private static Mock<ITraceCollector> CreateTracerMock()

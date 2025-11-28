@@ -8,6 +8,7 @@ using Client.Desktop.Communication.Requests.Ticket;
 using Client.Desktop.DataModels;
 using Client.Desktop.Presentation.Factories;
 using Client.Desktop.Presentation.Models.TimeTracking;
+using Client.Desktop.Services.Authentication;
 using Client.Desktop.Services.Cache;
 using Client.Desktop.Services.LocalSettings;
 using Client.Tracing.Tracing.Tracers;
@@ -20,12 +21,18 @@ public static class TimeTrackingModelProvider
 {
     private static TestNotificationPublisherFacade CreateNotificationPublisherMock()
     {
-        return new TestNotificationPublisherFacade(CreateGrpcUrlBuilderMock().Object, CreateTracerMock().Object);
+        return new TestNotificationPublisherFacade(CreateGrpcUrlBuilderMock().Object, CreateTracerMock().Object,
+            CreateTokenServiceMock().Object);
     }
 
     private static IClientTimerNotificationPublisher CreateClientTimerNotificationPublisherMock()
     {
         return new TestTimerSettingsPublisher();
+    }
+
+    private static Mock<ITokenService> CreateTokenServiceMock()
+    {
+        return new Mock<ITokenService>();
     }
 
     private static Mock<IGrpcUrlService> CreateGrpcUrlBuilderMock()
