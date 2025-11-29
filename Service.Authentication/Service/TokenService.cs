@@ -36,24 +36,4 @@ public class TokenService
         );
         return new JwtSecurityTokenHandler().WriteToken(jwt);
     }
-
-    public void AddAuthCode(string code, AuthorizationCode authCode)
-    {
-        _authCodes[code] = authCode;
-    }
-
-    public AuthorizationCode GetAuthCode(string code)
-    {
-        return _authCodes[code];
-    }
-
-    public void AddRefreshToken(string token, RefreshToken refreshToken)
-    {
-        _refreshTokens[token] = refreshToken;
-    }
-
-    public RefreshToken GetRefreshToken(string token)
-    {
-        return _refreshTokens[token];
-    }
 }

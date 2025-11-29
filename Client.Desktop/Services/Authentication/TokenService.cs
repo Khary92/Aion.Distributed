@@ -38,7 +38,7 @@ public class TokenService : ITokenService
         var challenge = WebEncoders.Base64UrlEncode(
             sha.ComputeHash(Encoding.ASCII.GetBytes(verifier)));
 
-        
+
         // 1) /authorize
         var query = new Dictionary<string, string?>
         {
