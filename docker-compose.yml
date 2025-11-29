@@ -7,7 +7,7 @@ services:
     expose:
       - "5001"
     volumes:
-    - /auth.keys:/certs:ro,Z
+    - ./auth-keys:/certs:ro,Z
     - ./DataProtection-Keys:/app/DataProtection-Keys:rw
     environment:
       - TZ=Europe/Berlin
