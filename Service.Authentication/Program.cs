@@ -21,7 +21,7 @@ builder.Services.AddAuthServices(rsaKey);
 
 var app = builder.Build();
 
-app.MapGet("/authorize", req => app.Services.GetRequiredService<AuthoritaionEndpoint>().Handle(req.Request));
+app.MapGet("/authorize", req => app.Services.GetRequiredService<AuthoritaionEndpoint>().Handle(req.Request, req.Response));
 app.MapPost("/token", req => app.Services.GetRequiredService<TokenEndpoint>().Handle(req.Request));
 app.MapGet("/userinfo", req => app.Services.GetRequiredService<UserInfoEndpoint>().Handle(req.Request));
 
