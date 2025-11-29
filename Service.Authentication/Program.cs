@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRouting();
 builder.Services.AddEndpointsApiExplorer();
     
-var keyPath = "/certs/private_key.pem";
+var keyPath = "/certs/private_key_pkcs8.pem";
 
 var rsa = RSA.Create();
 rsa.ImportFromPem(File.ReadAllText(keyPath));
