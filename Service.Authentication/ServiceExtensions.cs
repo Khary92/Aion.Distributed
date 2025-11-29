@@ -16,7 +16,7 @@ public static class ServiceExtensions
     
     private static void InternalServices(this IServiceCollection services, RsaSecurityKey rsaKey)
     {
-        services.AddScoped<TokenService>(_ => new TokenService(rsaKey));
+        services.AddSingleton<TokenService>(_ => new TokenService(rsaKey));
     }
 
     private static void PersistenceServices(this IServiceCollection services)
@@ -27,7 +27,7 @@ public static class ServiceExtensions
     
     private static void AddEndpoints(this IServiceCollection services)
     {
-        services.AddScoped<AuthoritaionEndpoint>();
+        services.AddScoped<AuthorizationEndpoint>();
         services.AddScoped<TokenEndpoint>();
         services.AddScoped<UserInfoEndpoint>();
     }

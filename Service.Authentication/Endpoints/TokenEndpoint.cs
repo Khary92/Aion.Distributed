@@ -3,15 +3,18 @@ using System.Security.Claims;
 using Service.Authorization.Persistence;
 using Service.Authorization.Records;
 using Service.Authorization.Service;
+using static Microsoft.AspNetCore.Http.Results;
 
 namespace Service.Authorization.Endpoints;
 
 public class TokenEndpoint(IUserRepository users, TokenService tokenService)
 {
-    public async Task<IResult> Handle(HttpRequest req)
+    public async Task<IResult> Handle(HttpContext httpContext)
     {
-        if (!req.HasFormContentType) return Results.BadRequest("invalid_request");
-        var form = await req.ReadFormAsync();
+        if (!httpContext.Request.HasFormContentType)
+            return BadRequest(new { error = "invalid_request" });
+
+        var form = await httpContext.Request.ReadFormAsync();
         var grantType = form["grant_type"].ToString();
 
         if (grantType == "authorization_code")
@@ -22,19 +25,19 @@ public class TokenEndpoint(IUserRepository users, TokenService tokenService)
             var codeVerifier = form["code_verifier"].ToString();
 
             if (!tokenService.AuthCodes.TryGetValue(code, out var stored))
-                return Results.BadRequest(new { error = "invalid_grant" });
+                return BadRequest(new { error = "invalid_grant" });
+
             if (stored.Expiry < DateTime.UtcNow)
             {
                 tokenService.AuthCodes.Remove(code);
-                return Results.BadRequest(new { error = "invalid_grant" });
+                return BadRequest(new { error = "invalid_grant" });
             }
 
-            if (stored.ClientId != clientId) return Results.BadRequest(new { error = "invalid_grant" });
-            if (stored.RedirectUri != redirectUri) return Results.BadRequest(new { error = "invalid_grant" });
+            if (stored.ClientId != clientId || stored.RedirectUri != redirectUri)
+                return BadRequest(new { error = "invalid_grant" });
 
-            // Verify PKCE if required
             if (!Helpers.VerifyPkce(stored.CodeChallenge, stored.CodeChallengeMethod, codeVerifier))
-                return Results.BadRequest(new { error = "invalid_grant", error_description = "pkce_failed" });
+                return BadRequest(new { error = "invalid_grant", error_description = "pkce_failed" });
 
             // One-time use
             tokenService.AuthCodes.Remove(code);
@@ -56,7 +59,7 @@ public class TokenEndpoint(IUserRepository users, TokenService tokenService)
                 Expiry = DateTime.UtcNow.AddDays(30)
             };
 
-            return Results.Json(new
+            return Json(new
             {
                 access_token = accessToken,
                 token_type = "Bearer",
@@ -69,11 +72,12 @@ public class TokenEndpoint(IUserRepository users, TokenService tokenService)
         {
             var refresh = form["refresh_token"].ToString();
             if (!tokenService.RefreshTokens.TryGetValue(refresh, out var rinfo))
-                return Results.BadRequest(new { error = "invalid_grant" });
+                return BadRequest(new { error = "invalid_grant" });
+
             if (rinfo.Expiry < DateTime.UtcNow)
             {
                 tokenService.RefreshTokens.Remove(refresh);
-                return Results.BadRequest(new { error = "invalid_grant", error_description = "refresh expired" });
+                return BadRequest(new { error = "invalid_grant", error_description = "refresh expired" });
             }
 
             var user = users.GetAll().First(u => u.UserId == rinfo.UserId);
@@ -84,14 +88,16 @@ public class TokenEndpoint(IUserRepository users, TokenService tokenService)
             };
 
             var accessToken = tokenService.CreateJwt(user.UserId, claims, TimeSpan.FromMinutes(15));
-            return Results.Json(new
+
+            return Json(new
             {
                 access_token = accessToken,
                 token_type = "Bearer",
-                expires_in = 900
+                expires_in = 900,
+                refresh_token = refresh
             });
         }
 
-        return Results.BadRequest(new { error = "unsupported_grant_type" });
+        return BadRequest(new { error = "unsupported_grant_type" });
     }
 }

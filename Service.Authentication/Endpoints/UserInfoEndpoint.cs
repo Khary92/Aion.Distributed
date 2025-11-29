@@ -6,9 +6,9 @@ namespace Service.Authorization.Endpoints;
 
 public class UserInfoEndpoint(TokenService tokenService)
 {
-    public Task<IResult> Handle(HttpRequest req)
+    public Task<IResult> Handle(HttpContext httpContext)
     {
-        var auth = req.Headers["Authorization"].ToString();
+        var auth = httpContext.Request.Headers["Authorization"].ToString();
         if (string.IsNullOrEmpty(auth) || !auth.StartsWith("Bearer ")) return Task.FromResult(Results.Unauthorized());
 
         var token = auth.Substring("Bearer ".Length).Trim();

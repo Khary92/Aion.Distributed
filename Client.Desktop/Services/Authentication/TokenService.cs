@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Security.Cryptography;
 using System.Text;
@@ -39,8 +38,9 @@ public class TokenService : ITokenService
         var challenge = WebEncoders.Base64UrlEncode(
             sha.ComputeHash(Encoding.ASCII.GetBytes(verifier)));
 
+        
         // 1) /authorize
-        var query = new Dictionary<string, string>
+        var query = new Dictionary<string, string?>
         {
             ["response_type"] = "code",
             ["client_id"] = "demo_client",
@@ -53,8 +53,7 @@ public class TokenService : ITokenService
             ["login_pass"] = pass
         };
 
-        var uri = "https://auth.hiegert.eu/authorize?" +
-                  string.Join("&", query.Select(kv => $"{kv.Key}={Uri.EscapeDataString(kv.Value)}"));
+        var uri = QueryHelpers.AddQueryString("http://127.0.0.1:5001/authorize", query);
 
         var resp = await _client.GetAsync(uri);
 
@@ -77,7 +76,7 @@ public class TokenService : ITokenService
         };
 
         var tokenResp = await _client.PostAsync(
-            "https://auth.hiegert.eu/token",
+            "http://127.0.0.1:5001/token",
             new FormUrlEncodedContent(tokenReq));
 
         var json = await tokenResp.Content.ReadAsStringAsync();
