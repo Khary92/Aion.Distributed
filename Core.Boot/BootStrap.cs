@@ -35,7 +35,7 @@ public static class BootStrap
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
-                    ValidIssuer = "your-issuer",
+                    ValidIssuer = "http://localhost:5001/",
                     ValidateAudience = true,
                     ValidAudience = "your-audience",
                     ValidateIssuerSigningKey = true,

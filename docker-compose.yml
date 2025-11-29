@@ -7,8 +7,8 @@ services:
     expose:
       - "5001"
     volumes:
-    - ./auth-keys:/certs:ro,z
-    - ./DataProtection-Keys:/app/DataProtection-Keys:rw
+      - ./auth-keys:/certs:rw
+      - ./DataProtection-Keys:/app/DataProtection-Keys:rw
     environment:
       - TZ=Europe/Berlin
     restart: unless-stopped
@@ -29,6 +29,7 @@ services:
       - postgres
     restart: unless-stopped
     volumes:
+      - ./auth-keys/public_key.pem:/jwt/public_key.pem:ro,z
       - /var/lib/docker/volumes/npm_npm-ssl/_data/archive/npm-9:/certs:ro,Z
       - ./DataProtection-Keys:/app/DataProtection-Keys:rw
 
@@ -44,6 +45,7 @@ services:
       - ASPNETCORE_URLS=http://+:8080
       - TZ=Europe/Berlin
     volumes:
+      - ./auth-keys/public_key.pem:/jwt/public_key.pem:ro,z
       - /var/lib/docker/volumes/npm_npm-ssl/_data/archive/npm-9:/certs:ro,Z
       - ./DataProtection-Keys:/app/DataProtection-Keys:rw
     depends_on:
@@ -61,6 +63,7 @@ services:
       - ASPNETCORE_URLS=http://+:8080
       - TZ=Europe/Berlin
     volumes:
+      - ./auth-keys/public_key.pem:/jwt/public_key.pem:ro,z
       - ./DataProtection-Keys:/app/DataProtection-Keys:rw
     depends_on:
       - monitoring-service

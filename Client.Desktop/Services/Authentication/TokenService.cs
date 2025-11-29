@@ -53,7 +53,7 @@ public class TokenService : ITokenService
             ["login_pass"] = pass
         };
 
-        var uri = QueryHelpers.AddQueryString("http://127.0.0.1:5001/authorize", query);
+        var uri = QueryHelpers.AddQueryString("https://auth.hiegert.eu/authorize", query);
 
         var resp = await _client.GetAsync(uri);
 
@@ -76,7 +76,7 @@ public class TokenService : ITokenService
         };
 
         var tokenResp = await _client.PostAsync(
-            "http://127.0.0.1:5001/token",
+            "https://auth.hiegert.eu/token",
             new FormUrlEncodedContent(tokenReq));
 
         var json = await tokenResp.Content.ReadAsStringAsync();
