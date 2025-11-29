@@ -1,5 +1,5 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using System.Text;
+﻿using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using Core.Persistence;
 using Core.Persistence.DbContext;
@@ -28,31 +28,39 @@ public static class BootStrap
             options.MaxReceiveMessageSize = 2 * 1024 * 1024;
             options.MaxSendMessageSize = 2 * 1024 * 1024;
         });
-        
+
+        var publicKeyPath = "/jwt/public_key.pem";
+
+        var rsa = RSA.Create();
+        rsa.ImportFromPem(await File.ReadAllTextAsync(publicKeyPath));
+
+        var rsaKey = new RsaSecurityKey(rsa)
+        {
+            KeyId = "auth-server-key"
+        };
+
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
-                    ValidIssuer = "http://localhost:5001/",
+                    ValidIssuer = "http://localhost:5001",
                     ValidateAudience = true,
                     ValidAudience = "your-audience",
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey("super-secret-key"u8.ToArray()),
-                    ValidateLifetime = true,
+                    IssuerSigningKey = rsaKey,
+                    ValidateLifetime = true
                 };
 
-                // Optional: support access_token in querystring for gRPC-Web or web clients
                 options.Events = new JwtBearerEvents
                 {
                     OnMessageReceived = context =>
                     {
-                        // if header is missing, allow token via ?access_token=... (useful for gRPC-web)
-                        if (string.IsNullOrEmpty(context.Request.Headers["Authorization"]))
+                        if (string.IsNullOrEmpty(context.Request.Headers["Authorization"]) &&
+                            context.Request.Query.TryGetValue("access_token", out var t))
                         {
-                            if (context.Request.Query.TryGetValue("access_token", out var t))
-                                context.Token = t;
+                            context.Token = t;
                         }
 
                         return Task.CompletedTask;
