@@ -47,7 +47,7 @@ public static class BootStrap
                     ValidateIssuer = true,
                     ValidIssuer = "http://localhost:5001",
                     ValidateAudience = true,
-                    ValidAudience = "your-audience",
+                    ValidAudience = "api",
                     ValidateIssuerSigningKey = true,
                     IssuerSigningKey = rsaKey,
                     ValidateLifetime = true
