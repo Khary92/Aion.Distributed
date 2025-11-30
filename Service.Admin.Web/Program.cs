@@ -25,16 +25,18 @@ builder.Configuration.GetSection("AdminSettings").Bind(adminSettings);
 
 builder.WebHost.ConfigureKestrel(options =>
 {
-    // Internal Grpc Listener (HTTP/2, no TLS)
+    // Internal gRPC Listener (HTTP/2, no TLS)
     options.ListenAnyIP(adminSettings.InternalGrpcPort, listenOptions =>
     {
         listenOptions.Protocols = HttpProtocols.Http2;
         AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
     });
 
-    // Web listener
-    options.ListenAnyIP(adminSettings.ExposedWebPort,
-        listenOptions => { listenOptions.Protocols = HttpProtocols.Http1AndHttp2; });
+    // Web Listener (HTTPS + HTTP/1/2)
+    options.ListenAnyIP(adminSettings.ExposedWebPort, listenOptions =>
+    {
+        listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
+    });
 });
 
 builder.Logging.AddConsole();
@@ -49,10 +51,15 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseRouting();
+
+//app.UseAuthentication();
+//app.UseAuthorization();
+
 app.UseAntiforgery();
 
 app.MapGrpcService<TicketNotificationsReceiver>();
 app.MapGrpcService<ReportReceiver>();
+
 app.MapStaticAssets();
 app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 
