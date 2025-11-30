@@ -19,26 +19,24 @@ public class ShutdownHandler(
     IEnumerable<IEventRegistration> messengers,
     IStreamLifeCycleHandler streamLifeCycleHandler) : IShutDownHandler
 {
-    public async Task Exit()
+    public void Exit()
     {
-        await startTimeCache.Persist();
-        await endTimeCache.Persist();
-
         streamLifeCycleHandler.Stop();
 
         foreach (var messenger in messengers) messenger.UnregisterMessenger();
 
-        try
-        {
-            timerService.Dispose();
-        }
-        catch (ObjectDisposedException)
-        {
-        }
+        timerService.Dispose();
 
         applicationLifetime.StopApplication();
 
         if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopApp)
             desktopApp.Shutdown();
+    }
+
+    public async Task ExitAndSendCommands()
+    {
+        await startTimeCache.Persist();
+        await endTimeCache.Persist();
+        Exit();
     }
 }

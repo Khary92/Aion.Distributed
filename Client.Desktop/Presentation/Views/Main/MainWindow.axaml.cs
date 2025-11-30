@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -6,6 +7,7 @@ using Avalonia.Interactivity;
 using Avalonia.Platform;
 using Client.Desktop.Lifecycle.Shutdown;
 using Client.Desktop.Presentation.Models.Main;
+using Client.Desktop.Services.Authentication;
 using Microsoft.Extensions.Hosting;
 using MsBox.Avalonia;
 using MsBox.Avalonia.Dto;
@@ -16,6 +18,7 @@ namespace Client.Desktop.Presentation.Views.Main;
 public partial class MainWindow : Window
 {
     private readonly IHost _host;
+    private readonly ITokenService _tokenService;
     private readonly IShutDownHandler _shutDownHandler;
 
     public MainWindow()
@@ -25,10 +28,12 @@ public partial class MainWindow : Window
         _host = null!;
     }
 
-    public MainWindow(MainWindowViewModel viewModel, IShutDownHandler shutDownHandler, IHost host)
+    public MainWindow(MainWindowViewModel viewModel, IShutDownHandler shutDownHandler, IHost host,
+        ITokenService tokenService)
     {
         _shutDownHandler = shutDownHandler;
         _host = host;
+        _tokenService = tokenService;
         InitializeComponent();
         DataContext = viewModel;
 
@@ -49,6 +54,13 @@ public partial class MainWindow : Window
 
     private async void CloseApp(object? sender, RoutedEventArgs e)
     {
+        if (!_tokenService.IsAuthenticated &&
+            Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime)
+        {
+            _shutDownHandler.Exit();
+            return;
+        }
+
         var messageBoxStandard = MessageBoxManager.GetMessageBoxStandard(new MessageBoxStandardParams
         {
             ButtonDefinitions = ButtonEnum.YesNo,
@@ -62,7 +74,7 @@ public partial class MainWindow : Window
         if (result == ButtonResult.Yes &&
             Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopApp)
         {
-            await _shutDownHandler.Exit();
+            await _shutDownHandler.ExitAndSendCommands();
             await _host.StopAsync();
             desktopApp.Shutdown();
         }

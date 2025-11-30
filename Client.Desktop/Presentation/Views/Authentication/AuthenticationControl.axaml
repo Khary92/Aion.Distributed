@@ -4,18 +4,48 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:authentication="clr-namespace:Client.Desktop.Presentation.Models.Authentication"
              x:DataType="authentication:AuthenticationViewModel"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d"
              x:Class="Client.Desktop.Presentation.Views.Authentication.AuthenticationControl">
 
-    <Grid RowDefinitions="*,Auto,Auto,Auto,*">
-        <StackPanel Grid.Row="1" HorizontalAlignment="Center">
-            <TextBlock>User: </TextBlock>
-            <TextBox Text="{Binding UserName, Mode=TwoWay}" />
-        </StackPanel>
-        <StackPanel Grid.Row="2" HorizontalAlignment="Center">
-            <TextBlock>Password: </TextBlock>
-            <TextBox Text="{Binding Password, Mode=TwoWay}" />
-        </StackPanel>
-        <Button Grid.Row="3" Command="{Binding LoginCommand}" />
+    <Grid RowDefinitions="*" ColumnDefinitions="*">
+        <Border Width="350"
+                Padding="24"
+                Background="#2C2C2C"
+                CornerRadius="10"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+
+            <StackPanel Spacing="16">
+
+                <TextBlock Text="Login"
+                           FontSize="24"
+                           HorizontalAlignment="Center"
+                           Margin="0 0 0 8"/>
+
+                <StackPanel Spacing="4">
+                    <TextBlock Text="User" />
+                    <TextBox Text="{Binding UserName, Mode=TwoWay}"
+                             Watermark="Enter username"/>
+                </StackPanel>
+
+                <StackPanel Spacing="4">
+                    <TextBlock Text="Password" />
+                    <TextBox Text="{Binding Password, Mode=TwoWay}"
+                             Watermark="Enter password"
+                             PasswordChar="●"/>
+                </StackPanel>
+
+                <TextBlock Text="{Binding Result}"
+                           Foreground="Orange"
+                           HorizontalAlignment="Center"
+                           Margin="0 8 0 0"/>
+
+                <Button Content="Login"
+                        Command="{Binding LoginCommand}"
+                        Width="150"
+                        HorizontalAlignment="Center"
+                        Margin="0 12 0 0"/>
+            </StackPanel>
+        </Border>
     </Grid>
 </UserControl>

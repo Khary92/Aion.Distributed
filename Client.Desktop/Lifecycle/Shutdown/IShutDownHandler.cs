@@ -4,5 +4,6 @@ namespace Client.Desktop.Lifecycle.Shutdown;
 
 public interface IShutDownHandler
 {
-    Task Exit();
+    void Exit();
+    Task ExitAndSendCommands();
 }

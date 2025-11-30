@@ -25,7 +25,9 @@ public class TokenService : ITokenService
 
     public event Func<string, Task>? Authenticated;
 
-    public async Task Login(string user, string pass)
+    public bool IsAuthenticated => !string.IsNullOrEmpty(_accessToken);
+    
+    public async Task<AuthenticationResult> Login(string user, string pass)
     {
         // PKCE minimal
         string RandomStr(int len = 32)
@@ -55,10 +57,20 @@ public class TokenService : ITokenService
 
         var uri = QueryHelpers.AddQueryString("https://auth.hiegert.eu/authorize", query);
 
-        var resp = await _client.GetAsync(uri);
+        HttpResponseMessage resp;
+
+        try
+        {
+            resp = await _client.GetAsync(uri);
+        }
+        catch (Exception e)
+        {
+            return AuthenticationResult.ServiceUnavailable;
+        }
+
 
         if (resp.Headers.Location == null)
-            return;
+            return AuthenticationResult.InvalidCredentials;
 
         var redirect = resp.Headers.Location?.ToString();
 
@@ -80,16 +92,19 @@ public class TokenService : ITokenService
             new FormUrlEncodedContent(tokenReq));
 
         var json = await tokenResp.Content.ReadAsStringAsync();
+
         var data = JsonSerializer.Deserialize<TokenData>(json);
 
+        if (data == null) return AuthenticationResult.RedirectFailed;
+        
         _accessToken = data!.access_token;
         _refreshToken = data.refresh_token;
         _expiry = DateTime.UtcNow.AddSeconds(data.expires_in);
 
         if (Authenticated == null) throw new InvalidOperationException("No forwarding receiver set");
 
-        //await startupScheduler.Execute();
         await Authenticated.Invoke(_accessToken);
+        return AuthenticationResult.Successful;
     }
 
     public async Task<string> GetToken()
@@ -103,7 +118,7 @@ public class TokenService : ITokenService
         };
 
         var resp = await _client.PostAsync(
-            "https://localhost:5001/token",
+            "https://auth.hiegert.eu/token",
             new FormUrlEncodedContent(body));
 
         var json = await resp.Content.ReadAsStringAsync();
