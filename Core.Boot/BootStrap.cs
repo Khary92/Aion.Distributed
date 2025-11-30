@@ -87,12 +87,13 @@ public static class BootStrap
             await SeedAsync(db);
         }
 
-        app.AddEndPoints();
         app.UseRouting();
 
         app.UseAuthentication();
         app.UseAuthorization();
 
+        app.AddEndPoints();
+        
         await app.RunAsync();
     }
 

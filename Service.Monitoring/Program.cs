@@ -98,10 +98,11 @@ public abstract class Program
 
         var app = builder.Build();
         app.UseRouting();
-        app.AddEndPoints();
 
         app.UseAuthentication();
         app.UseAuthorization(); 
+        
+        app.AddEndPoints();
         
         await app.RunAsync();
     }
