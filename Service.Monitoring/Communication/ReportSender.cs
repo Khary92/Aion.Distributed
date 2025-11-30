@@ -25,6 +25,6 @@ public class ReportSender : IReportSender
 
     public async Task Send(Report report)
     {
-        await _client.SendReportAsync(report.ToProto(), GetAuthHeader());
+        await _client.SendReportAsync(report.ToProto());
     }
 }
