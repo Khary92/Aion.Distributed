@@ -1,10 +1,12 @@
 ﻿using Core.Server.Services.Entities.TimeSlots;
 using Core.Server.Tracing.Tracing.Tracers;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Proto.Command.TimeSlots;
 
 namespace Core.Server.Communication.Endpoints.TimeSlot;
 
+[Authorize]
 public class TimeSlotCommandReceiver(ITimeSlotCommandsService timeSlotCommandsService, ITraceCollector tracer)
     : TimeSlotCommandProtoService.TimeSlotCommandProtoServiceBase
 {

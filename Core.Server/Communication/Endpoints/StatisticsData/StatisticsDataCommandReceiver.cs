@@ -1,10 +1,12 @@
 ﻿using Core.Server.Services.Entities.StatisticsData;
 using Core.Server.Tracing.Tracing.Tracers;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Proto.Command.StatisticsData;
 
 namespace Core.Server.Communication.Endpoints.StatisticsData;
 
+[Authorize]
 public class StatisticsDataCommandReceiver(
     IStatisticsDataCommandsService statisticsDataCommandsService,
     ITraceCollector tracer)

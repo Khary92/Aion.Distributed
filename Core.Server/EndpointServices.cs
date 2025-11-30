@@ -1,4 +1,5 @@
-﻿using Core.Server.Communication.Endpoints.Analysis;
+﻿using Core.Server.Communication;
+using Core.Server.Communication.Endpoints.Analysis;
 using Core.Server.Communication.Endpoints.Client;
 using Core.Server.Communication.Endpoints.Note;
 using Core.Server.Communication.Endpoints.NoteType;

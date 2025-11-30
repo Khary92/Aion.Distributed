@@ -1,10 +1,12 @@
 ﻿using Core.Server.Services.Entities.TimeSlots;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Proto.DTO.TimeSlots;
 using Proto.Requests.TimeSlots;
 
 namespace Core.Server.Communication.Endpoints.TimeSlot;
 
+[Authorize]
 public class TimeSlotRequestReceiver(ITimeSlotRequestsService timeSlotRequestsService)
     : TimeSlotRequestService.TimeSlotRequestServiceBase
 {

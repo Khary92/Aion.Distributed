@@ -1,10 +1,12 @@
 using Core.Server.Services.Entities.Tickets;
 using Core.Server.Tracing.Tracing.Tracers;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Proto.Command.Tickets;
 
 namespace Core.Server.Communication.Endpoints.Ticket;
 
+[Authorize]
 public class TicketCommandReceiver(ITicketCommandsService ticketCommandsService, ITraceCollector tracer)
     : TicketCommandProtoService.TicketCommandProtoServiceBase
 {

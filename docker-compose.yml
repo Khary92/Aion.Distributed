@@ -8,7 +8,6 @@ services:
       - "5001"
     volumes:
       - ./auth-keys:/certs:rw
-      - ./DataProtection-Keys:/app/DataProtection-Keys:rw
     environment:
       - TZ=Europe/Berlin
     restart: unless-stopped
@@ -31,7 +30,6 @@ services:
     volumes:
       - ./auth-keys/public_key.pem:/jwt/public_key.pem:ro,z
       - /var/lib/docker/volumes/npm_npm-ssl/_data/archive/npm-9:/certs:ro,Z
-      - ./DataProtection-Keys:/app/DataProtection-Keys:rw
 
   monitoring-service:
     build:
@@ -47,7 +45,6 @@ services:
     volumes:
       - ./auth-keys/public_key.pem:/jwt/public_key.pem:ro,z
       - /var/lib/docker/volumes/npm_npm-ssl/_data/archive/npm-9:/certs:ro,Z
-      - ./DataProtection-Keys:/app/DataProtection-Keys:rw
     depends_on:
       - core-service
     restart: unless-stopped
@@ -64,7 +61,6 @@ services:
       - TZ=Europe/Berlin
     volumes:
       - ./auth-keys/public_key.pem:/jwt/public_key.pem:ro,z
-      - ./DataProtection-Keys:/app/DataProtection-Keys:rw
     depends_on:
       - monitoring-service
       - core-service
@@ -89,4 +85,3 @@ services:
 
 volumes:
   postgres_data:
-  data_protection_keys:

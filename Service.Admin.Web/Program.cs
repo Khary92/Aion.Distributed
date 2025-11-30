@@ -1,7 +1,5 @@
-using System.Security.Cryptography.X509Certificates;
 using Global.Settings;
 using Global.Settings.Types;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Service.Admin.Tracing;
 using Service.Admin.Web;
@@ -15,9 +13,6 @@ var builder = WebApplication.CreateBuilder(args);
 builder.SetConfiguration();
 builder.Services.AddWebServices();
 builder.Services.AddTracingServices();
-
-builder.Services.AddDataProtection()
-    .PersistKeysToFileSystem(new DirectoryInfo("/app/DataProtection-Keys"));
 
 builder.Services.AddAntiforgery(options =>
 {
@@ -36,19 +31,13 @@ builder.WebHost.ConfigureKestrel(options =>
         listenOptions.Protocols = HttpProtocols.Http2;
         AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
     });
-    
+
     // Web listener
-    options.ListenAnyIP(adminSettings.ExposedWebPort, listenOptions =>
-    {
-        listenOptions.Protocols = HttpProtocols.Http1AndHttp2;
-    });
+    options.ListenAnyIP(adminSettings.ExposedWebPort,
+        listenOptions => { listenOptions.Protocols = HttpProtocols.Http1AndHttp2; });
 });
 
 builder.Logging.AddConsole();
-
-builder.Services.AddDataProtection()
-    .PersistKeysToFileSystem(new DirectoryInfo("/app/DataProtection-Keys"))
-    .SetApplicationName("Aion");
 
 var app = builder.Build();
 

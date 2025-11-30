@@ -1,10 +1,12 @@
 ﻿using System.Collections.Concurrent;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Proto.Notifications.Tag;
 using SubscribeRequest = Proto.Notifications.Tag.SubscribeRequest;
 
 namespace Core.Server.Communication.Endpoints.Tag;
 
+[Authorize]
 public class TagNotificationService : Proto.Notifications.Tag.TagNotificationService.TagNotificationServiceBase
 {
     private readonly ConcurrentDictionary<Guid, (IServerStreamWriter<TagNotification> Stream,

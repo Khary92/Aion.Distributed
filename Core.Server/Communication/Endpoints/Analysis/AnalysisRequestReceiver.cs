@@ -3,6 +3,7 @@ using Core.Server.Services.Entities.Sprints;
 using Core.Server.Services.Entities.Tags;
 using Core.Server.Services.Entities.Tickets;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Proto.DTO.AnalysisBySprint;
 using Proto.DTO.AnalysisByTag;
 using Proto.DTO.AnalysisByTicket;
@@ -10,6 +11,7 @@ using Proto.Requests.AnalysisData;
 
 namespace Core.Server.Communication.Endpoints.Analysis;
 
+[Authorize]
 public class AnalysisRequestReceiver(
     IAnalysisDataService analysisDataService,
     ISprintRequestsService sprintRequestsService,

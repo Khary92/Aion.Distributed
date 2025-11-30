@@ -1,10 +1,12 @@
 ﻿using Core.Server.Services.Entities.Notes;
 using Core.Server.Tracing.Tracing.Tracers;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Proto.Command.Notes;
 
 namespace Core.Server.Communication.Endpoints.Note;
 
+[Authorize]
 public class NoteCommandReceiver(INoteCommandsService noteCommandsService, ITraceCollector tracer)
     : NoteCommandProtoService.NoteCommandProtoServiceBase
 {

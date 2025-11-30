@@ -1,10 +1,12 @@
 ﻿using Core.Server.Services.Entities.Tickets;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Proto.DTO.Ticket;
 using Proto.Requests.Tickets;
 
 namespace Core.Server.Communication.Endpoints.Ticket;
 
+[Authorize]
 public class TicketRequestReceiver(ITicketRequestsService ticketRequestsService)
     : TicketProtoRequestService.TicketProtoRequestServiceBase
 {

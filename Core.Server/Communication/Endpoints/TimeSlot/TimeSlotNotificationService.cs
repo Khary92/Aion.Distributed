@@ -1,10 +1,12 @@
 ﻿using System.Collections.Concurrent;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Proto.Notifications.TimeSlots;
 using SubscribeRequest = Proto.Notifications.TimeSlots.SubscribeRequest;
 
 namespace Core.Server.Communication.Endpoints.TimeSlot;
 
+[Authorize]
 public class
     TimeSlotNotificationService : Proto.Notifications.TimeSlots.TimeSlotNotificationService.
     TimeSlotNotificationServiceBase

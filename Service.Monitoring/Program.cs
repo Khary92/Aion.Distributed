@@ -1,12 +1,14 @@
+using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using Global.Settings;
 using Global.Settings.Types;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Service.Monitoring;
 
@@ -27,6 +29,46 @@ public abstract class Program
         });
 
         builder.Services.AddTracingServices();
+
+
+        var publicKeyPath = "/jwt/public_key.pem";
+
+        var rsa = RSA.Create();
+        rsa.ImportFromPem(await File.ReadAllTextAsync(publicKeyPath));
+
+        var rsaKey = new RsaSecurityKey(rsa)
+        {
+            KeyId = "auth-server-key"
+        };
+
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = "http://localhost:5001",
+                    ValidateAudience = true,
+                    ValidAudience = "api",
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = rsaKey,
+                    ValidateLifetime = true
+                };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        if (string.IsNullOrEmpty(context.Request.Headers["Authorization"]) &&
+                            context.Request.Query.TryGetValue("access_token", out var t))
+                        {
+                            context.Token = t;
+                        }
+
+                        return Task.CompletedTask;
+                    }
+                };
+            });
 
 
         var monitoringSettings = new MonitoringSettings();
@@ -57,10 +99,6 @@ public abstract class Program
                 listenOptions.Protocols = HttpProtocols.Http2;
             });
         });
-
-        builder.Services.AddDataProtection()
-            .PersistKeysToFileSystem(new DirectoryInfo("/app/DataProtection-Keys"))
-            .SetApplicationName("Aion");
 
         var app = builder.Build();
         app.UseRouting();

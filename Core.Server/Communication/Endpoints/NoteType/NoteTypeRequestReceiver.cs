@@ -1,10 +1,12 @@
 ﻿using Core.Server.Services.Entities.NoteTypes;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Proto.DTO.NoteType;
 using Proto.Requests.NoteTypes;
 
 namespace Core.Server.Communication.Endpoints.NoteType;
 
+[Authorize]
 public class NoteTypeRequestReceiver(INoteTypeRequestsService noteTypeRequestsService)
     : NoteTypeProtoRequestService.NoteTypeProtoRequestServiceBase
 {

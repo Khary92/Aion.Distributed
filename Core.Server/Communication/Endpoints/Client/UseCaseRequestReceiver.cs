@@ -1,9 +1,11 @@
 using Core.Server.Communication.Endpoints.Client.Handler;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Proto.Requests.Client;
 
 namespace Core.Server.Communication.Endpoints.Client;
 
+[Authorize]
 public class UseCaseRequestReceiver(ILoadTrackingControlDataHandler loadTrackingControlDataHandler)
     : ClientRequestService.ClientRequestServiceBase
 {

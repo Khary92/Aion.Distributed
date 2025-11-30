@@ -1,10 +1,12 @@
 ﻿using Core.Server.Services.Entities.Sprints;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Proto.DTO.Sprint;
 using Proto.Requests.Sprints;
 
 namespace Core.Server.Communication.Endpoints.Sprint;
 
+[Authorize]
 public class SprintRequestReceiver(
     ISprintRequestsService sprintRequestsService) : SprintProtoRequestService.SprintProtoRequestServiceBase
 {

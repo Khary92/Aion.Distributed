@@ -1,10 +1,12 @@
 ﻿using Core.Server.Services.Entities.TimerSettings;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Proto.DTO.TimerSettings;
 using Proto.Requests.TimerSettings;
 
 namespace Core.Server.Communication.Endpoints.TimerSettings;
 
+[Authorize]
 public class TimerSettingsRequestReceiver(ITimerSettingsRequestsService timerSettingsRequestsService)
     : TimerSettingsProtoRequestService.TimerSettingsProtoRequestServiceBase
 {

@@ -1,10 +1,12 @@
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Proto.Command.TraceData;
 using Service.Monitoring.Shared;
 using Service.Monitoring.Sink;
 
 namespace Service.Monitoring.Communication;
 
+[Authorize]
 public class TraceDataCommandReceiver(ITraceSink traceSink)
     : TraceDataCommandProtoService.TraceDataCommandProtoServiceBase
 {

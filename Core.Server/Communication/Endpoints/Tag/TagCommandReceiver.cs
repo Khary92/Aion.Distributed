@@ -1,10 +1,12 @@
 ﻿using Core.Server.Services.Entities.Tags;
 using Core.Server.Tracing.Tracing.Tracers;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Proto.Command.Tags;
 
 namespace Core.Server.Communication.Endpoints.Tag;
 
+[Authorize]
 public class TagCommandReceiver(ITagCommandsService tagCommandsService, ITraceCollector tracer)
     : TagCommandProtoService.TagCommandProtoServiceBase
 {
