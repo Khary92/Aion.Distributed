@@ -7,19 +7,18 @@ namespace Service.Authorization.Service;
 
 public class TokenService
 {
-    private readonly RsaSecurityKey _key;
     private readonly SigningCredentials _credentials;
 
     public Dictionary<string, AuthorizationCode> AuthCodes { get; } = new();
 
     public Dictionary<string, RefreshToken> RefreshTokens { get; } = new();
 
-    public RsaSecurityKey Key => _key;
+    public RsaSecurityKey Key { get; }
 
     public TokenService(RsaSecurityKey key)
     {
-        _key = key;
-        _credentials = new SigningCredentials(_key, SecurityAlgorithms.RsaSha256);
+        Key = key;
+        _credentials = new SigningCredentials(Key, SecurityAlgorithms.RsaSha256);
     }
 
     public string CreateJwt(string user, IEnumerable<Claim> claims, TimeSpan validFor)
@@ -38,23 +37,13 @@ public class TokenService
 
     public async Task GenerateInternalToken(TimeSpan validFor)
     {
-        var now = DateTime.UtcNow;
-
-        var claims = new[]
+        var serviceUser = "service-user";
+        var claims = new List<Claim>
         {
-            new Claim("sub", "internal-service"),
-            new Claim("role", "internal")
+            new(JwtRegisteredClaimNames.Sub, serviceUser),
+            new("name", "internal use only")
         };
-
-        var token = new JwtSecurityToken(
-            issuer: "internal-auth",
-            audience: "internal",
-            claims: claims,
-            notBefore: now,
-            expires: now.Add(validFor),
-            signingCredentials: new SigningCredentials(_key, SecurityAlgorithms.RsaSha256)
-        );
-
+        
         var tokenDir = "/internal-token";
 
         if (!Directory.Exists(tokenDir))
@@ -65,7 +54,6 @@ public class TokenService
             File.Delete(file);
         }
 
-        await File.WriteAllTextAsync(Path.Combine(tokenDir, "token.jwt"),
-            new JwtSecurityTokenHandler().WriteToken(token));
+        await File.WriteAllTextAsync(Path.Combine(tokenDir, "token.jwt"), CreateJwt(serviceUser, claims, validFor));
     }
 }
