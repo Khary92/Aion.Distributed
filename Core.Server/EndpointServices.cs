@@ -15,8 +15,6 @@ namespace Core.Server;
 
 public static class EndpointServices
 {
-    private const string AuthorizationScheme = "InternalOrAuthenticated";
-
     public static void AddEndPoints(this WebApplication app)
     {
         AddCommandEndPoints(app);
@@ -26,45 +24,45 @@ public static class EndpointServices
 
     private static void AddCommandEndPoints(WebApplication app)
     {
-        app.MapGrpcService<NoteCommandReceiver>().RequireAuthorization(AuthorizationScheme);
-        app.MapGrpcService<NoteTypeCommandReceiver>().RequireAuthorization(AuthorizationScheme);
-        app.MapGrpcService<SprintCommandReceiver>().RequireAuthorization(AuthorizationScheme);
-        app.MapGrpcService<StatisticsDataCommandReceiver>().RequireAuthorization(AuthorizationScheme);
-        app.MapGrpcService<TagCommandReceiver>().RequireAuthorization(AuthorizationScheme);
-        app.MapGrpcService<TicketCommandReceiver>().RequireAuthorization(AuthorizationScheme);
-        app.MapGrpcService<TimerSettingsCommandReceiver>().RequireAuthorization(AuthorizationScheme);
-        app.MapGrpcService<TimeSlotCommandReceiver>().RequireAuthorization(AuthorizationScheme);
-        app.MapGrpcService<ClientCommandReceiver>().RequireAuthorization(AuthorizationScheme);
-        app.MapGrpcService<WorkDayCommandReceiver>().RequireAuthorization(AuthorizationScheme);
+        app.MapGrpcService<NoteCommandReceiver>();
+        app.MapGrpcService<NoteTypeCommandReceiver>();
+        app.MapGrpcService<SprintCommandReceiver>();
+        app.MapGrpcService<StatisticsDataCommandReceiver>();
+        app.MapGrpcService<TagCommandReceiver>();
+        app.MapGrpcService<TicketCommandReceiver>();
+        app.MapGrpcService<TimerSettingsCommandReceiver>();
+        app.MapGrpcService<TimeSlotCommandReceiver>();
+        app.MapGrpcService<ClientCommandReceiver>();
+        app.MapGrpcService<WorkDayCommandReceiver>();
     }
 
     private static void AddRequestEndPoints(WebApplication app)
     {
-        app.MapGrpcService<NoteRequestReceiver>().RequireAuthorization(AuthorizationScheme);
-        app.MapGrpcService<NoteTypeRequestReceiver>().RequireAuthorization(AuthorizationScheme);
-        app.MapGrpcService<SprintRequestReceiver>().RequireAuthorization(AuthorizationScheme);
-        app.MapGrpcService<StatisticsDataRequestReceiver>().RequireAuthorization(AuthorizationScheme);
-        app.MapGrpcService<TagRequestReceiver>().RequireAuthorization(AuthorizationScheme);
-        app.MapGrpcService<TicketRequestReceiver>().RequireAuthorization(AuthorizationScheme);
-        app.MapGrpcService<TicketReplayRequestReceiver>().RequireAuthorization(AuthorizationScheme);
-        app.MapGrpcService<TimerSettingsRequestReceiver>().RequireAuthorization(AuthorizationScheme);
-        app.MapGrpcService<TimeSlotRequestReceiver>().RequireAuthorization(AuthorizationScheme);
-        app.MapGrpcService<WorkDayRequestReceiver>().RequireAuthorization(AuthorizationScheme);
-        app.MapGrpcService<UseCaseRequestReceiver>().RequireAuthorization(AuthorizationScheme);
-        app.MapGrpcService<AnalysisRequestReceiver>().RequireAuthorization(AuthorizationScheme);
+        app.MapGrpcService<NoteRequestReceiver>();
+        app.MapGrpcService<NoteTypeRequestReceiver>();
+        app.MapGrpcService<SprintRequestReceiver>();
+        app.MapGrpcService<StatisticsDataRequestReceiver>();
+        app.MapGrpcService<TagRequestReceiver>();
+        app.MapGrpcService<TicketRequestReceiver>();
+        app.MapGrpcService<TicketReplayRequestReceiver>();
+        app.MapGrpcService<TimerSettingsRequestReceiver>();
+        app.MapGrpcService<TimeSlotRequestReceiver>();
+        app.MapGrpcService<WorkDayRequestReceiver>();
+        app.MapGrpcService<UseCaseRequestReceiver>();
+        app.MapGrpcService<AnalysisRequestReceiver>();
     }
 
     private static void AddNotificationEndPoints(WebApplication app)
     {
-        app.MapGrpcService<NoteNotificationService>().RequireAuthorization(AuthorizationScheme);
-        app.MapGrpcService<NoteTypeNotificationService>().RequireAuthorization(AuthorizationScheme);
-        app.MapGrpcService<SprintNotificationService>().RequireAuthorization(AuthorizationScheme);
-        app.MapGrpcService<StatisticsDataNotificationService>().RequireAuthorization(AuthorizationScheme);
-        app.MapGrpcService<TagNotificationService>().RequireAuthorization(AuthorizationScheme);
-        app.MapGrpcService<TicketNotificationService>().RequireAuthorization(AuthorizationScheme);
-        app.MapGrpcService<TimerSettingsNotificationService>().RequireAuthorization(AuthorizationScheme);
-        app.MapGrpcService<TimeSlotNotificationService>().RequireAuthorization(AuthorizationScheme);
-        app.MapGrpcService<UseCaseNotificationService>().RequireAuthorization(AuthorizationScheme);
-        app.MapGrpcService<WorkDayNotificationService>().RequireAuthorization(AuthorizationScheme);
+        app.MapGrpcService<NoteNotificationService>();
+        app.MapGrpcService<NoteTypeNotificationService>();
+        app.MapGrpcService<SprintNotificationService>();
+        app.MapGrpcService<StatisticsDataNotificationService>();
+        app.MapGrpcService<TagNotificationService>();
+        app.MapGrpcService<TicketNotificationService>();
+        app.MapGrpcService<TimerSettingsNotificationService>();
+        app.MapGrpcService<TimeSlotNotificationService>();
+        app.MapGrpcService<UseCaseNotificationService>();
+        app.MapGrpcService<WorkDayNotificationService>();
     }
 }

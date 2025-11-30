@@ -105,22 +105,6 @@ public static class BootStrap
         var serverSettings = new ServerSettings();
         builder.Configuration.GetSection("ServerSettings").Bind(serverSettings);
 
-        // bypass internal access
-        builder.Services.AddAuthorization(options =>
-        {
-            options.AddPolicy("InternalOrAuthenticated", policy =>
-                policy.RequireAssertion(context =>
-                {
-                    if (context.Resource is not HttpContext httpContext)
-                        return false;
-
-                    if (httpContext.Connection.LocalPort == serverSettings.InternalGrpcPort)
-                        return true;
-
-                    return context.User.Identity?.IsAuthenticated == true;
-                }));
-        });
-        
         builder.WebHost.ConfigureKestrel(options =>
         {
             // Internal GRPC listener (HTTP/2, no TLS)
