@@ -63,6 +63,6 @@ app.MapGet("/userinfo", async context =>
     await endpoint.Handle(context);
 });
 
-await app.Services.GetRequiredService<TokenService>().GenerateInternalToken(TimeSpan.MaxValue);
+await app.Services.GetRequiredService<TokenService>().GenerateInternalToken(TimeSpan.FromDays(30));
 
 app.Run("http://0.0.0.0:5001");

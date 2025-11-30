@@ -40,7 +40,7 @@ public static class AdminServiceExtension
 
     private static void AddJwtServices(this IServiceCollection services)
     {
-        services.AddHttpClient<JwtService>();
+        services.AddScoped<JwtService>();
     }
 
     private static void AddTraceSender(this IServiceCollection services)
