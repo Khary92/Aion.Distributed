@@ -27,6 +27,7 @@ services:
       - TZ=Europe/Berlin
     depends_on:
       - postgres
+      - authentication-service
     restart: unless-stopped
     volumes:
       - ./auth-keys/public_key.pem:/jwt/public_key.pem:ro,z
@@ -50,6 +51,7 @@ services:
       - /var/lib/docker/volumes/npm_npm-ssl/_data/archive/npm-9:/certs:ro,Z
     depends_on:
       - core-service
+      - authentication-service
     restart: unless-stopped
 
   admin-web:
@@ -68,6 +70,7 @@ services:
     depends_on:
       - monitoring-service
       - core-service
+      - authentication-service
     restart: unless-stopped
 
   postgres:
