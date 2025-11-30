@@ -117,8 +117,7 @@ public static class BootStrap
                     return context.User.Identity?.IsAuthenticated == true;
                 }));
         });
-
-
+        
         builder.WebHost.ConfigureKestrel(options =>
         {
             // Internal GRPC listener (HTTP/2, no TLS)

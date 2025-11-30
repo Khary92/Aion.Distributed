@@ -2,6 +2,7 @@ using System.Security.Cryptography;
 using Microsoft.IdentityModel.Tokens;
 using Service.Authorization;
 using Service.Authorization.Endpoints;
+using Service.Authorization.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRouting();
@@ -61,5 +62,7 @@ app.MapGet("/userinfo", async context =>
     var endpoint = context.RequestServices.GetRequiredService<UserInfoEndpoint>();
     await endpoint.Handle(context);
 });
+
+await app.Services.GetRequiredService<TokenService>().GenerateInternalToken(TimeSpan.MaxValue);
 
 app.Run("http://0.0.0.0:5001");

@@ -1,6 +1,7 @@
 ﻿using Global.Settings;
 using Grpc.Core;
 using Polly;
+using Service.Admin.Web.Communication.Authentication;
 using Service.Admin.Web.Communication.Commands.NoteTypes;
 using Service.Admin.Web.Communication.Commands.Sprints;
 using Service.Admin.Web.Communication.Commands.Tags;
@@ -27,6 +28,7 @@ public static class AdminServiceExtension
 {
     public static void AddWebServices(this IServiceCollection services)
     {
+        AddJwtServices(services);
         AddTraceSender(services);
         RegisterStateServices(services);
         AddSharedDataServices(services);
@@ -34,6 +36,11 @@ public static class AdminServiceExtension
         AddSettingsServices(services);
         AddReceiverServices(services);
         AddPolicyServices(services);
+    }
+
+    private static void AddJwtServices(this IServiceCollection services)
+    {
+        services.AddHttpClient<JwtService>();
     }
 
     private static void AddTraceSender(this IServiceCollection services)
@@ -146,28 +153,38 @@ public static class AdminServiceExtension
     private static void AddSharedDataServices(this IServiceCollection services)
     {
         services.AddSingleton<ITicketCommandSender>(sp =>
-            new TicketCommandSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl));
+            new TicketCommandSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl,
+                sp.GetRequiredService<JwtService>()));
         services.AddSingleton<ITicketRequestSender>(sp =>
-            new TicketRequestSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl));
+            new TicketRequestSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl,
+                sp.GetRequiredService<JwtService>()));
 
         services.AddSingleton<ISprintCommandSender>(sp =>
-            new SprintCommandSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl));
+            new SprintCommandSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl,
+                sp.GetRequiredService<JwtService>()));
         services.AddSingleton<ISprintRequestSender>(sp =>
-            new SprintRequestSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl));
+            new SprintRequestSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl,
+                sp.GetRequiredService<JwtService>()));
 
         services.AddSingleton<ITagCommandSender>(sp =>
-            new TagCommandSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl));
+            new TagCommandSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl,
+                sp.GetRequiredService<JwtService>()));
         services.AddSingleton<ITagRequestSender>(sp =>
-            new TagRequestSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl));
+            new TagRequestSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl,
+                sp.GetRequiredService<JwtService>()));
 
         services.AddSingleton<INoteTypeCommandSender>(sp =>
-            new NoteTypeCommandSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl));
+            new NoteTypeCommandSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl,
+                sp.GetRequiredService<JwtService>()));
         services.AddSingleton<INoteTypeRequestSender>(sp =>
-            new NoteTypeRequestSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl));
+            new NoteTypeRequestSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl,
+                sp.GetRequiredService<JwtService>()));
 
         services.AddSingleton<ITimerSettingsCommandSender>(sp =>
-            new TimerSettingsCommandSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl));
+            new TimerSettingsCommandSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl,
+                sp.GetRequiredService<JwtService>()));
         services.AddSingleton<ITimerSettingsRequestSender>(sp =>
-            new TimerSettingsRequestSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl));
+            new TimerSettingsRequestSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl,
+                sp.GetRequiredService<JwtService>()));
     }
 }

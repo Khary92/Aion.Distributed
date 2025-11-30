@@ -7,7 +7,8 @@ using static Microsoft.AspNetCore.Http.Results;
 
 namespace Service.Authorization.Endpoints;
 
-public class TokenEndpoint(IUserRepository users, TokenService tokenService)
+public class 
+    TokenEndpoint(IUserRepository users, TokenService tokenService)
 {
     public async Task<IResult> Handle(HttpContext httpContext)
     {

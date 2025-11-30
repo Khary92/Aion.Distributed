@@ -3,6 +3,7 @@ using Global.Settings.Types;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Service.Admin.Tracing;
 using Service.Admin.Web;
+using Service.Admin.Web.Communication.Authentication;
 using Service.Admin.Web.Communication.Receiver;
 using Service.Admin.Web.Communication.Receiver.Reports;
 using Service.Admin.Web.Pages;
@@ -42,6 +43,9 @@ builder.WebHost.ConfigureKestrel(options =>
 builder.Logging.AddConsole();
 
 var app = builder.Build();
+
+var jwtService = app.Services.GetRequiredService<JwtService>();
+await jwtService.LoadTokenAsync();
 
 if (!app.Environment.IsDevelopment())
 {

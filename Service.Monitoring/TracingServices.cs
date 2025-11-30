@@ -1,7 +1,7 @@
 using Global.Settings;
-using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using Service.Monitoring.Communication;
+using Service.Monitoring.Communication.Authentication;
 using Service.Monitoring.Sink;
 using Service.Monitoring.Verifiers.Common;
 using Service.Monitoring.Verifiers.Common.Factories;
@@ -21,8 +21,10 @@ public static class TracingServices
 
     private static void AddReportSender(IServiceCollection services)
     {
+        services.AddSingleton<JwtService>();
         services.AddSingleton<IReportSender>(sp =>
-            new ReportSender(sp.GetRequiredService<IGrpcUrlService>().InternalToAdminUrl));
+            new ReportSender(sp.GetRequiredService<IGrpcUrlService>().InternalToAdminUrl,
+                sp.GetRequiredService<JwtService>()));
     }
 
     private static void AddPolicyServices(IServiceCollection services)

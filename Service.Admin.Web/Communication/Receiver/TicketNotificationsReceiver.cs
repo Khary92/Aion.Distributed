@@ -3,6 +3,7 @@ using Grpc.Core;
 using Grpc.Net.Client;
 using Proto.Notifications.Ticket;
 using Service.Admin.Tracing;
+using Service.Admin.Web.Communication.Authentication;
 using Service.Admin.Web.Communication.Mapper;
 using Service.Admin.Web.Services.State;
 
@@ -11,25 +12,30 @@ namespace Service.Admin.Web.Communication.Receiver;
 public class TicketNotificationsReceiver(
     ITraceCollector tracer,
     ITicketStateService ticketStateService,
-    IGrpcUrlService grpcUrlBuilder)
+    IGrpcUrlService grpcUrlBuilder, JwtService jwtService)
 {
     public async Task SubscribeToNotifications(CancellationToken stoppingToken = default)
     {
-        var channelOptions = new GrpcChannelOptions
-        {
-            HttpHandler = new SocketsHttpHandler
-            {
-                EnableMultipleHttp2Connections = true,
-                KeepAlivePingDelay = TimeSpan.FromSeconds(60),
-                KeepAlivePingTimeout = TimeSpan.FromSeconds(30),
-                PooledConnectionIdleTimeout = Timeout.InfiniteTimeSpan
-            }
-        };
-
         var channel =
             GrpcChannel.ForAddress(
                 grpcUrlBuilder.InternalToServerUrl,
-                channelOptions);
+                new GrpcChannelOptions
+                {
+                    HttpHandler = new SocketsHttpHandler
+                    {
+                        EnableMultipleHttp2Connections = true,
+                        KeepAlivePingDelay = TimeSpan.FromSeconds(60),
+                        KeepAlivePingTimeout = TimeSpan.FromSeconds(30),
+                        PooledConnectionIdleTimeout = Timeout.InfiniteTimeSpan
+                    },
+                    Credentials = ChannelCredentials.Create(
+                        ChannelCredentials.Insecure,
+                        CallCredentials.FromInterceptor((_, metadata) =>
+                        {
+                            metadata.Add("Authorization", $"Bearer {jwtService.Token}");
+                            return Task.CompletedTask;
+                        }))
+                });
 
         var client = new TicketNotificationService.TicketNotificationServiceClient(channel);
 

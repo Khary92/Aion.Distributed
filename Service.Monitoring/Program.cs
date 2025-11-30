@@ -5,6 +5,7 @@ using Global.Settings.Types;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.IdentityModel.Tokens;
+using Service.Monitoring.Communication.Authentication;
 
 namespace Service.Monitoring;
 
@@ -104,7 +105,8 @@ public abstract class Program
         app.UseAuthorization(); 
         
         app.AddEndPoints();
-        
+
+        await app.Services.GetRequiredService<JwtService>().LoadTokenAsync();
         await app.RunAsync();
     }
 }

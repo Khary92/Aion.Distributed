@@ -8,6 +8,7 @@ services:
       - "5001"
     volumes:
       - ./auth-keys:/certs:rw
+      - ./internal-token:/internal-token:rw
     environment:
       - TZ=Europe/Berlin
     restart: unless-stopped
@@ -29,6 +30,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./auth-keys/public_key.pem:/jwt/public_key.pem:ro,z
+      - ./internal-token:/internal-token:ro,z
       - /var/lib/docker/volumes/npm_npm-ssl/_data/archive/npm-9:/certs:ro,Z
 
   monitoring-service:
@@ -44,6 +46,7 @@ services:
       - TZ=Europe/Berlin
     volumes:
       - ./auth-keys/public_key.pem:/jwt/public_key.pem:ro,z
+      - ./internal-token:/internal-token:ro,z
       - /var/lib/docker/volumes/npm_npm-ssl/_data/archive/npm-9:/certs:ro,Z
     depends_on:
       - core-service
@@ -61,6 +64,7 @@ services:
       - TZ=Europe/Berlin
     volumes:
       - ./auth-keys/public_key.pem:/jwt/public_key.pem:ro,z
+      - ./internal-token:/internal-token:ro,z
     depends_on:
       - monitoring-service
       - core-service
