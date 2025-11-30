@@ -6,22 +6,28 @@
              xmlns:setting="clr-namespace:Client.Desktop.Presentation.Views.Setting"
              x:DataType="settings1:SettingsCompositeViewModel"
              x:Class="Client.Desktop.Presentation.Views.Setting.SettingsCompositeControl"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450">
+             mc:Ignorable="d"
+             d:DesignWidth="800" d:DesignHeight="450">
 
-    <TabControl>
-        <TabItem Header="Settings">
-            <StackPanel Margin="10">
-                <StackPanel>
-                    <TextBlock Text="General settings"
-                               FontWeight="Bold" FontSize="16" Margin="10" HorizontalAlignment="Center" />
-                    <setting:SettingsControl DataContext="{Binding SettingsViewModel}" />
-                </StackPanel>
-                <StackPanel>
-                    <TextBlock Text="Work days"
-                               FontWeight="Bold" FontSize="16" Margin="10" HorizontalAlignment="Center" />
-                    <setting:WorkDaysControl DataContext="{Binding WorkDaysViewModel}" />
-                </StackPanel>
+    <StackPanel Margin="16" Spacing="24">
+
+        <Border CornerRadius="8" Padding="16">
+            <StackPanel Spacing="12">
+                <TextBlock Text="General Settings"
+                           FontSize="18"
+                           FontWeight="Bold" />
+                <setting:SettingsControl DataContext="{Binding SettingsViewModel}" />
             </StackPanel>
-        </TabItem>
-    </TabControl>
+        </Border>
+
+        <Border CornerRadius="8" Padding="16">
+            <StackPanel Spacing="12">
+                <TextBlock Text="Work Days"
+                           FontSize="18"
+                           FontWeight="Bold" />
+                <setting:WorkDaysControl DataContext="{Binding WorkDaysViewModel}" />
+            </StackPanel>
+        </Border>
+
+    </StackPanel>
 </UserControl>

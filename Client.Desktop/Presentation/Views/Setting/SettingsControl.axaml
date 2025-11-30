@@ -5,35 +5,22 @@
              xmlns:settings="clr-namespace:Client.Desktop.Presentation.Models.Settings"
              x:DataType="settings:SettingsViewModel"
              mc:Ignorable="d"
-             d:DesignWidth="600"
-             d:DesignHeight="400"
+             d:DesignWidth="600" d:DesignHeight="400"
              x:Class="Client.Desktop.Presentation.Views.Setting.SettingsControl">
 
-    <Grid Margin="20"
-          RowDefinitions="Auto,Auto,Auto,*,Auto"
-          ColumnDefinitions="*">
+    <Grid Margin="16" RowDefinitions="Auto,*,Auto" ColumnDefinitions="*">
+        
+        <StackPanel Orientation="Horizontal" Spacing="12" Grid.Row="0">
+            <TextBlock Text="File export path:" VerticalAlignment="Center"/>
+            <TextBox Text="{Binding Model.ExportPath, Mode=TwoWay}" IsReadOnly="True" Width="300"/>
+            <Button Content="Select" Click="OnExportPathClick"/>
+        </StackPanel>
 
-        <Border Grid.Row="0" Margin="0,0,0,10">
-            <StackPanel Orientation="Horizontal" Spacing="10">
-                <TextBlock Text="File export path:" VerticalAlignment="Center" />
-                <TextBox Text="{Binding Model.ExportPath, Mode=TwoWay}"
-                         IsReadOnly="True"
-                         Width="300" />
-                <Button Name="BtnExportPath"
-                        Content="Select"
-                        Click="OnExportPathClick"
-                        VerticalAlignment="Center" />
-            </StackPanel>
-        </Border>
+        <Grid Grid.Row="1"/>
 
-        <Grid Grid.Row="3" />
-
-        <Border Grid.Row="4" Margin="0,20,0,0">
-            <Button Content="Save"
-                    Command="{Binding SaveConfigCommand}"
-                    HorizontalAlignment="Right"
-                    Width="100" />
-        </Border>
+        <StackPanel Grid.Row="2" HorizontalAlignment="Right">
+            <Button Content="Save" Command="{Binding SaveConfigCommand}" Width="100"/>
+        </StackPanel>
 
     </Grid>
 </UserControl>
