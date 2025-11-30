@@ -72,6 +72,7 @@ public static class BootStrap
         builder.Services.AddCoreServices();
         builder.Services.AddInfrastructureServices();
         builder.Services.AddTracingServices();
+        builder.Services.AddAuthorization();
 
         SetupKestrel(builder);
 
