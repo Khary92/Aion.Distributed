@@ -9,7 +9,6 @@ using Domain.Events.TimerSettings;
 using Global.Settings;
 using Global.Settings.Types;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -72,7 +71,7 @@ public static class BootStrap
         builder.Services.AddCoreServices();
         builder.Services.AddInfrastructureServices();
         builder.Services.AddTracingServices();
-        
+
         SetupKestrel(builder);
 
         builder.Logging.AddConsole();
@@ -90,6 +89,9 @@ public static class BootStrap
 
         app.AddEndPoints();
         app.UseRouting();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
 
         await app.RunAsync();
     }
@@ -114,8 +116,8 @@ public static class BootStrap
                     return context.User.Identity?.IsAuthenticated == true;
                 }));
         });
-        
-        
+
+
         builder.WebHost.ConfigureKestrel(options =>
         {
             // Internal GRPC listener (HTTP/2, no TLS)

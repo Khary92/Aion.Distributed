@@ -3,11 +3,7 @@ using System.Security.Cryptography.X509Certificates;
 using Global.Settings;
 using Global.Settings.Types;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Service.Monitoring;
@@ -104,6 +100,9 @@ public abstract class Program
         app.UseRouting();
         app.AddEndPoints();
 
+        app.UseAuthentication();
+        app.UseAuthorization(); 
+        
         await app.RunAsync();
     }
 }
