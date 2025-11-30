@@ -32,7 +32,7 @@ services:
     volumes:
       - ./auth-keys/public_key.pem:/jwt/public_key.pem:ro,z
       - ./internal-token:/internal-token:ro,z
-      - /var/lib/docker/volumes/npm_npm-ssl/_data/archive/npm-9:/certs:ro,Z
+      - /var/lib/docker/volumes/npm_npm-ssl/_data/archive/npm-9:/certs:ro,z
 
   monitoring-service:
     build:
@@ -48,7 +48,7 @@ services:
     volumes:
       - ./auth-keys/public_key.pem:/jwt/public_key.pem:ro,z
       - ./internal-token:/internal-token:ro,z
-      - /var/lib/docker/volumes/npm_npm-ssl/_data/archive/npm-9:/certs:ro,Z
+      - /var/lib/docker/volumes/npm_npm-ssl/_data/archive/npm-9:/certs:ro,z
     depends_on:
       - core-service
       - authentication-service
