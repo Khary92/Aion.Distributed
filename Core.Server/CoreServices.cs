@@ -1,3 +1,4 @@
+using Core.Server.Communication;
 using Core.Server.Communication.Endpoints.Client;
 using Core.Server.Communication.Endpoints.Client.Handler;
 using Core.Server.Communication.Endpoints.Note;
@@ -11,6 +12,7 @@ using Core.Server.Communication.Endpoints.TimerSettings;
 using Core.Server.Communication.Endpoints.TimeSlot;
 using Core.Server.Communication.Endpoints.TraceReport;
 using Core.Server.Communication.Endpoints.WorkDay;
+using Core.Server.Communication.Tracing;
 using Core.Server.Services.Client;
 using Core.Server.Services.Entities.Notes;
 using Core.Server.Services.Entities.NoteTypes;
@@ -31,7 +33,6 @@ using Core.Server.Translators.Commands.TimerSettings;
 using Core.Server.Translators.Commands.TimeSlots;
 using Core.Server.Translators.Commands.WorkDays;
 using Global.Settings;
-using Service.Monitoring.Shared.Tracing;
 
 namespace Core.Server;
 
@@ -50,8 +51,10 @@ public static class CoreServices
 
     private static void AddTraceSender(this IServiceCollection services)
     {
+        services.AddSingleton<JwtService>();
         services.AddSingleton<ITracingDataSender>(sp =>
-            new TracingDataSender(sp.GetRequiredService<IGrpcUrlService>().ClientToMonitoringUrl));
+            new TracingDataSender(sp.GetRequiredService<IGrpcUrlService>().ClientToMonitoringUrl,
+                sp.GetRequiredService<JwtService>()));
     }
 
     private static void AddCommonServices(this IServiceCollection services)

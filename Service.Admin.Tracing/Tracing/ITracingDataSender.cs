@@ -1,4 +1,6 @@
-﻿namespace Service.Monitoring.Shared.Tracing;
+﻿using Service.Monitoring.Shared;
+
+namespace Service.Admin.Tracing.Tracing;
 
 public interface ITracingDataSender
 {

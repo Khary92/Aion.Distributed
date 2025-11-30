@@ -2,7 +2,7 @@ using System.Security.Cryptography;
 using System.Text;
 using Microsoft.AspNetCore.WebUtilities;
 
-namespace Service.Authorization;
+namespace Service.Authorization.Helpers;
 
 public static class Helpers
 {

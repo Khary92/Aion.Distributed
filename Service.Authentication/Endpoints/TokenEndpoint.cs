@@ -37,7 +37,7 @@ public class
             if (stored.ClientId != clientId || stored.RedirectUri != redirectUri)
                 return BadRequest(new { error = "invalid_grant" });
 
-            if (!Helpers.VerifyPkce(stored.CodeChallenge, stored.CodeChallengeMethod, codeVerifier))
+            if (!Helpers.Helpers.VerifyPkce(stored.CodeChallenge, stored.CodeChallengeMethod, codeVerifier))
                 return BadRequest(new { error = "invalid_grant", error_description = "pkce_failed" });
 
             // One-time use
@@ -51,7 +51,7 @@ public class
                 new("name", user.Name ?? user.UserId)
             };
             var accessToken = tokenService.CreateJwt(user.UserId, claims, TimeSpan.FromMinutes(15));
-            var refreshToken = Helpers.RandomString(48);
+            var refreshToken = Helpers.Helpers.RandomString(48);
             tokenService.RefreshTokens[refreshToken] = new RefreshToken
             {
                 Token = refreshToken,

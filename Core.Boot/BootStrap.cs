@@ -4,6 +4,7 @@ using System.Text.Json;
 using Core.Persistence;
 using Core.Persistence.DbContext;
 using Core.Server;
+using Core.Server.Communication.Tracing;
 using Core.Server.Tracing;
 using Domain.Events.TimerSettings;
 using Global.Settings;
@@ -79,6 +80,8 @@ public static class BootStrap
 
         var app = builder.Build();
 
+        await app.Services.GetRequiredService<JwtService>().LoadTokenAsync();
+        
         using (var scope = app.Services.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();

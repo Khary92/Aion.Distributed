@@ -27,7 +27,7 @@ public class AuthorizationEndpoint(IClientRepository clients, IUserRepository us
         var codeChallenge = q["code_challenge"].ToString();
         var codeChallengeMethod = q["code_challenge_method"].ToString();
         
-        var code = Helpers.RandomString();
+        var code = Helpers.Helpers.RandomString();
         tokenService.AuthCodes[code] = new AuthorizationCode(
             code,
             client.ClientId,

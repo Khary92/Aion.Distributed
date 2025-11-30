@@ -1,6 +1,6 @@
+using Core.Server.Communication.Tracing;
 using Service.Monitoring.Shared;
 using Service.Monitoring.Shared.Enums;
-using Service.Monitoring.Shared.Tracing;
 
 namespace Core.Server.Tracing.Tracing.Tracers.TimeSlot.UseCase;
 

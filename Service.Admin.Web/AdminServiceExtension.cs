@@ -1,6 +1,7 @@
 ﻿using Global.Settings;
 using Grpc.Core;
 using Polly;
+using Service.Admin.Tracing.Tracing;
 using Service.Admin.Web.Communication.Authentication;
 using Service.Admin.Web.Communication.Commands.NoteTypes;
 using Service.Admin.Web.Communication.Commands.Sprints;
@@ -17,10 +18,10 @@ using Service.Admin.Web.Communication.Requests.TimerSettings;
 using Service.Admin.Web.Communication.Sender;
 using Service.Admin.Web.Communication.Sender.Common;
 using Service.Admin.Web.Communication.Sender.Policies;
+using Service.Admin.Web.Communication.Tracing;
 using Service.Admin.Web.Services.Startup;
 using Service.Admin.Web.Services.State;
 using Service.Monitoring.Shared.Enums;
-using Service.Monitoring.Shared.Tracing;
 
 namespace Service.Admin.Web;
 
@@ -46,7 +47,8 @@ public static class AdminServiceExtension
     private static void AddTraceSender(this IServiceCollection services)
     {
         services.AddSingleton<ITracingDataSender>(sp =>
-            new TracingDataSender(sp.GetRequiredService<IGrpcUrlService>().InternalToMonitoringUrl));
+            new TracingDataSender(sp.GetRequiredService<IGrpcUrlService>().InternalToMonitoringUrl,
+                sp.GetRequiredService<JwtService>()));
     }
 
     private static void AddPolicyServices(IServiceCollection services)
