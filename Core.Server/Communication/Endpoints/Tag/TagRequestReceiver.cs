@@ -1,11 +1,13 @@
 ﻿using Client.Proto;
 using Core.Server.Services.Entities.Tags;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Proto.DTO.Tag;
 using Proto.Requests.Tags;
 
 namespace Core.Server.Communication.Endpoints.Tag;
 
+[Authorize]
 public class TagRequestReceiver(ITagRequestsService tagRequestsService)
     : TagProtoRequestService.TagProtoRequestServiceBase
 {

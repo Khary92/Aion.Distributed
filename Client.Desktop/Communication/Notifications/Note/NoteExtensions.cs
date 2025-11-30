@@ -10,6 +10,8 @@ public static class NoteExtensions
 {
     public static NewNoteMessage ToNewEntityMessage(this NoteCreatedNotification notification)
     {
+        Console.WriteLine(notification);
+
         return new NewNoteMessage(
             new NoteClientModel(Guid.Parse(notification.NoteId), notification.Text, Guid.Parse(notification.NoteTypeId),
                 Guid.Parse(notification.TimeSlotId), Guid.Parse(notification.TicketId),

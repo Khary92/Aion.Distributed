@@ -28,6 +28,7 @@ public static class NoteProtoExtensions
                 Text = proto.Text,
                 NoteTypeId = proto.NoteTypeId.ToString(),
                 TimeSlotId = proto.TimeSlotId.ToString(),
+                TicketId = proto.TicketId.ToString(),
                 TimeStamp = proto.TimeStamp.ToTimestamp(),
                 TraceData = new TraceDataProto
                 {
@@ -77,6 +78,7 @@ public static class NoteProtoExtensions
         {
             NoteId = note.NoteId.ToString(),
             NoteTypeId = note.NoteTypeId.ToString(),
+            TicketId = note.TicketId.ToString(),
             Text = note.Text,
             TimeSlotId = note.TicketId.ToString(),
             TimeStamp = Timestamp.FromDateTimeOffset(note.TimeStamp)

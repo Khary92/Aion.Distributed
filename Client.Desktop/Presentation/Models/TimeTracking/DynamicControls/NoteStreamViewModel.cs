@@ -26,7 +26,7 @@ public class NoteStreamViewModel(
     INoteViewFactory noteViewFactory,
     ILocalSettingsService localSettingsService,
     ITraceCollector tracer)
-    : ReactiveObject, IMessengerRegistration, IInitializeAsync
+    : ReactiveObject, IEventRegistration, IInitializeAsync
 {
     private Guid _ticketId;
     private Guid _timeSlotId;
@@ -44,18 +44,6 @@ public class NoteStreamViewModel(
         set => this.RaiseAndSetIfChanged(ref _timeSlotId, value);
     }
 
-    public InitializationType Type => InitializationType.ViewModel;
-
-    public async Task InitializeAsync()
-    {
-        Notes.Clear();
-
-        var noteClientModels =
-            await requestSender.Send(new ClientGetNotesByTimeSlotIdRequest(TimeSlotId, Guid.NewGuid()));
-
-        foreach (var note in noteClientModels) await InsertNoteViewModel(note);
-    }
-
     public void RegisterMessenger()
     {
         notificationPublisher.Note.NewNoteMessageReceived += HandleNewNoteMessage;
@@ -66,6 +54,18 @@ public class NoteStreamViewModel(
     {
         notificationPublisher.Note.NewNoteMessageReceived -= HandleNewNoteMessage;
         notificationPublisher.Note.ClientNoteUpdatedNotificationReceived -= HandleClientNoteUpdatedNotification;
+    }
+
+    public InitializationType Type => InitializationType.ViewModel;
+
+    public async Task InitializeAsync()
+    {
+        Notes.Clear();
+
+        var noteClientModels =
+            await requestSender.Send(new ClientGetNotesByTimeSlotIdRequest(TimeSlotId, Guid.NewGuid()));
+
+        foreach (var note in noteClientModels) await InsertNoteViewModel(note);
     }
 
     public async Task AddNoteControl()

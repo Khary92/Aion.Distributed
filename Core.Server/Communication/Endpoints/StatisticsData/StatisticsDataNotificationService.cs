@@ -1,10 +1,12 @@
 ﻿using System.Collections.Concurrent;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Proto.Notifications.StatisticsData;
 using SubscribeRequest = Proto.Notifications.StatisticsData.SubscribeRequest;
 
 namespace Core.Server.Communication.Endpoints.StatisticsData;
 
+[Authorize]
 public class
     StatisticsDataNotificationService : Proto.Notifications.StatisticsData.StatisticsDataNotificationService.
     StatisticsDataNotificationServiceBase

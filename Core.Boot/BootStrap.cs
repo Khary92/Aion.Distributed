@@ -1,14 +1,18 @@
-﻿using System.Text.Json;
+﻿using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
+using System.Text.Json;
 using Core.Persistence;
 using Core.Persistence.DbContext;
 using Core.Server;
+using Core.Server.Communication.Tracing;
 using Core.Server.Tracing;
 using Domain.Events.TimerSettings;
 using Global.Settings;
 using Global.Settings.Types;
-using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Core.Boot;
 
@@ -25,15 +29,51 @@ public static class BootStrap
             options.MaxSendMessageSize = 2 * 1024 * 1024;
         });
 
+        var publicKeyPath = "/jwt/public_key.pem";
+
+        var rsa = RSA.Create();
+        rsa.ImportFromPem(await File.ReadAllTextAsync(publicKeyPath));
+
+        var rsaKey = new RsaSecurityKey(rsa)
+        {
+            KeyId = "auth-server-key"
+        };
+
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = "http://localhost:5001",
+                    ValidateAudience = true,
+                    ValidAudience = "api",
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = rsaKey,
+                    ValidateLifetime = true
+                };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        if (string.IsNullOrEmpty(context.Request.Headers["Authorization"]) &&
+                            context.Request.Query.TryGetValue("access_token", out var t))
+                        {
+                            context.Token = t;
+                        }
+
+                        return Task.CompletedTask;
+                    }
+                };
+            });
+
         builder.SetConfiguration();
         builder.Services.AddCoreServices();
         builder.Services.AddInfrastructureServices();
         builder.Services.AddTracingServices();
-        
-        builder.Services.AddDataProtection()
-            .PersistKeysToFileSystem(new DirectoryInfo("/app/DataProtection-Keys"))
-            .SetApplicationName("Aion");
-        
+        builder.Services.AddAuthorization();
+
         SetupKestrel(builder);
 
         builder.Logging.AddConsole();
@@ -41,6 +81,8 @@ public static class BootStrap
 
         var app = builder.Build();
 
+        await app.Services.GetRequiredService<JwtService>().LoadTokenAsync();
+        
         using (var scope = app.Services.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -49,33 +91,44 @@ public static class BootStrap
             await SeedAsync(db);
         }
 
-        app.AddEndPoints();
         app.UseRouting();
 
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.AddEndPoints();
+        
         await app.RunAsync();
     }
 
     private static void SetupKestrel(WebApplicationBuilder builder)
     {
-        var globalSettings = new GlobalSettings();
-        builder.Configuration.GetSection("GlobalSettings").Bind(globalSettings);
-
         var serverSettings = new ServerSettings();
         builder.Configuration.GetSection("ServerSettings").Bind(serverSettings);
 
         builder.WebHost.ConfigureKestrel(options =>
         {
-            options.ListenAnyIP(serverSettings.GrpcPort, listenOptions =>
+            // Internal GRPC listener (HTTP/2, no TLS)
+            options.ListenAnyIP(serverSettings.InternalGrpcPort, listenOptions =>
+            {
+                listenOptions.Protocols = HttpProtocols.Http2;
+                AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+            });
+
+            // External GRPC listener (HTTPS + HTTP/2)
+            options.ListenAnyIP(serverSettings.SecureExternalGrpcPort, listenOptions =>
             {
                 listenOptions.Protocols = HttpProtocols.Http2;
 
-                if (globalSettings.UseHttps)
+                listenOptions.UseHttps(httpsOptions =>
                 {
-                    listenOptions.UseHttps("/app/certs/server.pfx");
-                    return;
-                }
+                    var cert = X509Certificate2.CreateFromPemFile(
+                        "/certs/fullchain1.pem",
+                        "/certs/privkey1.pem"
+                    );
 
-                AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+                    httpsOptions.ServerCertificate = cert;
+                });
             });
         });
     }

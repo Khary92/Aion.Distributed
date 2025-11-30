@@ -8,6 +8,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.11" />
         <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.9"/>
     </ItemGroup>
 
@@ -15,11 +16,11 @@
         <ProjectReference Include="..\Core.Domain\Core.Domain.csproj"/>
         <ProjectReference Include="..\Core.Persistence\Core.Persistence.csproj"/>
         <ProjectReference Include="..\Core.Server\Core.Server.csproj"/>
-        <ProjectReference Include="..\Global.Settings\Global.Settings.csproj"/>
+        <ProjectReference Include="..\Service.Global.Settings\Service.Global.Settings.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="..\Global.Settings\settings.json">
+        <None Update="..\Service.Global.Settings\settings.json">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>

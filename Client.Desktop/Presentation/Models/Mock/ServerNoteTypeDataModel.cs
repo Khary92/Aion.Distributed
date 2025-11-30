@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
@@ -13,16 +14,14 @@ using Client.Desktop.DataModels;
 using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
 using Proto.Command.NoteTypes;
-using Proto.DTO.NoteType;
 using Proto.Requests.NoteTypes;
 using ReactiveUI;
-using Service.Proto.Shared.Commands.NoteTypes;
-using Service.Proto.Shared.Requests.NoteTypes;
+using INoteTypeRequestSender = Client.Desktop.Communication.Requests.NoteType.INoteTypeRequestSender;
 
 namespace Client.Desktop.Presentation.Models.Mock;
 
 public class ServerNoteTypeDataModel(MockDataService mockDataService) : ReactiveObject, IInitializeAsync,
-    INoteTypeCommandSender, INoteTypeRequestSender, ILocalNoteTypeNotificationPublisher, IStreamClient
+    INoteTypeRequestSender, ILocalNoteTypeNotificationPublisher, IStreamClient
 {
     private readonly ConcurrentQueue<CreateNoteTypeCommandProto> _createQueue = new();
 
@@ -89,35 +88,21 @@ public class ServerNoteTypeDataModel(MockDataService mockDataService) : Reactive
         return Task.FromResult(true);
     }
 
-    public Task<GetAllNoteTypesResponseProto> Send(GetAllNoteTypesRequestProto request)
+    public Task<List<NoteTypeClientModel>> Send(GetAllNoteTypesRequestProto request)
     {
-        var list = new GetAllNoteTypesResponseProto();
-
-        foreach (var noteType in NoteTypes)
-            list.NoteTypes.Add(new NoteTypeProto
-            {
-                NoteTypeId = noteType.NoteTypeId.ToString(),
-                Name = noteType.Name,
-                Color = noteType.Color
-            });
-
+        var list = NoteTypes
+            .Select(noteType => new NoteTypeClientModel(noteType.NoteTypeId, noteType.Name, noteType.Color)).ToList();
         return Task.FromResult(list);
     }
 
 
-    public Task<NoteTypeProto> Send(GetNoteTypeByIdRequestProto request)
+    public Task<NoteTypeClientModel> Send(GetNoteTypeByIdRequestProto request)
     {
         var noteType = NoteTypes.FirstOrDefault(nt => nt.NoteTypeId == Guid.Parse(request.NoteTypeId));
 
         if (noteType == null) throw new Exception("Note type not found");
 
-        var result = new NoteTypeProto
-        {
-            NoteTypeId = noteType.NoteTypeId.ToString(),
-            Name = noteType.Name,
-            Color = noteType.Color
-        };
-
+        var result = new NoteTypeClientModel(noteType.NoteTypeId, noteType.Name, noteType.Color);
         return Task.FromResult(result);
     }
 

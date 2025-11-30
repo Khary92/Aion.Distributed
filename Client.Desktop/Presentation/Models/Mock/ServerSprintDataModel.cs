@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
@@ -12,19 +13,14 @@ using Client.Desktop.Communication.Notifications.Wrappers;
 using Client.Desktop.DataModels;
 using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
-using Client.Proto;
-using Google.Protobuf.WellKnownTypes;
 using Proto.Command.Sprints;
-using Proto.DTO.Sprint;
 using Proto.Requests.Sprints;
 using ReactiveUI;
-using Service.Proto.Shared.Commands.Sprints;
-using Service.Proto.Shared.Requests.Sprints;
+using ISprintRequestSender = Client.Desktop.Communication.Requests.Sprint.ISprintRequestSender;
 
 namespace Client.Desktop.Presentation.Models.Mock;
 
 public class ServerSprintDataModel(MockDataService mockDataService) : ReactiveObject, IInitializeAsync,
-    ISprintCommandSender,
     ISprintRequestSender, ILocalSprintNotificationPublisher, IStreamClient
 {
     private readonly ConcurrentQueue<AddTicketToActiveSprintCommandProto> _addTicketToSprintQueue = new();
@@ -106,39 +102,25 @@ public class ServerSprintDataModel(MockDataService mockDataService) : ReactiveOb
         return Task.FromResult(true);
     }
 
-    public Task<SprintProto?> Send(GetActiveSprintRequestProto request)
+    public Task<SprintClientModel?> Send(GetActiveSprintRequestProto request)
     {
         var activeSprint = Sprints.FirstOrDefault(s => s.IsActive);
 
-        if (activeSprint == null) return Task.FromResult<SprintProto?>(null);
+        if (activeSprint == null) return Task.FromResult<SprintClientModel?>(null);
 
-        var result = new SprintProto
-        {
-            SprintId = activeSprint.SprintId.ToString(),
-            Name = activeSprint.Name,
-            Start = Timestamp.FromDateTimeOffset(activeSprint.StartTime),
-            End = Timestamp.FromDateTimeOffset(activeSprint.EndTime),
-            IsActive = activeSprint.IsActive,
-            TicketIds = { activeSprint.TicketIds.ToRepeatedField() }
-        };
+        var result = new SprintClientModel(activeSprint.SprintId, activeSprint.Name, activeSprint.IsActive,
+            activeSprint.StartTime, activeSprint.EndTime, activeSprint.TicketIds);
 
         return Task.FromResult(result)!;
     }
 
-    public Task<SprintListProto> Send(GetAllSprintsRequestProto request)
+    public Task<List<SprintClientModel>> Send(GetAllSprintsRequestProto request)
     {
-        var list = new SprintListProto();
+        var list = new List<SprintClientModel>();
 
         foreach (var sprint in Sprints)
-            list.Sprints.Add(new SprintProto
-            {
-                SprintId = sprint.SprintId.ToString(),
-                Name = sprint.Name,
-                Start = Timestamp.FromDateTimeOffset(sprint.StartTime),
-                End = Timestamp.FromDateTimeOffset(sprint.EndTime),
-                IsActive = sprint.IsActive,
-                TicketIds = { sprint.TicketIds.ToRepeatedField() }
-            });
+            list.Add(new SprintClientModel(sprint.SprintId, sprint.Name, sprint.IsActive,
+                sprint.StartTime, sprint.EndTime, sprint.TicketIds));
 
         return Task.FromResult(list);
     }

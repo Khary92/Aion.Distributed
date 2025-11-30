@@ -1,10 +1,12 @@
 ﻿using Core.Server.Services.Client;
 using Core.Server.Tracing.Tracing.Tracers;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Proto.Command.Client;
 
 namespace Core.Server.Communication.Endpoints.Client;
 
+[Authorize]
 public class ClientCommandReceiver(ITrackingControlService trackingControlService, ITraceCollector tracer)
     : ClientCommandProtoService.ClientCommandProtoServiceBase
 {

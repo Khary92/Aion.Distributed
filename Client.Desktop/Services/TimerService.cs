@@ -15,7 +15,7 @@ using Timer = System.Timers.Timer;
 namespace Client.Desktop.Services;
 
 public class TimerService(IRequestSender requestSender, INotificationPublisherFacade publisherFacade)
-    : IDisposable, IMessengerRegistration, IInitializeAsync, IClientTimerNotificationPublisher
+    : IDisposable, IEventRegistration, IInitializeAsync, IClientTimerNotificationPublisher
 {
     private readonly Timer _timer = new(1000);
 
@@ -57,16 +57,6 @@ public class TimerService(IRequestSender requestSender, INotificationPublisherFa
         UnregisterMessenger();
     }
 
-    public InitializationType Type => InitializationType.Service;
-
-    public async Task InitializeAsync()
-    {
-        _timerSettings = await requestSender.Send(new ClientGetTimerSettingsRequest(Guid.NewGuid()));
-        _timer.Elapsed += OnTick;
-        _timer.AutoReset = true;
-        _timer.Start();
-    }
-
     public void RegisterMessenger()
     {
         publisherFacade.TimerSettings.ClientDocuTimerSaveIntervalChangedNotificationReceived +=
@@ -81,6 +71,16 @@ public class TimerService(IRequestSender requestSender, INotificationPublisherFa
             HandleClientDocuTimerSaveIntervalChangedNotification;
         publisherFacade.TimerSettings.ClientSnapshotSaveIntervalChangedNotificationReceived -=
             HandleClientSnapshotSaveIntervalChangedNotification;
+    }
+
+    public InitializationType Type => InitializationType.Service;
+
+    public async Task InitializeAsync()
+    {
+        _timerSettings = await requestSender.Send(new ClientGetTimerSettingsRequest(Guid.NewGuid()));
+        _timer.Elapsed += OnTick;
+        _timer.AutoReset = true;
+        _timer.Start();
     }
 
     private Task HandleClientDocuTimerSaveIntervalChangedNotification(

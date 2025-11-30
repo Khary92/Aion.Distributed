@@ -43,12 +43,11 @@
     <ItemGroup>
         <ProjectReference Include="..\Client.Tracing\Client.Tracing.csproj"/>
         <ProjectReference Include="..\Client.Proto\Client.Proto.csproj"/>
-        <ProjectReference Include="..\Global.Settings\Global.Settings.csproj"/>
+        <ProjectReference Include="..\Service.Global.Settings\Service.Global.Settings.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
         <Folder Include="Lifecycle\Startup\Tasks\"/>
-        <Folder Include="Presentation\Views\"/>
     </ItemGroup>
 
     <ItemGroup>

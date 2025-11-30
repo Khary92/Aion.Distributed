@@ -1,10 +1,12 @@
 ﻿using Core.Server.Services.Entities.Tickets;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Proto.DTO.TicketReplay;
 using Proto.Requests.TicketReplay;
 
 namespace Core.Server.Communication.Endpoints.TicketReplay;
 
+[Authorize]
 public class TicketReplayRequestReceiver(ITicketRequestsService ticketRequestsService)
     : TicketReplayRequestService.TicketReplayRequestServiceBase
 {

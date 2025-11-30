@@ -18,7 +18,7 @@ public class DocumentationSynchronizer(
     ITraceCollector tracer,
     INotificationPublisherFacade notificationPublisher,
     IClientTimerNotificationPublisher clientTimerNotificationPublisher)
-    : IDocumentationSynchronizer, IMessengerRegistration
+    : IDocumentationSynchronizer, IEventRegistration
 {
     private readonly List<IDocumentationSynchronizationListener> _listeners = [];
 

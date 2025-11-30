@@ -1,6 +1,5 @@
 using Service.Monitoring.Shared;
 using Service.Monitoring.Shared.Enums;
-using Service.Monitoring.Shared.Tracing;
 
 namespace Client.Tracing.Tracing.Tracers.Ticket.UseCase;
 

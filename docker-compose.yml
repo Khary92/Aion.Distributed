@@ -1,36 +1,57 @@
 ﻿version: '3.8'
 services:
+  authentication-service:
+    build:
+      context: .
+      dockerfile: ./Service.Authentication/Dockerfile
+    expose:
+      - "5001"
+    volumes:
+      - ./auth-keys:/certs:rw
+      - ./internal-token:/internal-token:rw
+    environment:
+      - TZ=Europe/Berlin
+    restart: unless-stopped
+  
   core-service:
     build:
       context: .
       dockerfile: ./Core.Boot/Dockerfile
     expose:
-      - "8080"
+      - "8081"
+    ports:
+      - "5002:5002"
     environment:
       - ASPNETCORE_URLS=http://+:8080
       - ConnectionStrings__DefaultConnection=Host=postgres;Database=aion;Username=aionuser;Password=aionpass
       - TZ=Europe/Berlin
     depends_on:
       - postgres
+      - authentication-service
     restart: unless-stopped
     volumes:
-      - ./Certificates:/app/certs:ro
-      - ./DataProtection-Keys:/app/DataProtection-Keys:rw
+      - ./auth-keys/public_key.pem:/jwt/public_key.pem:ro,z
+      - ./internal-token:/internal-token:ro,z
+      - /var/lib/docker/volumes/npm_npm-ssl/_data/archive/npm-9:/certs:ro,z
 
   monitoring-service:
     build:
       context: .
       dockerfile: ./Service.Monitoring/Dockerfile
     expose:
-      - "8080"
+      - "8083"
+    ports:
+      - "5003:5003"
     environment:
       - ASPNETCORE_URLS=http://+:8080
       - TZ=Europe/Berlin
     volumes:
-      - ./Certificates:/app/certs:ro
-      - ./DataProtection-Keys:/app/DataProtection-Keys:rw
+      - ./auth-keys/public_key.pem:/jwt/public_key.pem:ro,z
+      - ./internal-token:/internal-token:ro,z
+      - /var/lib/docker/volumes/npm_npm-ssl/_data/archive/npm-9:/certs:ro,z
     depends_on:
       - core-service
+      - authentication-service
     restart: unless-stopped
 
   admin-web:
@@ -39,15 +60,17 @@ services:
       dockerfile: ./Service.Admin.Web/Dockerfile
     expose:
       - "8080"
+      - "8081"
     environment:
       - ASPNETCORE_URLS=http://+:8080
       - TZ=Europe/Berlin
     volumes:
-      - ./Certificates:/app/certs:ro
-      - ./DataProtection-Keys:/app/DataProtection-Keys:rw
+      - ./auth-keys/public_key.pem:/jwt/public_key.pem:ro,z
+      - ./internal-token:/internal-token:ro,z
     depends_on:
       - monitoring-service
       - core-service
+      - authentication-service
     restart: unless-stopped
 
   postgres:
@@ -67,21 +90,5 @@ services:
       timeout: 5s
       retries: 5
 
-  pgadmin:
-    image: dpage/pgadmin4
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=admin@admin.com
-      - PGADMIN_DEFAULT_PASSWORD=admin
-      - PGADMIN_CONFIG_SERVER_MODE=False
-      - TZ=Europe/Berlin
-    expose:
-      - "80"
-    depends_on:
-      - postgres
-    volumes:
-      - ./servers.json:/pgadmin4/servers.json:ro
-    restart: unless-stopped
-
 volumes:
   postgres_data:
-  data_protection_keys:

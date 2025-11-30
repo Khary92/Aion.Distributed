@@ -11,6 +11,7 @@ using Client.Desktop.Lifecycle.Startup.Tasks.Register;
 using Client.Desktop.Lifecycle.Startup.Tasks.UnsentCommands;
 using Client.Desktop.Presentation.Factories;
 using Client.Desktop.Presentation.Models.Analysis;
+using Client.Desktop.Presentation.Models.Authentication;
 using Client.Desktop.Presentation.Models.Documentation;
 using Client.Desktop.Presentation.Models.Export;
 using Client.Desktop.Presentation.Models.Main;
@@ -20,16 +21,19 @@ using Client.Desktop.Presentation.Models.Synchronization;
 using Client.Desktop.Presentation.Models.TimeTracking;
 using Client.Desktop.Presentation.Models.TimeTracking.DynamicControls;
 using Client.Desktop.Presentation.Views.Analysis;
+using Client.Desktop.Presentation.Views.Authentication;
 using Client.Desktop.Presentation.Views.Documentation;
 using Client.Desktop.Presentation.Views.Export;
 using Client.Desktop.Presentation.Views.Main;
 using Client.Desktop.Presentation.Views.Setting;
 using Client.Desktop.Presentation.Views.Tracking;
 using Client.Desktop.Services;
+using Client.Desktop.Services.Authentication;
 using Client.Desktop.Services.Cache;
 using Client.Desktop.Services.Export;
 using Client.Desktop.Services.LocalSettings;
 using Microsoft.Extensions.DependencyInjection;
+using IEventRegistration = Client.Desktop.Lifecycle.Startup.Tasks.Register.IEventRegistration;
 
 namespace Client.Desktop;
 
@@ -49,10 +53,14 @@ public static class ServiceExtensions
     private static void AddSchedulerServices(this IServiceCollection services)
     {
         services.AddSingleton<CancellationTokenSource>();
-        services.AddSingleton<IStartupScheduler, StartupScheduler>();
+
+        services.AddSingleton<Lifecycle.Startup.Scheduler.IEventRegistration, EventRegistration>();
+
+        services.AddSingleton<StartupScheduler>();
+        services.AddSingleton<IStartupScheduler>(sp => sp.GetRequiredService<StartupScheduler>());
 
         services.AddSingleton<IStartupTask, AsyncInitializeTask>();
-        services.AddSingleton<IStartupTask, RegisterMessengerTask>();
+        services.AddSingleton<IStartupTask, RegisterEventsTask>();
         services.AddSingleton<IStartupTask, SendUnsentCommandsTask>();
 
         services.AddSingleton<IShutDownHandler, ShutdownHandler>();
@@ -60,6 +68,8 @@ public static class ServiceExtensions
 
     private static void AddLocalServices(this IServiceCollection services)
     {
+        services.AddSingleton<AuthInterceptor>();
+
         services.AddSingleton<LocalSettingsService>();
         services.AddSingleton<ILocalSettingsService>(sp => sp.GetRequiredService<LocalSettingsService>());
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<LocalSettingsService>());
@@ -69,16 +79,18 @@ public static class ServiceExtensions
 
         services.AddSingleton<TimerService>();
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<TimerService>());
-        services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<TimerService>());
+        services.AddSingleton<IEventRegistration>(sp => sp.GetRequiredService<TimerService>());
         services.AddSingleton<IDisposable>(sp => sp.GetRequiredService<TimerService>());
         services.AddSingleton<IClientTimerNotificationPublisher>(sp => sp.GetRequiredService<TimerService>());
 
         services.AddSingleton<DocumentationSynchronizer>();
-        services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<DocumentationSynchronizer>());
+        services.AddSingleton<IEventRegistration>(sp => sp.GetRequiredService<DocumentationSynchronizer>());
         services.AddSingleton<IDocumentationSynchronizer>(sp => sp.GetRequiredService<DocumentationSynchronizer>());
 
         services.AddTransient<TicketReplayProvider>();
         services.AddTransient<ITicketReplayProvider>(sp => sp.GetRequiredService<TicketReplayProvider>());
+
+        services.AddSingleton<ITokenService, TokenService>();
     }
 
     private static void AddFileSystemServices(this IServiceCollection services)
@@ -98,6 +110,7 @@ public static class ServiceExtensions
     private static void AddViews(this IServiceCollection services)
     {
         services.AddSingleton<MainWindow>();
+        services.AddSingleton<AuthenticationControl>();
         services.AddSingleton<SettingsCompositeControl>();
         services.AddSingleton<TrackingWrapperControl>();
         services.AddSingleton<DocumentationControl>();
@@ -107,6 +120,8 @@ public static class ServiceExtensions
 
     private static void AddModels(this IServiceCollection services)
     {
+        services.AddTransient<AuthenticationViewModel>();
+
         services.AddTransient<TypeCheckBoxViewModel>();
         services.AddTransient<TrackingSlotViewModel>();
         services.AddTransient<TrackingSlotModel>();
@@ -116,7 +131,6 @@ public static class ServiceExtensions
         services.AddSingleton<AnalysisBySprintViewModel>();
 
         services.AddSingleton<AnalysisControlWrapperViewModel>();
-        services.AddSingleton<MainWindowViewModel>();
         services.AddSingleton<SettingsCompositeViewModel>();
 
         services.AddSingleton<WorkDaysViewModel>();
@@ -126,35 +140,38 @@ public static class ServiceExtensions
 
         services.AddSingleton<SettingsModel>();
 
+        services.AddSingleton<MainWindowViewModel>();
+        services.AddSingleton<IEventRegistration>(sp => sp.GetRequiredService<MainWindowViewModel>());
+
         services.AddSingleton<DocumentationViewModel>();
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<DocumentationViewModel>());
 
         services.AddSingleton<DocumentationModel>();
-        services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<DocumentationModel>());
+        services.AddSingleton<IEventRegistration>(sp => sp.GetRequiredService<DocumentationModel>());
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<DocumentationModel>());
 
         services.AddSingleton<WorkDaysModel>();
-        services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<WorkDaysModel>());
+        services.AddSingleton<IEventRegistration>(sp => sp.GetRequiredService<WorkDaysModel>());
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<WorkDaysModel>());
 
         services.AddSingleton<TimeTrackingModel>();
-        services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<TimeTrackingModel>());
+        services.AddSingleton<IEventRegistration>(sp => sp.GetRequiredService<TimeTrackingModel>());
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<TimeTrackingModel>());
 
         services.AddSingleton<ExportModel>();
-        services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<ExportModel>());
+        services.AddSingleton<IEventRegistration>(sp => sp.GetRequiredService<ExportModel>());
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<ExportModel>());
 
         services.AddSingleton<AnalysisByTagModel>();
-        services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<AnalysisByTagModel>());
+        services.AddSingleton<IEventRegistration>(sp => sp.GetRequiredService<AnalysisByTagModel>());
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<AnalysisByTagModel>());
 
         services.AddSingleton<AnalysisByTicketModel>();
-        services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<AnalysisByTicketModel>());
+        services.AddSingleton<IEventRegistration>(sp => sp.GetRequiredService<AnalysisByTicketModel>());
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<AnalysisByTicketModel>());
 
         services.AddSingleton<AnalysisBySprintModel>();
-        services.AddSingleton<IMessengerRegistration>(sp => sp.GetRequiredService<AnalysisBySprintModel>());
+        services.AddSingleton<IEventRegistration>(sp => sp.GetRequiredService<AnalysisBySprintModel>());
         services.AddSingleton<IInitializeAsync>(sp => sp.GetRequiredService<AnalysisBySprintModel>());
     }
 

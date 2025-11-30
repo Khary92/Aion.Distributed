@@ -1,10 +1,13 @@
 ﻿using Core.Server.Services.Entities.NoteTypes;
 using Core.Server.Tracing.Tracing.Tracers;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Proto.Command.NoteTypes;
 
 namespace Core.Server.Communication.Endpoints.NoteType;
 
+[Authorize]
 public class NoteTypeCommandReceiver(
     INoteTypeCommandsService noteTypeCommandsService,
     ITraceCollector tracer)

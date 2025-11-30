@@ -1,9 +1,11 @@
 ﻿using System.Collections.Concurrent;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Proto.Notifications.WorkDay;
 
 namespace Core.Server.Communication.Endpoints.WorkDay;
 
+[Authorize]
 public class
     WorkDayNotificationService : Proto.Notifications.WorkDay.WorkDayNotificationService.WorkDayNotificationServiceBase
 {

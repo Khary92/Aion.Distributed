@@ -24,13 +24,23 @@ public class WorkDaysModel(
     IRequestSender requestSender,
     ILocalSettingsService localSettingsService,
     ITraceCollector tracer,
-    INotificationPublisherFacade notificationPublisher) : ReactiveObject, IInitializeAsync, IMessengerRegistration,
+    INotificationPublisherFacade notificationPublisher) : ReactiveObject, IInitializeAsync, IEventRegistration,
     IClientWorkDaySelectionChangedNotificationPublisher
 {
     public ObservableCollection<WorkDayClientModel> WorkDays { get; } = [];
 
     public event Func<ClientWorkDaySelectionChangedNotification, Task>?
         ClientWorkDaySelectionChangedNotificationReceived;
+
+    public void RegisterMessenger()
+    {
+        notificationPublisher.WorkDay.NewWorkDayMessageReceived += HandleNewWorkDayMessage;
+    }
+
+    public void UnregisterMessenger()
+    {
+        notificationPublisher.WorkDay.NewWorkDayMessageReceived -= HandleNewWorkDayMessage;
+    }
 
     public InitializationType Type => InitializationType.Model;
 
@@ -53,16 +63,6 @@ public class WorkDaysModel(
             new ClientCreateWorkDayCommand(Guid.NewGuid(), DateTimeOffset.Now, traceId);
         await tracer.WorkDay.Create.SendingCommand(GetType(), traceId, clientCreateWorkDayCommand);
         await commandSender.Send(clientCreateWorkDayCommand);
-    }
-
-    public void RegisterMessenger()
-    {
-        notificationPublisher.WorkDay.NewWorkDayMessageReceived += HandleNewWorkDayMessage;
-    }
-
-    public void UnregisterMessenger()
-    {
-        notificationPublisher.WorkDay.NewWorkDayMessageReceived -= HandleNewWorkDayMessage;
     }
 
     private async Task HandleNewWorkDayMessage(NewWorkDayMessage message)

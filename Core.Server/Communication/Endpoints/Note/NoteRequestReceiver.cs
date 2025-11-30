@@ -1,9 +1,11 @@
 ﻿using Core.Server.Services.Entities.Notes;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Proto.Requests.Notes;
 
 namespace Core.Server.Communication.Endpoints.Note;
 
+[Authorize]
 public class NoteRequestReceiver(INoteRequestsService noteRequestsService)
     : NotesRequestService.NotesRequestServiceBase
 {

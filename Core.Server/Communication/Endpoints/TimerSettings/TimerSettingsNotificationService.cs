@@ -1,10 +1,12 @@
 ﻿using System.Collections.Concurrent;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Proto.Notifications.TimerSettings;
 using SubscribeRequest = Proto.Notifications.TimerSettings.SubscribeRequest;
 
 namespace Core.Server.Communication.Endpoints.TimerSettings;
 
+[Authorize]
 public class TimerSettingsNotificationService : Proto.Notifications.TimerSettings.TimerSettingsNotificationService.
     TimerSettingsNotificationServiceBase
 {

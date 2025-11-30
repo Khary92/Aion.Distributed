@@ -2,10 +2,12 @@
 using Core.Server.Services.Entities.Sprints;
 using Core.Server.Tracing.Tracing.Tracers;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Proto.Command.Sprints;
 
 namespace Core.Server.Communication.Endpoints.Sprint;
 
+[Authorize]
 public class SprintCommandReceiver(
     ISprintCommandsService sprintsCommandsService,
     IAddTicketToActiveSprintCommandHandler addTicketToActiveSprintCommandHandler,

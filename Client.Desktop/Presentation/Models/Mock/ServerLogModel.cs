@@ -7,7 +7,7 @@ using Service.Monitoring.Shared;
 
 namespace Client.Desktop.Presentation.Models.Mock;
 
-public class ServerLogModel(IMockTraceDataPublisher logPublisher) : ReactiveObject, IMessengerRegistration
+public class ServerLogModel(IMockTraceDataPublisher logPublisher) : ReactiveObject, IEventRegistration
 {
     private ObservableCollection<ServiceTraceDataCommand> _traces = [];
 

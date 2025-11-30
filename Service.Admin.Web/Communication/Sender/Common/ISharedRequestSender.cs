@@ -1,8 +1,8 @@
-﻿using Service.Proto.Shared.Requests.NoteTypes;
-using Service.Proto.Shared.Requests.Sprints;
-using Service.Proto.Shared.Requests.Tags;
-using Service.Proto.Shared.Requests.Tickets;
-using Service.Proto.Shared.Requests.TimerSettings;
+﻿using Service.Admin.Web.Communication.Requests.NoteTypes;
+using Service.Admin.Web.Communication.Requests.Sprints;
+using Service.Admin.Web.Communication.Requests.Tags;
+using Service.Admin.Web.Communication.Requests.Tickets;
+using Service.Admin.Web.Communication.Requests.TimerSettings;
 
 namespace Service.Admin.Web.Communication.Sender.Common;
 

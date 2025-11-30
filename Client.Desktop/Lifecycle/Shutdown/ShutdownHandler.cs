@@ -16,7 +16,7 @@ public class ShutdownHandler(
     IPersistentCache<ClientSetStartTimeCommand> startTimeCache,
     IPersistentCache<ClientSetEndTimeCommand> endTimeCache,
     IDisposable timerService,
-    IEnumerable<IMessengerRegistration> messengers,
+    IEnumerable<IEventRegistration> messengers,
     IStreamLifeCycleHandler streamLifeCycleHandler) : IShutDownHandler
 {
     public async Task Exit()

@@ -2,9 +2,12 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Notifications.TimerSettings.Records;
+using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
-using Global.Settings.UrlResolver;
+using Client.Desktop.Services.Authentication;
+using Global.Settings;
 using Grpc.Core;
+using Grpc.Core.Interceptors;
 using Grpc.Net.Client;
 using Proto.Notifications.TimerSettings;
 using SubscribeRequest = Proto.Notifications.TimerSettings.SubscribeRequest;
@@ -12,8 +15,23 @@ using SubscribeRequest = Proto.Notifications.TimerSettings.SubscribeRequest;
 namespace Client.Desktop.Communication.Notifications.TimerSettings.Receiver;
 
 public class TimerSettingsNotificationReceiver(
-    IGrpcUrlBuilder grpcUrlBuilder) : ILocalTimerSettingsNotificationPublisher, IStreamClient
+    IGrpcUrlService grpcUrlBuilder,
+    ITokenService tokenService) : ILocalTimerSettingsNotificationPublisher, IStreamClient, IInitializeAsync
 {
+    private TimerSettingsNotificationService.TimerSettingsNotificationServiceClient? _client;
+
+    public InitializationType Type => InitializationType.AuthToken;
+
+    public async Task InitializeAsync()
+    {
+        var channel = GrpcChannel.ForAddress(grpcUrlBuilder.ClientToServerUrl);
+        var tokenProvider = new Func<Task<string>>(tokenService.GetToken);
+        var callInvoker = channel.Intercept(new AuthInterceptor(tokenProvider));
+        _client = new TimerSettingsNotificationService.TimerSettingsNotificationServiceClient(callInvoker);
+
+        await Task.CompletedTask;
+    }
+
     public event Func<ClientDocuTimerSaveIntervalChangedNotification, Task>?
         ClientDocuTimerSaveIntervalChangedNotificationReceived;
 
@@ -45,14 +63,8 @@ public class TimerSettingsNotificationReceiver(
         while (!cancellationToken.IsCancellationRequested)
             try
             {
-                using var channel = GrpcChannel.ForAddress(grpcUrlBuilder
-                    .From(ResolvingServices.Client)
-                    .To(ResolvingServices.Server)
-                    .BuildAddress());
-
-                var client = new TimerSettingsNotificationService.TimerSettingsNotificationServiceClient(channel);
                 using var call =
-                    client.SubscribeTimerSettingsNotifications(new SubscribeRequest(),
+                    _client.SubscribeTimerSettingsNotifications(new SubscribeRequest(),
                         cancellationToken: cancellationToken);
 
                 attempt = 0;

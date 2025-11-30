@@ -1,0 +1,24 @@
+﻿{
+  "GlobalSettings": {
+    "ExternalHostName": "hiegert.eu"
+  },
+  "AdminSettings": {
+    "InternalHostName": "admin-web",
+    "InternalGrpcPort": 8081,
+    "ExposedWebPort": 8080
+  },
+  "ServerSettings": {
+    "InternalHostName": "core-service",
+    "SecureExternalGrpcPort": 5002,
+    "InternalGrpcPort": 8082
+  },
+  "MonitoringSettings": {
+    "InternalHostName": "monitoring-service",
+    "SecureExternalGrpcPort": 5003,
+    "InternalGrpcPort": 8083
+  },
+  "DatabaseSettings": {
+    "ConnectionString": "Host=postgres;Database=aion;Username=aionuser;Password=aionpass"
+  }
+}
+

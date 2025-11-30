@@ -3,19 +3,37 @@ using System.Threading;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Notifications.Sprint.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
+using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
+using Client.Desktop.Services.Authentication;
 using Client.Tracing.Tracing.Tracers;
-using Global.Settings.UrlResolver;
+using Global.Settings;
 using Grpc.Core;
+using Grpc.Core.Interceptors;
 using Grpc.Net.Client;
 using Proto.Notifications.Sprint;
 
 namespace Client.Desktop.Communication.Notifications.Sprint.Receiver;
 
 public class SprintNotificationReceiver(
-    IGrpcUrlBuilder grpcUrlBuilder,
-    ITraceCollector tracer) : ILocalSprintNotificationPublisher, IStreamClient
+    IGrpcUrlService grpcUrlBuilder,
+    ITraceCollector tracer,
+    ITokenService tokenService) : ILocalSprintNotificationPublisher, IStreamClient, IInitializeAsync
 {
+    private SprintNotificationService.SprintNotificationServiceClient? _client;
+
+    public InitializationType Type => InitializationType.AuthToken;
+
+    public async Task InitializeAsync()
+    {
+        var channel = GrpcChannel.ForAddress(grpcUrlBuilder.ClientToServerUrl);
+        var tokenProvider = new Func<Task<string>>(tokenService.GetToken);
+        var callInvoker = channel.Intercept(new AuthInterceptor(tokenProvider));
+        _client = new SprintNotificationService.SprintNotificationServiceClient(callInvoker);
+
+        await Task.CompletedTask;
+    }
+
     public event Func<ClientSprintActiveStatusSetNotification, Task>? ClientSprintActiveStatusSetNotificationReceived;
     public event Func<ClientSprintDataUpdatedNotification, Task>? ClientSprintDataUpdatedNotificationReceived;
 
@@ -67,14 +85,11 @@ public class SprintNotificationReceiver(
         while (!cancellationToken.IsCancellationRequested)
             try
             {
-                using var channel = GrpcChannel.ForAddress(grpcUrlBuilder
-                    .From(ResolvingServices.Client)
-                    .To(ResolvingServices.Server)
-                    .BuildAddress());
+                if (_client == null)
+                    throw new InvalidOperationException("Client is not initialized");
 
-                var client = new SprintNotificationService.SprintNotificationServiceClient(channel);
                 using var call =
-                    client.SubscribeSprintNotifications(new SubscribeRequest(), cancellationToken: cancellationToken);
+                    _client.SubscribeSprintNotifications(new SubscribeRequest(), cancellationToken: cancellationToken);
 
                 attempt = 0;
 

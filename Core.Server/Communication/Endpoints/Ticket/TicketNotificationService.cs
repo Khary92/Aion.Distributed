@@ -1,10 +1,12 @@
 ﻿using System.Collections.Concurrent;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Proto.Notifications.Ticket;
 using SubscribeRequest = Proto.Notifications.Ticket.SubscribeRequest;
 
 namespace Core.Server.Communication.Endpoints.Ticket;
 
+[Authorize]
 public class
     TicketNotificationService : Proto.Notifications.Ticket.TicketNotificationService.TicketNotificationServiceBase
 {

@@ -46,7 +46,7 @@
                 </Grid>
             </Border>
 
-            <Grid ColumnDefinitions="*, Auto">
+            <Grid IsVisible="{Binding IsAuthenticated}" ColumnDefinitions="*, Auto">
                 <Border Grid.Column="0" x:Name="Sidebar" Padding="10,5,0, 10"
                         BorderBrush="Transparent"
                         Width="{Binding MenuWidth}"

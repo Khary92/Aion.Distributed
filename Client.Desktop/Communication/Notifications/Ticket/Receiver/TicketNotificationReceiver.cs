@@ -3,19 +3,37 @@ using System.Threading;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Notifications.Ticket.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
+using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
+using Client.Desktop.Services.Authentication;
 using Client.Tracing.Tracing.Tracers;
-using Global.Settings.UrlResolver;
+using Global.Settings;
 using Grpc.Core;
+using Grpc.Core.Interceptors;
 using Grpc.Net.Client;
 using Proto.Notifications.Ticket;
 
 namespace Client.Desktop.Communication.Notifications.Ticket.Receiver;
 
 public class TicketNotificationReceiver(
-    IGrpcUrlBuilder grpcUrlBuilder,
-    ITraceCollector tracer) : ILocalTicketNotificationPublisher, IStreamClient
+    IGrpcUrlService grpcUrlBuilder,
+    ITraceCollector tracer,
+    ITokenService tokenService) : ILocalTicketNotificationPublisher, IStreamClient, IInitializeAsync
 {
+    private TicketNotificationService.TicketNotificationServiceClient? _client;
+
+    public InitializationType Type => InitializationType.AuthToken;
+
+    public async Task InitializeAsync()
+    {
+        var channel = GrpcChannel.ForAddress(grpcUrlBuilder.ClientToServerUrl);
+        var tokenProvider = new Func<Task<string>>(tokenService.GetToken);
+        var callInvoker = channel.Intercept(new AuthInterceptor(tokenProvider));
+        _client = new TicketNotificationService.TicketNotificationServiceClient(callInvoker);
+
+        await Task.CompletedTask;
+    }
+
     public event Func<ClientTicketDataUpdatedNotification, Task>? TicketDataUpdatedNotificationReceived;
 
     public event Func<ClientTicketDocumentationUpdatedNotification, Task>?
@@ -57,14 +75,11 @@ public class TicketNotificationReceiver(
         while (!cancellationToken.IsCancellationRequested)
             try
             {
-                using var channel = GrpcChannel.ForAddress(grpcUrlBuilder
-                    .From(ResolvingServices.Client)
-                    .To(ResolvingServices.Server)
-                    .BuildAddress());
+                if (_client == null)
+                    throw new InvalidOperationException("Client is not initialized");
 
-                var client = new TicketNotificationService.TicketNotificationServiceClient(channel);
                 using var call =
-                    client.SubscribeTicketNotifications(new SubscribeRequest(), cancellationToken: cancellationToken);
+                    _client.SubscribeTicketNotifications(new SubscribeRequest(), cancellationToken: cancellationToken);
 
                 attempt = 0;
 

@@ -1,10 +1,12 @@
 ﻿using System.Collections.Concurrent;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Proto.Notifications.Note;
 using SubscribeRequest = Proto.Notifications.Note.SubscribeRequest;
 
 namespace Core.Server.Communication.Endpoints.Note;
 
+[Authorize]
 public class NoteNotificationService : Proto.Notifications.Note.NoteNotificationService.NoteNotificationServiceBase,
     INoteNotificationService
 {

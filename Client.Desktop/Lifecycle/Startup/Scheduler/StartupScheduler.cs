@@ -5,14 +5,15 @@ using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
 
 namespace Client.Desktop.Lifecycle.Startup.Scheduler;
 
-public class StartupScheduler(IEnumerable<IStartupTask> startupTasks, IStreamLifeCycleHandler streamLifeCycleHandler)
+public class StartupScheduler(
+    IEnumerable<IStartupTask> startupTasks,
+    IStreamLifeCycleHandler streamLifeCycleHandler)
     : IStartupScheduler
 {
     private readonly List<StartupTask> _order =
     [
-        StartupTask.RegisterMessenger,
-        StartupTask.NotificationStream,
         StartupTask.AsyncInitialize,
+        StartupTask.NotificationStream,
         StartupTask.CheckUnsentCommands
     ];
 

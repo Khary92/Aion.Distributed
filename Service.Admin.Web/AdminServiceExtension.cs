@@ -1,25 +1,27 @@
-﻿using Global.Settings.UrlResolver;
+﻿using Global.Settings;
 using Grpc.Core;
 using Polly;
+using Service.Admin.Tracing.Tracing;
+using Service.Admin.Web.Communication.Authentication;
+using Service.Admin.Web.Communication.Commands.NoteTypes;
+using Service.Admin.Web.Communication.Commands.Sprints;
+using Service.Admin.Web.Communication.Commands.Tags;
+using Service.Admin.Web.Communication.Commands.Tickets;
+using Service.Admin.Web.Communication.Commands.TimerSettings;
 using Service.Admin.Web.Communication.Receiver;
 using Service.Admin.Web.Communication.Receiver.Reports;
+using Service.Admin.Web.Communication.Requests.NoteTypes;
+using Service.Admin.Web.Communication.Requests.Sprints;
+using Service.Admin.Web.Communication.Requests.Tags;
+using Service.Admin.Web.Communication.Requests.Tickets;
+using Service.Admin.Web.Communication.Requests.TimerSettings;
 using Service.Admin.Web.Communication.Sender;
 using Service.Admin.Web.Communication.Sender.Common;
 using Service.Admin.Web.Communication.Sender.Policies;
+using Service.Admin.Web.Communication.Tracing;
 using Service.Admin.Web.Services.Startup;
 using Service.Admin.Web.Services.State;
 using Service.Monitoring.Shared.Enums;
-using Service.Monitoring.Shared.Tracing;
-using Service.Proto.Shared.Commands.NoteTypes;
-using Service.Proto.Shared.Commands.Sprints;
-using Service.Proto.Shared.Commands.Tags;
-using Service.Proto.Shared.Commands.Tickets;
-using Service.Proto.Shared.Commands.TimerSettings;
-using Service.Proto.Shared.Requests.NoteTypes;
-using Service.Proto.Shared.Requests.Sprints;
-using Service.Proto.Shared.Requests.Tags;
-using Service.Proto.Shared.Requests.Tickets;
-using Service.Proto.Shared.Requests.TimerSettings;
 
 namespace Service.Admin.Web;
 
@@ -27,6 +29,7 @@ public static class AdminServiceExtension
 {
     public static void AddWebServices(this IServiceCollection services)
     {
+        AddJwtServices(services);
         AddTraceSender(services);
         RegisterStateServices(services);
         AddSharedDataServices(services);
@@ -36,13 +39,16 @@ public static class AdminServiceExtension
         AddPolicyServices(services);
     }
 
+    private static void AddJwtServices(this IServiceCollection services)
+    {
+        services.AddScoped<JwtService>();
+    }
+
     private static void AddTraceSender(this IServiceCollection services)
     {
         services.AddSingleton<ITracingDataSender>(sp =>
-            new TracingDataSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.WebAdmin)
-                .To(ResolvingServices.Monitoring)
-                .BuildAddress()));
+            new TracingDataSender(sp.GetRequiredService<IGrpcUrlService>().InternalToMonitoringUrl,
+                sp.GetRequiredService<JwtService>()));
     }
 
     private static void AddPolicyServices(IServiceCollection services)
@@ -149,58 +155,38 @@ public static class AdminServiceExtension
     private static void AddSharedDataServices(this IServiceCollection services)
     {
         services.AddSingleton<ITicketCommandSender>(sp =>
-            new TicketCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.WebAdmin)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new TicketCommandSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl,
+                sp.GetRequiredService<JwtService>()));
         services.AddSingleton<ITicketRequestSender>(sp =>
-            new TicketRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.WebAdmin)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new TicketRequestSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl,
+                sp.GetRequiredService<JwtService>()));
 
         services.AddSingleton<ISprintCommandSender>(sp =>
-            new SprintCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.WebAdmin)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new SprintCommandSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl,
+                sp.GetRequiredService<JwtService>()));
         services.AddSingleton<ISprintRequestSender>(sp =>
-            new SprintRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.WebAdmin)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new SprintRequestSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl,
+                sp.GetRequiredService<JwtService>()));
 
         services.AddSingleton<ITagCommandSender>(sp =>
-            new TagCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.WebAdmin)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new TagCommandSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl,
+                sp.GetRequiredService<JwtService>()));
         services.AddSingleton<ITagRequestSender>(sp =>
-            new TagRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.WebAdmin)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new TagRequestSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl,
+                sp.GetRequiredService<JwtService>()));
 
         services.AddSingleton<INoteTypeCommandSender>(sp =>
-            new NoteTypeCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.WebAdmin)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new NoteTypeCommandSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl,
+                sp.GetRequiredService<JwtService>()));
         services.AddSingleton<INoteTypeRequestSender>(sp =>
-            new NoteTypeRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.WebAdmin)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new NoteTypeRequestSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl,
+                sp.GetRequiredService<JwtService>()));
 
         services.AddSingleton<ITimerSettingsCommandSender>(sp =>
-            new TimerSettingsCommandSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.WebAdmin)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new TimerSettingsCommandSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl,
+                sp.GetRequiredService<JwtService>()));
         services.AddSingleton<ITimerSettingsRequestSender>(sp =>
-            new TimerSettingsRequestSender(sp.GetRequiredService<IGrpcUrlBuilder>()
-                .From(ResolvingServices.WebAdmin)
-                .To(ResolvingServices.Server)
-                .BuildAddress()));
+            new TimerSettingsRequestSender(sp.GetRequiredService<IGrpcUrlService>().InternalToServerUrl,
+                sp.GetRequiredService<JwtService>()));
     }
 }

@@ -8,23 +8,27 @@ using Client.Desktop.Communication.Notifications.Tag.Receiver;
 using Client.Desktop.Communication.Notifications.Ticket.Receiver;
 using Client.Desktop.Communication.Notifications.TimerSettings.Receiver;
 using Client.Desktop.Communication.Notifications.WorkDay.Receiver;
+using Client.Desktop.Services.Authentication;
 using Client.Tracing.Tracing.Tracers;
-using Global.Settings.UrlResolver;
+using Global.Settings;
 
 namespace Client.Desktop.Test;
 
-public class TestNotificationPublisherFacade(IGrpcUrlBuilder urlBuilder, ITraceCollector traceCollector)
+public class TestNotificationPublisherFacade(
+    IGrpcUrlService urlBuilder,
+    ITraceCollector traceCollector,
+    ITokenService tokenService)
     : INotificationPublisherFacade
 {
-    public ClientNotificationReceiver Client { get; } = new(urlBuilder, traceCollector);
-    public NoteNotificationReceiver Note { get; } = new(urlBuilder, traceCollector);
-    public NoteTypeNotificationReceiver NoteType { get; } = new(urlBuilder, traceCollector);
-    public SprintNotificationReceiver Sprint { get; } = new(urlBuilder, traceCollector);
-    public StatisticsDataNotificationReceiver StatisticsData { get; } = new(urlBuilder, traceCollector);
-    public TagNotificationReceiver Tag { get; } = new(urlBuilder, traceCollector);
-    public TicketNotificationReceiver Ticket { get; } = new(urlBuilder, traceCollector);
-    public TimerSettingsNotificationReceiver TimerSettings { get; } = new(urlBuilder);
-    public WorkDayNotificationReceiver WorkDay { get; } = new(urlBuilder, traceCollector);
+    public ClientNotificationReceiver Client { get; } = new(urlBuilder, traceCollector, tokenService);
+    public NoteNotificationReceiver Note { get; } = new(urlBuilder, traceCollector, tokenService);
+    public NoteTypeNotificationReceiver NoteType { get; } = new(urlBuilder, traceCollector, tokenService);
+    public SprintNotificationReceiver Sprint { get; } = new(urlBuilder, traceCollector, tokenService);
+    public StatisticsDataNotificationReceiver StatisticsData { get; } = new(urlBuilder, traceCollector, tokenService);
+    public TagNotificationReceiver Tag { get; } = new(urlBuilder, traceCollector, tokenService);
+    public TicketNotificationReceiver Ticket { get; } = new(urlBuilder, traceCollector, tokenService);
+    public TimerSettingsNotificationReceiver TimerSettings { get; } = new(urlBuilder, tokenService);
+    public WorkDayNotificationReceiver WorkDay { get; } = new(urlBuilder, traceCollector, tokenService);
 
     ILocalClientNotificationPublisher INotificationPublisherFacade.Client => Client;
     ILocalNoteNotificationPublisher INotificationPublisherFacade.Note => Note;

@@ -1,10 +1,12 @@
 ﻿using Core.Server.Services.Entities.WorkDays;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Proto.DTO.TimerSettings;
 using Proto.Requests.WorkDays;
 
 namespace Core.Server.Communication.Endpoints.WorkDay;
 
+[Authorize]
 public class WorkDayRequestReceiver(IWorkDayRequestsService workDayRequestsService)
     : WorkDayRequestService.WorkDayRequestServiceBase
 {

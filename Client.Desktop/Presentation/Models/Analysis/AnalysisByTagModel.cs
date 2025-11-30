@@ -21,7 +21,7 @@ public class AnalysisByTagModel(
     IRequestSender requestSender,
     ITraceCollector tracer,
     INotificationPublisherFacade notificationPublisher)
-    : ReactiveObject, IInitializeAsync, IMessengerRegistration
+    : ReactiveObject, IInitializeAsync, IEventRegistration
 {
     private AnalysisByTagDecorator? _analysisByTag;
 
@@ -31,16 +31,6 @@ public class AnalysisByTagModel(
     {
         get => _analysisByTag;
         private set => this.RaiseAndSetIfChanged(ref _analysisByTag, value);
-    }
-
-    public InitializationType Type => InitializationType.Model;
-
-    public async Task InitializeAsync()
-    {
-        var tagClientModels = await requestSender.Send(new ClientGetAllTagsRequest());
-
-        Tags.Clear();
-        Tags.AddRange(tagClientModels);
     }
 
     public void RegisterMessenger()
@@ -53,6 +43,16 @@ public class AnalysisByTagModel(
     {
         notificationPublisher.Tag.NewTagMessageNotificationReceived -= HandleNewTagMessage;
         notificationPublisher.Tag.ClientTagUpdatedNotificationReceived -= HandleClientTagUpdatedNotification;
+    }
+
+    public InitializationType Type => InitializationType.Model;
+
+    public async Task InitializeAsync()
+    {
+        var tagClientModels = await requestSender.Send(new ClientGetAllTagsRequest());
+
+        Tags.Clear();
+        Tags.AddRange(tagClientModels);
     }
 
     private async Task HandleClientTagUpdatedNotification(ClientTagUpdatedNotification message)

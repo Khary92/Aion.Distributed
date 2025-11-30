@@ -11,11 +11,12 @@ namespace Client.Desktop.Presentation.Models.Mock;
 
 public class ServerSeedSettingsViewModel : ReactiveObject
 {
+    private readonly IStartupTask _asyncInitializeTask;
     private readonly MockDataService _mockDataService;
     private readonly IMockSeedSetupService _mockSeedSetupService;
-    private readonly IStartupTask _asyncInitializeTask;
 
-    public ServerSeedSettingsViewModel(MockDataService mockDataService, IMockSeedSetupService mockSeedSetupService, ServerSeedSettingsModel model,
+    public ServerSeedSettingsViewModel(MockDataService mockDataService, IMockSeedSetupService mockSeedSetupService,
+        ServerSeedSettingsModel model,
         IEnumerable<IStartupTask> startupTasks)
     {
         _mockDataService = mockDataService;

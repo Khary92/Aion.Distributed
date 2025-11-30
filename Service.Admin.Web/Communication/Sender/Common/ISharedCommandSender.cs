@@ -1,8 +1,8 @@
-﻿using Service.Proto.Shared.Commands.NoteTypes;
-using Service.Proto.Shared.Commands.Sprints;
-using Service.Proto.Shared.Commands.Tags;
-using Service.Proto.Shared.Commands.Tickets;
-using Service.Proto.Shared.Commands.TimerSettings;
+﻿using Service.Admin.Web.Communication.Commands.NoteTypes;
+using Service.Admin.Web.Communication.Commands.Sprints;
+using Service.Admin.Web.Communication.Commands.Tags;
+using Service.Admin.Web.Communication.Commands.Tickets;
+using Service.Admin.Web.Communication.Commands.TimerSettings;
 
 namespace Service.Admin.Web.Communication.Sender.Common;
 

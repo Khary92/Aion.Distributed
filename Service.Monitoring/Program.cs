@@ -1,11 +1,11 @@
+using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using Global.Settings;
 using Global.Settings.Types;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.DataProtection;
-using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Server.Kestrel.Core;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using Service.Monitoring.Communication.Authentication;
 
 namespace Service.Monitoring;
 
@@ -27,30 +27,86 @@ public abstract class Program
 
         builder.Services.AddTracingServices();
 
-        var globalSettings = new GlobalSettings();
-        builder.Configuration.GetSection("GlobalSettings").Bind(globalSettings);
+
+        var publicKeyPath = "/jwt/public_key.pem";
+
+        var rsa = RSA.Create();
+        rsa.ImportFromPem(await File.ReadAllTextAsync(publicKeyPath));
+
+        var rsaKey = new RsaSecurityKey(rsa)
+        {
+            KeyId = "auth-server-key"
+        };
+
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidIssuer = "http://localhost:5001",
+                    ValidateAudience = true,
+                    ValidAudience = "api",
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = rsaKey,
+                    ValidateLifetime = true
+                };
+
+                options.Events = new JwtBearerEvents
+                {
+                    OnMessageReceived = context =>
+                    {
+                        if (string.IsNullOrEmpty(context.Request.Headers["Authorization"]) &&
+                            context.Request.Query.TryGetValue("access_token", out var t))
+                        {
+                            context.Token = t;
+                        }
+
+                        return Task.CompletedTask;
+                    }
+                };
+            });
+
 
         var monitoringSettings = new MonitoringSettings();
         builder.Configuration.GetSection("MonitoringSettings").Bind(monitoringSettings);
 
         builder.WebHost.ConfigureKestrel(options =>
         {
-            options.ListenAnyIP(monitoringSettings.GrpcPort, listenOptions =>
+            // Internal GRPC listener (HTTP/2, no TLS)
+            options.ListenAnyIP(monitoringSettings.InternalGrpcPort, listenOptions =>
             {
-                if (globalSettings.UseHttps) listenOptions.UseHttps("/app/certs/server.pfx");
+                listenOptions.Protocols = HttpProtocols.Http2;
+                AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
+            });
+
+            // External GRPC listener (HTTPS + HTTP/2)
+            options.ListenAnyIP(monitoringSettings.SecureExternalGrpcPort, listenOptions =>
+            {
+                listenOptions.UseHttps(httpsOptions =>
+                {
+                    var cert = X509Certificate2.CreateFromPemFile(
+                        "/certs/fullchain1.pem",
+                        "/certs/privkey1.pem"
+                    );
+
+                    httpsOptions.ServerCertificate = cert;
+                });
 
                 listenOptions.Protocols = HttpProtocols.Http2;
             });
         });
-        
-        builder.Services.AddDataProtection()
-            .PersistKeysToFileSystem(new DirectoryInfo("/app/DataProtection-Keys"))
-            .SetApplicationName("Aion");
-        
+
+        builder.Services.AddAuthorization();
         var app = builder.Build();
         app.UseRouting();
+
+        app.UseAuthentication();
+        app.UseAuthorization(); 
+        
         app.AddEndPoints();
 
+        await app.Services.GetRequiredService<JwtService>().LoadTokenAsync();
         await app.RunAsync();
     }
 }

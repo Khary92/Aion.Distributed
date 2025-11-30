@@ -22,7 +22,7 @@ public class AnalysisByTicketModel(
     IRequestSender requestSender,
     ITraceCollector tracer,
     INotificationPublisherFacade notificationPublisher)
-    : ReactiveObject, IInitializeAsync, IMessengerRegistration
+    : ReactiveObject, IInitializeAsync, IEventRegistration
 {
     private const int AmountOfTagsShown = 3;
 
@@ -36,14 +36,6 @@ public class AnalysisByTicketModel(
         private set => this.RaiseAndSetIfChanged(ref _analysisByTicket, value);
     }
 
-    public InitializationType Type => InitializationType.Model;
-
-    public async Task InitializeAsync()
-    {
-        Tickets.Clear();
-        Tickets.AddRange(await requestSender.Send(new ClientGetAllTicketsRequest()));
-    }
-
     public void RegisterMessenger()
     {
         notificationPublisher.Ticket.TicketDataUpdatedNotificationReceived += HandleClientTicketDataUpdatedNotification;
@@ -54,6 +46,14 @@ public class AnalysisByTicketModel(
     {
         notificationPublisher.Ticket.TicketDataUpdatedNotificationReceived -= HandleClientTicketDataUpdatedNotification;
         notificationPublisher.Ticket.NewTicketNotificationReceived -= HandleNewTicketMessage;
+    }
+
+    public InitializationType Type => InitializationType.Model;
+
+    public async Task InitializeAsync()
+    {
+        Tickets.Clear();
+        Tickets.AddRange(await requestSender.Send(new ClientGetAllTicketsRequest()));
     }
 
     private async Task HandleClientTicketDataUpdatedNotification(ClientTicketDataUpdatedNotification message)

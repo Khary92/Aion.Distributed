@@ -28,7 +28,7 @@ public class StatisticsViewModel(
     ITraceCollector tracer,
     INotificationPublisherFacade notificationPublisher,
     IClientTimerNotificationPublisher clientTimerNotificationPublisher)
-    : ReactiveObject, IInitializeAsync, IMessengerRegistration
+    : ReactiveObject, IInitializeAsync, IEventRegistration
 {
     private ObservableCollection<TagCheckBoxViewModel> _availableTags = [];
     private StatisticsDataClientModel? _statisticsData;
@@ -51,22 +51,6 @@ public class StatisticsViewModel(
     {
         get => _availableTags;
         set => this.RaiseAndSetIfChanged(ref _availableTags, value);
-    }
-
-    public InitializationType Type => InitializationType.ViewModel;
-
-    public async Task InitializeAsync()
-    {
-        var tagClientModels = await requestSender.Send(new ClientGetAllTagsRequest());
-
-        AvailableTags.Clear();
-
-        foreach (var tagDto in tagClientModels) AvailableTags.Add(tagCheckBoxViewFactory.Create(tagDto));
-
-        AvailableTags
-            .Where(tvm => StatisticsData!.TagIds.Contains(tvm.Tag!.TagId))
-            .ToList()
-            .ForEach(tvm => tvm.IsChecked = true);
     }
 
     public void RegisterMessenger()
@@ -92,6 +76,22 @@ public class StatisticsViewModel(
             HandleClientChangeTagSelectionNotification;
         clientTimerNotificationPublisher.ClientCreateSnapshotNotificationReceived -=
             HandleClientCreateSnapshotNotification;
+    }
+
+    public InitializationType Type => InitializationType.ViewModel;
+
+    public async Task InitializeAsync()
+    {
+        var tagClientModels = await requestSender.Send(new ClientGetAllTagsRequest());
+
+        AvailableTags.Clear();
+
+        foreach (var tagDto in tagClientModels) AvailableTags.Add(tagCheckBoxViewFactory.Create(tagDto));
+
+        AvailableTags
+            .Where(tvm => StatisticsData!.TagIds.Contains(tvm.Tag!.TagId))
+            .ToList()
+            .ForEach(tvm => tvm.IsChecked = true);
     }
 
     private async Task HandleClientCreateSnapshotNotification(ClientCreateSnapshotNotification notification)

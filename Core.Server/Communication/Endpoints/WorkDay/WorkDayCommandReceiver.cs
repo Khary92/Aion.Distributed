@@ -1,10 +1,12 @@
 ﻿using Core.Server.Services.Entities.WorkDays;
 using Core.Server.Tracing.Tracing.Tracers;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Proto.Command.WorkDays;
 
 namespace Core.Server.Communication.Endpoints.WorkDay;
 
+[Authorize]
 public class WorkDayCommandReceiver(IWorkDayCommandsService workDayCommandsService, ITraceCollector tracer)
     : WorkDayCommandProtoService.WorkDayCommandProtoServiceBase
 {

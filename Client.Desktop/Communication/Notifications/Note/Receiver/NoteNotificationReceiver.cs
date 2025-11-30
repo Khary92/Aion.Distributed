@@ -3,19 +3,37 @@ using System.Threading;
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Notifications.Note.Records;
 using Client.Desktop.Communication.Notifications.Wrappers;
+using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
 using Client.Desktop.Lifecycle.Startup.Tasks.Streams;
+using Client.Desktop.Services.Authentication;
 using Client.Tracing.Tracing.Tracers;
-using Global.Settings.UrlResolver;
+using Global.Settings;
 using Grpc.Core;
+using Grpc.Core.Interceptors;
 using Grpc.Net.Client;
 using Proto.Notifications.Note;
 
 namespace Client.Desktop.Communication.Notifications.Note.Receiver;
 
 public class NoteNotificationReceiver(
-    IGrpcUrlBuilder grpcUrlBuilder,
-    ITraceCollector tracer) : ILocalNoteNotificationPublisher, IStreamClient
+    IGrpcUrlService grpcUrlBuilder,
+    ITraceCollector tracer,
+    ITokenService tokenService) : ILocalNoteNotificationPublisher, IStreamClient, IInitializeAsync
 {
+    private NoteNotificationService.NoteNotificationServiceClient? _client;
+
+    public InitializationType Type => InitializationType.AuthToken;
+
+    public async Task InitializeAsync()
+    {
+        var channel = GrpcChannel.ForAddress(grpcUrlBuilder.ClientToServerUrl);
+        var tokenProvider = new Func<Task<string>>(tokenService.GetToken);
+        var callInvoker = channel.Intercept(new AuthInterceptor(tokenProvider));
+        _client = new NoteNotificationService.NoteNotificationServiceClient(callInvoker);
+
+        await Task.CompletedTask;
+    }
+
     public event Func<ClientNoteUpdatedNotification, Task>? ClientNoteUpdatedNotificationReceived;
     public event Func<NewNoteMessage, Task>? NewNoteMessageReceived;
 
@@ -44,14 +62,8 @@ public class NoteNotificationReceiver(
         while (!cancellationToken.IsCancellationRequested)
             try
             {
-                using var channel = GrpcChannel.ForAddress(grpcUrlBuilder
-                    .From(ResolvingServices.Client)
-                    .To(ResolvingServices.Server)
-                    .BuildAddress());
-
-                var client = new NoteNotificationService.NoteNotificationServiceClient(channel);
                 using var call =
-                    client.SubscribeNoteNotifications(new SubscribeRequest(), cancellationToken: cancellationToken);
+                    _client.SubscribeNoteNotifications(new SubscribeRequest(), cancellationToken: cancellationToken);
 
                 attempt = 0;
 

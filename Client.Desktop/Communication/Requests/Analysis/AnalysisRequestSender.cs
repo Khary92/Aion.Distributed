@@ -2,22 +2,18 @@
 using System.Threading.Tasks;
 using Client.Desktop.Communication.Requests.Analysis.Records;
 using Client.Desktop.DataModels.Decorators;
+using Client.Desktop.Lifecycle.Startup.Tasks.Initialize;
+using Client.Desktop.Services.Authentication;
+using Grpc.Core.Interceptors;
 using Grpc.Net.Client;
 using Proto.Requests.AnalysisData;
 
 namespace Client.Desktop.Communication.Requests.Analysis;
 
-public class AnalysisRequestSender : IAnalysisRequestSender
+public class AnalysisRequestSender(IAnalysisMapper analysisMapper, string address, ITokenService tokenService)
+    : IAnalysisRequestSender, IInitializeAsync
 {
-    private readonly IAnalysisMapper _analysisMapper;
-    private readonly AnalysisRequestService.AnalysisRequestServiceClient _client;
-
-    public AnalysisRequestSender(IAnalysisMapper analysisMapper, string address)
-    {
-        _analysisMapper = analysisMapper;
-        var channel = GrpcChannel.ForAddress(address);
-        _client = new AnalysisRequestService.AnalysisRequestServiceClient(channel);
-    }
+    private AnalysisRequestService.AnalysisRequestServiceClient? _client;
 
     public async Task<AnalysisBySprintDecorator> Send(ClientGetSprintAnalysisById request)
     {
@@ -25,7 +21,7 @@ public class AnalysisRequestSender : IAnalysisRequestSender
 
         if (response == null) throw new ArgumentNullException();
 
-        return _analysisMapper.Create(response);
+        return analysisMapper.Create(response);
     }
 
     public async Task<AnalysisByTicketDecorator> Send(ClientGetTicketAnalysisById request)
@@ -34,7 +30,7 @@ public class AnalysisRequestSender : IAnalysisRequestSender
 
         if (response == null) throw new ArgumentNullException();
 
-        return _analysisMapper.Create(response);
+        return analysisMapper.Create(response);
     }
 
     public async Task<AnalysisByTagDecorator> Send(ClientGetTagAnalysisById request)
@@ -43,6 +39,18 @@ public class AnalysisRequestSender : IAnalysisRequestSender
 
         if (response == null) throw new ArgumentNullException();
 
-        return _analysisMapper.Create(response);
+        return analysisMapper.Create(response);
+    }
+
+    public InitializationType Type => InitializationType.AuthToken;
+
+    public async Task InitializeAsync()
+    {
+        var channel = GrpcChannel.ForAddress(address);
+        var tokenProvider = new Func<Task<string>>(tokenService.GetToken);
+        var callInvoker = channel.Intercept(new AuthInterceptor(tokenProvider));
+        _client = new AnalysisRequestService.AnalysisRequestServiceClient(callInvoker);
+
+        await Task.CompletedTask;
     }
 }

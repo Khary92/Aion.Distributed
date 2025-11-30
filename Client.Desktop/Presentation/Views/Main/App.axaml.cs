@@ -1,10 +1,12 @@
 using System;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Client.Desktop.Lifecycle.Shutdown;
 using Client.Desktop.Lifecycle.Startup.Scheduler;
 using Client.Desktop.Presentation.Views.Mock;
+using Client.Desktop.Services.Authentication;
 using Client.Desktop.Services.Mock;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,9 +16,9 @@ public class App(IServiceProvider serviceProvider) : Application
 {
     public override void OnFrameworkInitializationCompleted()
     {
-        var contentWrapper = serviceProvider.GetRequiredService<MainWindow>();
-        contentWrapper.WindowState = WindowState.Maximized;
-        contentWrapper.Show();
+        var mainWindow = serviceProvider.GetRequiredService<MainWindow>();
+        mainWindow.WindowState = WindowState.Maximized;
+        mainWindow.Show();
 
         var mockSettingsService = serviceProvider.GetRequiredService<IMockSettingsService>();
         if (mockSettingsService.IsMockingModeActive)
@@ -25,9 +27,18 @@ public class App(IServiceProvider serviceProvider) : Application
             debugWindow.Show();
         }
 
-        _ = serviceProvider.GetRequiredService<IStartupScheduler>().Execute();
+        _ = serviceProvider.GetRequiredService<IEventRegistration>().Execute();
+
+        var tokenService = serviceProvider.GetRequiredService<ITokenService>();
+        tokenService.Authenticated += LoadData;
 
         base.OnFrameworkInitializationCompleted();
+    }
+
+    private async Task LoadData(string token)
+    {
+        var startupScheduler = serviceProvider.GetRequiredService<IStartupScheduler>();
+        await startupScheduler.Execute();
     }
 
     public override void Initialize()

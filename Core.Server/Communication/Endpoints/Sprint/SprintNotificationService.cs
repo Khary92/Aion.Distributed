@@ -1,10 +1,12 @@
 ﻿using System.Collections.Concurrent;
 using Grpc.Core;
+using Microsoft.AspNetCore.Authorization;
 using Proto.Notifications.Sprint;
 using SubscribeRequest = Proto.Notifications.Sprint.SubscribeRequest;
 
 namespace Core.Server.Communication.Endpoints.Sprint;
 
+[Authorize]
 public class
     SprintNotificationService : Proto.Notifications.Sprint.SprintNotificationService.SprintNotificationServiceBase
 {

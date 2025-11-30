@@ -11,7 +11,7 @@ using Client.Desktop.Communication.Commands.TimeSlots.Records;
 using Client.Desktop.Communication.Commands.WorkDays;
 using Client.Desktop.Communication.Commands.WorkDays.Records;
 using Client.Desktop.Communication.Policies;
-using Service.Proto.Shared.Commands.Tickets;
+using ITicketCommandSender = Client.Desktop.Communication.Commands.Ticket.ITicketCommandSender;
 
 namespace Client.Desktop.Communication.Commands;
 
@@ -75,6 +75,6 @@ public class CommandSender(
     public async Task<bool> Send(ClientUpdateTicketDocumentationCommand command)
     {
         return await sender.Policy.ExecuteAsync(() =>
-            ticketCommandSender.Send(command.ToProto()));
+            ticketCommandSender.Send(command));
     }
 }

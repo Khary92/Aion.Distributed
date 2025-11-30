@@ -20,7 +20,7 @@ using Unit = System.Reactive.Unit;
 
 namespace Client.Desktop.Presentation.Models.TimeTracking.DynamicControls;
 
-public class NoteViewModel : ReactiveObject, IMessengerRegistration, IInitializeAsync
+public class NoteViewModel : ReactiveObject, IEventRegistration, IInitializeAsync
 {
     private readonly ICommandSender _commandSender;
     private readonly INotificationPublisherFacade _notificationPublisher;
@@ -48,21 +48,6 @@ public class NoteViewModel : ReactiveObject, IMessengerRegistration, IInitialize
     public ReactiveCommand<Unit, Unit> SetPreviousTypeCommand { get; }
     public ReactiveCommand<Unit, Unit> UpdateNoteCommand { get; }
 
-    public InitializationType Type => InitializationType.ViewModel;
-
-    public async Task InitializeAsync()
-    {
-        NoteTypes.Clear();
-
-        var noteTypeViewModels = await _requestSender.Send(new ClientGetAllNoteTypesRequest());
-
-        NoteTypes.AddRange(noteTypeViewModels);
-
-        if (Note.NoteTypeId == Guid.Empty || !NoteTypes.Any()) return;
-
-        Note.NoteType = NoteTypes.FirstOrDefault(nt => nt.NoteTypeId == Note.NoteTypeId);
-    }
-
     public void RegisterMessenger()
     {
         _notificationPublisher.Note.ClientNoteUpdatedNotificationReceived += HandleClientNoteUpdatedNotification;
@@ -81,6 +66,21 @@ public class NoteViewModel : ReactiveObject, IMessengerRegistration, IInitialize
             HandleClientNoteTypeColorChangedNotification;
         _notificationPublisher.NoteType.ClientNoteTypeNameChangedNotificationReceived -=
             HandleClientNoteTypeNameChangedNotification;
+    }
+
+    public InitializationType Type => InitializationType.ViewModel;
+
+    public async Task InitializeAsync()
+    {
+        NoteTypes.Clear();
+
+        var noteTypeViewModels = await _requestSender.Send(new ClientGetAllNoteTypesRequest());
+
+        NoteTypes.AddRange(noteTypeViewModels);
+
+        if (Note.NoteTypeId == Guid.Empty || !NoteTypes.Any()) return;
+
+        Note.NoteType = NoteTypes.FirstOrDefault(nt => nt.NoteTypeId == Note.NoteTypeId);
     }
 
     private async Task HandleClientNoteTypeNameChangedNotification(ClientNoteTypeNameChangedNotification notification)
