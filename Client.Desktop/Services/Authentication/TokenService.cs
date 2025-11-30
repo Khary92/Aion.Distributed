@@ -18,15 +18,15 @@ public class TokenService : ITokenService
             ServerCertificateCustomValidationCallback =
                 HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
         });
-
-    private string _accessToken = "";
+    
     private DateTime _expiry;
+    private string _accessToken = "";
     private string _refreshToken = "";
 
     public event Func<string, Task>? Authenticated;
 
     public bool IsAuthenticated => !string.IsNullOrEmpty(_accessToken);
-    
+
     public async Task<AuthenticationResult> Login(string user, string pass)
     {
         // PKCE minimal
@@ -57,22 +57,15 @@ public class TokenService : ITokenService
 
         var uri = QueryHelpers.AddQueryString("https://auth.hiegert.eu/authorize", query);
 
-        HttpResponseMessage resp;
+        var resp = await _client.GetAsync(uri);
 
-        try
-        {
-            resp = await _client.GetAsync(uri);
-        }
-        catch (Exception e)
-        {
+        if (!resp.IsSuccessStatusCode)
             return AuthenticationResult.ServiceUnavailable;
-        }
-
-
+        
         if (resp.Headers.Location == null)
             return AuthenticationResult.InvalidCredentials;
 
-        var redirect = resp.Headers.Location?.ToString();
+        var redirect = resp.Headers.Location.ToString();
 
         var parsed = QueryHelpers.ParseQuery(new Uri(redirect).Query);
         var code = parsed["code"].ToString();
@@ -96,7 +89,7 @@ public class TokenService : ITokenService
         var data = JsonSerializer.Deserialize<TokenData>(json);
 
         if (data == null) return AuthenticationResult.RedirectFailed;
-        
+
         _accessToken = data!.access_token;
         _refreshToken = data.refresh_token;
         _expiry = DateTime.UtcNow.AddSeconds(data.expires_in);
