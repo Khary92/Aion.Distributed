@@ -12,7 +12,8 @@ namespace Service.Admin.Web.Communication.Receiver;
 public class TicketNotificationsReceiver(
     ITraceCollector tracer,
     ITicketStateService ticketStateService,
-    IGrpcUrlService grpcUrlBuilder, JwtService jwtService)
+    IGrpcUrlService grpcUrlBuilder,
+    JwtService jwtService)
 {
     public async Task SubscribeToNotifications(CancellationToken stoppingToken = default)
     {
@@ -28,13 +29,8 @@ public class TicketNotificationsReceiver(
                         KeepAlivePingTimeout = TimeSpan.FromSeconds(30),
                         PooledConnectionIdleTimeout = Timeout.InfiniteTimeSpan
                     },
-                    Credentials = ChannelCredentials.Create(
-                        ChannelCredentials.Insecure,
-                        CallCredentials.FromInterceptor((_, metadata) =>
-                        {
-                            metadata.Add("Authorization", $"Bearer {jwtService.Token}");
-                            return Task.CompletedTask;
-                        }))
+                    Credentials = ChannelCredentials.Insecure,
+                    UnsafeUseInsecureChannelCallCredentials = true
                 });
 
         var client = new TicketNotificationService.TicketNotificationServiceClient(channel);
@@ -43,7 +39,9 @@ public class TicketNotificationsReceiver(
             try
             {
                 using var call =
-                    client.SubscribeTicketNotifications(new SubscribeRequest(), cancellationToken: stoppingToken);
+                    client.SubscribeTicketNotifications(new SubscribeRequest(),
+                        headers: new Metadata { { "Authorization", $"Bearer {jwtService.Token}" } },
+                        cancellationToken: stoppingToken);
 
                 await foreach (var notification in call.ResponseStream.ReadAllAsync(stoppingToken))
                     switch (notification.NotificationCase)

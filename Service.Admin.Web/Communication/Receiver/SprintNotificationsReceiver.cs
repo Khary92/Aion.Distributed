@@ -13,7 +13,8 @@ namespace Service.Admin.Web.Communication.Receiver;
 public class SprintNotificationsReceiver(
     ISprintStateService sprintStateService,
     ITraceCollector tracer,
-    IGrpcUrlService grpcUrlBuilder, JwtService jwtService)
+    IGrpcUrlService grpcUrlBuilder,
+    JwtService jwtService)
 {
     public async Task SubscribeToNotifications(CancellationToken stoppingToken = default)
     {
@@ -29,13 +30,8 @@ public class SprintNotificationsReceiver(
                         KeepAlivePingTimeout = TimeSpan.FromSeconds(30),
                         PooledConnectionIdleTimeout = Timeout.InfiniteTimeSpan
                     },
-                    Credentials = ChannelCredentials.Create(
-                        ChannelCredentials.Insecure,
-                        CallCredentials.FromInterceptor((_, metadata) =>
-                        {
-                            metadata.Add("Authorization", $"Bearer {jwtService.Token}");
-                            return Task.CompletedTask;
-                        }))
+                    Credentials = ChannelCredentials.Insecure,
+                    UnsafeUseInsecureChannelCallCredentials = true
                 });
 
         var client = new SprintNotificationService.SprintNotificationServiceClient(channel);
@@ -44,7 +40,9 @@ public class SprintNotificationsReceiver(
             try
             {
                 using var call =
-                    client.SubscribeSprintNotifications(new SubscribeRequest(), cancellationToken: stoppingToken);
+                    client.SubscribeSprintNotifications(new SubscribeRequest(),
+                        headers: new Metadata { { "Authorization", $"Bearer {jwtService.Token}" } },
+                        cancellationToken: stoppingToken);
 
                 await foreach (var notification in call.ResponseStream.ReadAllAsync(stoppingToken))
                     switch (notification.NotificationCase)

@@ -14,7 +14,18 @@ public class SprintRequestSender : ISprintRequestSender
     public SprintRequestSender(string address, JwtService jwtService)
     {
         _jwtService = jwtService;
-        var channel = GrpcChannel.ForAddress(address);
+        var channel = GrpcChannel.ForAddress(address, new GrpcChannelOptions
+        {
+            HttpHandler = new SocketsHttpHandler
+            {
+                EnableMultipleHttp2Connections = true,
+                KeepAlivePingDelay = TimeSpan.FromSeconds(60),
+                KeepAlivePingTimeout = TimeSpan.FromSeconds(30),
+                PooledConnectionIdleTimeout = Timeout.InfiniteTimeSpan
+            },
+            Credentials = ChannelCredentials.Insecure,
+            UnsafeUseInsecureChannelCallCredentials = true
+        });
         _client = new SprintProtoRequestService.SprintProtoRequestServiceClient(channel);
     }
 

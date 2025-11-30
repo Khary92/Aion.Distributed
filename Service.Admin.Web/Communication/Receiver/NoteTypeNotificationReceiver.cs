@@ -12,38 +12,35 @@ namespace Service.Admin.Web.Communication.Receiver;
 public class NoteTypeNotificationReceiver(
     INoteTypeStateService noteTypeStateService,
     ITraceCollector tracer,
-    IGrpcUrlService grpcUrlBuilder, JwtService jwtService)
+    IGrpcUrlService grpcUrlBuilder,
+    JwtService jwtService)
 {
     public async Task SubscribeToNotifications(CancellationToken stoppingToken = default)
     {
-        var channel =
-            GrpcChannel.ForAddress(
-                grpcUrlBuilder.InternalToServerUrl,
-                new GrpcChannelOptions
+        var channel = GrpcChannel.ForAddress(
+            grpcUrlBuilder.InternalToServerUrl,
+            new GrpcChannelOptions
+            {
+                HttpHandler = new SocketsHttpHandler
                 {
-                    HttpHandler = new SocketsHttpHandler
-                    {
-                        EnableMultipleHttp2Connections = true,
-                        KeepAlivePingDelay = TimeSpan.FromSeconds(60),
-                        KeepAlivePingTimeout = TimeSpan.FromSeconds(30),
-                        PooledConnectionIdleTimeout = Timeout.InfiniteTimeSpan
-                    },
-                    Credentials = ChannelCredentials.Create(
-                        ChannelCredentials.Insecure,
-                        CallCredentials.FromInterceptor((_, metadata) =>
-                        {
-                            metadata.Add("Authorization", $"Bearer {jwtService.Token}");
-                            return Task.CompletedTask;
-                        }))
-                });
+                    EnableMultipleHttp2Connections = true,
+                    KeepAlivePingDelay = TimeSpan.FromSeconds(60),
+                    KeepAlivePingTimeout = TimeSpan.FromSeconds(30),
+                    PooledConnectionIdleTimeout = Timeout.InfiniteTimeSpan
+                },
+                Credentials = ChannelCredentials.Insecure,
+                UnsafeUseInsecureChannelCallCredentials = true
+            });
 
         var client = new NoteTypeProtoNotificationService.NoteTypeProtoNotificationServiceClient(channel);
 
         while (!stoppingToken.IsCancellationRequested)
             try
             {
-                using var call =
-                    client.SubscribeNoteNotifications(new SubscribeRequest(), cancellationToken: stoppingToken);
+                using var call = client.SubscribeNoteNotifications(
+                    new SubscribeRequest(),
+                    headers: new Metadata { { "Authorization", $"Bearer {jwtService.Token}" } },
+                    cancellationToken: stoppingToken);
 
                 await foreach (var notification in call.ResponseStream.ReadAllAsync(stoppingToken))
                     switch (notification.NotificationCase)
