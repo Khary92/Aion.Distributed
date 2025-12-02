@@ -7,6 +7,7 @@ public interface ITokenService
 {
     event Func<string, Task>? Authenticated;
     bool IsAuthenticated { get; }
-    Task<AuthenticationResult> Login(string user, string pass);
+    Task<LoginResult> Login(string user, string pass);
+    Task<LoginResult> Login2(string user, string pass);
     Task<string> GetToken();
 }

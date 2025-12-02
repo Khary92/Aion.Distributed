@@ -1,6 +1,6 @@
 namespace Client.Desktop.Services.Authentication;
 
-public enum AuthenticationResult
+public enum LoginResult
 {
     Successful,
     ServiceUnavailable,

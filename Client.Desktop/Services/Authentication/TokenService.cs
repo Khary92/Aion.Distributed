@@ -6,10 +6,11 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.WebUtilities;
+using OpenIddict.Client;
 
 namespace Client.Desktop.Services.Authentication;
 
-public class TokenService : ITokenService
+public class TokenService(OpenIddictClientService openIddictClientService) : ITokenService
 {
     private readonly HttpClient _client = new(
         new HttpClientHandler
@@ -21,13 +22,24 @@ public class TokenService : ITokenService
     
     private DateTime _expiry;
     private string _accessToken = "";
-    private string _refreshToken = "";
+    private string? _refreshToken = "";
 
     public event Func<string, Task>? Authenticated;
 
     public bool IsAuthenticated => !string.IsNullOrEmpty(_accessToken);
 
-    public async Task<AuthenticationResult> Login(string user, string pass)
+    public async Task<LoginResult> Login2(string user, string pass)
+    {
+        var result = await openIddictClientService.AuthenticateWithClientCredentialsAsync(new());
+
+        if (result.TokenResponse.Error != null) return LoginResult.InvalidCredentials;
+        
+        _accessToken = result.AccessToken;
+        _refreshToken = result.RefreshToken;
+        return LoginResult.Successful;
+    }
+
+    public async Task<LoginResult> Login(string user, string pass)
     {
         // PKCE minimal
         string RandomStr(int len = 32)
@@ -60,10 +72,10 @@ public class TokenService : ITokenService
         var resp = await _client.GetAsync(uri);
 
         if (!resp.IsSuccessStatusCode)
-            return AuthenticationResult.ServiceUnavailable;
+            return LoginResult.ServiceUnavailable;
         
         if (resp.Headers.Location == null)
-            return AuthenticationResult.InvalidCredentials;
+            return LoginResult.InvalidCredentials;
 
         var redirect = resp.Headers.Location.ToString();
 
@@ -88,7 +100,7 @@ public class TokenService : ITokenService
 
         var data = JsonSerializer.Deserialize<TokenData>(json);
 
-        if (data == null) return AuthenticationResult.RedirectFailed;
+        if (data == null) return LoginResult.RedirectFailed;
 
         _accessToken = data!.access_token;
         _refreshToken = data.refresh_token;
@@ -97,7 +109,7 @@ public class TokenService : ITokenService
         if (Authenticated == null) throw new InvalidOperationException("No forwarding receiver set");
 
         await Authenticated.Invoke(_accessToken);
-        return AuthenticationResult.Successful;
+        return LoginResult.Successful;
     }
 
     public async Task<string> GetToken()

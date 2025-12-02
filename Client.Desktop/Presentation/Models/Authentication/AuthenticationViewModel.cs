@@ -13,11 +13,11 @@ public class AuthenticationViewModel : ReactiveObject
     private string _userName = string.Empty;
     private string _result = string.Empty;
 
-    private readonly Dictionary<AuthenticationResult, string> _resultMessages = new()
+    private readonly Dictionary<LoginResult, string> _resultMessages = new()
     {
-        { AuthenticationResult.Successful , "Successful" },
-        { AuthenticationResult.InvalidCredentials, "Invalid credentials"},
-        { AuthenticationResult.ServiceUnavailable , "Service unavailable"}
+        { LoginResult.Successful , "Successful" },
+        { LoginResult.InvalidCredentials, "Invalid credentials"},
+        { LoginResult.ServiceUnavailable , "Service unavailable"}
     };
     
     public AuthenticationViewModel(ITokenService tokenService)
@@ -48,7 +48,7 @@ public class AuthenticationViewModel : ReactiveObject
 
     private async Task Login()
     {
-        var loginResult =  await _tokenService.Login(UserName, Password);
+        var loginResult =  await _tokenService.Login2(UserName, Password);
         Result = _resultMessages[loginResult];
     }
 }
