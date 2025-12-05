@@ -11,6 +11,8 @@ services:
       - ./internal-token:/internal-token:rw
     environment:
       - TZ=Europe/Berlin
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://0.0.0.0:5001
     restart: unless-stopped
   
   core-service:
