@@ -39,7 +39,6 @@ public class Startup
         services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
 
         services.AddOpenIddict()
-
             // Register the OpenIddict core components.
             .AddCore(options =>
             {
@@ -51,25 +50,24 @@ public class Startup
                 // Enable Quartz.NET integration.
                 options.UseQuartz();
             })
-
             // Register the OpenIddict server components.
             .AddServer(options =>
             {
-                // Enable the token endpoint.
                 options.SetTokenEndpointUris("connect/token");
 
-                // Enable the client credentials flow.
+                // Client credentials flow
                 options.AllowClientCredentialsFlow();
 
-                // Register the signing and encryption credentials.
+                // Development certs
                 options.AddDevelopmentEncryptionCertificate()
                     .AddDevelopmentSigningCertificate();
 
-                // Register the ASP.NET Core host and configure the ASP.NET Core-specific options.
+                // ASP.NET Core integration
                 options.UseAspNetCore()
                     .EnableTokenEndpointPassthrough();
-            })
 
+                options.SetIssuer(new Uri("https://auth.hiegert.eu"));
+            })
             // Register the OpenIddict validation components.
             .AddValidation(options =>
             {
@@ -95,7 +93,7 @@ public class Startup
             KnownNetworks = { },
             KnownProxies = { }
         });
-        
+
         app.UseRouting();
 
         app.UseAuthentication();
