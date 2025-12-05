@@ -48,7 +48,7 @@ public class AuthenticationViewModel : ReactiveObject
 
     private async Task Login()
     {
-        var loginResult =  await _tokenService.Login2(UserName, Password);
+        var loginResult =  await _tokenService.Login(UserName, Password);
         Result = _resultMessages[loginResult];
     }
 }

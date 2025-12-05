@@ -5,9 +5,8 @@ namespace Client.Desktop.Services.Authentication;
 
 public interface ITokenService
 {
-    event Func<string, Task>? Authenticated;
-    bool IsAuthenticated { get; }
-    Task<LoginResult> Login(string user, string pass);
-    Task<LoginResult> Login2(string user, string pass);
     Task<string> GetToken();
+    bool IsAuthenticated { get; }
+    event Func<string, Task>? Authenticated;
+    Task<LoginResult> Login(string user, string pass);
 }
