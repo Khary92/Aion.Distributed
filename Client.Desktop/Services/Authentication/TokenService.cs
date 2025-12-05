@@ -9,6 +9,7 @@ public class TokenService(OpenIddictClientService openIddictClientService) : ITo
     private string _accessToken = string.Empty;
     private string _user = string.Empty;
     private string _password = string.Empty;
+    private DateTimeOffset? _expiryTime = DateTimeOffset.MinValue;
     
     public event Func<string, Task>? Authenticated;
 
@@ -16,8 +17,7 @@ public class TokenService(OpenIddictClientService openIddictClientService) : ITo
 
     public async Task<string> GetToken()
     {
-        //TODO save expiry time and request new token if expired
-        if (!IsAuthenticated)
+        if (_expiryTime == null || _expiryTime < DateTimeOffset.UtcNow.AddMinutes(-10))
         {
             await Login(_user, _password);
         }
@@ -35,7 +35,8 @@ public class TokenService(OpenIddictClientService openIddictClientService) : ITo
         if (result.TokenResponse.Error != null) return LoginResult.InvalidCredentials;
 
         _accessToken = result.AccessToken;
-
+        _expiryTime = result.AccessTokenExpirationDate;
+        
         if (Authenticated == null) throw new InvalidOperationException("No forwarding receiver set");
 
         await Authenticated.Invoke(_accessToken);
