@@ -34,19 +34,12 @@ public class Startup
         services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
 
         var keyPath = "/certs/private_key_pkcs8.pem";
-        var pubKeyPath = "/certs/public_key.pem";
-
         RSA rsa;
         if (!File.Exists(keyPath))
         {
             rsa = RSA.Create(2048);
-
-            var privPem = rsa.ExportPkcs8PrivateKeyPem();
             Directory.CreateDirectory(Path.GetDirectoryName(keyPath)!);
-            File.WriteAllText(keyPath, privPem);
-
-            var pubPem = rsa.ExportSubjectPublicKeyInfoPem();
-            File.WriteAllText(pubKeyPath, pubPem);
+            File.WriteAllText(keyPath, rsa.ExportPkcs8PrivateKeyPem());
         }
         else
         {
@@ -58,7 +51,7 @@ public class Startup
         {
             KeyId = "auth-server-key"
         };
-        
+
         // OpenIddict
         services.AddOpenIddict()
             .AddCore(options =>
@@ -70,11 +63,13 @@ public class Startup
             .AddServer(options =>
             {
                 options.SetTokenEndpointUris("connect/token");
+
                 options.AllowClientCredentialsFlow();
+                options.AllowPasswordFlow();
 
                 options.AddSigningKey(rsaKey);
                 options.AddEphemeralEncryptionKey();
-                
+
                 options.UseAspNetCore()
                     .EnableTokenEndpointPassthrough();
 

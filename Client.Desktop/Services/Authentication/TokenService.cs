@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using OpenIddict.Client;
 
@@ -10,7 +11,7 @@ public class TokenService(OpenIddictClientService openIddictClientService) : ITo
     private string _user = string.Empty;
     private string _password = string.Empty;
     private DateTimeOffset? _expiryTime = DateTimeOffset.MinValue;
-    
+
     public event Func<string, Task>? Authenticated;
 
     public bool IsAuthenticated => !string.IsNullOrEmpty(_accessToken);
@@ -21,22 +22,29 @@ public class TokenService(OpenIddictClientService openIddictClientService) : ITo
         {
             await Login(_user, _password);
         }
-        
+
         return _accessToken;
     }
-    
+
     public async Task<LoginResult> Login(string user, string pass)
     {
         _user = user;
         _password = pass;
-        
-        var result = await openIddictClientService.AuthenticateWithClientCredentialsAsync(new());
 
-        if (result.TokenResponse.Error != null) return LoginResult.InvalidCredentials;
+        var request = new OpenIddictClientModels.PasswordAuthenticationRequest
+        {
+            Username = user,
+            Password = pass,
+            Scopes = ["openid", "api"],
+            Resources = ["api"],
+            ProviderName = "default"
+        };
+
+        var result = await openIddictClientService.AuthenticateWithPasswordAsync(request);
 
         _accessToken = result.AccessToken;
         _expiryTime = result.AccessTokenExpirationDate;
-        
+
         if (Authenticated == null) throw new InvalidOperationException("No forwarding receiver set");
 
         await Authenticated.Invoke(_accessToken);
