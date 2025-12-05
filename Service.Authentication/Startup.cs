@@ -1,4 +1,5 @@
 ﻿using Aridka.Server.Models;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Quartz;
 
@@ -88,6 +89,13 @@ public class Startup
     {
         app.UseDeveloperExceptionPage();
 
+        app.UseForwardedHeaders(new ForwardedHeadersOptions
+        {
+            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
+            KnownNetworks = { },
+            KnownProxies = { }
+        });
+        
         app.UseRouting();
 
         app.UseAuthentication();

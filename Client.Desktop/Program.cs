@@ -48,7 +48,7 @@ public static class Program
                     // Add a client registration matching the client application definition in the server project.
                     options.AddRegistration(new OpenIddictClientRegistration
                     {
-                        Issuer = new Uri("https://localhost:44385/", UriKind.Absolute),
+                        Issuer = new Uri("https://auth.hiegert.eu/", UriKind.Absolute),
 
                         ClientId = "console",
                         ClientSecret = "388D45FA-B36B-4988-BA59-B187D329C207"
