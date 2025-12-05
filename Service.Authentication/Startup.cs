@@ -73,7 +73,6 @@ public class Startup
                 options.AllowClientCredentialsFlow();
 
                 options.AddSigningKey(rsaKey);
-                options.AddEphemeralEncryptionKey();  
 
                 options.UseAspNetCore()
                     .EnableTokenEndpointPassthrough();
