@@ -16,83 +16,65 @@ public class Startup
     {
         services.AddControllersWithViews();
 
+        // DbContext
         services.AddDbContext<ApplicationDbContext>(options =>
         {
-            // Configure the context to use sqlite.
             options.UseSqlite($"Filename={Path.Combine(Path.GetTempPath(), "openiddict-aridka-server.sqlite3")}");
-
-            // Register the entity sets needed by OpenIddict.
-            // Note: use the generic overload if you need
-            // to replace the default OpenIddict entities.
             options.UseOpenIddict();
         });
 
-        // OpenIddict offers native integration with Quartz.NET to perform scheduled tasks
-        // (like pruning orphaned authorizations/tokens from the database) at regular intervals.
+        // Quartz.NET
         services.AddQuartz(options =>
         {
             options.UseSimpleTypeLoader();
             options.UseInMemoryStore();
         });
-
-        // Register the Quartz.NET service and configure it to block shutdown until jobs are complete.
         services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
 
+        // OpenIddict
         services.AddOpenIddict()
-            // Register the OpenIddict core components.
             .AddCore(options =>
             {
-                // Configure OpenIddict to use the Entity Framework Core stores and models.
-                // Note: call ReplaceDefaultEntities() to replace the default OpenIddict entities.
                 options.UseEntityFrameworkCore()
-                    .UseDbContext<ApplicationDbContext>();
-
-                // Enable Quartz.NET integration.
+                       .UseDbContext<ApplicationDbContext>();
                 options.UseQuartz();
             })
-            // Register the OpenIddict server components.
             .AddServer(options =>
             {
                 options.SetTokenEndpointUris("connect/token");
-
-                // Client credentials flow
                 options.AllowClientCredentialsFlow();
 
-                // Development certs
+                // Development certificates (replace with real certs in Production)
                 options.AddDevelopmentEncryptionCertificate()
-                    .AddDevelopmentSigningCertificate();
+                       .AddDevelopmentSigningCertificate();
 
                 // ASP.NET Core integration
                 options.UseAspNetCore()
-                    .EnableTokenEndpointPassthrough();
+                       .EnableTokenEndpointPassthrough();
 
                 options.SetIssuer(new Uri("https://auth.hiegert.eu"));
             })
-            // Register the OpenIddict validation components.
             .AddValidation(options =>
             {
-                // Import the configuration from the local OpenIddict server instance.
                 options.UseLocalServer();
-
-                // Register the ASP.NET Core host.
                 options.UseAspNetCore();
             });
 
-        // Register the worker responsible for seeding the database.
-        // Note: in a real world application, this step should be part of a setup script.
         services.AddHostedService<Worker>();
     }
 
     public void Configure(IApplicationBuilder app)
     {
-        app.UseDeveloperExceptionPage();
-
-        app.UseForwardedHeaders(new ForwardedHeadersOptions
+        var forwardedOptions = new ForwardedHeadersOptions
         {
-            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
-            KnownNetworks = { },
-            KnownProxies = { }
-        });
+            ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
+        };
+        forwardedOptions.KnownNetworks.Clear();
+        forwardedOptions.KnownProxies.Clear();
+
+        app.UseForwardedHeaders(forwardedOptions);
+
+        app.UseDeveloperExceptionPage();
 
         app.UseRouting();
 
