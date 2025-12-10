@@ -8,6 +8,7 @@ using Client.Tracing;
 using Global.Settings;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using OpenIddict.Abstractions;
 using OpenIddict.Client;
 
 namespace Client.Desktop;
@@ -27,14 +28,15 @@ public static class Program
             services.AddPresentationServices();
             services.AddTracingServices();
             services.AddCommunicationServices(isMockMode);
+            
             services.AddOpenIddict()
 
                 // Register the OpenIddict client components.
                 .AddClient(options =>
                 {
+                    options.AllowPasswordFlow(); 
                     // Allow grant_type=client_credentials to be negotiated.
                     options.AllowClientCredentialsFlow();
-
                     // Disable token storage, which is not necessary for non-interactive flows like
                     // grant_type=password, grant_type=client_credentials or grant_type=refresh_token.
                     options.DisableTokenStorage();
@@ -51,7 +53,9 @@ public static class Program
                         Issuer = new Uri("https://auth.hiegert.eu/", UriKind.Absolute),
 
                         ClientId = "console",
-                        ClientSecret = "388D45FA-B36B-4988-BA59-B187D329C207"
+                        ClientSecret = "388D45FA-B36B-4988-BA59-B187D329C207",
+                        Scopes = { "openid" },
+                        GrantTypes = { OpenIddictConstants.GrantTypes.ClientCredentials }
                     });
                 });
         });

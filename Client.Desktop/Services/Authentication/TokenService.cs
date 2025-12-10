@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using OpenIddict.Client;
 
@@ -35,8 +34,7 @@ public class TokenService(OpenIddictClientService openIddictClientService) : ITo
         {
             Username = user,
             Password = pass,
-            Scopes = ["openid", "api"],
-            Resources = ["api"],
+            Scopes = ["openid"],
             ProviderName = "default"
         };
 

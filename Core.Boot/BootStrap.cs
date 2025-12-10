@@ -37,10 +37,7 @@ public static class BootStrap
 
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateAudience = true,
-                    ValidateIssuer = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true
+                    ValidateLifetime = true
                 };
 
                 options.Events = new JwtBearerEvents
@@ -106,7 +103,6 @@ public static class BootStrap
             options.ListenAnyIP(serverSettings.SecureExternalGrpcPort, listenOptions =>
             {
                 listenOptions.Protocols = HttpProtocols.Http2;
-                options.ListenAnyIP(serverSettings.SecureExternalGrpcPort);
 
                 listenOptions.UseHttps(httpsOptions =>
                 {
