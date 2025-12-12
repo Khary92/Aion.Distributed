@@ -18,15 +18,31 @@ public class Worker : IHostedService
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         await context.Database.EnsureCreatedAsync();
 
+        // Seed all OpenIddict applications
+        await SeedOpenIddictAsync(scope.ServiceProvider);
+    }
+
+    public Task StopAsync(CancellationToken cancellationToken)
+        => Task.CompletedTask;
+
+    private static async Task SeedOpenIddictAsync(IServiceProvider services)
+    {
+        await using var scope = services.CreateAsyncScope();
         var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictApplicationManager>();
 
-        if (await manager.FindByClientIdAsync("console") == null)
+
+        var clientId = Environment.GetEnvironmentVariable("CLIENT_ID")!;
+        var clientSecret = Environment.GetEnvironmentVariable("CLIENT_SECRET")!;
+
+        // Console client (client credentials)
+        if (await manager.FindByClientIdAsync(clientId) is null)
         {
             await manager.CreateAsync(new OpenIddictApplicationDescriptor
             {
-                ClientId = "console",
-                ClientSecret = "388D45FA-B36B-4988-BA59-B187D329C207",
+                ClientId = clientId,
+                ClientSecret = clientSecret,
                 DisplayName = "My client application",
+
                 Permissions =
                 {
                     Permissions.Endpoints.Token,
@@ -35,6 +51,4 @@ public class Worker : IHostedService
             });
         }
     }
-
-    public Task StopAsync(CancellationToken cancellationToken) => Task.CompletedTask;
 }

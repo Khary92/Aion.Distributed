@@ -34,8 +34,7 @@ public class TokenService(OpenIddictClientService openIddictClientService) : ITo
         {
             Username = user,
             Password = pass,
-            Scopes = ["openid"],
-            ProviderName = "default"
+            Scopes = ["openid"]
         };
 
         var result = await openIddictClientService.AuthenticateWithPasswordAsync(request);

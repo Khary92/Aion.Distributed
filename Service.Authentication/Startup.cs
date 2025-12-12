@@ -3,6 +3,7 @@ using Aridka.Server.Models;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using OpenIddict.Abstractions;
 using Quartz;
 
 namespace Aridka.Server;
