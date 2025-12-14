@@ -29,8 +29,7 @@ public class Worker : IHostedService
     {
         await using var scope = services.CreateAsyncScope();
         var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictApplicationManager>();
-
-
+        
         var clientId = Environment.GetEnvironmentVariable("CLIENT_ID")!;
         var clientSecret = Environment.GetEnvironmentVariable("CLIENT_SECRET")!;
 

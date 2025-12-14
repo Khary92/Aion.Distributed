@@ -26,7 +26,7 @@ builder.Configuration.GetSection("AdminSettings").Bind(adminSettings);
 
 builder.WebHost.ConfigureKestrel(options =>
 {
-    // Internal gRPC Listener (HTTP/2, no TLS)
+    // Internal gRPC Listener (HTTP/2, no TLS). Do not expose this outside of the docker network!
     options.ListenAnyIP(adminSettings.InternalGrpcPort, listenOptions =>
     {
         listenOptions.Protocols = HttpProtocols.Http2;
@@ -56,8 +56,8 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseRouting();
 
-//app.UseAuthentication();
-//app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseAntiforgery();
 

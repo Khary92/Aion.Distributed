@@ -12,7 +12,7 @@ services:
     environment:
       - TZ=Europe/Berlin
       - ASPNETCORE_ENVIRONMENT=Production
-      - ASPNETCORE_URLS=http://0.0.0.0:5001
+      - ASPNETCORE_URLS=https://0.0.0.0:5001
       - CLIENT_ID=internal-service
       - CLIENT_SECRET=388D45FA-B36B-4988-BA59-B187D329C207 #Test only
     restart: unless-stopped
@@ -29,7 +29,7 @@ services:
       - ASPNETCORE_URLS=http://+:8080
       - ConnectionStrings__DefaultConnection=Host=postgres;Database=aion;Username=aionuser;Password=aionpass
       - TZ=Europe/Berlin
-      - TOKEN_URL=http://authentication-service:5001/token
+      - TOKEN_URL=https://authentication-service:5001/token
       - CLIENT_ID=internal-service
       - CLIENT_SECRET=388D45FA-B36B-4988-BA59-B187D329C207 #Test only
     depends_on:
@@ -52,7 +52,7 @@ services:
     environment:
       - ASPNETCORE_URLS=http://+:8080
       - TZ=Europe/Berlin
-      - TOKEN_URL=http://authentication-service:5001/token
+      - TOKEN_URL=https://authentication-service:5001/token
       - CLIENT_ID=internal-service
       - CLIENT_SECRET=388D45FA-B36B-4988-BA59-B187D329C207 #Test only
     volumes:
@@ -74,7 +74,7 @@ services:
     environment:
       - ASPNETCORE_URLS=http://+:8080
       - TZ=Europe/Berlin
-      - TOKEN_URL=http://authentication-service:5001/token
+      - TOKEN_URL=https://authentication-service:5001/token
       - CLIENT_ID=internal-service
       - CLIENT_SECRET=388D45FA-B36B-4988-BA59-B187D329C207 #Test only
     volumes:
@@ -93,9 +93,6 @@ services:
       - POSTGRES_USER=aionuser
       - POSTGRES_PASSWORD=aionpass
       - TZ=Europe/Berlin
-      - TOKEN_URL=http://authentication-service:5001/token
-      - CLIENT_ID=internal-service
-      - CLIENT_SECRET=388D45FA-B36B-4988-BA59-B187D329C207 #Test only
     expose:
       - "5432"
     volumes:

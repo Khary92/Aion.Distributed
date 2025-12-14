@@ -1,3 +1,5 @@
+using System.Text.Json;
+
 namespace Service.Monitoring.Communication.Authentication;
 
 public class JwtService
@@ -6,11 +8,31 @@ public class JwtService
 
     public async Task LoadTokenAsync()
     {
-        var tokenFile = "/internal-token/token.jwt";
+        var tokenUrl = Environment.GetEnvironmentVariable("TOKEN_URL")!;
+        var clientId = Environment.GetEnvironmentVariable("CLIENT_ID")!;
+        var clientSecret = Environment.GetEnvironmentVariable("CLIENT_SECRET")!;
 
-        if (!File.Exists(tokenFile))
-            throw new InvalidOperationException("Internal token not found");
+        Console.WriteLine("Token URL: " + tokenUrl);
+        Console.WriteLine("Client ID: " + clientId);
+        Console.WriteLine("Client Secret: " + clientSecret);
+        
+        using var client = new HttpClient();
 
-        Token = await File.ReadAllTextAsync(tokenFile);
+        var request = new FormUrlEncodedContent(new[]
+        {
+            new KeyValuePair<string, string>("grant_type", "client_credentials"),
+            new KeyValuePair<string, string>("client_id", clientId),
+            new KeyValuePair<string, string>("client_secret", clientSecret),
+            new KeyValuePair<string, string>("scope", "api")
+        });
+
+        var response = await client.PostAsync(tokenUrl, request);
+        Console.WriteLine(response.StatusCode);
+        response.EnsureSuccessStatusCode();
+
+        var payload = await response.Content.ReadFromJsonAsync<JsonDocument>();
+        var Token = payload.RootElement.GetProperty("access_token").GetString();
+
+        Console.WriteLine("Access Token: " + Token);
     }
 }
