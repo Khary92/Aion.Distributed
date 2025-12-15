@@ -1,5 +1,4 @@
-﻿using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
+﻿using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using Core.Persistence;
 using Core.Persistence.DbContext;
@@ -29,27 +28,15 @@ public static class BootStrap
             options.MaxSendMessageSize = 2 * 1024 * 1024;
         });
 
-        var publicKeyPath = "/jwt/public_key.pem";
-
-        var rsa = RSA.Create();
-        rsa.ImportFromPem(await File.ReadAllTextAsync(publicKeyPath));
-
-        var rsaKey = new RsaSecurityKey(rsa)
-        {
-            KeyId = "auth-server-key"
-        };
-
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer(options =>
             {
+                options.Authority = "https://auth.hiegert.eu";
+                options.Audience = "api";
+                options.RequireHttpsMetadata = true;
+
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer = true,
-                    ValidIssuer = "http://localhost:5001",
-                    ValidateAudience = true,
-                    ValidAudience = "api",
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = rsaKey,
                     ValidateLifetime = true
                 };
 
@@ -82,11 +69,10 @@ public static class BootStrap
         var app = builder.Build();
 
         await app.Services.GetRequiredService<JwtService>().LoadTokenAsync();
-        
+
         using (var scope = app.Services.CreateScope())
         {
             var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
             await db.Database.MigrateAsync();
             await SeedAsync(db);
         }
@@ -96,8 +82,6 @@ public static class BootStrap
         app.UseAuthentication();
         app.UseAuthorization();
 
-        app.AddEndPoints();
-        
         await app.RunAsync();
     }
 
@@ -108,14 +92,14 @@ public static class BootStrap
 
         builder.WebHost.ConfigureKestrel(options =>
         {
-            // Internal GRPC listener (HTTP/2, no TLS)
+            // Internal GRPC (HTTP/2, no TLS)
             options.ListenAnyIP(serverSettings.InternalGrpcPort, listenOptions =>
             {
                 listenOptions.Protocols = HttpProtocols.Http2;
                 AppContext.SetSwitch("System.Net.Http.SocketsHttpHandler.Http2UnencryptedSupport", true);
             });
 
-            // External GRPC listener (HTTPS + HTTP/2)
+            // External GRPC (HTTPS + HTTP/2)
             options.ListenAnyIP(serverSettings.SecureExternalGrpcPort, listenOptions =>
             {
                 listenOptions.Protocols = HttpProtocols.Http2;
@@ -126,7 +110,6 @@ public static class BootStrap
                         "/certs/fullchain1.pem",
                         "/certs/privkey1.pem"
                     );
-
                     httpsOptions.ServerCertificate = cert;
                 });
             });
