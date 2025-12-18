@@ -16,15 +16,20 @@ public class JwtService
         Console.WriteLine("Client ID: " + clientId);
         Console.WriteLine("Client Secret: " + clientSecret);
         
-        using var client = new HttpClient();
-
-        var request = new FormUrlEncodedContent(new[]
+        var handler = new HttpClientHandler
         {
+            ServerCertificateCustomValidationCallback =
+                HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+        };
+
+        var client = new HttpClient(handler);
+        
+        var request = new FormUrlEncodedContent([
             new KeyValuePair<string, string>("grant_type", "client_credentials"),
             new KeyValuePair<string, string>("client_id", clientId),
             new KeyValuePair<string, string>("client_secret", clientSecret),
             new KeyValuePair<string, string>("scope", "api")
-        });
+        ]);
 
         var response = await client.PostAsync(tokenUrl, request);
         Console.WriteLine(response.StatusCode);

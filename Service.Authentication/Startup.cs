@@ -68,7 +68,7 @@ public class Startup
                 options.UseAspNetCore()
                     .EnableTokenEndpointPassthrough();
                 
-                options.SetIssuer(new Uri("https://authentication-service:5001"));
+                options.SetIssuer(new Uri("https://auth.hiegert.eu"));
             })
             .AddValidation(options =>
             {

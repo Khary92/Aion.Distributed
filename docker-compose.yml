@@ -28,6 +28,7 @@ services:
       - ASPNETCORE_URLS=http://+:8080
       - ConnectionStrings__DefaultConnection=Host=postgres;Database=aion;Username=aionuser;Password=aionpass
       - TZ=Europe/Berlin
+      - TOKEN_URL=https://authentication-service:5001/connect/token
       - CLIENT_ID=internal-service
       - CLIENT_SECRET=388D45FA-B36B-4988-BA59-B187D329C207 #Test only
     depends_on:
