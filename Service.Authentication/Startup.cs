@@ -52,25 +52,7 @@ public class Startup
         {
             KeyId = "auth-server-signing-key"
         };
-
-        var encryptionKeyPath = "/certs/encryption_key.pem";
-        RSA encryptionRsa;
-        if (!File.Exists(encryptionKeyPath))
-        {
-            encryptionRsa = RSA.Create(2048);
-            File.WriteAllText(encryptionKeyPath, encryptionRsa.ExportRSAPrivateKeyPem());
-        }
-        else
-        {
-            encryptionRsa = RSA.Create();
-            encryptionRsa.ImportFromPem(File.ReadAllText(encryptionKeyPath));
-        }
-
-        var encryptionKey = new RsaSecurityKey(encryptionRsa)
-        {
-            KeyId = "auth-server-encryption-key"
-        };
-
+        
         services.AddOpenIddict()
             .AddCore(options =>
             {
@@ -85,7 +67,6 @@ public class Startup
                 options.AllowPasswordFlow();
 
                 options.AddSigningKey(signingKey);
-                options.AddEncryptionKey(encryptionKey);
 
                 options.UseAspNetCore()
                     .EnableTokenEndpointPassthrough();

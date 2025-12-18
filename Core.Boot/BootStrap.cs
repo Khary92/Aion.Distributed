@@ -63,14 +63,14 @@ public static class BootStrap
             await db.Database.MigrateAsync();
             await SeedAsync(db);
         }
-
+        
         app.UseRouting();
 
-        app.AddEndPoints();
-        
         app.UseAuthentication();
         app.UseAuthorization();
 
+        app.AddEndPoints();
+        
         await app.RunAsync();
     }
 
