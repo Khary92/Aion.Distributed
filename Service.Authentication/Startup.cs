@@ -31,26 +31,43 @@ public class Startup
         });
         services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
 
-        var signingRsa = RSA.Create();
-        var privateKeyPath = "/certs/private_key_pkcs8.pem";
-        var publicKeyPath = "/certs/public_key.pem";
-        if (!File.Exists(privateKeyPath))
+        // ---- Signatur-Key ----
+        var signingPrivateKeyPath = "/certs/private_signing_key.pem";
+        var signingPublicKeyPath = "/certs/public_signing_key.pem";
+        RSA signingRsa = RSA.Create();
+        if (!File.Exists(signingPrivateKeyPath))
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(privateKeyPath)!);
+            Directory.CreateDirectory(Path.GetDirectoryName(signingPrivateKeyPath)!);
             signingRsa = RSA.Create(2048);
-            File.WriteAllText(privateKeyPath, signingRsa.ExportPkcs8PrivateKeyPem());
-
-            var publicKeyPem = signingRsa.ExportRSAPublicKeyPem();
-            File.WriteAllText(publicKeyPath, publicKeyPem);
+            File.WriteAllText(signingPrivateKeyPath, signingRsa.ExportPkcs8PrivateKeyPem());
+            File.WriteAllText(signingPublicKeyPath, signingRsa.ExportRSAPublicKeyPem());
         }
         else
         {
-            signingRsa.ImportFromPem(File.ReadAllText(privateKeyPath));
+            signingRsa.ImportFromPem(File.ReadAllText(signingPrivateKeyPath));
         }
 
         var signingKey = new RsaSecurityKey(signingRsa) { KeyId = "auth-server-signing-key" };
-        var encryptionKey = new RsaSecurityKey(signingRsa) { KeyId = "auth-server-encryption-key" };
 
+        // ---- Verschlüsselungs-Key ----
+        var encryptionPrivateKeyPath = "/certs/private_encryption_key.pem";
+        var encryptionPublicKeyPath = "/certs/public_encryption_key.pem";
+        RSA encryptionRsa = RSA.Create();
+        if (!File.Exists(encryptionPrivateKeyPath))
+        {
+            Directory.CreateDirectory(Path.GetDirectoryName(encryptionPrivateKeyPath)!);
+            encryptionRsa = RSA.Create(2048);
+            File.WriteAllText(encryptionPrivateKeyPath, encryptionRsa.ExportPkcs8PrivateKeyPem());
+            File.WriteAllText(encryptionPublicKeyPath, encryptionRsa.ExportRSAPublicKeyPem());
+        }
+        else
+        {
+            encryptionRsa.ImportFromPem(File.ReadAllText(encryptionPrivateKeyPath));
+        }
+
+        var encryptionKey = new RsaSecurityKey(encryptionRsa) { KeyId = "auth-server-encryption-key" };
+
+        // ---- OpenIddict konfigurieren ----
         services.AddOpenIddict()
             .AddCore(options =>
             {
@@ -76,6 +93,7 @@ public class Startup
                 options.UseLocalServer();
                 options.UseAspNetCore();
             });
+
         services.AddHostedService<Worker>();
     }
 

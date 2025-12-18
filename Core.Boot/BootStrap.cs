@@ -28,14 +28,21 @@ public static class BootStrap
             options.MaxReceiveMessageSize = 2 * 1024 * 1024;
             options.MaxSendMessageSize = 2 * 1024 * 1024;
         });
-        
-        var publicKeyPem = await File.ReadAllTextAsync("/jwt/public_key.pem");
-        var rsa = RSA.Create();
-        rsa.ImportFromPem(publicKeyPem);
 
-        var signingKey = new RsaSecurityKey(rsa)
+        var publicSigningKeyPem = await File.ReadAllTextAsync("/jwt/public_signing_key.pem");
+        var signingRsa = RSA.Create();
+        signingRsa.ImportFromPem(publicSigningKeyPem);
+        var signingKey = new RsaSecurityKey(signingRsa)
         {
             KeyId = "auth-server-signing-key"
+        };
+
+        var publicEncryptionKeyPem = await File.ReadAllTextAsync("/jwt/public_encryption_key.pem");
+        var encryptionRsa = RSA.Create();
+        encryptionRsa.ImportFromPem(publicEncryptionKeyPem);
+        var encryptionKey = new RsaSecurityKey(encryptionRsa)
+        {
+            KeyId = "auth-server-encryption-key"
         };
 
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -46,10 +53,12 @@ public static class BootStrap
                     ValidateIssuer = true,
                     ValidIssuer = "https://auth.hiegert.eu",
                     ValidateAudience = false,
-                    IssuerSigningKey = signingKey
+                    IssuerSigningKey = signingKey,
+
+                    TokenDecryptionKey = encryptionKey
                 };
             });
-        
+
         builder.SetConfiguration();
         builder.Services.AddCoreServices();
         builder.Services.AddInfrastructureServices();
