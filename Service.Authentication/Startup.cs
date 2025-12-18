@@ -52,7 +52,7 @@ public class Startup
         {
             KeyId = "auth-server-signing-key"
         };
-        
+
         services.AddOpenIddict()
             .AddCore(options =>
             {
@@ -67,6 +67,7 @@ public class Startup
                 options.AllowPasswordFlow();
 
                 options.AddSigningKey(signingKey);
+                options.AddEphemeralEncryptionKey();
 
                 options.UseAspNetCore()
                     .EnableTokenEndpointPassthrough();
@@ -94,7 +95,6 @@ public class Startup
         app.UseForwardedHeaders(forwardedOptions);
 
         app.UseDeveloperExceptionPage();
-
         app.UseRouting();
 
         app.UseAuthentication();
