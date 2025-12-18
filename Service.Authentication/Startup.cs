@@ -34,7 +34,6 @@ public class Startup
         var signingRsa = RSA.Create();
         var privateKeyPath = "/certs/private_key_pkcs8.pem";
         var publicKeyPath = "/certs/public_key.pem";
-
         if (!File.Exists(privateKeyPath))
         {
             Directory.CreateDirectory(Path.GetDirectoryName(privateKeyPath)!);
@@ -49,10 +48,8 @@ public class Startup
             signingRsa.ImportFromPem(File.ReadAllText(privateKeyPath));
         }
 
-        var signingKey = new RsaSecurityKey(signingRsa)
-        {
-            KeyId = "auth-server-signing-key"
-        };
+        var signingKey = new RsaSecurityKey(signingRsa) { KeyId = "auth-server-signing-key" };
+        var encryptionKey = new RsaSecurityKey(signingRsa) { KeyId = "auth-server-encryption-key" };
 
         services.AddOpenIddict()
             .AddCore(options =>
@@ -67,8 +64,7 @@ public class Startup
                 options.AllowClientCredentialsFlow();
 
                 options.AddSigningKey(signingKey);
-
-                options.AddEphemeralEncryptionKey();
+                options.AddEncryptionKey(encryptionKey);
 
                 options.UseAspNetCore()
                     .EnableTokenEndpointPassthrough();
