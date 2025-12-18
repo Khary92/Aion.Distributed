@@ -19,14 +19,12 @@ public class Startup
     {
         services.AddControllersWithViews();
 
-        // DbContext
         services.AddDbContext<ApplicationDbContext>(options =>
         {
             options.UseSqlite($"Filename={Path.Combine(Path.GetTempPath(), "openiddict-aridka-server.sqlite3")}");
             options.UseOpenIddict();
         });
 
-        // Quartz.NET
         services.AddQuartz(options =>
         {
             options.UseSimpleTypeLoader();
@@ -53,7 +51,6 @@ public class Startup
             KeyId = "auth-server-key"
         };
 
-        // OpenIddict
         services.AddOpenIddict()
             .AddCore(options =>
             {
@@ -74,7 +71,7 @@ public class Startup
                 options.UseAspNetCore()
                     .EnableTokenEndpointPassthrough();
 
-                options.SetIssuer(new Uri("https://auth.hiegert.eu"));
+                options.SetIssuer(new Uri("http://localhost:5000"));
             })
             .AddValidation(options =>
             {
@@ -91,9 +88,9 @@ public class Startup
         {
             ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
         };
+        
         forwardedOptions.KnownNetworks.Clear();
         forwardedOptions.KnownProxies.Clear();
-
         app.UseForwardedHeaders(forwardedOptions);
 
         app.UseDeveloperExceptionPage();
