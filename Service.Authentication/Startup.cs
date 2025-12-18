@@ -65,7 +65,9 @@ public class Startup
                 options.AddSigningKey(rsaKey);
                 options.AddEphemeralEncryptionKey();
 
-                options.UseAspNetCore();
+                options.UseAspNetCore()
+                    .EnableTokenEndpointPassthrough();
+                
                 options.SetIssuer(new Uri("https://authentication-service:5001"));
             })
             .AddValidation(options =>
