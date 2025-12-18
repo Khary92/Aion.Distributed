@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System.Security.Cryptography;
+using System.Security.Cryptography.X509Certificates;
 using System.Text.Json;
 using Core.Persistence;
 using Core.Persistence.DbContext;
@@ -28,17 +29,24 @@ public static class BootStrap
             options.MaxSendMessageSize = 2 * 1024 * 1024;
         });
         
-        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
-            {
-                options.Authority = "https://auth.hiegert.eu";
-                options.RequireHttpsMetadata = true;
+        var publicKeyPem = await File.ReadAllTextAsync("/certs/public_key.pem");
+        var rsa = RSA.Create();
+        rsa.ImportFromPem(publicKeyPem);
 
+        var signingKey = new RsaSecurityKey(rsa)
+        {
+            KeyId = "auth-server-signing-key"
+        };
+
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer("Bearer", options =>
+            {
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
                     ValidIssuer = "https://auth.hiegert.eu",
-                    ValidateAudience = false
+                    ValidateAudience = false,
+                    IssuerSigningKey = signingKey
                 };
             });
         
