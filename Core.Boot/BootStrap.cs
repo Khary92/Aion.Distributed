@@ -29,7 +29,7 @@ public static class BootStrap
             options.MaxSendMessageSize = 2 * 1024 * 1024;
         });
         
-        var publicKeyPem = await File.ReadAllTextAsync("/certs/public_key.pem");
+        var publicKeyPem = await File.ReadAllTextAsync("/jwt/public_key.pem");
         var rsa = RSA.Create();
         rsa.ImportFromPem(publicKeyPem);
 
