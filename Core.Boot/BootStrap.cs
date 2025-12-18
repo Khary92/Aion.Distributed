@@ -28,30 +28,18 @@ public static class BootStrap
             options.MaxSendMessageSize = 2 * 1024 * 1024;
         });
 
-        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-            .AddJwtBearer(options =>
+        builder.Services.AddAuthentication("Bearer")
+            .AddJwtBearer("Bearer", options =>
             {
                 options.Authority = "https://auth.hiegert.eu";
-                options.Audience = "api";
                 options.RequireHttpsMetadata = true;
 
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateLifetime = true
-                };
+                    ValidateIssuer = true,
+                    ValidIssuer = "https://auth.hiegert.eu",
 
-                options.Events = new JwtBearerEvents
-                {
-                    OnMessageReceived = context =>
-                    {
-                        if (string.IsNullOrEmpty(context.Request.Headers["Authorization"]) &&
-                            context.Request.Query.TryGetValue("access_token", out var t))
-                        {
-                            context.Token = t;
-                        }
-
-                        return Task.CompletedTask;
-                    }
+                    ValidateAudience = false
                 };
             });
 
@@ -60,7 +48,6 @@ public static class BootStrap
         builder.Services.AddInfrastructureServices();
         builder.Services.AddTracingServices();
         builder.Services.AddAuthorization();
-
         SetupKestrel(builder);
 
         builder.Logging.AddConsole();
@@ -79,6 +66,8 @@ public static class BootStrap
 
         app.UseRouting();
 
+        app.AddEndPoints();
+        
         app.UseAuthentication();
         app.UseAuthorization();
 

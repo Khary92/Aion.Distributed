@@ -31,23 +31,44 @@ public class Startup
         });
         services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
 
-        var keyPath = "/certs/private_key_pkcs8.pem";
-        RSA rsa;
-        if (!File.Exists(keyPath))
+        var signingKeyPath = "/certs/private_key_pkcs8.pem";
+        RSA signingRsa;
+        if (!File.Exists(signingKeyPath))
         {
-            rsa = RSA.Create(2048);
-            Directory.CreateDirectory(Path.GetDirectoryName(keyPath)!);
-            File.WriteAllText(keyPath, rsa.ExportPkcs8PrivateKeyPem());
+            signingRsa = RSA.Create(2048);
+            Directory.CreateDirectory(Path.GetDirectoryName(signingKeyPath)!);
+            File.WriteAllText(signingKeyPath, signingRsa.ExportPkcs8PrivateKeyPem());
+
+            var publicKeyPem = signingRsa.ExportRSAPublicKeyPem();
+            File.WriteAllText("/certs/public_key.pem", publicKeyPem);
         }
         else
         {
-            rsa = RSA.Create();
-            rsa.ImportFromPem(File.ReadAllText(keyPath));
+            signingRsa = RSA.Create();
+            signingRsa.ImportFromPem(File.ReadAllText(signingKeyPath));
         }
 
-        var rsaKey = new RsaSecurityKey(rsa)
+        var signingKey = new RsaSecurityKey(signingRsa)
         {
-            KeyId = "auth-server-key"
+            KeyId = "auth-server-signing-key"
+        };
+
+        var encryptionKeyPath = "/certs/encryption_key.pem";
+        RSA encryptionRsa;
+        if (!File.Exists(encryptionKeyPath))
+        {
+            encryptionRsa = RSA.Create(2048);
+            File.WriteAllText(encryptionKeyPath, encryptionRsa.ExportRSAPrivateKeyPem());
+        }
+        else
+        {
+            encryptionRsa = RSA.Create();
+            encryptionRsa.ImportFromPem(File.ReadAllText(encryptionKeyPath));
+        }
+
+        var encryptionKey = new RsaSecurityKey(encryptionRsa)
+        {
+            KeyId = "auth-server-encryption-key"
         };
 
         services.AddOpenIddict()
@@ -62,12 +83,13 @@ public class Startup
                 options.SetTokenEndpointUris("connect/token");
                 options.AllowClientCredentialsFlow();
                 options.AllowPasswordFlow();
-                options.AddSigningKey(rsaKey);
-                options.AddEphemeralEncryptionKey();
+
+                options.AddSigningKey(signingKey);
+                options.AddEncryptionKey(encryptionKey);
 
                 options.UseAspNetCore()
                     .EnableTokenEndpointPassthrough();
-                
+
                 options.SetIssuer(new Uri("https://auth.hiegert.eu"));
             })
             .AddValidation(options =>
