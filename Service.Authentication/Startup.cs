@@ -65,6 +65,10 @@ public class Startup
                 options.AllowPasswordFlow();
                 options.AddSigningKey(rsaKey);
                 options.AddEphemeralEncryptionKey();
+                
+                // TODO: THIS NEEDS TO BE REMOVED! TESTING ONLY!
+                options.UseAspNetCore()
+                    .DisableTransportSecurityRequirement();
 
                 options.UseAspNetCore();
                 options.SetIssuer(new Uri("http://authentication-service:5001"));
