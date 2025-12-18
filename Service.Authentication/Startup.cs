@@ -3,7 +3,6 @@ using Aridka.Server.Models;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using OpenIddict.Abstractions;
 using Quartz;
 
 namespace Aridka.Server;
@@ -50,12 +49,12 @@ public class Startup
         {
             KeyId = "auth-server-key"
         };
-        
+
         services.AddOpenIddict()
             .AddCore(options =>
             {
                 options.UseEntityFrameworkCore()
-                       .UseDbContext<ApplicationDbContext>();
+                    .UseDbContext<ApplicationDbContext>();
                 options.UseQuartz();
             })
             .AddServer(options =>
@@ -65,13 +64,9 @@ public class Startup
                 options.AllowPasswordFlow();
                 options.AddSigningKey(rsaKey);
                 options.AddEphemeralEncryptionKey();
-                
-                // TODO: THIS NEEDS TO BE REMOVED! TESTING ONLY!
-                options.UseAspNetCore()
-                    .DisableTransportSecurityRequirement();
 
                 options.UseAspNetCore();
-                options.SetIssuer(new Uri("http://authentication-service:5001"));
+                options.SetIssuer(new Uri("https://authentication-service:5001"));
             })
             .AddValidation(options =>
             {
@@ -82,13 +77,17 @@ public class Startup
         services.AddHostedService<Worker>();
     }
 
+    private static void GenerateToken()
+    {
+    }
+
     public void Configure(IApplicationBuilder app)
     {
         var forwardedOptions = new ForwardedHeadersOptions
         {
             ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
         };
-        
+
         forwardedOptions.KnownNetworks.Clear();
         forwardedOptions.KnownProxies.Clear();
         app.UseForwardedHeaders(forwardedOptions);

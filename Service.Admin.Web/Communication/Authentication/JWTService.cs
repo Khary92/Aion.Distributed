@@ -15,8 +15,14 @@ public class JwtService
         Console.WriteLine("Token URL: " + tokenUrl);
         Console.WriteLine("Client ID: " + clientId);
     
-        using var client = new HttpClient();
+        var handler = new HttpClientHandler
+        {
+            ServerCertificateCustomValidationCallback =
+                HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+        };
 
+        var client = new HttpClient(handler);
+        
         var request = new FormUrlEncodedContent([
             new KeyValuePair<string, string>("grant_type", "client_credentials"),
             new KeyValuePair<string, string>("client_id", clientId),

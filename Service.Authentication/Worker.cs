@@ -18,7 +18,6 @@ public class Worker : IHostedService
         var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
         await context.Database.EnsureCreatedAsync();
 
-        // Seed all OpenIddict applications
         await SeedOpenIddictAsync(scope.ServiceProvider);
     }
 
