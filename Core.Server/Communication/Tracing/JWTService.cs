@@ -14,9 +14,7 @@ public class JwtService
 
         Console.WriteLine("Token URL: " + tokenUrl);
         Console.WriteLine("Client ID: " + clientId);
-        Console.WriteLine("Client Secret: " + clientSecret);
-        
-
+    
         var handler = new HttpClientHandler
         {
             ServerCertificateCustomValidationCallback =
@@ -25,20 +23,22 @@ public class JwtService
 
         var client = new HttpClient(handler);
         
-        var request = new FormUrlEncodedContent(new[]
-        {
+        var request = new FormUrlEncodedContent([
             new KeyValuePair<string, string>("grant_type", "client_credentials"),
             new KeyValuePair<string, string>("client_id", clientId),
             new KeyValuePair<string, string>("client_secret", clientSecret),
-            new KeyValuePair<string, string>("scope", "api")
-        });
+            new KeyValuePair<string, string>("scope", "openid")
+        ]);
 
         var response = await client.PostAsync(tokenUrl, request);
         Console.WriteLine(response.StatusCode);
         response.EnsureSuccessStatusCode();
 
-        var payload = await response.Content.ReadFromJsonAsync<JsonDocument>();
-        var Token = payload.RootElement.GetProperty("access_token").GetString();
+        var content = await response.Content.ReadAsStringAsync();
+        Console.WriteLine("Raw Response: " + content);
+
+        var payload = JsonDocument.Parse(content);
+        Token = payload.RootElement.GetProperty("access_token").GetString();
 
         Console.WriteLine("Access Token: " + Token);
     }

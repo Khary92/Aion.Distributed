@@ -42,5 +42,4 @@ public class JwtService
 
         Console.WriteLine("Access Token: " + Token);
     }
-
 }
