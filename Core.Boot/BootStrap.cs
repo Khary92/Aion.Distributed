@@ -27,9 +27,9 @@ public static class BootStrap
             options.MaxReceiveMessageSize = 2 * 1024 * 1024;
             options.MaxSendMessageSize = 2 * 1024 * 1024;
         });
-
-        builder.Services.AddAuthentication("Bearer")
-            .AddJwtBearer("Bearer", options =>
+        
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
             {
                 options.Authority = "https://auth.hiegert.eu";
                 options.RequireHttpsMetadata = true;
@@ -38,11 +38,10 @@ public static class BootStrap
                 {
                     ValidateIssuer = true,
                     ValidIssuer = "https://auth.hiegert.eu",
-
                     ValidateAudience = false
                 };
             });
-
+        
         builder.SetConfiguration();
         builder.Services.AddCoreServices();
         builder.Services.AddInfrastructureServices();
@@ -63,14 +62,14 @@ public static class BootStrap
             await db.Database.MigrateAsync();
             await SeedAsync(db);
         }
-        
+
         app.UseRouting();
 
         app.UseAuthentication();
         app.UseAuthorization();
 
         app.AddEndPoints();
-        
+
         await app.RunAsync();
     }
 

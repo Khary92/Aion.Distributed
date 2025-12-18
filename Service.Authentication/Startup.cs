@@ -31,28 +31,10 @@ public class Startup
         });
         services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
 
-        var signingKeyPath = "/certs/private_key_pkcs8.pem";
-        RSA signingRsa;
-        if (!File.Exists(signingKeyPath))
-        {
-            signingRsa = RSA.Create(2048);
-            Directory.CreateDirectory(Path.GetDirectoryName(signingKeyPath)!);
-            File.WriteAllText(signingKeyPath, signingRsa.ExportPkcs8PrivateKeyPem());
-
-            var publicKeyPem = signingRsa.ExportRSAPublicKeyPem();
-            File.WriteAllText("/certs/public_key.pem", publicKeyPem);
-        }
-        else
-        {
-            signingRsa = RSA.Create();
-            signingRsa.ImportFromPem(File.ReadAllText(signingKeyPath));
-        }
-
-        var signingKey = new RsaSecurityKey(signingRsa)
-        {
-            KeyId = "auth-server-signing-key"
-        };
-
+        var signingRsa = RSA.Create();
+        signingRsa.ImportFromPem(File.ReadAllText("/certs/private_key_pkcs8.pem"));
+        var signingKey = new RsaSecurityKey(signingRsa) { KeyId = "auth-server-signing-key" };
+        
         services.AddOpenIddict()
             .AddCore(options =>
             {
@@ -64,7 +46,6 @@ public class Startup
             {
                 options.SetTokenEndpointUris("connect/token");
                 options.AllowClientCredentialsFlow();
-                options.AllowPasswordFlow();
 
                 options.AddSigningKey(signingKey);
                 options.AddEphemeralEncryptionKey();
