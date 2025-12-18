@@ -50,7 +50,7 @@ public class Startup
         {
             KeyId = "auth-server-key"
         };
-
+        
         services.AddOpenIddict()
             .AddCore(options =>
             {
@@ -61,17 +61,13 @@ public class Startup
             .AddServer(options =>
             {
                 options.SetTokenEndpointUris("connect/token");
-
                 options.AllowClientCredentialsFlow();
                 options.AllowPasswordFlow();
-
                 options.AddSigningKey(rsaKey);
                 options.AddEphemeralEncryptionKey();
 
-                options.UseAspNetCore()
-                    .EnableTokenEndpointPassthrough();
-
-                options.SetIssuer(new Uri("http://localhost:5000"));
+                options.UseAspNetCore();
+                options.SetIssuer(new Uri("http://authentication-service:5001"));
             })
             .AddValidation(options =>
             {
