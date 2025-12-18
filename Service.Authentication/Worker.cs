@@ -19,6 +19,7 @@ public class Worker : IHostedService
         await context.Database.EnsureCreatedAsync();
 
         await SeedOpenIddictAsync(scope.ServiceProvider);
+        await EnsureApiScopeAsync(scope.ServiceProvider);
     }
 
     public Task StopAsync(CancellationToken cancellationToken)
@@ -28,7 +29,7 @@ public class Worker : IHostedService
     {
         await using var scope = services.CreateAsyncScope();
         var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictApplicationManager>();
-        
+
         var clientId = Environment.GetEnvironmentVariable("CLIENT_ID")!;
         var clientSecret = Environment.GetEnvironmentVariable("CLIENT_SECRET")!;
 
@@ -46,6 +47,23 @@ public class Worker : IHostedService
                     Permissions.Endpoints.Token,
                     Permissions.GrantTypes.ClientCredentials
                 }
+            });
+        }
+    }
+
+    private static async Task EnsureApiScopeAsync(IServiceProvider services)
+    {
+        using var scope = services.CreateScope();
+        var manager = scope.ServiceProvider
+            .GetRequiredService<IOpenIddictScopeManager>();
+
+        if (await manager.FindByNameAsync("api") is null)
+        {
+            await manager.CreateAsync(new OpenIddictScopeDescriptor
+            {
+                Name = "api",
+                DisplayName = "Aridka API access",
+                Resources = { "resource_server" }
             });
         }
     }

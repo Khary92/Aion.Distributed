@@ -77,10 +77,6 @@ public class Startup
         services.AddHostedService<Worker>();
     }
 
-    private static void GenerateToken()
-    {
-    }
-
     public void Configure(IApplicationBuilder app)
     {
         var forwardedOptions = new ForwardedHeadersOptions

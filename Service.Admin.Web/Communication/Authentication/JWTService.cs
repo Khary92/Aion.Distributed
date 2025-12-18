@@ -27,7 +27,7 @@ public class JwtService
             new KeyValuePair<string, string>("grant_type", "client_credentials"),
             new KeyValuePair<string, string>("client_id", clientId),
             new KeyValuePair<string, string>("client_secret", clientSecret),
-            new KeyValuePair<string, string>("scope", "api")
+            new KeyValuePair<string, string>("scope", "openid")
         ]);
 
         var response = await client.PostAsync(tokenUrl, request);
