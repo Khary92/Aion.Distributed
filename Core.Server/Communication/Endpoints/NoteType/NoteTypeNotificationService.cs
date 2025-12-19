@@ -6,7 +6,6 @@ using SubscribeRequest = Proto.Notifications.NoteType.SubscribeRequest;
 
 namespace Core.Server.Communication.Endpoints.NoteType;
 
-[Authorize]
 public class NoteTypeNotificationService : NoteTypeProtoNotificationService.NoteTypeProtoNotificationServiceBase
 {
     private readonly ConcurrentDictionary<Guid, (IServerStreamWriter<NoteTypeNotification> Stream,

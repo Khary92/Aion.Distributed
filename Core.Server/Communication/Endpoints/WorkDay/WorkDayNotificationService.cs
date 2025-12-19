@@ -5,7 +5,6 @@ using Proto.Notifications.WorkDay;
 
 namespace Core.Server.Communication.Endpoints.WorkDay;
 
-[Authorize]
 public class
     WorkDayNotificationService : Proto.Notifications.WorkDay.WorkDayNotificationService.WorkDayNotificationServiceBase
 {

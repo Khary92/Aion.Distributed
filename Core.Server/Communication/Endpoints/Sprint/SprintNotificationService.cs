@@ -6,7 +6,6 @@ using SubscribeRequest = Proto.Notifications.Sprint.SubscribeRequest;
 
 namespace Core.Server.Communication.Endpoints.Sprint;
 
-[Authorize]
 public class
     SprintNotificationService : Proto.Notifications.Sprint.SprintNotificationService.SprintNotificationServiceBase
 {

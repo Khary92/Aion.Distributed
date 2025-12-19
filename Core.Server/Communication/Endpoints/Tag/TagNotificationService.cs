@@ -6,7 +6,6 @@ using SubscribeRequest = Proto.Notifications.Tag.SubscribeRequest;
 
 namespace Core.Server.Communication.Endpoints.Tag;
 
-[Authorize]
 public class TagNotificationService : Proto.Notifications.Tag.TagNotificationService.TagNotificationServiceBase
 {
     private readonly ConcurrentDictionary<Guid, (IServerStreamWriter<TagNotification> Stream,

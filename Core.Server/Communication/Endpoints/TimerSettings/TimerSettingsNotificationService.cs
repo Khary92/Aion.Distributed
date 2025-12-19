@@ -6,7 +6,6 @@ using SubscribeRequest = Proto.Notifications.TimerSettings.SubscribeRequest;
 
 namespace Core.Server.Communication.Endpoints.TimerSettings;
 
-[Authorize]
 public class TimerSettingsNotificationService : Proto.Notifications.TimerSettings.TimerSettingsNotificationService.
     TimerSettingsNotificationServiceBase
 {

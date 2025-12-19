@@ -5,7 +5,6 @@ using Proto.Notifications.Client;
 
 namespace Core.Server.Communication.Endpoints.Client;
 
-[Authorize]
 public class
     UseCaseNotificationService : ClientNotificationService.ClientNotificationServiceBase
 {

@@ -6,7 +6,6 @@ using SubscribeRequest = Proto.Notifications.Note.SubscribeRequest;
 
 namespace Core.Server.Communication.Endpoints.Note;
 
-[Authorize]
 public class NoteNotificationService : Proto.Notifications.Note.NoteNotificationService.NoteNotificationServiceBase,
     INoteNotificationService
 {

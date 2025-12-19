@@ -6,7 +6,6 @@ using SubscribeRequest = Proto.Notifications.StatisticsData.SubscribeRequest;
 
 namespace Core.Server.Communication.Endpoints.StatisticsData;
 
-[Authorize]
 public class
     StatisticsDataNotificationService : Proto.Notifications.StatisticsData.StatisticsDataNotificationService.
     StatisticsDataNotificationServiceBase
