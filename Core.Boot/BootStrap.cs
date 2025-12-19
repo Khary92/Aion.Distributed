@@ -30,16 +30,16 @@ public static class BootStrap
         });
 
         var publicSigningKeyPem = await File.ReadAllTextAsync("/jwt/public_signing_key.pem");
-        var signingRsa = RSA.Create();
-        signingRsa.ImportFromPem(publicSigningKeyPem);
+        using var signingRsa = RSA.Create();
+        signingRsa.ImportFromPem(publicSigningKeyPem); // PEM muss PKCS#8 SubjectPublicKeyInfo sein
         var signingKey = new RsaSecurityKey(signingRsa)
         {
             KeyId = "auth-server-signing-key"
         };
 
         var publicEncryptionKeyPem = await File.ReadAllTextAsync("/jwt/public_encryption_key.pem");
-        var encryptionRsa = RSA.Create();
-        encryptionRsa.ImportFromPem(publicEncryptionKeyPem);
+        using var encryptionRsa = RSA.Create();
+        encryptionRsa.ImportFromPem(publicEncryptionKeyPem); // PEM muss PKCS#8 SubjectPublicKeyInfo sein
         var encryptionKey = new RsaSecurityKey(encryptionRsa)
         {
             KeyId = "auth-server-encryption-key"
@@ -54,9 +54,11 @@ public static class BootStrap
                     ValidIssuer = "https://auth.hiegert.eu",
                     ValidateAudience = false,
                     IssuerSigningKey = signingKey,
-
                     TokenDecryptionKey = encryptionKey
                 };
+
+                // TODO remove debug info
+                options.IncludeErrorDetails = true;
             });
 
         builder.SetConfiguration();
