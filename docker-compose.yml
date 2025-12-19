@@ -7,7 +7,7 @@ services:
     expose:
       - "5001"
     volumes:
-      - ./auth-keys:/certs:rw,z
+      - auth_keys_data:/jwt:rw,z
     environment:
       - TZ=Europe/Berlin
       - ASPNETCORE_ENVIRONMENT=Production
