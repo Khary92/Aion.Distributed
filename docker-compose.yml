@@ -36,7 +36,7 @@ services:
       - authentication-service
     restart: unless-stopped
     volumes:
-      - ./auth-keys:/jwt:ro,z
+      - /root/Aion.Distributed/auth-keys:/jwt:ro,Z
       - ./internal-token:/internal-token:ro,z
       - /var/lib/docker/volumes/npm_npm-ssl/_data/archive/npm-9:/certs:ro,z
 
@@ -55,7 +55,7 @@ services:
       - CLIENT_ID=internal-service
       - CLIENT_SECRET=388D45FA-B36B-4988-BA59-B187D329C207 #Test only
     volumes:
-      - ./auth-keys:/jwt:ro,z
+      - /root/Aion.Distributed/auth-keys:/jwt:ro,Z
       - ./internal-token:/internal-token:ro,z
       - /var/lib/docker/volumes/npm_npm-ssl/_data/archive/npm-9:/certs:ro,z
     depends_on:
@@ -77,7 +77,7 @@ services:
       - CLIENT_ID=internal-service
       - CLIENT_SECRET=388D45FA-B36B-4988-BA59-B187D329C207 #Test only
     volumes:
-      - ./auth-keys:/jwt:ro,z
+      - /root/Aion.Distributed/auth-keys:/jwt:ro,Z
       - ./internal-token:/internal-token:ro,z
     depends_on:
       - monitoring-service
