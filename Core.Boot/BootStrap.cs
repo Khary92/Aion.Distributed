@@ -51,7 +51,7 @@ public static class BootStrap
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
-                    ValidIssuer = "https://auth.hiegert.eu",
+                    ValidIssuer = "https://auth.hiegert.eu/",
                     ValidateAudience = false,
                     IssuerSigningKey = signingKey,
                     TokenDecryptionKey = encryptionKey
