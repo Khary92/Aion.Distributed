@@ -30,21 +30,22 @@ public static class BootStrap
         });
 
         var publicSigningKeyPem = await File.ReadAllTextAsync("/jwt/public_signing_key.pem");
-        using var signingRsa = RSA.Create();
+        var privateEncryptionKey = await File.ReadAllTextAsync("/jwt/private_encryption_key.pem");
+
+        var signingRsa = RSA.Create();
         signingRsa.ImportFromPem(publicSigningKeyPem);
         var signingKey = new RsaSecurityKey(signingRsa)
         {
             KeyId = "auth-server-signing-key"
         };
 
-        var privateEncryptionKey = await File.ReadAllTextAsync("/jwt/private_encryption_key.pem");
-        using var encryptionRsa = RSA.Create();
+        var encryptionRsa = RSA.Create();
         encryptionRsa.ImportFromPem(privateEncryptionKey);
         var encryptionKey = new RsaSecurityKey(encryptionRsa)
         {
             KeyId = "auth-server-encryption-key"
         };
-        
+
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer("Bearer", options =>
             {
@@ -56,8 +57,6 @@ public static class BootStrap
                     IssuerSigningKey = signingKey,
                     TokenDecryptionKey = encryptionKey
                 };
-
-                // TODO remove debug info
                 options.IncludeErrorDetails = true;
             });
 
