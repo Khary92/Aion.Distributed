@@ -37,8 +37,9 @@ public class Startup
         RSA signingRsa = RSA.Create();
         if (!File.Exists(signingPrivateKeyPath))
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(signingPrivateKeyPath)!);
             signingRsa = RSA.Create(2048);
+            Directory.CreateDirectory(Path.GetDirectoryName(signingPrivateKeyPath)!);
+            Directory.CreateDirectory(Path.GetDirectoryName(signingPublicKeyPath)!);
             File.WriteAllText(signingPrivateKeyPath, signingRsa.ExportPkcs8PrivateKeyPem());
             File.WriteAllText(signingPublicKeyPath, signingRsa.ExportRSAPublicKeyPem());
         }
@@ -55,8 +56,9 @@ public class Startup
         RSA encryptionRsa = RSA.Create();
         if (!File.Exists(encryptionPrivateKeyPath))
         {
-            Directory.CreateDirectory(Path.GetDirectoryName(encryptionPrivateKeyPath)!);
             encryptionRsa = RSA.Create(2048);
+            Directory.CreateDirectory(Path.GetDirectoryName(encryptionPrivateKeyPath)!);
+            Directory.CreateDirectory(Path.GetDirectoryName(encryptionPublicKeyPath)!);
             File.WriteAllText(encryptionPrivateKeyPath, encryptionRsa.ExportPkcs8PrivateKeyPem());
             File.WriteAllText(encryptionPublicKeyPath, encryptionRsa.ExportRSAPublicKeyPem());
         }
