@@ -56,7 +56,7 @@ public class Startup
         var encryptionPrivateKeyPath = "/jwt/private_encryption_key.pem";
         var encryptionPublicKeyPath = "/jwt/public_encryption_key.pem";
         RSA encryptionRsa = RSA.Create();
-        if (!File.Exists(encryptionPrivateKeyPath))
+        if (!File.Exists(encryptionPublicKeyPath))
         {
             encryptionRsa = RSA.Create(2048);
             Directory.CreateDirectory(Path.GetDirectoryName(encryptionPrivateKeyPath)!);
@@ -65,10 +65,8 @@ public class Startup
             File.WriteAllText(encryptionPrivateKeyPath, encryptionRsa.ExportPkcs8PrivateKeyPem());
             File.WriteAllText(encryptionPublicKeyPath, encryptionRsa.ExportSubjectPublicKeyInfoPem());
         }
-        else
-        {
-            encryptionRsa.ImportFromPem(File.ReadAllText(encryptionPrivateKeyPath));
-        }
+
+        encryptionRsa.ImportFromPem(File.ReadAllText(encryptionPublicKeyPath));
 
         var encryptionKey = new RsaSecurityKey(encryptionRsa)
         {

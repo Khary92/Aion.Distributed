@@ -31,20 +31,20 @@ public static class BootStrap
 
         var publicSigningKeyPem = await File.ReadAllTextAsync("/jwt/public_signing_key.pem");
         using var signingRsa = RSA.Create();
-        signingRsa.ImportFromPem(publicSigningKeyPem); // PEM muss PKCS#8 SubjectPublicKeyInfo sein
+        signingRsa.ImportFromPem(publicSigningKeyPem);
         var signingKey = new RsaSecurityKey(signingRsa)
         {
             KeyId = "auth-server-signing-key"
         };
 
-        var publicEncryptionKeyPem = await File.ReadAllTextAsync("/jwt/public_encryption_key.pem");
+        var privateEncryptionKey = await File.ReadAllTextAsync("/jwt/private_encryption_key.pem");
         using var encryptionRsa = RSA.Create();
-        encryptionRsa.ImportFromPem(publicEncryptionKeyPem); // PEM muss PKCS#8 SubjectPublicKeyInfo sein
+        encryptionRsa.ImportFromPem(privateEncryptionKey);
         var encryptionKey = new RsaSecurityKey(encryptionRsa)
         {
             KeyId = "auth-server-encryption-key"
         };
-
+        
         builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer("Bearer", options =>
             {
