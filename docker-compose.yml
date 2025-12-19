@@ -8,7 +8,6 @@ services:
       - "5001"
     volumes:
       - ./auth-keys:/certs:rw,z
-      - ./internal-token:/internal-token:rw,z
     environment:
       - TZ=Europe/Berlin
       - ASPNETCORE_ENVIRONMENT=Production
@@ -36,8 +35,7 @@ services:
       - authentication-service
     restart: unless-stopped
     volumes:
-      - /root/Aion.Distributed/auth-keys:/jwt:ro,z
-      - ./internal-token:/internal-token:ro,z
+      - auth_keys_data:/jwt:ro,z
       - /var/lib/docker/volumes/npm_npm-ssl/_data/archive/npm-9:/certs:ro,z
 
   monitoring-service:
@@ -55,8 +53,7 @@ services:
       - CLIENT_ID=internal-service
       - CLIENT_SECRET=388D45FA-B36B-4988-BA59-B187D329C207 #Test only
     volumes:
-      - /root/Aion.Distributed/auth-keys:/jwt:ro,z
-      - ./internal-token:/internal-token:ro,z
+      - auth_keys_data:/jwt:ro,z
       - /var/lib/docker/volumes/npm_npm-ssl/_data/archive/npm-9:/certs:ro,z
     depends_on:
       - core-service
@@ -77,8 +74,7 @@ services:
       - CLIENT_ID=internal-service
       - CLIENT_SECRET=388D45FA-B36B-4988-BA59-B187D329C207 #Test only
     volumes:
-      - /root/Aion.Distributed/auth-keys:/jwt:ro,z
-      - ./internal-token:/internal-token:ro,z
+      - auth_keys_data:/jwt:ro,z
     depends_on:
       - monitoring-service
       - core-service
@@ -104,3 +100,4 @@ services:
 
 volumes:
   postgres_data:
+  auth_keys_data:

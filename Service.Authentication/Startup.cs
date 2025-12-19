@@ -40,9 +40,7 @@ public class Startup
             Directory.CreateDirectory(Path.GetDirectoryName(signingPrivateKeyPath)!);
             Directory.CreateDirectory(Path.GetDirectoryName(signingPublicKeyPath)!);
 
-            // Private Key im PKCS#8 Format
             File.WriteAllText(signingPrivateKeyPath, signingRsa.ExportPkcs8PrivateKeyPem());
-            // Public Key im PKCS#8 Format (wichtig!)
             File.WriteAllText(signingPublicKeyPath, signingRsa.ExportSubjectPublicKeyInfoPem());
         }
         else
