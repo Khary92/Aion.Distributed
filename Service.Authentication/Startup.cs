@@ -31,8 +31,8 @@ public class Startup
         });
         services.AddQuartzHostedService(options => options.WaitForJobsToComplete = true);
 
-        var signingPrivateKeyPath = "/certs/private_signing_key.pem";
-        var signingPublicKeyPath = "/certs/public_signing_key.pem";
+        var signingPrivateKeyPath = "/jwt/private_signing_key.pem";
+        var signingPublicKeyPath = "/jwt/public_signing_key.pem";
         RSA signingRsa = RSA.Create();
         if (!File.Exists(signingPrivateKeyPath))
         {
@@ -53,8 +53,8 @@ public class Startup
             KeyId = "auth-server-signing-key"
         };
 
-        var encryptionPrivateKeyPath = "/certs/private_encryption_key.pem";
-        var encryptionPublicKeyPath = "/certs/public_encryption_key.pem";
+        var encryptionPrivateKeyPath = "/jwt/private_encryption_key.pem";
+        var encryptionPublicKeyPath = "/jwt/public_encryption_key.pem";
         RSA encryptionRsa = RSA.Create();
         if (!File.Exists(encryptionPrivateKeyPath))
         {
