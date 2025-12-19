@@ -9,16 +9,23 @@ using Service.Admin.Web.Services.State;
 
 namespace Service.Admin.Web.Communication.Receiver;
 
-public class NoteTypeNotificationReceiver(
-    INoteTypeStateService noteTypeStateService,
-    ITraceCollector tracer,
-    IGrpcUrlService grpcUrlBuilder,
-    JwtService jwtService)
+public class NoteTypeNotificationReceiver
 {
-    public async Task SubscribeToNotifications(CancellationToken stoppingToken = default)
+    private readonly INoteTypeStateService _noteTypeStateService;
+    private readonly ITraceCollector _tracer;
+    private readonly JwtService _jwtService;
+    private readonly NoteTypeProtoNotificationService.NoteTypeProtoNotificationServiceClient _client;
+
+    public NoteTypeNotificationReceiver(
+        INoteTypeStateService noteTypeStateService,
+        ITraceCollector tracer,
+        IGrpcUrlService grpcUrlBuilder,
+        JwtService jwtService)
     {
-        var channel = GrpcChannel.ForAddress(
-            grpcUrlBuilder.InternalToServerUrl,
+        _noteTypeStateService = noteTypeStateService;
+        _tracer = tracer;
+        _jwtService = jwtService;
+        var channel = GrpcChannel.ForAddress(grpcUrlBuilder.InternalToServerUrl,
             new GrpcChannelOptions
             {
                 HttpHandler = new SocketsHttpHandler
@@ -32,14 +39,17 @@ public class NoteTypeNotificationReceiver(
                 UnsafeUseInsecureChannelCallCredentials = true
             });
 
-        var client = new NoteTypeProtoNotificationService.NoteTypeProtoNotificationServiceClient(channel);
-
+        _client = new NoteTypeProtoNotificationService.NoteTypeProtoNotificationServiceClient(channel);
+    }
+    
+    public async Task SubscribeToNotifications(CancellationToken stoppingToken = default)
+    {
         while (!stoppingToken.IsCancellationRequested)
             try
             {
-                using var call = client.SubscribeNoteNotifications(
+                using var call = _client.SubscribeNoteNotifications(
                     new SubscribeRequest(),
-                    headers: new Metadata { { "Authorization", $"Bearer {jwtService.Token}" } },
+                    headers: new Metadata { { "Authorization", $"Bearer {_jwtService.Token}" } },
                     cancellationToken: stoppingToken);
 
                 await foreach (var notification in call.ResponseStream.ReadAllAsync(stoppingToken))
@@ -49,10 +59,10 @@ public class NoteTypeNotificationReceiver(
                         {
                             var newNoteTypeMessage = notification.NoteTypeCreated.ToWebModel();
 
-                            await tracer.NoteType.Create.NotificationReceived(GetType(), newNoteTypeMessage.TraceId,
+                            await _tracer.NoteType.Create.NotificationReceived(GetType(), newNoteTypeMessage.TraceId,
                                 notification);
 
-                            await noteTypeStateService.AddNoteType(newNoteTypeMessage);
+                            await _noteTypeStateService.AddNoteType(newNoteTypeMessage);
                             break;
                         }
                         case NoteTypeNotification.NotificationOneofCase.NoteTypeColorChanged:
@@ -60,20 +70,20 @@ public class NoteTypeNotificationReceiver(
                             var webNoteTypeColorChangedNotification =
                                 notification.NoteTypeColorChanged.ToNotification();
 
-                            await tracer.NoteType.ChangeColor.NotificationReceived(GetType(),
+                            await _tracer.NoteType.ChangeColor.NotificationReceived(GetType(),
                                 webNoteTypeColorChangedNotification.TraceId, notification);
 
-                            await noteTypeStateService.Apply(webNoteTypeColorChangedNotification);
+                            await _noteTypeStateService.Apply(webNoteTypeColorChangedNotification);
                             break;
                         }
                         case NoteTypeNotification.NotificationOneofCase.NoteTypeNameChanged:
                         {
                             var webNoteTypeNameChangedNotification = notification.NoteTypeNameChanged.ToNotification();
 
-                            await tracer.NoteType.ChangeName.NotificationReceived(GetType(),
+                            await _tracer.NoteType.ChangeName.NotificationReceived(GetType(),
                                 webNoteTypeNameChangedNotification.TraceId, notification);
 
-                            await noteTypeStateService.Apply(webNoteTypeNameChangedNotification);
+                            await _noteTypeStateService.Apply(webNoteTypeNameChangedNotification);
                             break;
                         }
                         case NoteTypeNotification.NotificationOneofCase.None:
