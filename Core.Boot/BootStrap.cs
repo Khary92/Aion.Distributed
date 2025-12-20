@@ -32,14 +32,14 @@ public static class BootStrap
         var publicSigningKeyPem = await File.ReadAllTextAsync("/jwt/public_signing_key.pem");
         var privateEncryptionKey = await File.ReadAllTextAsync("/jwt/private_encryption_key.pem");
 
-        var signingRsa = RSA.Create();
+        using var signingRsa = RSA.Create();
         signingRsa.ImportFromPem(publicSigningKeyPem);
         var signingKey = new RsaSecurityKey(signingRsa)
         {
             KeyId = "auth-server-signing-key"
         };
 
-        var encryptionRsa = RSA.Create();
+        using var encryptionRsa = RSA.Create();
         encryptionRsa.ImportFromPem(privateEncryptionKey);
         var encryptionKey = new RsaSecurityKey(encryptionRsa)
         {
