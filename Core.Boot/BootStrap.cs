@@ -46,7 +46,9 @@ public static class BootStrap
             KeyId = "auth-server-encryption-key"
         };
 
-        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            
+        builder.Services
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddJwtBearer("Bearer", options =>
             {
                 options.TokenValidationParameters = new TokenValidationParameters
